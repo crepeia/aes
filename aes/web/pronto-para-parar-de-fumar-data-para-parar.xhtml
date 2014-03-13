@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Escolha uma data para parar de fumar | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_2 cssClass="leftmenu2" />
+
+                <div class="pagecontent">
+                    <div id="pagecont2">                        
+                        <div class="fotoframeclean">
+                            <h:graphicImage  library="default" title="Parar de fumar uma vez é melhor" name="images/calendario.png" alt="Parar de fumar de uma vez é melhor" />
+                        </div>
+                        <h1>Escolha uma data para parar</h1>                        
+                        <p>Nós já deixamos definido como hoje o dia de parar de fumar.</p>
+                        <p>Caso você queira parar em outro dia, escolha no calendário. Enviaremos mensagens de e-mail para lembrá-lo.</p>                                                                                                                       
+                        <p>Se você optou por <em>parar aos poucos</em>, escolha a data que vai fumar seu último cigarro.</p>
+                        <p>Lembre-se que fumantes que decidem parar de uma vez têm <em>mais sucesso</em> em parar.</p>
+
+                        <h:form>
+							<p:messages id="errorMessage" redisplay="true" globalOnly="true" />
+                            <p:panelGrid columns="4" id="data_parar">
+                                <h:outputText value="Escolher data"/>
+                                <p:selectOneMenu id="day" value="#{prontoParaPararController.dia}">  
+                                    <!--<f:selectItem itemLabel="Atual" itemValue="" />  -->
+                                    <f:selectItems value="#{userController.dias}" />  
+                                </p:selectOneMenu>
+                                <p:selectOneMenu id="month" value="#{prontoParaPararController.mes}">  
+                                    <!--<f:selectItem itemLabel="Atual" itemValue="" />  -->
+                                    <f:selectItems value="#{userController.meses}" />  
+                                </p:selectOneMenu>
+                                <p:selectOneMenu id="year" value="#{prontoParaPararController.ano}">  
+                                    <!--<f:selectItem itemLabel="Atual" itemValue="" />  -->
+                                    <f:selectItems value="#{prontoParaPararController.anos}" />  
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+
+							<div class="proximopasso">
+								<div class="txtproximopasso">
+									<h2>Próximo material</h2>                                
+									<p>Saiba como evitar recaídas.</p> 
+								</div>
+								<div class="btnfloatspec"><h:commandButton id="saveBtn" styleClass="btngen" value="Próximo" action="#{prontoParaPararController.dataParaParar}"/></div>
+							</div>
+
+						</h:form>
+                        <div class="referencias">
+                            <p>Fontes: U.S Department of Health and Human Services (2008). Treating Tobacco Use and Dependence: 2008 Update: Clinical Practice Guideline. DIANE Publishing.</p>                                                        
+                            <p>Atualizado em 31/10/2013</p>                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

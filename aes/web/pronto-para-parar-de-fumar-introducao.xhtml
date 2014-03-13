@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Início - Viva sem tabaco | Programa gratuito para o tratamento do tabagismo</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_2 cssClass="leftmenu2" />
+
+                <div class="pagecontent">
+                    <div id="pagecont2">
+                        <div class="fotoframe">
+                            <h:graphicImage library="default" title="Hora de fumar de fumar" name="images/hora-de-parar.png" alt="Hora de parar de fumar" />
+                        </div>
+
+                        <h1>Já está pronto para parar?</h1>
+                        <p>Parabéns por sua decisão! Nós iremos ajudá-lo com criar um plano personalizado.</p>
+                        <p>Aqui você encontra informações retiradas de estudos científicos e escritas por especialistas.</p>
+                        <p>Este programa não substitui uma consulta clínica tradicional. Recomendamos procure também a ajuda de um profissional de saúde.</p>
+
+                        <h3>Recomendações</h3>
+                        <ol>                          
+                            <li>Você construirá um plano para parar de fumar. Procure fazer os passos em ordem.</li>
+                            <li>Você poderá alterá-lo a qualquer momento. Clique no item desejado na barra lateral.</li>                                 
+                            <li>Se você não quer parar, recomendamos voltar ao primeiro passo: <h:outputLink value="preparando-parar-de-fumar-introducao.xhtml">"Preparando para parar"</h:outputLink>.</li>
+                        </ol>                        
+
+                        <div class="proximopasso">
+                            <div class="txtproximopasso">
+                                <h2>Próximo passo</h2>                                
+                                <p>O que é abstinência e como lidar com ela. Saiba mais.</p> 
+                            </div>
+                            <div class="btnfloat"><h:button class="btngen" title="Abstinência" value ="Próximo" outcome="./pronto-para-parar-de-fumar-abstinencia.xhtml"  ></h:button></div>
+                        </div>
+                        
+                        
+                        <div class="referencias">
+                            <p>Atualizado em 19/11/2013</p>
+                            <p>Crédito da foto: <h:outputLink value="http://www.flickr.com/photos/dasqfamily/">Dasqfamily</h:outputLink></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

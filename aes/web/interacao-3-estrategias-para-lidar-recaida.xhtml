@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <h:head>
+        <title>Acompanhamento - Identificar Motivos | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            
+            <div class="main">
+                <div class="pagecontent">
+                   <h:form>
+                       <div align="center">
+                            <p:panel id="questoes" >
+                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">
+                                    <f:facet name="header">  
+                                        <h2>Identificar estratégias para lidar com a recaída</h2>
+                                    </f:facet>
+                                    <p:inputText id="campo1"></p:inputText>
+                                    <p:inputText id="campo2"></p:inputText>
+                                    <p:inputText id="campo3"></p:inputText>
+                                    <p:inputText id="campo4"></p:inputText>
+                                </h:panelGrid>
+                            </p:panel>
+                       </div>
+                       <div id="signupbtn" align="center">
+                           <p:commandButton id="saveBtn" value="Avançar" update="@form" actionListener="#{userController.save}">
+                               <f:attribute name="object" value="#{userController.user}" />
+                                   <f:attribute name="typeName" value="user" />
+                           </p:commandButton>
+                       </div>
+                    </h:form>
+                </div><!-- end.pagecontent -->
+            </div><!-- end.main -->
+                
+       </div><!-- end.corpo --> 
+        
+            <!--Footer -->
+            <w:footer />
+    </h:body>
+</html>
+

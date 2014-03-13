@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <h:head>
+        <title>Pronto para Ação - Como enfrentar a fissura | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            
+            <div class="main">
+                <div class="pagecontent">
+                    <h:form>  
+  
+                        <p:panel header="Técnicas de enfretamento a abstinência escolhidas" id="questoes" >
+                            <p:selectManyCheckbox value="#{formBean.selectedOptions}" layout="pageDirection">  
+                                <f:selectItem itemLabel="Beber um copo de água pausadamente" itemValue="Option 1" />  
+                                <f:selectItem itemLabel="Finalmente, respire fundo para relaxar" itemValue="Option 2" /> 
+                                <f:selectItem itemLabel="Preparar uma pequena porção de comida como frutas cristalizadas e cenoura cortada" itemValue="Option 3" />  
+                                <f:selectItem itemLabel="Ler a lista de razões de ter parado de fumar" itemValue="Option 4" />  
+                                <f:selectItem itemLabel="Exercício de relaxamento em audio. Download." itemValue="Option 5" /> 
+                                <f:selectItem itemLabel="Entrar em contato com um amigo ou familiar parceiro durante a parada" itemValue="Option 6" /> 
+                            </p:selectManyCheckbox> 
+                        </p:panel>
+                    <div id="signupbtn" align="center">
+                        <p:commandButton id="saveBtn" value="Avançar" update="@form" actionListener="#{userController.save}">
+                            <f:attribute name="object" value="#{userController.user}" />
+                            <f:attribute name="typeName" value="user" />
+                        </p:commandButton>
+                    </div>
+  
+  
+                    </h:form> 
+                </div><!-- end.pagecontent -->
+            </div><!-- end.main -->
+                
+        </div><!-- end.corpo --> 
+        
+            <!--Footer -->
+            <w:footer />
+    </h:body>
+</html>
+

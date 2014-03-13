@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <h:head>
+        <title>Cadastrar nova conta | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo">
+            <!-- header -->    
+            <w:header />
+
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+                <!-- tentar colocar as definicoes de class no componente -->
+
+
+                <div class="pagecontent">
+                    <div id="maintop">
+                        <div id="maincenter">
+                            <div id="signup">
+                                <h1>Cadastro</h1>
+                                <h:form id="form" class="form-signup">
+                                    <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
+                                    <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
+                                    <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
+                                    <div class="signuptext">
+                                        <p:inputText id="nameTxt" value="#{userController.user.name}" required="true" size="30" label="Nome" >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="100" />
+                                        </p:inputText>
+                                        <p:watermark for="nameTxt" value="Nome completo" />
+                                        <p:message for="nameTxt" />
+                                    </div>
+                                    <div class="signuptext">
+                                        <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="50" />
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <p:watermark for="emailTxt" value="E-mail" />
+                                        <p:message for="emailTxt" />
+                                    </div>
+                                    <div class="signuptext">
+                                        <p:password id="passwordTxt" value="#{userController.password}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="Senha">  
+                                            <f:validateLength maximum="16" />
+                                            <!--<p:ajax update="passwordMsg" event="blur" />-->
+                                        </p:password>
+                                        <p:watermark for="passwordTxt" value="Senha" />
+                                        <p:message for="passwordTxt" />
+                                    </div>
+                                    <div class="signuptext">
+                                        <p:password id="confirmPasswordTxt" value="#{userController.password}" required="true" redisplay="true" label="Repetir senha">  
+                                            <f:validateLength maximum="16" />
+                                            <!--<p:ajax update="passwordMsg" event="blur" />-->
+                                        </p:password>
+                                        <p:watermark for="confirmPasswordTxt" value="Repetir senha" />
+                                    </div>
+
+                                    <div id="signupbottom">	
+                                        <p:panelGrid columns="4" id="nascimento">
+                                            <h:outputText value="Nascimento"/>
+                                            <p:selectOneMenu id="day" value="#{userController.dia}" required="true" label="Dia">  
+                                                <f:selectItem itemLabel="Dia" itemValue="" />  
+                                                <f:selectItems value="#{userController.dias}" />  
+                                            </p:selectOneMenu>
+                                            <p:selectOneMenu id="month" value="#{userController.mes}" required="true" label="Mês">  
+                                                <f:selectItem itemLabel="Mês" itemValue="" />  
+                                                <f:selectItems value="#{userController.meses}" />  
+                                            </p:selectOneMenu>
+                                            <p:selectOneMenu id="year" value="#{userController.ano}" required="true" label="Ano">  
+                                                <f:selectItem itemLabel="Ano" itemValue="" />  
+                                                <f:selectItems value="#{userController.anos}" />  
+                                            </p:selectOneMenu>
+                                        </p:panelGrid>
+                                        <p:message for="day" />
+                                        <p:message for="month" />
+                                        <p:message for="year" />
+                                        <p:panelGrid columns="2" id="sexo">
+                                            <h:outputText value="Sexo"/>
+                                            <p:selectOneRadio id="options" value="#{userController.user.gender}" required="true" label="Sexo">  
+                                                <f:selectItem itemLabel="Feminino" itemValue="F" />  
+                                                <f:selectItem itemLabel="Masculino" itemValue="M" />  
+                                            </p:selectOneRadio> 
+                                        </p:panelGrid>
+                                        <p:message for="options" />
+                                      
+                                        <div id="signupsubmit">			                                            
+                                            <div id="signupp"><p>Ao efetuar o cadastro, você concorda com os <h:outputLink value="./termos-de-uso.xhtml">termos de uso</h:outputLink>. Já tem cadastro? <h:outputLink value="login.xhtml">Entrar</h:outputLink></p></div>
+                                            <div id="signupbtn"><p:commandButton id="saveBtn" value="Registrar" update="@form" actionListener="#{userController.save}">
+                                                <f:attribute name="object" value="#{userController.user}" />
+                                                <f:attribute name="typeName" value="user" />
+                                                </p:commandButton></div>
+                                        </div>
+                                    </div>
+                                </h:form>	    		
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

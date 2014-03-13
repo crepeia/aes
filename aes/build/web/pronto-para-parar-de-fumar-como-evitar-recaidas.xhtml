@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Como evitar recaídas | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_2 cssClass="leftmenu2" />
+
+                <div class="pagecontent">
+                    <div id="pagecont2">
+                        <div class="fotoframeclean">
+                            <h:graphicImage  library="default" title="Saiba dizer não" name="images/stop-smoking.jpg" alt="Saiba dizer não" />
+                        </div>
+
+                        <h1>Como evitar recaídas</h1>                        
+                        <p>Você já tentou parar de fumar outras vezes? </p>                                                                   
+                        <h:form>
+                            <p:panel id="qrecaida" >                
+                                <h:panelGrid columns="2" style="margin-bottom:10px;" cellpadding="10" id="questao1">                                                    
+                                    <p:selectOneRadio id="options" value="#{prontoParaPararController.prontoParaParar.tentouParar}" required="true">  
+                                        <f:selectItem itemLabel="Sim" itemValue="true" />
+                                        <f:selectItem itemLabel="Não" itemValue="false" /> 
+                                    </p:selectOneRadio> 
+                                </h:panelGrid>
+                            </p:panel>
+							<div class="proximopasso">
+								<div class="btnfloatspec">
+									<h:commandButton id="saveBtn" styleClass="btngen" value="Próximo" action="#{prontoParaPararController.recaidaTentouParar}"/>
+								</div>
+							</div>
+                        </h:form>                      
+
+
+                        <div class="referencias">                            
+                            <p>Atualizado em 31/10/2013</p>                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Ganho de peso | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_2 cssClass="leftmenu2" />
+
+                <div class="pagecontent">
+                    <div id="pagecont2">
+                        <div class="fotoframeclean">
+                            <h:graphicImage  library="default" title="Procure um médico para recomendar um medicamento" name="images/ganho-peso.png" alt="Médico e paciente" />
+                        </div>
+
+                        <h1>Ganho de peso</h1>                                                                                 
+                        <p>Alguns fumantes ganham peso nos primeiros meses após parar de fumar.</p>
+                        <p>A média de ganho de peso, costuma variar entre 2 a 4 quilos. Alguns fumantes podem até emagrecer.</p>                                                
+                                                                        
+                        <h2>O que fazer?</h2>
+                        <ul>                          
+                            <li>Você ganha peso ao gastar menos energia do que consome.</li>
+                            <li>Logo, recomendamos o gasto de energia com exercícios físicos como caminhadas, corridas leves e academia. Consulte um profissional de área para saber qual o mais adequado.</li>
+                            <li>Procure comer mais alimentos como frutas e legumes e menos doces e alimentos gordurosos e com muito açúcar.</li>                            
+                        </ul>                                                  
+
+                        <div class="proximopasso">
+                            <div class="txtproximopasso">
+                                <h2>Próximo material</h2>                                
+                                <p>Pronto para ver seu plano personalizado de parada?</p> 
+                            </div>
+                            <div class="btnfloat"><h:button class="btngen" title="Riscos de fumar" value ="Próximo" outcome="./pronto-para-parar-de-fumar-plano-personalizado.xhtml"  ></h:button></div>
+                        </div>
+                        <div class="referencias">
+                            <p>Fontes: INCA. (2001). Abordagem e tratamento do fumante - consenso 2001.
+</p>                            
+                            <p>Atualizado em 01/11/2013</p>                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

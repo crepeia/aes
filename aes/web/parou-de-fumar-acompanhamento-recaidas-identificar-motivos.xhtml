@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <h:head>
+        <title>Recaída - identificar motivos e estratégias  | Viva sem tabaco</title>
+        <w:head_comum />
+        <script src="resources/js/jquery.price_format.1.8.min.js" type="text/javascript"></script>
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_3 cssClass="leftmenu3" />
+
+                <div class="pagecontent">
+
+                    <div id="pagecont2">
+
+
+                        <h2>Motivos e estratégias</h2>
+                        <p>Mesmo que você tenha recaído, é muito importante continuar tentanto.</p>
+                        <p>Identificar a situação, seus sentimentos e o número de cigarros fumados de uma recaída pode ser útil para novas tentativas.</p>                        
+                        <h2>O que causou a recaída?</h2>
+                        <p>As perguntas abaixo podem ajudá-lo a refletir e aprender melhor com a recaída:</p>
+
+
+                        <h:form>                            
+                            <p:panel id="questoes" >
+                                <h:panelGrid columns="1" style="margin-bottom:5px" id="questao1">
+                                    <f:facet name="header">  
+                                        <p>01. Qual situação fez você acender o primeiro cigarro?</p>  
+                                    </f:facet> 
+                                    <p:inputTextarea rows="1" cols="70" id="q1campo1" value="#{parouDeFumarController.acompanhamento.motivoRecaidaSituacao}" />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" style="margin-bottom:5px" id="questao2">
+                                    <f:facet name="header">  
+                                        <p>02. O que você estava fazendo quando acendeu o primeiro cigarro?</p>  
+                                    </f:facet> 
+                                    <p:inputTextarea rows="1" cols="70" id="q1campo2" value="#{parouDeFumarController.acompanhamento.motivoRecaidaFazendo}" />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" style="margin-bottom:5px" id="questao3">
+                                    <f:facet name="header">  
+                                        <p>03. O que aconteceu depois?</p>  
+                                    </f:facet> 
+                                    <p:inputTextarea rows="1" cols="70" id="q1campo3" value="#{parouDeFumarController.acompanhamento.motivoRecaidaDepois}" />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" style="margin-bottom:5px" id="questao4">
+                                    <f:facet name="header">  
+                                        <p>04. Quantos cigarros você está fumando atualmente?</p>  
+                                    </f:facet> 
+                                    <p:inputText id="q1campo4" onkeyup="$(this).val($(this).val().replace(/[^0-9]/g, ''));" value="#{parouDeFumarController.acompanhamento.motivoRecaidaCigarrosFuma}" />
+                                </h:panelGrid>
+
+                            </p:panel>
+
+                            <div class="proximopasso">
+                                <div class="btnfloat1">
+                                    <p:commandButton styleClass="btngen3" value ="Avançar" action="#{parouDeFumarController.identificarMotivos}" />
+                                </div>
+                            </div>
+                        </h:form>                      
+
+
+                        <div class="referencias">                            
+                            <p>Atualizado em 12/01/2014</p>                            
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

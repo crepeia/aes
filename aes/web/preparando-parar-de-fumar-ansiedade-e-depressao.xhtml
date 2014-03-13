@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Ansiedade e depressão - Preparando para parar de fumar | Viva sem tabaco </title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_1 cssClass="leftmenu1" />
+
+                <div class="pagecontent">
+                    <div id="pagecont1"> 
+                        <div class="fotoframe">
+                            <h:graphicImage library="default" title="Sorrowing Old Man - Vincent van Gogh" name="images/tristeza-vangogh.png" alt="Gratuito" />
+                        </div>
+                        <h1>Ansiedade de depressão</h1>
+                        <p>Tanto a ansiedade e depressão são fatores importantes para o tratamento do tabagismo.</p>
+                        <ul>
+                            <li>A depressão é mais comum nos fumantes que os não fumantes.</li>
+                            <li>Transtornos de ansiedade também são mais comuns.</li>                            
+                        </ul>
+
+                        <div id="avacomorbidades">
+                            <h3>Teste</h3>
+                            <h:form>
+                                <p:panel id="questoes" >
+                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao1">
+                                        <f:facet name="header">  
+                                            Você já foi diagnosticado com depressão por um profissional de saúde?  
+                                        </f:facet> 
+                                        <p:selectOneRadio id="options" value="" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />
+                                            <f:selectItem itemLabel="Não" itemValue="0" /> 
+                                        </p:selectOneRadio> 
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                        <f:facet name="header">  
+                                            Você já foi diagnosticado com ansiedade por um profissional de saúde?  
+                                        </f:facet> 
+                                        <p:selectOneRadio id="options2" value="" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />
+                                            <f:selectItem itemLabel="Não" itemValue="0" /> 
+                                        </p:selectOneRadio> 
+                                    </h:panelGrid>
+
+                                </p:panel>
+                                <div><p:commandButton id="saveBtn" styleClass="btngen1" value="avaliar" update="@form" actionListener="#{userController.save}">
+                                        <f:attribute name="object" value="#{userController.user}" />
+                                        <f:attribute name="typeName" value="user" />
+                                    </p:commandButton>                                
+
+                                </div>
+                            </h:form>
+                        </div>
+
+                        <div class="proximopasso">
+                            <div class="txtproximopasso">
+                                <h2>Próximo material</h2>
+                                <p>Muitos fumantes sentem que precisam parar mas não conseguem abandonar o prazer o cigarro. Saiba como lidar com esse sentimento.</p>
+                            </div>
+                            <div class="btnfloat"><h:button class="btngen1" title="Substituir o prazer do cigarro" value ="Próximo" outcome="./preparando-parar-de-fumar-substituir-prazer-cigarro.xhtml"  ></h:button></div>
+                        </div>
+                        <div class="referencias">
+                            <p>Fonte: Breslau, N., Peterson, E. L., Schultz, L. R., Chilcoat, H. D., Andreski, P. (1998). Major Depression and Stages of Smoking: A Longitudinal Investigation. Arch Gen Psychiatry, 55(2), 161–166.
+</p>
+                            <p>Atualizado em 14/11/2013</p>                                                        
+                        </div>
+
+                    </div>
+
+
+
+                </div>        
+            </div>
+
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

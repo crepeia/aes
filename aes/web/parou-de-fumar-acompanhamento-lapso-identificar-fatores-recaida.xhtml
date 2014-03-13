@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <h:head>
+        <title>Lapso - identificar fatores potenciais de recaída | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_3 cssClass="leftmenu3" />
+
+                <div class="pagecontent">
+
+                    <div id="pagecont2">
+                        <div class="fotoframeclean">
+                            <h:graphicImage  library="default" title="Acompanhamento" name="images/acompanhamento-interno.png" alt="Acompanhamento" />
+                        </div>                        
+
+                        <h2>Fatores que levam à recaídas</h2>
+                        <p>Existem diversos fatores que podem levar a recaídas. Identificar esses fatores e formas de lidar com eles é fundamental para o sucesso do tratamento.</p>
+                        <p>Alguns exemplos são: beber bebidas alcóolicas, parar de usar o medicamento sem supervisão médica e conviver com outros fumantes.</p>
+                        <h2>Exercício</h2>
+                        <p>Identifique situações de riscos e como você vai lidar com elas.</p>
+                        <p>Exemplo:</p>
+                        <ul>
+                            <li><strong>Situação de risco</strong> - conviver com amigos fumantes;</li>
+                            <li><strong>Como lidar</strong> - pedir aos meus amigos que fumem longe de mim no começo do tratamento.</li>                                     
+                        </ul>
+
+                        <h:form>
+                            <div style="float: left; width: 50%" align="center">
+                                <p:panel id="questoes" >
+                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">
+                                        <f:facet name="header">  
+                                            <h3>Situações de risco</h3>  
+                                        </f:facet> 
+                                        <p:inputTextarea rows="2" cols="30" id="q1campo1" value="#{parouDeFumarController.acompanhamento.recaidaSituacao1}" />   
+                                        <p:inputTextarea rows="2" cols="30" id="q1campo2" value="#{parouDeFumarController.acompanhamento.recaidaSituacao2}" />   
+                                        <p:inputTextarea rows="2" cols="30" id="q1campo3" value="#{parouDeFumarController.acompanhamento.recaidaSituacao3}" />
+                                    </h:panelGrid>
+                                </p:panel>
+                            </div>
+
+                            <div style="float: right; width: 50%" align="center">
+                                <p:panel id="questoes2" >
+                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                        <f:facet name="header">  
+                                            <h3>Como vou lidar</h3>  
+                                        </f:facet> 
+                                        <p:inputTextarea rows="2" cols="30" id="q2campo1" value="#{parouDeFumarController.acompanhamento.recaidaLidar1}" />
+                                        <p:inputTextarea rows="2" cols="30" id="q2campo2" value="#{parouDeFumarController.acompanhamento.recaidaLidar2}" />
+                                        <p:inputTextarea rows="2" cols="30" id="q2campo3" value="#{parouDeFumarController.acompanhamento.recaidaLidar3}" />
+                                    </h:panelGrid>
+                                </p:panel>
+                            </div> 
+
+                            <div class="proximopasso">
+                                <div class="btnfloat1">
+                                <p:commandButton styleClass="btngen3" value ="Avançar" action="#{parouDeFumarController.identificarFatoresRecaida}" />
+                                </div>
+                            </div>
+                        </h:form>                      
+
+
+                        <div class="referencias">                            
+                            <p>Atualizado em 04/11/2013</p>                            
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

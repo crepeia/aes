@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Plano personalizado de parar | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+		<h:form id="form">
+			<p:panel id="plano">
+				<h1>Plano personalizado</h1>  
+				<h2>Data de parada</h2>
+				<h:outputText value="#{prontoParaPararController.prontoParaParar.dataPararStr}"/>
+				<h2>Técnicas para fissura</h2>
+				<h:outputText value="#{prontoParaPararController.prontoParaParar.fissuraStr}"/>
+				<!--inserir as estratégias escolhidas em "pronto-para-parar-de-fumar-vencendo-a-fissura.xhtml" -->
+				<h2>Estratégias para resistir ao cigarro</h2>
+				<h:outputText value="#{prontoParaPararController.prontoParaParar.evitarRecaidaFara1}"/>
+				<h:outputText value="#{prontoParaPararController.prontoParaParar.evitarRecaidaFara2}"/>
+				<h:outputText value="#{prontoParaPararController.prontoParaParar.evitarRecaidaFara3}"/>
+				<!-- inserir as estratégias daqui pronto-para-parar-de-fumar-como-evitar-recaidas-estrategias.xhtml" -->
+				<h2>O que deu certo da última vez que parei</h2>
+				<h:outputText value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}"/>
+				<h:outputText value="#{prontoParaPararController.prontoParaParar.evitarRecaida2}"/>
+				<h:outputText value="#{prontoParaPararController.prontoParaParar.evitarRecaida3}"/>
+				<!-- inserir inputs daqui pronto-para-parar-de-fumar-como-evitar-recaidas-sim.xhtml -->
+
+			</p:panel>
+		</h:form>
+    </h:body>
+</html>
+

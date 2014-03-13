@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Medicamentos | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_2 cssClass="leftmenu2" />
+
+                <div class="pagecontent">
+                    <div id="pagecont2">
+                        <div class="fotoframeclean">
+                            <h:graphicImage  library="default" title="Procure um médico para recomendar um medicamento" name="images/medicos.png" alt="Médico e paciente" />
+                        </div>
+
+                        <h1>Medicamentos</h1>
+                        <p>O uso de medicamentos é um recurso complementar ao tratamento.</p>
+                        <p>Os mais usados no tratamento do tabagismo são: adesivos, gomas e pastilhas de nicotina e alguns antidepressivos.</p>
+                        <p>Eles funcionam melhor quando combinados com acompanhamento profissional - presencial, telefone e internet.</p>                       
+                        <p>Se for tomar qualquer um desses medicamentos, você deve consultar um médico.</p>                        
+
+                        <h3>Reposição de Nicotina - Adesivos, gomas e pastilhas</h3>
+                        <ul>                          
+                            <li>Seu uso aumenta 2 vezes as chances de você conseguir parar.</li>
+                            <li>Reduz os sintomas da abstinência e a vontade de fumar.</li>
+                            <li>Possui poucos efeitos colaterais.</li>
+                            <li>Seu uso deve ser acompanhado por um médico.</li>
+                        </ul>  
+
+                        <h3>Outros medicamentos</h3>
+                        <p>Como a depressão é muito comum entre os fumantes, alguns antidepressivos também são usados no tratamento.</p>
+                        <ul>                          
+                            <li>Bupropiona - Bup (nome genérico) - e Vareniclina.</li>
+                            <li>Apresentam mais efeitos colaterais que os medicamentos de nicotina.</li>                                 
+                            <li>Seu uso deve ser acompanhado por um médico.</li>
+                        </ul>
+
+                        <div class="proximopasso">
+                                <div class="txtproximopasso">
+                                    <h2>Próximo material</h2>                                
+                                    <p>Parar de uma vez ou aos poucos? Saiba a melhor forma de parar de fumar.</p> 
+                                </div>
+							<div class="btnfloatspec">
+								<h:button class="btngen" title="Métodos de parar" value ="Próximo" outcome="./pronto-para-parar-de-fumar-metodos-de-parar.xhtml"  />
+							</div>
+                            </div>
+                                                
+                        <div class="referencias">
+                            <p>Fontes: INCA. (2001). Abordagem e tratamento do fumante - consenso 2001.</p>
+                            <p>Hartmann-Boyce, J., Stead, L. F., Cahill, K., Lancaster, T. (2013). Efficacy of interventions to combat tobacco addiction: Cochrane update of 2012 reviews. Addiction, 108(10), 1711–1721. doi:10.1111/add.12291</p>
+                            <p>Atualizado em 19/11/2013</p>                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

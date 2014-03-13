@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <h:head>
+        <title>Lapso - identificar fatores potenciais de recaída | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_3 cssClass="leftmenu3" />
+
+                <div class="pagecontent">
+
+                    <div id="pagecont2">
+
+						<h:form id="form">
+
+							<div class="fotoframeclean">
+								<h:graphicImage  library="default" title="Acompanhamento" name="images/acompanhamento-interno.png" alt="Acompanhamento" />
+							</div>                        
+
+							<h1>Plano para evitar recaídas</h1>                           
+							<p>Evitar o primeiro cigarro é fundamental para quem consegue parar.</p>
+							<h2>Estratégias para lidar com a recaída</h2>
+							<h:outputText value="#{parouDeFumarController.acompanhamento.recaidaLidar1}"/>
+							<h:outputText value="#{parouDeFumarController.acompanhamento.recaidaLidar2}"/>
+							<h:outputText value="#{parouDeFumarController.acompanhamento.recaidaLidar3}"/>
+
+							<h2>Salvar</h2>                                                
+							<p><h:outputLink target="_blank" value="parou-de-fumar-acompanhamento-lapso-plano-evitar-recaida-print.xhtml">Ver versão para impressão.</h:outputLink></p>
+							<p><h:commandLink action="#{parouDeFumarController.enviarEmail}">Enviar para e-mail</h:commandLink></p>
+							<p><p:messages /></p>
+
+							<div class="referencias">
+								<p>Atualizado em 05/11/2013</p>                            
+							</div>
+
+						</h:form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

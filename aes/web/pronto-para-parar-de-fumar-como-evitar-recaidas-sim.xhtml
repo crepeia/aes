@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Aprendendo com os erros - como evitar recaídas | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_2 cssClass="leftmenu2" />
+
+                <div class="pagecontent">
+                    <div id="pagecont2">
+                        <div class="fotoframeclean">
+                            <h:graphicImage  library="default" title="Saiba dizer não" name="images/stop-smoking.jpg" alt="Saiba dizer não" />
+                        </div>
+
+                        <h1>Aprendendo com os erros</h1>                        
+                        <p>Que bom que você está tentando parar novamente. A maioria dos fumantes tenta parar de 4 a 5 vezes antes de abandonar o cigarro definitivamente.</p>
+                        <p>Aprender com os acertos e erros é fundamental no processo de parar de fumar. Valorizar os seus acertos é ainda mais importante.</p>
+                        
+                        <h:form>
+                            <p:panel id="questoes" >
+                                <h:panelGrid columns="1"  cellpadding="5" id="questao1">
+                                    <f:facet name="header">  
+                                        O que você fez em tentativas de parar anteriores que podem ajudar desta vez?
+                                    </f:facet>
+                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo1"/> 
+                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida2}" id="campo2"/> 
+                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida3}" id="campo3"/>                               
+                                </h:panelGrid>
+                            </p:panel>
+                            <div class="proximopasso">
+								<div class="btnfloatspec"><h:commandButton id="saveBtn" styleClass="btngen" value="Próximo" action="#{prontoParaPararController.recaidasAjudar}"/></div>
+							</div>
+                        </h:form>                      
+
+
+                        <div class="referencias">                            
+                            <p>Atualizado em 31/10/2013</p>                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

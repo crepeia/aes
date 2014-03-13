@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <h:head>
+
+    </h:head>
+    <h:body>
+        <h:form id="form" class="form-signup">
+            <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
+            <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>						
+            <div class="signuptext">
+                <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" >
+                    <!--<p:ajax update="loginMsg" event="blur" />-->
+                    <f:validateLength maximum="50" />
+                </p:inputText>
+                <p:watermark for="emailTxt" value="E-mail" />
+            </div>
+            <div class="signuptext">
+                <p:password id="passwordTxt" value="#{userController.password}" required="true" match="confirmPasswordTxt" redisplay="true" size="30">  
+                    <f:validateLength maximum="16" />
+                    <!--<p:ajax update="passwordMsg" event="blur" />-->
+                </p:password>
+                <p:watermark for="passwordTxt" value="Senha" />
+            </div>							
+            <div id="signipbottom">	
+
+                <div id="signinsubmit">
+                    <div id="signinbtn">
+                        <p:commandButton id="saveEntrar" value="Entrar" update="@form" actionListener="#{userController.save}">
+                            <f:attribute name="object" value="#{userController.user}" />
+                            <f:attribute name="typeName" value="user" />
+                        </p:commandButton>
+                    </div>
+
+                    <div id="signincheck">
+
+                        <p:selectBooleanCheckbox id="contConect" value="Continuar conectado"></p:selectBooleanCheckbox>
+                        <h:outputText value="Continuar conectado"/>
+
+                    </div>
+
+
+                    <p><h:link>Não consegue acessar sua conta?</h:link></p>
+
+                </div>
+            </div>
+        </h:form>	    		
+    </h:body>
+</html>
+

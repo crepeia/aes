@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Métodos de parar - De uma vez ou gradualmente | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_2 cssClass="leftmenu2" />
+
+                <div class="pagecontent">
+                    <div id="pagecont2">
+                        <div class="fotoframeclean">
+                            <h:graphicImage  library="default" title="Parar de fumar uma vez é melhor" name="images/parada-abrupta.png" alt="Parar de fumar de uma vez é melhor" />
+                        </div>
+                        <h1>Métodos de parar</h1>                                                
+                        <p>Existem dois métodos para parar de fumar: de uma vez ou aos poucos.</p>
+                        <p>Você deve escolher o que achar melhor. Contudo, pesquisas mostram que decidir parar de uma vez funciona melhor do que parar aos poucos.</p>
+                        
+                        <h3>Parar de uma vez</h3>
+                        <ul>                          
+                            <li>Parar de uma vez significa parar de fumar <em>totalmente</em>.</li>
+                            <li>No próximo passo você poderá marcar sua data para parar.</li>                            
+                            <li>Estudos mostram que marcar uma data para parar é fundamental para o sucesso do tratamento.</li>                            
+                        </ul>
+                        
+                        <h3>Parar aos poucos</h3>
+                        <ul>                          
+                            <li>Parar aos poucos significa <em>diminuir</em> o número de cigarros fumados por dia até parar <em>totalmente</em>.</li>
+                            <li>Não existe nível seguro para o uso de cigarros. </li>
+                            <li>Você deve parar totalmente até 2 semanas após começar a parar aos poucos.</li>
+                            <li>Qualquer número de cigarros fumados apresenta riscos a sua saúde.</li>
+                            <li>Na próxima etapa, você deverá indicar uma data em que terá parado totalmente.</li>                            
+                        </ul>
+                                                                                              
+                        <div class="proximopasso">
+                            <div class="txtproximopasso">
+                                <h2>Próximo passo</h2>                                
+                                <p>Escolha uma data para o grande dia de parar de fumar.</p> 
+                            </div>
+                            <div class="btnfloat"><h:button class="btngen" title="Data para parar" value ="Próximo" outcome="./pronto-para-parar-de-fumar-data-para-parar.xhtml"  ></h:button></div>
+                        </div>
+                        <div class="referencias">
+                            <p>Fontes: U.S Department of Health and Human Services (2008). Treating Tobacco Use and Dependence: 2008 Update: Clinical Practice Guideline. DIANE Publishing.</p>                                                        
+                            <p>Atualizado em 07/11/2013</p>                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

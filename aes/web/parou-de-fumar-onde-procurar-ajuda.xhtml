@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <h:head>
+        <title>Onde procurar ajuda | Viva sem tabaco</title>
+        <w:head_comum />
+    </h:head>
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <w:leftmenu_3 cssClass="leftmenu3" />
+
+                <div class="pagecontent">
+
+                    <div id="pagecont2">                        
+                        <h1>Onde procurar ajuda</h1>
+                        <p>Separamos alguns recursos e lugares onde você pode buscar tratamento do tabagismo.</p>
+                        <h2>Serviços</h2>
+                        <div class="buscarajuda">
+                            <div class="imgbuscarajuda">
+                                <h:outputLink value="./index.xhtml">
+                                    <h:graphicImage library="default" title="Viva sem Tabaco" name="images/vst-100.png" alt="Viva sem Tabaco"/>
+                                </h:outputLink>
+                            </div>
+                            <div class="pbuscarajuda">
+                                <h4><h:outputLink value="./index.xhtml">Programa Viva sem Tabaco</h:outputLink></h4>
+                                <p>Gostaria de tentar  nosso programa novamente? <br /><h:outputLink value="./index.xhtml">Clique aqui</h:outputLink>.</p>
+                            </div>
+                            <div class="btnbuscarajuda">
+                                <h:button class="btngen" title="Fazer novo plano" value ="Começar" outcome="./index.xhtml"  ></h:button>
+                            </div>
+                        </div>
+
+                        <div class="buscarajuda">
+                            <div class="imgbuscarajuda">
+                                <h:graphicImage library="default" title="Viva sem Tabaco" name="images/viva-voz.png" alt="Viva sem Tabaco"/>
+                            </div>
+                            <div class="pbuscarajuda">
+                                <h4>Serviço VivaVoz</h4>
+                                <p>Serviço gratuito para tratamento por telefone da Universidade Federal de Ciências da Saúde de Porto Alegre.</p>
+                            </div>                            
+                        </div>
+
+                        <div class="buscarajuda">
+                            <div class="imgbuscarajuda">
+                                <h:graphicImage library="default" title="Viva sem Tabaco" name="images/sus.png" alt="Viva sem Tabaco"/>
+                            </div>
+                            <div class="pbuscarajuda">
+                                <h4>Sistema Único de Saúde</h4>
+                                <p>O SUS oferece tratamento gratuito. Consulte o serviço de sua cidade. Se não tiver, solicite ao gestor de saúde de sua cidade. <h:outputLink value="http://www.brasil.gov.br/saude/2013/04/controle-ao-tabagismo-sera-ampliado-na-rede-publica-de-saude">Saiba mais.</h:outputLink></p>
+                            </div>
+
+                        </div>                                                                 
+
+                        <div class="referencias">                            
+                            <p>Atualizado em 12/01/2014</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+

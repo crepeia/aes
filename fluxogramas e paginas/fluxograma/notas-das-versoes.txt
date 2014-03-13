@@ -1,0 +1,28 @@
+==================
+Notas das versões
+
+Criado por Henrique Gomide
+Data - 08/11/2013
+
+
+tabaco-dimensionamento-v2.0.dia
+----------------------------------------
+Conteúdo criado a partir da discussão com especialista, com detalhes sobre o conteúdo das páginas. 
+
+tabaco-dimensionamento-v2.1.dia
+----------------------------------------
+Adaptação dos passos 1 a 2 aos resultados do grupo focal e discussões técnicas.
+ 
+Fluxograma com as páginas da intervenção. Adaptações de todos os passos de acordo com critérios de usabilidade e do fluxo da intervenção. 
+ 
+tabaco-dimensionamento-v3.0.dia
+---------------------------------------- 
+Esta versão deve ser utilizada como referência para a primeira versão da intervenção.
+
+Os detalhes das páginas foram removidos nessa versão para facilitar o entendimento do fluxo do programa. O fluxograma foi adaptado de acordo com a dinâmica do programa.
+
+tabaco-dimensionamento-v4.1.dia
+---------------------------------------- 
+Esta versão deve ser utilizada como referência para a versão da intervenção lançada dia 15/01/2014.
+
+O fluxograma descreve o fluxo das páginas e etapas da intervenção. O arquivo em pdf contém a legenda e foi utilizado para envio do artigo.
