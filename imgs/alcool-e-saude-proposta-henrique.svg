@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.93666122"
-     inkscape:cx="322.79783"
-     inkscape:cy="329.51799"
+     inkscape:zoom="0.6623195"
+     inkscape:cx="573.53807"
+     inkscape:cy="399.40287"
      inkscape:document-units="px"
      inkscape:current-layer="g3119"
      showgrid="false"
@@ -240,7 +240,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -251,23 +251,6 @@
     <g
        id="g3119"
        transform="matrix(3.2096728,0,0,3.1151679,-885.48355,-725.72922)">
-      <g
-         id="g7010"
-         transform="translate(-77.246323,40.558241)"
-         style="fill:#336699;fill-opacity:1">
-        <rect
-           style="fill:#336699;fill-opacity:1;stroke:none"
-           id="rect7012"
-           width="26.577787"
-           height="27.384077"
-           x="368.98007"
-           y="266.20251"
-           ry="13.288894" />
-        <g
-           transform="matrix(0.56513581,0,0,0.58228033,380.14626,270.57807)"
-           id="g7014"
-           style="fill:#336699;fill-opacity:1" />
-      </g>
       <rect
          style="fill:#f44800;fill-opacity:0;fill-rule:evenodd;stroke:none"
          id="rect3903"
@@ -275,286 +258,9 @@
          height="66.829872"
          x="288.18686"
          y="237.32118" />
-      <rect
-         style="fill:#336699;fill-opacity:1;stroke:none"
-         id="rect3855-2"
-         width="26.577787"
-         height="27.384077"
-         x="413.19919"
-         y="254.53442"
-         ry="6.2610855"
-         rx="13.288894" />
-      <path
-         sodipodi:nodetypes="cccccccc"
-         inkscape:connector-curvature="0"
-         style="fill:#fdca01;fill-opacity:1;stroke:none"
-         d="m 368.47618,365.05669 c 6.39093,-0.5329 8.02288,0.89646 8.02288,0.89646 l 0,7.26613 -13.28893,0 -13.28894,0 0,-16.69086 c 0,0 1.63692,0.74997 3.1003,2.17262 5.01643,5.01874 8.83594,7.22728 15.45469,6.35565 z"
-         id="path3857-2"
-         clip-path="url(#clipPath3508-0-0)"
-         transform="translate(63.216208,-90.147886)" />
-      <g
-         transform="matrix(0.77235058,0,0,0.77235058,192.41455,-52.154273)"
-         id="g3839-6-0-2"
-         style="fill:#336699;fill-opacity:1">
-        <text
-           transform="scale(0.9851681,1.0150552)"
-           xml:space="preserve"
-           style="font-size:16.20186996px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:-0.11707316px;word-spacing:0px;fill:#336699;fill-opacity:1;stroke:none;font-family:Sans"
-           x="334.58731"
-           y="401.41727"
-           id="text3841-73-4-5"
-           sodipodi:linespacing="125%"><tspan
-             sodipodi:role="line"
-             id="tspan3843-7-3-5"
-             x="334.58731"
-             y="401.41727"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:-0.11707316px;fill:#336699;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans" /><tspan
-             id="tspan3845-2-1-6"
-             sodipodi:role="line"
-             x="334.58731"
-             y="422.85767"
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;letter-spacing:0.01067431px;fill:#336699;fill-opacity:1;font-family:Trebuchet MS;-inkscape-font-specification:Trebuchet MS Bold">Saúde</tspan></text>
-        <text
-           transform="scale(0.9851681,1.0150552)"
-           sodipodi:linespacing="125%"
-           id="text3847-5-7-7"
-           y="393.09872"
-           x="335.30011"
-           style="font-size:11.23768425px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#336699;fill-opacity:1;stroke:none;font-family:Sans"
-           xml:space="preserve"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#336699;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans"
-             y="393.09872"
-             x="335.30011"
-             id="tspan3849-7-3-2"
-             sodipodi:role="line" /><tspan
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#336699;fill-opacity:1;font-family:Trebuchet MS;-inkscape-font-specification:Trebuchet MS Bold"
-             y="407.96988"
-             x="335.30011"
-             sodipodi:role="line"
-             id="tspan3851-2-8-6">Álcool &amp;</tspan></text>
-      </g>
       <g
          id="Layer_1"
          transform="matrix(0.56513581,0,0,0.58228033,380.85187,266.36186)" />
-      <g
-         id="g6813"
-         transform="translate(42.101225,40.22806)">
-        <rect
-           style="fill:#336699;fill-opacity:1;stroke:none"
-           id="rect6811"
-           width="26.577787"
-           height="27.384077"
-           x="368.98007"
-           y="266.20251"
-           ry="13.288894" />
-        <g
-           transform="matrix(0.56513581,0,0,0.58228033,380.14626,270.57807)"
-           id="g6779">
-          <rect
-             y="1.2485621"
-             x="-8.8788004"
-             style="fill:#fdca01;fill-opacity:1"
-             width="6.8250294"
-             height="27.300117"
-             id="rect6781" />
-          <rect
-             x="1.0049412"
-             y="8.0735912"
-             style="fill:#fdca01;fill-opacity:1"
-             width="6.8250294"
-             height="20.475088"
-             id="rect6783" />
-          <rect
-             x="10.88867"
-             y="19.166748"
-             style="fill:#eeeeee;fill-opacity:1"
-             width="6.8250294"
-             height="9.3819313"
-             id="rect6785" />
-        </g>
-      </g>
-      <g
-         style="fill:#336699;fill-opacity:1"
-         id="g6873"
-         transform="matrix(0.77235058,0,0,0.77235058,190.04016,-1.5909653)">
-        <text
-           sodipodi:linespacing="125%"
-           id="text6875"
-           y="401.41727"
-           x="334.58731"
-           style="font-size:16.20186996px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:-0.11707316px;word-spacing:0px;fill:#336699;fill-opacity:1;stroke:none;font-family:Sans"
-           xml:space="preserve"
-           transform="scale(0.9851681,1.0150552)"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:-0.11707316px;fill:#336699;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans"
-             y="401.41727"
-             x="334.58731"
-             id="tspan6877"
-             sodipodi:role="line" /><tspan
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;letter-spacing:0.01067431px;fill:#336699;fill-opacity:1;font-family:Trebuchet MS;-inkscape-font-specification:Trebuchet MS Bold"
-             y="422.85767"
-             x="334.58731"
-             sodipodi:role="line"
-             id="tspan6879">Saúde</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-size:11.23768425px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#336699;fill-opacity:1;stroke:none;font-family:Sans"
-           x="335.30011"
-           y="393.09872"
-           id="text6881"
-           sodipodi:linespacing="125%"
-           transform="scale(0.9851681,1.0150552)"><tspan
-             sodipodi:role="line"
-             id="tspan6883"
-             x="335.30011"
-             y="393.09872"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#336699;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans" /><tspan
-             id="tspan6885"
-             sodipodi:role="line"
-             x="335.30011"
-             y="407.96988"
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#336699;fill-opacity:1;font-family:Trebuchet MS;-inkscape-font-specification:Trebuchet MS Bold">Álcool &amp;</tspan></text>
-      </g>
-      <g
-         id="g7075"
-         transform="translate(-121.59963,-41.682086)">
-        <g
-           id="g6935"
-           transform="translate(44.95268,31.650547)">
-          <rect
-             style="fill:#336699;fill-opacity:1;stroke:none"
-             id="rect6937"
-             width="26.577787"
-             height="27.384077"
-             x="368.98007"
-             y="266.20251"
-             ry="13.288894" />
-          <g
-             transform="matrix(0.56513581,0,0,0.58228033,380.14626,270.57807)"
-             id="g6939" />
-        </g>
-        <g
-           style="fill:#336699;fill-opacity:1"
-           id="g6947"
-           transform="matrix(0.77235058,0,0,0.77235058,192.89162,-10.168479)">
-          <text
-             sodipodi:linespacing="125%"
-             id="text6949"
-             y="401.41727"
-             x="334.58731"
-             style="font-size:16.20186996px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:-0.11707316px;word-spacing:0px;fill:#336699;fill-opacity:1;stroke:none;font-family:Sans"
-             xml:space="preserve"
-             transform="scale(0.9851681,1.0150552)"><tspan
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:-0.11707316px;fill:#336699;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans"
-               y="401.41727"
-               x="334.58731"
-               id="tspan6951"
-               sodipodi:role="line" /><tspan
-               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;letter-spacing:0.01067431px;fill:#336699;fill-opacity:1;font-family:Trebuchet MS;-inkscape-font-specification:Trebuchet MS Bold"
-               y="422.85767"
-               x="334.58731"
-               sodipodi:role="line"
-               id="tspan6953">Saúde</tspan></text>
-          <text
-             xml:space="preserve"
-             style="font-size:11.23768425px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#336699;fill-opacity:1;stroke:none;font-family:Sans"
-             x="335.30011"
-             y="393.09872"
-             id="text6955"
-             sodipodi:linespacing="125%"
-             transform="scale(0.9851681,1.0150552)"><tspan
-               sodipodi:role="line"
-               id="tspan6957"
-               x="335.30011"
-               y="393.09872"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#336699;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans" /><tspan
-               id="tspan6959"
-               sodipodi:role="line"
-               x="335.30011"
-               y="407.96988"
-               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#336699;fill-opacity:1;font-family:Trebuchet MS;-inkscape-font-specification:Trebuchet MS Bold">Álcool &amp;</tspan></text>
-        </g>
-        <g
-           transform="translate(-0.7609295,-0.05423534)"
-           id="g6993">
-          <path
-             inkscape:connector-curvature="0"
-             id="path3994-6"
-             d="m 427.42451,307.25786 c -1.09945,0.17668 -1.69327,-0.52873 -1.32636,-1.57556 0.36693,-1.04685 1.55567,-2.0387 2.65512,-2.21539 1.09944,-0.17668 1.69328,0.52873 1.32636,1.57557 -0.36694,1.04685 -1.55568,2.0387 -2.65512,2.21538 z"
-             style="opacity:0.909465;fill:#fdca01;fill-opacity:1;fill-rule:evenodd;stroke:#14cc1e;stroke-width:0.00680634;stroke-miterlimit:0;stroke-opacity:1" />
-          <path
-             id="path3054"
-             style="fill:#fdca01;fill-opacity:1;fill-rule:nonzero;stroke:none"
-             d="m 420.7945,308.24041 c 3.66074,-1.42242 4.25023,0.4764 7.7709,-0.10806 2.81584,-0.4675 8.67416,-5.3801 7.26501,-2.99587 -0.88094,1.49048 -2.43176,2.70639 -4.09131,3.90276 -1.65954,1.19638 -3.4278,2.37322 -4.7436,3.78555 -2.10479,2.2592 -0.28989,8.02633 -1.80859,6.77973 -1.89887,-1.55859 -0.4228,-7.29415 -1.31186,-9.53432 -0.71106,-1.79169 -6.00842,-0.69217 -3.08055,-1.82979 z"
-             inkscape:connector-curvature="0"
-             sodipodi:nodetypes="scssscss" />
-        </g>
-      </g>
-      <g
-         style="fill:#336699;fill-opacity:1"
-         id="g7016"
-         transform="matrix(0.77235058,0,0,0.77235058,70.692617,-1.2607848)">
-        <text
-           sodipodi:linespacing="125%"
-           id="text7018"
-           y="401.41727"
-           x="334.58731"
-           style="font-size:16.20186995999999979px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:-0.11707316000000000px;word-spacing:0px;fill:#336699;fill-opacity:1;stroke:none;font-family:Sans"
-           xml:space="preserve"
-           transform="scale(0.9851681,1.0150552)"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:-0.11707316000000000px;fill:#336699;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans"
-             y="401.41727"
-             x="334.58731"
-             id="tspan7020"
-             sodipodi:role="line" /><tspan
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;letter-spacing:0.01067431000000000px;fill:#336699;fill-opacity:1;font-family:Trebuchet MS;-inkscape-font-specification:Trebuchet MS Bold"
-             y="422.85767"
-             x="334.58731"
-             sodipodi:role="line"
-             id="tspan7022">Saúde</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-size:11.23768424999999915px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#336699;fill-opacity:1;stroke:none;font-family:Sans"
-           x="335.30011"
-           y="393.09872"
-           id="text7024"
-           sodipodi:linespacing="125%"
-           transform="scale(0.9851681,1.0150552)"><tspan
-             sodipodi:role="line"
-             id="tspan7026"
-             x="335.30011"
-             y="393.09872"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#336699;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans" /><tspan
-             id="tspan7028"
-             sodipodi:role="line"
-             x="335.30011"
-             y="407.96988"
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#336699;fill-opacity:1;font-family:Trebuchet MS;-inkscape-font-specification:Trebuchet MS Bold">Álcool &amp;</tspan></text>
-      </g>
-      <g
-         id="g7114"
-         transform="translate(-0.89265065,0.68210292)"
-         style="fill:#eeeeee">
-        <path
-           transform="matrix(0.37406042,0,0,0.3854083,232.00057,186.68824)"
-           d="m 202.97984,325.08856 c 0,2.97064 -2.40818,5.37883 -5.37883,5.37883 -2.97064,0 -5.37882,-2.40819 -5.37882,-5.37883 0,-2.97064 2.40818,-5.37882 5.37882,-5.37882 2.97065,0 5.37883,2.40818 5.37883,5.37882 z"
-           sodipodi:ry="5.3788238"
-           sodipodi:rx="5.3788238"
-           sodipodi:cy="325.08856"
-           sodipodi:cx="197.60101"
-           id="path6999"
-           style="fill:#eeeeee;fill-opacity:1;stroke:none"
-           sodipodi:type="arc" />
-        <g
-           transform="matrix(1.1163659,0,0,1.1163659,-34.649456,-38.358192)"
-           id="g7110"
-           style="fill:#eeeeee">
-          <path
-             style="fill:#eeeeee;fill-opacity:1;fill-rule:nonzero;stroke:none"
-             d="M 69.5625 251.25 C 68.543282 251.20366 67.766596 251.39874 67.4375 251.96875 C 66.327434 254.71214 78.804904 257.12175 83.28125 264.875 C 88.126268 272.848 80.326915 303.25 87.90625 303.25 C 94.812187 303.25 85.363416 282.52 93.5625 273.9375 C 101.73673 282.52899 92.285511 303.25 99.1875 303.25 C 106.76683 303.25 98.936232 272.848 103.78125 264.875 C 108.2576 257.12175 120.73507 254.71214 119.625 251.96875 C 118.30862 249.68872 110.06534 253.22501 106.125 255.5 C 103.42292 257.06001 97.933076 259.89866 93.5625 259.6875 C 93.552371 259.68802 93.541391 259.68701 93.53125 259.6875 C 89.160487 259.89922 83.639819 257.06015 80.9375 255.5 C 77.982245 253.79376 72.620154 251.38901 69.5625 251.25 z "
-             transform="matrix(0.27908255,0,0,0.28754908,278.96033,242.43164)"
-             id="path6965" />
-        </g>
-      </g>
       <g
          style="fill:#015a01;fill-opacity:1"
          transform="matrix(1.5532176,0,0,1.5532176,-240.19427,12.407884)"
@@ -566,7 +272,7 @@
       </g>
       <g
          style="fill:#eeeeee"
-         transform="matrix(1.5341079,0,0,1.5341079,-75.246294,-99.998445)"
+         transform="matrix(1.5341079,0,0,1.5341079,-84.183984,-179.00054)"
          id="g7141">
         <g
            style="fill:#eeeeee"
@@ -581,16 +287,16 @@
       <text
          xml:space="preserve"
          style="font-size:26.86311722px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#2980bf;fill-opacity:0.94117647;stroke:none;font-family:Sans"
-         x="350.2692"
-         y="431.85452"
+         x="341.19696"
+         y="354.02417"
          id="text3090"
          sodipodi:linespacing="125%"
          transform="scale(0.9851681,1.0150552)"><tspan
            sodipodi:role="line"
            id="tspan3092"
-           x="350.2692"
-           y="431.85452"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#2980bf;fill-opacity:0.94117647000000004;font-family:Simplifica;-inkscape-font-specification:Simplifica">Álcool e Saúde</tspan></text>
+           x="341.19696"
+           y="354.02417"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#2980bf;fill-opacity:0.94117647;font-family:Simplifica;-inkscape-font-specification:Simplifica">Álcool e Saúde</tspan></text>
       <g
          id="g3874"
          transform="matrix(1.5064092,0,0,1.5064092,-125.6832,11.166244)"
