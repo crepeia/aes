@@ -14,7 +14,7 @@
    height="297mm"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="vst-figuras.svg"
    inkscape:export-filename="/home/hpgomide/Área de Trabalho/viva-sem-tabaco.png"
    inkscape:export-xdpi="500"
@@ -26,14 +26,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.17401688"
-     inkscape:cx="-3243.0859"
-     inkscape:cy="1626.757"
+     inkscape:zoom="0.24609703"
+     inkscape:cx="-3042.6238"
+     inkscape:cy="801.49618"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1680"
-     inkscape:window-height="1026"
+     inkscape:window-width="1360"
+     inkscape:window-height="744"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
@@ -845,6 +845,17 @@
      id="layer1"
      inkscape:groupmode="layer"
      inkscape:label="Camada 1">
+    <rect
+       style="fill:#f9f9f9;fill-opacity:1"
+       id="rect14608"
+       width="1158.0798"
+       height="406.34378"
+       x="-4002.4863"
+       y="-109.78105"
+       ry="66.348671"
+       inkscape:export-filename="/home/crepeia/aes/imgs/3logos.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <g
        id="g6295"
        transform="translate(-2.9515816,0)">
@@ -2089,28 +2100,29 @@
          style="fill:#a5e963;fill-opacity:1;stroke:none" />
     </g>
     <g
-       id="g3377">
+       id="g3377"
+       style="fill:#808080;fill-opacity:1">
       <path
-         style="fill:#38b394;fill-opacity:1;stroke:none"
+         style="fill:#808080;fill-opacity:1;stroke:none"
          d="m -2351.4288,803.79077 248.5714,0 c 14.2458,0 25.7143,11.46857 25.7143,25.71429 l 0,148.57143 c 0,14.24571 -11.4685,25.71431 -25.7143,25.71431 l -248.5714,0 c -14.2457,0 -25.7143,-11.4686 -25.7143,-25.71431 l 0,-148.57143 c 0,-14.24572 11.4686,-25.71429 25.7143,-25.71429 z"
          id="rect3652-7" />
       <g
          id="g3672-5"
          transform="matrix(5.02586,0,0,4.4518804,-2307.5566,841.46443)"
-         style="fill:#eeeeee;fill-opacity:1"
+         style="fill:#808080;fill-opacity:1"
          inkscape:export-filename="/home/hpgomide/Área de Trabalho/Link para images/preparando-parar.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <g
            id="g3674-1"
-           style="fill:#eeeeee;fill-opacity:1" />
+           style="fill:#808080;fill-opacity:1" />
         <g
            id="g3676-4"
-           style="fill:#eeeeee;fill-opacity:1">
+           style="fill:#808080;fill-opacity:1">
           <path
              id="path3678-0"
              d="M 16,4 C 16,4 12,0 0,0 v 24 c 12.125,0 16,4 16,4 0,0 3.875,-4 16,-4 V 0 C 20,0 16,4 16,4 z M 4,4 c 5.084,0.426 8.203,1.602 10,2.555 V 22.664 C 12.203,21.715 9.084,20.539 4,20.109 V 4 z m 24,16.109 c -5.086,0.43 -8.205,1.605 -10,2.555 V 6.555 C 19.795,5.602 22.914,4.426 28,4 v 16.109 z"
-             style="fill:#eeeeee;fill-opacity:1"
+             style="fill:#808080;fill-opacity:1"
              inkscape:connector-curvature="0" />
         </g>
       </g>
@@ -2235,6 +2247,150 @@
                id="polygon7785" />
           </g>
         </g>
+      </g>
+    </g>
+    <g
+       id="g14594"
+       transform="translate(528.24692,-357.58253)"
+       inkscape:export-filename="/home/crepeia/aes/imgs/3logos.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/hpgomide/Área de Trabalho/Link para images/preparando-parar.png"
+         ry="66.348671"
+         y="357.41797"
+         x="-4111.4375"
+         height="200"
+         width="300"
+         id="rect10204"
+         style="fill:#2980b9;fill-opacity:0.94117647;stroke:none" />
+      <g
+         style="fill:#f9f9f9"
+         transform="matrix(3.9630746,0,0,3.9630746,-4024.8467,394.00878)"
+         id="g10337">
+        <g
+           style="fill:#f9f9f9"
+           id="Layer_1-33">
+</g>
+        <g
+           style="fill:#f9f9f9"
+           id="arrow_x5F_down">
+	<path
+   inkscape:connector-curvature="0"
+   style="fill:#f9f9f9"
+   d="m 32,16.016 -5.672,-5.664 c 0,0 -3.18,3.18 -6.312,6.312 V 0 H 11.993 V 16.664 L 5.673,10.344 0,16.016 16,32 32,16.016 z"
+   id="path10329" />
+
+</g>
+      </g>
+    </g>
+    <g
+       id="g11059"
+       transform="matrix(7.7342605,0,0,7.7342605,-4421.6184,-26.753074)">
+      <g
+         id="Layer_1-439">
+</g>
+      <g
+         id="book">
+	<path
+   id="path11051"
+   d="M 4,0 C 1.791,0 0,1.789 0,4 v 24 c 0,2.211 1.791,4 4,4 H 28 V 0 H 4 z M 24,28 H 8 V 4 h 3.984 v 8.039 l 4,-4 4.031,4.031 V 4 H 24 v 24 z"
+   style="fill:#4e4e50"
+   inkscape:connector-curvature="0" />
+
+</g>
+    </g>
+    <g
+       id="g14584"
+       transform="translate(528.24692,-357.58253)"
+       inkscape:export-filename="/home/crepeia/aes/imgs/3logos.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/hpgomide/Área de Trabalho/Link para images/preparando-parar.png"
+         ry="66.348671"
+         y="357.41797"
+         x="-4488.6597"
+         height="200"
+         width="300"
+         id="rect3652-8"
+         style="fill:#f39c1f;fill-opacity:0.94117647;stroke:none" />
+      <g
+         style="fill:#f9f9f9;fill-opacity:1"
+         transform="matrix(5.1749495,0,0,5.1749495,-4416.2859,374.61878)"
+         id="g11833">
+        <g
+           style="fill:#f9f9f9;fill-opacity:1"
+           id="Layer_1-87">
+</g>
+        <g
+           style="fill:#f9f9f9;fill-opacity:1"
+           id="chart_x5F_alt-7">
+	<g
+   style="fill:#f9f9f9;fill-opacity:1"
+   id="g11819">
+		<path
+   inkscape:connector-curvature="0"
+   style="fill:#f9f9f9;fill-opacity:1"
+   d="M 14.534,19.422 3.956,8.844 c -5.275,6.086 -5.275,15.07 0,21.156 L 14.534,19.422 z"
+   id="path11821" />
+
+		<path
+   inkscape:connector-curvature="0"
+   style="fill:#8e44af;fill-opacity:0.94117647"
+   d="M 16.118,18 V 0 C 11.128,0.305 6.706,2.18 3.136,5.102 L 16.118,18 z"
+   id="path11823" />
+
+		<path
+   inkscape:connector-curvature="0"
+   style="fill:#f9f9f9;fill-opacity:1"
+   d="M 18.087,4.016 V 18.828 L 7.62,29.211 C 9.948,30.922 12.753,32 15.937,32 23.755,32 30.001,25.672 30.001,17.867 30.001,10.789 24.856,5.055 18.087,4.016 z"
+   id="path11825" />
+
+	</g>
+
+</g>
+      </g>
+    </g>
+    <g
+       id="g14601"
+       transform="translate(528.24692,-357.58253)"
+       inkscape:export-filename="/home/crepeia/aes/imgs/3logos.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <rect
+         style="fill:#8e44af;fill-opacity:0.94117647;stroke:none"
+         id="rect10202"
+         width="300"
+         height="200"
+         x="-3734.2153"
+         y="357.41797"
+         ry="66.348671"
+         inkscape:export-filename="/home/hpgomide/Área de Trabalho/Link para images/preparando-parar.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <g
+         style="fill:#f9f9f9;fill-opacity:1"
+         transform="matrix(4.6824905,0,0,4.6824905,-3659.1352,382.49812)"
+         id="g14579">
+        <g
+           style="fill:#f9f9f9;fill-opacity:1"
+           id="Layer_1-07">
+</g>
+        <g
+           style="fill:#f9f9f9;fill-opacity:1"
+           id="play_x5F_alt">
+	<path
+   inkscape:connector-curvature="0"
+   style="fill:#f9f9f9;fill-opacity:1"
+   d="M 16,0 C 7.164,0 0,7.164 0,16 0,24.836 7.164,32 16,32 24.836,32 32,24.836 32,16 32,7.164 24.836,0 16,0 z M 10,24 V 8 L 26.008,16 10,24 z"
+   id="path14571" />
+
+</g>
       </g>
     </g>
   </g>

@@ -1,26 +1,26 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:cc="http://java.sun.com/jsf/composite">
+      xmlns:cc="http://java.sun.com/jsf/composite">
 
-	<!-- INTERFACE -->
-	<cc:interface>
-		<cc:attribute name="cssClass" />
-	</cc:interface>
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="cssClass" />
+    </cc:interface>
 
-	<!-- IMPLEMENTATION -->
-	<cc:implementation>
-		<div class="#{cc.attrs.cssClass}">
-			<nav>
-				<ul>
-					<li><a href="parou-de-fumar-acompanhamento.xhtml">Acompanhamento</a></li>                                        
-                                        <li><a href="parou-de-fumar-acompanhamento-recaidas-identificar-motivos.xhtml">Causas da recaída</a></li>
-                                        <li><a href="parou-de-fumar-acompanhamento-lapso-identificar-fatores-recaida.xhtml">Fatores para recaída</a></li>                                        					                                        				
-					<li><a href="parou-de-fumar-onde-procurar-ajuda.xhtml">Onde procurar ajuda</a></li>					                                        
-                                        <li><a href="parou-de-fumar-acompanhamento-lapso-plano-evitar-recaida.xhtml">Meu plano para recaídas</a></li>
-									                                        
-				</ul>
-			</nav>
-		</div>
-	</cc:implementation>
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <div class="#{cc.attrs.cssClass}">
+            <nav>
+                <ul>
+                    <li><a href="parou-de-fumar-acompanhamento.xhtml">#{messages['menu.rdstep.li1']}</a></li>                                        
+                    <li><a href="parou-de-fumar-acompanhamento-recaidas-identificar-motivos.xhtml">#{messages['menu.rdstep.li2']}</a></li>
+                    <li><a href="parou-de-fumar-acompanhamento-lapso-identificar-fatores-recaida.xhtml">#{messages['menu.rdstep.li3']}</a></li>                                        					                                        				
+                    <li><a href="parou-de-fumar-onde-procurar-ajuda.xhtml">#{messages['menu.rdstep.li4']}</a></li>					                                        
+                    <li><a href="parou-de-fumar-acompanhamento-lapso-plano-evitar-recaida.xhtml">#{messages['menu.rdstep.li5']}</a></li>
+
+                </ul>
+            </nav>
+        </div>
+    </cc:implementation>
 </html>

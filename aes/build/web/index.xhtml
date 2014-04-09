@@ -11,12 +11,12 @@
     </h:head>
     <h:body>
         <div id="corpo">
-            <!-- header -->    
+            <!-- header -->   
             <w:header />
 
             <w:topmenu />
 
-            <!--mainmenu-->         	
+            <!--mainmenu-->            
             <div class="main">
                 <!-- tentar colocar as definicoes de class no componente -->
 
@@ -27,18 +27,18 @@
                             <h1>Avalie seu beber online</h1>
                             <div class="maindescribe">
                                 <h:graphicImage library="default" name="images/people.png" alt="Especialistas" />
-                                <p><h:outputText value="#{messages['register']}" /></p>
+                                <p>Registre aqui o quanto você bebe e conheça melhor os efeitos do álcool no seu organismo.</p>
                             </div>
                             <div class="maindescribe">
                                 <h:graphicImage library="default" name="images/book.png" alt="Ciências" />
-                                <p>O conteúdo foi criado por especialistas com a participação de ex-fumantes e fumantes. <h:outputLink value="quem-somos-os-autores.xhtml">Saiba mais</h:outputLink></p>                                
+                                <p>O conteúdo foi criado por profissionais de saúde e especialistas na área. <h:outputLink value="quem-somos-os-autores.xhtml">Saiba mais</h:outputLink>.</p>                               
                             </div>
                             <div class="maindescribe">
                                 <h:graphicImage library="default" name="images/padlock.png" alt="Gratuito" />
-                                <p>Ele é gratuito e sempre será! Faça seu cadastro agora mesmo <h:outputLink value="cadastrar-nova-conta.xhtml">aqui</h:outputLink>.</p>
-                            </div>                                                                                                                                          
+                                <p>A avaliação é gratuita e sempre será! Continue acessando ou faça seu cadastro agora mesmo <h:outputLink value="cadastrar-nova-conta.xhtml">aqui</h:outputLink>.</p>
+                            </div>                                                                                                                                         
                         </div>
-                        <div id="mainright">                            
+                        <div id="mainright">                           
                          <div id ="mainvideo">
                             <iframe width="350" height="263" src="//www.youtube.com/embed/_roRUq1CkGw?rel=0" frameborder="0"></iframe>
                          </div>
@@ -46,60 +46,61 @@
                     </div>
 
                     <div id="mainbottom">
-                        <h1>Comece agora!</h1>
-                        <h:graphicImage library="default" id="opcoes-img" name="images/opcoes.png" alt="Especialistas" />
+                        <h1>Vamos começar?</h1>
+                       
+                        
+                        <!--<h:graphicImage library="default" id="opcoes-img" name="images/opcoes.png" alt="Especialistas" />
                                     <div id="topo-avaliar">
-                                        <ul>                                                                         
-                                            <li>Escolha a que você achar melhor.</li> 
-                                            <li>Você pode ver as etapas na ordem que quiser.</li>
-                                            <li>Login necessário nas etapas 2 e 3. É gratuito e seguro.</li>
+                                        <ul>                                                                        
+                                            <li>Abaixo estão as três fases da avaliação.</li>
+                                            <li>Você deve começar pela primeira etapa.</li>
+                                            <li>Login é necessário nas etapas 2 e 3. É seguro e totalmente sigiloso.</li>
                                         </ul>
-                                    </div>
+                                    </div>-->
+                        
                         <div id="passosbottom">
                             <div class="passos">
-                                <h2><h:outputLink value="preparando-parar-de-fumar-introducao.xhtml">Vale a pena parar?</h:outputLink></h2>
-                                        <h:outputLink value="preparando-parar-de-fumar-introducao.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/preparando-parar.png" alt="Especialistas" /></h:outputLink>
+                                <h2><h:outputLink value="template-passo1.xhtml">O quanto você bebe?</h:outputLink></h2>
+                                        <h:outputLink value="template-passo1.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/preparando-parar.png" alt="Especialistas" /></h:outputLink>
                                         <h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" />
                                         <div class="passos-txt">
                                                <ul>
-                                                   <li>Riscos do cigarro</li>
-                                                   <li>Benefícios de parar</li>
-                                                   <li>Abstinência</li>                                      
-                                                   <li>Ganho de peso</li>
+                                                   <li>Avalie o seu beber</li>
+                                                   <li>Quanto você bebe?</li>                                   
+                                                   <li>Problemas</li>
                                                    <li>Custo financeiro</li>
                                                </ul>
-                                            
+                                           
                                         </div>
                                     </div>
-                                    
+                                   
                                     <div class="passos">
-                                        <h2><h:outputLink value="pronto-para-parar-de-fumar-introducao.xhtml">Pronto para parar?</h:outputLink></h2>
-                                        <h:outputLink value="pronto-para-parar-de-fumar-introducao.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/pronto-parar.png" alt="Especialistas" /></h:outputLink>
+                                        <h2><h:outputLink value="template-passo2.xhtml">Querendo beber menos?</h:outputLink></h2>
+                                        <h:outputLink value="template-passo2.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/pronto-parar.png" alt="Especialistas" /></h:outputLink>
                                         <h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" />
                                         <div class="passos-txt">
                                                <ul>
                                                    <li>Plano personalizado</li>
-                                                   <li>Medicamentos</li>
-                                                   <li>Sintomas de abstinência</li>                                      
-                                                   <li>Ganho de peso</li>
-                                                   <li>Enfrentando a fissura</li>
+                                                   <li>Estratégias</li>
+                                                   <li>Dificuldades</li>                                     
+                                                   <li>Benefícios</li>
                                                </ul>
-                                            
+                                           
                                         </div>
                                     </div>
-                                    
+                                   
                                     <div class="passos">
-                                        <h2><h:outputLink value="parou-de-fumar-acompanhamento.xhtml">Já parou?</h:outputLink></h2>
-                                        <h:outputLink value="parou-de-fumar-acompanhamento.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/acompanhamento.png" alt="Especialistas"/></h:outputLink>
-                                        
+                                        <h2><h:outputLink value="template-passo3.xhtml">Mantendo resultados...</h:outputLink></h2>
+                                        <h:outputLink value="template-passo3.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/acompanhamento.png" alt="Especialistas"/></h:outputLink>
+                                       
                                         <div class="passos-txt">
-                                               <ul>                                                                                                      
+                                               <ul>                                                                                                     
                                                    <li>Plano para recaídas</li>
-                                                   <li>Recaídas e lapsos</li>                                      
+                                                   <li>Recaídas e lapsos</li>                                     
                                                    <li>E-mails de acompanhamento</li>
                                                    <li>Mensagens</li>
                                                </ul>
-                                            
+                                           
                                         </div>
                                     </div>
                         </div>
@@ -107,7 +108,7 @@
                 </div>
             </div>
 
-        </div><!-- end.corpo --> 
+        </div><!-- end.corpo -->
 
         <!--Footer -->
         <w:footer />

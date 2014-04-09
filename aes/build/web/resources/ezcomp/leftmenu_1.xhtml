@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://java.sun.com/jsf/composite"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:p="http://primefaces.org/ui"
-	  xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <!-- INTERFACE -->
     <cc:interface>
@@ -14,26 +14,26 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>	
         <div class="#{cc.attrs.cssClass}">			
-			<h:form id="leftMenuForm">
-				<nav>
+            <h:form id="leftMenuForm">
+                <nav>
 
-					<ul>
-						<li><a href="preparando-parar-de-fumar-introducao.xhtml">Preparar para parar</a></li>
-						<li><a href="preparando-parar-de-fumar-riscos-de-fumar.xhtml">Riscos de fumar</a></li>
-						<li><a href="preparando-parar-de-fumar-beneficios-de-parar.xhtml">Benefícios de parar</a></li>
-						<li><a href="preparando-parar-de-fumar-calculadora-gastos.xhtml">Gastos financeiros</a></li>
-						<li><a href="preparando-parar-de-fumar-abstinencia-fissura.xhtml">Abstinência e fissura</a></li>
-						<li><a href="preparando-parar-de-fumar-medo-nao-conseguir-ganho-de-peso.xhtml">Ganho de peso e medos</a></li>
-						<li><a href="preparando-parar-de-fumar-ansiedade-e-depressao.xhtml">Ansiedade e depressão</a></li>
-						<li><a href="preparando-parar-de-fumar-substituir-prazer-cigarro.xhtml">Substituir o prazer do cigarro</a></li>
-						<li id="blue-li">
-							<p:commandLink value="Já estou pronto!" action="#{preparandoParaParar.prontoParaPararDeFumar}" update="@form" >
-								<f:attribute name="toURL" value="pronto-para-parar-de-fumar-introducao.xhtml" />
-							</p:commandLink>
-						</li>				
-					</ul>
-				</nav>              
-			</h:form>
+                    <ul>
+                        <li><a href="preparando-parar-de-fumar-introducao.xhtml">#{messages['menu.firststep.li1']}</a></li>
+                        <li><a href="preparando-parar-de-fumar-riscos-de-fumar.xhtml">#{messages['menu.firststep.li2']}</a></li>
+                        <li><a href="preparando-parar-de-fumar-beneficios-de-parar.xhtml">#{messages['menu.firststep.li3']}</a></li>
+                        <li><a href="preparando-parar-de-fumar-calculadora-gastos.xhtml">#{messages['menu.firststep.li4']}</a></li>
+                        <li><a href="preparando-parar-de-fumar-abstinencia-fissura.xhtml">#{messages['menu.firststep.li5']}</a></li>
+                        <li><a href="preparando-parar-de-fumar-medo-nao-conseguir-ganho-de-peso.xhtml">#{messages['menu.firststep.li6']}</a></li>
+                        <li><a href="preparando-parar-de-fumar-ansiedade-e-depressao.xhtml">#{messages['menu.firststep.li7']}</a></li>
+                        <li><a href="preparando-parar-de-fumar-substituir-prazer-cigarro.xhtml">#{messages['menu.firststep.li8']}</a></li>
+                        <li id="blue-li">
+                            <p:commandLink value="#{messages['menu.firststep.li9']}" action="#{preparandoParaParar.prontoParaPararDeFumar}" update="@form" >
+                                <f:attribute name="toURL" value="pronto-para-parar-de-fumar-introducao.xhtml" />
+                            </p:commandLink>
+                        </li>				
+                    </ul>
+                </nav>              
+            </h:form>
         </div>
 
     </cc:implementation>

@@ -19,7 +19,7 @@
 
         <div id="header">
             <div class="headertop">
-                <h:outputLink value="." title="Viva sem Tabaco">
+                <h:outputLink value="." title="#{messages['header.title']}">
                     <h:graphicImage library="default" name="images/logo-alcool-e-saude.png" alt="Logomarca do Álcool e Saúde " id="logo"/>
                 </h:outputLink>
             </div>
@@ -29,31 +29,31 @@
                     <h:form id="loginForm">
                         <p:panel id="groupPanel">
                             <p:panel id="loginPanel" rendered="#{!loginController.showName}">
-                                <h:outputLink value="cadastrar-nova-conta.xhtml" >Cadastrar</h:outputLink> / 
-                                <p:commandLink value="Entrar" id="entrarLink" /> 
+                                <h:outputLink value="cadastrar-nova-conta.xhtml" >#{messages['register']}</h:outputLink> / 
+                                <p:commandLink value="#{messages['signin']}" id="entrarLink" /> 
                             </p:panel>
                             <p:panel id="userPanel" rendered="#{loginController.showName}">
                                 Olá <h:outputText value="#{loginController.user.name}" />  ::  
-								<h:outputLink value="logout.xhtml">Sair</h:outputLink>
+                                <h:outputLink value="logout.xhtml">Sair</h:outputLink>
                             </p:panel>
                         </p:panel>
                         <div id="fastlogin">
-							<p:overlayPanel id="loginDialog" for="entrarLink" hideEffect="fade" showEffect="fade">  
-								<p:panel id="loginInformationPanel" >
-									<p:message for="emailTxt" />
-									<p:message for="passwordTxt"/>
-									<p:messages id="loginMessages" globalOnly="true" />
-									<p:inputText id="emailTxt" value="#{loginController.user.email}" required="true" size="30" label="E-mail" >
-										<f:validateLength maximum="50" />
-									</p:inputText>
-									<p:watermark for="emailTxt" value="E-mail" />
-									<p:password id="passwordTxt" value="#{loginController.password}" required="true" size="30" label="Senha">  
-										<f:validateLength maximum="16" />
-									</p:password>
-									<p:watermark for="passwordTxt" value="Senha" />
-									<p:commandButton id="entrarBtn" value="Entrar" styleClass="btnlogin" update="groupPanel loginInformationPanel" actionListener="#{loginController.loginDialog}" />
-								</p:panel>
-							</p:overlayPanel>
+                            <p:overlayPanel id="loginDialog" for="entrarLink" hideEffect="fade" showEffect="fade">  
+                                <p:panel id="loginInformationPanel" >
+                                    <p:message for="emailTxt" />
+                                    <p:message for="passwordTxt"/>
+                                    <p:messages id="loginMessages" globalOnly="true" />
+                                    <p:inputText id="emailTxt" value="#{loginController.user.email}" required="true" size="30" label="E-mail" >
+                                        <f:validateLength maximum="50" />
+                                    </p:inputText>
+                                    <p:watermark for="emailTxt" value="#{messages['email']}" />
+                                    <p:password id="passwordTxt" value="#{loginController.password}" required="true" size="30" label="Senha">  
+                                        <f:validateLength maximum="16" />
+                                    </p:password>
+                                    <p:watermark for="passwordTxt" value="#{messages['password']}" />
+                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btnlogin" update="groupPanel loginInformationPanel" actionListener="#{loginController.loginDialog}" />
+                                </p:panel>
+                            </p:overlayPanel>
                         </div>    
                     </h:form>
                 </div>
@@ -62,8 +62,8 @@
                         <div>
                             <input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/>
                             <input type="hidden" name="ie" value="UTF-8" />
-                            <input type="text" placeholder="Pesquise aqui" name="q" size="15" />
-                            <button type="submit">Buscar</button>
+                            <input type="text" placeholder="#{messages['search.here']}" name="q" size="15" />
+                            <button type="submit">#{messages['search']}</button>
                         </div>
                     </form>
                     <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&amp;lang=pt;"></script>
