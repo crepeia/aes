@@ -1,0 +1,39 @@
+Github
+-----------------------
+
+# Instalar no terminal
+sudo apt-get install git
+
+# Configurar nome de usuário e email para submissão
+git config --global user.email "leomartinsjf@gmail.com"
+git config --global user.name "Leonardo Martins"
+
+# Clonar repositório
+git clone https://github.com/crepeia/aes.git
+
+# Submeter alterações para github
+git add .
+git commit -m "Fazer comentário da submissão"
+git push
+
+# Fazer download do repositório
+git pull
+
+Mysql
+-----------------------
+Instalar no terminal
+
+sudo apt-get install mysql-client mysql-server
+
+* Durante a instalação você deverá inserir uma senha para usar o mysql. Atribua a seguinte senha: Pl1n3k6626068
+
+Ler arquivo com instruções para instalação do banco de dados em /aes/aes/database/mysql_script.dat
+
+
+
+
+
+
+
+
+
