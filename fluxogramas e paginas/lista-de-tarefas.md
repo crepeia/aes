@@ -1,35 +1,19 @@
-Pautas para reunião 14/11
+AES - 
 ==========================
 
 * Artigo Caloi - Terminar o artigo
 * Gwiaa - Cronograma de atividades
 
 
-WATI
 ==========================
+Prioridade alta
 
-Alta prioridade
-----------------
-Inserir botão 'voltar' na página de navegação.
-Lembre-se do benefícios que você pode ter. 
-
-Baixa prioridade
------------------
-cadastrar-nova-conta - arrumar mensagens de erro. Estão fora de lugar.
+* Preparar as páginas da etapa 1 - Avaliação do uso
+* Redigir o texto das páginas estáticas
 
 
-
-PROGRAMAÇÃO
-=============================
-login - criar página que envia senha para o usuário que esqueceu. Por enquanto, deixei link para formulário de contato.
-
-preparando-parar-de-fumar-ansiedade-e-depressao.xhtml - Avaliação não está funcionando.
-
-
-
-
-Preparar CSS para impressão
-
+==========================
+Próxima semana 15/05/2014
 
 
 
