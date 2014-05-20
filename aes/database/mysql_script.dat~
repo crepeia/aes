@@ -1,0 +1,6 @@
+#-- acessar como como root
+#-- mysql --user=root -p
+
+create user wati@localhost identified by "wati1235";
+create database wati;
+grant all privileges on wati.* to wati@localhost;
