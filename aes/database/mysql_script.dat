@@ -1,6 +1,6 @@
 #-- acessar como como root
 #-- mysql --user=root -p
 
-create user aes@localhost identified by "aes12345";
+create user aes@localhost identified by "aes1235";
 create database aes;
 grant all privileges on aes.* to aes@localhost;
