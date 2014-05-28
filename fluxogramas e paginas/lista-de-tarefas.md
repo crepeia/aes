@@ -1,19 +1,25 @@
 AES - 
-==========================
-
-* Artigo Caloi - Terminar o artigo
-* Gwiaa - Cronograma de atividades
-
 
 ==========================
-Prioridade alta
-
-* Preparar as páginas da etapa 1 - Avaliação do uso
-* Redigir o texto das páginas estáticas
+* Estabelecer quais critérios diagnósticos para dependência e que usaremos no site: DSM IV? CID 10?
+* Preparar os controladores para as páginas da etapa de avaliação
 
 
+Alta Prioridade
 ==========================
-Próxima semana 15/05/2014
+* Preparar os controladores para as páginas da etapa de avaliação
+
+
+Baixa Prioridade
+==========================
+* Preparar o sistema para tradução,
+* Design nas páginas internas do programa e da main page,
+* Otimização das imagens,
+* Preparar o sistema para tradução.
+
+
+
+
 
 
 
