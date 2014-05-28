@@ -10,7 +10,7 @@
         <title>Avaliação - Preparando para parar de fumar | Viva sem tabaco </title>
         <w:head_comum />
     </h:head>
-    
+
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
@@ -23,26 +23,22 @@
                 <w:leftmenu_1 cssClass="leftmenu1" />
 
                 <div class="pagecontent">
-                    
-                    
-                    
+
+
+
                     <div id="pagecont1">                                                                                                 
                         <div id="pagetop">
                             <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
                             </div>
                         </div>                                                                                                                                                                                                                                                                      
-                        
+
                         <h1>O quanto você bebe?</h1>                                                
-                        <h2>Avaliação do uso</h2>
-                                                
-                        <p>Tische kunste freund zur sah hauses seiner wieder. Flusterton am achthausen ab wo kindlichen en. Handwerke kellnerin vom wei wer nah schreiben. Wei pfeifen steigst ich weibern nachtun regnete drunten. Kapelle dunklem schlank bi zu mu sagerei du gelehnt. Ausblasen erstaunen war gegenteil und viehmarkt.</p>
-                        
-                        
+                        <h2>Avaliação do uso</h2>                                                                        
                         <div id="avacomorbidades">
                             <h:form>
                                 <p:panel id="questoes" >
-                                    
+
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="questao1">
                                         <f:facet name="header">  
@@ -56,8 +52,8 @@
                                             <f:selectItem itemLabel="4 ou mais vezes por semana" itemValue="4" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
-                                    
-                                    
+
+
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
                                             02. Quantas doses alcoólicas você consome tipicamente ao beber? 
@@ -70,8 +66,8 @@
                                             <f:selectItem itemLabel="10 ou mais" itemValue="4" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
-                                    
-                                    
+
+
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="questao3">
                                         <f:facet name="header">  
                                             03. Com que frequencia você consome seis ou mais doses de uma vez? 
@@ -83,10 +79,34 @@
                                             <f:selectItem itemLabel="Semanalmente" itemValue="3" />
                                             <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="4" />
                                         </p:selectOneRadio> 
-                                    </h:panelGrid>                                                                        
+                                    </h:panelGrid>
 
-                                </p:panel>
-                                <div><p:commandButton id="saveBtn" styleClass="btngen1" value="#{messages['preparando.aed.btn.avaliar']}" update="@form" action="#{preparandoParaPararController.avaliar()}">
+                                    <h2>Avaliação por semana</h2>    
+
+                                    <h:panelGrid columns="2" id="weeklyaverage">
+                                        <h:outputText value="01 - On average, how many days a week do you have an alcoholic drink?"/>
+                                        <p:selectOneMenu id="question1" value="">
+                                            <f:selectItem itemLabel="01" itemValue="1" />
+                                            <f:selectItem itemLabel="02" itemValue="2" />
+                                            <f:selectItem itemLabel="03" itemValue="3" />
+                                            <f:selectItem itemLabel="04" itemValue="4" />
+                                        </p:selectOneMenu>
+
+
+                                        <h:outputText value="02 - On a typical drinking day, how many drinks do you have?"/>
+                                        <p:selectOneMenu id="question2" value="">
+                                            <f:selectItem itemLabel="01" itemValue="1" />
+                                            <f:selectItem itemLabel="02" itemValue="2" />
+                                            <f:selectItem itemLabel="03" itemValue="3" />
+                                            <f:selectItem itemLabel="04" itemValue="4" />
+                                        </p:selectOneMenu>
+
+                                    </h:panelGrid>    
+
+
+                                </p:panel>                                                                                                                                
+
+                                <div><p:commandButton id="saveBtn" styleClass="btngen1" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.avaliar()}">
                                         <f:attribute name="object" value="#{userController.user}" />
                                         <f:attribute name="typeName" value="user" />
                                     </p:commandButton>                                
@@ -94,10 +114,10 @@
                                 </div>
                             </h:form>
                         </div>                                               
-                        
+
                         <div class="referencias">
-                        <p>Atualizado em 20/01/2014</p>
-                    </div>
+                            <p>Atualizado em 20/01/2014</p>
+                        </div>
 
                     </div>                                      
 

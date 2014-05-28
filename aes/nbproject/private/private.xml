@@ -2,11 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/thiagorizuti/aes/aes/src/java/aes/controller/BaseFormController.java</file>
-            <file>file:/home/thiagorizuti/aes/aes/src/conf/persistence.xml</file>
-            <file>file:/home/thiagorizuti/aes/aes/src/java/aes/controller/BaseController.java</file>
-            <file>file:/home/thiagorizuti/aes/aes/setup/glassfish-resources.xml</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
