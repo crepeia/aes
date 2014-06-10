@@ -8,6 +8,8 @@ AES -
 Alta Prioridade
 ==========================
 * Preparar os controladores para as páginas da etapa de avaliação
+* Criar página com opções "Já fiz uma avaliação" or "Quero começar novamente"
+* Inserir no fluxograma
 
 
 Baixa Prioridade
