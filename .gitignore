@@ -1,6 +1,6 @@
 ### NetBeans ###
-/aes/nbproject/
-/aes/build/
-/aes/dist/
+aes/nbproject/private
+aes/build/
+aes/dist/
 
 
