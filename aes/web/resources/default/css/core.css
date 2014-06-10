@@ -45,10 +45,7 @@ html, body {
 
 .pagecontent {
     height:100%;
-}
-
-.subpagecontent{
-    margin-left: 270px;
+    width:100%;
 }
 
 #footer {
@@ -189,12 +186,10 @@ img {
 }
 
 
-
-
 /*Search bar*/
 
 .form-wrapper input {
-    width: 170px;
+    width: 212px;
     height: 20px;
     padding: 10px 5px;
     border: 0;
@@ -344,7 +339,7 @@ img {
 /*PAGECONTENT*/
 
 .pagecontent  h1{
-    font-size:1.5em;
+    font-size:1.8em;
 
 }
 
@@ -574,142 +569,6 @@ INDEX***********************/
     text-shadow: none; 
 }
 
-/****************************
-LEFTMENUS***********************/
-
-/*LEFTMENU-1*/
-
-.leftmenu1 {	
-    float:left;
-    width: 260px;
-}
-
-
-.leftmenu1 nav ul {
-    background: #f39c12;
-    box-shadow: 1px 0px 8px rgba(0,0,0,0.15);
-    padding:0;
-    border-radius: 10px;  
-    list-style: none;
-    position: relative;
-
-}
-
-.leftmenu1 li#blue-li {
-    background:#2980b9;
-    border-radius: 4px;
-}
-
-
-.leftmenu1 nav ul li {
-    clear: both;             
-}
-
-.leftmenu1 li#blue-li:hover a{
-    color: #fff;
-    text-decoration: none;
-    background: #4375b4;
-    border-radius: 4px;
-}
-
-.leftmenu1 nav ul li:hover {
-    background: #f8f8f8;
-    background: linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    background: -moz-linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    background: -webkit-linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    border-radius: 4px;
-}
-
-.leftmenu1 nav ul li:hover a {
-    color: #f39c12;
-    text-decoration: none;
-}
-
-.leftmenu1	nav ul li a {
-    display: block; padding: 6px 15px;
-    color: #f8f8f8; text-decoration: none;
-}
-
-
-
-/*LEFTMENU-2*/
-
-.leftmenu2 {	
-    float:left;
-    width: 250px;
-}
-
-
-.leftmenu2 nav ul {
-    background: #4375b4;  
-    box-shadow: 1px 0px 8px rgba(0,0,0,0.15);
-    padding:0;
-    border-radius: 4px;  
-    list-style: none;
-    position: relative;
-}
-
-.leftmenu2 nav ul li {
-    clear: both;
-}
-
-.leftmenu2 nav ul li:hover {
-    background: #f8f8f8;
-    background: linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    background: -moz-linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    background: -webkit-linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    border-radius: 4px;
-}
-
-.leftmenu2 nav ul li:hover a {
-    color: #4375b4;
-    text-decoration: none;
-}
-
-.leftmenu2	nav ul li a {
-    display: block; padding: 6px 15px;
-    color: #f8f8f8; text-decoration: none;
-}
-
-/*LEFTMENU-3*/
-
-.leftmenu3 {	
-    float:left;
-    width: 250px;
-}
-
-
-.leftmenu3 nav ul {
-    background: #5a4cbc; 
-    box-shadow: 1px 0px 8px rgba(0,0,0,0.15);
-    padding:0;
-    border-radius: 4px;  
-    list-style: disc;
-    position: relative;            
-}
-
-.leftmenu3 nav ul li {
-    clear: both;
-}
-
-.leftmenu3 nav ul li:hover {
-    background: #f8f8f8;
-    background: linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    background: -moz-linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    background: -webkit-linear-gradient(top, #f8f8f8 0%, #e0e0e0 100%);
-    border-radius: 4px;
-}
-
-.leftmenu3 nav ul li:hover a {
-    color: #5a4cbc;
-    text-decoration: none;
-}
-
-.leftmenu3 nav ul li a {
-    display: block; padding: 6px 15px;
-    color: #fff; text-decoration: none;
-}
-
 
 /* LOGIN PAGE */
 
@@ -827,29 +686,6 @@ img#artigotabaco{
     background: #12745c!important;
 }
 
-
-.btngen {
-    display:block!important;
-    color: #900!important;
-    overflow: visible!important;
-    border: 0!important;
-    padding: 0 5px 0 5px!important;
-    cursor: pointer!important;
-    height: 40px!important;
-    width: auto!important;
-    font-size: bold 15px!important;
-    color: #fff!important;
-    text-transform: uppercase!important;
-    background: #4375b4!important;
-    border-radius: 3px!important;     
-    text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3)!important;
-
-}
-
-.btngen:hover {
-    background: #2980b9!important;
-}
-
 .btngen3 {
     display:block!important;
     color: #900!important;
@@ -910,9 +746,105 @@ img#artigotabaco{
 
 /*Páginas internas*/
 
-#pagecont1, #pagecont2, #pagecont3{
-    margin-left:280px;
+#pagetop{
+   
 }
+
+#hpagetop{
+    float:left;
+}
+
+#progressbar{
+    float:right;
+    width: 300px;
+    position:relative;
+    top:31px;
+    right: 1px;    
+}
+
+#progressbar .ui-progressbar .ui-widget-header{
+    background: #f1c40f!important;
+}
+
+#progressbar .ui-widget-header{
+    border:1px solid #f39c12!important;
+}
+
+
+#progressbar .ui-progressbar .ui-progressbar-label{
+    font-weight: 700;
+    font-family: 'Verdana', sans-serif;
+    font-size: 16px;
+    color: #444;
+    
+}
+
+#pagemiddle{
+    clear:both;
+    border-radius: 15px;
+    background: whitesmoke;
+    border: 1px solid #bdc3c7;
+    padding-bottom:15px;    
+}
+
+#pagemiddle .ui-widget-content {
+    background: whitesmoke!important;    
+}
+
+#pagemiddle .ui-panel .ui-panel-content {
+    padding: 0!important;    
+}
+
+#pmtext p{
+    padding: 15px 0 0 20px;
+}
+
+.fotoframe{
+    width:289px;
+    float:right;
+    border:1px solid #bdc3c7;
+    background: #fff;
+    float:right;
+    margin: 30px 10px 40px 40px;        
+    border-radius: 20px;
+}
+
+#btnback {      
+    clear:both;
+    float:left;
+    position:relative;
+    top:25px; 
+}
+
+#btnnext {      
+    float:right;      
+    position:relative;
+    top:25px;
+}
+
+.btngen {
+    display:block!important;
+    color: #fff!important;
+    overflow: visible!important;
+    border: 0!important;
+    padding: 0 10px 0 10px!important;
+    cursor: pointer!important;
+    height: 40px!important;
+    width: auto!important;
+    font-size:15px!important;    
+    text-transform: uppercase!important;
+    background: #3498db!important;    
+    border-radius: 30px!important;     
+    text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3)!important;
+}
+
+.btngen:hover {
+    background: #2980b9!important;
+    box-shadow: 0!important;
+}
+
+
+
 
 /*Avaliar estagio */
 
@@ -924,7 +856,6 @@ img#artigotabaco{
 
 #topo-avaliar {
     float:left;
-
 }
 
 #seta1-img {
@@ -1005,17 +936,6 @@ img#artigotabaco{
 
 /*PAGINAS PARANDO DE FUMAR*/
 
-.fotoframe{
-    float:right;
-    border:1 solid #fff;
-    background: #fff;
-    float:right;
-    margin: 0 3px 40px 40px;
-    box-shadow: 1px 1px 2px 2px rgba(0,0,0,0.15);
-    padding: 5px; 
-}
-
-
 
 .txtproximopasso{    
     float:left; 
@@ -1041,7 +961,7 @@ img#artigotabaco{
 }
 
 .referencias {
-    padding-top:10px;
+    padding-top:50px;
     clear:both;
 }
 
