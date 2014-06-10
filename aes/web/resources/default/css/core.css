@@ -139,6 +139,16 @@ img {
     color: #2980b9;
 }
 
+.ui-panel .ui-panel-content {    
+    padding:10px 11px 5px 0!important;
+}
+
+#fastsignin .ui-widget {
+    font-family: 'Open Sans', sans-serif!important;    
+
+}
+
+
 #searchbar {
      
 }
@@ -352,16 +362,16 @@ img {
 /*FOOTER */
 
 #footer {
-    border-top:1px solid #ddd;
-    background-color:#eee;
+    border-top:1px solid #2980b9 ;     
+    background-color:#3498db;
     text-align:center;
     font-size:.85em;
 }
 
 #footer p{
     line-height:.5em;
-    color:#999;
-    font-size: 1.2em;
+    color:#e0e0e0;
+    font-size: 1.0em;
 }
 
 #footer .urls li {
@@ -369,13 +379,19 @@ img {
     font-weight:bold;
 }
 
-#footer li {
-    color:#4375b4;
+#footer li{
+    color:#efefef;
     font-size: 1.3em;
 }
 
+
+#footer a {
+    color:#efefef;
+    font-size: .8em;
+}
+
 #footer a.ajuda  {
-    font-weight:bold;
+    font-weight:bold;    
 }	
 
 .wc {
@@ -841,6 +857,8 @@ img#artigotabaco{
 .btngen:hover {
     background: #2980b9!important;
     box-shadow: 0!important;
+    -moz-box-shadow: 0!important;
+    -webkit-box-shadow: 0!important;
 }
 
 
