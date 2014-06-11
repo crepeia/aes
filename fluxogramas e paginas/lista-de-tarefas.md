@@ -1,8 +1,8 @@
 AES - 
-
 ==========================
-* Estabelecer quais critérios diagnósticos para dependência e que usaremos no site: DSM IV? CID 10?
-* Preparar os controladores para as páginas da etapa de avaliação
+* Passo 1 - adaptar páginas estáticas - Henrique
+* Escrever conteúdo das páginas - Leo
+* Controladores - thiago está esperando o término das páginas para testar os controladores 
 
 
 Alta Prioridade
@@ -10,7 +10,6 @@ Alta Prioridade
 * Preparar os controladores para as páginas da etapa de avaliação
 * Criar página com opções "Já fiz uma avaliação" or "Quero começar novamente"
 * Inserir no fluxograma
-
 
 Baixa Prioridade
 ==========================

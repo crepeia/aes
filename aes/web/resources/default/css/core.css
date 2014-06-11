@@ -354,7 +354,6 @@ img {
 }
 
 .pagecontent p {
-    text-indent:1em;
     text-align:left;
 }
 
@@ -811,8 +810,8 @@ img#artigotabaco{
     padding: 0!important;    
 }
 
-#pmtext p{
-    padding: 15px 0 0 20px;
+#pmtext p, h2, h3, h4{
+    padding-left:20px;
 }
 
 .fotoframe{
