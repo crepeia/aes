@@ -4,7 +4,6 @@
  */
 package aes.persistence;
 
-import com.sun.xml.ws.developer.Stateful;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Date;
@@ -14,7 +13,6 @@ import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 

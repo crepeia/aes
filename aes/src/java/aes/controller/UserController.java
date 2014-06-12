@@ -26,6 +26,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import aes.model.User;
 import aes.utility.Encrypter;
+import java.util.Calendar;
 
 /**
  *
@@ -66,9 +67,8 @@ public class UserController extends BaseFormController<User> {
 			dias.put(String.valueOf(i), String.valueOf(i));
 		}
 
-		for (int i = 0; i < this.nomeMeses.length; i++) {
-			//meses.put(this.nomeMeses[ i], String.valueOf(i + 1));
-			meses.put(this.nomeMeses[ i], String.valueOf(i));
+		for (int i = 1; i < this.nomeMeses.length; i++){
+			meses.put(this.nomeMeses[i-1], String.valueOf(i-1));
 		}
 
 		GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
@@ -132,7 +132,9 @@ public class UserController extends BaseFormController<User> {
 	public void save(ActionEvent actionEvent) {
 
 		this.showErrorMessage = true;
-		this.user.setBirth(new GregorianCalendar(ano, mes, dia).getTime());
+                Calendar birth = Calendar.getInstance();
+                birth.set(ano, mes, dia);
+		this.user.setBirth(birth);
 
 		try {
 

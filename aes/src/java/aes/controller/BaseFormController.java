@@ -5,24 +5,14 @@
 package aes.controller;
 
 //import wati.model.User;
-import aes.utility.Encrypter;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.enterprise.inject.Default;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.inject.Named;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import aes.model.Acompanhamento;
 import aes.persistence.GenericDAO;
 
 /**
