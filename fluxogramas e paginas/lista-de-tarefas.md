@@ -4,6 +4,8 @@ AES -
 * Escrever conteúdo das páginas - Leo
 * Controladores - thiago está esperando o término das páginas para testar os controladores 
 
+* Inserir no cadastro uma opção se a pessoa que preencheu é um profissional de saúde e está fazendo o site por terceiro.
+
 
 Alta Prioridade
 ==========================
@@ -20,7 +22,9 @@ Baixa Prioridade
 
 
 
-
+PESQUISA
+=========================
+Inserir pergunta ao final do cadastro se o usuário está testando o sistema.
 
 
 

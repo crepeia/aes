@@ -49,14 +49,30 @@
                         <h1>Vamos começar?</h1>
                        
                         
-                        <!--<h:graphicImage library="default" id="opcoes-img" name="images/opcoes.png" alt="Especialistas" />
-                                    <div id="topo-avaliar">
-                                        <ul>                                                                        
-                                            <li>Abaixo estão as três fases da avaliação.</li>
-                                            <li>Você deve começar pela primeira etapa.</li>
-                                            <li>Login é necessário nas etapas 2 e 3. É seguro e totalmente sigiloso.</li>
-                                        </ul>
-                                    </div>-->
+                        <div id="pagemiddle">
+                            
+                            <h:form>
+                                <p:panel id="questoes" >
+
+                            
+                            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao4">
+                                    <h:outputText value="01 - E-mail:" style="font-weight: bold;"/> 
+                                    <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="50" />
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <p:watermark for="emailTxt" value="E-mail" />
+                                        <p:message for="emailTxt" />    
+                            </h:panelGrid>
+                            
+                                </p:panel>
+                                <div id="saveBtn"><p:commandButton value ="Enviar" update="@form" actionListener="#{contatoController.sendEmail}"/></div>
+                                
+                            </h:form>
+                            
+                        </div>
+                    
                         
                         <div id="passosbottom">
                             <div class="passos">
