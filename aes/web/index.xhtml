@@ -39,86 +39,62 @@
                             </div>                                                                                                                                         
                         </div>
                         <div id="mainright">                           
-                         <div id ="mainvideo">
-                            <iframe width="350" height="263" src="//www.youtube.com/embed/_roRUq1CkGw?rel=0" frameborder="0"></iframe>
-                         </div>
-                         </div>
+                            <div id ="mainvideo">
+                                <iframe width="350" height="263" src="//www.youtube.com/embed/_roRUq1CkGw?rel=0" frameborder="0"></iframe>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="mainbottom">
-                        <h1>Vamos começar?</h1>
-                       
-                        
-                        <div id="pagemiddle">
-                            
-                            <h:form>
-                                <p:panel id="questoes" >
+                        <h1>Vamos começar?</h1>   
 
+
+                        <div id="passosbottom"> 
                             
-                            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao4">
-                                    <h:outputText value="01 - E-mail:" style="font-weight: bold;"/> 
-                                    <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
-                                            <!--<p:ajax update="loginMsg" event="blur" />-->
-                                            <f:validateLength maximum="50" />
-                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                        </p:inputText>
-                                        <p:watermark for="emailTxt" value="E-mail" />
-                                        <p:message for="emailTxt" />    
-                            </h:panelGrid>
                             
-                                </p:panel>
-                                <div id="saveBtn"><p:commandButton value ="Enviar" update="@form" actionListener="#{contatoController.sendEmail}"/></div>
-                                
-                            </h:form>
-                            
-                        </div>
-                    
-                        
-                        <div id="passosbottom">
                             <div class="passos">
                                 <h2><h:outputLink value="quanto-voce-bebe-introducao.xhtml">O quanto você bebe?</h:outputLink></h2>
-                                        <h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/preparando-parar.png" alt="Especialistas" /></h:outputLink>
-                                        <h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" />
-                                        <div class="passos-txt">
-                                               <ul>
-                                                   <li>Avalie o seu beber</li>
-                                                   <li>Quanto você bebe?</li>                                   
-                                                   <li>Problemas</li>
-                                                   <li>Custo financeiro</li>
-                                               </ul>
-                                           
-                                        </div>
-                                    </div>
-                                   
-                                    <div class="passos">
-                                        <h2><h:outputLink value="template-passo2.xhtml">Querendo beber menos?</h:outputLink></h2>
-                                        <h:outputLink value="template-passo2.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/pronto-parar.png" alt="Especialistas" /></h:outputLink>
-                                        <h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" />
-                                        <div class="passos-txt">
-                                               <ul>
-                                                   <li>Plano personalizado</li>
-                                                   <li>Estratégias</li>
-                                                   <li>Dificuldades</li>                                     
-                                                   <li>Benefícios</li>
-                                               </ul>
-                                           
-                                        </div>
-                                    </div>
-                                   
-                                    <div class="passos">
-                                        <h2><h:outputLink value="template-passo3.xhtml">Mantendo resultados...</h:outputLink></h2>
-                                        <h:outputLink value="template-passo3.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/acompanhamento.png" alt="Especialistas"/></h:outputLink>
-                                       
-                                        <div class="passos-txt">
-                                               <ul>                                                                                                     
-                                                   <li>Plano para recaídas</li>
-                                                   <li>Recaídas e lapsos</li>                                     
-                                                   <li>E-mails de acompanhamento</li>
-                                                   <li>Mensagens</li>
-                                               </ul>
-                                           
-                                        </div>
-                                    </div>
+                                <h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/preparando-parar.png" alt="Especialistas" /></h:outputLink>
+                                <h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" />
+                                <div class="passos-txt">
+                                    <ul>
+                                        <li>Avalie o seu beber</li>
+                                        <li>Quanto você bebe?</li>                                   
+                                        <li>Problemas</li>
+                                        <li>Custo financeiro</li>
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                            <div class="passos">
+                                <h2><h:outputLink value="template-passo2.xhtml">Querendo beber menos?</h:outputLink></h2>
+                                <h:outputLink value="template-passo2.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/pronto-parar.png" alt="Especialistas" /></h:outputLink>
+                                <h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" />
+                                <div class="passos-txt">
+                                    <ul>
+                                        <li>Plano personalizado</li>
+                                        <li>Estratégias</li>
+                                        <li>Dificuldades</li>                                     
+                                        <li>Benefícios</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="passos">
+                                <h2><h:outputLink value="template-passo3.xhtml">Mantendo resultados...</h:outputLink></h2>
+                                <h:outputLink value="template-passo3.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/acompanhamento.png" alt="Especialistas"/></h:outputLink>
+
+                                <div class="passos-txt">
+                                    <ul>                                                                                                     
+                                        <li>Plano para recaídas</li>
+                                        <li>Recaídas e lapsos</li>                                     
+                                        <li>E-mails de acompanhamento</li>
+                                        <li>Mensagens</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
