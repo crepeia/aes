@@ -7,68 +7,94 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>O quanto você bebe - Abstêmio e Beber de Baixo Risco | Álcool e Saúde </title>
+        <title>O quanto você bebe - Abstêmio e Beber de Baixo Risco | Álcool e Saúde</title>
         <w:head_comum />
     </h:head>
-    
+
     <h:body>
         <div id="corpo"> 
-            <!-- header --> 
+            <!-- header -->    
             <w:header />
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
 
 
-                <w:leftmenu_1 cssClass="leftmenu1" />
-
                 <div class="pagecontent">
-                    
-                    
-                    
-                    <div id="pagecont1">                                                                                                 
-                        <div id="pagetop">
-                            <div class="fotoframe">                            
+
+
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1>Recomendações</h1> 
+                        </div>    
+
+                        <div id="progressbar">
+                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>                        
+                    </div>
+
+
+                    <div id="pagemiddle">
+
+                        <div class="fotoframe">                            
                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
-                            </div>
-                        </div>                                                                                                                                                                                                                                                                      
-                        
-                        <h1>O quanto você bebe?</h1>                                                
-                        <h2>Abstêmio</h2>
+                        </div>
+
+                        <div id="pmtext">                                               
+                                            
                                                 
                         <p>Parabéns,</p>
-                        <p> Como Abstêmio, você evita diversos problemas de saúde decorrentes do consumo abusivo de álcool.</p>
-                        <p> Conheça os limites de beber seguro, caso você venha a consumir álcool no futuro</p>
-                        <p> Confira a seguir os limites do beber de baixo risco:</p>
-                        <h3>No caso de homens: </h3>
-                        <ul> No máximo duas doses padrão por ocasião, no máximo 5 dias na semana </ul>
-                        <h3>No caso de mulheres:</h3>
-                        <ul> No máximo uma dose padrão por ocasião, no máximo 5 dias na semana </ul>
+                        
+                        <p>Como Abstêmio, você evita diversos problemas de saúde decorrentes do consumo abusivo de álcool.</p>
+                        <p>Conheça os limites de beber seguro, caso você venha a consumir álcool no futuro</p>
+                        <p>Confira a seguir os limites do beber de baixo risco:</p>
+                        
+                        <h3>Homens</h3>
+                        <p> No máximo duas doses padrão por ocasião, no máximo 5 dias na semana </p>
+                        <h3>Mulheres</h3>
+                        
+                        <p> No máximo uma dose padrão por ocasião, no máximo 5 dias na semana </p>
+                        
                         <h3> Mesmo o beber de baixo risco pode apresentar problemas:</h3>
-                        <ul> É importante evitar o uso de álcool concomitante com medicamentos </ul>
-                        <ul> Diversas condições de saúde podem ser agravadas pelo uso de álcool</ul>
-                        <ul> Pessoas acima de 60 anos devem evitar o consumo de álcool</ul>
-                     
-                        <h2>Quer saber mais sobre álcool e a sua saúde?</h2>
-                        <h2>Gostaria de fazer acompanhamento anual?</h2>
-                        <p>Se você quiser, podemos entrar em contato com você daqui a um ano para uma nova avaliação. Escreva seu e-mail abaixo.</p>
-                        <h:form id="form" class="form-signup">
-                            <p:growl id="errorGrowl" sticky="true" />  
-                            <p:inputText id="sendEmail" value="#{contatoController.email}" required="true" label="E-mail"></p:inputText>
-                            <p:watermark for="sendEmail" value="E-mail" />                                                      
-                            <div id="saveBtn"><p:commandButton value ="Enviar" update="@form" actionListener="#{contatoController.sendEmail}" /></div>
-                        </h:form>
                         
-                        <h2>Recomendar a um amigo</h2>                                                                                                                                                                          
-                        <p>Conhece alguém que bebe muito e gostaria de convidá-lo a fazer avaliação. Compartilhe nossa página</p>
-                        <!-- Inserir aqui links para para redes sociais ou e-mail pessoal-->                                                
-                        
-                        
-                        <div class="referencias">
+                        <ul>
+                        <li> É importante evitar o uso de álcool concomitante com medicamentos </li>
+                        <li> Diversas condições de saúde podem ser agravadas pelo uso de álcool</li>
+                        <li> Pessoas acima de 60 anos devem evitar o consumo de álcool</li>
+                        </ul>
+
+
+                            <h3>Mais informações</h3>
+                            <p>Se você gostaria de aprofundar mais sobre o assunto, preparamos um material para você neste <h:outputLink value="https://www.informalcool.org.br/bebermenos"> link</h:outputLink>.</p>        
+
+                            <h3>Acompanhamento anual</h3>                        
+                            <p>Se você quiser, podemos entrar em contato com você daqui a um ano para uma nova avaliação. Coloque seu e-mail no campo abaixo.</p>
+
+                            <h:form id="form" class="form-signup">
+
+                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                    <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
+                                        <!--<p:ajax update="loginMsg" event="blur" />-->
+                                        <f:validateLength maximum="50" />
+                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                    </p:inputText>
+                                    <p:watermark for="emailTxt" value="E-mail" />
+                                    <p:message for="emailTxt" />
+                                </h:panelGrid>
+
+                                <div id="btnback">
+                                    <p:commandButton styleClass="btngen" value ="Enviar" update="@form" actionListener="#{contatoController.sendEmail}" />
+                                </div>
+                            </h:form>
+
+                        </div><!-- end pmtext -->  
+                    </div><!-- end page middle -->                                             
+
+                    <div class="referencias">
                         <p>Atualizado em 12/01/2014</p>
                     </div>
 
-                    </div>                                      
+
 
                 </div>        
             </div>
