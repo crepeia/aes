@@ -1,14 +1,15 @@
 AES - 
 ==========================
-* Escrever conteúdo das páginas - Leo
+* Escrever conteúdo das páginas
+   * quanto-voce-bebe-sim-beber-dependencia.xhtml - Escrever lista de acordo com booklet.
 * Controladores - thiago está esperando o término das páginas para testar os controladores
 * Decidir quais as páginas do passo 2.
 
 Alta Prioridade
 ==========================
 * Preparar os controladores para as páginas da etapa de avaliação
-* Criar página com opções "Já fiz uma avaliação" ou "Quero começar novamente"
-* Inserir no fluxograma
+* Fazer imagens das doses padrão
+
 
 Baixa Prioridade
 ==========================
@@ -17,7 +18,6 @@ Baixa Prioridade
 * Seleção das imagens das páginas,
 * Otimização das imagens,
 * Preparar o sistema para tradução.
-
 
 
 PESQUISA
