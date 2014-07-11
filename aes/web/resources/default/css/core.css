@@ -1107,3 +1107,73 @@ thead{
     position:relative;
     left:12px;
 }
+
+/* STANDARD DRINK */
+#standarddose  {
+    float:left;
+    width:auto;
+    height: auto;
+    margin-left: 80px;
+    padding-bottom: 20px;
+    
+}
+
+#standarddose h1{
+    line-height:normal;
+    text-align: center;
+    padding:0 0 5px 0;
+    margin: 0;
+    font-size: 26px;  
+    border-bottom: 1px solid #BDC3C7;
+}
+
+#doseex1, #doseex2, #doseex3, #doseex4, #doseex5{
+    float:left;    
+}
+
+.doseexample {
+    width: 100px;
+    height: auto;
+    padding: 0 30px 0 30px;
+}
+
+.doseh h2 {
+    font-size: 20px;
+    line-height: 26px;
+    color: #555;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.doseimg img {
+    width: 100px;
+    padding-left: 10px;
+}
+
+.dosep1 p {
+    font-weight: bold;
+    line-height: 20px;
+    text-align: center;
+    line-height:normal;
+    padding-top:20px;
+    margin: 0;        
+}
+
+
+.dosep2 p {
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    line-height:normal;
+    padding:0;
+    margin: 0;        
+}
+
+
+#audit3evaluation{
+    clear:both;
+}
+
+hr {
+    color: #BDC3C7;
+}
