@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Introdução - O quanto voce bebe ? | Álcool e Saude </title>
+        <w:head_comum />
+    </h:head>
+
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+
+
+
+                <div class="pagecontent">
+
+
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1>O quanto você bebe?</h1> 
+                        </div>    
+
+                        <div id="progressbar">
+                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>                        
+                    </div>
+
+
+                    <div id="pagemiddle">
+                        
+                        <div class="fotoframe">                            
+                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+
+                        <div id="pmtext">
+
+                            <p> A seguir você será convidado a responder algumas questões sobre você e sobre como você consome bebidas álcoolicas. Ao final do conjunto de perguntas você receberá uma avaliação personalizada. Clique em prosseguir a cada conjunto de questões.</p>
+                            <h:form>
+                                <p:panel id="questoes" >
+
+                       <h:form>
+                            <p:panel id="questoes" >
+                                <h:panelGrid columns="1"  cellpadding="5" id="questao1">
+                                    <f:facet name="header">  
+                                        #{messages['pronto.evitar.sim.question.label']}                                        
+                                    </f:facet>
+                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo1"/> 
+                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida2}" id="campo2"/> 
+                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida3}" id="campo3"/>                               
+                                </h:panelGrid>
+                            </p:panel>                            
+                            
+                            <div class="btnfloat">
+                                <div class="btn1">
+                                    <h:button class="btnback" value ="#{messages['back']}" outcome="./pronto-para-parar-de-fumar-como-evitar-recaidas.xhtml"/>
+                                </div>
+                                <div class="btn2">                                    
+                                    <h:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" action="#{prontoParaPararController.recaidasAjudar}"/>
+                                </div>
+                            </div>
+                            
+                        </h:form>                     
+                     
+
+
+                                </p:panel>
+                                
+                                <div id="btnback">
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
+                                </div>
+                                
+                                
+                                <div id="btnnext">
+                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.avaliar()}">
+                                <f:attribute name="object" value="#{userController.user}" />
+                                <f:attribute name="typeName" value="user" />
+                            </p:commandButton>                                
+                                </div>
+
+                        </h:form>
+
+                        </div><!-- end pmtext -->  
+
+                    </div><!-- end page middle -->                                             
+
+                    <div class="referencias">
+                        <p>Atualizado em 12/01/2014</p>
+                    </div>
+
+
+
+                </div>        
+            </div>
+
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+
