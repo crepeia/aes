@@ -51,7 +51,7 @@
                                         <f:validateLength maximum="16" />
                                     </p:password>
                                     <p:watermark for="passwordTxt" value="#{messages['password']}" />
-                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btnlogin" update="groupPanel loginInformationPanel" actionListener="#{loginController.loginDialog}" />
+                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btnlogin" update="@all" actionListener="#{loginController.loginDialog}" />
                                 </p:panel>
                             </p:overlayPanel>
                         </div>    

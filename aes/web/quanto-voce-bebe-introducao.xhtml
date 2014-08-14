@@ -50,23 +50,23 @@
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao1">
                                         <h:outputText value="01 - Sexo:" style="font-weight: bold;"/>
-                                        <p:selectOneRadio id="options1" value="#{preparandoParaPararController.pergunta2}" required="true">  
-                                            <f:selectItem itemLabel="Feminino" itemValue="1" />
-                                            <f:selectItem itemLabel="Masculino" itemValue="0" />
+                                        <p:selectOneRadio id="options1" value="#{evaluationController.gender}" required="true">  
+                                            <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                            <f:selectItem itemLabel="Masculino" itemValue="M" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
 
                                     <p:panelGrid columns="4" style="margin-bottom:10px"  id="nascimento">                                            
                                         <h:outputText value="02 - Nascimento:" style="font-weight: bold;"/>
-                                        <p:selectOneMenu id="day" value="#{userController.dia}" required="true" label="Dia">  
+                                        <p:selectOneMenu id="day" value="#{evaluationController.day}" required="true" label="Dia">  
                                             <f:selectItem itemLabel="Dia" itemValue="" />  
                                             <f:selectItems value="#{userController.dias}" />  
                                         </p:selectOneMenu>
-                                        <p:selectOneMenu id="month" value="#{userController.mes}" required="true" label="Mês">  
+                                        <p:selectOneMenu id="month" value="#{evaluationController.month}" required="true" label="Mês">  
                                             <f:selectItem itemLabel="Mês" itemValue="" />  
                                             <f:selectItems value="#{userController.meses}" />  
                                         </p:selectOneMenu>
-                                        <p:selectOneMenu id="year" value="#{userController.ano}" required="true" label="Ano">  
+                                        <p:selectOneMenu id="year" value="#{evaluationController.year}" required="true" label="Ano">  
                                             <f:selectItem itemLabel="Ano" itemValue="" />  
                                             <f:selectItems value="#{userController.anos}" />  
                                         </p:selectOneMenu>
@@ -76,22 +76,12 @@
                                         <f:facet name="header">  
                                             03. As vezes, você bebe cerveja, cachaça, vinho ou outras bebidas álcoolicas? 
                                         </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{preparandoParaPararController.pergunta1}" required="true">  
+                                        <p:selectOneRadio id="options" value="#{evaluationController.drink}" required="true">  
                                             <f:selectItem itemLabel="Sim" itemValue="1" />
                                             <f:selectItem itemLabel="Não" itemValue="0" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                     
-                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao4">
-                                    <h:outputText value="04 - E-mail:" style="font-weight: bold;"/> 
-                                    <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
-                                            <!--<p:ajax update="loginMsg" event="blur" />-->
-                                            <f:validateLength maximum="50" />
-                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                        </p:inputText>
-                                        <p:watermark for="emailTxt" value="E-mail" />
-                                        <p:message for="emailTxt" />    
-                                    </h:panelGrid>
 
 
 
@@ -103,10 +93,7 @@
                                 
                                 
                                 <div id="btnnext">
-                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.avaliar()}">
-                                <f:attribute name="object" value="#{userController.user}" />
-                                <f:attribute name="typeName" value="user" />
-                            </p:commandButton>                                
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.intro()}" />
                                 </div>
 
                         </h:form>

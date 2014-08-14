@@ -35,18 +35,16 @@ public class Evaluation {
     @Column(name = "drink")
     private Boolean drink;
     
-    @Column(name = "heavy_options_1")
-    private Integer heavyOptions1;
-    @Column(name = "heavy_options_2")
-    private Integer heavyOptions2;
-    @Column(name = "heavy_options_3")
-    private Integer heavyOptions3;
-    @Column(name = "heavy_question_1")
-    private Integer heavyQuestion1;
-    @Column(name = "heavy_question_2")
-    private Integer heavyQuestion2;
-    @Column(name = "heavy_sum")
-    private Integer heavySum;
+    @Column(name = "audit_1")
+    private Integer audit1;
+    @Column(name = "audit_2")
+    private Integer audit2;
+    @Column(name = "audit_3")
+    private Integer audit3;
+    @Column(name = "week_evaluation_1")
+    private Integer weekEvaluation1;
+    @Column(name = "week_evaluation_2")
+    private Integer weekEvaluation2;
     
     @Column(name = "dep_question_1")
     private Integer depQuestion1;
@@ -97,52 +95,50 @@ public class Evaluation {
         this.drink = drink;
     }
 
-    public Integer getHeavyOptions1() {
-        return heavyOptions1;
+    public Integer getAudit1() {
+        return audit1;
     }
 
-    public void setHeavyOptions1(Integer heavyOptions1) {
-        this.heavyOptions1 = heavyOptions1;
+    public void setAudit1(Integer audit1) {
+        this.audit1 = audit1;
     }
 
-    public Integer getHeavyOptions2() {
-        return heavyOptions2;
+    public Integer getAudit2() {
+        return audit2;
     }
 
-    public void setHeavyOptions2(Integer heavyOptions2) {
-        this.heavyOptions2 = heavyOptions2;
+    public void setAudit2(Integer audit2) {
+        this.audit2 = audit2;
     }
 
-    public Integer getHeavyOptions3() {
-        return heavyOptions3;
+    public Integer getAudit3() {
+        return audit3;
     }
 
-    public void setHeavyOptions3(Integer heavyOptions3) {
-        this.heavyOptions3 = heavyOptions3;
+    public void setAudit3(Integer audit3) {
+        this.audit3 = audit3;
     }
 
-    public Integer getHeavyQuestion1() {
-        return heavyQuestion1;
+    public Integer getWeekEvaluation1() {
+        return weekEvaluation1;
     }
 
-    public void setHeavyQuestion1(Integer heavyQuestion1) {
-        this.heavyQuestion1 = heavyQuestion1;
+    public void setWeekEvaluation1(Integer weekEvaluation1) {
+        this.weekEvaluation1 = weekEvaluation1;
     }
 
-    public Integer getHeavyQuestion2() {
-        return heavyQuestion2;
+    public Integer getWeekEvaluation2() {
+        return weekEvaluation2;
     }
 
-    public void setHeavyQuestion2(Integer heavyQuestion2) {
-        this.heavyQuestion2 = heavyQuestion2;
+    public void setWeekEvaluation2(Integer weekEvaluation2) {
+        this.weekEvaluation2 = weekEvaluation2;
     }
 
-    public Integer getHeavySum() {
-        return this.heavyOptions1+this.heavyOptions2+this.heavyOptions3;
-    }
+   
 
-    public void setHeavySum(Integer heavySum) {
-        this.heavySum = heavySum;
+    public Integer getSum() {
+        return this.audit1+this.audit2+this.audit3;
     }
 
     public Integer getDepQuestion1() {

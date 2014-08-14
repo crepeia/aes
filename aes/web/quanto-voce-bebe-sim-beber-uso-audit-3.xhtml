@@ -116,7 +116,7 @@
                                         <f:facet name="header">  
                                             01. Com que frequência você consome bebidas alcoólicas? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options1" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options1" value="#{evaluationController.evaluation.audit1}"  required="true">  
                                             <f:selectItem itemLabel="Nunca" itemValue="0" />
                                             <f:selectItem itemLabel="Mensalmente ou menos" itemValue="1" />
                                             <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="2" />
@@ -130,7 +130,7 @@
                                         <f:facet name="header">  
                                             02. Quantas doses alcoólicas você consome tipicamente ao beber? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options2" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options2" value="#{evaluationController.evaluation.audit2}"  required="true">  
                                             <f:selectItem itemLabel="1 ou 2" itemValue="0" />
                                             <f:selectItem itemLabel="3 ou 4" itemValue="1" />
                                             <f:selectItem itemLabel="5 ou 6" itemValue="2" />
@@ -144,7 +144,7 @@
                                         <f:facet name="header">  
                                             03. Com que frequencia você consome seis ou mais doses de uma vez? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options3" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options3" value="#{evaluationController.evaluation.audit3}"  required="true">  
                                             <f:selectItem itemLabel="Nunca" itemValue="0" />
                                             <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="1" />
                                             <f:selectItem itemLabel="Mensalmente" itemValue="2" />
@@ -157,7 +157,7 @@
 
                                     <h:panelGrid columns="2" id="weeklyaverage">
                                         <p><h:outputText value="01 - On average, how many days a week do you have an alcoholic drink?"/></p>
-                                        <p:selectOneMenu id="question1" value="">
+                                        <p:selectOneMenu id="question1" value="#{evaluationController.evaluation.weekEvaluation1}">
                                             <f:selectItem itemLabel="01" itemValue="1" />
                                             <f:selectItem itemLabel="02" itemValue="2" />
                                             <f:selectItem itemLabel="03" itemValue="3" />
@@ -166,7 +166,7 @@
 
 
                                         <p><h:outputText value="02 - On a typical drinking day, how many drinks do you have?"/></p>
-                                        <p:selectOneMenu id="question2" value="">
+                                        <p:selectOneMenu id="question2" value="#{evaluationController.evaluation.weekEvaluation2}">
                                             <f:selectItem itemLabel="01" itemValue="1" />
                                             <f:selectItem itemLabel="02" itemValue="2" />
                                             <f:selectItem itemLabel="03" itemValue="3" />
@@ -187,10 +187,7 @@
                                 
                                 
                                 <div id="btnnext">
-                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.avaliar()}">
-                                <f:attribute name="object" value="#{userController.user}" />
-                                <f:attribute name="typeName" value="user" />
-                            </p:commandButton>                                
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.heavyDrinking()}"/>      
                                 </div>
 
                         </h:form>

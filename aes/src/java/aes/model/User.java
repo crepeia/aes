@@ -6,6 +6,7 @@ package aes.model;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +30,7 @@ public class User {
     private long id;
     @Column(name = "name", length = 100)
     private String name;
-    @Column(name = "email", length = 50, unique = true)
+    @Column(name = "email", length = 50)
     private String email;
     @Column(name = "password", length = 16)
     private byte[] password;
@@ -153,6 +154,14 @@ public class User {
     public void setEvaluations(List<Evaluation> evaluations) {
         this.evaluations = evaluations;
     }
+    
+    public void setBirth(int year,int month,int day){
+        if(this.birth == null){
+            this.birth = Calendar.getInstance();
+        }
+        this.birth.set(year,month,day);
+    }
+    
 
 
 
