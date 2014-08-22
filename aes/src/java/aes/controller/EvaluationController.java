@@ -40,6 +40,8 @@ public class EvaluationController extends BaseController<Evaluation> {
     private Integer month;
     private Integer year;
     private String email;
+    
+    private String message;
 
     private GenericDAO userDAO;
 
@@ -159,7 +161,24 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public void sendEmail() {
+        this.evaluation.setYearEmail(true);
+        try {
+            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
 
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String message = "Email enviado";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+        Logger.getLogger(BaseFormController.class.getName()).log(Level.INFO, message);
+        this.clear();
+    }
+    
+    public void clear(){
+        this.email = "";
+        this.message = "";
     }
 
     public boolean loggedUser() {

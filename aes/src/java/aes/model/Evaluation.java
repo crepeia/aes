@@ -35,6 +35,9 @@ public class Evaluation {
     @Column(name = "drink")
     private Boolean drink;
     
+    @Column(name = "year_email")
+    private Boolean yearEmail;
+    
     @Column(name = "audit_1")
     private Integer audit1;
     @Column(name = "audit_2")
@@ -135,8 +138,14 @@ public class Evaluation {
         this.weekEvaluation2 = weekEvaluation2;
     }
 
-   
+    public Boolean isYearEmail() {
+        return yearEmail;
+    }
 
+    public void setYearEmail(Boolean yearEmail) {
+        this.yearEmail = yearEmail;
+    }
+    
     public Integer getSum() {
         return this.audit1+this.audit2+this.audit3;
     }

@@ -6,6 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
+  
     <h:head>
         <title>O quanto você bebe - Abstêmio e Beber de Baixo Risco | Álcool e Saúde</title>
         <w:head_comum />
@@ -70,8 +71,17 @@
                             <h3>Acompanhamento anual</h3>                        
                             <p>Se você quiser, podemos entrar em contato com você daqui a um ano para uma nova avaliação. Coloque seu e-mail no campo abaixo.</p>
 
-                            <h:form id="form" class="form-signup">
+                            <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
 
+                            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                <p:graphicImage library="default" name="images/loading.gif" />
+                            </p:dialog>
+                            
+                            <h:form id="form" class="form-signup">
+                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+
+                                
+                                
                                 <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
                                     <p:inputText id="emailTxt" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
                                         <!--<p:ajax update="loginMsg" event="blur" />-->
@@ -85,17 +95,17 @@
                                 <div id="btnback">
                                     <p:commandButton styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.sendEmail}" />
                                 </div>
+                                
                             </h:form>
-
+                            
+                            
                         </div><!-- end pmtext -->  
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
                         <p>Atualizado em 12/01/2014</p>
                     </div>
-
-
-
+                    
                 </div>        
             </div>
 
