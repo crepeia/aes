@@ -55,15 +55,29 @@
                             <h:form>
                             <p:panel id="qrecaida" >                
                                 <h:panelGrid columns="1" style="margin:10px;" cellpadding="10" id="questao1">                                                    
-                                    <p:selectOneRadio id="options" value="#{prontoParaPararController.prontoParaParar.tentouParar}" required="true">  
+                                    <p:selectOneRadio id="options" value="#{evaluationController.continueEvaluation}" required="true">  
                                         <f:selectItem itemLabel="Sim" itemValue="true" />
                                         <f:selectItem itemLabel="Não" itemValue="false" /> 
                                     </p:selectOneRadio> 
                                 </h:panelGrid>
                             </p:panel>
+                                
+                                <div id="btnback">
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-sintomas-alcool-doenca.xhtml"></h:button>
+                                </div>
+                                
+                                
+                                <div id="btnnext">
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.continueEvaluation()}"/>
+                               
+                                                         
+                                </div>
+                                
                            </h:form> 
                         </div><!-- end pmtext -->  
-                    </div><!-- end page middle -->                                             
+                    </div><!-- end page middle -->      
+                    
+                    
 
                     <div class="referencias">
                         <p>Atualizado em 12/01/2014</p>

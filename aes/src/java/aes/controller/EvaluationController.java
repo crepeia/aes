@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
@@ -33,16 +32,15 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     private User user;
     private Evaluation evaluation;
-   
+
     private String gender;
     private Integer drink;
     private Integer day;
     private Integer month;
     private Integer year;
-    private String email;
     
-    private String message;
-
+    private boolean continueEvaluation;
+    
     private GenericDAO userDAO;
 
     public EvaluationController() {
@@ -92,7 +90,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public User getUser() {
         if (loggedUser()) {
-            return (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
+            return getLoggedUser();
         }
         return user;
     }
@@ -133,7 +131,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     }
 
-    public String heavyDrinking() {
+    public String audit3() {
         try {
             this.daoBase.update(this.getEvaluation(), this.getEntityManager());
 
@@ -142,26 +140,41 @@ public class EvaluationController extends BaseController<Evaluation> {
                     .getName()).log(Level.SEVERE, null, ex);
         }
         if (this.getEvaluation().getSum() <= 3) {
-            if (this.getEvaluation().getUser().getGender() == 'M' && this.getEvaluation().getUser().getAge() <= 65) {
-                return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
-            } else {
-                return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
-            }
+           return this.drinkingLimits();
         } else {
-            Object obj = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
-            if (obj != null) {
-                User user = (User) obj;
-                if (user.getId() > 0) {
-                    return "quanto-voce-bebe-sim-beber-dependencia.xhtml?faces-redirect=true";
-                }
+            if (loggedUser()) {
+                return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml?faces-redirect=true";
             }
 
             return "cadastrar-nova-conta.xhtml?faces-redirect=true";
         }
     }
 
+    public String drinkingLimits() {
+        if (this.getEvaluation().getUser().getGender() == 'M' && this.getEvaluation().getUser().getAge() <= 65) {
+            return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
+        } else {
+            return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
+        }
+    }
+
     public void sendEmail() {
         this.evaluation.setYearEmail(true);
+        try {
+            this.userDAO.update(this.getUser(), this.getEntityManager());
+            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String message = "Solicitação enviada com sucesso!";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+        Logger.getLogger(BaseFormController.class.getName()).log(Level.INFO, message);
+    }
+
+    public String audit7() {
         try {
             this.daoBase.update(this.getEvaluation(), this.getEntityManager());
 
@@ -169,21 +182,30 @@ public class EvaluationController extends BaseController<Evaluation> {
             Logger.getLogger(EvaluationController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-        
-        String message = "Email enviado";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
-        Logger.getLogger(BaseFormController.class.getName()).log(Level.INFO, message);
-        this.clear();
-    }
-    
-    public void clear(){
-        this.email = "";
-        this.message = "";
+        return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-doenca.xhtml?faces-redirect=true";
     }
 
-    public boolean loggedUser() {
-        Object obj = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
-        return obj != null;
+    public String screenForAlcoholUseDisorders() {
+        try {
+            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        if (evaluation.screen()) {
+            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-doenca-sim-cuidado.xhtml?faces-redirect=true";
+        } else {
+            return this.drinkingLimits();
+        }
+    }
+    
+    public String continueEvaluation(){
+        if (isContinueEvaluation()){
+            return "preparando-pros-cons.xhtml?faces-redirect=true";
+        }else{
+            return "index.xhtml?faces-redirect=true";
+        }
     }
 
     public String getGender() {
@@ -248,22 +270,20 @@ public class EvaluationController extends BaseController<Evaluation> {
         this.year = year;
     }
 
-    public String getEmail() {
-        if (loggedUser()) {
-            return this.getUser().getEmail();
-        }
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    
     public boolean sameDate(Calendar firstDate, Calendar secondDate) {
         return firstDate.get(Calendar.DAY_OF_MONTH) == secondDate.get(Calendar.DAY_OF_MONTH)
                 && firstDate.get(Calendar.MONTH) == secondDate.get(Calendar.MONTH)
                 && firstDate.get(Calendar.YEAR) == secondDate.get(Calendar.YEAR);
     }
+
+    public boolean isContinueEvaluation() {
+        return continueEvaluation;
+    }
+
+    public void setContinueEvaluation(boolean continueEvaluation) {
+        this.continueEvaluation = continueEvaluation;
+    }
+    
+    
 
 }

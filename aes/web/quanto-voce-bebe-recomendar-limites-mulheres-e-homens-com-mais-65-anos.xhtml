@@ -70,10 +70,17 @@
                             <h3>Acompanhamento anual</h3>                        
                             <p>Se você quiser, podemos entrar em contato com você daqui a um ano para uma nova avaliação. Coloque seu e-mail no campo abaixo.</p>
 
+                            <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+
+                            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                <p:graphicImage library="default" name="images/loading.gif" />
+                            </p:dialog>
+                            
+                            
                             <h:form id="form" class="form-signup">
 
                                 <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                    <p:inputText id="emailTxt" value="#{evaluationController.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
+                                    <p:inputText id="emailTxt" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
                                         <!--<p:ajax update="loginMsg" event="blur" />-->
                                         <f:validateLength maximum="50" />
                                         <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />

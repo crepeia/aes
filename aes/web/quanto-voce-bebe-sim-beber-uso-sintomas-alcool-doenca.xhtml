@@ -49,31 +49,40 @@
                                 <p:panel id="questoes" >
 
                                     <!--inserir tag "value" com controlador na tag abaixo - selectManyCheckbox-->
-                                    <p:selectManyCheckbox  layout="pageDirection">  
-                                    <f:selectItem itemLabel="had times when you ended up drinking more, or longer, than you intended?" itemValue="0" />                                      
-                                    <f:selectItem itemLabel="more than once wanted to cut down or stop drinking, or tried to, but couldn't?" itemValue="1" />  
-                                    <f:selectItem itemLabel="more than once gotten into situations while or after drinking that increased your chances of getting hurt (such as driving, swimming, using machinery, walking in a dangerous area, or having unsafe sex)?" itemValue="3" />  
-                                    <f:selectItem itemLabel="continued to drink even though it was making you feel depressed or anxious or adding to another health problem? Or after having had a memory blackout?" itemValue="4" />                                      
-                                    <f:selectItem itemLabel="spent a lot of time drinking? Or being sick or getting over other aftereffects?" itemValue="5" />                                      
-                                    <f:selectItem itemLabel="continued to drink even though it was causing trouble with your family or friends?" itemValue="6" />                                      
-                                    <f:selectItem itemLabel="found that drinking—or being sick from drinking—often interfered with taking care of your home or family? Or caused job troubles? Or school problems?" itemValue="7" />                                      
-                                    <f:selectItem itemLabel="given up or cut back on activities that were important or interesting to you, or gave you pleasure, in order to drink?" itemValue="8" />                                      
-                                    <f:selectItem itemLabel="more than once gotten arrested, been held at a police station, or had other legal problems because of your drinking?" itemValue="9" />                                      
-                                    <f:selectItem itemLabel="found that when the effects of alcohol were wearing off, you had withdrawal symptoms,	such as trouble sleeping, shakiness, restlessness, nausea, sweating, a racing heart, or a seizure? Or sensed things that were not there?" itemValue="10" />                                                                                                               
-                                    </p:selectManyCheckbox>                            
+                                    <h:panelGrid columns="2" >
+                                        <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen1}" />                                      
+                                    <h:outputText value="had times when you ended up drinking more, or longer, than you intended?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen2}" /> 
+                                    <h:outputText value="more than once wanted to cut down or stop drinking, or tried to, but couldn't?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen3}" />  
+                                    <h:outputText value="more than once gotten into situations while or after drinking that increased your chances of getting hurt (such as driving, swimming, using machinery, walking in a dangerous area, or having unsafe sex)?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen4}" />                                      
+                                    <h:outputText value="continued to drink even though it was making you feel depressed or anxious or adding to another health problem? Or after having had a memory blackout?" />
+                                    <p:selectBooleanCheckbox  value="#{evaluationController.evaluation.screen5}" />                                      
+                                    <h:outputText value="spent a lot of time drinking? Or being sick or getting over other aftereffects?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen6}" />                                      
+                                    <h:outputText value="continued to drink even though it was causing trouble with your family or friends?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen7}" />                                      
+                                    <h:outputText value="found that drinking—or being sick from drinking—often interfered with taking care of your home or family? Or caused job troubles? Or school problems?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen8}" />                                      
+                                    <h:outputText value="given up or cut back on activities that were important or interesting to you, or gave you pleasure, in order to drink?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen9}" />                                      
+                                    <h:outputText value="more than once gotten arrested, been held at a police station, or had other legal problems because of your drinking?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen10}" />
+                                    <h:outputText value="found that when the effects of alcohol were wearing off, you had withdrawal symptoms,	such as trouble sleeping, shakiness, restlessness, nausea, sweating, a racing heart, or a seizure? Or sensed things that were not there?"/>
+                                    </h:panelGrid>                           
                                    
                                 </p:panel>
                                 
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
                                 </div>
                                 
                                 
                                 <div id="btnnext">
-                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.evaluate()}">
-                                <f:attribute name="object" value="#{userController.user}" />
-                                <f:attribute name="typeName" value="user" />
-                            </p:commandButton>                                
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.screenForAlcoholUseDisorders()}"/>
+                               
+                                                         
                                 </div>
 
                         </h:form>

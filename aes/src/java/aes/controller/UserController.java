@@ -18,7 +18,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -26,7 +25,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import aes.model.User;
 import aes.utility.Encrypter;
-import java.util.Calendar;
 
 /**
  *
@@ -40,16 +38,16 @@ public class UserController extends BaseFormController<User> {
 
 	private String password;
 
-	private int dia;
-	private int mes;
-	private int ano;
+	private int day;
+	private int month;
+	private int year;
 
 	private boolean showErrorMessage;
 
-	private Map<String, String> dias = new LinkedHashMap<String, String>();
-	private Map<String, String> meses = new LinkedHashMap<String, String>();
-	private Map<String, String> anos = new LinkedHashMap<String, String>();
-	private String[] nomeMeses = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
+	private Map<String, String> days = new LinkedHashMap<String, String>();
+	private Map<String, String> months = new LinkedHashMap<String, String>();
+	private Map<String, String> years = new LinkedHashMap<String, String>();
+	private String[] monthsName = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
 
 	@PersistenceContext
 	private EntityManager entityManager = null;
@@ -62,19 +60,21 @@ public class UserController extends BaseFormController<User> {
 		super(User.class);
 
 		this.showErrorMessage = false;
+                
+                month = -1;
 
 		for (int i = 1; i <= 31; i++) {
-			dias.put(String.valueOf(i), String.valueOf(i));
+			days.put(String.valueOf(i), String.valueOf(i));
 		}
 
-		for (int i = 1; i < this.nomeMeses.length; i++){
-			meses.put(this.nomeMeses[i-1], String.valueOf(i-1));
+		for (int i = 1; i < this.monthsName.length; i++){
+			months.put(this.monthsName[i-1], String.valueOf(i-1));
 		}
 
 		GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
 		int lastYear = gc.get(GregorianCalendar.YEAR) - 1;
 		for (int i = lastYear; i > lastYear - 100; i--) {
-			anos.put(String.valueOf(i), String.valueOf(i));
+			years.put(String.valueOf(i), String.valueOf(i));
 		}
 
 	}
@@ -132,9 +132,7 @@ public class UserController extends BaseFormController<User> {
 	public void save(ActionEvent actionEvent) {
 
 		this.showErrorMessage = true;
-                Calendar birth = Calendar.getInstance();
-                birth.set(ano, mes, dia);
-		this.user.setBirth(birth);
+		this.user.setBirth(year, month, day);
 
 		try {
 
@@ -175,89 +173,63 @@ public class UserController extends BaseFormController<User> {
 
 	}
 
-	/**
-	 * @return the dia
-	 */
-	public int getDia() {
-		return dia;
-	}
+    public int getDay() {
+        return day;
+    }
 
-	/**
-	 * @param dia the dia to set
-	 */
-	public void setDia(int dia) {
-		this.dia = dia;
-	}
+    public void setDay(int day) {
+        this.day = day;
+    }
 
-	/**
-	 * @return the mes
-	 */
-	public int getMes() {
-		return mes;
-	}
+    public int getMonth() {
+        return month;
+    }
 
-	/**
-	 * @param mes the mes to set
-	 */
-	public void setMes(int mes) {
-		this.mes = mes;
-	}
+    public void setMonth(int month) {
+        this.month = month;
+    }
 
-	/**
-	 * @return the ano
-	 */
-	public int getAno() {
-		return ano;
-	}
+    public int getYear() {
+        return year;
+    }
 
-	/**
-	 * @param ano the ano to set
-	 */
-	public void setAno(int ano) {
-		this.ano = ano;
-	}
+    public void setYear(int year) {
+        this.year = year;
+    }
 
-	/**
-	 * @return the dias
-	 */
-	public Map<String, String> getDias() {
-		return dias;
-	}
+    public Map<String, String> getDays() {
+        return days;
+    }
 
-	/**
-	 * @param dias the dias to set
-	 */
-	public void setDias(Map<String, String> dias) {
-		this.dias = dias;
-	}
+    public void setDays(Map<String, String> days) {
+        this.days = days;
+    }
 
-	/**
-	 * @return the meses
-	 */
-	public Map<String, String> getMeses() {
-		return meses;
-	}
+    public Map<String, String> getMonths() {
+        return months;
+    }
 
-	/**
-	 * @param meses the meses to set
-	 */
-	public void setMeses(Map<String, String> meses) {
-		this.meses = meses;
-	}
+    public void setMonths(Map<String, String> months) {
+        this.months = months;
+    }
 
-	/**
-	 * @return the anos
-	 */
-	public Map<String, String> getAnos() {
-		return anos;
-	}
+    public Map<String, String> getYears() {
+        return years;
+    }
 
-	/**
-	 * @param anos the anos to set
-	 */
-	public void setAnos(Map<String, String> anos) {
-		this.anos = anos;
-	}
+    public void setYears(Map<String, String> years) {
+        this.years = years;
+    }
+
+    public String[] getMonthsName() {
+        return monthsName;
+    }
+
+    public void setMonthsName(String[] monthsName) {
+        this.monthsName = monthsName;
+    }
+
+        
 
 	/**
 	 * @return the showErrorMessage
@@ -274,9 +246,9 @@ public class UserController extends BaseFormController<User> {
 	}
 
 	private void clear() {
-		this.ano = 0;
-		this.dia = 0;
-		this.mes = 0;
+		this.year = 0;
+		this.day = 0;
+		this.month = -1;
 		this.password = "";
 		this.user = new User();
 	}

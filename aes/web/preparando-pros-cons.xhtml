@@ -38,7 +38,7 @@
 
 
                     <div id="pagemiddle">
-                        
+
                         <div class="fotoframe">                            
                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div>
@@ -46,49 +46,39 @@
                         <div id="pmtext">
 
                             <p> A seguir você será convidado a responder algumas questões sobre você e sobre como você consome bebidas álcoolicas. Ao final do conjunto de perguntas você receberá uma avaliação personalizada. Clique em prosseguir a cada conjunto de questões.</p>
+
                             <h:form>
                                 <p:panel id="questoes" >
+                                    <h:panelGrid columns="1"  cellpadding="5" id="questao1">
+                                        <f:facet name="header">  
+                                           O que você fez em tentativas de parar anteriores que podem ajudar desta vez?                                      
+                                        </f:facet>
+                                        <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo1"/> 
+                                        <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida2}" id="campo2"/> 
+                                        <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida3}" id="campo3"/>                               
+                                    </h:panelGrid>
+                                </p:panel>                            
 
-                       <h:form>
-                            <p:panel id="questoes" >
-                                <h:panelGrid columns="1"  cellpadding="5" id="questao1">
-                                    <f:facet name="header">  
-                                        #{messages['pronto.evitar.sim.question.label']}                                        
-                                    </f:facet>
-                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo1"/> 
-                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida2}" id="campo2"/> 
-                                    <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida3}" id="campo3"/>                               
-                                </h:panelGrid>
-                            </p:panel>                            
                             
-                            <div class="btnfloat">
-                                <div class="btn1">
-                                    <h:button class="btnback" value ="#{messages['back']}" outcome="./pronto-para-parar-de-fumar-como-evitar-recaidas.xhtml"/>
-                                </div>
-                                <div class="btn2">                                    
-                                    <h:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" action="#{prontoParaPararController.recaidasAjudar}"/>
-                                </div>
-                            </div>
-                            
-                        </h:form>                     
-                     
-
-
-                                </p:panel>
                                 
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-sintomas-alcool-doenca.xhtml"></h:button>
                                 </div>
                                 
                                 
                                 <div id="btnnext">
-                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.avaliar()}">
-                                <f:attribute name="object" value="#{userController.user}" />
-                                <f:attribute name="typeName" value="user" />
-                            </p:commandButton>                                
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.continueEvaluation()}"/>
+                               
+                                                         
                                 </div>
+                               
 
-                        </h:form>
+                            </h:form>                     
+
+
+
+
+
 
                         </div><!-- end pmtext -->  
 

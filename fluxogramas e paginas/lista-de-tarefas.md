@@ -3,6 +3,7 @@ AES -
 * Escrever conteúdo das páginas
    * quanto-voce-bebe-sim-beber-dependencia.xhtml - Escrever lista de acordo com booklet.
 * Controladores - thiago está esperando o término das páginas para testar os controladores
+* Fazer a página de convite.
 * Decidir quais as páginas do passo 2.
 
 Alta Prioridade

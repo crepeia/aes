@@ -66,17 +66,17 @@
                                     <div id="signupbottom">	
                                         <p:panelGrid columns="4" id="nascimento">
                                             <h:outputText value="Nascimento"/>
-                                            <p:selectOneMenu id="day" value="#{userController.dia}" required="true" label="Dia">  
+                                            <p:selectOneMenu id="day" value="#{userController.day}" required="true" label="Dia">  
                                                 <f:selectItem itemLabel="Dia" itemValue="" />  
-                                                <f:selectItems value="#{userController.dias}" />  
+                                                <f:selectItems value="#{userController.days}" />  
                                             </p:selectOneMenu>
-                                            <p:selectOneMenu id="month" value="#{userController.mes}" required="true" label="Mês">  
+                                            <p:selectOneMenu id="month" value="#{userController.month}" required="true" label="Mês">  
                                                 <f:selectItem itemLabel="Mês" itemValue="" />  
-                                                <f:selectItems value="#{userController.meses}" />  
+                                                <f:selectItems value="#{userController.months}" />  
                                             </p:selectOneMenu>
-                                            <p:selectOneMenu id="year" value="#{userController.ano}" required="true" label="Ano">  
+                                            <p:selectOneMenu id="year" value="#{userController.year}" required="true" label="Ano">  
                                                 <f:selectItem itemLabel="Ano" itemValue="" />  
-                                                <f:selectItems value="#{userController.anos}" />  
+                                                <f:selectItems value="#{userController.years}" />  
                                             </p:selectOneMenu>
                                         </p:panelGrid>
                                         <p:message for="day" />

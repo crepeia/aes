@@ -52,7 +52,7 @@
                                         <f:facet name="header">  
                                             04. Quantas vezes ao longo dos últimos 12 meses você achou que não conseguiria parar de beber uma vez tendo começado? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options1" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options1" value="#{evaluationController.evaluation.audit4}"  required="true">  
                                             <f:selectItem itemLabel="Nunca" itemValue="0" />
                                             <f:selectItem itemLabel="Mensalmente ou menos" itemValue="1" />
                                             <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="2" />
@@ -66,7 +66,7 @@
                                         <f:facet name="header">  
                                             05. Quantas vezes ao longo dos últimos 12 meses por causa do álcool, não conseguiu fazer o que era esperado de você? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options2" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options2" value="#{evaluationController.evaluation.audit5}"  required="true">  
                                             <f:selectItem itemLabel="1 ou 2" itemValue="0" />
                                             <f:selectItem itemLabel="3 ou 4" itemValue="1" />
                                             <f:selectItem itemLabel="5 ou 6" itemValue="2" />
@@ -80,7 +80,7 @@
                                         <f:facet name="header">  
                                             06. Quantas vezes ao longo dos últimos 12 meses você precisou beber pela manhã para poder se sentir bem ao longo do dia após ter bebido bastante no dia anterior?
                                         </f:facet>
-                                        <p:selectOneRadio id="options3" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options3" value="#{evaluationController.evaluation.audit6}"  required="true">  
                                             <f:selectItem itemLabel="Nunca" itemValue="0" />
                                             <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="1" />
                                             <f:selectItem itemLabel="Mensalmente" itemValue="2" />
@@ -93,7 +93,7 @@
                                         <f:facet name="header">  
                                             07. Quantas vezes ao longo dos últimos 12 meses você se sentiu culpado ou com remorso depois de ter bebido?
                                         </f:facet>
-                                        <p:selectOneRadio id="options4" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options4" value="#{evaluationController.evaluation.audit7}"  required="true">  
                                             <f:selectItem itemLabel="Nunca" itemValue="0" />
                                             <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="1" />
                                             <f:selectItem itemLabel="Mensalmente" itemValue="2" />
@@ -106,7 +106,7 @@
                                         <f:facet name="header">  
                                             08 - Quantas vezes ao longo dos últimos 12 meses você foi incapaz de lembrar o que aconteceu devido a bebida?
                                         </f:facet>
-                                        <p:selectOneRadio id="options5" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options5" value="#{evaluationController.evaluation.audit8}"  required="true">  
                                             <f:selectItem itemLabel="Nunca" itemValue="0" />
                                             <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="1" />
                                             <f:selectItem itemLabel="Mensalmente" itemValue="2" />
@@ -120,7 +120,7 @@
                                         <f:facet name="header">  
                                             09 - Você ja causou ferimentos ou prejuízos a você mesmo ou a outra pessoa após ter bebido?
                                         </f:facet>
-                                        <p:selectOneRadio id="options6" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options6" value="#{evaluationController.evaluation.audit9}"  required="true">  
                                             <f:selectItem itemLabel="Não" itemValue="0" />
                                             <f:selectItem itemLabel="Sim, mas não no ano passado" itemValue="2" />
                                             <f:selectItem itemLabel="Sim, no ano passado" itemValue="4" />
@@ -133,7 +133,7 @@
                                         <f:facet name="header">  
                                             10 - Algum parente, amigo ou médico já se preocupou com o fato de você beber ou sugeriu que você parasse?
                                         </f:facet>
-                                        <p:selectOneRadio id="options7" value="#{preparandoParaPararController.pergunta2}"  required="true">  
+                                        <p:selectOneRadio id="options7" value="#{evaluationController.evaluation.audit10}"  required="true">  
                                             <f:selectItem itemLabel="Não" itemValue="0" />
                                             <f:selectItem itemLabel="Sim, mas não no ano passado" itemValue="2" />
                                             <f:selectItem itemLabel="Sim, no ano passado" itemValue="4" />
@@ -145,15 +145,12 @@
                                 </p:panel>
 
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
                                 </div>
 
 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.avaliar()}">
-                                        <f:attribute name="object" value="#{userController.user}" />
-                                        <f:attribute name="typeName" value="user" />
-                                    </p:commandButton>                                
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit7()}"/>                               
                                 </div>
 
                             </h:form>

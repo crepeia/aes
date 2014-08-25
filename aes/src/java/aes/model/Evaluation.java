@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package aes.model;
 
 import java.util.Calendar;
@@ -24,20 +23,20 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "tb_evaluation")
 public class Evaluation {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar date;
-    
+
     @Column(name = "drink")
     private Boolean drink;
-    
+
     @Column(name = "year_email")
     private Boolean yearEmail;
-    
+
     @Column(name = "audit_1")
     private Integer audit1;
     @Column(name = "audit_2")
@@ -48,37 +47,43 @@ public class Evaluation {
     private Integer weekEvaluation1;
     @Column(name = "week_evaluation_2")
     private Integer weekEvaluation2;
-    
-    @Column(name = "dep_question_1")
-    private Integer depQuestion1;
-    @Column(name = "dep_question_2")
-    private Integer depQuestion2;
-    @Column(name = "dep_question_3")
-    private Integer depQuestion3;
-    @Column(name = "dep_question_4")
-    private Integer depQuestion4;
-    @Column(name = "dep_question_5")
-    private Integer depQuestion5;
-    @Column(name = "dep_question_6")
-    private Integer depQuestion6;
-    @Column(name = "dep_question_7")
-    private Integer depQuestion7;
-    @Column(name = "dep_question_8")
-    private Integer depQuestion8;
-    
-    @Column(name = "risk_question_1")
-    private Integer riskQuestion1;
-    @Column(name = "risk_question_2")
-    private Integer riskQuestion2;
-    @Column(name = "risk_question_3")
-    private Integer riskQuestion3;
-    @Column(name = "risk_question_4")
-    private Integer riskQuestion4;
-    @Column(name = "risk_question_5")
-    private Integer riskQuestion5;
-    @Column(name = "risk_question_6")
-    private Integer riskQuestion6;
-    
+
+    @Column(name = "audit_4")
+    private Integer audit4;
+    @Column(name = "audit_5")
+    private Integer audit5;
+    @Column(name = "audit_6")
+    private Integer audit6;
+    @Column(name = "audit_7")
+    private Integer audit7;
+    @Column(name = "audit_8")
+    private Integer audit8;
+    @Column(name = "audit_9")
+    private Integer audit9;
+    @Column(name = "audit_10")
+    private Integer audit10;
+
+    @Column(name = "screen_1")
+    private Boolean screen1;
+    @Column(name = "screen_2")
+    private Boolean screen2;
+    @Column(name = "screen_3")
+    private Boolean screen3;
+    @Column(name = "screen_4")
+    private Boolean screen4;
+    @Column(name = "screen_5")
+    private Boolean screen5;
+    @Column(name = "screen_6")
+    private Boolean screen6;
+    @Column(name = "screen_7")
+    private Boolean screen7;
+    @Column(name = "screen_8")
+    private Boolean screen8;
+    @Column(name = "screen_9")
+    private Boolean screen9;
+    @Column(name = "screen_10")
+    private Boolean screen10;
+
     @ManyToOne
     private User user;
 
@@ -145,121 +150,9 @@ public class Evaluation {
     public void setYearEmail(Boolean yearEmail) {
         this.yearEmail = yearEmail;
     }
-    
+
     public Integer getSum() {
-        return this.audit1+this.audit2+this.audit3;
-    }
-
-    public Integer getDepQuestion1() {
-        return depQuestion1;
-    }
-
-    public void setDepQuestion1(Integer depQuestion1) {
-        this.depQuestion1 = depQuestion1;
-    }
-
-    public Integer getDepQuestion2() {
-        return depQuestion2;
-    }
-
-    public void setDepQuestion2(Integer depQuestion2) {
-        this.depQuestion2 = depQuestion2;
-    }
-
-    public Integer getDepQuestion3() {
-        return depQuestion3;
-    }
-
-    public void setDepQuestion3(Integer depQuestion3) {
-        this.depQuestion3 = depQuestion3;
-    }
-
-    public Integer getDepQuestion4() {
-        return depQuestion4;
-    }
-
-    public void setDepQuestion4(Integer depQuestion4) {
-        this.depQuestion4 = depQuestion4;
-    }
-
-    public Integer getDepQuestion5() {
-        return depQuestion5;
-    }
-
-    public void setDepQuestion5(Integer depQuestion5) {
-        this.depQuestion5 = depQuestion5;
-    }
-
-    public Integer getDepQuestion6() {
-        return depQuestion6;
-    }
-
-    public void setDepQuestion6(Integer depQuestion6) {
-        this.depQuestion6 = depQuestion6;
-    }
-
-    public Integer getDepQuestion7() {
-        return depQuestion7;
-    }
-
-    public void setDepQuestion7(Integer depQuestion7) {
-        this.depQuestion7 = depQuestion7;
-    }
-
-    public Integer getDepQuestion8() {
-        return depQuestion8;
-    }
-
-    public void setDepQuestion8(Integer depQuestion8) {
-        this.depQuestion8 = depQuestion8;
-    }
-
-    public Integer getRiskQuestion1() {
-        return riskQuestion1;
-    }
-
-    public void setRiskQuestion1(Integer riskQuestion1) {
-        this.riskQuestion1 = riskQuestion1;
-    }
-
-    public Integer getRiskQuestion2() {
-        return riskQuestion2;
-    }
-
-    public void setRiskQuestion2(Integer riskQuestion2) {
-        this.riskQuestion2 = riskQuestion2;
-    }
-
-    public Integer getRiskQuestion3() {
-        return riskQuestion3;
-    }
-
-    public void setRiskQuestion3(Integer riskQuestion3) {
-        this.riskQuestion3 = riskQuestion3;
-    }
-
-    public Integer getRiskQuestion4() {
-        return riskQuestion4;
-    }
-
-    public void setRiskQuestion4(Integer riskQuestion4) {
-        this.riskQuestion4 = riskQuestion4;
-    }
-
-    public Integer getRiskQuestion5() {
-        return riskQuestion5;
-    }
-
-    public void setRiskQuestion5(Integer riskQuestion5) {
-        this.riskQuestion5 = riskQuestion5;
-    }
-
-    public Integer getRiskQuestion6() {
-        return riskQuestion6;
-    }
-
-    public void setRiskQuestion6(Integer riskQuestion6) {
-        this.riskQuestion6 = riskQuestion6;
+        return this.audit1 + this.audit2 + this.audit3;
     }
 
     public User getUser() {
@@ -277,9 +170,145 @@ public class Evaluation {
     public void setDate(Calendar date) {
         this.date = date;
     }
-    
-    
-    
-    
-    
+
+    public Integer getAudit4() {
+        return audit4;
+    }
+
+    public void setAudit4(Integer audit4) {
+        this.audit4 = audit4;
+    }
+
+    public Integer getAudit5() {
+        return audit5;
+    }
+
+    public void setAudit5(Integer audit5) {
+        this.audit5 = audit5;
+    }
+
+    public Integer getAudit6() {
+        return audit6;
+    }
+
+    public void setAudit6(Integer audit6) {
+        this.audit6 = audit6;
+    }
+
+    public Integer getAudit7() {
+        return audit7;
+    }
+
+    public void setAudit7(Integer audit7) {
+        this.audit7 = audit7;
+    }
+
+    public Integer getAudit8() {
+        return audit8;
+    }
+
+    public void setAudit8(Integer audit8) {
+        this.audit8 = audit8;
+    }
+
+    public Integer getAudit9() {
+        return audit9;
+    }
+
+    public void setAudit9(Integer audit9) {
+        this.audit9 = audit9;
+    }
+
+    public Integer getAudit10() {
+        return audit10;
+    }
+
+    public void setAudit10(Integer audit10) {
+        this.audit10 = audit10;
+    }
+
+    public boolean isScreen1() {
+        return screen1;
+    }
+
+    public void setScreen1(boolean screen1) {
+        this.screen1 = screen1;
+    }
+
+    public boolean isScreen2() {
+        return screen2;
+    }
+
+    public void setScreen2(boolean screen2) {
+        this.screen2 = screen2;
+    }
+
+    public boolean isScreen3() {
+        return screen3;
+    }
+
+    public void setScreen3(boolean screen3) {
+        this.screen3 = screen3;
+    }
+
+    public boolean isScreen4() {
+        return screen4;
+    }
+
+    public void setScreen4(boolean screen4) {
+        this.screen4 = screen4;
+    }
+
+    public boolean isScreen5() {
+        return screen5;
+    }
+
+    public void setScreen5(boolean screen5) {
+        this.screen5 = screen5;
+    }
+
+    public boolean isScreen6() {
+        return screen6;
+    }
+
+    public void setScreen6(boolean screen6) {
+        this.screen6 = screen6;
+    }
+
+    public boolean isScreen7() {
+        return screen7;
+    }
+
+    public void setScreen7(boolean screen7) {
+        this.screen7 = screen7;
+    }
+
+    public boolean isScreen8() {
+        return screen8;
+    }
+
+    public void setScreen8(boolean screen8) {
+        this.screen8 = screen8;
+    }
+
+    public boolean isScreen9() {
+        return screen9;
+    }
+
+    public void setScreen9(boolean screen9) {
+        this.screen9 = screen9;
+    }
+
+    public boolean isScreen10() {
+        return screen10;
+    }
+
+    public void setScreen10(boolean screen10) {
+        this.screen10 = screen10;
+    }
+
+    public boolean screen() {
+        return isScreen1() || isScreen2() || isScreen3() || isScreen4() || isScreen5() || isScreen6() || isScreen7() || isScreen8() || isScreen9() || isScreen10();
+    }
+
 }
