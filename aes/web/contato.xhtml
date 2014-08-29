@@ -21,7 +21,7 @@
 
                 <div class="pagecontent">
                     <h:graphicImage library="default" name="images/vst-paisagem.png" alt="Álcool e Saúde" id="vstpaisagem" />	
-                    <h1>Contato</h1>
+                    <h1>#{messages['contact']}</h1>
                     <div id="contato">
                         <h4>E-mail: contato@alcoolesaude.com.br</h4>
                         <h4>Twitter:@alcoolesaude</h4>
@@ -30,7 +30,7 @@
                             <p:growl id="errorGrowl" sticky="true" />  
                             <p:inputText id="sendEmail" value="#{contatoController.email}" required="true" label="E-mail"></p:inputText>
                             <p:watermark for="sendEmail" value="E-mail" />
-                            <h4>Mensagem</h4>
+                            <h4>#{messages['h4.message']}</h4>
                             <p:inputTextarea rows="4" cols="60" autoResize="false" value="#{contatoController.message}" required="true" label="Mensagem" />
                             <div id="signinsubmit"><p:commandButton value ="Enviar" update="@form" actionListener="#{contatoController.sendEmail}" /></div>
                         </h:form>

@@ -6,7 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
     <h:head>
-        <title>Álcool e Saúde | Programa gratuito de avaliação do consumo de álcool </title>
+        <title>#{messages['title.1']}</title>
         <w:head_comum />
     </h:head>
     <h:body>
@@ -24,18 +24,18 @@
                 <div class="pagecontent">
                     <div id="maintop">
                         <div id="mainleft">
-                            <h1>Avalie seu beber online</h1>
+                            <h1>#{messages['h1.index']}</h1>
                             <div class="maindescribe">
                                 <h:graphicImage library="default" name="images/people.png" alt="Especialistas" />
-                                <p>Registre aqui o quanto você bebe e conheça melhor os efeitos do álcool no seu organismo.</p>
+                                <p>#{messages['p.index']}</p>
                             </div>
                             <div class="maindescribe">
                                 <h:graphicImage library="default" name="images/book.png" alt="Ciências" />
-                                <p>O conteúdo foi criado por profissionais de saúde e especialistas na área. <h:outputLink value="quem-somos-os-autores.xhtml">Saiba mais</h:outputLink>.</p>                               
+                                <p>#{messages['p1.index']}<h:outputLink value="quem-somos-os-autores.xhtml">#{messages['p1.1.index']}</h:outputLink>.</p>                               
                             </div>
                             <div class="maindescribe">
                                 <h:graphicImage library="default" name="images/padlock.png" alt="Gratuito" />
-                                <p>A avaliação é gratuita e sempre será! Continue acessando ou faça seu cadastro agora mesmo <h:outputLink value="cadastrar-nova-conta.xhtml">aqui</h:outputLink>.</p>
+                                <p>#{messages['p2.index']}<h:outputLink value="cadastrar-nova-conta.xhtml">#{messages['p2.2.index']}</h:outputLink>.</p>
                             </div>                                                                                                                                         
                         </div>
                         <div id="mainright">                           
@@ -46,7 +46,7 @@
                     </div>
 
                     <div id="mainbottom">
-                        <h1>Vamos começar?</h1>
+                        <h1>#{messages['h1.index.lets.start']}Vamos começar?</h1>
                        
                         
                         <!--<h:graphicImage library="default" id="opcoes-img" name="images/opcoes.png" alt="Especialistas" />
@@ -60,45 +60,45 @@
                         
                         <div id="passosbottom">
                             <div class="passos">
-                                <h2><h:outputLink value="quanto-voce-bebe-introducao.xhtml">O quanto você bebe?</h:outputLink></h2>
+                                <h2><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['h2.index']}</h:outputLink></h2>
                                         <h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/preparando-parar.png" alt="Especialistas" /></h:outputLink>
                                         <h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" />
                                         <div class="passos-txt">
                                                <ul>
-                                                   <li>Avalie o seu beber</li>
-                                                   <li>Quanto você bebe?</li>                                   
-                                                   <li>Problemas</li>
-                                                   <li>Custo financeiro</li>
+                                                   <li>#{messages['index.li.1']}</li>
+                                                   <li>#{messages['index.li.2']}</li>                                   
+                                                   <li>#{messages['index.li.3']}</li>
+                                                   <li>#{messages['index.li.4']}</li>
                                                </ul>
                                            
                                         </div>
                                     </div>
                                    
                                     <div class="passos">
-                                        <h2><h:outputLink value="template-passo2.xhtml">Querendo beber menos?</h:outputLink></h2>
+                                        <h2><h:outputLink value="template-passo2.xhtml">#{messages['h2.index.1']}</h:outputLink></h2>
                                         <h:outputLink value="template-passo2.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/pronto-parar.png" alt="Especialistas" /></h:outputLink>
                                         <h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" />
                                         <div class="passos-txt">
                                                <ul>
-                                                   <li>Plano personalizado</li>
-                                                   <li>Estratégias</li>
-                                                   <li>Dificuldades</li>                                     
-                                                   <li>Benefícios</li>
+                                                   <li>#{messages['index.li.5']}</li>
+                                                   <li>#{messages['index.li.6']}</li>
+                                                   <li>#{messages['index.li.7']}</li>                                     
+                                                   <li>#{messages['index.li.8']}</li>
                                                </ul>
                                            
                                         </div>
                                     </div>
                                    
                                     <div class="passos">
-                                        <h2><h:outputLink value="template-passo3.xhtml">Mantendo resultados...</h:outputLink></h2>
+                                        <h2><h:outputLink value="template-passo3.xhtml">#{messages['h2.index.2']}</h:outputLink></h2>
                                         <h:outputLink value="template-passo3.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/acompanhamento.png" alt="Especialistas"/></h:outputLink>
                                        
                                         <div class="passos-txt">
                                                <ul>                                                                                                     
-                                                   <li>Plano para recaídas</li>
-                                                   <li>Recaídas e lapsos</li>                                     
-                                                   <li>E-mails de acompanhamento</li>
-                                                   <li>Mensagens</li>
+                                                   <li>#{messages['index.li.9']}</li>
+                                                   <li>#{messages['index.li.10']}</li>                                     
+                                                   <li>#{messages['index.li.11']}</li>
+                                                   <li>#{messages['index.li.12']}</li>
                                                </ul>
                                            
                                         </div>

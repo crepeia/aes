@@ -6,7 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
     <h:head>
-        <title>Cadastrar nova conta | Álcool e Saúde</title>
+        <title>#{messages['register.title']}</title>
         <w:head_comum />
     </h:head>
     <h:body>
@@ -25,7 +25,7 @@
                     <div id="maintop">
                         <div id="maincenter">
                             <div id="signup">
-                                <h1>Cadastro</h1>
+                                <h1>#{messages['register']}</h1>
                                 <h:form id="form" class="form-signup">
                                     <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                     <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
@@ -92,7 +92,7 @@
                                         <p:message for="options" />
                                       
                                         <div id="signupsubmit">			                                            
-                                            <div id="signupp"><p>Ao efetuar o cadastro, você concorda com os <h:outputLink value="./termos-de-uso.xhtml">termos de uso</h:outputLink>. Já tem cadastro? <h:outputLink value="login.xhtml">Entrar</h:outputLink></p></div>
+                                            <div id="signupp"><p>#{messages['register.1']}<h:outputLink value="./termos-de-uso.xhtml">#{messages['regiter.2']}</h:outputLink>#{messages['register.3']}<h:outputLink value="login.xhtml">#{messages['enter']}</h:outputLink></p></div>
                                             <div id="signupbtn"><p:commandButton id="saveBtn" value="Registrar" update="@form" actionListener="#{userController.save}">
                                                 <f:attribute name="object" value="#{userController.user}" />
                                                 <f:attribute name="typeName" value="user" />
