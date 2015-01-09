@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Introdução - O quanto voce bebe ? | Álcool e Saude </title>
+        <w:head_comum />
+    </h:head>
+
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+
+
+
+                <div class="pagecontent">
+
+
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1>Você ainda não está pensando em mudar</h1> 
+                        </div>    
+
+                        <div id="progressbar">
+                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>                        
+                    </div>
+
+
+                    <div id="pagemiddle">
+                        
+                        <div class="fotoframe">                            
+                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+
+                        <div id="pmtext">
+
+                            <p> Apesar do álcool poder ser causa de problemas, você respondeu que ainda não está preparado(a) para mudar. Considere durante este período as sequintes sugestões</p>
+                            <li>Continue prestando atenção no quanto tem bebido, considerando a frequencia e e quantidade</li>
+                            <li>Procure compreender o quanto o álcool afeta você</li>
+                            <li>Lide com outras prioridades que possam estar no caminho da sua mudança</li>
+                            <li>Peça ajuda de um amigo, profissional de saúde ou outra pessoa que você confie</li>
+                            <li>Refaça a avaliação no site, considere principalmente os prós e contras de mudar</li>
+                            <h4> Lembre-se não espere por um problema maior</h4>
+                            <p> Quando alguém está bebendo muito, mudar mais cedo gera maior chance de sucesso e menos destrutivo este problema é para o individuo e seus familiares</p>
+                            <h:form>    
+                                <div id="btnback">
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
+                                </div>
+                                
+                                
+                                <div id="btnnext">
+                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.evaluate()}">
+                                <f:attribute name="object" value="#{userController.user}" />
+                                <f:attribute name="typeName" value="user" />
+                            </p:commandButton>                                
+                                </div>
+                            </h:form>
+                        </div><!-- end pmtext -->  
+
+                    </div><!-- end page middle -->                                             
+
+                    <div class="referencias">
+                        <p>Atualizado em 12/01/2014</p>
+                    </div>
+
+
+
+                </div>        
+            </div>
+
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+
+

@@ -41,52 +41,42 @@
 
                         <div id="pmtext">
 
-                            <h3>Avaliação</h3>
+                            <h3>Quais são os sintomas de um transtorno relacionado ao uso de álcool</h3>
                             
-                            <p>In the past year, have you (check all that apply and click the “Feedback” button, below):</p>
-                            
-                            <h:form>
-                                <p:panel id="questoes" >
-
+                            <p> No último ano, você apresentou algum destes sintomas abaixo ? (Marque todos os que você apresentou e clique em resultado):</p>
                                     <!--inserir tag "value" com controlador na tag abaixo - selectManyCheckbox-->
+                                    <h:form>
                                     <h:panelGrid columns="2" >
-                                        <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen1}" />                                      
-                                    <h:outputText value="had times when you ended up drinking more, or longer, than you intended?" />
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen1}" />                                      
+                                    <h:outputText value="teve vezes em que você bebeu mais, durante mais tempo do que havia planejado" />
                                     <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen2}" /> 
-                                    <h:outputText value="more than once wanted to cut down or stop drinking, or tried to, but couldn't?" />
+                                    <h:outputText value="mais do que uma vez você quiz ou tentou diminuir ou para de beber mas não conseguiu " />
                                     <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen3}" />  
-                                    <h:outputText value="more than once gotten into situations while or after drinking that increased your chances of getting hurt (such as driving, swimming, using machinery, walking in a dangerous area, or having unsafe sex)?" />
+                                    <h:outputText value="mais do que uma vez você se envolveu em situações durante ou depois de beber que aumentaram as suas chances de se machucar (tais como dirigir, nadas, operar maquiasn, andar por áreas perigosa ou fazer sexo sem proteção" />
                                     <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen4}" />                                      
-                                    <h:outputText value="continued to drink even though it was making you feel depressed or anxious or adding to another health problem? Or after having had a memory blackout?" />
+                                    <h:outputText value="teve que beber muito mais do que costumava para conseguir os efeitos que queria ? Ou achou que a quatidade que você costuma beber teve um efeito muito menor do que antes" />
                                     <p:selectBooleanCheckbox  value="#{evaluationController.evaluation.screen5}" />                                      
-                                    <h:outputText value="spent a lot of time drinking? Or being sick or getting over other aftereffects?" />
+                                    <h:outputText value="continuou a beber apesar disso le fazer se sentir deprimido ou ansioso ou mesmo aumentando um outro problema de saúde? Ou depois de ter um esquecido o que fez por ter bebido?" />
                                     <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen6}" />                                      
-                                    <h:outputText value="continued to drink even though it was causing trouble with your family or friends?" />
+                                    <h:outputText value="gastou muito tempo bebendo ? ou passando mal ou mesmo se recuperando por ter bebido" />
                                     <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen7}" />                                      
-                                    <h:outputText value="found that drinking—or being sick from drinking—often interfered with taking care of your home or family? Or caused job troubles? Or school problems?" />
+                                    <h:outputText value="continuou a beber mesmo que isso estivesse causando problema com sua família ou amigos?" />
                                     <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen8}" />                                      
-                                    <h:outputText value="given up or cut back on activities that were important or interesting to you, or gave you pleasure, in order to drink?" />
+                                    <h:outputText value="notou que beber ou estar passando mal por ter bebido frequentemente interferiu na forma que você cuidava de sua casa ou família ? Ou causou problemas no trabalho ? Ou problemas relacionados aos estudos" />
                                     <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen9}" />                                      
-                                    <h:outputText value="more than once gotten arrested, been held at a police station, or had other legal problems because of your drinking?" />
+                                    <h:outputText value="para beber você desistiu ou interrompeu atividades que eram importantes ou interessantes para você, que lhe davam prazer, " />
                                     <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen10}" />
-                                    <h:outputText value="found that when the effects of alcohol were wearing off, you had withdrawal symptoms,	such as trouble sleeping, shakiness, restlessness, nausea, sweating, a racing heart, or a seizure? Or sensed things that were not there?"/>
-                                    </h:panelGrid>                           
-                                   
-                                </p:panel>
-                                
+                                    <h:outputText value="mais de uma vez foi preso ou detido em uma delegacia, ou teve outros probis relacionados com a bebida"/>
+                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen11}" />
+                                    <h:outputText value="percebeu que depois que os efeitos do álcool passaram você teve sintomas de abstinência, tais como problemas para dormir, tremores, exaustão, nauseas, sudorese, taquicardia ou convulsões? Ou sentiu coisas que não estão aqui?"/>
+                                    </h:panelGrid>
+                                    </h:form>
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
-                                </div>
-                                
-                                
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>                                
+                                </div>                                                           
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.screenForAlcoholUseDisorders()}"/>
-                               
-                                                         
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.screenForAlcoholUseDisorders()}"/>                         
                                 </div>
-
-                        </h:form>
-
                         </div><!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             
