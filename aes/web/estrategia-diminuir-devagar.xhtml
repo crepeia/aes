@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Introdução - O quanto voce bebe ? | Álcool e Saude </title>
+        <w:head_comum />
+    </h:head>
+
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            <!--mainmenu-->         	
+            <div class="main">
+
+                <div class="pagecontent">
+
+
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1>Planejando sua mudança</h1> 
+                        </div>    
+
+                        <div id="progressbar">
+                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>                        
+                    </div>
+
+
+                    <div id="pagemiddle">
+                        
+                        <div class="fotoframe">                            
+                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+
+                        <div id="pmtext">
+
+                            <h3>Controlando o Ritmo</h3>
+                            <h4>Velocidade e Espaço</h4>
+                            <li>Procure sempre beber devagar</li>
+                            <li>Evite beber mais do que uma dose padrão por hora</li>
+                            <li>Sempre consuma uma bebida não álcoolica antes e depois de uma dose, tendo espaço entre as doses</li>
+                            <li>Como bebidas não álcoolicas você pode usar água, sucos ou refrigerantes</li>
+                        
+                            <h4>Inclua comida</h4>
+                            <li>Não bebe de estômago vazio</li>
+                            <li>Procure também se alimentar durante o período em que está bebendo</li>
+                            <li>Ter comido faz com que o álcool seja absorvido no seu organismo mais lentamente</li>
+                            <h:form>
+
+                                <div id="btnback">
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-introducao.xhtml"></h:button>
+                                </div>
+                                
+                                
+                                <div id="btnnext">
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit3()}"/>      
+                                </div>
+
+                            </h:form>
+
+                        </div><!-- end pmtext -->  
+
+                    </div><!-- end page middle -->                                             
+
+                    <div class="referencias">
+                        <p>Atualizado em 12/01/2014</p>
+                    </div>
+
+
+
+                </div>        
+            </div>
+
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+
+
+
