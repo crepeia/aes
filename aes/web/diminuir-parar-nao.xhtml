@@ -45,15 +45,27 @@
 
                         <div id="pmtext">
 
-                            <p> Apesar do álcool poder ser causa de problemas, você respondeu que ainda não está preparado(a) para mudar. Considere durante este período as sequintes sugestões</p>
+                            <p> Apesar do álcool poder ser causa de problemas, você respondeu que ainda não está preparado(a) para mudar</p>
+                            <h4>Considere durante este período as sequintes sugestões</h4>
                             <li>Continue prestando atenção no quanto tem bebido, considerando a frequencia e e quantidade</li>
                             <li>Procure compreender o quanto o álcool afeta você</li>
                             <li>Lide com outras prioridades que possam estar no caminho da sua mudança</li>
                             <li>Peça ajuda de um amigo, profissional de saúde ou outra pessoa que você confie</li>
                             <li>Refaça a avaliação no site, considere principalmente os prós e contras de mudar</li>
-                            <h4> Lembre-se não espere por um problema maior</h4>
-                            <p> Quando alguém está bebendo muito, mudar mais cedo gera maior chance de sucesso e menos destrutivo este problema é para o individuo e seus familiares</p>
-                            <h:form>    
+                            <h4> Prevenção - não espere por um problema maior ou mais grave</h4>
+                            <p> Quando mais cedo mudamos maiores são nossas chances de sucesso e menores são os danos para o individuo e seus familiares</p>
+                            <h:form> 
+                                <p:panel id="questoes" >
+                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                        <f:facet name="header">  
+                                        Você gostaria de continuar no programa para elaborar um plano de mudança que possa lhe auxiliar? 
+                                        </f:facet> 
+                                        <p:selectOneRadio id="options" value="#{evaluationController.drink}" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />
+                                            <f:selectItem itemLabel="Não" itemValue="0" /> 
+                                        </p:selectOneRadio> 
+                                    </h:panelGrid>
+                                </p:panel>
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
                                 </div>

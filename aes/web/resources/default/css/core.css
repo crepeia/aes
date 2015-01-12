@@ -799,7 +799,9 @@ img#artigotabaco{
     border-radius: 15px;
     background: whitesmoke;
     border: 1px solid #bdc3c7;
-    padding-bottom:15px;    
+    padding-bottom:15px;
+    padding-top:15px;
+    padding-left: 10px;
 }
 
 #pagemiddle .ui-widget-content {
@@ -810,7 +812,7 @@ img#artigotabaco{
     padding: 0!important;    
 }
 
-#pmtext p, h2, h3, h4{
+#pmtext li, p, h2, h3, h4, panelGrid{
     padding-left:20px;
 }
 
@@ -1115,6 +1117,7 @@ thead{
     height: auto;
     margin-left: 80px;
     padding-bottom: 20px;
+    padding-top: 20px; 
     
 }
 
