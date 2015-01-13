@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdu√ß√£o - O quanto voce bebe ? | √Ålcool e Saude </title>
+        <title>IntroduÁ„o - O quanto voce bebe ? | ¡lcool e Saude </title>
         <w:head_comum />
     </h:head>
 
@@ -24,7 +24,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Planejando sua mudan√ßa</h1> 
+                            <h1>Planejando sua mudanÁa</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -41,15 +41,13 @@
 
                         <div id="pmtext">
 
-                            <h3>Buscando Alternativas</h3>
-                            <h4>Alternativas de Lazer</h4>
-                            <li>Beber tenha ocupado uma grande parte do seu tempo livre ou de lazer ?</li>
-                            <li>Procure iniciar novas atividades mais saud√°veis, como exerc√≠cios fisicos (ex. caminhada)</li>
-                            <h4>Tente ser mais saud√°vel evitando beber para:</h4>
-                            <li>Se sentir confort√°vel em situa√ß√µes sociais</li>
-                            <li>Melhorar o seu humor</li>
-                            <li>Lidar com problemas</li>
-                        
+                            <h3>Parando de Beber - Grupos de Auto-Ajuda</h3>
+                            <h4>Considere participar de um grupo de auto-ajuda como os ¡lcoolicos AnÙnimos</h4>
+                            <li>Pessoas em recuperaÁ„o que frequentam grupos como o AA regurlamente tendem a terem melhores resultados dos que n„o frequentam </li>
+                            <h4>Grupos podem variar bastante </h4>
+                            <li>Procure um grupoem que vocÍ se sinta mais confort·vel</li> 
+                            <li>Em um grupo que vocÍ se sinta mais confort·vel vocÍ ter· mais chances de se envolver, inclusive podendo ajudar outras pessoas no futuro</li>
+                           
                             <h:form>
 
                                 <div id="btnback">
@@ -83,7 +81,4 @@
         <w:footer />
     </h:body>
 </html>
-
-
-
 
