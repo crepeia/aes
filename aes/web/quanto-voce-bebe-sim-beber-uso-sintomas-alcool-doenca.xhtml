@@ -43,40 +43,119 @@
 
                             <h3>Quais são os sintomas de um transtorno relacionado ao uso de álcool</h3>
                             
-                            <p> No último ano, você apresentou algum destes sintomas abaixo ? (Marque todos os que você apresentou e clique em resultado):</p>
-                                    <!--inserir tag "value" com controlador na tag abaixo - selectManyCheckbox-->
-                                    <h:form>
-                                    <h:panelGrid columns="2" >
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen1}" />                                      
-                                    <h:outputText value="teve vezes em que você bebeu mais, durante mais tempo do que havia planejado" />
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen2}" /> 
-                                    <h:outputText value="mais do que uma vez você quiz ou tentou diminuir ou para de beber mas não conseguiu " />
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen3}" />  
-                                    <h:outputText value="mais do que uma vez você se envolveu em situações durante ou depois de beber que aumentaram as suas chances de se machucar (tais como dirigir, nadas, operar maquiasn, andar por áreas perigosa ou fazer sexo sem proteção" />
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen4}" />                                      
-                                    <h:outputText value="teve que beber muito mais do que costumava para conseguir os efeitos que queria ? Ou achou que a quatidade que você costuma beber teve um efeito muito menor do que antes" />
-                                    <p:selectBooleanCheckbox  value="#{evaluationController.evaluation.screen5}" />                                      
-                                    <h:outputText value="continuou a beber apesar disso le fazer se sentir deprimido ou ansioso ou mesmo aumentando um outro problema de saúde? Ou depois de ter um esquecido o que fez por ter bebido?" />
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen6}" />                                      
-                                    <h:outputText value="gastou muito tempo bebendo ? ou passando mal ou mesmo se recuperando por ter bebido" />
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen7}" />                                      
-                                    <h:outputText value="continuou a beber mesmo que isso estivesse causando problema com sua família ou amigos?" />
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen8}" />                                      
-                                    <h:outputText value="notou que beber ou estar passando mal por ter bebido frequentemente interferiu na forma que você cuidava de sua casa ou família ? Ou causou problemas no trabalho ? Ou problemas relacionados aos estudos" />
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen9}" />                                      
-                                    <h:outputText value="para beber você desistiu ou interrompeu atividades que eram importantes ou interessantes para você, que lhe davam prazer, " />
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen10}" />
-                                    <h:outputText value="mais de uma vez foi preso ou detido em uma delegacia, ou teve outros probis relacionados com a bebida"/>
-                                    <p:selectBooleanCheckbox value="#{evaluationController.evaluation.screen11}" />
-                                    <h:outputText value="percebeu que depois que os efeitos do álcool passaram você teve sintomas de abstinência, tais como problemas para dormir, tremores, exaustão, nauseas, sudorese, taquicardia ou convulsões? Ou sentiu coisas que não estão aqui?"/>
-                                    </h:panelGrid>
-                                    </h:form>
+                            <p> Não último ano, você apresentou algum destes sintomas abaixo ? (Marque todos os que você apresentou e clique em resultado):</p>
+                                
+                                <h:form>
+                                <p:panel id="questoes" >
+
+
+                                    <p><h:outputText value="01 - teve vezes em que você bebeu mais, durante mais tempo do que havia planejado?"/></p>
+
+                                    <p:panelGrid columns="2" id="question1">
+                                        <p:selectOneRadio id="options" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                     
+                                    <p><h:outputText value="02 - mais do que uma vez você quiz ou tentou diminuir ou para de beber mas não conseguiu "/></p>
+                                    <p:panelGrid columns="2" id="question2">
+                                        <p:selectOneRadio id="options2" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                    <p><h:outputText value="03 - teve que beber muito mais do que costumava para conseguir os efeitos que queria ? Ou achou que a quatidade que você costuma beber teve um efeito muito menor do que antes"/></p>
+                                    <p:panelGrid columns="2" id="question3">
+                                        <p:selectOneRadio id="options3" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                    <p><h:outputText value="04 - continuou a beber apesar disso le fazer se sentir deprimido ou ansioso ou mesmo aumentando um outro problema de saúde? Ou depois de ter um esquecido o que fez por ter bebido?"/></p>
+                                    <p:panelGrid columns="2" id="question4">
+                                        <p:selectOneRadio id="options4" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                                                        
+                                    <p><h:outputText value="05 - gastou muito tempo bebendo ? ou passando mal ou mesmo se recuperando por ter bebido"/></p>
+                                    <p:panelGrid columns="2" id="question5">
+                                        <p:selectOneRadio id="options5" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                    <p><h:outputText value="06 - continuou a beber mesmo que isso estivesse causando problema com sua família ou amigos?"/></p>
+                                    <p:panelGrid columns="2" id="question6">
+                                        <p:selectOneRadio id="options6" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                    <p><h:outputText value="07 - notou que beber ou estar passando mal por ter bebido frequentemente interferiu na forma que você cuidava de sua casa ou família ? Ou causou problemas no trabalho ? Ou problemas relacionados aos estudos?"/></p>
+                                    <p:panelGrid columns="2" id="question7">
+                                        <p:selectOneRadio id="options7" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                    <p><h:outputText value="08 - notou que beber ou estar passando mal por ter bebido frequentemente interferiu na forma que você cuidava de sua casa ou família ? Ou causou problemas no trabalho ? Ou problemas relacionados aos estudos"/></p>
+                                    <p:panelGrid columns="2" id="question8">
+                                        <p:selectOneRadio id="options8" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                    <p><h:outputText value="09 - mais de uma vez foi preso ou detido em uma delegacia, ou teve outros probis relacionados com a bebida"/></p>
+                                    <p:panelGrid columns="2" id="question9">
+                                        <p:selectOneRadio id="options9" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                    <p><h:outputText value="10 - mais de uma vez foi preso ou detido em uma delegacia, ou teve outros probis relacionados com a bebida"/></p>
+                                    <p:panelGrid columns="2" id="question10">
+                                        <p:selectOneRadio id="options10" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                                                        
+                                    <p><h:outputText value="11 - percebeu que depois que os efeitos do álcool passaram você teve sintomas de abstinência, tais como problemas para dormir, tremores, exaustão, nauseas, sudorese, taquicardia ou convulsões? Ou sentiu coisas que não estão aqui?"/></p>
+                                    <p:panelGrid columns="2" id="question11">
+                                        <p:selectOneRadio id="options11" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
+                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                                            
+                                </p:panel>
+                                
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>                                
-                                </div>                                                           
-                                <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.screenForAlcoholUseDisorders()}"/>                         
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
                                 </div>
+                                
+                                
+                                <div id="btnnext">
+                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.evaluate()}">
+                                <f:attribute name="object" value="#{userController.user}" />
+                                <f:attribute name="typeName" value="user" />
+                            </p:commandButton>                                
+                                </div>
+
+                        </h:form>
+                        
+                        
                         </div><!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             

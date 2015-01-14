@@ -48,7 +48,7 @@
                                 <p:panel id="questoes" >
 
 
-                                    <p><h:outputText value="01 - Have you had times when you ended up drinking more than you meant to?"/></p>
+                                    <p><h:outputText value="01 - teve vezes em que você bebeu mais, durante mais tempo do que havia planejado?"/></p>
 
                                     <p:panelGrid columns="2" id="question1">
                                         <p:selectOneRadio id="options" value="#" required="true">  
@@ -56,9 +56,8 @@
                                             <f:selectItem itemLabel="No" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
-                                    
-                                    
-                                    <p><h:outputText value="02 - Have you more than once wanted to stop or cut down on your drinking? Or tried more than once to stop or cut down but found you couldn't?"/></p>
+                                     
+                                    <p><h:outputText value="02 - mais do que uma vez você quiz ou tentou diminuir ou para de beber mas não conseguiu "/></p>
                                     <p:panelGrid columns="2" id="question2">
                                         <p:selectOneRadio id="options2" value="#" required="true">  
                                             <f:selectItem itemLabel="Yes" itemValue="1" />  
@@ -66,7 +65,7 @@
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="03 - Have you found that you have to drink much more than you once did to get the effect you want? Or that usual number of drinks has much less effect on you than it once did?"/></p>
+                                    <p><h:outputText value="03 - teve que beber muito mais do que costumava para conseguir os efeitos que queria ? Ou achou que a quatidade que você costuma beber teve um efeito muito menor do que antes"/></p>
                                     <p:panelGrid columns="2" id="question3">
                                         <p:selectOneRadio id="options3" value="#" required="true">  
                                             <f:selectItem itemLabel="Yes" itemValue="1" />  
@@ -74,15 +73,15 @@
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="04 - When the effects of alcohol are wearing off, have you had trouble sleeping?  Found your hand shaking? Nervous? Nauseous? Restless? Sweating or with your heart beating fast? Have you sensed things that aren't really there? Had seizures"/></p>
+                                    <p><h:outputText value="04 - continuou a beber apesar disso le fazer se sentir deprimido ou ansioso ou mesmo aumentando um outro problema de saúde? Ou depois de ter um esquecido o que fez por ter bebido?"/></p>
                                     <p:panelGrid columns="2" id="question4">
                                         <p:selectOneRadio id="options4" value="#" required="true">  
                                             <f:selectItem itemLabel="Yes" itemValue="1" />  
                                             <f:selectItem itemLabel="No" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
-                                    
-                                    <p><h:outputText value="05 - Have you taken a drink or used any drug or medicine (other than over-the-counter pain relievers) to keep from having bad aftereffects of drinking? Or get over them??"/></p>
+                                                                        
+                                    <p><h:outputText value="05 - gastou muito tempo bebendo ? ou passando mal ou mesmo se recuperando por ter bebido"/></p>
                                     <p:panelGrid columns="2" id="question5">
                                         <p:selectOneRadio id="options5" value="#" required="true">  
                                             <f:selectItem itemLabel="Yes" itemValue="1" />  
@@ -90,7 +89,7 @@
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="06 - Have you continued to drink even though you knew it was making you feel depressed or anxious? Or causing a health problem or making one worse? Or after having had a blackout?"/></p>
+                                    <p><h:outputText value="06 - continuou a beber mesmo que isso estivesse causando problema com sua família ou amigos?"/></p>
                                     <p:panelGrid columns="2" id="question6">
                                         <p:selectOneRadio id="options6" value="#" required="true">  
                                             <f:selectItem itemLabel="Yes" itemValue="1" />  
@@ -98,7 +97,7 @@
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="07 - Have you had  a period when you spent a lot of time drinking? Or being sick of getting over the bad aftereffects of drinking?"/></p>
+                                    <p><h:outputText value="07 - notou que beber ou estar passando mal por ter bebido frequentemente interferiu na forma que você cuidava de sua casa ou família ? Ou causou problemas no trabalho ? Ou problemas relacionados aos estudos?"/></p>
                                     <p:panelGrid columns="2" id="question7">
                                         <p:selectOneRadio id="options7" value="#" required="true">  
                                             <f:selectItem itemLabel="Yes" itemValue="1" />  
@@ -106,7 +105,7 @@
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="08 - In order to drink, have you given up or cut down on activities that were important or interesting to you or gave you pleasure?"/></p>
+                                    <p><h:outputText value="08 - notou que beber ou estar passando mal por ter bebido frequentemente interferiu na forma que você cuidava de sua casa ou família ? Ou causou problemas no trabalho ? Ou problemas relacionados aos estudos"/></p>
                                     <p:panelGrid columns="2" id="question8">
                                         <p:selectOneRadio id="options8" value="#" required="true">  
                                             <f:selectItem itemLabel="Yes" itemValue="1" />  
@@ -114,10 +113,31 @@
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
+                                    <p><h:outputText value="09 - mais de uma vez foi preso ou detido em uma delegacia, ou teve outros probis relacionados com a bebida"/></p>
+                                    <p:panelGrid columns="2" id="question9">
+                                        <p:selectOneRadio id="options9" value="#" required="true">  
+                                            <f:selectItem itemLabel="Yes" itemValue="1" />  
+                                            <f:selectItem itemLabel="No" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
                                     
-
-
-
+                                    <p><h:outputText value="10 - mais de uma vez foi preso ou detido em uma delegacia, ou teve outros probis relacionados com a bebida"/></p>
+                                    <p:panelGrid columns="2" id="question10">
+                                        <p:selectOneRadio id="options10" value="#" required="true">  
+                                            <f:selectItem itemLabel="Yes" itemValue="1" />  
+                                            <f:selectItem itemLabel="No" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                                                        
+                                    <p><h:outputText value="11 - percebeu que depois que os efeitos do álcool passaram você teve sintomas de abstinência, tais como problemas para dormir, tremores, exaustão, nauseas, sudorese, taquicardia ou convulsões? Ou sentiu coisas que não estão aqui?"/></p>
+                                    <p:panelGrid columns="2" id="question11">
+                                        <p:selectOneRadio id="options11" value="#" required="true">  
+                                            <f:selectItem itemLabel="Yes" itemValue="1" />  
+                                            <f:selectItem itemLabel="No" itemValue="0" />  
+                                        </p:selectOneRadio> 
+                                    </p:panelGrid>
+                                    
+                                                            
                                 </p:panel>
                                 
                                 <div id="btnback">
