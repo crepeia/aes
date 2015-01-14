@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title> O quanto voce bebe ? | Álcool e Saude </title>
+        <w:head_comum />
+    </h:head>
+
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+
+
+
+                <div class="pagecontent">
+
+
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1> Pronto para começar</h1> 
+                        </div>    
+
+                        <div id="progressbar">
+                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>                        
+                    </div>
+
+
+                    <div id="pagemiddle">
+
+                        <div class="fotoframe">                            
+                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+
+                        <div id="pmtext">
+
+                            <p>A seguir, caso esteja pronto(a) para começar, você terá a oportunidade de preencher o seu plano de mudança</p>
+                            <h4>Você terá a opção de imprimir e/ou enviar este plano para o seu e-mail depois de finalizado</h4>
+                            <h3>Plano de Mudança</h3>
+                            <h:form>
+                                <p:panel id="questoes" >
+                                    <p:growl id="messages" showDetail="true" />
+                                    <p:panelGrid columns="2" id="meta2">
+                                        <f:facet name="header">  
+                                           Meta                                      
+                                        </f:facet>                                                                     
+                                            <h:outputText value=""/>
+                                            <p:selectOneRadio id="options" value="#{userController.user.gender}" required="true" label="">  
+                                                <f:selectItem itemLabel="Eu quero diminuir o quanto eu bebo" itemValue="D" />  
+                                                <f:selectItem itemLabel="Eu quero parar" itemValue="P" />  
+                                            </p:selectOneRadio> 
+                                        </p:panelGrid>
+                                    
+                                    <h:panelGrid columns="1"  cellpadding="5">
+                                        <f:facet name="header">  
+                                           Data para começar                                      
+                                        </f:facet>
+                                            <p:outputLabel for="dataM" value="" />
+                                            <p:calendar id="dataM" value="#{calendarView.date10}" />
+                                    </h:panelGrid>
+                                  
+                                                                           
+                                    <h:panelGrid columns="1"  cellpadding="5" id="questao2">
+                                        <f:facet name="header">  
+                                           Razões: As razões mais importantes que eu tenho para mudar a forma que bebo são:                                      
+                                        </f:facet>
+                                        <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo2"/> 
+                                    </h:panelGrid>
+                                    
+                                    <h:panelGrid columns="1"  cellpadding="5" id="questao3">
+                                        <f:facet name="header">  
+                                           Estratégias - Eu irei usar as seguintes estratégias ?                                      
+                                        </f:facet>
+                                        <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo3"/> 
+                                    </h:panelGrid>
+                                    
+                                    <h:panelGrid columns="1"  cellpadding="5" id="questao4">
+                                        <f:facet name="header">  
+                                           Pessoas - As pessoas que podem me ajudar são (nomes e como eles podem lhe ajudar) ?                                      
+                                        </f:facet>
+                                        <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo4"/> 
+                                    </h:panelGrid>
+                                    
+                                    <h:panelGrid columns="1"  cellpadding="5" id="questao5">
+                                        <f:facet name="header">  
+                                           Sinais de Sucesso - Eu saberei que meu plano está funcionando quando ?                                      
+                                        </f:facet>
+                                        <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo5"/> 
+                                    </h:panelGrid>
+                                    
+                                    <h:panelGrid columns="1"  cellpadding="5" id="questao6">
+                                        <f:facet name="header">  
+                                           Possíveis Dificuldades e Soluções: O que pode interferir e como posso lidar com estas situações ?                                      
+                                        </f:facet>
+                                        <p:inputTextarea rows="2" cols="70" value="#{prontoParaPararController.prontoParaParar.evitarRecaida1}" id="campo6"/> 
+                                    </h:panelGrid>
+                                
+                                </p:panel>
+                                                   
+
+                            
+                                
+                                <div id="btnback">
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-sintomas-alcool-doenca.xhtml"></h:button>
+                                </div>
+                                
+                                
+                                <div id="btnnext">
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.continueEvaluation()}"/>
+                               
+                                                         
+                                </div>
+                               
+
+                            </h:form>                     
+
+
+
+
+
+
+                        </div><!-- end pmtext -->  
+
+                    </div><!-- end page middle -->                                             
+
+                    <div class="referencias">
+                        <p>Atualizado em 12/01/2014</p>
+                    </div>
+
+
+
+                </div>        
+            </div>
+
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+</html>
+
