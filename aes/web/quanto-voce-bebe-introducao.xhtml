@@ -55,6 +55,18 @@
                                             <f:selectItem itemLabel="Masculino" itemValue="M" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
+                                    
+                                    <!--Caso respondente for mulher - perguntar se está grávida ou tem chance de estar grávida
+                                    
+                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao1">
+                                        <h:outputText value="Você está grávida ou tem chance de estar grávida?" style="font-weight: bold;"/>
+                                        <p:selectOneRadio id="options1.1" value="#" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="F" />
+                                            <f:selectItem itemLabel="Não" itemValue="M" />
+                                        </p:selectOneRadio> 
+                                    </h:panelGrid> 
+                                    
+                                    -->
 
                                     <p:panelGrid columns="4" style="margin-bottom:10px"  id="nascimento">                                            
                                         <h:outputText value="02 - Nascimento:" style="font-weight: bold;"/>
@@ -74,7 +86,7 @@
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
-                                            03. As vezes, você bebe cerveja, cachaça, vinho ou outras bebidas álcoolicas? 
+                                            03. Às vezes, você bebe cerveja, cachaça, vinho ou outras bebidas álcoolicas? 
                                         </f:facet> 
                                         <p:selectOneRadio id="options" value="#{evaluationController.drink}" required="true">  
                                             <f:selectItem itemLabel="Sim" itemValue="1" />

@@ -19,16 +19,12 @@
             <!--mainmenu-->         	
             <div class="main">
 
-
-
-
-
                 <div class="pagecontent">
 
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Planejando sua mudança: Estratégias para diminuir</h1> 
+                            <h1>Planejando sua mudança</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -39,23 +35,33 @@
 
                     <div id="pagemiddle">
                         
-                        
+                        <div class="fotoframe">                            
+                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+
                         <div id="pmtext">
 
+                            <h3>Buscando Alternativas</h3>
+                            <h4>Aprendendo a dizer não</h4>
+                            <li>Existe uma maior chance de alguém lhe oferecer alguma bebida quando você não está bebendo</li>
+                            <p>Tenha sempre na ponta da língua um "não, muito obrigado" - dito de forma educada e convicente</p>
+                            <li>O quanto mais rápido você for capaz de dizer não a estas ofertas, menores são as chance de você acabar bebendo</li> 
+                            <li>O segredo de negar a oferta rápido, faz com que você evite pensar em desculpas para permitir você mesmo a beber</li>
+                            <h3>Lembre-se: "Não, muito obrigado" nada mais complexo que isso</h3>
+                        
                             <h:form>
+
+                                <div id="btnback">
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-introducao.xhtml"></h:button>
+                                </div>
                                 
-                            <p:accordionPanel>
-<p:tab title="First Tab Title">
-	 	 <h:outputText value= "Lorem"/>
-	 	 ...More content for first tab
-</p:tab>
-<p:tab title="Second Tab Title">
-	 	 <h:outputText value="Ipsum" />
-</p:tab>
-//any number of tabs
-</p:accordionPanel>
+                                
+                                <div id="btnnext">
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit3()}"/>      
+                                </div>
+
                             </h:form>
-                            
+
                         </div><!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             
@@ -76,6 +82,3 @@
         <w:footer />
     </h:body>
 </html>
-
-
-

@@ -41,6 +41,9 @@
                             <!-- Este texto precisa ser atualizado -->
                             <h3>Avaliação</h3>
                             
+                            <p>A seguir vamos lhe perguntar acerca do seu consumo de álcool em relação ao último ano. Algumas destas perguntas são relativas à quantitade de álcool que você consome</p>
+                            <p>Como cada bebida possui uma quantidade de álcool, vamos lhe perguntar em termos de dose padrão</p>
+                            
                             
                             <div id="standarddose">
                                 
@@ -112,18 +115,18 @@
                                 <p:panel id="questoes" >
 
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="questao1">
+                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" id="questao1">
                                         <f:facet name="header">  
                                             01. Com que frequência você consome bebidas alcoólicas? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options1" value="#{evaluationController.evaluation.audit1}"  required="true">  
+                                        <p:selectOneRadio id="options1" value="#{evaluationController.evaluation.audit1}" layout="grid" required="true" >  
                                             <f:selectItem itemLabel="Nunca" itemValue="0" />
                                             <f:selectItem itemLabel="Mensalmente ou menos" itemValue="1" />
                                             <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="2" />
                                             <f:selectItem itemLabel="De 2 a 3 vezes por semana" itemValue="3" />
                                             <f:selectItem itemLabel="4 ou mais vezes por semana" itemValue="4" />
                                         </p:selectOneRadio> 
-                                    </h:panelGrid>
+                                   </h:panelGrid>
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="questao2">
@@ -156,7 +159,7 @@
                                     <h2>Avaliação por semana</h2>    
 
                                     <h:panelGrid columns="2" id="weeklyaverage">
-                                        <p><h:outputText value="01 - On average, how many days a week do you have an alcoholic drink?"/></p>
+                                        <p><h:outputText value="01 - Quantos dias na semana você consome alguma bebida álcoolica? (em média)"/></p>
                                         <p:selectOneMenu id="question1" value="#{evaluationController.evaluation.weekEvaluation1}">
                                             <f:selectItem itemLabel="01" itemValue="1" />
                                             <f:selectItem itemLabel="02" itemValue="2" />
@@ -165,7 +168,7 @@
                                         </p:selectOneMenu>
 
 
-                                        <p><h:outputText value="02 - On a typical drinking day, how many drinks do you have?"/></p>
+                                        <p><h:outputText value="02 - Em um dia típico, quantas doses você constuma beber?"/></p>
                                         <p:selectOneMenu id="question2" value="#{evaluationController.evaluation.weekEvaluation2}">
                                             <f:selectItem itemLabel="01" itemValue="1" />
                                             <f:selectItem itemLabel="02" itemValue="2" />
