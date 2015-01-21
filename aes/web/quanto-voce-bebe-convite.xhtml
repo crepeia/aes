@@ -69,17 +69,17 @@
                                             <div id="signupbottom">	
                                                 <p:panelGrid columns="4" id="nascimento">
                                                     <h:outputText value="#{messages['naccount.birthdate']}"/>
-                                                    <p:selectOneMenu id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}">  
+                                                    <p:selectOneMenu id="day" value="#{userController.day}" required="true" label="#{messages['naccount.day']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue="" />  
-                                                        <f:selectItems value="#{userController.dias}" />  
+                                                        <f:selectItems value="#{userController.days}" />  
                                                     </p:selectOneMenu>
-                                                    <p:selectOneMenu id="month" value="#{userController.mes}" required="true" label="#{messages['naccount.month']}">  
+                                                    <p:selectOneMenu id="month" value="#{userController.month}" required="true" label="#{messages['naccount.month']}">  
                                                         <f:selectItem itemLabel="Mês" itemValue="" />  
-                                                        <f:selectItems value="#{userController.meses}" />  
+                                                        <f:selectItems value="#{userController.months}" />  
                                                     </p:selectOneMenu>
-                                                    <p:selectOneMenu id="year" value="#{userController.ano}" required="true" label="#{messages['naccount.year']}">  
+                                                    <p:selectOneMenu id="year" value="#{userController.year}" required="true" label="#{messages['naccount.year']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
-                                                        <f:selectItems value="#{userController.anos}" />  
+                                                        <f:selectItems value="#{userController.years}" />  
                                                     </p:selectOneMenu>
                                                 </p:panelGrid>
                                                 <p:message for="day" />
