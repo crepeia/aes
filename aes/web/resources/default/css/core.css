@@ -429,7 +429,7 @@ INDEX***********************/
 
 #maincenter{
     float: left;
-    width: 90%;
+    width: 100%;
     background: #efefef;
     box-shadow: 0 2px 3px 0px rgba(0,0,0,0.30);
     padding: 0 0 10px;

@@ -1,16 +1,163 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+  
+    <h:head>
+        <title>O quanto você bebe - Informações menores de 18 anos | Álcool e Saúde</title>
+        <w:head_comum />
+    </h:head>
+
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <div class="pagecontent">
+
+
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1>Informações para menores de 18 anos</h1> 
+                        </div>    
+
+                        <div id="progressbar">
+                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>                        
+                    </div>
+
+
+                    <div id="pagemiddle">
+
+                        <div class="fotoframe">                            
+                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+
+                        <div id="pmtext">                                               
+                                            
+                                                
+                        <p>Parabéns !</p>
+                        
+                        <p>Você relatou não fazer consumo de álcool o que é fundamental para o bom desenvolvimento de um bebê. É fundamental que permaneça sem beber durante toda a gravidez e mesmo durante o período em que estiver amamentando.</p>
+                        <p>Caso tenha dúvidas procure sempre um profissional de saúde</p>
+                        
+                        <p>Confira abaixo algumas das dúvidas frequentes entre gestantes</p>
+                        
+                        
+                        <p:accordionPanel>
+                                <p:tab title="1. Eu posso consumir bebidas álcoolicas se estiver grávida?">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p> Não, você não pode</p>
+                                        <p> Não consuma álcool caso esteja ou possa estar grávida</p>
+                                        <p> O álcool que você consome afeta o desenvolvimento do seu bebe</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                      
+                                <p:tab title="2. Existe algum tipo de bebida álcoolica que é segura para ser usada durante a gravidez?">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p> Não, não existe</p>
+                                        <p> Toda a bebida que contém álcool, mesmo que em menor quantidade, pode prejudicar o se bebê </p>
+                                        <p> Por bebidas álcoolicas estamos nos referindo à todas, mesmo cerveja, vinho, coquetéis, "ice" ou qualquer outra mistura que contenha álcool</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                                         
+                                <p:tab title="3. Caso tivesse bebido durante minha última gestação e não tive problemas. Tudo bem eu beber desta vez ?">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p> Não, cada gestação é diferente</p>
+                                        <p> O consumo de álcool pode prejudicar mais um bebê do que outro </p>
+                                        <p> Você poderia ter tido uma criança que nasceu saudável, mas também poderia ter tido uma criança nascida com problemas</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                        
+                                <p:tab title="4. Os problemas que meu bebê pode ter por eu ter bebido vão melhorar com o tempo?">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p> Não, os problemas afetar o desenvolvimento de sua criança</p>
+                                            <p> Em alguns casos mais graves, mesmo quando adulto sua criança precisará de cuidados especiais </p>
+                                    </h:panelGrid>
+                                </p:tab>
+                        
+                                <p:tab title="5. O que eu faço se estou grávida, mas mesmo assim tenho bebido?">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p> Caso tenha bebido álcool antes de saber que estava grávida, para de beber agora e procure um profissional de saúde</p>
+                                        <p>Você se sentirá melhor e o seu bebê terá uma grande chance de nascer saudável</p>
+                                        <p>Caso esteja com suspeita de estar grávida - não beba álcool</p>
+                                        <p>Mesmo caso esteja tentando engravidar, não beba álcool, pois você pode já estar grávida e não saber</p>
+                                        <p>Mesmos nos dois primeiros meses o álcool pode prejudicar o seu bebê</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                   
+                                <p:tab title="6. Como eu faço para parar de beber?">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p>Recomendamos em seu caso que procure um profissional de saúde para ajudá-la</p>
+                                        <p>O conteúdo deste site não foi desenvolvido especialmente para gestantes, mas algumas dicas podem ser úteis:</p>
+                                        <p>Saiba que existem diversos meios para ajudá-la a parar de beber</p>
+                                        <p>Caso alguém lhe ofereça bebida, sempre diga "não obrigada", de forma educada e direta</p>
+                                        <p>Procure manter-se longe de pessoas ou lugares que fazem com que você beba</p>
+                                        <p>Não guarde bebidas álcoolicas em casa</p>
+                                        <p>Caso você não consiga parar de beber procure um profissional de saúde e peça ajuda</p>
+                                        <p>Caso não tenha acesso à um profissional de saúde utilize o Viva Voz (Disque 132 - ligação gratuita)</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                        </p:accordionPanel>
+                                             
+                            <h3>Mais informações sobre álcool</h3>
+                            <p>Se você gostaria de aprofundar mais sobre o assunto, preparamos um material para você neste <h:outputLink value="https://www.informalcool.org.br/bebermenos"> link</h:outputLink>.</p>        
+
+                            <h3>Acompanhamento anual</h3>                        
+                            <p>Se você quiser, podemos entrar em contato com você daqui a um ano para uma nova avaliação e outras infomações. Coloque seu e-mail no campo abaixo.</p>
+
+                            <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+
+                            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                <p:graphicImage library="default" name="images/loading.gif" />
+                            </p:dialog>
+                            
+                            <h:form id="form" class="form-signup">
+                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+
+                                
+                                
+                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                    <p:inputText id="emailTxt" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
+                                        <!--<p:ajax update="loginMsg" event="blur" />-->
+                                        <f:validateLength maximum="50" />
+                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                    </p:inputText>
+                                    <p:watermark for="emailTxt" value="E-mail" />
+                                    <p:message for="emailTxt" />
+                                </h:panelGrid>
+
+                                <div id="btnback">
+                                    <p:commandButton styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.sendEmail}" />
+                                </div>
+                                
+                            </h:form>
+                            
+                            
+                        </div><!-- end pmtext -->  
+                    </div><!-- end page middle -->                                             
+
+                    <div class="referencias">
+                        <p>Atualizado em 12/01/2014</p>
+                    </div>
+                    
+                </div>        
+            </div>
+
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
 </html>
+
+
