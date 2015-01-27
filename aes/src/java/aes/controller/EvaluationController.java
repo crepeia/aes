@@ -33,17 +33,20 @@ public class EvaluationController extends BaseController<Evaluation> {
     private User user;
     private Evaluation evaluation;
 
-    private String gender;
+    private Integer gender;
     private Integer drink;
     private Integer day;
     private Integer month;
     private Integer year;
+    private Integer pregnant;
     
     private boolean continueEvaluation;
     
     private GenericDAO userDAO;
 
     public EvaluationController() {
+        gender = 3;
+        pregnant = 3;
         try {
             this.userDAO = new GenericDAO(User.class);
             this.daoBase = new GenericDAO<Evaluation>(Evaluation.class);
@@ -94,11 +97,30 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
         return user;
     }
+    
+    public String intro1(){
+        Calendar cal = GregorianCalendar.getInstance();
+        int anoAtual = Integer.valueOf(cal.get(Calendar.YEAR)); 
+        //System.out.println(cal.get(Calendar.YEAR)); 
+        int age = this.year - anoAtual;
+        if(this.pregnant == 1 && this.drink == 2){
+            return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
+        }else if(this.pregnant == 1 && this.drink == 1){
+            return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
+        }else if(age < 18 && drink == 2){
+            return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
+        }else if(age < 18 && drink == 1){
+            return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
+        }else if(drink == 2){
+            return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
+        }else
+            return "quanto-voce-bebe-convite.xhtml?faces-redirect=true";
+    }  
 
     public String intro() {
         if (this.getUser() == null) {
             this.user = new User();
-            this.user.setGender(this.gender.charAt(0));
+            //this.user.setGender(this.gender.charAt(0));
             this.user.setBirth(this.year, this.month, this.day);
         }
         try {
@@ -208,14 +230,19 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
 
-    public String getGender() {
-        if (loggedUser()) {
-            return String.valueOf(this.getUser().getGender());
-        }
+    /*public String getGender() {
+    if (loggedUser()) {
+    return String.valueOf(this.getUser().getGender());
+    }
+    return gender;
+    }*/
+    
+    public Integer getGender() {
         return gender;
     }
+    
 
-    public void setGender(String gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
@@ -283,6 +310,22 @@ public class EvaluationController extends BaseController<Evaluation> {
     public void setContinueEvaluation(boolean continueEvaluation) {
         this.continueEvaluation = continueEvaluation;
     }
+    
+    public boolean isWoman(){
+        return gender == 1;
+        //return getGender().equals('F');
+        //eturn this.getUser().getGender()=='F';
+    }
+
+    public Integer getPregnant() {
+        return pregnant;
+    }
+
+    public void setPregnant(Integer pregnant) {
+        this.pregnant = pregnant;
+    }
+    
+    
     
     
 
