@@ -100,9 +100,30 @@ public class EvaluationController extends BaseController<Evaluation> {
     
     public String intro1(){
         Calendar cal = GregorianCalendar.getInstance();
-        int anoAtual = Integer.valueOf(cal.get(Calendar.YEAR)); 
+        int anoAtual = Integer.valueOf(cal.get(Calendar.YEAR));
+        int mesAtual = Integer.valueOf(cal.get(Calendar.MONTH));
+        int diaAtual = Integer.valueOf(cal.get(Calendar.DAY_OF_MONTH));
         //System.out.println(cal.get(Calendar.YEAR)); 
-        int age = this.year - anoAtual;
+        System.out.println("ano atual: " + anoAtual);
+        System.out.println("mes atual: " + mesAtual);
+        System.out.println("dia atual: " + diaAtual);
+        
+        int difAno, difMes, difDia;
+        difAno = anoAtual - this.year;
+        difMes = this.month - mesAtual;
+        difDia = diaAtual - this.day;
+        int age;
+        if(difMes <= 0){
+            if(difDia >= this.day)
+                age = difAno;
+            else
+                age = difAno - 1;
+        }else{
+            age = difAno - 1;
+        }
+        
+        //int age = anoAtual - this.year;
+        System.out.println("idade: " + age);
         if(this.pregnant == 1 && this.drink == 2){
             return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
         }else if(this.pregnant == 1 && this.drink == 1){
