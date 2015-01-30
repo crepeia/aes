@@ -115,44 +115,44 @@
                                 <p:panel id="questoes" >
 
 
-                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" id="questao1">
+                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" id="audit1">
                                         <f:facet name="header">  
                                             01. Com que frequência você consome bebidas alcoólicas? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options1" value="#{evaluationController.evaluation.audit1}" layout="grid" required="true" >  
-                                            <f:selectItem itemLabel="Nunca" itemValue="0" />
-                                            <f:selectItem itemLabel="Mensalmente ou menos" itemValue="1" />
-                                            <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="2" />
-                                            <f:selectItem itemLabel="De 2 a 3 vezes por semana" itemValue="3" />
-                                            <f:selectItem itemLabel="4 ou mais vezes por semana" itemValue="4" />
+                                        <p:selectOneRadio id="audit_1" value="#{evaluationController.evaluation.audit1}" layout="grid" required="true" >  
+                                            <f:selectItem itemLabel="Nunca" itemValue="1" />
+                                            <f:selectItem itemLabel="Mensalmente ou menos" itemValue="2" />
+                                            <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="3" />
+                                            <f:selectItem itemLabel="De 2 a 3 vezes por semana" itemValue="4" />
+                                            <f:selectItem itemLabel="4 ou mais vezes por semana" itemValue="5" />
                                         </p:selectOneRadio> 
                                    </h:panelGrid>
 
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit2">
                                         <f:facet name="header">  
                                             02. Quantas doses alcoólicas você consome tipicamente ao beber? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options2" value="#{evaluationController.evaluation.audit2}"  required="true">  
-                                            <f:selectItem itemLabel="1 ou 2" itemValue="0" />
-                                            <f:selectItem itemLabel="3 ou 4" itemValue="1" />
-                                            <f:selectItem itemLabel="5 ou 6" itemValue="2" />
-                                            <f:selectItem itemLabel="7, 8 ou 9" itemValue="3" />
-                                            <f:selectItem itemLabel="10 ou mais" itemValue="4" />
+                                        <p:selectOneRadio id="audit_2" value="#{evaluationController.evaluation.audit2}"  required="true">  
+                                            <f:selectItem itemLabel="1 ou 2" itemValue="1" />
+                                            <f:selectItem itemLabel="3 ou 4" itemValue="2" />
+                                            <f:selectItem itemLabel="5 ou 6" itemValue="3" />
+                                            <f:selectItem itemLabel="7, 8 ou 9" itemValue="4" />
+                                            <f:selectItem itemLabel="10 ou mais" itemValue="5" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
 
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="questao3">
+                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit3">
                                         <f:facet name="header">  
                                             03. Com que frequencia você consome seis ou mais doses de uma vez? 
                                         </f:facet>
-                                        <p:selectOneRadio id="options3" value="#{evaluationController.evaluation.audit3}"  required="true">  
-                                            <f:selectItem itemLabel="Nunca" itemValue="0" />
-                                            <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="1" />
-                                            <f:selectItem itemLabel="Mensalmente" itemValue="2" />
-                                            <f:selectItem itemLabel="Semanalmente" itemValue="3" />
-                                            <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="4" />
+                                        <p:selectOneRadio id="audit_3" value="#{evaluationController.evaluation.audit3}"  required="true">  
+                                            <f:selectItem itemLabel="Nunca" itemValue="1" />
+                                            <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
+                                            <f:selectItem itemLabel="Mensalmente" itemValue="3" />
+                                            <f:selectItem itemLabel="Semanalmente" itemValue="4" />
+                                            <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
 
@@ -165,16 +165,15 @@
                                             <f:selectItem itemLabel="02" itemValue="2" />
                                             <f:selectItem itemLabel="03" itemValue="3" />
                                             <f:selectItem itemLabel="04" itemValue="4" />
+                                            <f:selectItem itemLabel="05" itemValue="5" />
+                                            <f:selectItem itemLabel="06" itemValue="6" />
+                                            <f:selectItem itemLabel="07" itemValue="7" />
                                         </p:selectOneMenu>
 
 
                                         <p><h:outputText value="02 - Em um dia típico, quantas doses você constuma beber?"/></p>
-                                        <p:selectOneMenu id="question2" value="#{evaluationController.evaluation.weekEvaluation2}">
-                                            <f:selectItem itemLabel="01" itemValue="1" />
-                                            <f:selectItem itemLabel="02" itemValue="2" />
-                                            <f:selectItem itemLabel="03" itemValue="3" />
-                                            <f:selectItem itemLabel="04" itemValue="4" />
-                                        </p:selectOneMenu>
+                                        <p:inputText id="week2" value="#{evaluationController.evaluation.weekEvaluation2}" size="10"></p:inputText>
+                                        
 
                                     </h:panelGrid>
                                     

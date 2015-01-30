@@ -129,7 +129,7 @@ public class UserController extends BaseFormController<User> {
 		this.password = password;
 	}
 
-	public void save(ActionEvent actionEvent) {
+	public String save(ActionEvent actionEvent) {
 
 		this.showErrorMessage = true;
 		this.user.setBirth(year, month, day);
@@ -170,6 +170,7 @@ public class UserController extends BaseFormController<User> {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
 			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
 		}
+                return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml";
 
 	}
 

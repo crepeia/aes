@@ -173,8 +173,21 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
 
     }
+    
+    public String audit3(){ 
+        int sum1 = evaluation.getAudit1();
+        int sum2 = evaluation.getAudit2();
+        int sum3 = evaluation.getAudit3();
+        
+        int sumTotal = sum1 + sum2 + sum3;
+        if(sumTotal > 6 && (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() > 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() > 10)){
+            return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml";
+        }
+        return "";
+            
+    }
 
-    public String audit3() {
+    public String audit31() {
         try {
             this.daoBase.update(this.getEvaluation(), this.getEntityManager());
 
