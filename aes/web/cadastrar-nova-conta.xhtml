@@ -76,7 +76,7 @@
                                             </div>
 
                                             <div id="signupbottom">
-                                                <!--
+                                                
                                                 <p:panelGrid columns="4" id="nascimento">
                                                     <h:outputText value="#{messages['naccount.birthdate']}"/>
                                                     <p:selectOneMenu id="day" value="#{userController.day}" required="true" label="#{messages['naccount.day']}">  
@@ -104,7 +104,7 @@
                                                 </p:panelGrid>
                                                                                                                                           
                                                 <p:message for="options" />
-                                                 -->
+                                                 
      
                                                 <div id="signup-terms">
                                                     <p:panelGrid columns="2" id="allowemail">
@@ -118,7 +118,7 @@
                                                 <div id="signupsubmit">			                                            
                                                     <div id="signupp"><p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink>. #{messages['naccount.already.registered']} <h:outputLink value="login.xhtml">#{messages['signin']}</h:outputLink></p></div>                                            
                                                     <div id="signupbtn">
-                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.save}">
+                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.save()}">
                                                             <f:attribute name="object" value="#{userController.user}" />
                                                             <f:attribute name="typeName" value="user" />
                                                         </p:commandButton>

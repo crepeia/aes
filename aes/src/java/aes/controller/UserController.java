@@ -4,6 +4,9 @@
  */
 package aes.controller;
 
+import aes.model.User;
+import aes.persistence.GenericDAO;
+import aes.utility.Encrypter;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -23,8 +26,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import aes.model.User;
-import aes.utility.Encrypter;
 
 /**
  *
@@ -51,6 +52,8 @@ public class UserController extends BaseFormController<User> {
 
 	@PersistenceContext
 	private EntityManager entityManager = null;
+        
+        private GenericDAO dao = null;
 	
 	/**
 	 * Creates a new instance of UserController
@@ -129,12 +132,16 @@ public class UserController extends BaseFormController<User> {
 		this.password = password;
 	}
 
-	public String save(ActionEvent actionEvent) {
+	public String save(ActionEvent actionEvent) throws SQLException {
 
 		this.showErrorMessage = true;
 		this.user.setBirth(year, month, day);
 
 		try {
+                    if (!(dao.list("email", user.getEmail(), entityManager).isEmpty())) {
+                        String message = "email.cadastrado";
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
+                    } else {
 
 			if (user.getId() == 0) {
 
@@ -153,7 +160,7 @@ public class UserController extends BaseFormController<User> {
 			super.save(actionEvent, entityManager);
 			//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( FacesMessage.SEVERITY_INFO, "Usuário criado com sucesso.", null ));
 			this.clear();
-
+                    }
 		} catch (InvalidKeyException ex) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
 			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
