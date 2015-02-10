@@ -438,7 +438,19 @@ public class EvaluationController extends BaseController<Evaluation> {
         return "preparando-pros-cons.xhtml";
     }
     
+    public String nextPreparado(){
+        if(evaluation.getPreparado() == 1)
+            return "to cut down or to quit";
+        else
+            return "preparando-diminuir-parar-nao.xhtml";
+    }
     
+    public String nextBackPlan(){
+        if(evaluation.getBackPlan() == 1)
+            return "to cut down or to quit";
+        else 
+            return "avaliação apos um ano";
+    }
     
 
 }

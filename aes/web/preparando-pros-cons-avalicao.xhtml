@@ -57,7 +57,7 @@
                                         <f:facet name="header">  
                                             Você está preparado(a) para mudar a forma com que bebe ? 
                                         </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.drink}" required="true">  
+                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.preparado}" required="true">  
                                             <f:selectItem itemLabel="Sim" itemValue="1" />
                                             <f:selectItem itemLabel="Não" itemValue="0" /> 
                                         </p:selectOneRadio> 
@@ -70,7 +70,7 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.intro()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.nextPreparado()}" />
                                 </div>
                         </h:form>
                             

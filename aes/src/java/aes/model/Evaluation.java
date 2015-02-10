@@ -83,6 +83,12 @@ public class Evaluation {
     private Boolean screen9;
     @Column(name = "screen_10")
     private Boolean screen10;
+    
+    @Column(name = "preparado")
+    private Integer preparado;
+    
+    @Column(name = "back_plan")
+    private Integer backPlan;
 
     @ManyToOne
     private User user;
@@ -310,5 +316,24 @@ public class Evaluation {
     public boolean screen() {
         return isScreen1() || isScreen2() || isScreen3() || isScreen4() || isScreen5() || isScreen6() || isScreen7() || isScreen8() || isScreen9() || isScreen10();
     }
+
+    public Integer getPreparado() {
+        return preparado;
+    }
+
+    public void setPreparado(Integer preparado) {
+        this.preparado = preparado;
+    }
+
+    public Integer getBackPlan() {
+        return backPlan;
+    }
+
+    public void setBackPlan(Integer backPlan) {
+        this.backPlan = backPlan;
+    }
+    
+    
+    
 
 }

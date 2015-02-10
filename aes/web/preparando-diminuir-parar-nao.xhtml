@@ -61,22 +61,19 @@
                                         <f:facet name="header">  
                                         Você gostaria de voltar ao programa e elaborar plano de mudança que possa lhe auxiliar? 
                                         </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.drink}" required="true">  
+                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.backPlan}" required="true">  
                                             <f:selectItem itemLabel="Sim" itemValue="1" />
                                             <f:selectItem itemLabel="Não" itemValue="0" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./preparando-pros-cons-avaliacao.xhtml"></h:button>
                                 </div>
                                 
                                 
                                 <div id="btnnext">
-                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{preparandoParaPararController.evaluate()}">
-                                <f:attribute name="object" value="#{userController.user}" />
-                                <f:attribute name="typeName" value="user" />
-                            </p:commandButton>                                
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.nextBackPlan()}" />
                                 </div>
                             </h:form>
                         </div><!-- end pmtext -->  
