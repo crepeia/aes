@@ -14,7 +14,7 @@
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="true" />
+           <!-- <w:header loginRequired="true" /> -->
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
@@ -52,7 +52,7 @@
                                         <f:facet name="header">  
                                             04. Quantas vezes ao longo dos últimos 12 meses você achou que não conseguiria parar de beber uma vez tendo começado? 
                                         </f:facet>
-                                        <p:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true">  
+                                        <p:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" layout="grid">  
                                             <f:selectItem itemLabel="Nunca" itemValue="0" />
                                             <f:selectItem itemLabel="Mensalmente ou menos" itemValue="1" />
                                             <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="2" />

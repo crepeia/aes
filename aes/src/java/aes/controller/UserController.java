@@ -108,6 +108,9 @@ public class UserController extends BaseFormController<User> {
 		return user;
 	}
 
+        public void teste(){
+            System.out.println("teste");
+        }
 	/**
 	 * @param user the user to set
 	 */
@@ -132,16 +135,16 @@ public class UserController extends BaseFormController<User> {
 		this.password = password;
 	}
 
-	public String save(ActionEvent actionEvent) throws SQLException {
+	public void save(ActionEvent actionEvent) {
 
 		this.showErrorMessage = true;
 		this.user.setBirth(year, month, day);
 
 		try {
-                    if (!(dao.list("email", user.getEmail(), entityManager).isEmpty())) {
+                    /*if (!(dao.list("email", user.getEmail(), entityManager).isEmpty())) {
                         String message = "email.cadastrado";
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
-                    } else {
+                    } else {*/
 
 			if (user.getId() == 0) {
 
@@ -161,7 +164,7 @@ public class UserController extends BaseFormController<User> {
 			//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( FacesMessage.SEVERITY_INFO, "Usuário criado com sucesso.", null ));
 			this.clear();
                     }
-		} catch (InvalidKeyException ex) {
+                catch (InvalidKeyException ex) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
 			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (IllegalBlockSizeException ex) {
@@ -177,7 +180,8 @@ public class UserController extends BaseFormController<User> {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
 			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-                return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml";
+                //return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml";
+                System.out.println("teste");
 
 	}
 
