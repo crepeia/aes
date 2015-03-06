@@ -898,17 +898,23 @@ img#artigotabaco{
     box-shadow: 1px 1px 2px 2px rgba(0,0,0,0.15);
 }
 
-/*Referências*/
+/*REFERENCES*/
 
 #bib p {
     font-size: 0.8em;
 }
 
 
-/*Páginas internas*/
+/*INSIDE PAGES*/
 
 #pagetop{
-   
+   float:right;
+   width:310px;
+}
+
+
+#pagecontentstrategy{
+    margin-left: 270px;
 }
 
 #hpagetop{
@@ -970,6 +976,17 @@ img#artigotabaco{
     float:right;
     margin: 30px 10px 40px 40px;        
     border-radius: 20px;
+}
+
+.fotoframestrategy{
+    width:289px;
+    border:1px solid #bdc3c7;
+    background: #fff;
+    float:right;
+    margin: 40px 10px 40px 40px;        
+    border-radius: 20px;
+    position: relative;
+    left:250px;
 }
 
 #btnback {      
