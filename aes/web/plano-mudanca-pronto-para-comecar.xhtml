@@ -14,8 +14,7 @@
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header />
-            <w:header loginRequired="true" />
+            <w:header loginRequired="false" />
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
@@ -52,16 +51,6 @@
                             <h:form>
                                 <p:panel id="questoes" >
                                     <p:growl id="messages" showDetail="true" />
-                                    <p:panelGrid columns="2" id="meta2">
-                                        <f:facet name="header">  
-                                           Meta                                      
-                                        </f:facet>                                                                     
-                                            <h:outputText value=""/>
-                                            <p:selectOneRadio id="options" value="#{userController.user.gender}" required="true" label="">  
-                                                <f:selectItem itemLabel="Eu quero diminuir o quanto eu bebo" itemValue="D" />  
-                                                <f:selectItem itemLabel="Eu quero parar" itemValue="P" />  
-                                            </p:selectOneRadio> 
-                                        </p:panelGrid>
                                     
                                     <h:panelGrid columns="1"  cellpadding="5">
                                         <f:facet name="header">  

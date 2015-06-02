@@ -14,44 +14,41 @@
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header />
-            <w:header loginRequired="true" />
+            <w:header loginRequired="false" />
+            
+           
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
-                
-                <w:leftmenu_1 cssClass="leftmenu1" />
 
+                <w:leftmenu_1 cssClass="leftmenu1" />
+                
                 <div class="pagecontent">
 
 
                     <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>Planejando sua mudança</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
-
-
-                    <div id="pagemiddle">
                         
-                        <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        <div id="progressbar">
+                            <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
                         </div>
-
-                        <div id="pmtext">
-
+                        
+                        <div class='fotoframestratety'>
+                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+                    </div>
+                    
+                    <div id="pagecontentstrategy">
+                                                     
                             <h3>Parando de Beber - Apoio Profissional</h3>
                             <h4>Medicamentos para tratar alcoolismo</h4>
                             <p>Avanços no tratamento do alcoolismo fazem com que atualmente pacientes tenha mais alternativas de tratamento e que profissionais tenha mais ferramentas</p>
+                            <ul>
                             <li>Novos medicamentos podem ajudá-lo a parar de beber atuando em vias neurais</li>
                             <li>Estes novos medicamentos como Naltrexona, Topiramato e etc) não o fazem se sentir com náuses como o medicamento mais antigo (Disulfiram)</li>
                             <li>Nenhuma destas medicações causam dependência, o que é a preocupação de alguns grupos de apoio e serviços de aconselhamento para álcool</li>
                             <li>Estudos tem mostrado que pacientes com dependência de álcool podem receber tratamento efetivo combinando estas novas medicações e visitas breves à um profissional de saúde para acompanhamento  </li>
-                          
+                            </ul>
+                            
                             <h:form>
 
                                 <div id="btnback">
@@ -63,22 +60,16 @@
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit3()}"/>      
                                 </div>
 
-                            </h:form>
-
-                        </div><!-- end pmtext -->  
-
-                    </div><!-- end page middle -->                                             
+                            </h:form>                                            
 
                     <div class="referencias">
                         <p>Atualizado em 12/01/2014</p>
                     </div>
-
-
-
+             </div> 
+ 
                 </div>        
             </div>
-
-
+                
         </div><!-- end.corpo --> 
 
         <!--Footer -->

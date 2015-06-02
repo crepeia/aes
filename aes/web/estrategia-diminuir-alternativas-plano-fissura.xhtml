@@ -7,57 +7,58 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto voce bebe ? | Álcool e Saude </title>
+        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
         <w:head_comum />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header />
-            <w:header loginRequired="true" />
+            <w:header loginRequired="false" />
+            
+           
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
-                <w:leftmenu_2 cssClass="leftmenu2" />
 
+                <w:leftmenu_2 cssClass="leftmenu2" />
+                
                 <div class="pagecontent">
 
 
                     <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>Planejando sua mudança</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
-
-
-                    <div id="pagemiddle">
                         
-                        <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        <div id="progressbar">
+                            <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
                         </div>
-
-                        <div id="pmtext">
-
+                        
+                        <div class='fotoframestratety'>
+                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+                    </div>
+                    
+                    <div id="pagecontentstrategy">
                             <h3>Buscando Alternativas</h3>
                             <h4>Plano para resistir à vontade de beber (fissura)</h4>
+                            <ul>
                             <li>Algumas vezes você poderá não conseguir evitar que alguma coisa ao seu redor lhe faça sentir vontade de beber</li>
+                            </ul>
                             <h3>Quando isso acontecer você pode considerar estas três opções</h3>
+                            <ul>
                             <li>Procure-se se lembrar das razões porque você optou por mudar</li> 
+                            </ul>
                             <p>(uma boa dica é manter isso por escrito ou gravado em uma mensagem eletronica que você possa acessar facilmente)</p>
+                            <ul>
                             <li>Converse com alguém que você confia sobre o que você está sentindo</li>
                             <li>Procure se envolver em uma atividade saudável, uma atividade que o destraia</li>
+                            </ul>
                             <p>Estas atividades podem ser exercícios físicos ou hobby que não envolva álcool</p>
                             <h3>Aceite a sua fissura</h3>
                             <p>Ao invés de lutar contra o que está sentindo, aceite e espere sua vontade passar</p>
                             <p>Sua vontade passará em breve - geralmente dentro de alguns minutos</p>
                             <p>Pense em uma onda que chega forte a uma praia, mas que perde a sua força depois de um tempo</p>
                         
-                            <h:form>
+                      <h:form>
 
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-introducao.xhtml"></h:button>
@@ -68,25 +69,21 @@
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit3()}"/>      
                                 </div>
 
-                            </h:form>
-
-                        </div><!-- end pmtext -->  
-
-                    </div><!-- end page middle -->                                             
+                            </h:form>                                            
 
                     <div class="referencias">
                         <p>Atualizado em 12/01/2014</p>
                     </div>
-
-
-
+             </div> 
+ 
                 </div>        
             </div>
-
-
+                
         </div><!-- end.corpo --> 
 
         <!--Footer -->
         <w:footer />
     </h:body>
 </html>
+
+

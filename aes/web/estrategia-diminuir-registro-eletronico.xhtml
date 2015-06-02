@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto voce bebe ? | Álcool e Saude </title>
+        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
         <w:head_comum />
     </h:head>
 
@@ -15,38 +15,41 @@
         <div id="corpo"> 
             <!-- header -->    
             <w:header loginRequired="false" />
+            
+           
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
-                <w:leftmenu_2 cssClass="leftmenu2" />
 
+                <w:leftmenu_2 cssClass="leftmenu2" />
+                
                 <div class="pagecontent">
 
+
                     <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>Planejando sua mudança</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
-
-
-                    <div id="pagemiddle">
                         
+                        <div id="progressbar">
+                            <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>
+                        
+                        <div class='fotoframestratety'>
+                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        </div>
+                    </div>
+                    
+                    <div id="pagecontentstrategy">                      
                        <div id="pmtext">
 
                             <h3>Quanto e Quando eu bebo</h3>
                             <p>Tomar nota sobre o seu consumo é um passo importante para diminuir.</p>
                             <h4>Escolha a forma mais prática de fazê⁻lo</h4>
+                            <ul>
                             <li>Preenche on-line - logo abaixo</li>
                             <li>Use um modelo impresso que cabe na carteira ou bolsa</li> <!--incluir link para impressão-->
                             <li>Use uma agenda, calendário em casa, bloco de notas do celular</li>
-                          
+                            </ul>
                             
-                            <h4>Seu Registro</h4>
-                                                                             
+                           <!-- <div id="pagemiddle">
                             <h3> As suas metas atuais são:</h3>
                             
                             <h:panelGrid columns="2" cellpadding="5">
@@ -60,10 +63,11 @@
                                         value="XXXX não mais do que isso em doses padrão" />   
                             </p:fieldset>
                             </h:panelGrid>
-
-                          
-                            
-                            <h3>Como foi a sua semana última semana ? </h3> 
+                            </div> -->
+                       </div>
+                    </div>      
+                        <div id="pagemiddle">    
+                            <h3>Registre aqui - Como foi a sua semana última semana ? </h3> 
                                                                                      
                             <p:accordionPanel>
                                 <p:tab title="Segunda">
@@ -172,28 +176,29 @@
                                 </p:tab>
                                                                                                  
                             </p:accordionPanel>
-                        
-                        
-                        </div><!-- end pmtext -->  
+                        </div>                                             
+                        <h:form>
 
-                    </div><!-- end page middle -->                                             
+                                <div id="btnback">
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-introducao.xhtml"></h:button>
+                                </div>
+                                
+                                
+                                <div id="btnnext">
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit3()}"/>      
+                                </div>
+
+                        </h:form>                                            
 
                     <div class="referencias">
                         <p>Atualizado em 12/01/2014</p>
                     </div>
-
-
-
+             </div> 
+ 
                 </div>        
             </div>
-
-
-        </div><!-- end.corpo --> 
-
+            
         <!--Footer -->
         <w:footer />
     </h:body>
 </html>
-
-
-

@@ -7,14 +7,15 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto voce bebe ? | Álcool e Saude </title>
+        <title> O quanto voce bebe ? | Álcool e Saude </title>
         <w:head_comum />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="false" />
+            <w:header />
+            
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
@@ -28,7 +29,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Você ainda não está pensando em mudar</h1> 
+                            <h1>Diminuir ou Parar ? </h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -38,43 +39,44 @@
 
 
                     <div id="pagemiddle">
-                        
+
                         <div class="fotoframe">                            
                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div>
 
                         <div id="pmtext">
 
-                            <p> Apesar do álcool poder ser causa de problemas, você respondeu que ainda não está preparado(a) para mudar</p>
-                            <h4>Considere durante este período as sequintes sugestões</h4>
-                            <li>Continue prestando atenção no quanto tem bebido, considerando a frequencia e e quantidade</li>
-                            <li>Procure compreender o quanto o álcool afeta você</li>
-                            <li>Lide com outras prioridades que possam estar no caminho da sua mudança</li>
-                            <li>Peça ajuda de um amigo, profissional de saúde ou outra pessoa que você confie</li>
-                            <li>Refaça a avaliação no site, considere principalmente os prós e contras de mudar</li>
-                            <h4> Prevenção - não espere por um problema maior ou mais grave</h4>
-                            <p> Quando mais cedo mudamos maiores são nossas chances de sucesso e menores são os danos para o individuo e seus familiares</p>
-                            <h:form> 
+                            <h3>O que você gostaria de fazer em relação ao seu beber?  </h3>
+                            <p>Neste momento você pode optar por um dos dois caminhos: Parar ou Diminuir</p>
+                            <p>Pessoas com problemas de saúde, que utilizam medicamentos, são dependentes de álcool ou podem estar grávidas devem considerar a opção de parar de beber</p>
+                            <p>Diminuir pode ser uma estratégia adequada para a maioria das pessoas, sendo uma meta mais fácil de ser alcançada</p>
+     
+<h:form>
                                 <p:panel id="questoes" >
+                                    
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
-                                        Você gostaria de voltar ao programa e elaborar plano de mudança que possa lhe auxiliar? 
+                                            Eu gostaria de iniciar um programa para ? 
                                         </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.backPlan}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />
-                                            <f:selectItem itemLabel="Não" itemValue="0" /> 
+                                        <p:selectOneRadio id="options" value="#{#}" required="true">  
+                                            <f:selectItem itemLabel="Diminuir o meu consumo " itemValue="1" />
+                                            <f:selectItem itemLabel="Parar de beber" itemValue="0" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>
+                             
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./preparando-pros-cons-avaliacao.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
                                 </div>
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.nextBackPlan()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.nextPreparado()}" />
                                 </div>
-                            </h:form>
+                        </h:form>
+                            
+                            
+                            
                         </div><!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             
