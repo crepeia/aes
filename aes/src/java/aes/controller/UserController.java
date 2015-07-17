@@ -108,9 +108,6 @@ public class UserController extends BaseFormController<User> {
 		return user;
 	}
 
-        public void teste(){
-            System.out.println("teste");
-        }
 	/**
 	 * @param user the user to set
 	 */

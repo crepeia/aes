@@ -105,20 +105,20 @@
                                                                                                                                           
                                                 <p:message for="options" />
                                                  
-     
-                                                <div id="signup-terms">
+      
+                                               <div id="signup-terms">
                                                     <p:panelGrid columns="2" id="allowemail">
                                                         <label for="chk1">Você gostaria de receber e-mails de acompanhamento?</label>
-                                                        <p:selectBooleanCheckbox value=""/>
+                                                        <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}"/>
                                                         <label for="chk2">Autorizo o uso dos meus dados para fins de pesquisa</label>
-                                                        <p:selectBooleanCheckbox value=""/>
+                                                        <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
                                                     </p:panelGrid>
                                                 </div>
 
                                                 <div id="signupsubmit">			                                            
                                                     <div id="signupp"><p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink>. #{messages['naccount.already.registered']} <h:outputLink value="login.xhtml">#{messages['signin']}</h:outputLink></p></div>                                            
                                                     <div id="signupbtn">
-                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" action="#{userController.teste()}">
+                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.save}">
                                                             <f:attribute name="object" value="#{userController.user}" />
                                                             <f:attribute name="typeName" value="user" />
                                                         </p:commandButton>

@@ -39,6 +39,10 @@ public class User {
     private Calendar birth;
     @Column(name = "gender")
     private char gender;
+    @Column(name = "receive_emails") 
+    private boolean receiveEmails;
+    @Column(name = "authorize_data")
+    private boolean authorizeData;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Evaluation> evaluations;
@@ -160,6 +164,34 @@ public class User {
             this.birth = Calendar.getInstance();
         }
         this.birth.set(year,month,day);
+    }
+
+    /**
+     * @return the receiveEmails
+     */
+    public boolean isReceiveEmails() {
+	return receiveEmails;
+    }
+
+    /**
+     * @param receiveEmails the receiveEmails to set
+     */
+    public void setReceiveEmails(boolean receiveEmails) {
+	this.receiveEmails = receiveEmails;
+    }
+
+    /**
+     * @return the authorizeData
+     */
+    public boolean isAuthorizeData() {
+	return authorizeData;
+    }
+
+    /**
+     * @param authorizeData the authorizeData to set
+     */
+    public void setAuthorizeData(boolean authorizeData) {
+	this.authorizeData = authorizeData;
     }
     
 
