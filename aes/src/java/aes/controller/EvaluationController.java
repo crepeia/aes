@@ -10,6 +10,7 @@ import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -174,30 +175,24 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     }
     
-    public String audit3(){ 
+    public void audit3(){ 
+        /*int year = user.
+        Date date = new Date(this.year, this.month, this.day);
         Calendar cal = GregorianCalendar.getInstance();
-        int anoAtual = Integer.valueOf(cal.get(Calendar.YEAR));
-        int mesAtual = Integer.valueOf(cal.get(Calendar.MONTH));
-        int diaAtual = Integer.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        int difAno, difMes, difDia;
-        difAno = anoAtual - this.year;
-        difMes = this.month - mesAtual;
-        difDia = diaAtual - this.day;
-        int age;
-        if(difMes <= 0){
-            if(difDia >= this.day)
-                age = difAno;
-            else
-                age = difAno - 1;
-        }else{
-            age = difAno - 1;
-        }
+        long time;
+        time = cal.getTime().getTime() - date.getTime();
+        date = new Date(time);
         
+        int age = date.getYear();*/
+        User userLocal = getUser();
+        
+        System.out.println("idade: " + userLocal.getAge());
         int sum1 = evaluation.getAudit1();
-        int sum2 = evaluation.getAudit2();
-        int sum3 = evaluation.getAudit3();
+        System.out.println("sum1: " + sum1);
+        //int sum2 = evaluation.getAudit2();
+        //int sum3 = evaluation.getAudit3();
         
-        int sumTotal = sum1 + sum2 + sum3;
+        /*int sumTotal = sum1 + sum2 + sum3;
         if(sumTotal > 6 && (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() > 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() > 10)){
             return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml";
         }else if(sumTotal <= 6 && (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() <= 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() <= 10) ){
@@ -205,8 +200,13 @@ public class EvaluationController extends BaseController<Evaluation> {
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
             else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F' && age > 65)
                 return "quanto-voce-bebe-reconmendar-limites-mulheres-e-homens-com-mais-de-65-anos.xhtml";
-        }
-        return "";  
+        }*/
+        //return "";
+        System.out.println("teste");  
+    }
+    
+    public void teste(){
+        System.out.println("teste"); 
     }
     
     public String audit7(){

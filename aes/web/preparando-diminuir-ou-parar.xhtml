@@ -27,15 +27,7 @@
                 <div class="pagecontent">
 
 
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>Diminuir ou Parar ? </h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    
 
 
                     <div id="pagemiddle">
@@ -44,26 +36,7 @@
                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div>
 
-                        <div id="pmtext">
-
-                            <h3>O que você gostaria de fazer em relação ao seu beber?  </h3>
-                            <p>Neste momento você pode optar por um dos dois caminhos: Parar ou Diminuir</p>
-                            <p>Pessoas com problemas de saúde, que utilizam medicamentos, são dependentes de álcool ou podem estar grávidas devem considerar a opção de parar de beber</p>
-                            <p>Diminuir pode ser uma estratégia adequada para a maioria das pessoas, sendo uma meta mais fácil de ser alcançada</p>
-     
-<h:form>
-                                <p:panel id="questoes" >
-                                    
-                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
-                                        <f:facet name="header">  
-                                            Eu gostaria de iniciar um programa para ? 
-                                        </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{#}" required="true">  
-                                            <f:selectItem itemLabel="Diminuir o meu consumo " itemValue="1" />
-                                            <f:selectItem itemLabel="Parar de beber" itemValue="0" /> 
-                                        </p:selectOneRadio> 
-                                    </h:panelGrid>
-                                </p:panel>
+                        
                              
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
@@ -73,11 +46,11 @@
                                 <div id="btnnext">
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.nextPreparado()}" />
                                 </div>
-                        </h:form>
+                        
                             
                             
                             
-                        </div><!-- end pmtext -->  
+                        <!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             
 

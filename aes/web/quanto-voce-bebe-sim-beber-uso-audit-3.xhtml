@@ -14,7 +14,7 @@
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header />
+            <w:header loginRequired = "true"/>
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
@@ -43,7 +43,6 @@
                             
                             <p>A seguir vamos lhe perguntar acerca do seu consumo de álcool em relação ao último ano. Algumas destas perguntas são relativas à quantitade de álcool que você consome</p>
                             <p>Como cada bebida possui uma quantidade de álcool, vamos lhe perguntar em termos de dose padrão</p>
-                            
                             
                             <div id="standarddose">
                                 
@@ -109,6 +108,7 @@
                             </div>
                             
                             
+                            
                             <div id="audit3evaluation">
                             
                             <h:form>
@@ -129,7 +129,7 @@
                                    </h:panelGrid>
 
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit2">
+                                    <!--<h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit2">
                                         <f:facet name="header">  
                                             02. Quantas doses alcoólicas você consome tipicamente ao beber? 
                                         </f:facet>
@@ -154,9 +154,9 @@
                                             <f:selectItem itemLabel="Semanalmente" itemValue="4" />
                                             <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
                                         </p:selectOneRadio> 
-                                    </h:panelGrid>
+                                    </h:panelGrid>-->
 
-                                    <h2>Avaliação por semana</h2>    
+                                   <!-- <h2>Avaliação por semana</h2>    
 
                                     <h:panelGrid columns="2" id="weeklyaverage">
                                         <p><h:outputText value="01 - Quantos dias na semana você consome alguma bebida álcoolica? (em média)"/></p>
@@ -175,7 +175,7 @@
                                         <p:inputText id="week2" value="#{evaluationController.evaluation.weekEvaluation2}" size="10"></p:inputText>
                                         
 
-                                    </h:panelGrid>
+                                    </h:panelGrid>-->
                                     
                                     
 
@@ -183,13 +183,14 @@
 
                                 </p:panel>
                                 
+                                
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-introducao.xhtml"></h:button>
                                 </div>
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit3()}"/>      
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" actionListener="#{evaluationController.audit3()}"/>      
                                 </div>
 
                         </h:form>

@@ -7,6 +7,7 @@ package aes.controller;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.Encrypter;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.el.ELContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -158,6 +160,13 @@ public class UserController extends BaseFormController<User> {
 			}
 
 			super.save(actionEvent, entityManager);
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedUser", user);
+                        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+                LoginController login = (LoginController) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "loginController");
+                login.setShowName(true);
+                login.setUser(user);
+                        
+
 			//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( FacesMessage.SEVERITY_INFO, "Usuário criado com sucesso.", null ));
 			this.clear();
                     }
@@ -177,8 +186,13 @@ public class UserController extends BaseFormController<User> {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
 			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
 		}
-                //return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml";
-                System.out.println("teste");
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-3.xhtml");
+                }catch(IOException ex){
+                    //
+                }
+                
+                //System.out.println("teste");
 
 	}
 
