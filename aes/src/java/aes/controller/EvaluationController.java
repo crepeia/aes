@@ -8,6 +8,7 @@ package aes.controller;
 import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
@@ -175,7 +176,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     }
     
-    public void audit3(){ 
+    public void audit3() throws IOException{ 
         /*int year = user.
         Date date = new Date(this.year, this.month, this.day);
         Calendar cal = GregorianCalendar.getInstance();
@@ -185,28 +186,41 @@ public class EvaluationController extends BaseController<Evaluation> {
         
         int age = date.getYear();*/
         User userLocal = getUser();
-        
+        int age = userLocal.getAge();
         System.out.println("idade: " + userLocal.getAge());
         int sum1 = evaluation.getAudit1();
         System.out.println("sum1: " + sum1);
-        //int sum2 = evaluation.getAudit2();
-        //int sum3 = evaluation.getAudit3();
+        int sum2 = evaluation.getAudit2();
+        System.out.println("sum2: " + sum2);
+        int sum3 = evaluation.getAudit3();
+        System.out.println("sum3: " + sum3);
+        System.out.println("sexo: " + this.getUser().getGender());
+        System.out.println("week1: " + evaluation.getWeekEvaluation1());
+        System.out.println("week2: " + evaluation.getWeekEvaluation2());
         
-        /*int sumTotal = sum1 + sum2 + sum3;
+        int sumTotal = sum1 + sum2 + sum3;
         if(sumTotal > 6 && (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() > 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() > 10)){
-            return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml";
+            //FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"); 
+            System.out.println("1111");
         }else if(sumTotal <= 6 && (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() <= 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() <= 10) ){
             if(this.getUser().getGender() == 'M' && age <= 65)
-                return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
+            System.out.println("22222");
+                //FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml");
             else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F' && age > 65)
-                return "quanto-voce-bebe-reconmendar-limites-mulheres-e-homens-com-mais-de-65-anos.xhtml";
-        }*/
-        //return "";
-        System.out.println("teste");  
+                //FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-reconmendar-limites-mulheres-e-homens-com-mais-de-65-anos.xhtml");
+                System.out.println("3333");
+        }else
+           System.out.println("teste");  
     }
     
     public void teste(){
-        System.out.println("teste"); 
+        System.out.println("4: " +evaluation.getAudit4());
+        System.out.println("5 " +evaluation.getAudit5());
+        System.out.println("6: " +evaluation.getAudit6());
+        System.out.println("7: " +evaluation.getAudit7());
+        System.out.println("8: " +evaluation.getAudit8());
+        System.out.println("9: " +evaluation.getAudit9());
+        System.out.println("10: " +evaluation.getAudit10());
     }
     
     public String audit7(){
@@ -218,6 +232,8 @@ public class EvaluationController extends BaseController<Evaluation> {
         int sum5 = evaluation.getAudit8();
         int sum6 = evaluation.getAudit9();
         int sum7 = evaluation.getAudit10();
+        
+        this.teste();
         
         int sumTotal = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7;
         
