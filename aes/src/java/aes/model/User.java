@@ -43,6 +43,10 @@ public class User {
     private boolean receiveEmails;
     @Column(name = "authorize_data")
     private boolean authorizeData;
+    @Column(name = "pregnant")
+    private Integer pregnant;
+    @Column(name = "drink")
+    private Integer drink;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Evaluation> evaluations;
@@ -193,6 +197,24 @@ public class User {
     public void setAuthorizeData(boolean authorizeData) {
 	this.authorizeData = authorizeData;
     }
+
+    public Integer getPregnant() {
+        return pregnant;
+    }
+
+    public void setPregnant(Integer pregnant) {
+        this.pregnant = pregnant;
+    }
+
+    public Integer getDrink() {
+        return drink;
+    }
+
+    public void setDrink(Integer drink) {
+        this.drink = drink;
+    }
+
+    
     
 
 

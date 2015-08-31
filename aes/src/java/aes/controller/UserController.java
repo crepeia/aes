@@ -195,6 +195,11 @@ public class UserController extends BaseFormController<User> {
                 //System.out.println("teste");
 
 	}
+        
+     public boolean isWoman(){
+        //return gender == 1;
+        return this.getUser().getGender()=='F';
+    }
 
     public int getDay() {
         return day;

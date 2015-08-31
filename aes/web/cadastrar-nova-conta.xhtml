@@ -95,13 +95,36 @@
                                                 <p:message for="day" />
                                                 <p:message for="month" />
                                                 <p:message for="year" />
-                                                <p:panelGrid columns="2" id="sexo">
-                                                    <h:outputText value="#{messages['naccount.sex']}"/>
+                                                <p:panelGrid columns="2" id="sexo" style="margin-bottom:10px">
+                                                    <h:outputText value="#{messages['naccount.sex']}" style="font-weight: bold;"/>
                                                     <p:selectOneRadio id="options" value="#{userController.user.gender}" required="true" label="#{messages['naccount.sex']}">  
+                                                        <f:ajax event="change" execute="@this" render="questao" />
                                                         <f:selectItem itemLabel="#{messages['naccount.female']}" itemValue="F" />  
                                                         <f:selectItem itemLabel="#{messages['naccount.male']}" itemValue="M" />  
                                                     </p:selectOneRadio> 
                                                 </p:panelGrid>
+                                                
+                                                 <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao">
+                                                     <h:panelGrid columns="1" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.woman}">
+                                        <h:outputText value="Você está grávida ou tem chance de estar grávida?" style="font-weight: bold"/>
+                                        <p:selectOneRadio id="options6" value="#{userController.user.pregnant}" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />
+                                            <f:selectItem itemLabel="Não" itemValue="2" />
+                                        </p:selectOneRadio> 
+                                    </h:panelGrid> 
+                                    </h:panelGrid>
+                                                
+                                                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                        <f:facet name="header">  
+                                            Às vezes, você bebe cerveja, cachaça, vinho ou outras bebidas álcoolicas? 
+                                        </f:facet> 
+                                                    <p:selectOneRadio id="options1" value="#{userController.user.drink}" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="1" />
+                                            <f:selectItem itemLabel="Não" itemValue="2" /> 
+                                        </p:selectOneRadio> 
+                                    </h:panelGrid>
+                                                
+                                                
                                                                                                                                           
                                                 <p:message for="options" />
                                                  

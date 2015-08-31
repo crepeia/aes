@@ -106,9 +106,6 @@ public class EvaluationController extends BaseController<Evaluation> {
         int mesAtual = Integer.valueOf(cal.get(Calendar.MONTH));
         int diaAtual = Integer.valueOf(cal.get(Calendar.DAY_OF_MONTH));
         //System.out.println(cal.get(Calendar.YEAR)); 
-        System.out.println("ano atual: " + anoAtual);
-        System.out.println("mes atual: " + mesAtual);
-        System.out.println("dia atual: " + diaAtual);
         
         int difAno, difMes, difDia;
         difAno = anoAtual - this.year;
@@ -199,10 +196,10 @@ public class EvaluationController extends BaseController<Evaluation> {
         System.out.println("week2: " + evaluation.getWeekEvaluation2());
         
         int sumTotal = sum1 + sum2 + sum3;
-        if(sumTotal > 6 && (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() > 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() > 10)){
+        if(sumTotal > 6 || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() > 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() > 10)){
             //FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"); 
             System.out.println("1111");
-        }else if(sumTotal <= 6 && (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() <= 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() <= 10) ){
+        }else if(sumTotal <= 6 || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() <= 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() <= 10) ){
             if(this.getUser().getGender() == 'M' && age <= 65)
             System.out.println("22222");
                 //FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml");
@@ -211,6 +208,9 @@ public class EvaluationController extends BaseController<Evaluation> {
                 System.out.println("3333");
         }else
            System.out.println("teste");  
+        
+        
+        //salvar no banco
     }
     
     public void teste(){
