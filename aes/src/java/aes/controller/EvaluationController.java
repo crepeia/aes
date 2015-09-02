@@ -194,18 +194,20 @@ public class EvaluationController extends BaseController<Evaluation> {
         System.out.println("sexo: " + this.getUser().getGender());
         System.out.println("week1: " + evaluation.getWeekEvaluation1());
         System.out.println("week2: " + evaluation.getWeekEvaluation2());
+        int weekTotal;
+        weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
         
         int sumTotal = sum1 + sum2 + sum3;
-        if(sumTotal > 6 || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() > 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() > 10)){
-            //FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"); 
-            System.out.println("1111");
-        }else if(sumTotal <= 6 || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() <= 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() <= 10) ){
+        if(sumTotal > 6 || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)){
+            FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"); 
+            //System.out.println("1111");
+        }else if(sumTotal <= 6 && (((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender()=='F' && weekTotal <= 5) || (this.getUser().getGender()=='M' && weekTotal <= 10))) ){
             if(this.getUser().getGender() == 'M' && age <= 65)
-            System.out.println("22222");
-                //FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml");
-            else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F' && age > 65)
-                //FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-reconmendar-limites-mulheres-e-homens-com-mais-de-65-anos.xhtml");
-                System.out.println("3333");
+            //System.out.println("22222");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml");
+            else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F')
+                FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml");
+                //System.out.println("3333");
         }else
            System.out.println("teste");  
         
