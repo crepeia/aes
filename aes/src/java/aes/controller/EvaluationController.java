@@ -174,26 +174,11 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
     
     public void audit3() throws IOException{ 
-        /*int year = user.
-        Date date = new Date(this.year, this.month, this.day);
-        Calendar cal = GregorianCalendar.getInstance();
-        long time;
-        time = cal.getTime().getTime() - date.getTime();
-        date = new Date(time);
-        
-        int age = date.getYear();*/
         User userLocal = getUser();
         int age = userLocal.getAge();
-        System.out.println("idade: " + userLocal.getAge());
         int sum1 = evaluation.getAudit1();
-        System.out.println("sum1: " + sum1);
         int sum2 = evaluation.getAudit2();
-        System.out.println("sum2: " + sum2);
         int sum3 = evaluation.getAudit3();
-        System.out.println("sum3: " + sum3);
-        System.out.println("sexo: " + this.getUser().getGender());
-        System.out.println("week1: " + evaluation.getWeekEvaluation1());
-        System.out.println("week2: " + evaluation.getWeekEvaluation2());
         int weekTotal;
         weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
         
@@ -208,11 +193,13 @@ public class EvaluationController extends BaseController<Evaluation> {
             else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F')
                 FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml");
                 //System.out.println("3333");
-        }else
-           System.out.println("teste");  
-        
-        
-        //salvar no banco
+        }
+        try {
+            this.getDaoBase().insertOrUpdate(evaluation, this.getEntityManager());
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problema ao gravar dados", null));
+        }
     }
     
     public void teste(){
@@ -236,11 +223,19 @@ public class EvaluationController extends BaseController<Evaluation> {
         int sum7 = evaluation.getAudit10();
         
         this.teste();
-        
+        int age = getUser().getAge();
         int sumTotal = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7;
+        System.out.println(sumTotal);
+        int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
         
-        if(sumTotal <= 17){
-             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco.xhtml";
+        if((sumTotal <= 17) && ((evaluation.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() < 1) || (evaluation.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() < 2)) && ((evaluation.getUser().getGender() == 'F' && weekTotal < 5) ||(evaluation.getUser().getGender() == 'M' && weekTotal < 10))){
+            if(this.getUser().getGender() == 'M' && age <= 65){
+                return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
+            }else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F'){
+                return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml";
+            }
+        }else if((sumTotal <= 17) && ((evaluation.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() > 1) || (evaluation.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() > 2)) && ((evaluation.getUser().getGender() == 'F' && weekTotal > 5) ||(evaluation.getUser().getGender() == 'M' && weekTotal > 10))){
+            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites";
         }else if(sumTotal>=18 && sumTotal <= 25){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml";
         }else if(sumTotal>=26 && sumTotal <= 29){
@@ -248,29 +243,21 @@ public class EvaluationController extends BaseController<Evaluation> {
         }else if(sumTotal >= 30 && sumTotal <= 50){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-dependencia.xhtml";
         }
-        return "";
+        
+        try {
+            this.getDaoBase().insertOrUpdate(evaluation, this.getEntityManager());
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar dados", null));
+        }
+        return ""; 
     }
     
     public String nextBaixoRisco(){
-        Calendar cal = GregorianCalendar.getInstance();
-        int anoAtual = Integer.valueOf(cal.get(Calendar.YEAR));
-        int mesAtual = Integer.valueOf(cal.get(Calendar.MONTH));
-        int diaAtual = Integer.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        int difAno, difMes, difDia;
-        difAno = anoAtual - this.year;
-        difMes = this.month - mesAtual;
-        difDia = diaAtual - this.day;
-        int age;
-        if(difMes <= 0){
-            if(difDia >= this.day)
-                age = difAno;
-            else
-                age = difAno - 1;
-        }else{
-            age = difAno - 1;
-        }       
-        
-        if((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() > 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() > 10))
+        User userLocal = getUser();
+        int age = userLocal.getAge();
+        int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
+        if(((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2)) || ((this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)))
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-baixo-risco-limites.xhtml";
         else if((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() < 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() < 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() < 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() < 10)){
             if(this.getUser().getGender() == 'M' && age <= 65)
@@ -350,11 +337,20 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
     
     public String continueEvaluation(){
-        if (isContinueEvaluation()){
-            return "preparando-pros-cons.xhtml?faces-redirect=true";
-        }else{
-            return "index.xhtml?faces-redirect=true";
+        System.out.println(evaluation.getDependencia());
+        if(evaluation.getDependencia() == 1){
+            //FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-parar-apoio-intro.xhtml");
+            return "estrategia-parar-apoio-intro.xhtml";
         }
+        else
+            return "ver oq fazer caso seja nao";
+        
+            //System.out.println("ver oq fazer caso seja nao");
+        
+    }
+    
+    public void teste1(){
+        System.out.println("testeee");
     }
 
     /*public String getGender() {

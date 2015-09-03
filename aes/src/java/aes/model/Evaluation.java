@@ -89,6 +89,9 @@ public class Evaluation {
     
     @Column(name = "back_plan")
     private Integer backPlan;
+    
+    @Column(name = "dependencia")
+    private Integer dependencia;
 
     @ManyToOne
     private User user;
@@ -332,6 +335,16 @@ public class Evaluation {
     public void setBackPlan(Integer backPlan) {
         this.backPlan = backPlan;
     }
+
+    public Integer getDependencia() {
+        return dependencia;
+    }
+
+    public void setDependencia(Integer dependencia) {
+        this.dependencia = dependencia;
+    }
+    
+    
     
     
     

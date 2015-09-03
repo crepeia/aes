@@ -14,7 +14,7 @@
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="false" />
+            <w:header loginRequired="true" />
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
@@ -59,9 +59,9 @@
                             <h:form>
                             <p:panel id="qrecaida" >                
                                 <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
-                                    <p:selectOneRadio id="options" value="#{evaluationController.continueEvaluation}" required="true">  
-                                        <f:selectItem itemLabel="Sim" itemValue="true" />
-                                        <f:selectItem itemLabel="Não" itemValue="false" /> 
+                                    <p:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependencia}" required="true">  
+                                        <f:selectItem itemLabel="Sim" itemValue="1" />
+                                        <f:selectItem itemLabel="Não" itemValue="2" /> 
                                     </p:selectOneRadio> 
                                 </h:panelGrid>
                             </p:panel>
@@ -72,9 +72,8 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.continueEvaluation()}"/>
-                               
-                                                         
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" actionListener="#{evaluationController.continueEvaluation()}"/>
+                                                   
                                 </div>
                                 
                            </h:form> 
