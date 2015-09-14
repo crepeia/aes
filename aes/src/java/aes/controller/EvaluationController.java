@@ -184,15 +184,12 @@ public class EvaluationController extends BaseController<Evaluation> {
         
         int sumTotal = sum1 + sum2 + sum3;
         if(sumTotal > 6 || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)){
-            FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"); 
-            //System.out.println("1111");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml");
         }else if(sumTotal <= 6 && (((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender()=='F' && weekTotal <= 5) || (this.getUser().getGender()=='M' && weekTotal <= 10))) ){
             if(this.getUser().getGender() == 'M' && age <= 65)
-            //System.out.println("22222");
                 FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml");
             else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F')
                 FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml");
-                //System.out.println("3333");
         }
         try {
             this.getDaoBase().insertOrUpdate(evaluation, this.getEntityManager());
@@ -226,10 +223,6 @@ public class EvaluationController extends BaseController<Evaluation> {
         int age = getUser().getAge();
         int sumTotal = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7;
         int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
-        System.out.println("soma:" + sumTotal);
-        System.out.println("week1: " + evaluation.getWeekEvaluation1());
-        System.out.println("week2: " + evaluation.getWeekEvaluation2());
-        System.out.println("sexo: " + this.getUser().getGender());
         
         if((sumTotal <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) ||(this.getUser().getGender() == 'M' && weekTotal <= 10))){
             if(this.getUser().getGender() == 'M' && age <= 65){
