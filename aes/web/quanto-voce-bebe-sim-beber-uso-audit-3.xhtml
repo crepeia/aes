@@ -119,7 +119,7 @@
                                         <f:facet name="header">  
                                             01. Com que frequência você consome bebidas alcoólicas? 
                                         </f:facet>
-                                        <p:selectOneRadio id="audit_1" value="#{evaluationController.evaluation.audit1}" layout="grid" required="true" >  
+                                        <p:selectOneRadio id="audit_1" value="#{evaluationController.evaluation.audit1}" required="true" layout="pageDirection">  
                                             <f:selectItem itemLabel="Nunca" itemValue="1" />
                                             <f:selectItem itemLabel="Mensalmente ou menos" itemValue="2" />
                                             <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="3" />
@@ -133,7 +133,7 @@
                                         <f:facet name="header">  
                                             02. Quantas doses alcoólicas você consome tipicamente ao beber? 
                                         </f:facet>
-                                        <p:selectOneRadio id="audit_2" value="#{evaluationController.evaluation.audit2}"  required="true">  
+                                        <p:selectOneRadio id="audit_2" value="#{evaluationController.evaluation.audit2}"  required="true" layout="pageDirection">  
                                             <f:selectItem itemLabel="1 ou 2" itemValue="1" />
                                             <f:selectItem itemLabel="3 ou 4" itemValue="2" />
                                             <f:selectItem itemLabel="5 ou 6" itemValue="3" />
@@ -147,7 +147,7 @@
                                         <f:facet name="header">  
                                             03. Com que frequencia você consome seis ou mais doses de uma vez? 
                                         </f:facet>
-                                        <p:selectOneRadio id="audit_3" value="#{evaluationController.evaluation.audit3}"  required="true">  
+                                        <p:selectOneRadio id="audit_3" value="#{evaluationController.evaluation.audit3}"  required="true" layout="pageDirection">  
                                             <f:selectItem itemLabel="Nunca" itemValue="1" />
                                             <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
                                             <f:selectItem itemLabel="Mensalmente" itemValue="3" />
@@ -157,10 +157,10 @@
                                     </h:panelGrid>
 
                                    <h2>Avaliação por semana</h2>    
-
+                                  <!--
                                     <h:panelGrid columns="2" id="weeklyaverage">
                                         <p><h:outputText value="01 - Quantos dias na semana você consome alguma bebida álcoolica? (em média)"/></p>
-                                        <p:selectOneMenu id="question1" value="#{evaluationController.evaluation.weekEvaluation1}">
+                                        <p:selectOneMenu id="question1" value="#{evaluationController.evaluation.weekEvaluation1}" >
                                             <f:selectItem itemLabel="01" itemValue="1" />
                                             <f:selectItem itemLabel="02" itemValue="2" />
                                             <f:selectItem itemLabel="03" itemValue="3" />
@@ -170,14 +170,40 @@
                                             <f:selectItem itemLabel="07" itemValue="7" />
                                         </p:selectOneMenu>
 
-
+                                    </h:panelGrid>
+                                   
                                         <p><h:outputText value="02 - Em um dia típico, quantas doses você constuma beber?"/></p>
                                         <p:inputText id="week2" value="#{evaluationController.evaluation.weekEvaluation2}" size="10"></p:inputText>
-                                        
-
-                                    </h:panelGrid>
+                                     -->
+                                     
                                     
-                                    
+                                       <p><h:outputText value="Em uma semana típica, durante os últimos 6 meses, quantas doses você costumava ingerir consumir nestes dias da semana?"/></p>
+             
+                                       <p:panelGrid style="margin-bottom:30px" cellpadding="50" id="weeklyaverage">                                          
+                                           <p:row>    
+                                            <p:column> <h:outputLabel value="Segunda" style="font-weight:bold" /></p:column>                                                                           
+                                            <p:column> <h:outputLabel value="Terça" style="font-weight:bold" /></p:column>                                      
+                                            <p:column> <h:outputLabel value="Quarta" style="font-weight:bold" /></p:column>                                                                                                                                                       
+                                            <p:column> <h:outputLabel value="Quinta" style="font-weight:bold" /></p:column>                                                                      
+                                            <p:column> <h:outputLabel value="Sexta" style="font-weight:bold" /></p:column>                                                                   
+                                            <p:column> <h:outputLabel value="Sábado" style="font-weight:bold" /></p:column>                                       
+                                            <p:column> <h:outputLabel value="Domingo" style="font-weight:bold" /></p:column>
+                                        </p:row>   
+                                        <p:row>                                      
+                                            <p:column><p:spinner id="monday" value="#{#}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="tuesday" value="#{#}" size="5" min="0" ></p:spinner></p:column>
+                                            <p:column> <p:spinner id="wednesday" value="#{#}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="thursday" value="#{#}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="friday" value="#{#}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="saturday" value="#{#}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="sunday" value="#{#}" size="5" min="0"></p:spinner></p:column>
+                                       </p:row>
+                                       
+                                       
+                                       
+                                       
+                                      </p:panelGrid>
+                 
 
 
 
