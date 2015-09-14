@@ -225,21 +225,21 @@ public class EvaluationController extends BaseController<Evaluation> {
         this.teste();
         int age = getUser().getAge();
         int sumTotal = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7;
-        System.out.println(sumTotal);
-        //int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
+        int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
+        System.out.println("soma:" + sumTotal);
+        System.out.println("week1: " + evaluation.getWeekEvaluation1());
+        System.out.println("week2: " + evaluation.getWeekEvaluation2());
+        System.out.println("sexo: " + this.getUser().getGender());
         
-        /*if((sumTotal <= 17) && ((evaluation.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() <= 1) || (evaluation.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() <= 2)) && ((evaluation.getUser().getGender() == 'F' && weekTotal <= 5) ||(evaluation.getUser().getGender() == 'M' && weekTotal <= 10))){
+        if((sumTotal <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) ||(this.getUser().getGender() == 'M' && weekTotal <= 10))){
             if(this.getUser().getGender() == 'M' && age <= 65){
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
             }else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F'){
                 return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml";
             }
-        }else if((sumTotal <= 17) && ((evaluation.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() > 1) || (evaluation.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() > 2)) && ((evaluation.getUser().getGender() == 'F' && weekTotal > 5) ||(evaluation.getUser().getGender() == 'M' && weekTotal > 10))){
+        }else if((sumTotal <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() > 2)) && ((this.getUser().getGender() == 'F' && weekTotal > 5) ||(this.getUser().getGender() == 'M' && weekTotal > 10))){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites";
-        }else */
-        System.out.println(evaluation.getWeekEvaluation1());
-        System.out.println(evaluation.getWeekEvaluation2());
-        if(sumTotal>=18 && sumTotal <= 25){
+        }else if(sumTotal>=18 && sumTotal <= 25){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml";
         }else if(sumTotal>=26 && sumTotal <= 29){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-nocivo.xhtml";
