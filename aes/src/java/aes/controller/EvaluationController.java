@@ -211,32 +211,36 @@ public class EvaluationController extends BaseController<Evaluation> {
     
     public String audit7(){
         
-        int sum1 = evaluation.getAudit4();
-        int sum2 = evaluation.getAudit5();
-        int sum3 = evaluation.getAudit6();
-        int sum4 = evaluation.getAudit7();
-        int sum5 = evaluation.getAudit8();
-        int sum6 = evaluation.getAudit9();
-        int sum7 = evaluation.getAudit10();
+        int sum1 = evaluation.getAudit1();
+        int sum2 = evaluation.getAudit2();
+        int sum3 = evaluation.getAudit3();
+        
+        int sum4 = evaluation.getAudit4();
+        int sum5 = evaluation.getAudit5();
+        int sum6 = evaluation.getAudit6();
+        int sum7 = evaluation.getAudit7();
+        int sum8 = evaluation.getAudit8();
+        int sum9 = evaluation.getAudit9();
+        int sum10 = evaluation.getAudit10();
         
         this.teste();
         int age = getUser().getAge();
-        int sumTotal = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7;
+        int auditFull = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7 + sum8 + sum9 + sum10;
         int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
         
-        if((sumTotal <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) ||(this.getUser().getGender() == 'M' && weekTotal <= 10))){
+        if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) ||(this.getUser().getGender() == 'M' && weekTotal <= 10))){
             if(this.getUser().getGender() == 'M' && age <= 65){
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
             }else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F'){
                 return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml";
             }
-        }else if((sumTotal <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() > 2)) && ((this.getUser().getGender() == 'F' && weekTotal > 5) ||(this.getUser().getGender() == 'M' && weekTotal > 10))){
+        }else if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() > 2)) && ((this.getUser().getGender() == 'F' && weekTotal > 5) ||(this.getUser().getGender() == 'M' && weekTotal > 10))){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites";
-        }else if(sumTotal>=18 && sumTotal <= 25){
+        }else if(auditFull>=18 && auditFull <= 25){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml";
-        }else if(sumTotal>=26 && sumTotal <= 29){
+        }else if(auditFull>=26 && auditFull <= 29){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-nocivo.xhtml";
-        }else if(sumTotal >= 30 && sumTotal <= 50){
+        }else if(auditFull >= 30 && auditFull <= 50){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-dependencia.xhtml";
         }
         
