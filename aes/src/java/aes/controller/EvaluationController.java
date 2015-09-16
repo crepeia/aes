@@ -42,6 +42,9 @@ public class EvaluationController extends BaseController<Evaluation> {
     private Integer year;
     private Integer pregnant;
     
+    private int consumoDias;
+    private int consumoDoses;
+    
     private boolean continueEvaluation;
     
     private GenericDAO userDAO;
@@ -49,6 +52,8 @@ public class EvaluationController extends BaseController<Evaluation> {
     public EvaluationController() {
         gender = 3;
         pregnant = 3;
+        consumoDias = 0;
+        consumoDoses = 0;
         try {
             this.userDAO = new GenericDAO(User.class);
             this.daoBase = new GenericDAO<Evaluation>(Evaluation.class);
@@ -173,19 +178,41 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     }
     
+    public void getConsumoDiasDoses(){
+        int cont = 0;
+        if(evaluation.getSunday() != 0)
+            cont++;
+        if(evaluation.getTuesday()!= 0)
+            cont++;
+        if(evaluation.getWednesday()!= 0)
+            cont++;
+        if(evaluation.getThursday()!= 0)
+            cont++;
+        if(evaluation.getFriday()!= 0)
+            cont++;
+        if(evaluation.getSaturday()!= 0)
+            cont++;
+        if(evaluation.getMonday()!= 0)
+            cont++;
+        consumoDias = cont;
+        consumoDoses = evaluation.getSunday() + evaluation.getTuesday() + evaluation.getWednesday() + evaluation.getThursday() +  evaluation.getFriday() + evaluation.getSaturday() + evaluation.getMonday();
+    }
+    
+   
     public void audit3() throws IOException{ 
         User userLocal = getUser();
         int age = userLocal.getAge();
+        this.getConsumoDiasDoses();
+        
         int sum1 = evaluation.getAudit1();
         int sum2 = evaluation.getAudit2();
         int sum3 = evaluation.getAudit3();
-        int weekTotal;
-        weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
-        
+        int weekTotal = consumoDoses;
         int sumTotal = sum1 + sum2 + sum3;
-        if(sumTotal > 6 || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)){
+        
+        if(sumTotal > 6 || (this.getUser().getGender()=='F' && consumoDias > 1) || (this.getUser().getGender()=='M' && consumoDias > 2) || (this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)){
             FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml");
-        }else if(sumTotal <= 6 && (((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender()=='F' && weekTotal <= 5) || (this.getUser().getGender()=='M' && weekTotal <= 10))) ){
+        }else if(sumTotal <= 6 && (((this.getUser().getGender()=='F' && consumoDias <= 1) || (this.getUser().getGender()=='M' && consumoDias <= 2)) && ((this.getUser().getGender()=='F' && weekTotal <= 5) || (this.getUser().getGender()=='M' && weekTotal <= 10))) ){
             if(this.getUser().getGender() == 'M' && age <= 65)
                 FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml");
             else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F')
@@ -199,15 +226,6 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
     
-    public void teste(){
-        System.out.println("4: " +evaluation.getAudit4());
-        System.out.println("5 " +evaluation.getAudit5());
-        System.out.println("6: " +evaluation.getAudit6());
-        System.out.println("7: " +evaluation.getAudit7());
-        System.out.println("8: " +evaluation.getAudit8());
-        System.out.println("9: " +evaluation.getAudit9());
-        System.out.println("10: " +evaluation.getAudit10());
-    }
     
     public String audit7(){
         
@@ -222,19 +240,18 @@ public class EvaluationController extends BaseController<Evaluation> {
         int sum8 = evaluation.getAudit8();
         int sum9 = evaluation.getAudit9();
         int sum10 = evaluation.getAudit10();
-        
-        this.teste();
+        this.getConsumoDiasDoses();
         int age = getUser().getAge();
         int auditFull = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7 + sum8 + sum9 + sum10;
-        int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
+        int weekTotal = consumoDoses;
         
-        if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) ||(this.getUser().getGender() == 'M' && weekTotal <= 10))){
+        if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && consumoDias <= 1) || (this.getUser().getGender() == 'M' && consumoDias <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) ||(this.getUser().getGender() == 'M' && weekTotal <= 10))){
             if(this.getUser().getGender() == 'M' && age <= 65){
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
             }else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F'){
                 return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml";
             }
-        }else if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() > 2)) && ((this.getUser().getGender() == 'F' && weekTotal > 5) ||(this.getUser().getGender() == 'M' && weekTotal > 10))){
+        }else if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && consumoDias > 1) || (this.getUser().getGender() == 'M' && consumoDias > 2)) && ((this.getUser().getGender() == 'F' && weekTotal > 5) ||(this.getUser().getGender() == 'M' && weekTotal > 10))){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites";
         }else if(auditFull>=18 && auditFull <= 25){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml";
@@ -256,10 +273,11 @@ public class EvaluationController extends BaseController<Evaluation> {
     public String nextBaixoRisco(){
         User userLocal = getUser();
         int age = userLocal.getAge();
-        int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
-        if(((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2)) || ((this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)))
+        this.getConsumoDiasDoses();
+        int weekTotal = consumoDoses;
+        if(((this.getUser().getGender()=='F' && consumoDias > 1) || (this.getUser().getGender()=='M' && consumoDias > 2)) || ((this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)))
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-baixo-risco-limites.xhtml";
-        else if((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() < 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() < 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() < 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() < 10)){
+        else if((this.getUser().getGender()=='F' && consumoDias < 1) || (this.getUser().getGender()=='M' && consumoDias < 2) || (this.getUser().getGender()=='F' && weekTotal < 5) || (this.getUser().getGender()=='M' && weekTotal < 10)){
             if(this.getUser().getGender() == 'M' && age <= 65)
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
             else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F' && age > 65)
