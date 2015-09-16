@@ -57,11 +57,19 @@
                         </div><!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             
-
+                    <h:form>
+                    <div id="btnback">
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-parar-apoio-depressao-e-ansiedade.xhtml"></h:button>
+                                </div>
+                                
+                                
+                                <div id="btnnext">
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="plano-mudanca-pronto-para-comecar.xhtml"/>      
+                                </div>
                     <div class="referencias">
                         <p>Atualizado em 12/01/2014</p>
                     </div>
-
+                        </h:form>
 
 
                 </div>        
