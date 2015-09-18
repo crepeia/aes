@@ -77,10 +77,12 @@ public class EvaluationController extends BaseController<Evaluation> {
                     List<Evaluation> evaluations = this.getDaoBase().list("user", getLoggedUser(), this.getEntityManager());
                     for (Evaluation e : evaluations) {
                         if (gc.after(e.getDate())) {
+                            System.out.println("loaded evaluation");
                             evaluation = e;
                         }
                     }
                     if(evaluation == null){
+                        System.out.println("new");
                         evaluation = new Evaluation();
                         evaluation.setDate(Calendar.getInstance());
                         evaluation.setUser(getLoggedUser());
@@ -130,9 +132,10 @@ public class EvaluationController extends BaseController<Evaluation> {
         try { 
             daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
             FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Você será contactado em breve."));
-            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
             ((InputText) getComponent("email")).setDisabled(true);
             ((CommandButton) getComponent("sendButton")).setDisabled(true);
+            if(!loggedUser())
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }

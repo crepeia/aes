@@ -47,13 +47,6 @@ public abstract class BaseController<T> implements Serializable {
         return (Map<String, String>) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     }
 
-//	/**
-//	 *
-//	 * @return Locale
-//	 */
-//	protected Locale getLocale() {
-//		return FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{languageBean.language}", Locale.class);
-//	}
     /**
      * @return the entityManager
      */

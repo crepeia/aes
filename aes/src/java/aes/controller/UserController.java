@@ -4,6 +4,7 @@
  */
 package aes.controller;
 
+import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.Encrypter;
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,168 +40,173 @@ import javax.persistence.PersistenceContext;
 @SessionScoped
 public class UserController extends BaseFormController<User> {
 
-	private User user;
+    private User user;
 
-	private String password;
+    private String password;
 
-	private int day;
-	private int month;
-	private int year;
+    private int day;
+    private int month;
+    private int year;
 
-	private boolean showErrorMessage;
+    private Boolean drink;
 
-	private Map<String, String> days = new LinkedHashMap<String, String>();
-	private Map<String, String> months = new LinkedHashMap<String, String>();
-	private Map<String, String> years = new LinkedHashMap<String, String>();
-	private String[] monthsName = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
+    private boolean showErrorMessage;
 
-	@PersistenceContext
-	private EntityManager entityManager = null;
-        
-        private GenericDAO dao = null;
-	
-	/**
-	 * Creates a new instance of UserController
-	 */
-	public UserController() {
+    private Map<String, String> days = new LinkedHashMap<String, String>();
+    private Map<String, String> months = new LinkedHashMap<String, String>();
+    private Map<String, String> years = new LinkedHashMap<String, String>();
+    private String[] monthsName = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
 
-		super(User.class);
+    @PersistenceContext
+    private EntityManager entityManager = null;
 
-		this.showErrorMessage = false;
-                
-                month = -1;
+    private GenericDAO dao = null;
 
-		for (int i = 1; i <= 31; i++) {
-			days.put(String.valueOf(i), String.valueOf(i));
-		}
+    /**
+     * Creates a new instance of UserController
+     */
+    public UserController() {
 
-		for (int i = 1; i < this.monthsName.length; i++){
-			months.put(this.monthsName[i-1], String.valueOf(i-1));
-		}
+        super(User.class);
 
-		GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
-		int lastYear = gc.get(GregorianCalendar.YEAR) - 1;
-		for (int i = lastYear; i > lastYear - 100; i--) {
-			years.put(String.valueOf(i), String.valueOf(i));
-		}
+        this.showErrorMessage = false;
 
-	}
+        month = -1;
 
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		if (user == null) {
-			String id = this.getParameterMap().get("id");
-			if (id == null || id.isEmpty()) {
-				this.user = new User();
-			} else {
-				try {
-					List<User> list = this.getDaoBase().list("id", Long.parseLong(id), this.entityManager);
-					if (list.isEmpty()) {
-						this.user = new User();
-					} else {
-						this.user = list.get(0);
-					}
-				} catch (SQLException ex) {
-					Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-					this.user = new User();
-				}
-			}
+        for (int i = 1; i <= 31; i++) {
+            days.put(String.valueOf(i), String.valueOf(i));
+        }
 
-		}
-		return user;
-	}
+        for (int i = 1; i < this.monthsName.length; i++) {
+            months.put(this.monthsName[i - 1], String.valueOf(i - 1));
+        }
 
-	/**
-	 * @param user the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
+        GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
+        int lastYear = gc.get(GregorianCalendar.YEAR) - 1;
+        for (int i = lastYear; i > lastYear - 100; i--) {
+            years.put(String.valueOf(i), String.valueOf(i));
+        }
 
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		if (this.password == null) {
-			this.password = this.user == null || this.user.getPassword() == null ? "" : this.user.getPassword().toString();
-		}
-		return this.password;
-	}
+    }
 
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void save(ActionEvent actionEvent) {
-
-		this.showErrorMessage = true;
-		this.user.setBirth(year, month, day);
-
-		try {
-                    /*if (!(dao.list("email", user.getEmail(), entityManager).isEmpty())) {
-                        String message = "email.cadastrado";
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
-                    } else {*/
-
-			if (user.getId() == 0) {
-
-				//incluir criptografia da senha
-				this.user.setPassword(Encrypter.encrypt(this.password));
-
-			} else {
-
-				if (!Encrypter.compare(this.password, this.user.getPassword())) {
-					//incluir criptografia da senha
-					this.user.setPassword(Encrypter.encrypt(this.password));
-				}
-
-			}
-
-			super.save(actionEvent, entityManager);
-                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedUser", user);
-                        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-                LoginController login = (LoginController) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "loginController");
-                login.setShowName(true);
-                login.setUser(user);
-                        
-
-			//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( FacesMessage.SEVERITY_INFO, "Usuário criado com sucesso.", null ));
-			this.clear();
-                    }
-                catch (InvalidKeyException ex) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
-			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (IllegalBlockSizeException ex) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
-			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (BadPaddingException ex) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
-			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (NoSuchAlgorithmException ex) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
-			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (NoSuchPaddingException ex) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
-			Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-		}
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        if (user == null) {
+            String id = this.getParameterMap().get("id");
+            if (id == null || id.isEmpty()) {
+                this.user = new User();
+            } else {
                 try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-3.xhtml");
-                }catch(IOException ex){
-                    //
+                    List<User> list = this.getDaoBase().list("id", Long.parseLong(id), this.entityManager);
+                    if (list.isEmpty()) {
+                        this.user = new User();
+                    } else {
+                        this.user = list.get(0);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                    this.user = new User();
                 }
-                
-                //System.out.println("teste");
+            }
 
-	}
-        
-     public boolean isWoman(){
-        //return gender == 1;
-        return this.getUser().getGender()=='F';
+        }
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        if (this.password == null) {
+            this.password = this.user == null || this.user.getPassword() == null ? "" : this.user.getPassword().toString();
+        }
+        return this.password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void save(ActionEvent actionEvent) {
+
+        this.showErrorMessage = true;
+        this.user.setBirth(year, month, day);
+
+        try {
+
+            if (user.getId() == 0) {
+                this.user.setPassword(Encrypter.encrypt(this.password));
+            } else {
+                if (!Encrypter.compare(this.password, this.user.getPassword())) {
+                    this.user.setPassword(Encrypter.encrypt(this.password));
+                }
+
+            }
+            
+            Evaluation evaluation = new Evaluation();
+            evaluation.setDate(Calendar.getInstance());
+            evaluation.setDrink(drink);
+            evaluation.setUser(user);
+            user.setEvaluations(new ArrayList<Evaluation>());
+            user.getEvaluations().add(evaluation);
+
+            super.save(actionEvent, entityManager);
+            
+            
+            ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+            LoginController login = (LoginController) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "loginController");
+            login.setUser(user);
+            login.setShowName(true);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedUser", user);
+            String url;
+            if (getUser().isPregnant() && !evaluation.getDrink()) {
+                url = "quanto-voce-bebe-nao-gravidez.xhtml";
+            } else if (getUser().isPregnant() && evaluation.getDrink()) {
+                url =  "quanto-voce-bebe-sim-gravidez.xhtml";
+            } else if (getUser().isUnderage() && !evaluation.getDrink()) {
+                url = "quanto-voce-bebe-nao-adoles.xhtml";
+            } else if (getUser().isUnderage() && evaluation.getDrink()) {
+                url = "quanto-voce-bebe-sim-adoles.xhtml";
+            } else if (!evaluation.getDrink()) {
+                url = "quanto-voce-bebe-abstemio.xhtml";
+            } else {
+                url = "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml";
+            }
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+
+            this.clear();
+
+        } catch (InvalidKeyException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public int getDay() {
@@ -257,27 +265,34 @@ public class UserController extends BaseFormController<User> {
         this.monthsName = monthsName;
     }
 
-        
+    public Boolean getDrink() {
+        return drink;
+    }
 
-	/**
-	 * @return the showErrorMessage
-	 */
-	public boolean isShowErrorMessage() {
-		return showErrorMessage;
-	}
+    public void setDrink(Boolean drink) {
+        this.drink = drink;
+    }
 
-	/**
-	 * @param showErrorMessage the showErrorMessage to set
-	 */
-	public void setShowErrorMessage(boolean showErrorMessage) {
-		this.showErrorMessage = showErrorMessage;
-	}
+    /**
+     * @return the showErrorMessage
+     */
+    public boolean isShowErrorMessage() {
+        return showErrorMessage;
+    }
 
-	private void clear() {
-		this.year = 0;
-		this.day = 0;
-		this.month = -1;
-		this.password = "";
-		this.user = new User();
-	}
+    /**
+     * @param showErrorMessage the showErrorMessage to set
+     */
+    public void setShowErrorMessage(boolean showErrorMessage) {
+        this.showErrorMessage = showErrorMessage;
+    }
+
+    private void clear() {
+        this.year = 0;
+        this.day = 0;
+        this.month = -1;
+        this.password = "";
+        this.drink = null;
+        this.user = new User();
+    }
 }
