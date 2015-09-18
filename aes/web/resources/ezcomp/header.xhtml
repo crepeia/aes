@@ -10,12 +10,14 @@
     <!-- INTERFACE -->
     <cc:interface>
 		<cc:attribute name="loginRequired" default="false" rendered="false"/>
+                <cc:attribute name="logoutRequired" default="false" rendered="false"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
 
 		<h:inputHidden value="#{redirectController.redirect( cc.attrs.loginRequired )}" />
+                <h:inputHidden value="#{redirectController.redirectLogged( cc.attrs.logoutRequired )}" />
 
         <div id="header">
             <div class="headertop">
