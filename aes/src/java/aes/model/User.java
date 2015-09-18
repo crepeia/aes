@@ -4,9 +4,11 @@
  */
 package aes.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +25,7 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name = "tb_user")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,14 +46,98 @@ public class User {
     @Column(name = "authorize_data")
     private boolean authorizeData;
     @Column(name = "pregnant")
-    private Integer pregnant;
-    @Column(name = "drink")
-    private Integer drink;
+    private boolean pregnant;
+   
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Evaluation> evaluations;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public byte[] getPassword() {
+        return password;
+    }
+
+    public void setPassword(byte[] password) {
+        this.password = password;
+    }
+
+    public Calendar getBirth() {
+        return birth;
+    }
+
+    public void setBirth(Calendar birth) {
+        this.birth = birth;
+    }
+
+    public char getGender() {
+        return gender;
+    }
+
+    public void setGender(char gender) {
+        this.gender = gender;
+    }
+
+    public boolean isReceiveEmails() {
+        return receiveEmails;
+    }
+
+    public void setReceiveEmails(boolean receiveEmails) {
+        this.receiveEmails = receiveEmails;
+    }
+
+    public boolean isAuthorizeData() {
+        return authorizeData;
+    }
+
+    public void setAuthorizeData(boolean authorizeData) {
+        this.authorizeData = authorizeData;
+    }
+
+    public boolean isPregnant() {
+        return pregnant;
+    }
+
+    public void setPregnant(boolean pregnant) {
+        this.pregnant = pregnant;
+    }
+
+    public List<Evaluation> getEvaluations() {
+        return evaluations;
+    }
+
+    public void setEvaluations(List<Evaluation> evaluations) {
+        this.evaluations = evaluations;
+    }
     
-    public Integer getAge() {
+    @Override
+    public String toString() {
+        return this.id + ", " + this.name + ", " + this.email + ", " + new String(this.password);
+    }
+    
+    public int getAge() {
         Calendar today = Calendar.getInstance(); 
         
         if (today.get(Calendar.MONTH) < this.getBirth().get(Calendar.MONTH)) {
@@ -65,158 +151,23 @@ public class User {
             return today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR);
 
     }
-
-    /**
-     * @return the id
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return the password
-     */
-    public byte[] getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(byte[] password) {
-        this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return this.id + ", " + this.name + ", " + this.email + ", " + new String(this.password);
-    }
-
-    /**
-     * @return the email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * @return the birth
-     */
-    public Calendar getBirth() {
-        return birth;
-    }
-
-    /**
-     * @param birth the birth to set
-     */
-    public void setBirth(Calendar birth) {
-        this.birth = birth;
-    }
-
-    /**
-     * @return the gender
-     */
-    public char getGender() {
-        return gender;
-    }
-
-    /**
-     * @param gender the gender to set
-     */
-    public void setGender(char gender) {
-        this.gender = gender;
-    }
-
-    public List<Evaluation> getEvaluations() {
-        return evaluations;
-    }
-
-    public void setEvaluations(List<Evaluation> evaluations) {
-        this.evaluations = evaluations;
+   
+    public void setBirth(int year,int month,int day){     
+        birth = Calendar.getInstance();
+        birth.set(year,month,day);
     }
     
-    public void setBirth(int year,int month,int day){
-        if(this.birth == null){
-            this.birth = Calendar.getInstance();
-        }
-        this.birth.set(year,month,day);
+    public boolean isUnderage(){
+        return getAge() < 18;
+          
     }
-
-    /**
-     * @return the receiveEmails
-     */
-    public boolean isReceiveEmails() {
-	return receiveEmails;
-    }
-
-    /**
-     * @param receiveEmails the receiveEmails to set
-     */
-    public void setReceiveEmails(boolean receiveEmails) {
-	this.receiveEmails = receiveEmails;
-    }
-
-    /**
-     * @return the authorizeData
-     */
-    public boolean isAuthorizeData() {
-	return authorizeData;
-    }
-
-    /**
-     * @param authorizeData the authorizeData to set
-     */
-    public void setAuthorizeData(boolean authorizeData) {
-	this.authorizeData = authorizeData;
-    }
-
-    public Integer getPregnant() {
-        return pregnant;
-    }
-
-    public void setPregnant(Integer pregnant) {
-        this.pregnant = pregnant;
-    }
-
-    public Integer getDrink() {
-        return drink;
-    }
-
-    public void setDrink(Integer drink) {
-        this.drink = drink;
-    }
-
     
+    public boolean isFemale(){
+        return gender == 'F';
+    }
     
-
-
+    public boolean isMale(){
+        return gender == 'M';
+    }
 
 }

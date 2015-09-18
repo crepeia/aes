@@ -21,6 +21,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.inputtext.InputText;
 
 /**
  *
@@ -66,31 +68,31 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public Evaluation getEvaluation() {
-        if (this.evaluation == null) {
-            System.out.println("Procurando avaliação");
-
+        if (evaluation == null) {
             GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
             gc.add(GregorianCalendar.HOUR, EvaluationController.HOURS_LIMIT);
 
-            if (this.getUser() != null) {
-
+            if (loggedUser()) {
                 try {
-
-                    List<Evaluation> evaluations = this.getDaoBase().list("user", this.getUser(), this.getEntityManager());
+                    List<Evaluation> evaluations = this.getDaoBase().list("user", getLoggedUser(), this.getEntityManager());
                     for (Evaluation e : evaluations) {
-                        if (gc.after(e.getDate()) && e.isDrink() == this.getDrinkBoolean()) {
-                            this.evaluation = e;
-                            System.out.println("Carregou avaliação " + e.getId());
+                        if (gc.after(e.getDate())) {
+                            evaluation = e;
                         }
                     }
-
+                    if(evaluation == null){
+                        evaluation = new Evaluation();
+                        evaluation.setDate(Calendar.getInstance());
+                        evaluation.setUser(getLoggedUser());
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             } else {
-                Logger.getLogger(Evaluation.class.getName()).log(Level.SEVERE, "Usuário não identificado sendo avaliado.");
-                this.evaluation = new Evaluation();
+                User user = new User();
+                evaluation = new Evaluation();
+                evaluation.setDate(Calendar.getInstance());
+                evaluation.setUser(user);
             }
 
         }
@@ -98,84 +100,42 @@ public class EvaluationController extends BaseController<Evaluation> {
         return evaluation;
     }
 
-    public User getUser() {
-        if (loggedUser()) {
-            return getLoggedUser();
-        }
-        return user;
+    public User getUser(){
+        return getEvaluation().getUser();
     }
     
-    public String intro1(){
-        Calendar cal = GregorianCalendar.getInstance();
-        int anoAtual = Integer.valueOf(cal.get(Calendar.YEAR));
-        int mesAtual = Integer.valueOf(cal.get(Calendar.MONTH));
-        int diaAtual = Integer.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        //System.out.println(cal.get(Calendar.YEAR)); 
-        
-        int difAno, difMes, difDia;
-        difAno = anoAtual - this.year;
-        difMes = this.month - mesAtual;
-        difDia = diaAtual - this.day;
-        int age;
-        if(difMes <= 0){
-            if(difDia >= this.day)
-                age = difAno;
-            else
-                age = difAno - 1;
+    public String intro(){
+        getUser().setBirth(year, month, day); 
+        try{   
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager()); 
+        }catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(getUser().isPregnant() && !getEvaluation().getDrink()){
+            return "quanto-voce-bebe-nao-gravidez.xhtml";
+        }else if(getUser().isPregnant() && getEvaluation().getDrink()){
+            return "quanto-voce-bebe-sim-gravidez.xhtml";
+        }else if(getUser().isUnderage() && !getEvaluation().getDrink()){
+            return "quanto-voce-bebe-nao-adoles.xhtml";
+        }else if(getUser().isUnderage() && getEvaluation().getDrink()){
+            return "quanto-voce-bebe-sim-adoles.xhtml";
+        }else if(!getEvaluation().getDrink()){
+            return "quanto-voce-bebe-abstemio.xhtml";
         }else{
-            age = difAno - 1;
+            return "quanto-voce-bebe-convite.xhtml";
         }
-        
-        //int age = anoAtual - this.year;
-        System.out.println("idade: " + age);
-        if(this.pregnant == 1 && this.drink == 2){
-            return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
-        }else if(this.pregnant == 1 && this.drink == 1){
-            return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
-        }else if(age < 18 && drink == 2){
-            return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
-        }else if(age < 18 && drink == 1){
-            return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
-        }else if(drink == 2){
-            return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
-        }else
-            return "quanto-voce-bebe-convite.xhtml?faces-redirect=true";
-    }  
-
-    public String intro() {
-        if (this.getUser() == null) {
-            this.user = new User();
-            //this.user.setGender(this.gender.charAt(0));
-            this.user.setBirth(this.year, this.month, this.day);
-        }
-        try {
-            this.userDAO.insertOrUpdate(this.getUser(), this.getEntityManager());
-
-            if (this.getEvaluation() == null) {
-                this.evaluation = new Evaluation();
-                System.out.println("Nova avaliação");
-                this.evaluation.setDate(GregorianCalendar.getInstance());
-                this.evaluation.setUser(this.getUser());
-                if (this.drink == 1) {
-                    this.getEvaluation().setDrink(true);
-                } else {
-                    this.getEvaluation().setDrink(false);
-                }
-            }
-
-            this.daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
-
-            if (this.drink == 1) {
-                return "quanto-voce-bebe-sim-beber-uso-audit-3?faces-redirect=true";
-            } else {
-                return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
-            }
+    }
+    public void yearEmail() {
+        getEvaluation().setYearEmail(true);
+        try { 
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Você será contactado em breve."));
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            ((InputText) getComponent("email")).setDisabled(true);
+            ((CommandButton) getComponent("sendButton")).setDisabled(true);
         } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Ocorreu um erro inesperado.", null));
-            return "";
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
     
     public void getConsumoDiasDoses(){
@@ -312,21 +272,6 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
 
-    public void sendEmail() {
-        this.evaluation.setYearEmail(true);
-        try {
-            this.userDAO.update(this.getUser(), this.getEntityManager());
-            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-
-        String message = "Solicitação enviada com sucesso!";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
-        Logger.getLogger(BaseFormController.class.getName()).log(Level.INFO, message);
-    }
 
     public String audit71() {
         try {

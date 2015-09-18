@@ -6,6 +6,7 @@
 package aes.model;
 
 import java.util.Calendar;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -103,7 +104,7 @@ public class Evaluation {
     @Column(name = "dependencia")
     private Integer dependencia;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private User user;
 
     public long getId() {
@@ -114,7 +115,7 @@ public class Evaluation {
         this.id = id;
     }
 
-    public Boolean isDrink() {
+    public Boolean getDrink() {
         return drink;
     }
 
@@ -204,7 +205,7 @@ public class Evaluation {
     
     
 
-    public Boolean isYearEmail() {
+    public Boolean getYearEmail() {
         return yearEmail;
     }
 
@@ -395,6 +396,7 @@ public class Evaluation {
     public void setDependencia(Integer dependencia) {
         this.dependencia = dependencia;
     }
+    
     
     
     
