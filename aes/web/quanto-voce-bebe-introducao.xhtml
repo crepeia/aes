@@ -51,19 +51,19 @@
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao1">
                                         <h:outputText value="01 - Sexo:" style="font-weight: bold;"/>
-                                        <p:selectOneRadio id="options1" value="#{evaluationController.gender}" required="true" >  
+                                        <p:selectOneRadio id="options1" value="#{evaluationController.user.gender}" required="true" >  
                                             <f:ajax event="change" execute="@this" render="questao6" />
-                                            <f:selectItem itemLabel="Feminino" itemValue="1" />
-                                            <f:selectItem itemLabel="Masculino" itemValue="2" />
+                                            <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                            <f:selectItem itemLabel="Masculino" itemValue="M" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                         
                                     <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao6">
-                                        <h:panelGrid columns="2" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{evaluationController.woman}">
+                                        <h:panelGrid columns="2" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{evaluationController.user.female}">
                                         <h:outputText value="Você está grávida ou tem chance de estar grávida?" style="font-weight: bold"/>
-                                        <p:selectOneRadio id="options6" value="#{evaluationController.pregnant}" required="true" >  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />
-                                            <f:selectItem itemLabel="Não" itemValue="2" />
+                                        <p:selectOneRadio id="options6" value="#{evaluationController.user.pregnant}" required="true" >  
+                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="Não" itemValue="#{false}" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid> 
                                     </h:panelGrid> 
@@ -88,9 +88,9 @@
                                         <f:facet name="header">  
                                             03. Às vezes, você bebe cerveja, cachaça, vinho ou outras bebidas álcoolicas? 
                                         </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.drink}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />
-                                            <f:selectItem itemLabel="Não" itemValue="2" /> 
+                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.drink}" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="Não" itemValue="#{false}" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                     
@@ -105,7 +105,7 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.intro1()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.intro()}" />
                                 </div>
 
                         </h:form>

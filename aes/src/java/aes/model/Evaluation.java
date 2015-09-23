@@ -6,6 +6,7 @@
 package aes.model;
 
 import java.util.Calendar;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,11 +44,21 @@ public class Evaluation {
     private Integer audit2;
     @Column(name = "audit_3")
     private Integer audit3;
-    @Column(name = "week_evaluation_1")
-    private Integer weekEvaluation1;
-    @Column(name = "week_evaluation_2")
-    private Integer weekEvaluation2;
-
+    @Column(name = "monday")
+    private int monday;
+    @Column(name = "tuesday")
+    private int tuesday;
+    @Column(name = "wednesday")
+    private int wednesday;
+    @Column(name = "thursday")
+    private int thursday;
+    @Column(name = "friday")
+    private int friday;
+    @Column(name = "saturday")
+    private int saturday;
+    @Column(name = "sunday")
+    private int sunday;
+    
     @Column(name = "audit_4")
     public Integer audit4;
     @Column(name = "audit_5")
@@ -93,7 +104,7 @@ public class Evaluation {
     @Column(name = "dependencia")
     private Integer dependencia;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private User user;
 
     public long getId() {
@@ -104,7 +115,7 @@ public class Evaluation {
         this.id = id;
     }
 
-    public Boolean isDrink() {
+    public Boolean getDrink() {
         return drink;
     }
 
@@ -136,23 +147,65 @@ public class Evaluation {
         this.audit3 = audit3;
     }
 
-    public Integer getWeekEvaluation1() {
-        return weekEvaluation1;
+    public int getMonday() {
+        return monday;
     }
 
-    public void setWeekEvaluation1(Integer weekEvaluation1) {
-        this.weekEvaluation1 = weekEvaluation1;
+    public void setMonday(int monday) {
+        this.monday = monday;
     }
 
-    public Integer getWeekEvaluation2() {
-        return weekEvaluation2;
+    public int getTuesday() {
+        return tuesday;
     }
 
-    public void setWeekEvaluation2(Integer weekEvaluation2) {
-        this.weekEvaluation2 = weekEvaluation2;
+    public void setTuesday(int tuesday) {
+        this.tuesday = tuesday;
     }
 
-    public Boolean isYearEmail() {
+    public int getWednesday() {
+        return wednesday;
+    }
+
+    public void setWednesday(int wednesday) {
+        this.wednesday = wednesday;
+    }
+
+    public int getThursday() {
+        return thursday;
+    }
+
+    public void setThursday(int thursday) {
+        this.thursday = thursday;
+    }
+
+    public int getFriday() {
+        return friday;
+    }
+
+    public void setFriday(int friday) {
+        this.friday = friday;
+    }
+
+    public int getSaturday() {
+        return saturday;
+    }
+
+    public void setSaturday(int saturday) {
+        this.saturday = saturday;
+    }
+
+    public int getSunday() {
+        return sunday;
+    }
+
+    public void setSunday(int sunday) {
+        this.sunday = sunday;
+    }
+    
+    
+
+    public Boolean getYearEmail() {
         return yearEmail;
     }
 
@@ -343,6 +396,7 @@ public class Evaluation {
     public void setDependencia(Integer dependencia) {
         this.dependencia = dependencia;
     }
+    
     
     
     

@@ -22,6 +22,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.inputtext.InputText;
 
 /**
  *
@@ -43,6 +45,9 @@ public class EvaluationController extends BaseController<Evaluation> {
     private Integer year;
     private Integer pregnant;
     
+    private int consumoDias;
+    private int consumoDoses;
+    
     private boolean continueEvaluation;
     
     private GenericDAO userDAO;
@@ -50,6 +55,8 @@ public class EvaluationController extends BaseController<Evaluation> {
     public EvaluationController() {
         gender = 3;
         pregnant = 3;
+        consumoDias = 0;
+        consumoDoses = 0;
         try {
             this.userDAO = new GenericDAO(User.class);
             this.daoBase = new GenericDAO<Evaluation>(Evaluation.class);
@@ -125,31 +132,33 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public Evaluation getEvaluation() {
-        if (this.evaluation == null) {
-            System.out.println("Procurando avaliação");
-
+        if (evaluation == null) {
             GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
             gc.add(GregorianCalendar.HOUR, EvaluationController.HOURS_LIMIT);
 
-            if (this.getUser() != null) {
-
+            if (loggedUser()) {
                 try {
-
-                    List<Evaluation> evaluations = this.getDaoBase().list("user", this.getUser(), this.getEntityManager());
+                    List<Evaluation> evaluations = this.getDaoBase().list("user", getLoggedUser(), this.getEntityManager());
                     for (Evaluation e : evaluations) {
-                        if (gc.after(e.getDate()) && e.isDrink() == this.getDrinkBoolean()) {
-                            this.evaluation = e;
-                            System.out.println("Carregou avaliação " + e.getId());
+                        if (gc.after(e.getDate())) {
+                            System.out.println("loaded evaluation");
+                            evaluation = e;
                         }
                     }
-
+                    if(evaluation == null){
+                        System.out.println("new");
+                        evaluation = new Evaluation();
+                        evaluation.setDate(Calendar.getInstance());
+                        evaluation.setUser(getLoggedUser());
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             } else {
-                Logger.getLogger(Evaluation.class.getName()).log(Level.SEVERE, "Usuário não identificado sendo avaliado.");
-                this.evaluation = new Evaluation();
+                User user = new User();
+                evaluation = new Evaluation();
+                evaluation.setDate(Calendar.getInstance());
+                evaluation.setUser(user);
             }
 
         }
@@ -157,99 +166,80 @@ public class EvaluationController extends BaseController<Evaluation> {
         return evaluation;
     }
 
-    public User getUser() {
-        if (loggedUser()) {
-            return getLoggedUser();
-        }
-        return user;
+    public User getUser(){
+        return getEvaluation().getUser();
     }
     
-    public String intro1(){
-        Calendar cal = GregorianCalendar.getInstance();
-        int anoAtual = Integer.valueOf(cal.get(Calendar.YEAR));
-        int mesAtual = Integer.valueOf(cal.get(Calendar.MONTH));
-        int diaAtual = Integer.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        //System.out.println(cal.get(Calendar.YEAR)); 
-        
-        int difAno, difMes, difDia;
-        difAno = anoAtual - this.year;
-        difMes = this.month - mesAtual;
-        difDia = diaAtual - this.day;
-        int age;
-        if(difMes <= 0){
-            if(difDia >= this.day)
-                age = difAno;
-            else
-                age = difAno - 1;
+    public String intro(){
+        getUser().setBirth(year, month, day); 
+        try{   
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager()); 
+        }catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(getUser().isPregnant() && !getEvaluation().getDrink()){
+            return "quanto-voce-bebe-nao-gravidez.xhtml";
+        }else if(getUser().isPregnant() && getEvaluation().getDrink()){
+            return "quanto-voce-bebe-sim-gravidez.xhtml";
+        }else if(getUser().isUnderage() && !getEvaluation().getDrink()){
+            return "quanto-voce-bebe-nao-adoles.xhtml";
+        }else if(getUser().isUnderage() && getEvaluation().getDrink()){
+            return "quanto-voce-bebe-sim-adoles.xhtml";
+        }else if(!getEvaluation().getDrink()){
+            return "quanto-voce-bebe-abstemio.xhtml";
         }else{
-            age = difAno - 1;
+            return "quanto-voce-bebe-convite.xhtml";
         }
-        
-        //int age = anoAtual - this.year;
-        System.out.println("idade: " + age);
-        if(this.pregnant == 1 && this.drink == 2){
-            return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
-        }else if(this.pregnant == 1 && this.drink == 1){
-            return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
-        }else if(age < 18 && drink == 2){
-            return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
-        }else if(age < 18 && drink == 1){
-            return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
-        }else if(drink == 2){
-            return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
-        }else
-            return "quanto-voce-bebe-convite.xhtml?faces-redirect=true";
-    }  
-
-    public String intro() {
-        if (this.getUser() == null) {
-            this.user = new User();
-            //this.user.setGender(this.gender.charAt(0));
-            this.user.setBirth(this.year, this.month, this.day);
-        }
-        try {
-            this.userDAO.insertOrUpdate(this.getUser(), this.getEntityManager());
-
-            if (this.getEvaluation() == null) {
-                this.evaluation = new Evaluation();
-                System.out.println("Nova avaliação");
-                this.evaluation.setDate(GregorianCalendar.getInstance());
-                this.evaluation.setUser(this.getUser());
-                if (this.drink == 1) {
-                    this.getEvaluation().setDrink(true);
-                } else {
-                    this.getEvaluation().setDrink(false);
-                }
-            }
-
-            this.daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
-
-            if (this.drink == 1) {
-                return "quanto-voce-bebe-sim-beber-uso-audit-3?faces-redirect=true";
-            } else {
-                return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
-            }
+    }
+    public void yearEmail() {
+        getEvaluation().setYearEmail(true);
+        try { 
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Você será contactado em breve."));
+            ((InputText) getComponent("email")).setDisabled(true);
+            ((CommandButton) getComponent("sendButton")).setDisabled(true);
+            if(!loggedUser())
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Ocorreu um erro inesperado.", null));
-            return "";
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
     
+    public void getConsumoDiasDoses(){
+        int cont = 0;
+        if(evaluation.getSunday() != 0)
+            cont++;
+        if(evaluation.getTuesday()!= 0)
+            cont++;
+        if(evaluation.getWednesday()!= 0)
+            cont++;
+        if(evaluation.getThursday()!= 0)
+            cont++;
+        if(evaluation.getFriday()!= 0)
+            cont++;
+        if(evaluation.getSaturday()!= 0)
+            cont++;
+        if(evaluation.getMonday()!= 0)
+            cont++;
+        consumoDias = cont;
+        consumoDoses = evaluation.getSunday() + evaluation.getTuesday() + evaluation.getWednesday() + evaluation.getThursday() +  evaluation.getFriday() + evaluation.getSaturday() + evaluation.getMonday();
+    }
+    
+   
     public void audit3() throws IOException{ 
         User userLocal = getUser();
         int age = userLocal.getAge();
+        this.getConsumoDiasDoses();
+        
         int sum1 = evaluation.getAudit1();
         int sum2 = evaluation.getAudit2();
         int sum3 = evaluation.getAudit3();
-        int weekTotal;
-        weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
-        
+        int weekTotal = consumoDoses;
         int sumTotal = sum1 + sum2 + sum3;
-        if(sumTotal > 6 || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2) || (this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)){
+        
+        if(sumTotal > 6 || (this.getUser().getGender()=='F' && consumoDias > 1) || (this.getUser().getGender()=='M' && consumoDias > 2) || (this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)){
             FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml");
-        }else if(sumTotal <= 6 && (((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender()=='F' && weekTotal <= 5) || (this.getUser().getGender()=='M' && weekTotal <= 10))) ){
+        }else if(sumTotal <= 6 && (((this.getUser().getGender()=='F' && consumoDias <= 1) || (this.getUser().getGender()=='M' && consumoDias <= 2)) && ((this.getUser().getGender()=='F' && weekTotal <= 5) || (this.getUser().getGender()=='M' && weekTotal <= 10))) ){
             if(this.getUser().getGender() == 'M' && age <= 65)
                 FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml");
             else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F')
@@ -263,15 +253,6 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
     
-    public void teste(){
-        System.out.println("4: " +evaluation.getAudit4());
-        System.out.println("5 " +evaluation.getAudit5());
-        System.out.println("6: " +evaluation.getAudit6());
-        System.out.println("7: " +evaluation.getAudit7());
-        System.out.println("8: " +evaluation.getAudit8());
-        System.out.println("9: " +evaluation.getAudit9());
-        System.out.println("10: " +evaluation.getAudit10());
-    }
     
     public String audit7(){
         
@@ -286,19 +267,18 @@ public class EvaluationController extends BaseController<Evaluation> {
         int sum8 = evaluation.getAudit8();
         int sum9 = evaluation.getAudit9();
         int sum10 = evaluation.getAudit10();
-        
-        this.teste();
+        this.getConsumoDiasDoses();
         int age = getUser().getAge();
         int auditFull = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7 + sum8 + sum9 + sum10;
-        int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
+        int weekTotal = consumoDoses;
         
-        if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() <= 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) ||(this.getUser().getGender() == 'M' && weekTotal <= 10))){
+        if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && consumoDias <= 1) || (this.getUser().getGender() == 'M' && consumoDias <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) ||(this.getUser().getGender() == 'M' && weekTotal <= 10))){
             if(this.getUser().getGender() == 'M' && age <= 65){
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
             }else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F'){
                 return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml";
             }
-        }else if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender() == 'M' && evaluation.getWeekEvaluation1() > 2)) && ((this.getUser().getGender() == 'F' && weekTotal > 5) ||(this.getUser().getGender() == 'M' && weekTotal > 10))){
+        }else if((auditFull <= 17) && ((this.getUser().getGender() == 'F' && consumoDias > 1) || (this.getUser().getGender() == 'M' && consumoDias > 2)) && ((this.getUser().getGender() == 'F' && weekTotal > 5) ||(this.getUser().getGender() == 'M' && weekTotal > 10))){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites";
         }else if(auditFull>=18 && auditFull <= 25){
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml";
@@ -320,10 +300,11 @@ public class EvaluationController extends BaseController<Evaluation> {
     public String nextBaixoRisco(){
         User userLocal = getUser();
         int age = userLocal.getAge();
-        int weekTotal = evaluation.getWeekEvaluation1() * evaluation.getWeekEvaluation2();
-        if(((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() > 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() > 2)) || ((this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)))
+        this.getConsumoDiasDoses();
+        int weekTotal = consumoDoses;
+        if(((this.getUser().getGender()=='F' && consumoDias > 1) || (this.getUser().getGender()=='M' && consumoDias > 2)) || ((this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)))
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-baixo-risco-limites.xhtml";
-        else if((this.getUser().getGender()=='F' && evaluation.getWeekEvaluation1() < 1) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation1() < 2) || (this.getUser().getGender()=='F' && evaluation.getWeekEvaluation2() < 5) || (this.getUser().getGender()=='M' && evaluation.getWeekEvaluation2() < 10)){
+        else if((this.getUser().getGender()=='F' && consumoDias < 1) || (this.getUser().getGender()=='M' && consumoDias < 2) || (this.getUser().getGender()=='F' && weekTotal < 5) || (this.getUser().getGender()=='M' && weekTotal < 10)){
             if(this.getUser().getGender() == 'M' && age <= 65)
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
             else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F' && age > 65)
@@ -358,21 +339,6 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
 
-    public void sendEmail() {
-        this.evaluation.setYearEmail(true);
-        try {
-            this.userDAO.update(this.getUser(), this.getEntityManager());
-            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-
-        String message = "Solicitação enviada com sucesso!";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
-        Logger.getLogger(BaseFormController.class.getName()).log(Level.INFO, message);
-    }
 
     public String audit71() {
         try {

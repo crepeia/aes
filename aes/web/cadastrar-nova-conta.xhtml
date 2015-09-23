@@ -14,7 +14,7 @@
     <h:body>    
         <div id="corpo"> 
             <!-- header -->    
-            <w:header />
+            <w:header logoutRequired="true"  />
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
@@ -105,11 +105,11 @@
                                                 </p:panelGrid>
                                                 
                                                  <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao">
-                                                     <h:panelGrid columns="1" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.woman}">
+                                                     <h:panelGrid columns="1" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.user.female}">
                                         <h:outputText value="Você está grávida ou tem chance de estar grávida?" style="font-weight: bold"/>
                                         <p:selectOneRadio id="options6" value="#{userController.user.pregnant}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />
-                                            <f:selectItem itemLabel="Não" itemValue="2" />
+                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="Não" itemValue="#{false}" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid> 
                                     </h:panelGrid>
@@ -118,9 +118,9 @@
                                         <f:facet name="header">  
                                             Às vezes, você bebe cerveja, cachaça, vinho ou outras bebidas álcoolicas? 
                                         </f:facet> 
-                                                    <p:selectOneRadio id="options1" value="#{userController.user.drink}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />
-                                            <f:selectItem itemLabel="Não" itemValue="2" /> 
+                                                    <p:selectOneRadio id="options1" value="#{userController.drink}" required="true">  
+                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="Não" itemValue="#{false}" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                                 
@@ -179,7 +179,7 @@
                                         </div>
 
                                         <div id="signinbtn">
-                                            <p:commandButton id="entrarBtn" value="#{messages['signin']}" update="@form" actionListener="#{loginController.loginBegin}" ajax="false"/>
+                                            <p:commandButton id="entrarBtn" value="#{messages['signin']}" update="@form" actionListener="#{loginController.login()}" ajax="false"/>
                                         </div>
 
 

@@ -20,40 +20,55 @@ import javax.servlet.http.HttpServletRequest;
 @RequestScoped
 public class RedirectController {
 
-	/**
-	 * Creates a new instance of RedirectController
-	 */
-	public RedirectController() {
-	}
+    /**
+     * Creates a new instance of RedirectController
+     */
+    public RedirectController() {
+    }
 
-	public String redirect(boolean test) {
+    public String redirect(boolean test) {
 
-		if (test) {
+        if (test) {
 
-			Object object = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
-			if (object == null) {
-				try {
-					Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
-					if (request instanceof HttpServletRequest) {
-						//String url = ((HttpServletRequest) request).getRequestURL().toString();
-						String url = ((HttpServletRequest) request).getRequestURI();
-						url = url.substring( url.lastIndexOf('/') + 1 );
-						//Logger.getLogger(RedirectController.class.getName()).log(Level.SEVERE, null, url);
-						FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("url", url);
-						//FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml?url=" + url);
-						FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
-					} else {
-						FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
-					}
+            Object object = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
+            if (object == null) {
+                try {
+                    Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                    if (request instanceof HttpServletRequest) {
+                        //String url = ((HttpServletRequest) request).getRequestURL().toString();
+                        String url = ((HttpServletRequest) request).getRequestURI();
+                        url = url.substring(url.lastIndexOf('/') + 1);
+                        //Logger.getLogger(RedirectController.class.getName()).log(Level.SEVERE, null, url);
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("url", url);
+                        //FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml?url=" + url);
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+                    } else {
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+                    }
 
-					
-				} catch (IOException ex) {
-					Logger.getLogger(RedirectController.class.getName()).log(Level.SEVERE, null, ex);
-				}
-			}
+                } catch (IOException ex) {
+                    Logger.getLogger(RedirectController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
-		}
-		return "OK";
+        }
+        return "OK";
 
-	}
+    }
+
+    public String redirectLogged(boolean test) {
+        if (test) {
+
+            Object object = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
+            if (object != null) {
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(RedirectController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+        return "OK";
+    }
 }

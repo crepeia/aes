@@ -157,24 +157,7 @@
                                     </h:panelGrid>
 
                                    <h2>Avaliação por semana</h2>    
-                                  <!--
-                                    <h:panelGrid columns="2" id="weeklyaverage">
-                                        <p><h:outputText value="01 - Quantos dias na semana você consome alguma bebida álcoolica? (em média)"/></p>
-                                        <p:selectOneMenu id="question1" value="#{evaluationController.evaluation.weekEvaluation1}" >
-                                            <f:selectItem itemLabel="01" itemValue="1" />
-                                            <f:selectItem itemLabel="02" itemValue="2" />
-                                            <f:selectItem itemLabel="03" itemValue="3" />
-                                            <f:selectItem itemLabel="04" itemValue="4" />
-                                            <f:selectItem itemLabel="05" itemValue="5" />
-                                            <f:selectItem itemLabel="06" itemValue="6" />
-                                            <f:selectItem itemLabel="07" itemValue="7" />
-                                        </p:selectOneMenu>
-
-                                    </h:panelGrid>
-                                   
-                                        <p><h:outputText value="02 - Em um dia típico, quantas doses você constuma beber?"/></p>
-                                        <p:inputText id="week2" value="#{evaluationController.evaluation.weekEvaluation2}" size="10"></p:inputText>
-                                     -->
+                                  
                                      
                                     
                                        <p><h:outputText value="Em uma semana típica, durante os últimos 6 meses, quantas doses você costumava ingerir consumir nestes dias da semana?"/></p>
@@ -190,13 +173,13 @@
                                             <p:column> <h:outputLabel value="Domingo" style="font-weight:bold" /></p:column>
                                         </p:row>   
                                         <p:row>                                      
-                                            <p:column><p:spinner id="monday" value="#{#}" size="5" min="0"></p:spinner></p:column>
-                                            <p:column> <p:spinner id="tuesday" value="#{#}" size="5" min="0" ></p:spinner></p:column>
-                                            <p:column> <p:spinner id="wednesday" value="#{#}" size="5" min="0"></p:spinner></p:column>
-                                            <p:column> <p:spinner id="thursday" value="#{#}" size="5" min="0"></p:spinner></p:column>
-                                            <p:column> <p:spinner id="friday" value="#{#}" size="5" min="0"></p:spinner></p:column>
-                                            <p:column> <p:spinner id="saturday" value="#{#}" size="5" min="0"></p:spinner></p:column>
-                                            <p:column> <p:spinner id="sunday" value="#{#}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column><p:spinner id="monday" value="#{evaluationController.evaluation.monday}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="tuesday" value="#{evaluationController.evaluation.tuesday}" size="5" min="0" ></p:spinner></p:column>
+                                            <p:column> <p:spinner id="wednesday" value="#{evaluationController.evaluation.wednesday}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="thursday" value="#{evaluationController.evaluation.thursday}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="friday" value="#{evaluationController.evaluation.friday}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="saturday" value="#{evaluationController.evaluation.saturday}" size="5" min="0"></p:spinner></p:column>
+                                            <p:column> <p:spinner id="sunday" value="#{evaluationController.evaluation.monday}" size="5" min="0"></p:spinner></p:column>
                                        </p:row>
                                        
                                        
