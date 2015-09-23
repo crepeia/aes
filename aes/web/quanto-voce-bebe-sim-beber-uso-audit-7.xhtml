@@ -43,7 +43,7 @@
 
                             <h:form>
 
-
+                                
                                 <p:panel id="questoes" >
 
 
@@ -52,7 +52,8 @@
                                         <f:facet name="header">  
                                             04. Quantas vezes ao longo dos últimos 12 meses você achou que não conseguiria parar de beber uma vez tendo começado? 
                                         </f:facet>
-                                        <p:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" layout="grid">  
+                                        <p:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" layout="pageDirection">  
+                                            <f:ajax event="change" execute="@this" render="audit5" />
                                             <f:selectItem itemLabel="Nunca" itemValue="1" />
                                             <f:selectItem itemLabel="Mensalmente ou menos" itemValue="2" />
                                             <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="3" />
@@ -63,95 +64,116 @@
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5">
-                                        <f:facet name="header">  
-                                            05. Quantas vezes ao longo dos últimos 12 meses por causa do álcool, não conseguiu fazer o que era esperado de você? 
-                                        </f:facet>
-                                        <p:selectOneRadio id="audit_5" value="#{evaluationController.evaluation.audit5}"  required="true">  
-                                            <f:selectItem itemLabel="1 ou 2" itemValue="1" />
-                                            <f:selectItem itemLabel="3 ou 4" itemValue="2" />
-                                            <f:selectItem itemLabel="5 ou 6" itemValue="3" />
-                                            <f:selectItem itemLabel="7, 8 ou 9" itemValue="4" />
-                                            <f:selectItem itemLabel="10 ou mais" itemValue="5" />
-                                        </p:selectOneRadio> 
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5X" rendered ="#{evaluationController.q4()}">
+                                            <f:facet name="header">  
+                                                05. Quantas vezes ao longo dos últimos 12 meses por causa do álcool, não conseguiu fazer o que era esperado de você? 
+                                            </f:facet>
+                                            <p:selectOneRadio id="audit_5" value="#{evaluationController.evaluation.audit5}"  required="true" layout="pageDirection">  
+                                                <f:ajax event="change" execute="@this" render="audit6" />
+                                                <f:selectItem itemLabel="1 ou 2" itemValue="1" />
+                                                <f:selectItem itemLabel="3 ou 4" itemValue="2" />
+                                                <f:selectItem itemLabel="5 ou 6" itemValue="3" />
+                                                <f:selectItem itemLabel="7, 8 ou 9" itemValue="4" />
+                                                <f:selectItem itemLabel="10 ou mais" itemValue="5" />
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
                                     </h:panelGrid>
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6">
-                                        <f:facet name="header">  
-                                            06. Quantas vezes ao longo dos últimos 12 meses você precisou beber pela manhã para poder se sentir bem ao longo do dia após ter bebido bastante no dia anterior?
-                                        </f:facet>
-                                        <p:selectOneRadio id="audit_6" value="#{evaluationController.evaluation.audit6}"  required="true">  
-                                            <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                            <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
-                                            <f:selectItem itemLabel="Mensalmente" itemValue="3" />
-                                            <f:selectItem itemLabel="Semanalmente" itemValue="4" />
-                                            <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
-                                        </p:selectOneRadio> 
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6X" rendered ="#{evaluationController.q5()}">
+                                            <f:facet name="header">  
+                                                06. Quantas vezes ao longo dos últimos 12 meses você precisou beber pela manhã para poder se sentir bem ao longo do dia após ter bebido bastante no dia anterior?
+                                            </f:facet>
+                                            <p:selectOneRadio id="audit_6" value="#{evaluationController.evaluation.audit6}"  required="true" layout="pageDirection">  
+                                                <f:ajax event="change" execute="@this" render="audit7" />
+                                                <f:selectItem itemLabel="Nunca" itemValue="1" />
+                                                <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
+                                                <f:selectItem itemLabel="Mensalmente" itemValue="3" />
+                                                <f:selectItem itemLabel="Semanalmente" itemValue="4" />
+                                                <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7">
-                                        <f:facet name="header">  
-                                            07. Quantas vezes ao longo dos últimos 12 meses você se sentiu culpado ou com remorso depois de ter bebido?
-                                        </f:facet>
-                                        <p:selectOneRadio id="audit_7" value="#{evaluationController.evaluation.audit7}"  required="true">  
-                                            <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                            <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
-                                            <f:selectItem itemLabel="Mensalmente" itemValue="3" />
-                                            <f:selectItem itemLabel="Semanalmente" itemValue="4" />
-                                            <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
-                                        </p:selectOneRadio>                                                                      
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7X" rendered ="#{evaluationController.q6()}">
+                                            <f:facet name="header">  
+                                                07. Quantas vezes ao longo dos últimos 12 meses você se sentiu culpado ou com remorso depois de ter bebido?
+                                            </f:facet>
+                                            <p:selectOneRadio id="audit_7" value="#{evaluationController.evaluation.audit7}"  required="true" layout="pageDirection">  
+                                                <f:ajax event="change" execute="@this" render="audit8" />
+                                                <f:selectItem itemLabel="Nunca" itemValue="1" />
+                                                <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
+                                                <f:selectItem itemLabel="Mensalmente" itemValue="3" />
+                                                <f:selectItem itemLabel="Semanalmente" itemValue="4" />
+                                                <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8">
-                                        <f:facet name="header">  
-                                            08 - Quantas vezes ao longo dos últimos 12 meses você foi incapaz de lembrar o que aconteceu devido a bebida?
-                                        </f:facet>
-                                        <p:selectOneRadio id="audit_8" value="#{evaluationController.evaluation.audit8}"  required="true">  
-                                            <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                            <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
-                                            <f:selectItem itemLabel="Mensalmente" itemValue="3" />
-                                            <f:selectItem itemLabel="Semanalmente" itemValue="4" />
-                                            <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
-                                        </p:selectOneRadio> 
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8X" rendered ="#{evaluationController.q7()}">
+                                            <f:facet name="header">  
+                                                08 - Quantas vezes ao longo dos últimos 12 meses você foi incapaz de lembrar o que aconteceu devido a bebida?
+                                            </f:facet>
+                                            <p:selectOneRadio id="audit_8" value="#{evaluationController.evaluation.audit8}"  required="true" layout="pageDirection">  
+                                                <f:ajax event="change" execute="@this" render="audit9" />
+                                                <f:selectItem itemLabel="Nunca" itemValue="1" />
+                                                <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
+                                                <f:selectItem itemLabel="Mensalmente" itemValue="3" />
+                                                <f:selectItem itemLabel="Semanalmente" itemValue="4" />
+                                                <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
                                     </h:panelGrid>
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9">
-                                        <f:facet name="header">  
-                                            09 - Você ja causou ferimentos ou prejuízos a você mesmo ou a outra pessoa após ter bebido?
-                                        </f:facet>
-                                        <p:selectOneRadio id="audit_9" value="#{evaluationController.evaluation.audit9}"  required="true">  
-                                            <f:selectItem itemLabel="Não" itemValue="1" />
-                                            <f:selectItem itemLabel="Sim, mas não no ano passado" itemValue="3" />
-                                            <f:selectItem itemLabel="Sim, no ano passado" itemValue="5" />
-                                        </p:selectOneRadio> 
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9X" rendered ="#{evaluationController.q8()}">
+                                            <f:facet name="header">  
+                                                09 - Você ja causou ferimentos ou prejuízos a você mesmo ou a outra pessoa após ter bebido?
+                                            </f:facet>
+                                            <p:selectOneRadio id="audit_9" value="#{evaluationController.evaluation.audit9}"  required="true" layout="pageDirection">  
+                                                <f:ajax event="change" execute="@this" render="audit10" />
+                                                <f:selectItem itemLabel="Não" itemValue="1" />
+                                                <f:selectItem itemLabel="Sim, mas não no ano passado" itemValue="3" />
+                                                <f:selectItem itemLabel="Sim, no ano passado" itemValue="5" />
+                                            </p:selectOneRadio>
+                                        </h:panelGrid>
                                     </h:panelGrid>
 
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10">
-                                        <f:facet name="header">  
-                                            10 - Algum parente, amigo ou médico já se preocupou com o fato de você beber ou sugeriu que você parasse?
-                                        </f:facet>
-                                        <p:selectOneRadio id="audit_10" value="#{evaluationController.evaluation.audit10}"  required="true">  
-                                            <f:selectItem itemLabel="Não" itemValue="1" />
-                                            <f:selectItem itemLabel="Sim, mas não no ano passado" itemValue="3" />
-                                            <f:selectItem itemLabel="Sim, no ano passado" itemValue="5" />
-                                        </p:selectOneRadio> 
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10X" rendered ="#{evaluationController.q9()}">
+                                            <f:facet name="header">  
+                                                10 - Algum parente, amigo ou médico já se preocupou com o fato de você beber ou sugeriu que você parasse?
+                                            </f:facet>
+                                            <p:selectOneRadio id="audit_10" value="#{evaluationController.evaluation.audit10}"  required="true" layout="pageDirection">  
+                                                <f:ajax event="change" execute="@this" render="enviar" />
+                                                <f:selectItem itemLabel="Não" itemValue="1" />
+                                                <f:selectItem itemLabel="Sim, mas não no ano passado" itemValue="3" />
+                                                <f:selectItem itemLabel="Sim, no ano passado" itemValue="5" />
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
                                     </h:panelGrid>
 
 
 
                                 </p:panel>
+                                <h:panelGrid id="enviar">
+                                    <h:panelGrid id="enviarx" rendered ="#{evaluationController.q10()}">
+                                        <div id="btnback">
+                                            <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
+                                        </div>
 
-                                <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
-                                </div>
 
-
-                                <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit7()}"/>                               
-                                </div>
+                                        <div id="btnnext">
+                                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit7()}"/>                               
+                                        </div>
+                                    </h:panelGrid>
+                                </h:panelGrid>
 
                             </h:form>
 
