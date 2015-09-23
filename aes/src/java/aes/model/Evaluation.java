@@ -49,7 +49,7 @@ public class Evaluation {
     private Integer weekEvaluation2;
 
     @Column(name = "audit_4")
-    private Integer audit4;
+    public Integer audit4;
     @Column(name = "audit_5")
     private Integer audit5;
     @Column(name = "audit_6")
