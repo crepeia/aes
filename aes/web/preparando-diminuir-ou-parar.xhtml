@@ -10,33 +10,56 @@
         <title> O quanto voce bebe ? | Álcool e Saude </title>
         <w:head_comum />
     </h:head>
-
+ 
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header />
+            <w:header loginRequired="true"/>
             
             <w:topmenu />
-            <!--mainmenu-->         	
+            <!--mainmenu-->                  
             <div class="main">
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
                 <div class="pagecontent">
-
-
-                    
-
-
+ 
+ 
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1>Pronto para mudar ? </h1> 
+                        </div>    
+ 
+                        <div id="progressbar">
+                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>                        
+                    </div>
+ 
+ 
                     <div id="pagemiddle">
-
+ 
                         <div class="fotoframe">                            
                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div>
-
-                        
+ 
+                        <div id="pmtext">
+ 
+                            <p>Neste momento você pode optar por diminuir ou parar de beber </p>      
+<h:form>
+                                <p:panel id="questoes" >
+                                    
+                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                        <f:facet name="header">  
+                                            Você gostaria de parar de beber ou diminuir a quantidade que bebe
+                                        </f:facet> 
+                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.preparado}" required="true">  
+                                            <f:selectItem itemLabel="Diminuir" itemValue="1" />
+                                            <f:selectItem itemLabel="Parar de Beber" itemValue="0" /> 
+                                        </p:selectOneRadio> 
+                                    </h:panelGrid>
+                                </p:panel>
                              
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
@@ -46,29 +69,27 @@
                                 <div id="btnnext">
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.nextPreparado()}" />
                                 </div>
-                        
+                        </h:form>
                             
                             
                             
-                        <!-- end pmtext -->  
-
+                        </div><!-- end pmtext -->  
+ 
                     </div><!-- end page middle -->                                             
-
+ 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
-
-
-
+ 
+ 
+ 
                 </div>        
             </div>
-
-
+ 
+ 
         </div><!-- end.corpo --> 
-
+ 
         <!--Footer -->
         <w:footer />
     </h:body>
 </html>
-
-

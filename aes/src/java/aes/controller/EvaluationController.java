@@ -24,11 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
-<<<<<<< HEAD
 import java.text.SimpleDateFormat;
-=======
 import static java.sql.Types.NULL;
->>>>>>> be59a83f8514a9d0684725a7bfc08948ec705034
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -388,17 +385,22 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
     
-    public String continueEvaluation(){
+    public void continueEvaluation() throws IOException{
         System.out.println(evaluation.getDependencia());
         if(evaluation.getDependencia() == 1){
-            //System.out.println("sjaikjsakj");
-            //FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-parar-apoio-intro.xhtml");
-            return "estrategia-parar-apoio-intro.xhtml";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-parar-apoio-intro.xhtml");
+            //return "estrategia-parar-apoio-intro.xhtml";
         }
         else{
-            return "index.xhtml";
+            System.out.println("POPUP");
         }
-        //salvar no banco
+        try {
+            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public String teste1(){ 
@@ -505,11 +507,19 @@ public class EvaluationController extends BaseController<Evaluation> {
         return "preparando-pros-cons.xhtml";
     }
     
-    public String nextPreparado(){
+    public void nextPreparado() throws IOException{
         if(evaluation.getPreparado() == 1)
-            return "to cut down or to quit";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("preparando-diminuir-ou-parar.xhtml");
         else
-            return "preparando-diminuir-parar-nao.xhtml";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("preparando-diminuir-parar-nao.xhtml");
+        
+        try {
+            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public String nextBackPlan(){
