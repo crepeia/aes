@@ -10,6 +10,7 @@ import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.io.IOException;
 import java.sql.SQLException;
+import static java.sql.Types.NULL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -58,6 +59,69 @@ public class EvaluationController extends BaseController<Evaluation> {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
 
+    }
+    
+    public boolean q4(){
+        try{
+            return evaluation.getAudit4()!= 0;
+        }catch(NullPointerException e){
+            return false;
+        }
+                
+    }
+    
+    public boolean q5(){
+        try{
+            return evaluation.getAudit5()!= 0;
+        }catch(NullPointerException e){
+            return false;
+        }
+                
+    }
+    
+    public boolean q6(){
+        try{
+            return evaluation.getAudit6()!= 0;
+        }catch(NullPointerException e){
+            return false;
+        }
+                
+    }
+    
+    public boolean q7(){
+        try{
+            return evaluation.getAudit7()!= 0;
+        }catch(NullPointerException e){
+            return false;
+        }
+                
+    }
+    
+    public boolean q8(){
+        try{
+            return evaluation.getAudit8()!= 0;
+        }catch(NullPointerException e){
+            return false;
+        }
+                
+    }
+    
+    public boolean q9(){
+        try{
+            return evaluation.getAudit9()!= 0;
+        }catch(NullPointerException e){
+            return false;
+        }
+                
+    }
+    
+    public boolean q10(){
+        try{
+            return evaluation.getAudit10()!= 0;
+        }catch(NullPointerException e){
+            return false;
+        }
+                
     }
 
     public Evaluation getEvaluation() {
