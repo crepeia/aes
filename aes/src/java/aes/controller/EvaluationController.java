@@ -8,8 +8,23 @@ package aes.controller;
 import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Color;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -23,6 +38,8 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.inputtext.InputText;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -50,6 +67,8 @@ public class EvaluationController extends BaseController<Evaluation> {
     private boolean continueEvaluation;
     
     private GenericDAO userDAO;
+    
+    private StreamedContent planoPersonalizado;
 
     public EvaluationController() {
         gender = 3;
@@ -431,6 +450,144 @@ public class EvaluationController extends BaseController<Evaluation> {
             return "to cut down or to quit";
         else 
             return "avaliação apos um ano";
+    }
+    
+    public ByteArrayOutputStream gerarPdf() {
+        System.out.println(getEvaluation().getDataComecarPlano());
+        System.out.println(getEvaluation().getRazoesPlano());
+        System.out.println(getEvaluation().getEstrategiasPlano());
+        System.out.println(getEvaluation().getPessoasPlano());
+        System.out.println(getEvaluation().getSinaisSucessoPlano());
+        System.out.println(getEvaluation().getPossiveisDificuladesPlano());
+        
+        try {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+            Document document = new Document();
+            PdfWriter.getInstance(document, os);
+            document.open();
+
+            document.addTitle("Plano Personalizado");
+            document.addAuthor("aes.com.br");
+
+            URL url = FacesContext.getCurrentInstance().getExternalContext().getResource("/resources/default/images/logo-alcool-e-saude.png");
+            Image img = Image.getInstance(url);
+            img.setAlignment(Element.ALIGN_CENTER);
+            img.scaleToFit(75, 75);
+            document.add(img);
+
+            Color color = Color.getHSBColor(214, 81, 46);
+            Font f1 = new Font(FontFamily.HELVETICA, 20, Font.BOLD, BaseColor.BLUE);
+            f1.setColor(22, 63, 117);
+            Font f2 = new Font(FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.BLUE);
+            f2.setColor(22, 63, 117);
+            Font f3 = new Font(FontFamily.HELVETICA, 11);
+
+            Paragraph paragraph = new Paragraph("Meu plano", f1);
+            paragraph.setAlignment(Element.ALIGN_CENTER);
+            document.add(paragraph);
+            document.add(Chunk.NEWLINE);
+            document.add(Chunk.NEWLINE);
+
+           /* paragraph = new Paragraph(this.getText("pronto.plano.padrao.h2.1"), f2);
+            document.add(paragraph);
+            paragraph = new Paragraph(this.getText("dicas.p1"), f3);
+            document.add(paragraph);
+            paragraph = new Paragraph(this.getText("dicas.p2"), f3);
+            document.add(paragraph);
+            paragraph = new Paragraph(this.getText("dicas.p3"), f3);
+            document.add(paragraph);
+            paragraph = new Paragraph(this.getText("dicas.p4"), f3);
+            document.add(paragraph);
+            paragraph = new Paragraph(this.getText("dicas.p5"), f3);
+            document.add(paragraph);
+            paragraph = new Paragraph(this.getText("dicas.p5.1"), f3);
+            document.add(paragraph);
+            paragraph = new Paragraph(this.getText("dicas.p5.2"), f3);
+            document.add(paragraph);
+            paragraph = new Paragraph(this.getText("dicas.p6"), f3);
+            document.add(paragraph);
+            document.add(Chunk.NEWLINE);*/
+
+            paragraph = new Paragraph("Data para começar", f2);
+            document.add(paragraph);
+            paragraph = new Paragraph( new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(getEvaluation().getDataComecarPlano()), f3);
+            document.add(paragraph);
+            document.add(Chunk.NEWLINE);
+
+            if (getEvaluation().getRazoesPlano() != null){
+                paragraph = new Paragraph(" As razões mais importantes que eu tenho para mudar a forma que bebo são: ", f2);
+                document.add(paragraph);
+                paragraph = new Paragraph(getEvaluation().getRazoesPlano(), f3);
+                document.add(Chunk.NEWLINE);
+            } else{
+                paragraph.add(new Paragraph("teste2"));
+            }
+            
+            if (getEvaluation().getEstrategiasPlano() != null){
+                paragraph = new Paragraph("Eu irei usar as seguintes estratégias: ", f2);
+                document.add(paragraph);
+                paragraph = new Paragraph(getEvaluation().getEstrategiasPlano(), f3);
+                document.add(Chunk.NEWLINE);
+            } else{
+                paragraph.add(new Paragraph("teste3 "));
+            }
+            
+            if (getEvaluation().getPessoasPlano() != null){
+                paragraph = new Paragraph("As pessoas que podem me ajudar são: ", f2);
+                document.add(paragraph);
+                paragraph = new Paragraph(getEvaluation().getPessoasPlano(), f3);
+                document.add(Chunk.NEWLINE);
+            } else{
+                paragraph.add(new Paragraph(" teste4"));
+            }
+            
+            if (getEvaluation().getSinaisSucessoPlano() != null){
+                paragraph = new Paragraph("Eu saberei que meu plano está funcionando quando: ", f2);
+                document.add(paragraph);
+                paragraph = new Paragraph(getEvaluation().getSinaisSucessoPlano(), f3);
+                document.add(Chunk.NEWLINE);
+            } else{
+                paragraph.add(new Paragraph("teste5 "));
+            }
+            
+            if(getEvaluation().getPossiveisDificuladesPlano() != null){
+                paragraph = new Paragraph("O que pode interferir e como posso lidar com estas situações: ", f2);
+                document.add(paragraph);
+                paragraph = new Paragraph(getEvaluation().getPossiveisDificuladesPlano(), f3);
+                document.add(Chunk.NEWLINE);
+            } else {
+                paragraph.add(new Paragraph(" teste6"));
+            }
+            document.close();
+
+            return os;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+    
+    public StreamedContent getPlanoPersonalizado() {
+
+        InputStream is;
+        try {
+            is = new ByteArrayInputStream(gerarPdf().toByteArray());
+            return new DefaultStreamedContent(is, "application/pdf", "plano.pdf");
+        } catch (Exception e) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, "erro ao gerar PDF");
+            return null;
+        }
+
+    }
+    
+    public void salvarDados(){
+         try {
+            this.getDaoBase().insertOrUpdate(evaluation, this.getEntityManager());
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar dados", null));
+        }
     }
     
 

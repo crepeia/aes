@@ -5,6 +5,7 @@
  */
 package aes.model;
 
+import java.sql.Date;
 import java.util.Calendar;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -103,6 +104,21 @@ public class Evaluation {
     
     @Column(name = "dependencia")
     private Integer dependencia;
+    
+    @Column(name = "data_comecar_plano")
+    private Date dataComecarPlano;
+    @Column(name = "razoes_plano")
+    private String razoesPlano;
+    @Column(name = "estrategias_plano")
+    private String estrategiasPlano;
+    @Column(name = "pessoas_plano")
+    private String pessoasPlano;
+    @Column(name = "sinais_sucesso_plano")
+    private String sinaisSucessoPlano;
+    @Column(name = "possiveis_dificuldades_plano")
+    private String possiveisDificuladesPlano;
+    
+    
 
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private User user;
@@ -396,6 +412,55 @@ public class Evaluation {
     public void setDependencia(Integer dependencia) {
         this.dependencia = dependencia;
     }
+
+    public Date getDataComecarPlano() {
+        return dataComecarPlano;
+    }
+
+    public void setDataComecarPlano(Date dataComecarPlano) {
+        this.dataComecarPlano = dataComecarPlano;
+    }
+
+    public String getRazoesPlano() {
+        return razoesPlano;
+    }
+
+    public void setRazoesPlano(String razoesPlano) {
+        this.razoesPlano = razoesPlano;
+    }
+
+    public String getEstrategiasPlano() {
+        return estrategiasPlano;
+    }
+
+    public void setEstrategiasPlano(String estrategiasPlano) {
+        this.estrategiasPlano = estrategiasPlano;
+    }
+
+    public String getPessoasPlano() {
+        return pessoasPlano;
+    }
+
+    public void setPessoasPlano(String pessoasPlano) {
+        this.pessoasPlano = pessoasPlano;
+    }
+
+    public String getSinaisSucessoPlano() {
+        return sinaisSucessoPlano;
+    }
+
+    public void setSinaisSucessoPlano(String sinaisSucessoPlano) {
+        this.sinaisSucessoPlano = sinaisSucessoPlano;
+    }
+
+    public String getPossiveisDificuladesPlano() {
+        return possiveisDificuladesPlano;
+    }
+
+    public void setPossiveisDificuladesPlano(String possiveisDificuladesPlano) {
+        this.possiveisDificuladesPlano = possiveisDificuladesPlano;
+    }
+    
     
     
     
