@@ -528,14 +528,9 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
     
     public ByteArrayOutputStream gerarPdf() {
-        System.out.println(getEvaluation().getDataComecarPlano());
-        System.out.println(getEvaluation().getRazoesPlano());
-        System.out.println(getEvaluation().getEstrategiasPlano());
-        System.out.println(getEvaluation().getPessoasPlano());
-        System.out.println(getEvaluation().getSinaisSucessoPlano());
-        System.out.println(getEvaluation().getPossiveisDificuladesPlano());
-        
+       
         try {
+            this.getDaoBase().insertOrUpdate(getEvaluation(), this.getEntityManager());
             ByteArrayOutputStream os = new ByteArrayOutputStream();
 
             Document document = new Document();
@@ -584,60 +579,72 @@ public class EvaluationController extends BaseController<Evaluation> {
             document.add(paragraph);
             document.add(Chunk.NEWLINE);*/
 
-            paragraph = new Paragraph("Data para começar", f2);
-            document.add(paragraph);
-            paragraph = new Paragraph( new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(getEvaluation().getDataComecarPlano()), f3);
-            document.add(paragraph);
-            document.add(Chunk.NEWLINE);
-
-            if (getEvaluation().getRazoesPlano() != null){
+            if(getEvaluation().getDataComecarPlano() != null && !getEvaluation().getRazoesPlano().trim().isEmpty()){
+                paragraph = new Paragraph("Data para começar", f2);
+                document.add(paragraph);
+                paragraph = new Paragraph( new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(getEvaluation().getDataComecarPlano()), f3);
+                document.add(paragraph);
+                document.add(Chunk.NEWLINE);
+            } else {
+                paragraph.add(new Paragraph("teste1"));
+            }
+            
+            if (getEvaluation().getRazoesPlano() != null && !getEvaluation().getRazoesPlano().trim().isEmpty()){
                 paragraph = new Paragraph(" As razões mais importantes que eu tenho para mudar a forma que bebo são: ", f2);
                 document.add(paragraph);
                 paragraph = new Paragraph(getEvaluation().getRazoesPlano(), f3);
+                document.add(paragraph);
                 document.add(Chunk.NEWLINE);
             } else{
-                paragraph.add(new Paragraph("teste2"));
+                paragraph = new Paragraph(" ");
+                paragraph.add(paragraph);
             }
             
-            if (getEvaluation().getEstrategiasPlano() != null){
+            if (getEvaluation().getEstrategiasPlano() != null && !getEvaluation().getEstrategiasPlano().trim().isEmpty()){
                 paragraph = new Paragraph("Eu irei usar as seguintes estratégias: ", f2);
                 document.add(paragraph);
                 paragraph = new Paragraph(getEvaluation().getEstrategiasPlano(), f3);
+                document.add(paragraph);
                 document.add(Chunk.NEWLINE);
             } else{
-                paragraph.add(new Paragraph("teste3 "));
+                paragraph.add(new Paragraph(" "));
             }
             
-            if (getEvaluation().getPessoasPlano() != null){
+            if (getEvaluation().getPessoasPlano() != null && !getEvaluation().getPessoasPlano().trim().isEmpty()){
                 paragraph = new Paragraph("As pessoas que podem me ajudar são: ", f2);
                 document.add(paragraph);
                 paragraph = new Paragraph(getEvaluation().getPessoasPlano(), f3);
+                document.add(paragraph);
                 document.add(Chunk.NEWLINE);
             } else{
-                paragraph.add(new Paragraph(" teste4"));
+                paragraph.add(new Paragraph(" "));
             }
             
-            if (getEvaluation().getSinaisSucessoPlano() != null){
+            if (getEvaluation().getSinaisSucessoPlano() != null || getEvaluation().getSinaisSucessoPlano().trim().isEmpty()){
                 paragraph = new Paragraph("Eu saberei que meu plano está funcionando quando: ", f2);
                 document.add(paragraph);
                 paragraph = new Paragraph(getEvaluation().getSinaisSucessoPlano(), f3);
+                document.add(paragraph);
                 document.add(Chunk.NEWLINE);
             } else{
-                paragraph.add(new Paragraph("teste5 "));
+                paragraph.add(new Paragraph(" "));
             }
             
-            if(getEvaluation().getPossiveisDificuladesPlano() != null){
+            if(getEvaluation().getPossiveisDificuladesPlano() != null || getEvaluation().getPossiveisDificuladesPlano().trim().isEmpty()){
                 paragraph = new Paragraph("O que pode interferir e como posso lidar com estas situações: ", f2);
                 document.add(paragraph);
                 paragraph = new Paragraph(getEvaluation().getPossiveisDificuladesPlano(), f3);
+                document.add(paragraph);
                 document.add(Chunk.NEWLINE);
             } else {
-                paragraph.add(new Paragraph(" teste6"));
+                paragraph.add(new Paragraph(" "));
             }
             document.close();
 
             return os;
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar dados", null));
             return null;
         }
 
@@ -656,14 +663,6 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     }
     
-    public void salvarDados(){
-         try {
-            this.getDaoBase().insertOrUpdate(evaluation, this.getEntityManager());
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar dados", null));
-        }
-    }
     
     public void estrategiaRegistro() {
         if(getUser().getGender() == 'F'){
