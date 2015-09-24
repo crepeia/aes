@@ -7,14 +7,14 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['estrategia.dim.alt.dize.nao.title.1']}</title>
         <w:head_comum />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="false" />
+            <w:header loginRequired="true" />
             
            
             <w:topmenu />
@@ -29,7 +29,7 @@
                     <div id="pagetop">
                         
                         <div id="progressbar">
-                            <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
+                            <p:progressBar value="23" labelTemplate="{value}%" displayOnly="true"/>
                         </div>
                         
                         <div class='fotoframestratety'>
@@ -39,18 +39,23 @@
                     
                     <div id="pagecontentstrategy">
                          
-                     <h3>Buscando Alternativas</h3>
+                     <h3>#{messages['estrategia.dim.alt.dize.nao.h3.1']}</h3>
                      
-                            <h4>Aprendendo a dizer não</h4>
-                            <ul>
-                            <li>Existe uma maior chance de alguém lhe oferecer alguma bebida quando você não está bebendo</li>
-                            </ul>
-                            <p>Tenha sempre na ponta da língua um "não, muito obrigado" - dito de forma educada e convicente</p>
-                            <ul>
-                            <li>O quanto mais rápido você for capaz de dizer não a estas ofertas, menores são as chance de você acabar bebendo</li> 
-                            </ul>
-                            <li>O segredo de negar a oferta rápido, faz com que você evite pensar em desculpas para permitir você mesmo a beber</li>
-                            <h3>Lembre-se: "Não, muito obrigado" nada mais complexo que isso</h3>
+                    	<h4>#{messages['estrategia.dim.alt.dize.nao.h4.1']} </h4>  
+                            
+                        <ul>
+                        <li>#{messages['estrategia.dim.alt.dize.nao.l1.1']} </li>  
+                        </ul>
+                        <ul>
+                    	<li>#{messages['estrategia.dim.alt.dize.nao.p.1']} </li>
+                        </ul>
+                        <ul>
+                        <li>#{messages['estrategia.dim.alt.dize.nao.l1.2']} </li> 
+                        </ul>
+                        <ul>
+                        <li>#{messages['estrategia.dim.alt.dize.nao.l1.2']} </li>
+                        </ul>   
+                    <h3>#{messages['estrategia.dim.alt.dize.nao.h3.2']} </h3>
                             <h:form>
 
                                 <div id="btnback">
@@ -65,7 +70,7 @@
                             </h:form>                                            
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
              </div> 
  

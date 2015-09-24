@@ -7,14 +7,14 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['cadastrar.nova.conta.title.1']}</title>
         <w:head_comum />
     </h:head>
 
     <h:body>    
         <div id="corpo"> 
             <!-- header -->    
-            <w:header logoutRequired="true"  />
+            <w:header />
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
@@ -24,16 +24,16 @@
                         <div id="maintop">
                              
                             <div id="maincenter">
-                            <h3>Pronto para avaliar o quanto você bebe ?</h3>                                         
-                            <p>Para continuar e receber seus resultados é preciso que você crie uma conta. Dessa forma nós podemos lhe enviar informações personalizadas, assim como avaliar melhor o seu programa.</p>
+                            <h3>#{messages['cadastrar.nova.conta.h3.1']}</h3>                                         
+                            <p>#{messages['cadastrar.nova.conta.p.1']}</p>
                             
                             <div id="mainleft">
                                     
-                            <h3>Garantimos:</h3>
+                            <h3>#{messages['cadastrar.nova.conta.h3.2']}</h3>
                             <ul>
-                            <li>Seus dados serão analisados de forma anônima e sigilosa</li>
-                            <li>Não enviaremos e-mail com conteúdo de propaganda</li>
-                            <li>Este programa é completamente gratuito</li>
+                            <li>#{messages['cadastrar.nova.conta.li.1']}</li>
+                            <li>#{messages['cadastrar.nova.conta.li.2']}</li>
+                            <li>#{messages['cadastrar.nova.conta.li.3']}</li>
                             </ul>
 
                                     <div id="signup">
@@ -105,22 +105,22 @@
                                                 </p:panelGrid>
                                                 
                                                  <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao">
-                                                     <h:panelGrid columns="1" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.user.female}">
-                                        <h:outputText value="Você está grávida ou tem chance de estar grávida?" style="font-weight: bold"/>
+                                                     <h:panelGrid columns="1" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.woman}">
+                                        <h:outputText value="#{messages['cadastrar.nova.conta.outputText.1']}" style="font-weight: bold"/>
                                         <p:selectOneRadio id="options6" value="#{userController.user.pregnant}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Não" itemValue="#{false}" />
+                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="2" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid> 
                                     </h:panelGrid>
                                                 
                                                 <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
-                                            Às vezes, você bebe cerveja, cachaça, vinho ou outras bebidas álcoolicas? 
+                                            #{messages['cadastrar.nova.conta.facet.1']}
                                         </f:facet> 
-                                                    <p:selectOneRadio id="options1" value="#{userController.drink}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Não" itemValue="#{false}" /> 
+                                                    <p:selectOneRadio id="options1" value="#{userController.user.drink}" required="true">  
+                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="2" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                                 
@@ -131,9 +131,9 @@
       
                                                <div id="signup-terms">
                                                     <p:panelGrid columns="2" id="allowemail">
-                                                        <label for="chk1">Você gostaria de receber e-mails de acompanhamento?</label>
+                                                        <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>
                                                         <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}"/>
-                                                        <label for="chk2">Autorizo o uso dos meus dados para fins de pesquisa</label>
+                                                        <label for="chk2">#{messages['cadastrar.nova.conta.chk2']}</label>
                                                         <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
                                                     </p:panelGrid>
                                                 </div>
@@ -154,11 +154,10 @@
                                 </div><!-- end.main left -->
 
                                 <div id="mainright"> 
-                                    <h3>Importante</h3>
-                            <p>Este site não substitui o atendimento tradicional realizado por um profissional de saúde. A eficácia do conteúdo será testada e avaliada por uma pesquisa clínica.</p>
-                            
-
-                                    <h1>Já é cadastrado ?</h1>
+                                    <h3>#{messages['cadastrar.nova.conta.h3.3']}</h3>
+                            <p>#{messages['cadastrar.nova.conta.p.2']}</p>
+                           
+                                    <h1>#{messages['cadastrar.nova.conta.h1']}</h1>
                                     <h:form id="form1" class="form-signup">
                                         <p:messages />
                                         <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
@@ -179,7 +178,7 @@
                                         </div>
 
                                         <div id="signinbtn">
-                                            <p:commandButton id="entrarBtn" value="#{messages['signin']}" update="@form" actionListener="#{loginController.login()}" ajax="false"/>
+                                            <p:commandButton id="entrarBtn" value="#{messages['signin']}" update="@form" actionListener="#{loginController.loginBegin}" ajax="false"/>
                                         </div>
 
 

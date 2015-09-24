@@ -7,14 +7,14 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['estrategia.dim.registro.elet.title.1']}</title>
         <w:head_comum />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="true" />
+            <w:header loginRequired="false" />
             
            
             <w:topmenu />
@@ -40,137 +40,145 @@
                     <div id="pagecontentstrategy">                      
                        <div id="pmtext">
 
-                            <h3>Quanto e Quando eu bebo</h3>
-                            <p>Tomar nota sobre o seu consumo é um passo importante para diminuir.</p>
-                            <h4>Escolha a forma mais prática de fazê⁻lo</h4>
+                            <h3>#{messages['estrategia.dim.registro.elet.h3.1']}</h3>
+                            <p>#{messages['estrategia.dim.registro.elet.p.1']}</p>
+                            <h4>#{messages['estrategia.dim.registro.elet.h4.1']}</h4>
                             <ul>
-                            <li>Preenche on-line - logo abaixo</li>
-                            <li>Use um modelo impresso que cabe na carteira ou bolsa</li> <!--incluir link para impressão-->
-                            <li>Use uma agenda, calendário em casa, bloco de notas do celular</li>
+                            <li>#{messages['estrategia.dim.registro.elet.li.1']}</li>
+                            <li>#{messages['estrategia.dim.registro.elet.li.2']}<b>#{messages['estrategia.dim.registro.elet.li.2.b.1']}</b></li>
+                            <li>#{messages['estrategia.dim.registro.elet.li.3']}</li>
                             </ul>
-                            
-                           <!-- <div id="pagemiddle">
-                            <h3> As suas metas atuais são:</h3>
-                            
-                            <h:panelGrid columns="2" cellpadding="5">
-                            <p:fieldset legend="Diária" style="margin-bottom:20px">
-                                   <h:outputText
-                                        value="XXXX doses padrão e não mais do que isso" />                             
-                            </p:fieldset>
-                            
-                            <p:fieldset legend="Semana" style="margin-bottom:20px">
-                                   <h:outputText
-                                        value="XXXX não mais do que isso em doses padrão" />   
-                            </p:fieldset>
-                            </h:panelGrid>
-                            </div> -->
+                        
                        </div>
-                    </div>      
+                    </div>
+                        <div id="pagemiddle">
+                                <h3>#{messages['estrategia.dim.registro.elet.h3.2']}</h3>
+
+                                <h:panelGrid columns="2" cellpadding="5">
+                                <p:fieldset legend="#{messages['estrategia.dim.registro.elet.fieldteste.1']}" style="margin-bottom:20px">
+                                       <h:outputText
+                                            value="XXXX coletar meta diária" />
+                                       <h:outputText
+                                            value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
+                                </p:fieldset>
+
+                                <p:fieldset legend="#{messages['estrategia.dim.registro.elet.fieldteste.2']}" style="margin-bottom:20px">
+                                       <h:outputText
+                                            value="xxxx coletar meta semanal"  />
+                                       <h:outputText
+                                            value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
+                                </p:fieldset>
+                                </h:panelGrid>
+                                </div>
                         <div id="pagemiddle">    
-                            <h3>Registre aqui - Como foi a sua semana última semana ? </h3> 
+                            <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
+                            
+                            <p:outputLabel for="inline" value="Inline:" />
+                            <p:calendar id="inline" value="#{calendarView.date1}" mode="inline" />
                                                                                      
                             <p:accordionPanel>
-                                <p:tab title="Segunda">
+                                <p:tab title="#{messages['estrategia.dim.registro.elet.monday']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p:outputLabel for="popup1" value="Dia do Mês:" />
+                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
                                         <p:calendar id="popup1" value="#{calendarView.date2}" />
-                                        <p:outputLabel for="dose1" value="Doses Padrão: " />
+                                        <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
                                         <p:spinner id="dose1" value="#{maskView.dose1}"/>
-                                        <p:outputLabel for="situation1" value="Contexto (Pessoas, Lugares, Emoções e Motivos"/>
+                                        <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
                                         <p:inputText id="situation1" value="#{maskView.situation1}"/> 
-                                        <p:outputLabel for="consequence1" value="Consequências do Consumo"/>
+                                        <p:outputLabel for="consequence1" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
                                         <p:inputText id="consequence1" value="#{maskView.consequence1}"/>
-                                        <!-- INCLUIR MENSAGEM DE PARABENS QUANDO A META FOI CUMPRIDA E MENSAGEM DE TENTE NOVAMENTE PARA QUANDO NÃO FOI -->
                                         
                                     </h:panelGrid>
                                 </p:tab>
                                     
-                                <p:tab title="Terca">
+                                <p:tab title="#{messages['estrategia.dim.registro.elet.tuesday']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p:outputLabel for="popup2" value="Dia:" />
+                                        <p:outputLabel for="popup2" value="#{messages['estrategia.dim.registro.elet.day']}"/>
                                         <p:calendar id="popup2" value="#{calendarView.date2}" />
-                                        <p:outputLabel for="dose2" value="Doses: " />
+                                        <p:outputLabel for="dose2" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
                                         <p:spinner id="dose2" value="#{maskView.dose2}"/>
-                                        <p:outputLabel for="situation2" value="Situação"/>
+                                        <p:outputLabel for="situation2" value="#{messages['estrategia.dim.registro.elet.context']}"/>
                                         <p:inputText id="situation2" value="#{maskView.situation2}"/> 
-                                        <p:outputLabel for="consequence2" value="Consequencias"/>
+                                        <p:outputLabel for="consequence2" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
                                         <p:inputText id="consequence2" value="#{maskView.consequence2}"/>
                                     </h:panelGrid>
                                 </p:tab>
                                 
-                                <p:tab title="Quarta">
+                                <p:tab title="#{messages['estrategia.dim.registro.elet.wednesday']}">
                                     <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="Dia:" />
+                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}" />
                                         <p:calendar id="popup3" value="#{calendarView.date3}" />
-                                        <p:outputLabel for="dose3" value="Doses: " />
+                                        <p:outputLabel for="dose3" value="#{messages['estrategia.dim.registro.elet.doses']}" />
                                         <p:spinner id="dose3" value="#{maskView.dose3}"/>
-                                        <p:outputLabel for="situation3" value="Situação"/>
+                                        <p:outputLabel for="situation3" value="#{messages['estrategia.dim.registro.elet.context']}"/>
                                         <p:inputText id="situation3" value="#{maskView.situation3}"/> 
-                                        <p:outputLabel for="consequence3" value="Consequencias"/>
+                                        <p:outputLabel for="consequence3" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
                                         <p:inputText id="consequence3" value="#{maskView.consequence3}"/>
                                     </h:panelGrid>
                                 </p:tab>
                                 
-                                <p:tab title="Quinta">
+                                <p:tab title="#{messages['estrategia.dim.registro.elet.thursday']}">
                                     <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="Dia:" />
-                                        <p:calendar id="popup4" value="#{calendarView.date4}" />
-                                        <p:outputLabel for="dose4" value="Doses: " />
+                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
+                                        <p:calendar id="popup4" value="#{calendarView.date4}"/>
+                                        <p:outputLabel for="dose4" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
                                         <p:spinner id="dose4" value="#{maskView.dose4}"/>
-                                        <p:outputLabel for="situation4" value="Situação"/>
+                                        <p:outputLabel for="situation4" value="#{messages['estrategia.dim.registro.elet.context']}"/>
                                         <p:inputText id="situation4" value="#{maskView.situation4}"/> 
-                                        <p:outputLabel for="consequence4" value="Consequencias"/>
+                                        <p:outputLabel for="consequence4" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
                                         <p:inputText id="consequence4" value="#{maskView.consequence4}"/>
                                     </h:panelGrid>
                                 </p:tab>
                                 
-                                <p:tab title="Sexta">
+                                <p:tab title="#{messages['estrategia.dim.registro.elet.friday']}">
                                     <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="Dia:" />
+                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}" />
                                         <p:calendar id="popup5" value="#{calendarView.date5}" />
-                                        <p:outputLabel for="dose5" value="Doses: " />
+                                        <p:outputLabel for="dose5" value="#{messages['estrategia.dim.registro.elet.doses']}" />
                                         <p:spinner id="dose5" value="#{maskView.dose5}"/>
-                                        <p:outputLabel for="situation5" value="Situação"/>
+                                        <p:outputLabel for="situation5" value="#{messages['estrategia.dim.registro.elet.context']}"/>
                                         <p:inputText id="situation5" value="#{maskView.situation5}"/> 
-                                        <p:outputLabel for="consequence5" value="Consequencias"/>
+                                        <p:outputLabel for="consequence5" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
                                         <p:inputText id="consequence5" value="#{maskView.consequence4}"/>
                                     </h:panelGrid>
                                 </p:tab>
                                     
-                               <p:tab title="Sábado">
+                               <p:tab title="#{messages['estrategia.dim.registro.elet.saturday']}">
                                     <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="Dia:" />
+                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}" />
                                         <p:calendar id="popup6" value="#{calendarView.date6}" />
-                                        <p:outputLabel for="dose6" value="Doses: " />
+                                        <p:outputLabel for="dose6" value="#{messages['estrategia.dim.registro.elet.doses']}" />
                                         <p:spinner id="dose6" value="#{maskView.dose6}"/>
-                                        <p:outputLabel for="situation6" value="Situação"/>
+                                        <p:outputLabel for="situation6" value="#{messages['estrategia.dim.registro.elet.context']}"/>
                                         <p:inputText id="situation6" value="#{maskView.situation6}"/> 
-                                        <p:outputLabel for="consequence6" value="Consequencias"/>
+                                        <p:outputLabel for="consequence6" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
                                         <p:inputText id="consequence6" value="#{maskView.consequence6}"/>
                                     </h:panelGrid>
                                 </p:tab> 
                                 
                                 
-                                <p:tab title="Domingo">
+                                <p:tab title="#{messages['estrategia.dim.registro.elet.sunday']}">
                                     <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="Dia:" />
+                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
                                         <p:calendar id="popup7" value="#{calendarView.date7}" />
-                                        <p:outputLabel for="dose7" value="Doses: " />
+                                        <p:outputLabel for="dose7" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
                                         <p:spinner id="dose7" value="#{maskView.dose7}"/>
-                                        <p:outputLabel for="situation7" value="Situação"/>
+                                        <p:outputLabel for="situation7" value="#{messages['estrategia.dim.registro.elet.context']}"/>
                                         <p:inputText id="situation7" value="#{maskView.situation7}"/> 
-                                        <p:outputLabel for="consequence7" value="Consequencias"/>
+                                        <p:outputLabel for="consequence7" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
                                         <p:inputText id="consequence7" value="#{maskView.consequence7}"/>
                                     </h:panelGrid>
                                 </p:tab>
                                 
-                                <p:tab title="Total da Semana">
+                                <p:tab title="#{messages['estrategia.dim.registro.elet.total']}">
                                     <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="dose8" value="Doses: " />
+                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
+                                        <p:calendar id="popup8" value="#{calendarView.date8}" />
+                                        <p:outputLabel for="dose8" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
                                         <p:inputText id="dose8" value="#{maskView.dose8}"/>
-                                        <p:outputLabel for="situation8" value="Situação"/>
+                                        <p:outputLabel for="situation8" value="#{messages['estrategia.dim.registro.elet.context']}"/>
                                         <p:inputText id="situation8" value="#{maskView.situation8}"/> 
-                                        <p:outputLabel for="consequence8" value="Consequencias"/>
+                                        <p:outputLabel for="consequence8" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
                                         <p:inputText id="consequence8" value="#{maskView.consequence8}"/>
                                     </h:panelGrid>
                                 </p:tab>
@@ -191,7 +199,7 @@
                         </h:form>                                            
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
              </div> 
  

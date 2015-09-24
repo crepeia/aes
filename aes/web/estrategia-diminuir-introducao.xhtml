@@ -7,14 +7,14 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['estrategia.dim.intro']}</title>
         <w:head_comum />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="true" />
+            <w:header loginRequired="false" />
             
            
             <w:topmenu />
@@ -38,17 +38,17 @@
                     </div>
                     
                     <div id="pagecontentstrategy">
-                            <h3>Estratégias para diminuir</h3>
-                            <p>Pequenas mudanças podem fazer uma grande diferença nas chances de você diminuir problemas relacionados com o consumo de álcool </p>
-                            <h4>A seguir lhe serão apresentadas diferentes estratégias que podem lhe ajudar a diminuir o seu consumo de álcool</h4>
-                            <ul>
-                            <li>Escolha dentre elas quais você acredita que poderiam lhe ajudar</li>
-                            <li>Escolha inicialmente entre duas ou três estratégias que seriam mais adequadas a sua rotina</li>
-                            <li>Tente usar estas estratégias na próxima semana e na seguinte</li>
-                            <li>Escolha outras caso seja necessário</li>
-                            <li>Caso você não consiga fazer progresso depois de 2 ou 3 meses, você poderá considerar também parar de beber, buscando também a ajuda de um profissional de saúde</li>
-                            </ul>
-                            <h4>Nós iremos repetir estas informações no final do seu plano</h4>
+                            <h3>#{messages['estrategia.dim.intro.h3.1']}</h3>
+                                <p>#{messages['estrategia.dim.intro.p.1']}</p>
+                                <h4>#{messages['estrategia.dim.intro.h4.1']}</h4>
+                                    <ul>
+                                        <li>#{messages['estrategia.dim.intro.li.1']}</li>
+                                        <li>#{messages['estrategia.dim.intro.li.2']}</li>
+                                        <li>#{messages['estrategia.dim.intro.li.3']}</li>
+                                        <li>#{messages['estrategia.dim.intro.li.4']}</li>
+                                        <li>#{messages['estrategia.dim.intro.li.5']}</li>
+                                    </ul>
+                                <h4>#{messages['estrategia.dim.intro.h4.2']}</h4>
                       <h:form>
 
                                 <div id="btnback">
@@ -63,7 +63,7 @@
                             </h:form>                                            
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
              </div> 
  

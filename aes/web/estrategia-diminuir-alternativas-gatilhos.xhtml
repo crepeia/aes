@@ -7,14 +7,14 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['estrategia.dim.alt.gati.title.1']}</title>
         <w:head_comum />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="true" />
+            <w:header loginRequired="false" />
             
            
             <w:topmenu />
@@ -38,15 +38,15 @@
                     </div>
                     
                     <div id="pagecontentstrategy">
-                            <h3>Evitando "Gatilhos" ou Situações de Risco</h3>
-                            <h4>O que geralmente faz com que acabe bebendo acima do que havia planejado?</h4>
+                        <h3>#{messages['estrategia.dim.alt.gati.h3.1']}</h3>
+                            <h4>#{messages['estrategia.dim.alt.gati.h4.1']}</h4>
                             <ul>
-                            <li>Caso certas pessoas ou locais fazem você beber, mesmo quando você não quer, busque evitá-los</li>
+                            <li>#{messages['estrategia.dim.alt.gati.li.1']}</li>
                             </ul>
-                            <h4>Caso determinadas atividades, horas do dia, ou sentimentos aumentam a sua vontade de ber, planeje realizar alguma outra coisa nestes momentos</h4>
-                            <p> Pense sempre em que tipo de atividades você gostaria de fazer ao invés de beber?</p>
+                            <h4>#{messages['estrategia.dim.alt.gati.h4.2']}</h4>
+                            <p>#{messages['estrategia.dim.alt.gati.p.1']}</p>
                             <ul>
-                            <li>Caso beber em casa for um problema, matenha pouco álcool ou nenhum dentro de casa</li>
+                            <li>#{messages['estrategia.dim.alt.gati.li.2']}</li>
                             </ul> 
                       <h:form>
 
@@ -62,7 +62,7 @@
                             </h:form>                                            
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
              </div> 
  

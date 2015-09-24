@@ -6,7 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
     <h:head>
-        <title>Contato | Álcool e Saúde</title>
+        <title>#{messages['contato.title']}</title>
         <w:head_comum />
     </h:head>
     <h:body>
@@ -19,12 +19,11 @@
             <div class="main">
 
 
-                <div class="pagecontent">
-                    <h:graphicImage library="default" name="images/vst-paisagem.png" alt="Álcool e Saúde" id="vstpaisagem" />	
+                <div class="pagecontent">                 
                     <h1>#{messages['contact']}</h1>
                     <div id="contato">
-                        <h4>E-mail: contato@alcoolesaude.com.br</h4>
-                        <h4>Twitter:@alcoolesaude</h4>
+                        <h4>#{messages['contato.h4.1']}</h4>
+                        <h4>#{messages['contato.h4.2']}</h4>
                         <h2>Envio</h2>
                         <h:form id="form" class="form-signup">
                             <p:growl id="errorGrowl" sticky="true" />  
