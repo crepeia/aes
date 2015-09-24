@@ -160,12 +160,10 @@ public class EvaluationController extends BaseController<Evaluation> {
                     List<Evaluation> evaluations = this.getDaoBase().list("user", getLoggedUser(), this.getEntityManager());
                     for (Evaluation e : evaluations) {
                         if (gc.after(e.getDate())) {
-                            System.out.println("loaded evaluation");
                             evaluation = e;
                         }
                     }
                     if(evaluation == null){
-                        System.out.println("new");
                         evaluation = new Evaluation();
                         evaluation.setDate(Calendar.getInstance());
                         evaluation.setUser(getLoggedUser());
@@ -509,9 +507,9 @@ public class EvaluationController extends BaseController<Evaluation> {
     
     public void nextPreparado() throws IOException{
         if(evaluation.getPreparado() == 1)
-            FacesContext.getCurrentInstance().getExternalContext().redirect("preparando-diminuir-ou-parar.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-introducao.xhtml");
         else
-            FacesContext.getCurrentInstance().getExternalContext().redirect("preparando-diminuir-parar-nao.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-parar-apoio-intro.xhtml");
         
         try {
             this.daoBase.update(this.getEvaluation(), this.getEntityManager());
@@ -666,6 +664,23 @@ public class EvaluationController extends BaseController<Evaluation> {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar dados", null));
         }
     }
+    
+    public void estrategiaRegistro() {
+        if(getUser().getGender() == 'F'){
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-registro-eletronico-meta-mulher.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else{
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-registro-eletronico-meta-homem.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     
 
 }
