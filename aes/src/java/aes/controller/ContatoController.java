@@ -4,6 +4,9 @@
  */
 package aes.controller;
 
+import aes.model.Contact;
+import aes.model.Evaluation;
+import aes.persistence.GenericDAO;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +15,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import aes.utility.EMailSSL;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Locale;
+import javax.naming.NamingException;
 
 /**
  *
@@ -19,26 +26,42 @@ import aes.utility.EMailSSL;
  */
 @ManagedBean(name = "contatoController")
 @RequestScoped
-public class ContatoController implements Serializable {
+public class ContatoController extends BaseController implements Serializable {
 
     private EMailSSL eMailSSL;
     private String email;
     private String message;
+    private Contact contact;
 
     public ContatoController() {
 
         super();
-
-        this.eMailSSL = new EMailSSL();
+        eMailSSL = new EMailSSL();
+        contact = new Contact();
+        try {
+            daoBase = new GenericDAO<Contact>(Contact.class);
+        } catch (NamingException ex) {
+            Logger.getLogger(ContatoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
     public void sendEmail() {
-
-        eMailSSL.send(this.email, "hedersb@gmail.com", "Contato -- Wati", message);
-        String message = "Mensagem enviada com sucesso.";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
-        Logger.getLogger(BaseFormController.class.getName()).log(Level.INFO, message);
+        try {
+            contact.setFrom(email);
+            contact.setTo("acoolesaude@gmail.com");
+            contact.setSubject("Contato -- Álcool e Saúde");
+            contact.setTextContent(message);
+            contact.setSentDate(Calendar.getInstance());
+            if(loggedUser()){
+                contact.setUser(getLoggedUser());
+            }
+            eMailSSL.send(contact);
+            daoBase.insertOrUpdate(contact, this.getEntityManager());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Mensagem enviada com sucesso.", null));
+        } catch (SQLException ex) {
+            Logger.getLogger(ContatoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 

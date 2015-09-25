@@ -51,6 +51,8 @@ public class User implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Evaluation> evaluations;
+     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
+    private List<Contact> contacts;
 
     public long getId() {
         return id;
@@ -130,6 +132,14 @@ public class User implements Serializable {
 
     public void setEvaluations(List<Evaluation> evaluations) {
         this.evaluations = evaluations;
+    }
+         
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
     
     @Override

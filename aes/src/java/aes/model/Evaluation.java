@@ -38,6 +38,8 @@ public class Evaluation {
 
     @Column(name = "year_email")
     private Boolean yearEmail;
+    @Column (name = "year_email_date")
+    private Calendar yearEmailDate;
 
     @Column(name = "audit_1")
     private Integer audit1;
@@ -224,14 +226,20 @@ public class Evaluation {
         this.sunday = sunday;
     }
     
-    
-
     public Boolean getYearEmail() {
         return yearEmail;
     }
 
     public void setYearEmail(Boolean yearEmail) {
         this.yearEmail = yearEmail;
+    }
+    
+    public Calendar getYearEmailDate() {
+        return yearEmailDate;
+    }
+
+    public void setYearEmailDate(Calendar yearEmailDate) {
+        this.yearEmailDate = yearEmailDate;
     }
 
     public Integer getSum() {
