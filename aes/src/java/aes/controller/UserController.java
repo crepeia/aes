@@ -171,9 +171,9 @@ public class UserController extends BaseFormController<User> {
             login.setShowName(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedUser", user);
             String url;
-            if (getUser().isPregnant() && !evaluation.getDrink()) {
+            if (getUser().getPregnant() && !evaluation.getDrink()) {
                 url = "quanto-voce-bebe-nao-gravidez.xhtml";
-            } else if (getUser().isPregnant() && evaluation.getDrink()) {
+            } else if (getUser().getPregnant() && evaluation.getDrink()) {
                 url =  "quanto-voce-bebe-sim-gravidez.xhtml";
             } else if (getUser().isUnderage() && !evaluation.getDrink()) {
                 url = "quanto-voce-bebe-nao-adoles.xhtml";

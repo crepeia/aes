@@ -46,7 +46,7 @@ public class User implements Serializable {
     @Column(name = "authorize_data")
     private boolean authorizeData;
     @Column(name = "pregnant")
-    private boolean pregnant;
+    private Boolean pregnant;
    
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
@@ -116,11 +116,11 @@ public class User implements Serializable {
         this.authorizeData = authorizeData;
     }
 
-    public boolean isPregnant() {
+    public Boolean getPregnant() {
         return pregnant;
     }
 
-    public void setPregnant(boolean pregnant) {
+    public void setPregnant(Boolean pregnant) {
         this.pregnant = pregnant;
     }
 
