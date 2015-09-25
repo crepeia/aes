@@ -7,14 +7,14 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto voce bebe ? | Álcool e Saude </title>
+        <title>#{messages['estrategia.parar.apoio.intro.title.1']}</title>
         <w:head_comum />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="false" /><!-- Remember to set as loginRequired as true when you finish -->
+            <w:header loginRequired="false" />
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
@@ -23,8 +23,7 @@
 
                 <div class="pagecontent">
                     
-                    <!-- This is new tophead now. It contains the progress bar and also the photoframe. 
-                    If you are not going to use the frame, please remove it.-->
+                    
                     <div id ="pagetop"> 
                         <div id="progressbar">
                             <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>                            
@@ -35,31 +34,24 @@
                     </div> 
 
                     
-                    <!-- Begin "strategy's" pages with the tag below. Do not forget to close it -->
+                    
                     <div id="pagecontentstrategy">
 
-                        <h1>Main Header</h1>
-                        
-                        <!-- Tip: It's not correct to start the tag <li> without enclosing it with the <ul> (http://stackoverflow.com/questions/2031725/is-using-li-without-enclosing-ul-tags-dangerous). The correct form is:
-                        Example:
-                        <ul>
-                           <li>Item 1 </li>
-                        </ul>
-                        -->
+                        <h1>#{messages['estrategia.parar.apoio.intro.h1.1']}</h1>
 
-                        <h3>Parando de Beber</h3>
-                        <h4>As sugestões a seguir são mais úteis para pessoas que tem grande probalidade de terem se tornado dependentes de álcool</h4>
+                        <h3>#{messages['estrategia.parar.apoio.intro.h3.1']}</h3>
+                        <h4>#{messages['estrategia.parar.apoio.intro.h4.1']}</h4>
                         <ul>
-                        <li>Pessoas que podem ser dependentes podem achar dificil parar de beber sem ajuda</li>
+                        <li>#{messages['estrategia.parar.apoio.intro.li.1']}</li>
                         </ul>
-                        <h4>Recomendando fortemente que caso esteja querendo parar de beber você deve procurar ajuda de um profissional de saúde </h4>
+                        <h4> #{messages['estrategia.parar.apoio.intro.h4.2']}</h4>
                         <ul>
-                        <li>Existem atualmente diversas abordagens de tratamentos que comprovadamente podem lhe ajudar</li>
+                        <li>#{messages['estrategia.parar.apoio.intro.li.2']}</li>
                         </ul>
-                        <h4>É importante ressaltar que não existe um único tipo de tratamento e que cada pessoa pode se adaptar melhor a um especifico </h4>
+                        <h4>#{messages['estrategia.parar.apoio.intro.h4.3']}</h4>
                         <ul>
-                        <li>Começar buscando ajuda é um excelente caminho</li>
-                        <li>As suas chances são muito maiores quando você encontra um tipo de tratamento que você se sente confortável</li>
+                        <li>#{messages['estrategia.parar.apoio.intro.li.3']}</li>
+                        <li>#{messages['estrategia.parar.apoio.intro.li.4']}</li>
                         </ul>
                         <h:form>
 
@@ -74,7 +66,7 @@
                         </h:form>
 
                         <div class="referencias">
-                            <p>Atualizado em 12/01/2014</p>
+                            <p>#{messages['updated']}</p>
                         </div>
 
                     </div><!-- end of pagecontentstrategy div -->
