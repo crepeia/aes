@@ -194,9 +194,9 @@ public class EvaluationController extends BaseController<Evaluation> {
         }catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if(getUser().isPregnant() && !getEvaluation().getDrink()){
+        if(getUser().getPregnant() && !getEvaluation().getDrink()){
             return "quanto-voce-bebe-nao-gravidez.xhtml";
-        }else if(getUser().isPregnant() && getEvaluation().getDrink()){
+        }else if(getUser().getPregnant() && getEvaluation().getDrink()){
             return "quanto-voce-bebe-sim-gravidez.xhtml";
         }else if(getUser().isUnderage() && !getEvaluation().getDrink()){
             return "quanto-voce-bebe-nao-adoles.xhtml";
@@ -680,6 +680,19 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
     
+    public String nextRegEleManAndWoman(){
+        try {
+            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return "estrategia-diminuir-registro-eletronico.xhtml";
+    }
+    
+    
     
 
 }
+

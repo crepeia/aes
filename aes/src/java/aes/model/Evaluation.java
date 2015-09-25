@@ -118,6 +118,11 @@ public class Evaluation {
     @Column(name = "possiveis_dificuldades_plano")
     private String possiveisDificuladesPlano;
     
+    @Column(name = "dose_padrao_diaria")
+    private Integer dosePadraoDiaria;
+    @Column(name = "dose_padrao_semanal")
+    private Integer dosePadraoSemanal;
+    
     
 
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
@@ -460,6 +465,24 @@ public class Evaluation {
     public void setPossiveisDificuladesPlano(String possiveisDificuladesPlano) {
         this.possiveisDificuladesPlano = possiveisDificuladesPlano;
     }
+
+    public Integer getDosePadraoDiaria() {
+        return dosePadraoDiaria;
+    }
+
+    public void setDosePadraoDiaria(Integer dosePadraoDiaria) {
+        this.dosePadraoDiaria = dosePadraoDiaria;
+    }
+
+    public Integer getDosePadraoSemanal() {
+        return dosePadraoSemanal;
+    }
+
+    public void setDosePadraoSemanal(Integer dosePadraoSemanal) {
+        this.dosePadraoSemanal = dosePadraoSemanal;
+    }
+    
+    
     
     
     
@@ -469,3 +492,4 @@ public class Evaluation {
     
 
 }
+
