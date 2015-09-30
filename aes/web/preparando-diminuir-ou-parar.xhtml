@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title> O quanto voce bebe ? | Álcool e Saude </title>
+        <title>#{messages['preparando.diminuir.parar.title.1']}</title>
         <w:head_comum />
     </h:head>
  
@@ -20,16 +20,11 @@
             <!--mainmenu-->                  
             <div class="main">
  
- 
- 
- 
- 
                 <div class="pagecontent">
- 
  
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Pronto para mudar ? </h1> 
+                            <h1>#{messages['preparando.diminuir.parar.h1.1']}</h1> 
                         </div>    
  
                         <div id="progressbar">
@@ -46,17 +41,17 @@
  
                         <div id="pmtext">
  
-                            <p>Neste momento você pode optar por diminuir ou parar de beber </p>      
+                            <p>#{messages['preparando.diminuir.parar.p.1']}</p>      
 <h:form>
                                 <p:panel id="questoes" >
                                     
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
-                                            Você gostaria de parar de beber ou diminuir a quantidade que bebe
+                                            #{messages['preparando.diminuir.parar.facet.1']}
                                         </f:facet> 
                                         <p:selectOneRadio id="options" value="#{evaluationController.evaluation.preparado}" required="true">  
-                                            <f:selectItem itemLabel="Diminuir" itemValue="1" />
-                                            <f:selectItem itemLabel="Parar de Beber" itemValue="2" /> 
+                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.parar.ilabel.1']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.parar.ilabel.2']}" itemValue="2" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>
@@ -81,8 +76,7 @@
                         <p>#{messages['updated']}</p>
                     </div>
  
- 
- 
+
                 </div>        
             </div>
  
