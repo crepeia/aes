@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto voce bebe ? | Álcool e Saude </title>
+        <title> #{messages['preparando.diminuir.parar.nao.title.1']}</title>
         <w:head_comum />
     </h:head>
 
@@ -28,7 +28,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Você ainda não está pensando em mudar</h1> 
+                            <h1>#{messages['preparando.diminuir.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -45,24 +45,24 @@
 
                         <div id="pmtext">
 
-                            <p> Apesar do álcool poder ser causa de problemas, você respondeu que ainda não está preparado(a) para mudar</p>
-                            <h4>Considere durante este período as sequintes sugestões</h4>
-                            <li>Continue prestando atenção no quanto tem bebido, considerando a frequencia e e quantidade</li>
-                            <li>Procure compreender o quanto o álcool afeta você</li>
-                            <li>Lide com outras prioridades que possam estar no caminho da sua mudança</li>
-                            <li>Peça ajuda de um amigo, profissional de saúde ou outra pessoa que você confie</li>
-                            <li>Refaça a avaliação no site, considere principalmente os prós e contras de mudar</li>
-                            <h4> Prevenção - não espere por um problema maior ou mais grave</h4>
-                            <p> Quando mais cedo mudamos maiores são nossas chances de sucesso e menores são os danos para o individuo e seus familiares</p>
+                            <p>#{messages['preparando.diminuir.p.1']}</p>
+                            <h4>#{messages['preparando.diminuir.h4.1']}</h4>
+                            <li>#{messages['preparando.diminuir.li.1']}</li>
+                            <li>#{messages['preparando.diminuir.li.2']}</li>
+                            <li>#{messages['preparando.diminuir.li.3']}</li>
+                            <li>#{messages['preparando.diminuir.li.4']}</li>
+                            <li>#{messages['preparando.diminuir.li.5']}</li>
+                            <h4>#{messages['preparando.diminuir.li.6']}</h4>
+                            <p>#{messages['preparando.diminuir.li.7']}</p>
                             <h:form> 
                                 <p:panel id="questoes" >
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
-                                        Você gostaria de voltar ao programa e elaborar plano de mudança que possa lhe auxiliar? 
+                                        #{messages['preparando.diminuir.facet.1']}
                                         </f:facet> 
                                         <p:selectOneRadio id="options" value="#{evaluationController.evaluation.backPlan}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />
-                                            <f:selectItem itemLabel="Não" itemValue="0" /> 
+                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.yes']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.no']}" itemValue="0" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>
@@ -80,7 +80,7 @@
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']} </p>
                     </div>
 
 
@@ -95,5 +95,3 @@
         <w:footer />
     </h:body>
 </html>
-
-
