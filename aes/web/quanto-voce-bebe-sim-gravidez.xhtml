@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
   
     <h:head>
-        <title>O quanto você bebe - Informações para Gestantes | Álcool e Saúde</title>
+        <title>#{messages['quanto.voce.bebe.sim.gravidez.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -26,7 +26,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Informações para Gestantes</h1> 
+                            <h1>#{messages['quanto.voce.bebe.sim.gravidez.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -44,76 +44,76 @@
                         <div id="pmtext">                                               
                                             
                                                 
-                        <h3>Cuidado !</h3>
+                        <h3>#{messages['quanto.voce.bebe.sim.gravidez.h3.1']}</h3>
                         
-                        <p>Você relatou fazer consumo de álcool - o que é extremamente prejudicial para o bom desenvolvimento do seu bebê.</p>
-                        <p>É fundamental que permaneça sem beber durante toda a gravidez e mesmo durante o período em que estiver amamentando.</p>
-                        <p> Recomendamos fortemente que pare de beber e que procure assim que possível profissional de saúde que possa ajudá-la.</p>
-                        <p>Este ainda não possui ferramentas específicas para gestantes.</p> 
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.1']}</p>
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.2']}</p>
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.3']}</p>
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.4']}</p> 
                         
-                        <p> Recomendamos que leia as perguntas e respostas sobre álcool e gravidez abaixo, elas podem lhe ajudar.</p>
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.5']}</p>
                         
                         <p:accordionPanel>
-                                <p:tab title="1. Eu posso consumir bebidas álcoolicas se estiver grávida?">
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.p.tab.title.1']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p> Não, você não pode</p>
-                                        <p> Não consuma álcool caso esteja ou possa estar grávida</p>
-                                        <p> O álcool que você consome afeta o desenvolvimento do seu bebe</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.6']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.7']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.8']}</p>
                                     </h:panelGrid>
                                 </p:tab>
                       
-                                <p:tab title="2. Existe algum tipo de bebida álcoolica que é segura para ser usada durante a gravidez?">
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.p.tab.title.2']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p> Não, não existe</p>
-                                        <p> Toda a bebida que contém álcool, mesmo que em menor quantidade, pode prejudicar o se bebê </p>
-                                        <p> Por bebidas álcoolicas estamos nos referindo à todas, mesmo cerveja, vinho, coquetéis, "ice" ou qualquer outra mistura que contenha álcool</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.9']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.10']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.11']}</p>
                                     </h:panelGrid>
                                 </p:tab>
                                          
-                                <p:tab title="3. Caso tivesse bebido durante minha última gestação e não tive problemas. Tudo bem eu beber desta vez ?">
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.p.tab.title.3']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p> Não, cada gestação é diferente</p>
-                                        <p> O consumo de álcool pode prejudicar mais um bebê do que outro </p>
-                                        <p> Você poderia ter tido uma criança que nasceu saudável, mas também poderia ter tido uma criança nascida com problemas</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.12']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.13']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.14']}</p>
                                     </h:panelGrid>
                                 </p:tab>
                         
-                                <p:tab title="4. Os problemas que meu bebê pode ter por eu ter bebido vão melhorar com o tempo?">
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.p.tab.title.4']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p> Não, os problemas afetar o desenvolvimento de sua criança</p>
-                                            <p> Em alguns casos mais graves, mesmo quando adulto sua criança precisará de cuidados especiais </p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.15']}</p>
+                                            <p>#{messages['quanto.voce.bebe.sim.gravidez.p.16']}</p>
                                     </h:panelGrid>
                                 </p:tab>
                         
-                                <p:tab title="5. O que eu faço se estou grávida, mas mesmo assim tenho bebido?">
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.p.tab.title.5']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p> Caso tenha bebido álcool antes de saber que estava grávida, para de beber agora e procure um profissional de saúde</p>
-                                        <p>Você se sentirá melhor e o seu bebê terá uma grande chance de nascer saudável</p>
-                                        <p>Caso esteja com suspeita de estar grávida - não beba álcool</p>
-                                        <p>Mesmo caso esteja tentando engravidar, não beba álcool, pois você pode já estar grávida e não saber</p>
-                                        <p>Mesmos nos dois primeiros meses o álcool pode prejudicar o seu bebê</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.17']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.18']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.19']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.20']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.21']}</p>
                                     </h:panelGrid>
                                 </p:tab>
                    
-                                <p:tab title="6. Como eu faço para parar de beber?">
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.p.tab.title.6']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p>Recomendamos em seu caso que procure um profissional de saúde para ajudá-la</p>
-                                        <p>O conteúdo deste site não foi desenvolvido especialmente para gestantes, mas algumas dicas podem ser úteis:</p>
-                                        <p>Saiba que existem diversos meios para ajudá-la a parar de beber</p>
-                                        <p>Caso alguém lhe ofereça bebida, sempre diga "não obrigada", de forma educada e direta</p>
-                                        <p>Procure manter-se longe de pessoas ou lugares que fazem com que você beba</p>
-                                        <p>Não guarde bebidas álcoolicas em casa</p>
-                                        <p>Caso você não consiga parar de beber procure um profissional de saúde e peça ajuda</p>
-                                        <p>Caso não tenha acesso à um profissional de saúde utilize o Viva Voz (Disque 132 - ligação gratuita)</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.22']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.23']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.24']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.25']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.26']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.27']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.28']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.p.29']}</p>
                                     </h:panelGrid>
                                 </p:tab>
                         </p:accordionPanel>
                                              
-                            <h3>Mais informações sobre álcool</h3>
-                            <p>Se você gostaria de aprofundar mais sobre o assunto, preparamos um material para você neste <h:outputLink value="https://www.informalcool.org.br/bebermenos"> link</h:outputLink>.</p>        
+                            <h3>#{messages['quanto.voce.bebe.sim.gravidez.h3.2']}</h3>
+                            <p>#{messages['quanto.voce.bebe.sim.gravidez.p.30']}</p>        
 
-                            <h3>Acompanhamento anual</h3>                        
-                            <p>Se você quiser, podemos entrar em contato com você daqui a um ano para uma nova avaliação e outras infomações. Coloque seu e-mail no campo abaixo.</p>
+                            <h3>#{messages['quanto.voce.bebe.sim.gravidez.h3.3']}</h3>                        
+                            <p>#{messages['quanto.voce.bebe.sim.gravidez.p.31']}</p>
 
 
                             
@@ -144,7 +144,7 @@
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                         <p>http://pubs.niaaa.nih.gov/publications/DrinkingPregnancy_HTML/pregnancy.pdf</p>
                     </div>
                     

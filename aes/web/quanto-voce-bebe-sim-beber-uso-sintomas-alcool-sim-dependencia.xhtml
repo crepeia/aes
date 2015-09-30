@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -25,7 +25,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Resultados do seu Teste</h1> 
+                            <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -41,27 +41,27 @@
                         </div>
 
                         <div id="pmtext">                                               
-                            <h2>Você possui chances de ter um Importante problema com álcool</h2>
+                            <h2>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h2.1']}</h2>
                             <ul>
                                 <!-- Incluir feedback e diminuir tamanho da paǵina -->
-                                <li>Considerando as suas respostas, seu consumo de álcool já poderia ser considerado como associado à vários problemas.</li>
-                                <li>A forma que você consome álcool é compatível com a maneira com pessoas dependentes de álcool o consomem</li>
-                                <li>Você já experimenta problemas importantes e irá se beneficiar muito de uma ajuda profissional </li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.1']}</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.2']}</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.3']} </li>
             
-                                <li>Geralmente conhecido como alcoolismo, a dependência do uso de álcool é uma consequência do seu consumo abusivo</li>
-                                <li>Os problemas relacionados ao consumo de álcool são considerados problemas de saúde importantes e exigem cuidado</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.4']}</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.5']}</li>
                             </ul>
                             
-                            <h4>Baseado nos seus resultados recomendamos que você procure um profissional de saúde para conversar sobre o seu consumo</h4>
+                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h4.1']}</h4>
                                                    
-                            <p><b>Você gostaria de adicionalmente conhecer algumas estratégias práticas que podem lhe ajudar com este problem ?</b></p>
+                            <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.b.1']}</b></p>
                             
                             <h:form>
                             <p:panel id="qrecaida" >                
                                 <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
                                     <p:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependencia}" required="true">  
-                                        <f:selectItem itemLabel="Sim" itemValue="1" />
-                                        <f:selectItem itemLabel="Não" itemValue="2" /> 
+                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.yes']}" itemValue="1" />
+                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.no']}" itemValue="2" /> 
                                     </p:selectOneRadio> 
                                 </h:panelGrid>
                             </p:panel>
@@ -83,7 +83,7 @@
                     
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
 
 

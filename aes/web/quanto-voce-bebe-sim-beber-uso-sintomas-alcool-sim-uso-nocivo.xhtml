@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -28,7 +28,7 @@
 
 <div id="pagetop">
                        <!-- <div id="hpagetop"> </div --> 
-                    <h1>Resultados do seu teste</h1> 
+                    <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.h1.1']}</h1> 
                            
 
                         <div id="progressbar">
@@ -44,70 +44,70 @@
                         </div> -->
                         
            <div id="pmtext">                                               
-                            <h2><b>O seu consumo pode ser considerado Nocivo à sua saúde</b></h2>
+                            <h2><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.b.1']}</b></h2>
                             <ul>
                                 <!-- Incluir feedback e diminuir tamanho da paǵina -->
-                                <li>Considerando as suas respostas, seu consumo de álcool já pode causar problemas para a sua saúde.</li>
-                                <li>Quanto maior o número de sintomas que você apresentou, mais urgente é a sua necessidade de mudança</li>
-                                <li>Muitos destes possíveis problemas pode demorar para aparecem, apesar de poderem ser graves no futuro</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.1']}</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.2']}</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.3']}</li>
                             </ul> 
                                 
-                                <h3>Alguns problemas relacionados ao álcool</h3>
+                                <h3>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.h3.1']}</h3>
                                  <p:accordionPanel>
-                                    <p:tab title="Acidentes">
+                                    <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.p.tab.tile.1']}">
                                         <h:panelGrid columns="4" cellpadding="7">
                                             <div id="pagemiddle">
-                                            <h4>São maiores as chances de sofrer um acidente menor ou até mesmo fatal entre pessoas que possuem o seu padrão de consumo</h4>
-                                            <ul><li>60% dos incêndios com vitimas fatais, afogamentos e homicídios</li></ul>
-                                            <ul><li>50% dos acidentes com traumas graves e casos de abuso sexual</li></ul>
-                                            <ul><li>50% dos acidentes fatais com mortes no trânsito, suicídios e quedas fatais</li></ul>
+                                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.h4.1']}</h4>
+                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.4']}</li></ul>
+                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.5']}</li></ul>
+                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.6']}</li></ul>
                                             </div>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="Problemas de Saúde">
+                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.p.tab.tile.2']}">
                                         <h:panelGrid columns="4" cellpadding="7">
                                             <div id="pagemiddle">
-                                            <h4>Pessoas que bebem muito possuem o risco aumentado para mais de 60 tipos de condições de saúde, dentre elas várias que são fatais</h4>
+                                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.h4.2']}</h4>
                                             <ul>
-                                                <li>Doenças do Fígado (Cirrose Hepática, etc)</li>
-                                                <li>Doenças do Coração</li>
-                                                <li>Transtorno do Sono</li>
-                                                <li>Depressão</li>
-                                                <li>Acidente Vascular Cerebral (Derrames)</li>
-                                                <li>Úlceras Gástricas</li>
-                                                <li>Doenças Sexualmente Tramissíveis (sexo sem proteção)</li>
-                                                <li>Diversos Tipos de Câncer</li>
-                                                <li>Dificuldade de manter controlado doenças como diabetes e pressão alta</li></ul>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.7']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.8']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.9']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.10']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.11']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.12']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.13']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.14']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.15']}</li></ul>
                                             </div>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="Problemas de formação do feto">
+                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.p.tab.tile.3']}">
                                         <h:panelGrid columns="4" cellpadding="7">
-                                            <p>Beber durante a gravidez pode gerar diversas consequências negativas e irreversivéis para o bebê</p>
-                                            <li>Danos Cerebrais</li>
-                                            <li>Sérios Problemas de formação</li>
-                                            <li><b>Mulheres com suspeita de gravidez ou grávidas não devem consumir álcool</b></li>
+                                            <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.p.1']}</p>
+                                            <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.16']}</li>
+                                            <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.17']}</li>
+                                            <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.b.2']}</b></li>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="Dependência e Danos Associados">
+                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.p.tab.tile.4']}">
                                         <h:panelGrid columns="4" cellpadding="7">
-                                            <li>Geralmente conhecido como alcoolismo, a dependência do uso de álcool é uma consequência do seu consumo abusivo</li>
-                                            <li>Os problemas relacionados ao consumo de álcool são considerados problemas de saúde importantes e exigem cuidado</li>
+                                            <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.18']}</li>
+                                            <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.li.19']}</li>
                                          
                                         </h:panelGrid>
                                     </p:tab>
                                  </p:accordionPanel>
                             
-                            <h4>Baseado nos seus resultados recomendamos que você considere continuar usando o site e/ou conversar com um profissional de saúde sobre o seu consumo</h4>
+                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.h4.3']}</h4>
                                                         
-                            <p><b>Você gostaria de conhecer a seguir estratégias práticas que podem lhe ajudar ?</b></p>
+                            <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.b.3']}</b></p>
                             
                             <h:form>
                             <p:panel id="qrecaida" >                
                                 <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
                                     <p:selectOneRadio id="options" value="#{evaluationController.continueEvaluation}" required="true">  
-                                        <f:selectItem itemLabel="Sim" itemValue="true" />
-                                        <f:selectItem itemLabel="Não" itemValue="false" /> 
+                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.yes']}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.no']}" itemValue="false" /> 
                                     </p:selectOneRadio> 
                                 </h:panelGrid>
                             </p:panel>
@@ -130,7 +130,7 @@
                     
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
 
 

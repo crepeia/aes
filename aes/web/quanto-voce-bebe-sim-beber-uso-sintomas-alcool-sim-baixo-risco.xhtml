@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -29,7 +29,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Resultado</h1> 
+                            <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -45,28 +45,28 @@
                         </div>
 
                         <div id="pmtext">                                               
-                            <h2><b>Consumo de Baixo Risco</b></h2>
+                            <h2><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.b.1']}</b></h2>
                             
                                 <!-- Incluir feedback e diminuir tamanho da paǵina -->
-                                <p>Considerando as suas respostas:</p>
+                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.p.1']}</p>
                                     <ul>
-                                        <li>O seu consumo tem um baixo risco de lhe causar problemas no momento</li>
+                                        <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.1']}</li>
                                     </ul>
-                                    <h4>Contudo, lembre-se:</h4>
+                                    <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.h4.1']}</h4>
                                     <ul>
-                                <li>Baixo risco não quer dizer sem risco !</li>
-                                <li>Mesmo pessoas que bebem pouco podem facilmente passar a beber mais </li>
-                                <li>Quanto mais você bebe, mais chances você tem de prejudicar a sua saúde</li>
-                                <li>Algumas pessoas não devem nem mesmo consumir pequenas doses (grávidas, pessoas com problemas de saúde, etc)</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.2']}</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.3']} </li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.4']}</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.5']}</li>
                                     </ul>                             
-                            <h3>Você gostaria de ter mais informações sobre como deve proceder para se manter saudável?</h3>
+                            <h3>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.h3.1']}</h3>
                             
                             <h:form>
                             <p:panel id="qrecaida" >                
                                 <h:panelGrid columns="2" style="margin:1px;" cellpadding="1" id="questao1">                                                    
                                     <p:selectOneRadio id="options" value="#{evaluationController.continueEvaluation}" required="true" layout="row">  
-                                        <f:selectItem itemLabel="Sim" itemValue="true" />
-                                        <f:selectItem itemLabel="Não" itemValue="false" /> 
+                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.yes']}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.no']}Não" itemValue="false" /> 
                                     </p:selectOneRadio> 
                                 </h:panelGrid>
                             </p:panel>
@@ -89,7 +89,7 @@
                     
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['update']}</p>
                     </div>
 
 
