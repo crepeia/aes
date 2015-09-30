@@ -6,7 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
     <h:head>
-        <title> Para pesquisadores | Álcool e Saúde</title>
+        <title>#{messages['para.pesquisadores']}</title>
         <w:head_comum />
     </h:head>
     <h:body>
@@ -34,34 +34,33 @@
                     <p>#{messages['p.pesquisadores.6']}</p>
                     <p>#{messages['p.pesquisadores.7']}</p>                                 
                     <p>#{messages['p.pesquisadores.8']}</p>
-                    <h2>Licença</h2>
-                    <p>Salvo quando indicado expressamente o contrário, o conteúdo do site incluindo os programas, design, textos e gráficos são licenciados pela Licença Pública Geral - GNU, garantindo a liberdade de usar o conteúdo do programa para qualquer propósito, modificar o programa, de compartilhar com seus vizinhos e amigos e compartilhar as mudanças que você fizer. <h:outputLink value="http://www.gnu.org/licenses/gpl.html">Ver a licença GPL GNU completa.</h:outputLink></p><center><object type="image/svg+xml" data="resources/default/images/gpl.svg">gpl</object></center>
-                    <h2>Código Fonte</h2>
-                    <p>O código fonte do projeto pode ser acessado no repositório no <h:outputLink value="https://github.com/crepeia/aes">github.</h:outputLink></p>
-                    <h2>Pesquisas futuras</h2>
-                    <p>Nos próximos anos, o programa será avaliado quanto à sua efetividade, viabilidade e eficácia.</p>
-                    <p>Acreditamos numa ciência aberta. As pesquisas serão divulgadas no site do programa e os bancos de dados e análises estatísticas serão disponibilizadas.</p>
-                    <h2>Colabore</h2>
-                    <p>Se você é desenvolvedor web, pesquisador, clínico ou mesmo um entusiatas e ficou interessado em contribuir para o projeto, entre em contato conosco pelo e-mail: <strong>pesquisa@alcoolesaude.com.br</strong></p>
+                    <h2>#{messages['h2.pesquisadores.3']}</h2>
+                    <p>#{messages['p.pesquisadores.9']} <h:outputLink value="http://www.gnu.org/licenses/gpl.html"> #{messages['p.pesquisadores.9.1']}</h:outputLink></p><center><object type="image/svg+xml" data="resources/default/images/gpl.svg">gpl</object></center>
+                    <h2>#{messages['h2.pesquisadores.4']}</h2>
+                    <p>#{messages['p.pesquisadores.10']}  <h:outputLink value="https://github.com/crepeia/aes">github.</h:outputLink></p>
+                    <h2>#{messages['h2.pesquisadores.5']} </h2>
+                    <p>#{messages['p.pesquisadores.11']}</p>
+                    <p>#{messages['p.pesquisadores.12']} </p>
+                    <h2>#{messages['h2.pesquisadores.6']} </h2>
+                    <p>#{messages['p.pesquisadores.13']}<strong>pesquisa@alcoolesaude.com.br</strong></p>
 
 
 
                     <div id="bib">
-                        <h4>Referências</h4>
-                        <p>Barbosa, A. F. (2009). Pesquisa sobre o Uso das Tecnologias da Informação e da Comunicação no Brasil : TIC Domicílios e TIC Empresas 2008. São Paulo: Comitê Gestor da Internet no Brasil.
+                        <h4>#{messages['h4.pesquisadores.1']} </h4>
+                        <p>#{messages['p.pesquisadores.14']}
+                        <p>#{messages['p.pesquisadores.15']} 
                         </p>
-                        <p>Organização Mundial de Saúde. (2011). WHO report on the global tobacco epidemic, 2011 warning about the dangers of tobacco. Geneva : Organização Mundial de Saúde.
+                        <p>#{messages['p.pesquisadores.16']}
                         </p>
-                        <p>Rooke, S., Thorsteinsson, E., Karpin, A., Copeland, J., e Allsop, D. (2010). Computer-delivered interventions for alcohol and tobacco use: A meta-analysis. Addiction, 105(8), 1381–1390. doi:10.1111/j.1360-0443.2010.02975.x
+                        <p>#{messages['p.pesquisadores.17']} 
                         </p>
-                        <p>Carlini, B. H., Ronzani, T. M., Martins, L. F., Gomide, H. P., e Souza, I. C. W. de. (2012). Demand for and availability of online support to stop smoking. Revista de Saúde Pública, 46(6), 1074–1081. doi:10.1590/S0034-89102012000600018
-                        </p>
-                        <p>Barak, A., Hen, L., Boniel-Nissim, M., e Shapira, N. (2008). A comprehensive review and a meta-analysis of the effectiveness of Internet-based psychotherapeutic interventions. Journal of Technology in Human Services, 26(2-4), 109–160. doi:10.1080/15228830802094429
+                        <p>#{messages['p.pesquisadores.18']} 
                         </p>
                     </div> 
 
                     <div class="referencias">
-                        <p>Atualizado em 30/05/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
 
 
