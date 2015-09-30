@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>#{messages['plano.mudanca.pronto.para.comecar.title.1']} O quanto voce bebe ? | Álcool e Saude </title>
+        <title>#{messages['plano.mudanca.pronto.para.comecar.title.1']}</title>
         <w:head_comum />
     </h:head>
 
@@ -24,7 +24,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>#{messages['plano.mudanca.pronto.para.comecar.h1.1']} Pronto para começar</h1> 
+                            <h1>#{messages['plano.mudanca.pronto.para.comecar.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -41,16 +41,16 @@
 
                         <div id="pmtext">
 
-                            <p>#{messages['plano.mudanca.pronto.para.comecar.p.1']} A seguir, caso esteja pronto(a) para começar, você terá a oportunidade de preencher o seu plano de mudança</p>
-                            <h4>#{messages['plano.mudanca.pronto.para.comecar.h4.1']} Você terá a opção de imprimir e/ou enviar este plano para o seu e-mail depois de finalizado</h4>
-                            <h3>#{messages['plano.mudanca.pronto.para.comecar.h3.1']} Plano de Mudança</h3>
+                            <p>#{messages['plano.mudanca.pronto.para.comecar.p.1']}</p>
+                            <h4>#{messages['plano.mudanca.pronto.para.comecar.h4.1']}</h4>
+                            <h3>#{messages['plano.mudanca.pronto.para.comecar.h3.1']}</h3>
                             <h:form>
                                 <p:panel id="questoes" >
                                     <p:growl id="messages" showDetail="true" />
                                     
                                     <h:panelGrid columns="1"  cellpadding="5">
                                         <f:facet name="header">  
-                                          #{messages['plano.mudanca.pronto.para.comecar.facet.1']} Data para começar                                      
+                                          #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
                                         </f:facet>
                                         <p:outputLabel for="dataM" value="#{evaluationController.evaluation.dataComecarPlano}" />
                                             <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}" />
@@ -59,35 +59,35 @@
                                                                            
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao2">
                                         <f:facet name="header">  
-                                           #{messages['plano.mudanca.pronto.para.comecar.facet.2']}Razões: As razões mais importantes que eu tenho para mudar a forma que bebo são:                                      
+                                           #{messages['plano.mudanca.pronto.para.comecar.facet.2']}                                      
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2"/> 
                                     </h:panelGrid>
                                     
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                         <f:facet name="header">  
-                                           #{messages['plano.mudanca.pronto.para.comecar.facet.3']} Estratégias - Eu irei usar as seguintes estratégias ?                                      
+                                           #{messages['plano.mudanca.pronto.para.comecar.facet.3']}                                      
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3"/> 
                                     </h:panelGrid>
                                     
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao4">
                                         <f:facet name="header">  
-                                           #{messages['plano.mudanca.pronto.para.comecar.facet.4']}Pessoas - As pessoas que podem me ajudar são (nomes e como eles podem lhe ajudar) ?                                      
+                                           #{messages['plano.mudanca.pronto.para.comecar.facet.4']}                                      
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4"/> 
                                     </h:panelGrid>
                                     
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao5">
                                         <f:facet name="header">  
-                                          #{messages['plano.mudanca.pronto.para.comecar.facet.5']} Sinais de Sucesso - Eu saberei que meu plano está funcionando quando ?                                      
+                                          #{messages['plano.mudanca.pronto.para.comecar.facet.5']}                                       
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5"/> 
                                     </h:panelGrid>
                                     
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao6">
                                         <f:facet name="header">  
-                                          #{messages['plano.mudanca.pronto.para.comecar.facet.6']} Possíveis Dificuldades e Soluções: O que pode interferir e como posso lidar com estas situações ?                                      
+                                          #{messages['plano.mudanca.pronto.para.comecar.facet.6']}                                       
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6"/> 
                                     </h:panelGrid>
@@ -113,7 +113,7 @@
                                 <div id ="planoimg1">
                                     <div class="planoimg">                                                            
                                         <h:outputLink target="_blank" value="plano-mudanca-pronto-para-comecar_1.xhtml"><h:graphicImage  library="default" title="Imprimir" name="images/impressao.png" alt="#{messages['pronto.plano.print']}Imprimir" /></h:outputLink>                                                            
-                                        <p><h:outputLink target="_blank" value="plano-mudanca-pronto-para-comecar_1.xhtml">Imprimir</h:outputLink></p>
+                                        <p><h:outputLink target="_blank" value="plano-mudanca-pronto-para-comecar_1.xhtml">#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</h:outputLink></p>
                                     </div>
                                 </div>
 
