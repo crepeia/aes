@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>{messages['plano-mudanca']}</title>
+        <title>#{messages['plano-mudanca']}</title>
         <w:head_comum />
     </h:head>
 
@@ -28,7 +28,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Planejando de Mudança</h1> 
+                            <h1>#{messages['plano.mudanca.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -45,13 +45,13 @@
 
                         <div id="pmtext">
 
-                            <p>Mesmo que você esteja comprometido com em mudar o seu consumo de álcool, você pode ainda sentir-se em dúvida sobre esta decisão</p>
-                            <p> Apresentar sentimentos mistos em relação a este objetivo é comum - uma ferramenta que irá lhe ajudar a alcançar as suas metas é o <b>plano de ação</b></p>
-                            <h4>Este plano vai lhe ajudar a definir:</h4>
-                            <li>Quais são as suas metas </li>
-                            <li>Porquê você quer alcança-las</li>
-                            <li>Como você planeja alcança-las</li>
-                            <h4>Clique em próximo para continuar</h4>                      
+                            <p>#{messages['plano.mudanca.p.1']}</p>
+                            <p>#{messages['plano.mudanca.p.2']}<b>#{messages['plano.mudanca.p.2.1']}</b></p>
+                            <h4>#{messages['plano.mudanca.h4.1']}</h4>
+                            <li>#{messages['plano.mudanca.li.1']} </li>
+                            <li>#{messages['plano.mudanca.li.2']}</li>
+                            <li>#{messages['plano.mudanca.li.3']}</li>
+                            <h4>#{messages['plano.mudanca.li.4']}</h4>                      
 
                         </div><!-- end pmtext -->  
 
@@ -66,7 +66,7 @@
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="plano-mudanca-pronto-para-comecar.xhtml"/>      
                                 </div>
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']} </p>
                     </div>
                         </h:form>
 
