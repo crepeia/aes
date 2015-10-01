@@ -48,8 +48,8 @@ public class ContatoController extends BaseController implements Serializable {
 
     public void sendEmail() {
         try {
-            contact.setFrom(email);
-            contact.setTo("acoolesaude@gmail.com");
+            contact.setSender(email);
+            contact.setRecipient("acoolesaude@gmail.com");
             contact.setSubject("Contato -- Álcool e Saúde");
             contact.setTextContent(message);
             contact.setSentDate(Calendar.getInstance());

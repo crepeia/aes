@@ -33,7 +33,6 @@ public class EMailSSL {
     private Properties props;
     private Session session;
     private Authenticator authenticator;
-    private String from;
 
     public EMailSSL() {
         props = new Properties();
@@ -54,7 +53,7 @@ public class EMailSSL {
 
     }
 
-    public void send(String to, String subject, String text, String html, ByteArrayOutputStream pdfAttachment, String attachmentName) {
+    public void send(String from, String to, String subject, String text, String html, ByteArrayOutputStream pdfAttachment, String attachmentName) {
         try {
             //Message
             Message message = new MimeMessage(session);
@@ -105,7 +104,7 @@ public class EMailSSL {
     }
     
     public void send (Contact contact){
-        send(contact.getFrom(), contact.getTo(), contact.getSubject(), 
+        send(contact.getSender(), contact.getRecipient(), contact.getSubject(), contact.getTextContent(),
             contact.getHtmlTemplate(), contact.getAttachment(), contact.getAttachmentName());
     }
     
