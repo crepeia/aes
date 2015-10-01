@@ -82,7 +82,7 @@ public class UserController extends BaseFormController<User> {
         }
 
         GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
-        int lastYear = gc.get(GregorianCalendar.YEAR) - 1;
+        int lastYear = gc.get(GregorianCalendar.YEAR);
         for (int i = lastYear; i > lastYear - 100; i--) {
             years.put(String.valueOf(i), String.valueOf(i));
         }

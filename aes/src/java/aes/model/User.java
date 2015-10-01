@@ -119,6 +119,9 @@ public class User implements Serializable {
     }
 
     public Boolean getPregnant() {
+        if(pregnant == null){
+            return false;
+        }
         return pregnant;
     }
 

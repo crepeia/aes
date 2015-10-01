@@ -60,34 +60,32 @@
                                 <li>Tomar medicações que tem efeito com álcool como por exemplo: (1); (2); (3)</li>
                                 <li>Tiver um problema de saúde que seja piorada com o uso de álcool - .</li>                            
                             </ul>
-                            
+
                             <h3>Mais informações</h3>
                             <p>Se você gostaria de aprofundar mais sobre o assunto, preparamos um material para você neste <h:outputLink value="https://www.informalcool.org.br/bebermenos"> link</h:outputLink>.</p>        
 
                             <h3>Acompanhamento anual</h3>                        
                             <p>Se você quiser, podemos entrar em contato com você daqui a um ano para uma nova avaliação. Coloque seu e-mail no campo abaixo.</p>
 
-                            <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+                            
 
-                            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-                                <p:graphicImage library="default" name="images/loading.gif" />
-                            </p:dialog>
-                            
-                            
+
                             <h:form id="form" class="form-signup">
 
                                 <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                    <p:inputText id="emailTxt" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
+                                    <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
                                         <!--<p:ajax update="loginMsg" event="blur" />-->
                                         <f:validateLength maximum="50" />
                                         <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                     </p:inputText>
-                                    <p:watermark for="emailTxt" value="E-mail" />
-                                    <p:message for="emailTxt" />
+                                    <p:watermark for="email" value="E-mail" />
+                                    <p:message for="email" />
                                 </h:panelGrid>
+                                <p:messages id="messages" showDetail="true" autoUpdate="true" />
+
 
                                 <div id="btnback">
-                                    <p:commandButton styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.sendEmail}" />
+                                    <p:commandButton id="sendButton" styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.yearEmail()}" />
                                 </div>
                             </h:form>
 

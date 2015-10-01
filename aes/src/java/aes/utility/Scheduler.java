@@ -41,8 +41,8 @@ public class Scheduler {
             for (Evaluation e : evaluations) {
                 if (e.getUser().getPregnant() || e.getUser().isUnderage() || e.getDrink() == false) {
                     contact = new Contact();
-                    contact.setFrom("acoolesaude@gmail.com");
-                    contact.setTo(e.getUser().getEmail());
+                    contact.setSender("acoolesaude@gmail.com");
+                    contact.setRecipient(e.getUser().getEmail());
                     contact.setSubject("test1");
                     contact.setTextContent("test1");
                     contact.setSentDate(Calendar.getInstance());
@@ -53,8 +53,8 @@ public class Scheduler {
                     evaluationDAO.insertOrUpdate(e, entityManager);
                 } else {
                     contact = new Contact();
-                    contact.setFrom("acoolesaude@gmail.com");
-                    contact.setTo(e.getUser().getEmail());
+                    contact.setSender("acoolesaude@gmail.com");
+                    contact.setRecipient(e.getUser().getEmail());
                     contact.setSubject("test2");
                     contact.setTextContent("test2");
                     contact.setSentDate(Calendar.getInstance());

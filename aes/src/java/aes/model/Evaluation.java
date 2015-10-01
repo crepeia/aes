@@ -5,6 +5,7 @@
  */
 package aes.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Calendar;
 import javax.persistence.CascadeType;
@@ -24,7 +25,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "tb_evaluation")
-public class Evaluation {
+public class Evaluation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,21 +48,6 @@ public class Evaluation {
     private Integer audit2;
     @Column(name = "audit_3")
     private Integer audit3;
-    @Column(name = "monday")
-    private int monday;
-    @Column(name = "tuesday")
-    private int tuesday;
-    @Column(name = "wednesday")
-    private int wednesday;
-    @Column(name = "thursday")
-    private int thursday;
-    @Column(name = "friday")
-    private int friday;
-    @Column(name = "saturday")
-    private int saturday;
-    @Column(name = "sunday")
-    private int sunday;
-    
     @Column(name = "audit_4")
     public Integer audit4;
     @Column(name = "audit_5")
@@ -76,28 +62,22 @@ public class Evaluation {
     private Integer audit9;
     @Column(name = "audit_10")
     private Integer audit10;
-
-    @Column(name = "screen_1")
-    private Boolean screen1;
-    @Column(name = "screen_2")
-    private Boolean screen2;
-    @Column(name = "screen_3")
-    private Boolean screen3;
-    @Column(name = "screen_4")
-    private Boolean screen4;
-    @Column(name = "screen_5")
-    private Boolean screen5;
-    @Column(name = "screen_6")
-    private Boolean screen6;
-    @Column(name = "screen_7")
-    private Boolean screen7;
-    @Column(name = "screen_8")
-    private Boolean screen8;
-    @Column(name = "screen_9")
-    private Boolean screen9;
-    @Column(name = "screen_10")
-    private Boolean screen10;
     
+    @Column(name = "monday")
+    private int monday;
+    @Column(name = "tuesday")
+    private int tuesday;
+    @Column(name = "wednesday")
+    private int wednesday;
+    @Column(name = "thursday")
+    private int thursday;
+    @Column(name = "friday")
+    private int friday;
+    @Column(name = "saturday")
+    private int saturday;
+    @Column(name = "sunday")
+    private int sunday;
+       
     @Column(name = "preparado")
     private Integer preparado;
     
@@ -125,8 +105,6 @@ public class Evaluation {
     @Column(name = "dose_padrao_semanal")
     private Integer dosePadraoSemanal;
     
-    
-
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private User user;
 
@@ -242,10 +220,6 @@ public class Evaluation {
         this.yearEmailDate = yearEmailDate;
     }
 
-    public Integer getSum() {
-        return this.audit1 + this.audit2 + this.audit3;
-    }
-
     public User getUser() {
         return user;
     }
@@ -316,90 +290,6 @@ public class Evaluation {
 
     public void setAudit10(Integer audit10) {
         this.audit10 = audit10;
-    }
-
-    public boolean isScreen1() {
-        return screen1;
-    }
-
-    public void setScreen1(boolean screen1) {
-        this.screen1 = screen1;
-    }
-
-    public boolean isScreen2() {
-        return screen2;
-    }
-
-    public void setScreen2(boolean screen2) {
-        this.screen2 = screen2;
-    }
-
-    public boolean isScreen3() {
-        return screen3;
-    }
-
-    public void setScreen3(boolean screen3) {
-        this.screen3 = screen3;
-    }
-
-    public boolean isScreen4() {
-        return screen4;
-    }
-
-    public void setScreen4(boolean screen4) {
-        this.screen4 = screen4;
-    }
-
-    public boolean isScreen5() {
-        return screen5;
-    }
-
-    public void setScreen5(boolean screen5) {
-        this.screen5 = screen5;
-    }
-
-    public boolean isScreen6() {
-        return screen6;
-    }
-
-    public void setScreen6(boolean screen6) {
-        this.screen6 = screen6;
-    }
-
-    public boolean isScreen7() {
-        return screen7;
-    }
-
-    public void setScreen7(boolean screen7) {
-        this.screen7 = screen7;
-    }
-
-    public boolean isScreen8() {
-        return screen8;
-    }
-
-    public void setScreen8(boolean screen8) {
-        this.screen8 = screen8;
-    }
-
-    public boolean isScreen9() {
-        return screen9;
-    }
-
-    public void setScreen9(boolean screen9) {
-        this.screen9 = screen9;
-    }
-
-    public boolean isScreen10() {
-        return screen10;
-    }
-
-    public void setScreen10(boolean screen10) {
-        this.screen10 = screen10;
-    }
-
-    public boolean screen() {
-        return isScreen1() || isScreen2() || isScreen3() || isScreen4() || isScreen5() || isScreen6() || isScreen7() || isScreen8() || isScreen9() || isScreen10();
     }
 
     public Integer getPreparado() {
@@ -489,15 +379,8 @@ public class Evaluation {
     public void setDosePadraoSemanal(Integer dosePadraoSemanal) {
         this.dosePadraoSemanal = dosePadraoSemanal;
     }
+       
     
-    
-    
-    
-    
-    
-    
-    
-    
-
+ 
 }
 

@@ -7,6 +7,7 @@ package aes.model;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -31,17 +32,17 @@ import javax.servlet.ServletContext;
  */
 @Entity
 @Table(name = "tb_contact")
-public class Contact {
+public class Contact implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column(name = "sent_date")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Calendar sentDate;
-    @Column(name = "from")
-    private String from;
-    @Column(name = "to")
-    private String to;
+    @Column(name = "sender")
+    private String sender;
+    @Column(name = "recipient")
+    private String recipient;
     @Column (name = "subject")
     private String subject;
     @Column(name = "text_content")
@@ -72,21 +73,22 @@ public class Contact {
         this.sentDate = sentDate;
     }
 
-    public String getFrom() {
-        return from;
+    public String getSender() {
+        return sender;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
-    public String getTo() {
-        return to;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
+
 
     public String getSubject() {
         return subject;
