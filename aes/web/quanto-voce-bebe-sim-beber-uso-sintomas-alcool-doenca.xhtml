@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Avaliação - O quanto você bebe? | Álcool e Saúde</title>
+        <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -24,7 +24,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>O quanto você bebe?</h1> 
+                            <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -36,89 +36,89 @@
                     <div id="pagemiddle">
                         
                         <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <h:graphicImage library="default" id="cartoonman" title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.graphicimage']}" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div>
 
                         <div id="pmtext">
 
-                            <h3>Problemas relacionado ao uso de álcool</h3>
+                            <h3>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h3.1']}</h3>
                             
-                            <p> Não último ano, você apresentou algum destes sintomas abaixo ? (Marque todos os que você apresentou e clique em resultado):</p>
+                            <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.p.1']}</p>
                                 
                                 <h:form>
                                 <p:panel id="questoes" >
 
 
-                                    <p><h:outputText value="01 - teve vezes em que você bebeu mais, durante mais tempo do que havia planejado?"/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.1']}"/></p>
 
                                     <p:panelGrid columns="2" id="question1">
                                         <p:selectOneRadio id="options" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                      
-                                    <p><h:outputText value="02 - mais do que uma vez você quiz ou tentou diminuir ou para de beber mas não conseguiu "/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.2']}"/></p>
                                     <p:panelGrid columns="2" id="question2">
                                         <p:selectOneRadio id="options2" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="03 - teve que beber muito mais do que costumava para conseguir os efeitos que queria ? Ou achou que a quatidade que você costuma beber teve um efeito muito menor do que antes"/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.3']}"/></p>
                                     <p:panelGrid columns="2" id="question3">
                                         <p:selectOneRadio id="options3" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="04 - continuou a beber apesar disso le fazer se sentir deprimido ou ansioso ou mesmo aumentando um outro problema de saúde? Ou depois de ter um esquecido o que fez por ter bebido?"/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.4']}"/></p>
                                     <p:panelGrid columns="2" id="question4">
                                         <p:selectOneRadio id="options4" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                                                         
-                                    <p><h:outputText value="05 - gastou muito tempo bebendo ? ou passando mal ou mesmo se recuperando por ter bebido"/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.5']}"/></p>
                                     <p:panelGrid columns="2" id="question5">
                                         <p:selectOneRadio id="options5" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="06 - continuou a beber mesmo que isso estivesse causando problema com sua família ou amigos?"/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.6']}"/></p>
                                     <p:panelGrid columns="2" id="question6">
                                         <p:selectOneRadio id="options6" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
-                                    <p><h:outputText value="07 - notou que beber ou estar passando mal por ter bebido frequentemente interferiu na forma que você cuidava de sua casa ou família ? Ou causou problemas no trabalho ? Ou problemas relacionados aos estudos?"/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.7']}"/></p>
                                     <p:panelGrid columns="2" id="question7">
                                         <p:selectOneRadio id="options7" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                                                       
-                                    <p><h:outputText value="08 - mais de uma vez foi preso ou detido em uma delegacia, ou teve outros probis relacionados com a bebida"/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.8']}"/></p>
                                     <p:panelGrid columns="2" id="question9">
                                         <p:selectOneRadio id="options9" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                                                         
-                                    <p><h:outputText value="09 - percebeu que depois que os efeitos do álcool passaram você teve sintomas de abstinência, tais como problemas para dormir, tremores, exaustão, nauseas, sudorese, taquicardia ou convulsões? Ou sentiu coisas que não estão aqui?"/></p>
+                                    <p><h:outputText value="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.h.outputtext.9']}"/></p>
                                     <p:panelGrid columns="2" id="question11">
                                         <p:selectOneRadio id="options11" value="#" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="1" />  
-                                            <f:selectItem itemLabel="Não" itemValue="0" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.yes']}" itemValue="1" />  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.doenca.no']}" itemValue="0" />  
                                         </p:selectOneRadio> 
                                     </p:panelGrid>
                                     
@@ -145,7 +145,7 @@
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 11/06/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
 
 

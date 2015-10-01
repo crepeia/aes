@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Avaliação 2 - O quanto você bebe? | Álcool e Saúde</title>
+        <title>#{messages['audit.7.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -24,7 +24,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>O quanto você bebe?</h1> 
+                            <h1>#{messages['audit.7.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -36,7 +36,7 @@
                     <div id="pagemiddle">
 
                         <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <h:graphicImage library="default" id="cartoonman" title="#{messages['audit.7.graphicimage']}" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div>
 
                         <div id="pmtext">
@@ -50,15 +50,15 @@
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit4">
                                         <f:facet name="header">  
-                                            04. Quantas vezes ao longo dos últimos 12 meses você achou que não conseguiria parar de beber uma vez tendo começado? 
+                                            #{messages['audit.7.p.1']}
                                         </f:facet>
                                         <p:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" layout="pageDirection">  
                                             <f:ajax event="change" execute="@this" render="audit5" />
-                                            <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                            <f:selectItem itemLabel="Mensalmente ou menos" itemValue="2" />
-                                            <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="3" />
-                                            <f:selectItem itemLabel="De 2 a 3 vezes por semana" itemValue="4" />
-                                            <f:selectItem itemLabel="4 ou mais vezes por semana" itemValue="5" />
+                                            <f:selectItem itemLabel="#{messages['audit.7.select.1']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['audit.7.select.2']}" itemValue="2" />
+                                            <f:selectItem itemLabel="#{messages['audit.7.select.3']}" itemValue="3" />
+                                            <f:selectItem itemLabel="#{messages['audit.7.select.4']}" itemValue="4" />
+                                            <f:selectItem itemLabel="#{messages['audit.7.select.5']}" itemValue="5" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
 
@@ -66,15 +66,15 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5X" rendered ="#{evaluationController.q4()}">
                                             <f:facet name="header">  
-                                                05. Quantas vezes ao longo dos últimos 12 meses por causa do álcool, não conseguiu fazer o que era esperado de você? 
+                                                #{messages['audit.7.p.2']}
                                             </f:facet>
                                             <p:selectOneRadio id="audit_5" value="#{evaluationController.evaluation.audit5}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit6" />
-                                                <f:selectItem itemLabel="1 ou 2" itemValue="1" />
-                                                <f:selectItem itemLabel="3 ou 4" itemValue="2" />
-                                                <f:selectItem itemLabel="5 ou 6" itemValue="3" />
-                                                <f:selectItem itemLabel="7, 8 ou 9" itemValue="4" />
-                                                <f:selectItem itemLabel="10 ou mais" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.6']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.7']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.8']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.9']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.10']}" itemValue="5" />
                                             </p:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -83,15 +83,15 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6X" rendered ="#{evaluationController.q5()}">
                                             <f:facet name="header">  
-                                                06. Quantas vezes ao longo dos últimos 12 meses você precisou beber pela manhã para poder se sentir bem ao longo do dia após ter bebido bastante no dia anterior?
+                                                #{messages['audit.7.p.3']}
                                             </f:facet>
                                             <p:selectOneRadio id="audit_6" value="#{evaluationController.evaluation.audit6}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit7" />
-                                                <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                                <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
-                                                <f:selectItem itemLabel="Mensalmente" itemValue="3" />
-                                                <f:selectItem itemLabel="Semanalmente" itemValue="4" />
-                                                <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.11']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.12']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.13']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.14']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.15']}" itemValue="5" />
                                             </p:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -99,15 +99,15 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7X" rendered ="#{evaluationController.q6()}">
                                             <f:facet name="header">  
-                                                07. Quantas vezes ao longo dos últimos 12 meses você se sentiu culpado ou com remorso depois de ter bebido?
+                                                #{messages['audit.7.p.4']}
                                             </f:facet>
                                             <p:selectOneRadio id="audit_7" value="#{evaluationController.evaluation.audit7}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit8" />
-                                                <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                                <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
-                                                <f:selectItem itemLabel="Mensalmente" itemValue="3" />
-                                                <f:selectItem itemLabel="Semanalmente" itemValue="4" />
-                                                <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.16']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.17']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.18']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.19']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.20']}" itemValue="5" />
                                             </p:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -115,15 +115,15 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8X" rendered ="#{evaluationController.q7()}">
                                             <f:facet name="header">  
-                                                08 - Quantas vezes ao longo dos últimos 12 meses você foi incapaz de lembrar o que aconteceu devido a bebida?
+                                                #{messages['audit.7.p.5']}
                                             </f:facet>
                                             <p:selectOneRadio id="audit_8" value="#{evaluationController.evaluation.audit8}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit9" />
-                                                <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                                <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
-                                                <f:selectItem itemLabel="Mensalmente" itemValue="3" />
-                                                <f:selectItem itemLabel="Semanalmente" itemValue="4" />
-                                                <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.21']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.22']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.23']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.24']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.25']}" itemValue="5" />
                                             </p:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -132,13 +132,13 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9X" rendered ="#{evaluationController.q8()}">
                                             <f:facet name="header">  
-                                                09 - Você ja causou ferimentos ou prejuízos a você mesmo ou a outra pessoa após ter bebido?
+                                                #{messages['audit.7.p.6']}
                                             </f:facet>
                                             <p:selectOneRadio id="audit_9" value="#{evaluationController.evaluation.audit9}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit10" />
-                                                <f:selectItem itemLabel="Não" itemValue="1" />
-                                                <f:selectItem itemLabel="Sim, mas não no ano passado" itemValue="3" />
-                                                <f:selectItem itemLabel="Sim, no ano passado" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.26']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.27']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.28']}" itemValue="5" />
                                             </p:selectOneRadio>
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -148,13 +148,13 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10X" rendered ="#{evaluationController.q9()}">
                                             <f:facet name="header">  
-                                                10 - Algum parente, amigo ou médico já se preocupou com o fato de você beber ou sugeriu que você parasse?
+                                                #{messages['audit.7.p.7']}
                                             </f:facet>
                                             <p:selectOneRadio id="audit_10" value="#{evaluationController.evaluation.audit10}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="enviar" />
-                                                <f:selectItem itemLabel="Não" itemValue="1" />
-                                                <f:selectItem itemLabel="Sim, mas não no ano passado" itemValue="3" />
-                                                <f:selectItem itemLabel="Sim, no ano passado" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.29']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.30']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['audit.7.select.31']}" itemValue="5" />
                                             </p:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -182,7 +182,7 @@
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 11/06/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
 
 

@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['audit.3.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -24,7 +24,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>O quanto você bebe?</h1> 
+                            <h1>#{messages['audit.3.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -39,22 +39,22 @@
                         <div id="pmtext">
 
                             <!-- Este texto precisa ser atualizado -->
-                            <h3>Avaliação</h3>
+                            <h3>#{messages['audit.3.h3.1']}</h3>
                             
-                            <p>A seguir vamos lhe perguntar acerca do seu consumo de álcool em relação ao último ano. Algumas destas perguntas são relativas à quantitade de álcool que você consome</p>
-                            <p>Como cada bebida possui uma quantidade de álcool, vamos lhe perguntar em termos de dose padrão</p>
+                            <p>>#{messages['audit.3.p.1']}</p>
+                            <p>#{messages['audit.3.p.2']}</p>
                             
                             <div id="standarddose">
                                 
-                                <h1>O que é uma dose padrão?</h1>                                                                
+                                <h1>#{messages['audit.3.h1.2']}</h1>                                                                
                                 
                                 <div id="doseex1">
                                     <div class="doseexample">
 
-                                        <div class="doseh"><h2>Cerveja (340ml)</h2></div>
-                                        <div class="doseimg"><h:graphicImage library="default" title="beer" name="images/beer.png" alt="beer" /></div>
-                                        <div class="dosep1"><p>1 Dose</p></div>
-                                        <div class="dosep2"><p>(5% de álcool)</p></div>                                                                                            
+                                        <div class="doseh"><h2>#{messages['audit.3.h2.1']}</h2></div>
+                                        <div class="doseimg"><h:graphicImage library="default" title="#{messages['audit.3.graphicimage.1']}" name="images/beer.png" alt="beer" /></div>
+                                        <div class="dosep1"><p>#{messages['audit.3.p.3']}</p></div>
+                                        <div class="dosep2"><p>#{messages['audit.3.p.4']}</p></div>                                                                                            
 
                                     </div>
                                 </div>
@@ -62,10 +62,10 @@
                                 <div id="doseex2">
                                     <div class="doseexample">
 
-                                        <div class="doseh"><h2>Vinho (140ml)</h2></div>
-                                        <div class="doseimg"><h:graphicImage library="default"  title="wine" name="images/wine.png" alt="wine" /></div>
-                                        <div class="dosep1"><p>1 Dose</p></div>
-                                        <div class="dosep2"><p>(12% de álcool)</p></div>
+                                        <div class="doseh"><h2>#{messages['audit.3.h2.2']}</h2></div>
+                                        <div class="doseimg"><h:graphicImage library="default"  title="#{messages['audit.3.graphicimage.2']}" name="images/wine.png" alt="wine" /></div>
+                                        <div class="dosep1"><p>#{messages['audit.3.p.5']}</p></div>
+                                        <div class="dosep2"><p>#{messages['audit.3.p.6']}</p></div>
 
                                     </div>
                                 </div>
@@ -73,10 +73,10 @@
                                 <div id="doseex3">
                                     <div class="doseexample">
 
-                                        <div class="doseh"><h2>Uísque (40ml)</h2></div>
-                                        <div class="doseimg"><h:graphicImage library="default"  title="whiskey" name="images/whiskey.png" alt="whiskey" /></div>
-                                        <div class="dosep1"><p>1 Dose</p></div>
-                                        <div class="dosep2"><p>(40% de álcool)</p></div>                                                                                                
+                                        <div class="doseh"><h2>#{messages['audit.3.h2.3']}</h2></div>
+                                        <div class="doseimg"><h:graphicImage library="default"  title="#{messages['audit.3.graphicimage.3']}" name="images/whiskey.png" alt="whiskey" /></div>
+                                        <div class="dosep1"><p>#{messages['audit.3.p.7']}</p></div>
+                                        <div class="dosep2"><p>#{messages['audit.3.p.8']}</p></div>                                                                                                
 
                                     </div>
                                 </div>
@@ -84,10 +84,10 @@
                                 <div id="doseex4">
                                     <div class="doseexample">
 
-                                        <div class="doseh"><h2>Cachaça (40ml)</h2></div>
-                                        <div class="doseimg"><h:graphicImage library="default" title="vodka" name="images/vodka.png" alt="vodka" /></div>
-                                        <div class="dosep1"><p>1 Dose</p></div>
-                                        <div class="dosep2"><p>(40% de álcool)</p></div>                                                                                             
+                                        <div class="doseh"><h2>#{messages['audit.3.h2.4']}</h2></div>
+                                        <div class="doseimg"><h:graphicImage library="default" title="#{messages['audit.3.graphicimage.4']}" name="images/vodka.png" alt="vodka" /></div>
+                                        <div class="dosep1"><p>#{messages['audit.3.p.9']}</p></div>
+                                        <div class="dosep2"><p>#{messages['audit.3.p.10']}</p></div>                                                                                             
 
                                     </div>
                                 </div>
@@ -95,10 +95,10 @@
                                 <div id="doseex5">
                                     <div class="doseexample">
 
-                                        <div class="doseh"><h2>Cerveja (600ml)</h2></div>
-                                        <div class="doseimg"><h:graphicImage library="default"  title="bottle" name="images/bottle.png" alt="bottle" /></div>
-                                        <div class="dosep1"><p>2 Doses</p></div>
-                                        <div class="dosep2"><p>(40% de álcool)</p></div>
+                                        <div class="doseh"><h2>#{messages['audit.3.h2.5']}</h2></div>
+                                        <div class="doseimg"><h:graphicImage library="default"  title="#{messages['audit.3.graphicimage.5']}" name="images/bottle.png" alt="bottle" /></div>
+                                        <div class="dosep1"><p>#{messages['audit.3.p.11']}</p></div>
+                                        <div class="dosep2"><p>#{messages['audit.3.p.12']}</p></div>
 
                                     </div>
                                 </div>                                                               
@@ -117,60 +117,60 @@
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" id="audit1">
                                         <f:facet name="header">  
-                                            01. Com que frequência você consome bebidas alcoólicas? 
+                                            #{messages['audit.3.p.13']}
                                         </f:facet>
                                         <p:selectOneRadio id="audit_1" value="#{evaluationController.evaluation.audit1}" required="true" layout="pageDirection">  
-                                            <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                            <f:selectItem itemLabel="Mensalmente ou menos" itemValue="2" />
-                                            <f:selectItem itemLabel="De 2 a 4 vezes por mês" itemValue="3" />
-                                            <f:selectItem itemLabel="De 2 a 3 vezes por semana" itemValue="4" />
-                                            <f:selectItem itemLabel="4 ou mais vezes por semana" itemValue="5" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.1']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.2']}" itemValue="2" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.3']}" itemValue="3" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.4']}" itemValue="4" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.5']}" itemValue="5" />
                                         </p:selectOneRadio> 
                                    </h:panelGrid>
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit2">
                                         <f:facet name="header">  
-                                            02. Quantas doses alcoólicas você consome tipicamente ao beber? 
+                                            #{messages['audit.3.p.14']}
                                         </f:facet>
                                         <p:selectOneRadio id="audit_2" value="#{evaluationController.evaluation.audit2}"  required="true" layout="pageDirection">  
-                                            <f:selectItem itemLabel="1 ou 2" itemValue="1" />
-                                            <f:selectItem itemLabel="3 ou 4" itemValue="2" />
-                                            <f:selectItem itemLabel="5 ou 6" itemValue="3" />
-                                            <f:selectItem itemLabel="7, 8 ou 9" itemValue="4" />
-                                            <f:selectItem itemLabel="10 ou mais" itemValue="5" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.6']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.7']}" itemValue="2" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.8']}" itemValue="3" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.9']}" itemValue="4" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.10']}" itemValue="5" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit3">
                                         <f:facet name="header">  
-                                            03. Com que frequencia você consome seis ou mais doses de uma vez? 
+                                            #{messages['audit.3.p.15']}
                                         </f:facet>
                                         <p:selectOneRadio id="audit_3" value="#{evaluationController.evaluation.audit3}"  required="true" layout="pageDirection">  
-                                            <f:selectItem itemLabel="Nunca" itemValue="1" />
-                                            <f:selectItem itemLabel="Menos do que uma vez ao mês" itemValue="2" />
-                                            <f:selectItem itemLabel="Mensalmente" itemValue="3" />
-                                            <f:selectItem itemLabel="Semanalmente" itemValue="4" />
-                                            <f:selectItem itemLabel="Todos ou quase todos os dias" itemValue="5" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.11']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.12']}" itemValue="2" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.13']}" itemValue="3" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.14']}" itemValue="4" />
+                                            <f:selectItem itemLabel="#{messages['audit.3.selectitem.15']}" itemValue="5" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
 
-                                   <h2>Avaliação por semana</h2>    
+                                   <h2>#{messages['audit.3.h2.6']}</h2>    
                                   
                                      
                                     
-                                       <p><h:outputText value="Em uma semana típica, durante os últimos 6 meses, quantas doses você costumava ingerir consumir nestes dias da semana?"/></p>
+                                       <p><h:outputText value="#{messages['audit.3.outputtext.1']}"/></p>
              
                                        <p:panelGrid style="margin-bottom:30px" id="weeklyaverage">                                          
                                            <p:row>    
-                                            <p:column> <h:outputLabel value="Segunda" style="font-weight:bold" /></p:column>                                                                           
-                                            <p:column> <h:outputLabel value="Terça" style="font-weight:bold" /></p:column>                                      
-                                            <p:column> <h:outputLabel value="Quarta" style="font-weight:bold" /></p:column>                                                                                                                                                       
-                                            <p:column> <h:outputLabel value="Quinta" style="font-weight:bold" /></p:column>                                                                      
-                                            <p:column> <h:outputLabel value="Sexta" style="font-weight:bold" /></p:column>                                                                   
-                                            <p:column> <h:outputLabel value="Sábado" style="font-weight:bold" /></p:column>                                       
-                                            <p:column> <h:outputLabel value="Domingo" style="font-weight:bold" /></p:column>
+                                            <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.1']}" style="font-weight:bold" /></p:column>                                                                           
+                                            <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.2']}" style="font-weight:bold" /></p:column>                                      
+                                            <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.3']}" style="font-weight:bold" /></p:column>                                                                                                                                                       
+                                            <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.4']}" style="font-weight:bold" /></p:column>                                                                      
+                                            <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.5']}" style="font-weight:bold" /></p:column>                                                                   
+                                            <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.6']}" style="font-weight:bold" /></p:column>                                       
+                                            <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.7']}" style="font-weight:bold" /></p:column>
                                         </p:row>   
                                         <p:row>                                      
                                             <p:column><p:spinner id="monday" value="#{evaluationController.evaluation.monday}" size="5" min="0"></p:spinner></p:column>
@@ -213,7 +213,7 @@
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 11/06/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
 
 

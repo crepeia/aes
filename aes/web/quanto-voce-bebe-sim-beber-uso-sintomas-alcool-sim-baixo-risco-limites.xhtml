@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -24,7 +24,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Resultados</h1> 
+                            <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -40,86 +40,86 @@
                         </div>
                         
                                    <div id="pmtext">                                               
-                            <h2><b>Em algumas ocasiões você tem bebido acima do recomendado</b></h2>
+                            <h2><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.1']}</b></h2>
                             
                                 <!-- Incluir feedback e diminuir tamanho da paǵina -->
-                                <li>Apesar do seu consumo poder ser considerado de baixo risco, você tem bebido em algumas ocasiões acima do que é recomendado para você</li>
-                                <li>Muitos dos problemas de saúde relacionados ao uso do álcool demoram para aparecer e dependem da quantidade que você bebe</li>                               
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.1']}</li>
+                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.2']}</li>                               
                                 
-                                <h3>A Organização Mundial da Saúde recomenda os seguintes limites:</h3>
+                                <h3>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h3.1']}</h3>
                                 
-                                <h4>Sexo Masculino</h4>
-                                
-                                <ul>
-                                    <li><b>Dia:</b> Até 2 doses por dia </li>
-                                    <li><b>Semana:</b>Não mais que 10 doses por semana</li>
-                                    <h4>O consumo de quantidades maiores do que estas está associado com diversos problemas de saúde</h4>
-                                </ul>
-                                
-                                <h4>Sexo Feminino</h4>
+                                <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.1']}</h4>
                                 
                                 <ul>
-                                    <li><b>Dia:</b> Até uma 1 por dia</li>
-                                    <li><b>Semana:</b>Não mais que 5 doses por semana</li>
-                                    <h4>O consumo de quantidades maiores do que estas está associado com diversos problemas de saúde</h4>
+                                    <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.3']}</b> #{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.3']}</li>
+                                    <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.4']}</b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.4']}</li>
+                                    <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.2']}</h4>
+                                </ul>
+                                
+                                <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.3']}</h4>
+                                
+                                <ul>
+                                    <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.3']}</b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.5']}</li>
+                                    <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.4']}</b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.6']}</li>
+                                    <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.4']}</h4>
                                 </ul>
                                 
                                 
-                                <p>Pesquisas apontam que o consumo de álcool está associado com diversos problemas</p>
+                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.1']}</p>
                                  <p:accordionPanel>
-                                    <p:tab title="Acidentes">
+                                    <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.1']}">
                                         <h:panelGrid columns="4" cellpadding="7">
                                             <div id="pagemiddle">
-                                            <h4>São maiores as chances de sofrer um acidente menor ou até mesmo fatal entre pessoas que possuem o seu padrão de consumo</h4>
-                                            <ul><li>60% dos incêndios com vitimas fatais, afogamentos e homicídios</li></ul>
-                                            <ul><li>50% dos acidentes com traumas graves e casos de abuso sexual</li></ul>
-                                            <ul><li>50% dos acidentes fatais com mortes no trânsito, suicídios e quedas fatais</li></ul>
+                                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.5']}</h4>
+                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.7']}</li></ul>
+                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.8']}</li></ul>
+                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.9']}</li></ul>
                                             </div>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="Problemas de Saúde">
+                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.2']}">
                                         <h:panelGrid columns="4" cellpadding="7">
                                             <div id="pagemiddle">
-                                            <h4>Pessoas que bebem muito possuem o risco aumentado para mais de 60 tipos de condições de saúde, dentre elas várias que são fatais</h4>
+                                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.6']}</h4>
                                             <ul>
-                                                <li>Doenças do Fígado (Cirrose Hepática, etc)</li>
-                                                <li>Doenças do Coração</li>
-                                                <li>Transtorno do Sono</li>
-                                                <li>Depressão</li>
-                                                <li>Acidente Vascular Cerebral (Derrames)</li>
-                                                <li>Úlceras Gástricas</li>
-                                                <li>Doenças Sexualmente Tramissíveis (sexo sem proteção)</li>
-                                                <li>Diversos Tipos de Câncer</li>
-                                                <li>Dificuldade de manter controlado doenças como diabetes e pressão alta</li></ul>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.10']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.11']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.12']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.13']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.14']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.15']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.16']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.17']}</li>
+                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.18']}</li></ul>
                                             </div>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="Problemas de formação do feto">
+                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.3']}">
                                         <h:panelGrid columns="4" cellpadding="7">
-                                            <p>Beber durante a gravidez pode gerar diversas consequencias negativas e irreversiveis para o bebê</p>
-                                            <li>Danos Cerebrais</li>
-                                            <li>Sérios Problemas de formação</li>
-                                            <li><b>Mulheres com suspeita de gravidez ou grávidas não devem consumir álcool</b></li>
+                                            <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.2']}</p>
+                                            <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.19']}</li>
+                                            <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.20']}</li>
+                                            <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.7']}</b></li>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="Dependência e Danos Associados">
+                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.4']}">
                                         <h:panelGrid columns="4" cellpadding="7">
-                                            <li>Geralmente conhecido como alcoolismo, a dependência do uso de álcool é uma consequencia do seu consumo abusivo</li>
-                                            <li>Os problemas relacionados ao consumo de álcool são considerados problemas de saúde importantes e exigem cuidado</li>
+                                            <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.21']}</li>
+                                            <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.22']}</li>
                                          
                                         </h:panelGrid>
                                     </p:tab>
                                  </p:accordionPanel>
                            
 
-                            <p><b>Você gostaria de continuar no programa e conhecer algumas técnicas que podem lhe ajudar a beber dentro destas recomendações</b></p>
+                            <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.2']}</b></p>
                             
                             <h:form>
                             <p:panel id="qrecaida" >                
                                 <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
                                     <p:selectOneRadio id="options" value="#{evaluationController.continueEvaluation}" required="true">  
-                                        <f:selectItem itemLabel="Sim" itemValue="true" />
-                                        <f:selectItem itemLabel="Não" itemValue="false" /> 
+                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.yes']}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.no']}" itemValue="false" /> 
                                     </p:selectOneRadio> 
                                 </h:panelGrid>
                             </p:panel>
@@ -142,7 +142,7 @@
                     
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
 
 
