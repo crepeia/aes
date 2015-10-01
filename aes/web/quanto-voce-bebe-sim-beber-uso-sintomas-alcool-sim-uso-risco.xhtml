@@ -100,25 +100,17 @@
                                     </p:tab>
                                  </p:accordionPanel>
                                                                    
-                            <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.risco.b.3']}</b></p>
+                            <!--<p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.risco.b.3']}</b></p>-->
                             
                             <h:form>
-                            <p:panel id="qrecaida" >                
-                                <h:panelGrid columns="2" style="margin:5px;" cellpadding="10" id="questao1">                                                    
-                                    <p:selectOneRadio id="options" value="#{evaluationController.continueEvaluation}" required="true">  
-                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.risco.yes']}" itemValue="true" />
-                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.risco.no']}" itemValue="false" /> 
-                                    </p:selectOneRadio> 
-                                </h:panelGrid>
-                            </p:panel>
-                                
+     
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
                                 </div>
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.continueEvaluation1()}"/>
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.symptoms()}"/>
                                
                                                          
                                 </div>

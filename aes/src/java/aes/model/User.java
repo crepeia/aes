@@ -48,11 +48,48 @@ public class User implements Serializable {
     @Column(name = "pregnant")
     private Boolean pregnant;
    
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Evaluation> evaluations;
      @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Contact> contacts;
+     
+    @Override
+    public String toString() {
+        return this.id + ", " + this.name + ", " + this.email;
+    }
+    
+    public int getAge() {
+        Calendar today = Calendar.getInstance(); 
+        
+        if (today.get(Calendar.MONTH) < this.getBirth().get(Calendar.MONTH)) {
+            return (today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR) - 1);
+            
+        } else if (today.get(Calendar.MONTH) == this.getBirth().get(Calendar.MONTH) && 
+                today.get(Calendar.DAY_OF_MONTH) < this.getBirth().get(Calendar.DAY_OF_MONTH)) {
+            return (today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR) - 1);
+            
+        }else 
+            return today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR);
+
+    }
+   
+    public void setBirth(int year,int month,int day){     
+        birth = Calendar.getInstance();
+        birth.set(year,month,day);
+    }
+    
+    public boolean isUnderage(){
+        return getAge() < 18;
+          
+    }
+    
+    public boolean isFemale(){
+        return gender == 'F';
+    }
+    
+    public boolean isMale(){
+        return gender == 'M';
+    }
 
     public long getId() {
         return id;
@@ -145,42 +182,5 @@ public class User implements Serializable {
         this.contacts = contacts;
     }
     
-    @Override
-    public String toString() {
-        return this.id + ", " + this.name + ", " + this.email + ", " + new String(this.password);
-    }
-    
-    public int getAge() {
-        Calendar today = Calendar.getInstance(); 
-        
-        if (today.get(Calendar.MONTH) < this.getBirth().get(Calendar.MONTH)) {
-            return (today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR) - 1);
-            
-        } else if (today.get(Calendar.MONTH) == this.getBirth().get(Calendar.MONTH) && 
-                today.get(Calendar.DAY_OF_MONTH) < this.getBirth().get(Calendar.DAY_OF_MONTH)) {
-            return (today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR) - 1);
-            
-        }else 
-            return today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR);
-
-    }
-   
-    public void setBirth(int year,int month,int day){     
-        birth = Calendar.getInstance();
-        birth.set(year,month,day);
-    }
-    
-    public boolean isUnderage(){
-        return getAge() < 18;
-          
-    }
-    
-    public boolean isFemale(){
-        return gender == 'F';
-    }
-    
-    public boolean isMale(){
-        return gender == 'M';
-    }
-
+  
 }

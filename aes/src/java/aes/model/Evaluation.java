@@ -7,6 +7,7 @@ package aes.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -30,16 +31,14 @@ public class Evaluation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar date;
-
     @Column(name = "drink")
     private Boolean drink;
 
     @Column(name = "year_email")
     private Boolean yearEmail;
-    @Column (name = "year_email_date")
+    @Column(name = "year_email_date")
     private Calendar yearEmailDate;
 
     @Column(name = "audit_1")
@@ -48,21 +47,6 @@ public class Evaluation implements Serializable {
     private Integer audit2;
     @Column(name = "audit_3")
     private Integer audit3;
-    @Column(name = "audit_4")
-    public Integer audit4;
-    @Column(name = "audit_5")
-    private Integer audit5;
-    @Column(name = "audit_6")
-    private Integer audit6;
-    @Column(name = "audit_7")
-    private Integer audit7;
-    @Column(name = "audit_8")
-    private Integer audit8;
-    @Column(name = "audit_9")
-    private Integer audit9;
-    @Column(name = "audit_10")
-    private Integer audit10;
-    
     @Column(name = "monday")
     private int monday;
     @Column(name = "tuesday")
@@ -77,16 +61,61 @@ public class Evaluation implements Serializable {
     private int saturday;
     @Column(name = "sunday")
     private int sunday;
-       
-    @Column(name = "preparado")
-    private Integer preparado;
     
+    @Column(name = "audit_4")
+    public Integer audit4;
+    @Column(name = "audit_5")
+    private Integer audit5;
+    @Column(name = "audit_6")
+    private Integer audit6;
+    @Column(name = "audit_7")
+    private Integer audit7;
+    @Column(name = "audit_8")
+    private Integer audit8;
+    @Column(name = "audit_9")
+    private Integer audit9;
+    @Column(name = "audit_10")
+    private Integer audit10;
+
+    @Column(name = "pros_reasons_1")
+    private Integer prosReasons1;
+    @Column(name = "pros_reasons_2")
+    private Integer prosReasons2;
+    @Column(name = "pros_reasons_3")
+    private Integer prosReasons3;
+    @Column(name = "pros_reasons_4")
+    private Integer prosReasons4;
+    @Column(name = "pros_reasons_5")
+    private Integer prosReasons5;
+    @Column(name = "pros_reasons_6")
+    private Integer prosReasons6;
+    @Column(name = "pros_reasons_7")
+    private Integer prosReasons7;
+    @Column(name = "pros_reasons_8")
+    private Integer prosReasons8;
+    @Column(name = "pros_1")
+    private String pros1;
+    @Column(name = "pros_2")
+    private String pros2;
+    @Column(name = "pros_3")
+    private String pros3;
+    @Column(name = "cons_1")
+    private String cons1;
+    @Column(name = "cons_2")
+    private String cons2;
+    @Column(name = "cons_3")
+    private String cons3;
+             
+    @Column(name = "ready")
+    private Boolean ready;
     @Column(name = "back_plan")
-    private Integer backPlan;
-    
+    private Boolean backPlan;
+    @Column(name = "quit")
+    private Boolean quit; 
+
     @Column(name = "dependencia")
     private Integer dependencia;
-    
+
     @Column(name = "data_comecar_plano")
     private Date dataComecarPlano;
     @Column(name = "razoes_plano")
@@ -99,15 +128,60 @@ public class Evaluation implements Serializable {
     private String sinaisSucessoPlano;
     @Column(name = "possiveis_dificuldades_plano")
     private String possiveisDificuladesPlano;
-    
+
     @Column(name = "dose_padrao_diaria")
     private Integer dosePadraoDiaria;
     @Column(name = "dose_padrao_semanal")
     private Integer dosePadraoSemanal;
-    
-    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    private User user;
 
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private User user;
+    
+     @Override
+    public String toString() {
+        return this.id + ", " + this.user.getId() + ", " + 
+                new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(date) + ", " + this.drink;
+    }
+    
+    public int getDrinkingDays() {
+        int drinkingDays = 0;
+        if (sunday != 0) {
+            drinkingDays++;
+        }
+        if (monday != 0) {
+            drinkingDays++;
+        }
+        if (tuesday != 0) {
+            drinkingDays++;
+        }
+        if (wednesday != 0) {
+            drinkingDays++;
+        }
+        if (thursday != 0) {
+            drinkingDays++;
+        }
+        if (friday != 0) {
+            drinkingDays++;
+        }
+        if (saturday != 0) {
+            drinkingDays++;
+        }
+      
+        return drinkingDays;
+    }
+    
+    public int getWeekTotal(){
+        return sunday + monday + tuesday + wednesday + thursday + friday + saturday;
+    }
+    
+    public int getAudit3Sum(){
+        return audit1 + audit2 + audit3;
+    } 
+    
+    public int getAuditFullSum(){
+        return audit1 + audit2 + audit3 + audit4 + audit5 + audit6 + audit7 + audit8 + audit9 + audit10;
+    } 
+    
     public long getId() {
         return id;
     }
@@ -203,7 +277,7 @@ public class Evaluation implements Serializable {
     public void setSunday(int sunday) {
         this.sunday = sunday;
     }
-    
+
     public Boolean getYearEmail() {
         return yearEmail;
     }
@@ -211,7 +285,7 @@ public class Evaluation implements Serializable {
     public void setYearEmail(Boolean yearEmail) {
         this.yearEmail = yearEmail;
     }
-    
+
     public Calendar getYearEmailDate() {
         return yearEmailDate;
     }
@@ -292,24 +366,32 @@ public class Evaluation implements Serializable {
         this.audit10 = audit10;
     }
 
-    public Integer getPreparado() {
-        return preparado;
+    public Boolean getReady() {
+        return ready;
     }
 
-    public void setPreparado(Integer preparado) {
-        this.preparado = preparado;
+    public void setReady(Boolean ready) {
+        this.ready = ready;
     }
 
-    public Integer getBackPlan() {
+    public Boolean getBackPlan() {
         return backPlan;
     }
 
-    public void setBackPlan(Integer backPlan) {
+    public void setBackPlan(Boolean backPlan) {
         this.backPlan = backPlan;
     }
 
     public Integer getDependencia() {
         return dependencia;
+    }
+
+    public Boolean getQuit() {
+        return quit;
+    }
+
+    public void setQuit(Boolean quit) {
+        this.quit = quit;
     }
 
     public void setDependencia(Integer dependencia) {
@@ -379,8 +461,119 @@ public class Evaluation implements Serializable {
     public void setDosePadraoSemanal(Integer dosePadraoSemanal) {
         this.dosePadraoSemanal = dosePadraoSemanal;
     }
-       
-    
- 
-}
 
+    public Integer getProsReasons1() {
+        return prosReasons1;
+    }
+
+    public void setProsReasons1(Integer prosReasons1) {
+        this.prosReasons1 = prosReasons1;
+    }
+
+    public Integer getProsReasons2() {
+        return prosReasons2;
+    }
+
+    public void setProsReasons2(Integer prosReasons2) {
+        this.prosReasons2 = prosReasons2;
+    }
+
+    public Integer getProsReasons3() {
+        return prosReasons3;
+    }
+
+    public void setProsReasons3(Integer prosReasons3) {
+        this.prosReasons3 = prosReasons3;
+    }
+
+    public String getPros1() {
+        return pros1;
+    }
+
+    public void setPros1(String pros1) {
+        this.pros1 = pros1;
+    }
+
+    public String getPros2() {
+        return pros2;
+    }
+
+    public void setPros2(String pros2) {
+        this.pros2 = pros2;
+    }
+
+    public String getPros3() {
+        return pros3;
+    }
+
+    public void setPros3(String pros3) {
+        this.pros3 = pros3;
+    }
+
+    public String getCons1() {
+        return cons1;
+    }
+
+    public void setCons1(String cons1) {
+        this.cons1 = cons1;
+    }
+
+    public String getCons2() {
+        return cons2;
+    }
+
+    public void setCons2(String cons2) {
+        this.cons2 = cons2;
+    }
+
+    public String getCons3() {
+        return cons3;
+    }
+
+    public void setCons3(String cons3) {
+        this.cons3 = cons3;
+    }
+
+    public Integer getProsReasons4() {
+        return prosReasons4;
+    }
+
+    public void setProsReasons4(Integer prosReasons4) {
+        this.prosReasons4 = prosReasons4;
+    }
+
+    public Integer getProsReasons5() {
+        return prosReasons5;
+    }
+
+    public void setProsReasons5(Integer prosReasons5) {
+        this.prosReasons5 = prosReasons5;
+    }
+
+    public Integer getProsReasons6() {
+        return prosReasons6;
+    }
+
+    public void setProsReasons6(Integer prosReasons6) {
+        this.prosReasons6 = prosReasons6;
+    }
+
+    public Integer getProsReasons7() {
+        return prosReasons7;
+    }
+
+    public void setProsReasons7(Integer prosReasons7) {
+        this.prosReasons7 = prosReasons7;
+    }
+
+    public Integer getProsReasons8() {
+        return prosReasons8;
+    }
+
+    public void setProsReasons8(Integer prosReasons8) {
+        this.prosReasons8 = prosReasons8;
+    }
+    
+    
+
+}

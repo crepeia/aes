@@ -57,9 +57,6 @@ public class EvaluationController extends BaseController<Evaluation> {
     private Integer month;
     private Integer year;
 
-    private int consumoDias;
-    private int consumoDoses;
-
     private boolean continueEvaluation;
 
     private StreamedContent planoPersonalizado;
@@ -68,13 +65,11 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public EvaluationController() {
         try {
-           this.daoBase = new GenericDAO<Evaluation>(Evaluation.class);
+            this.daoBase = new GenericDAO<Evaluation>(Evaluation.class);
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    
 
     public Evaluation getEvaluation() {
         if (evaluation == null) {
@@ -114,32 +109,34 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public String intro() {
-        getUser().setBirth(year, month, day);
         try {
+            getUser().setBirth(year, month, day);
             daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            if (getUser().getPregnant() && !getEvaluation().getDrink()) {
+                return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
+            } else if (getUser().getPregnant() && getEvaluation().getDrink()) {
+                return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
+            } else if (getUser().isUnderage() && !getEvaluation().getDrink()) {
+                return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
+            } else if (getUser().isUnderage() && getEvaluation().getDrink()) {
+                return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
+            } else if (!getEvaluation().getDrink()) {
+                return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
+            } else if (loggedUser()) {
+                return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
+            } else {
+                return "quanto-voce-bebe-convite.xhtml?faces-redirect=true";
+            }
         } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
         }
-        if (getUser().getPregnant() && !getEvaluation().getDrink()) {
-            return "quanto-voce-bebe-nao-gravidez.xhtml";
-        } else if (getUser().getPregnant() && getEvaluation().getDrink()) {
-            return "quanto-voce-bebe-sim-gravidez.xhtml";
-        } else if (getUser().isUnderage() && !getEvaluation().getDrink()) {
-            return "quanto-voce-bebe-nao-adoles.xhtml";
-        } else if (getUser().isUnderage() && getEvaluation().getDrink()) {
-            return "quanto-voce-bebe-sim-adoles.xhtml";
-        } else if (!getEvaluation().getDrink()) {
-            return "quanto-voce-bebe-abstemio.xhtml";
-        } else if (loggedUser()) {
-            return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml";
-        } else {
-            return "quanto-voce-bebe-convite.xhtml";
-        }
+
     }
 
     public void yearEmail() {
-        getEvaluation().setYearEmail(true);
         try {
+            getEvaluation().setYearEmail(true);
             daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
             FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Você será contactado em breve."));
             ((InputText) getComponent("email")).setDisabled(true);
@@ -152,109 +149,64 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
 
-    public void getConsumoDiasDoses() {
-        int cont = 0;
-        if (evaluation.getSunday() != 0) {
-            cont++;
-        }
-        if (evaluation.getTuesday() != 0) {
-            cont++;
-        }
-        if (evaluation.getWednesday() != 0) {
-            cont++;
-        }
-        if (evaluation.getThursday() != 0) {
-            cont++;
-        }
-        if (evaluation.getFriday() != 0) {
-            cont++;
-        }
-        if (evaluation.getSaturday() != 0) {
-            cont++;
-        }
-        if (evaluation.getMonday() != 0) {
-            cont++;
-        }
-        consumoDias = cont;
-        consumoDoses = evaluation.getSunday() + evaluation.getTuesday() + evaluation.getWednesday() + evaluation.getThursday() + evaluation.getFriday() + evaluation.getSaturday() + evaluation.getMonday();
-    }
-
-    public void audit3(){ 
-        User userLocal = getUser();
-        int age = userLocal.getAge();
-        this.getConsumoDiasDoses();
-        
-        int sum1 = evaluation.getAudit1();
-        int sum2 = evaluation.getAudit2();
-        int sum3 = evaluation.getAudit3();
-        int weekTotal = consumoDoses;
-        int sumTotal = sum1 + sum2 + sum3;
-        
-        try {
-            if(sumTotal > 6 || (this.getUser().getGender()=='F' && consumoDias > 1) || (this.getUser().getGender()=='M' && consumoDias > 2) || (this.getUser().getGender()=='F' && weekTotal > 5) || (this.getUser().getGender()=='M' && weekTotal > 10)){
-                FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-7.xhtml");
-            }else if(sumTotal <= 6 && (((this.getUser().getGender()=='F' && consumoDias <= 1) || (this.getUser().getGender()=='M' && consumoDias <= 2)) && ((this.getUser().getGender()=='F' && weekTotal <= 5) || (this.getUser().getGender()=='M' && weekTotal <= 10))) ){
-                if(this.getUser().getGender() == 'M' && age <= 65)
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml");
-                else if((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F')
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml");
-            }
-        
-            this.getDaoBase().insertOrUpdate(evaluation, this.getEntityManager());
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problema ao gravar dados", null));
-        } catch (IOException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public String audit7() {
-
-        int sum1 = evaluation.getAudit1();
-        int sum2 = evaluation.getAudit2();
-        int sum3 = evaluation.getAudit3();
-
-        int sum4 = evaluation.getAudit4();
-        int sum5 = evaluation.getAudit5();
-        int sum6 = evaluation.getAudit6();
-        int sum7 = evaluation.getAudit7();
-        int sum8 = evaluation.getAudit8();
-        int sum9 = evaluation.getAudit9();
-        int sum10 = evaluation.getAudit10();
-        this.getConsumoDiasDoses();
-        int age = getUser().getAge();
-        int auditFull = sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7 + sum8 + sum9 + sum10;
-        int weekTotal = consumoDoses;
-
-        if ((auditFull <= 17) && ((this.getUser().getGender() == 'F' && consumoDias <= 1) || (this.getUser().getGender() == 'M' && consumoDias <= 2)) && ((this.getUser().getGender() == 'F' && weekTotal <= 5) || (this.getUser().getGender() == 'M' && weekTotal <= 10))) {
-            if (this.getUser().getGender() == 'M' && age <= 65) {
-                return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
-            } else if ((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F') {
-                return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml";
-            }
-        } else if ((auditFull <= 17) && ((this.getUser().getGender() == 'F' && consumoDias > 1) || (this.getUser().getGender() == 'M' && consumoDias > 2)) && ((this.getUser().getGender() == 'F' && weekTotal > 5) || (this.getUser().getGender() == 'M' && weekTotal > 10))) {
-            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites";
-        } else if (auditFull >= 18 && auditFull <= 25) {
-            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml";
-        } else if (auditFull >= 26 && auditFull <= 29) {
-            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-nocivo.xhtml";
-        } else if (auditFull >= 30 && auditFull <= 50) {
-            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-dependencia.xhtml";
-        }
-
+    public String audit3() {
         try {
             this.getDaoBase().insertOrUpdate(getEvaluation(), this.getEntityManager());
+
+            int age = getUser().getAge();
+            int drinkingnDays = getEvaluation().getDrinkingDays();
+            int weekTotal = getEvaluation().getWeekTotal();
+            int audit3sum = getEvaluation().getAudit3Sum();
+
+            if (audit3sum > 6 || (getUser().isFemale() && drinkingnDays > 1) || (getUser().isMale() && drinkingnDays > 2) || (getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10)) {
+                return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml?faces-redirect=true";
+            } else if (audit3sum <= 6 && (((getUser().isFemale() && drinkingnDays <= 1) || (getUser().isMale() && drinkingnDays <= 2)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10)))) {
+                if (getUser().isMale() && age <= 65) {
+                    return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
+                } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
+                    return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar dados", null));
         }
         return "";
     }
 
+    public String audit7() {
+        try {
+            this.getDaoBase().insertOrUpdate(getEvaluation(), this.getEntityManager());
+
+            int age = getUser().getAge();
+            int drinkingDays = getEvaluation().getDrinkingDays();
+            int weekTotal = getEvaluation().getWeekTotal();
+            int auditFull = getEvaluation().getAuditFullSum();
+
+            if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays <= 1) || (getUser().isMale() && drinkingDays <= 2)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10))) {
+                if (getUser().isFemale() && age <= 65) {
+                    return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
+                } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
+                    return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
+                }
+            } else if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays > 1) || (getUser().isMale() && drinkingDays > 2)) && ((getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10))) {
+                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites?faces-redirect=true";
+            } else if (auditFull >= 18 && auditFull <= 25) {
+                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml?faces-redirect=true";
+            } else if (auditFull >= 26 && auditFull <= 29) {
+                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-nocivo.xhtml?faces-redirect=true";
+            } else if (auditFull >= 30 && auditFull <= 50) {
+                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-dependencia.xhtml?faces-redirect=true";
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+
+    }
+
     public boolean q4() {
         try {
-            return evaluation.getAudit4() != 0;
+            return getEvaluation().getAudit4() != 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -263,7 +215,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public boolean q5() {
         try {
-            return evaluation.getAudit5() != 0;
+            return getEvaluation().getAudit5() != 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -272,7 +224,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public boolean q6() {
         try {
-            return evaluation.getAudit6() != 0;
+            return getEvaluation().getAudit6() != 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -281,7 +233,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public boolean q7() {
         try {
-            return evaluation.getAudit7() != 0;
+            return getEvaluation().getAudit7() != 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -290,7 +242,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public boolean q8() {
         try {
-            return evaluation.getAudit8() != 0;
+            return getEvaluation().getAudit8() != 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -299,7 +251,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public boolean q9() {
         try {
-            return evaluation.getAudit9() != 0;
+            return getEvaluation().getAudit9() != 0;
         } catch (NullPointerException e) {
             return false;
         }
@@ -308,33 +260,81 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public boolean q10() {
         try {
-            return evaluation.getAudit10() != 0;
+            return getEvaluation().getAudit10() != 0;
         } catch (NullPointerException e) {
             return false;
         }
 
     }
 
-    public String nextBaixoRisco() {
-        User userLocal = getUser();
-        int age = userLocal.getAge();
-        this.getConsumoDiasDoses();
-        int weekTotal = consumoDoses;
-        if (((this.getUser().getGender() == 'F' && consumoDias > 1) || (this.getUser().getGender() == 'M' && consumoDias > 2)) || ((this.getUser().getGender() == 'F' && weekTotal > 5) || (this.getUser().getGender() == 'M' && weekTotal > 10))) {
-            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-baixo-risco-limites.xhtml";
-        } else if ((this.getUser().getGender() == 'F' && consumoDias < 1) || (this.getUser().getGender() == 'M' && consumoDias < 2) || (this.getUser().getGender() == 'F' && weekTotal < 5) || (this.getUser().getGender() == 'M' && weekTotal < 10)) {
-            if (this.getUser().getGender() == 'M' && age <= 65) {
-                return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml";
-            } else if ((this.getUser().getGender() == 'M' && age > 65) || this.getUser().getGender() == 'F' && age > 65) {
-                return "quanto-voce-bebe-reconmendar-limites-mulheres-e-homens-com-mais-de-65-anos.xhtml";
+    public String symptoms() {
+        setURL();
+        return "preparando-pros-cons.xhtml?faces-redirect=true";
+    }
+
+    public String prosCons() {
+        try {
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            return "preparando-pros-cons-avaliacao.xhtml?faces-redirect=true";
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
+        }
+    }
+
+    public String prosConsEvaluation() {
+        try {
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            if (getEvaluation().getReady()) {
+                setURL();
+                return "preparando-diminuir-ou-parar.xhtml?faces-redirect=true";
+            } else {
+                return "preparando-diminuir-parar-nao.xhtml?faces-redirect=true";
+
             }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    public String cutDownQuitNo() {
+        try {
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            if (getEvaluation().getBackPlan()) {
+                setURL();
+                return "preparando-diminuir-ou-parar.xhtml?faces-redirect=true";
+            } else {
+                getEvaluation().setYearEmail(true);
+                daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+                ((CommandButton) getComponent("saveBtn")).setDisabled(true);
+                FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Você será contactado dentro de um ano."));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    public String cutDownQuit() {
+        try {
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            if (getEvaluation().getQuit()) {
+                return "estrategia-diminuir-introducao.xhtml?faces-redirect=true";
+            } else {
+                return "estrategia-parar-apoio-intro.xhtml?faces-redirect=true";
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }
 
     public void continueEvaluation() throws IOException {
-        System.out.println(evaluation.getDependencia());
-        if (evaluation.getDependencia() == 1) {
+        if (getEvaluation().getDependencia() == 1) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-parar-apoio-intro.xhtml");
             //return "estrategia-parar-apoio-intro.xhtml";
         } else {
@@ -348,61 +348,23 @@ public class EvaluationController extends BaseController<Evaluation> {
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public Integer getDay() {
-        if (loggedUser()) {
-            return this.getUser().getBirth().get(Calendar.DAY_OF_MONTH);
-        }
-        return day;
-    }
-
-    public void setDay(Integer day) {
-        this.day = day;
-    }
-
-    public Integer getMonth() {
-        if (loggedUser()) {
-            return this.getUser().getBirth().get(Calendar.MONTH);
-        }
-        return month;
-    }
-
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    public Integer getYear() {
-        if (loggedUser()) {
-            return this.getUser().getBirth().get(Calendar.YEAR);
-        }
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public boolean sameDate(Calendar firstDate, Calendar secondDate) {
-        return firstDate.get(Calendar.DAY_OF_MONTH) == secondDate.get(Calendar.DAY_OF_MONTH)
-                && firstDate.get(Calendar.MONTH) == secondDate.get(Calendar.MONTH)
-                && firstDate.get(Calendar.YEAR) == secondDate.get(Calendar.YEAR);
-    }
-
-    public boolean isContinueEvaluation() {
-        return continueEvaluation;
-    }
-
-    public void setContinueEvaluation(boolean continueEvaluation) {
-        this.continueEvaluation = continueEvaluation;
-    }
-
-    public void nextPreparado() throws IOException {
-        if (evaluation.getPreparado() == 1) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-introducao.xhtml");
+     public void estrategiaRegistro() {
+        if (getUser().getGender() == 'F') {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-registro-eletronico-meta-mulher.xhtml?faces-redirect=true");
+            } catch (IOException ex) {
+                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-parar-apoio-intro.xhtml");
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-registro-eletronico-meta-homem.xhtml?faces-redirect=true");
+            } catch (IOException ex) {
+                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+    }
 
+    public String nextRegEleManAndWoman() {
         try {
             this.daoBase.update(this.getEvaluation(), this.getEntityManager());
 
@@ -410,19 +372,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             Logger.getLogger(EvaluationController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public String nexProsCons() {
-        setURL();
-        return "preparando-pros-cons.xhtml";
-    }
-
-    public String nextBackPlan() {
-        if (evaluation.getBackPlan() == 1) {
-            return "to cut down or to quit";
-        } else {
-            return "avaliação apos um ano";
-        }
+        return "estrategia-diminuir-registro-eletronico.xhtml?faces-redirect=true";
     }
 
     public ByteArrayOutputStream gerarPdf() {
@@ -560,31 +510,45 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     }
 
-    public void estrategiaRegistro() {
-        if (getUser().getGender() == 'F') {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-registro-eletronico-meta-mulher.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-registro-eletronico-meta-homem.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public Integer getDay() {
+        if (loggedUser()) {
+            return this.getUser().getBirth().get(Calendar.DAY_OF_MONTH);
         }
+        return day;
     }
 
-    public String nextRegEleManAndWoman() {
-        try {
-            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+    public void setDay(Integer day) {
+        this.day = day;
+    }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+    public Integer getMonth() {
+        if (loggedUser()) {
+            return this.getUser().getBirth().get(Calendar.MONTH);
         }
-        return "estrategia-diminuir-registro-eletronico.xhtml";
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getYear() {
+        if (loggedUser()) {
+            return this.getUser().getBirth().get(Calendar.YEAR);
+        }
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public boolean isContinueEvaluation() {
+        return continueEvaluation;
+    }
+
+    public void setContinueEvaluation(boolean continueEvaluation) {
+        this.continueEvaluation = continueEvaluation;
     }
 
     public void setURL() {
@@ -595,7 +559,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public String getURL() {
         if (url == null) {
-            return "index.xhtml";
+            return "index.xhtml?faces-redirect=true";
         }
         return url;
     }

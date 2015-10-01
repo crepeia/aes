@@ -56,6 +56,27 @@ public class Contact implements Serializable {
     
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private User user;
+    
+        
+    public void readHTMLTemplate(String relativePath) throws IOException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        String absolutePath = servletContext.getRealPath(relativePath);
+        byte[] encoded = Files.readAllBytes(Paths.get(absolutePath));
+        htmlTemplate =  new String(encoded, StandardCharsets.UTF_8);
+    }
+    
+    public void fillHTMLTemplate(String title, String subtitle, String body) {
+            if(title != null){
+                htmlTemplate = htmlTemplate.replace("#title#", title);
+            }
+            if(subtitle != null){
+                htmlTemplate = htmlTemplate.replace("#subtitle#", subtitle);
+            }
+            if(body != null){
+                htmlTemplate = htmlTemplate.replace("#body#", body); 
+            }
+    }
 
     public long getId() {
         return id;
@@ -137,25 +158,6 @@ public class Contact implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-    
-    public void readHTMLTemplate(String relativePath) throws IOException {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        String absolutePath = servletContext.getRealPath(relativePath);
-        byte[] encoded = Files.readAllBytes(Paths.get(absolutePath));
-        htmlTemplate =  new String(encoded, StandardCharsets.UTF_8);
-    }
-    
-    public void fillHTMLTemplate(String title, String subtitle, String body) {
-            if(title != null){
-                htmlTemplate = htmlTemplate.replace("#title#", title);
-            }
-            if(subtitle != null){
-                htmlTemplate = htmlTemplate.replace("#subtitle#", subtitle);
-            }
-            if(body != null){
-                htmlTemplate = htmlTemplate.replace("#body#", body); 
-            }
-    }
+
     
 }

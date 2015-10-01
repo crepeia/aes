@@ -49,20 +49,20 @@
                                         <f:facet name="header">  
                                             #{messages['preparando.diminuir.parar.facet.1']}
                                         </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.preparado}" required="true">  
-                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.parar.ilabel.1']}" itemValue="1" />
-                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.parar.ilabel.2']}" itemValue="2" /> 
+                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.quit}" required="true">  
+                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.parar.ilabel.1']}" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.parar.ilabel.2']}" itemValue="#{false}" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>
                              
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./preparando-pros-cons-avalicao.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>
                                 </div>
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.nextPreparado()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.cutDownQuit()}" />
                                 </div>
                         </h:form>
                             
