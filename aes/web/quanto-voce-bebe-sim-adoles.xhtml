@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
   
     <h:head>
-        <title>O quanto você bebe - Informações menores de 18 anos | Álcool e Saúde</title>
+        <title>#{messages['quanto.voce.bebe.sim.adoles.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -26,7 +26,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Informações para menores de 18 anos</h1> 
+                            <h1>#{messages['quanto.voce.bebe.sim.adoles.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -38,48 +38,48 @@
                     <div id="pagemiddle">
 
                         <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <h:graphicImage library="default" id="cartoonman" title="#{messages['quanto.voce.bebe.sim.adoles.graphicimage.1']}" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div>
 
                         <div id="pmtext">                                               
                                             
                                                 
-                            <h3>Você não deveria consumir álcool</h3>
+                            <h3>#{messages['quanto.voce.bebe.sim.adoles.h3.1']}</h3>
                         
-                        <p>Você relatou fazer consumo de álcool, o que pode lhe causar uma série de consequências negativas em seu futuro</p>
-                        <p>Menores de 18 anos não devem utilizar álcool</p>
+                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.1']}</p>
+                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.2']}</p>
                         
-                        <p>Confira abaixo algumas das dúvidas frequentes entre adolescentes</p>
+                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.3']}</p>
                         
                         
                         <p:accordionPanel>
-                                <p:tab title="1. Por que eu não devo beber ?">
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.adoles.p.tab.title.1']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p> O consumo de álcool está associado com uma série de problemas</p>
-                                        <p> Muitos destes problemas demoram para aparecer e outros são mais visíveis</p>
-                                        <p> Problemas de saúde, legais e acidentes estão associados com o consumo de álcool</p>
-                                        <p> Adolescentes e adultos podem ter o seu desenvolvimento prejudicado pelo álcool, reduzindo seu desempenho em esportes, estudo e trabalho</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.4']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.5']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.6']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.7']}</p>
                                     </h:panelGrid>
                                 </p:tab>
                    
-                                <p:tab title="2. Caso eu já beba, o que devo fazer?">
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.adoles.p.tab.title.2']}">
                                     <h:panelGrid columns="4" cellpadding="7">
-                                        <p>Recomendamos em seu caso que procure um profissional de saúde para ajudá-la ou alguém que possa lhe ajudar a parar de beber</p>
-                                        <p>O conteúdo deste site não foi desenvolvido especialmente para adolescentes, mas algumas dicas podem ser úteis:</p>
-                                        <p>Saiba que existem diversos meios para ajudá-la a parar de beber</p>
-                                        <p>Caso alguém lhe ofereça bebida, sempre diga "não obrigada", de forma educada e direta</p>
-                                        <p>Procure manter-se longe de pessoas ou lugares que fazem com que você beba</p>
-                                        <p>Caso você não consiga parar de beber procure um profissional de saúde e peça ajuda</p>
-                                        <p>Caso não tenha acesso à um profissional de saúde utilize o Viva Voz (Disque 132 - ligação gratuita)</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.8']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.9']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.10']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.11']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.12']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.13']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.adoles.p.14']}</p>
                                     </h:panelGrid>
                                 </p:tab>
                         </p:accordionPanel>
                                              
-                            <h3>Mais informações sobre álcool</h3>
-                            <p>Se você gostaria de aprofundar mais sobre o assunto, preparamos um material para você neste <h:outputLink value="https://www.informalcool.org.br/bebermenos"> link</h:outputLink>.</p>        
+                            <h3>#{messages['quanto.voce.bebe.sim.adoles.h3.2']}</h3>
+                            <p>#{messages['quanto.voce.bebe.sim.adoles.p.15']} <h:outputLink value="https://www.informalcool.org.br/bebermenos"> link</h:outputLink>.</p>        
 
-                            <h3>Acompanhamento anual</h3>                        
-                            <p>Se você quiser, podemos entrar em contato com você daqui a um ano para uma nova avaliação e outras infomações. Coloque seu e-mail no campo abaixo.</p>
+                            <h3>#{messages['quanto.voce.bebe.sim.adoles.h3.3']}</h3>                        
+                            <p>#{messages['quanto.voce.bebe.sim.adoles.p.16']}</p>
 
                             <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
 
@@ -114,7 +114,7 @@
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
                     
                 </div>        
