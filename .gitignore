@@ -2,7 +2,6 @@
 aes/nbproject/private
 aes/build/
 aes/dist/
-aes/nbproject/project.properties
 
 ### Java ###
 *.class
