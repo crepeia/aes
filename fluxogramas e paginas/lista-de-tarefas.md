@@ -4,26 +4,18 @@ AES -
 
 Alta Prioridade
 ==========================
-Thiago
-*Verificar envio de e-mail para usuários que são excluídos da intervenção (mulheres grávidas, adolescentes, abstêmios)
-*Criar pasta com templates para envio de e-mail
-*Verificar status de gravação do perfil dos usuários que acessam a página antes do login
-
-Daniela
-*Continuação do fluxo a partir da verificação dos condicionais baseados na pontuação do AUDIT e características dos participantes
-
-*Criar variável que registre o consumo por dias da semana (quanto-voce-bebe-sim-beber-uso-audit-3)
-	-Número de dias da semana com consumo
-	-Consumo total por dia da semana
-	-Consumo total na semana
-
+*Correção completa do fluxo.
+*Validação formularios.
+*Verificar atributologinRequired de todas as páginas.
+*Programar email todos casos.
+*Desenvolver controle de idiomas.
 
 
 Média Prioridade
 ==========================
-Thiago
-Criar ação em Javascript que fazem com que as perguntas do AUDIT 7 (quanto-voce-bebe-sim-beber-uso-audit-7) sejam mostradas após o clique na opção. 
-	-Exemplo semelhante à página o-quanto-voce-bebe-convite questão relativa à avaliação de gravidez apenas entre mulheres.  
+*Audit 7 mover botão proximo
+*Corrigir login dialog caso usario/senha incorretos
+*Tirar campo busca	
 
 
 Heder
@@ -41,6 +33,12 @@ Baixa Prioridade
 * Design da main page,
 * Seleção das imagens das páginas,
 * Otimização das imagens,
+* Logs do sistema,
+* Exibir mensagens para o usuário ao capturar excessão,
+* Limpar e organizar o projeto,
+* Atualizar GlassFish e bibliotecas,
+* Documentar o projeto,
+
 
 
 
@@ -66,3 +64,11 @@ Atividades Realizadas
 Lembrete - verificar se todos os inputs estão sendo gravados no banco
 *Verificar condição extra média semanal e diária
 *Calcular Pontuação AUDIT FULL = AUDIT 7 + AUDIT 3
+*Criar ação em Javascript que fazem com que as perguntas do AUDIT 7 (quanto-voce-bebe-sim-beber-uso-audit-7) sejam mostradas após o clique na opção. 
+*Verificar envio de e-mail para usuários que são excluídos da intervenção (mulheres grávidas, adolescentes, abstêmios)
+*Criar pasta com templates para envio de e-mail
+*Verificar status de gravação do perfil dos usuários que acessam a página antes do login
+*Criar variável que registre o consumo por dias da semana (quanto-voce-bebe-sim-beber-uso-audit-3)
+	-Número de dias da semana com consumo
+	-Consumo total por dia da semana
+	-Consumo total na semana
