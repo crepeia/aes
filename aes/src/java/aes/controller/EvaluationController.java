@@ -333,22 +333,25 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
         return "";
     }
+    
+    public void dependenceListener(){
+            try {
+                daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            } catch (SQLException ex) {
+                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
 
-    public void continueEvaluation() throws IOException {
-        if (getEvaluation().getDependencia() == 1) {
-            setURL();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-parar-apoio-intro.xhtml");
-            //return "estrategia-parar-apoio-intro.xhtml";
-        } else {
-            System.out.println("POPUP");
-        }
+    public String dependenceNext(){     
         try {
-            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+            setURL();
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+            return ("estrategia-parar-apoio-intro.xhtml?faces-redirect=true");
 
         } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "";
     }
     
     public String nextEstrategia(){

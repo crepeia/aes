@@ -113,8 +113,8 @@ public class Evaluation implements Serializable {
     @Column(name = "quit")
     private Boolean quit; 
 
-    @Column(name = "dependencia")
-    private Integer dependencia;
+    @Column(name = "dependence")
+    private Boolean dependence;
 
     @Column(name = "data_comecar_plano")
     private Date dataComecarPlano;
@@ -382,8 +382,8 @@ public class Evaluation implements Serializable {
         this.backPlan = backPlan;
     }
 
-    public Integer getDependencia() {
-        return dependencia;
+    public Boolean getDependence() {
+        return dependence;
     }
 
     public Boolean getQuit() {
@@ -394,8 +394,8 @@ public class Evaluation implements Serializable {
         this.quit = quit;
     }
 
-    public void setDependencia(Integer dependencia) {
-        this.dependencia = dependencia;
+    public void setDependence(Boolean dependence) {
+        this.dependence = dependence;
     }
 
     public Date getDataComecarPlano() {
