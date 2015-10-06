@@ -324,6 +324,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             if (getEvaluation().getQuit()) {
                 return "estrategia-diminuir-introducao.xhtml?faces-redirect=true";
             } else {
+                setURL();
                 return "estrategia-parar-apoio-intro.xhtml?faces-redirect=true";
             }
 
@@ -335,6 +336,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void continueEvaluation() throws IOException {
         if (getEvaluation().getDependencia() == 1) {
+            setURL();
             FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-parar-apoio-intro.xhtml");
             //return "estrategia-parar-apoio-intro.xhtml";
         } else {
@@ -348,6 +350,12 @@ public class EvaluationController extends BaseController<Evaluation> {
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public String nextEstrategia(){
+        setURL();
+        return "plano-mudanca.xhtml?faces-redirect=true";
+    }
+    
      public void estrategiaRegistro() {
         if (getUser().getGender() == 'F') {
             try {
@@ -372,6 +380,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             Logger.getLogger(EvaluationController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        setURL();
         return "estrategia-diminuir-registro-eletronico.xhtml?faces-redirect=true";
     }
 
