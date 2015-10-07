@@ -130,9 +130,9 @@ public class Evaluation implements Serializable {
     private String possiveisDificuladesPlano;
 
     @Column(name = "dose_padrao_diaria")
-    private Integer dosePadraoDiaria;
+    private int dosePadraoDiaria;
     @Column(name = "dose_padrao_semanal")
-    private Integer dosePadraoSemanal;
+    private int dosePadraoSemanal;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User user;

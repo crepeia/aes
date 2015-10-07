@@ -56,11 +56,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     private Integer day;
     private Integer month;
     private Integer year;
-
-    private boolean continueEvaluation;
-
-    private StreamedContent planoPersonalizado;
-
+    
     private String url;
 
     public EvaluationController() {
@@ -354,173 +350,35 @@ public class EvaluationController extends BaseController<Evaluation> {
         return "";
     }
     
-    public String nextEstrategia(){
+    public String nextRegEleManAndWoman() {
+        try {
+            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+            setURL();
+            return "estrategia-diminuir-registro-eletronico.xhtml?faces-redirect=true";
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+    
+    public String goToPlan(){
         setURL();
         return "plano-mudanca.xhtml?faces-redirect=true";
     }
     
-     public void estrategiaRegistro() {
-        if (getUser().getGender() == 'F') {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-registro-eletronico-meta-mulher.xhtml?faces-redirect=true");
-            } catch (IOException ex) {
-                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("estrategia-diminuir-registro-eletronico-meta-homem.xhtml?faces-redirect=true");
-            } catch (IOException ex) {
-                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public String getURL() {
+        if (url == null) {
+            return "index.xhtml?faces-redirect=true";
         }
+        return url;
+    }
+    
+    public void setURL() {
+        Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        url = ((HttpServletRequest) request).getRequestURI();
+        url = url.substring(url.lastIndexOf('/') + 1);
     }
 
-    public String nextRegEleManAndWoman() {
-        try {
-            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        setURL();
-        return "estrategia-diminuir-registro-eletronico.xhtml?faces-redirect=true";
-    }
-
-    public ByteArrayOutputStream gerarPdf() {
-
-        try {
-            this.getDaoBase().insertOrUpdate(getEvaluation(), this.getEntityManager());
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-            Document document = new Document();
-            PdfWriter.getInstance(document, os);
-            document.open();
-
-            document.addTitle("Plano Personalizado");
-            document.addAuthor("aes.com.br");
-
-            URL url = FacesContext.getCurrentInstance().getExternalContext().getResource("/resources/default/images/logo-alcool-e-saude.png");
-            Image img = Image.getInstance(url);
-            img.setAlignment(Element.ALIGN_CENTER);
-            img.scaleToFit(75, 75);
-            document.add(img);
-
-            Color color = Color.getHSBColor(214, 81, 46);
-            Font f1 = new Font(FontFamily.HELVETICA, 20, Font.BOLD, BaseColor.BLUE);
-            f1.setColor(22, 63, 117);
-            Font f2 = new Font(FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.BLUE);
-            f2.setColor(22, 63, 117);
-            Font f3 = new Font(FontFamily.HELVETICA, 11);
-
-            Paragraph paragraph = new Paragraph("Meu plano", f1);
-            paragraph.setAlignment(Element.ALIGN_CENTER);
-            document.add(paragraph);
-            document.add(Chunk.NEWLINE);
-            document.add(Chunk.NEWLINE);
-
-            /* paragraph = new Paragraph(this.getText("pronto.plano.padrao.h2.1"), f2);
-             document.add(paragraph);
-             paragraph = new Paragraph(this.getText("dicas.p1"), f3);
-             document.add(paragraph);
-             paragraph = new Paragraph(this.getText("dicas.p2"), f3);
-             document.add(paragraph);
-             paragraph = new Paragraph(this.getText("dicas.p3"), f3);
-             document.add(paragraph);
-             paragraph = new Paragraph(this.getText("dicas.p4"), f3);
-             document.add(paragraph);
-             paragraph = new Paragraph(this.getText("dicas.p5"), f3);
-             document.add(paragraph);
-             paragraph = new Paragraph(this.getText("dicas.p5.1"), f3);
-             document.add(paragraph);
-             paragraph = new Paragraph(this.getText("dicas.p5.2"), f3);
-             document.add(paragraph);
-             paragraph = new Paragraph(this.getText("dicas.p6"), f3);
-             document.add(paragraph);
-             document.add(Chunk.NEWLINE);*/
-            if (getEvaluation().getDataComecarPlano() != null && !getEvaluation().getRazoesPlano().trim().isEmpty()) {
-                paragraph = new Paragraph("Data para começar", f2);
-                document.add(paragraph);
-                paragraph = new Paragraph(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(getEvaluation().getDataComecarPlano()), f3);
-                document.add(paragraph);
-                document.add(Chunk.NEWLINE);
-            } else {
-                paragraph.add(new Paragraph("teste1"));
-            }
-
-            if (getEvaluation().getRazoesPlano() != null && !getEvaluation().getRazoesPlano().trim().isEmpty()) {
-                paragraph = new Paragraph(" As razões mais importantes que eu tenho para mudar a forma que bebo são: ", f2);
-                document.add(paragraph);
-                paragraph = new Paragraph(getEvaluation().getRazoesPlano(), f3);
-                document.add(paragraph);
-                document.add(Chunk.NEWLINE);
-            } else {
-                paragraph = new Paragraph(" ");
-                paragraph.add(paragraph);
-            }
-
-            if (getEvaluation().getEstrategiasPlano() != null && !getEvaluation().getEstrategiasPlano().trim().isEmpty()) {
-                paragraph = new Paragraph("Eu irei usar as seguintes estratégias: ", f2);
-                document.add(paragraph);
-                paragraph = new Paragraph(getEvaluation().getEstrategiasPlano(), f3);
-                document.add(paragraph);
-                document.add(Chunk.NEWLINE);
-            } else {
-                paragraph.add(new Paragraph(" "));
-            }
-
-            if (getEvaluation().getPessoasPlano() != null && !getEvaluation().getPessoasPlano().trim().isEmpty()) {
-                paragraph = new Paragraph("As pessoas que podem me ajudar são: ", f2);
-                document.add(paragraph);
-                paragraph = new Paragraph(getEvaluation().getPessoasPlano(), f3);
-                document.add(paragraph);
-                document.add(Chunk.NEWLINE);
-            } else {
-                paragraph.add(new Paragraph(" "));
-            }
-
-            if (getEvaluation().getSinaisSucessoPlano() != null || getEvaluation().getSinaisSucessoPlano().trim().isEmpty()) {
-                paragraph = new Paragraph("Eu saberei que meu plano está funcionando quando: ", f2);
-                document.add(paragraph);
-                paragraph = new Paragraph(getEvaluation().getSinaisSucessoPlano(), f3);
-                document.add(paragraph);
-                document.add(Chunk.NEWLINE);
-            } else {
-                paragraph.add(new Paragraph(" "));
-            }
-
-            if (getEvaluation().getPossiveisDificuladesPlano() != null || getEvaluation().getPossiveisDificuladesPlano().trim().isEmpty()) {
-                paragraph = new Paragraph("O que pode interferir e como posso lidar com estas situações: ", f2);
-                document.add(paragraph);
-                paragraph = new Paragraph(getEvaluation().getPossiveisDificuladesPlano(), f3);
-                document.add(paragraph);
-                document.add(Chunk.NEWLINE);
-            } else {
-                paragraph.add(new Paragraph(" "));
-            }
-            document.close();
-
-            return os;
-        } catch (Exception ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar dados", null));
-            return null;
-        }
-
-    }
-
-    public StreamedContent getPlanoPersonalizado() {
-
-        InputStream is;
-        try {
-            is = new ByteArrayInputStream(gerarPdf().toByteArray());
-            return new DefaultStreamedContent(is, "application/pdf", "plano.pdf");
-        } catch (Exception e) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, "erro ao gerar PDF");
-            return null;
-        }
-
-    }
 
     public Integer getDay() {
         if (loggedUser()) {
@@ -553,27 +411,6 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void setYear(Integer year) {
         this.year = year;
-    }
-
-    public boolean isContinueEvaluation() {
-        return continueEvaluation;
-    }
-
-    public void setContinueEvaluation(boolean continueEvaluation) {
-        this.continueEvaluation = continueEvaluation;
-    }
-
-    public void setURL() {
-        Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        url = ((HttpServletRequest) request).getRequestURI();
-        url = url.substring(url.lastIndexOf('/') + 1);
-    }
-
-    public String getURL() {
-        if (url == null) {
-            return "index.xhtml?faces-redirect=true";
-        }
-        return url;
     }
 
 }

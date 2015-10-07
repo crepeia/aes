@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -58,15 +60,13 @@ public class Contact implements Serializable {
     private User user;
     
         
-    public void readHTMLTemplate(String relativePath) throws IOException {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        String absolutePath = servletContext.getRealPath(relativePath);
-        byte[] encoded = Files.readAllBytes(Paths.get(absolutePath));
-        htmlTemplate =  new String(encoded, StandardCharsets.UTF_8);
-    }
-    
-    public void fillHTMLTemplate(String title, String subtitle, String body) {
+    public void setHTMLTemplate(String relativePath, String title, String subtitle, String body) {
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+            String absolutePath = servletContext.getRealPath(relativePath);
+            byte[] encoded = Files.readAllBytes(Paths.get(absolutePath));
+            htmlTemplate =  new String(encoded, StandardCharsets.UTF_8);
             if(title != null){
                 htmlTemplate = htmlTemplate.replace("#title#", title);
             }
@@ -76,6 +76,13 @@ public class Contact implements Serializable {
             if(body != null){
                 htmlTemplate = htmlTemplate.replace("#body#", body); 
             }
+        } catch (IOException ex) {
+            Logger.getLogger(Contact.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void fillHTMLTemplate(String title, String subtitle, String body) {
+            
     }
 
     public long getId() {

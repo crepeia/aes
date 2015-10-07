@@ -59,7 +59,7 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" actionListener="#{evaluationController.estrategiaRegistro()}"/>      
+                                    <h:button class="btngen" value ="#{messages['next']}" outcome="#{evaluationController.evaluation.user.female ? 'estrategia-diminuir-registro-eletronico-meta-mulher.xhtml?faces-redirect=true' : 'estrategia-diminuir-registro-eletronico-meta-homem.xhtml?faces-redirect=true'}"></h:button>
                                 </div>
 
                             </h:form>                                            

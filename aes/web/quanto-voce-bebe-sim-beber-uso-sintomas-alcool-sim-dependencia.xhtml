@@ -82,7 +82,7 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.continueEvaluation}" disabled="#{!evaluationController.evaluation.dependence or empty evaluationController.evaluation.dependence}"/>
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceNext()}" disabled="#{!evaluationController.evaluation.dependence or empty evaluationController.evaluation.dependence}"/>
                                                    
                                 </div>
                                 

@@ -129,14 +129,14 @@
                             
                                 <h:panelGrid columns="2" cellpadding="1">
                                     <p:outputLabel for="metadosediaria" value="Doses Padrão" />
-                                    <p:spinner id="metadosediaria" value="#{evaluationController.evaluation.dosePadraoDiaria}"/>
+                                    <p:spinner id="metadosediaria" value="#{evaluationController.evaluation.dosePadraoDiaria}" min="0"/>
                                 </h:panelGrid>
                                                                 
                             <h4>#{messages['estrategia.dim.registro.elet.meta.mul.h4.3']}</h4> 
                             
                                 <h:panelGrid columns="2" cellpadding="1">
                                     <p:outputLabel for="metadosesemanal" value="Doses Padrão" />
-                                    <p:spinner id="metadosesemanal" value="#{evaluationController.evaluation.dosePadraoSemanal}"/>
+                                    <p:spinner id="metadosesemanal" value="#{evaluationController.evaluation.dosePadraoSemanal}" min="0"/>
                                 </h:panelGrid>  
                                     
                         </div><!-- end pmtext -->  
