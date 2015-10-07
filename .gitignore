@@ -1,14 +1,6 @@
-### NetBeans ###
 aes/nbproject/private
 aes/build/
 aes/dist/
 
-### Java ###
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
 
 
