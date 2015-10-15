@@ -45,7 +45,7 @@ public class EMailSSL {
         
         this.authenticator = new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("acoolesaude", "forininhosenha");
+                return new PasswordAuthentication("alcoolesaude", "forninhosenha");
             }
         };
 

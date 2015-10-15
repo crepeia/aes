@@ -46,85 +46,83 @@
                             <h3>#{messages['plano.mudanca.pronto.para.comecar.h3.1']}</h3>
                             <h:form>
                                 <p:panel id="questoes" >
-                                    <p:growl id="messages" showDetail="true" />
-                                    
+
                                     <h:panelGrid columns="1"  cellpadding="5">
                                         <f:facet name="header">  
-                                          #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
+                                            #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
                                         </f:facet>
-                                        <p:outputLabel for="dataM" value="#{evaluationController.evaluation.dataComecarPlano}" />
-                                            <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}" />
+                                        <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy"/>
                                     </h:panelGrid>
-                                  
-                                                                           
+
+
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao2">
                                         <f:facet name="header">  
-                                           #{messages['plano.mudanca.pronto.para.comecar.facet.2']}                                      
+                                            #{messages['plano.mudanca.pronto.para.comecar.facet.2']}                                      
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2"/> 
                                     </h:panelGrid>
-                                    
+
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                         <f:facet name="header">  
-                                           #{messages['plano.mudanca.pronto.para.comecar.facet.3']}                                      
+                                            #{messages['plano.mudanca.pronto.para.comecar.facet.3']}                                      
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3"/> 
                                     </h:panelGrid>
-                                    
+
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao4">
                                         <f:facet name="header">  
-                                           #{messages['plano.mudanca.pronto.para.comecar.facet.4']}                                      
+                                            #{messages['plano.mudanca.pronto.para.comecar.facet.4']}                                      
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4"/> 
                                     </h:panelGrid>
-                                    
+
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao5">
                                         <f:facet name="header">  
-                                          #{messages['plano.mudanca.pronto.para.comecar.facet.5']}                                       
+                                            #{messages['plano.mudanca.pronto.para.comecar.facet.5']}                                       
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5"/> 
                                     </h:panelGrid>
-                                    
+
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao6">
                                         <f:facet name="header">  
-                                          #{messages['plano.mudanca.pronto.para.comecar.facet.6']}                                       
+                                            #{messages['plano.mudanca.pronto.para.comecar.facet.6']}                                       
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6"/> 
                                     </h:panelGrid>
-                                
+
                                 </p:panel>
-                                                   
 
-                            
-                                
-                                <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
-                                </div>
-                                
-                                
-                                <!--<div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action=""/>
-                               
-                                                         
-                                </div>-->
-                                <br></br>
-                                <br></br>
-                                <h2>Salvar</h2>
-                                <div id ="planoimg1">
-                                    <div class="planoimg">                                                            
-                                        <h:outputLink target="_blank" value="plano-mudanca-pronto-para-comecar_1.xhtml"><h:graphicImage  library="default" title="Imprimir" name="images/impressao.png" alt="#{messages['pronto.plano.print']}Imprimir" /></h:outputLink>                                                            
-                                        <p><h:outputLink target="_blank" value="plano-mudanca-pronto-para-comecar_1.xhtml">#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</h:outputLink></p>
-                                    </div>
-                                </div>
+                                <h:panelGrid columns="2" >
+                                    <p:panelGrid columns="1">
+                                        <div id ="planoimg1">
+                                            <div class="planoimg">                                                            
+                                                <p:commandLink action="#{evaluationController.printPlan()}"  ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
+                                                <p><p:commandLink action="#{evaluationController.printPlan()}"  >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                            </div>
+                                        </div>
+                                    </p:panelGrid>
 
-                               <!-- <div id ="planoimg2">
-                                    <div class="planoimg">
-                                        <p:commandLink action="#{prontoParaPararController.enviarEmail}" update="@form" ><h:graphicImage  library="default" title="#{messages['pronto.plano.email']}" name="images/email.png" alt="#{messages['pronto.plano.email']}" /></p:commandLink>
-                                        <p><p:commandLink action="#{prontoParaPararController.enviarEmail}" update="@form">#{messages['pronto.plano.email']}</p:commandLink></p>
+                                    <p:panelGrid columns="1">
+                                        <div id ="planoimg2">
+                                            <div class="planoimg">
+                                                <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
+                                                <p><p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form">E-Mail</p:commandLink></p>
+                                            </div>
+                                        </div>
+                                    </p:panelGrid>
+
+
+                                </h:panelGrid>  
+
+                                <p:messages id="messages" />   
+                                <h:panelGrid>   
+                                    <div id="btnback">
+                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
                                     </div>
-                                </div>-->
-                                <p><p:messages /></p>
-                               
+                                </h:panelGrid>   
+
+
+
 
                             </h:form>                     
 

@@ -5,9 +5,12 @@
  */
 package aes.controller;
 
+import aes.model.Contact;
 import aes.model.Evaluation;
+import aes.model.Plan;
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import aes.utility.EMailSSL;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -22,10 +25,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -352,7 +357,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     
     public String nextRegEleManAndWoman() {
         try {
-            this.daoBase.update(this.getEvaluation(), this.getEntityManager());
+            daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
             setURL();
             return "estrategia-diminuir-registro-eletronico.xhtml?faces-redirect=true";
         } catch (SQLException ex) {
@@ -364,6 +369,47 @@ public class EvaluationController extends BaseController<Evaluation> {
     public String goToPlan(){
         setURL();
         return "plano-mudanca.xhtml?faces-redirect=true";
+    }
+       
+    public String printPlan(){
+       try {
+            daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
+            return "plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true";
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+       return "";
+    }
+    
+    public void sendPlan(){
+        try {
+            Contact contact = new Contact();
+            contact.setUser(getUser());
+            contact.setRecipient("t.rizuti@gmail.com");
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSentDate(Calendar.getInstance());
+            contact.setSubject("Plano");
+            contact.setTextContent("Seu plano em anexo");
+            contact.setAttachmentName("meuplano.pdf");
+            contact.setAttachment(new Plan(getEvaluation()).getPdf());
+            contact.setHTMLTemplate("/resources/default/templates/plan-template.html",
+                    "Alcool e Saude", "Plano", "Em Anexo seu plano");
+            EMailSSL eMailSSL = new EMailSSL();
+            eMailSSL.send(contact);
+            new GenericDAO(Contact.class).insertOrUpdate(contact, this.getEntityManager());
+            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Plano enviado."));
+        } catch (NamingException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public StreamedContent getPlanPdf() {   
+            Plan plan = new Plan(getEvaluation());
+            return new DefaultStreamedContent(new ByteArrayInputStream(plan.getPdf().toByteArray()), 
+                    "application/pdf", "meuplano.pdf");
     }
     
     public String getURL() {
@@ -377,6 +423,10 @@ public class EvaluationController extends BaseController<Evaluation> {
         Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
         url = ((HttpServletRequest) request).getRequestURI();
         url = url.substring(url.lastIndexOf('/') + 1);
+    }
+    
+    public Date getCurrentDate(){
+        return new Date();
     }
 
 
