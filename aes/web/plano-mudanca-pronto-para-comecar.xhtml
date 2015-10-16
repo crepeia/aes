@@ -114,7 +114,24 @@
 
                                 </h:panelGrid>  
 
-                                <p:messages id="messages" />   
+                                <p:panel>
+                                <p:messages id="messages" showDetail="true" autoUpdate="true"/> 
+                                    
+                                 <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;"  >
+                                    <f:facet name="default">
+
+                                    </f:facet>
+
+                                    <f:facet name="start">
+                                        <p:graphicImage library="default" name="/images/ajax-loader.gif" />
+                                        <p:outputLabel value="Por favor, aguarde."/>    
+                                    </f:facet>
+
+                                    <f:facet name="complete">
+                                    </f:facet>
+                                </p:ajaxStatus>
+                                </p:panel>
+                                
                                 <h:panelGrid>   
                                     <div id="btnback">
                                         <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>

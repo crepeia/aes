@@ -48,16 +48,13 @@ public class Contact implements Serializable {
     @Column (name = "subject")
     private String subject;
     @Column(name = "text_content")
-    private String textContent;
-    @Column (name="html_template")
-    String htmlTemplate;
+    private String textContent;  
+    @Transient
+    private String htmlTemplate;
     @Transient
     ByteArrayOutputStream attachment;
     @Column (name="attachment_name")
-    String attachmentName; 
-    
-    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    private User user;
+    private String attachmentName; 
     
         
     public void setHTMLTemplate(String relativePath, String title, String subtitle, String body) {
@@ -157,14 +154,5 @@ public class Contact implements Serializable {
     public void setAttachmentName(String attachmentName) {
         this.attachmentName = attachmentName;
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     
 }

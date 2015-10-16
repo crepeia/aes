@@ -137,10 +137,10 @@ public class Evaluation implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User user;
     
-     @Override
+       @Override
     public String toString() {
         return this.id + ", " + this.user.getId() + ", " + 
-                new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(date) + ", " + this.drink;
+                new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(date.getTime()) + ", " + this.drink;
     }
     
     public int getDrinkingDays() {

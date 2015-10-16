@@ -46,7 +46,6 @@ public class Scheduler {
                     contact.setSubject("test1");
                     contact.setTextContent("test1");
                     contact.setSentDate(Calendar.getInstance());
-                    contact.setUser(e.getUser());
                     emailSSL.send(contact);
                     contactDAO.insertOrUpdate(contact, entityManager);
                     e.setYearEmailDate(Calendar.getInstance());
@@ -58,7 +57,6 @@ public class Scheduler {
                     contact.setSubject("test2");
                     contact.setTextContent("test2");
                     contact.setSentDate(Calendar.getInstance());
-                    contact.setUser(e.getUser());
                     emailSSL.send(contact);
                     contactDAO.insertOrUpdate(contact, entityManager);
                     e.setYearEmailDate(Calendar.getInstance());

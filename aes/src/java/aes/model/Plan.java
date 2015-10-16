@@ -30,14 +30,12 @@ import javax.servlet.ServletContext;
  */
 public class Plan {
     
-    private Evaluation evaluation;
     private String htmlTemplate;
     private ByteArrayOutputStream pdf;
     
     
     public Plan(Evaluation evaluation){
         try {
-            this.evaluation = evaluation;
             String subtitle[] = new String[6];
             String content[] = new String[6];
             String title = "Meu Plano";
@@ -46,18 +44,18 @@ public class Plan {
             subtitle[2] = "Eu irei usar as seguintes estratégias:" ;
             subtitle[3] = "As pessoas que podem me ajudar são:" ;
             subtitle[4] = "Eu saberei que meu plano está funcionando quando:";
-            subtitle[5] = "O que pode interferir e como posso lidar com estas situações: ";
-            if(this.evaluation.getDataComecarPlano() != null){
-                content[0] = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.evaluation.getDataComecarPlano());
+            subtitle[5] = "O que pode interferir e como posso lidar com estas situações:";
+            if(evaluation.getDataComecarPlano() != null){
+                content[0] = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(evaluation.getDataComecarPlano());
             }
             else{
                 content[0] = "";
             }
-            content[1] = this.evaluation.getRazoesPlano();
-            content[2] = this.evaluation.getEstrategiasPlano();
-            content[3] = this.evaluation.getPessoasPlano();
-            content[4] = this.evaluation.getSinaisSucessoPlano();
-            content[5] = this.evaluation.getPossiveisDificuladesPlano();
+            content[1] = evaluation.getRazoesPlano();
+            content[2] = evaluation.getEstrategiasPlano();
+            content[3] = evaluation.getPessoasPlano();
+            content[4] = evaluation.getSinaisSucessoPlano();
+            content[5] = evaluation.getPossiveisDificuladesPlano();
             
             FacesContext facesContext = FacesContext.getCurrentInstance();
             ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
@@ -93,15 +91,7 @@ public class Plan {
             Logger.getLogger(Plan.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public Evaluation getEvaluation() {
-        return evaluation;
-    }
-
-    public void setEvaluation(Evaluation evaluation) {
-        this.evaluation = evaluation;
-    }
-
+    
     public String getHtmlTemplate() {
         return htmlTemplate;
     }

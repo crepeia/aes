@@ -94,14 +94,18 @@ public class EvaluationController extends BaseController<Evaluation> {
                     Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                User user = new User();
-                evaluation = new Evaluation();
-                evaluation.setDate(Calendar.getInstance());
-                evaluation.setUser(user);
+                Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                url = ((HttpServletRequest) request).getRequestURI();
+                url = url.substring(url.lastIndexOf('/') + 1);
+                if(url.contains("quanto-voce-bebe-introducao")){
+                    User user = new User();
+                    evaluation = new Evaluation();
+                    evaluation.setDate(Calendar.getInstance());
+                    evaluation.setUser(user);
+                }
+                
             }
-
         }
-
         return evaluation;
     }
 
@@ -381,29 +385,30 @@ public class EvaluationController extends BaseController<Evaluation> {
        return "";
     }
     
-    public void sendPlan(){
+   public void sendPlan() {
         try {
+           daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
             Contact contact = new Contact();
-            contact.setUser(getUser());
-            contact.setRecipient("t.rizuti@gmail.com");
+            contact.setRecipient(getUser().getEmail());
             contact.setSender("alcoolesaude@gmail.com");
             contact.setSentDate(Calendar.getInstance());
-            contact.setSubject("Plano");
-            contact.setTextContent("Seu plano em anexo");
+            contact.setSubject("Álcool e Saúde - Seu Plano");
+            contact.setTextContent("Em anexo está seu plano em formato PDF.");
             contact.setAttachmentName("meuplano.pdf");
             contact.setAttachment(new Plan(getEvaluation()).getPdf());
-            contact.setHTMLTemplate("/resources/default/templates/plan-template.html",
-                    "Alcool e Saude", "Plano", "Em Anexo seu plano");
+            contact.setHTMLTemplate("/resources/default/templates/email-template.html",
+                    "Álcool e Saúde", "Seu Plano Personalizado","Em anexo está seu plano em formato PDF.");
             EMailSSL eMailSSL = new EMailSSL();
             eMailSSL.send(contact);
-            new GenericDAO(Contact.class).insertOrUpdate(contact, this.getEntityManager());
+            GenericDAO contactDAO = new GenericDAO(Contact.class);
+            contactDAO.insertOrUpdate(contact, this.getEntityManager());
             FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Plano enviado."));
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
     
     public StreamedContent getPlanPdf() {   

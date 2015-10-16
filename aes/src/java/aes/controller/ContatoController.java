@@ -53,9 +53,6 @@ public class ContatoController extends BaseController implements Serializable {
             contact.setSubject("Contato -- Álcool e Saúde");
             contact.setTextContent(message);
             contact.setSentDate(Calendar.getInstance());
-            if(loggedUser()){
-                contact.setUser(getLoggedUser());
-            }
             eMailSSL.send(contact);
             daoBase.insertOrUpdate(contact, this.getEntityManager());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Mensagem enviada com sucesso.", null));
