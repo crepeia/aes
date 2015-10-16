@@ -114,6 +114,7 @@
                             </div>
        
                     <div id="pagemiddle">
+                        <h:form>
                         <div id="pmtext">
                             
                             <h3>#{messages['estrategia.dim.registro.elet.meta.mul.h3.2']}</h3>
@@ -128,21 +129,23 @@
                             <h4>#{messages['estrategia.dim.registro.elet.meta.mul.h4.2']}</h4> 
                             
                                 <h:panelGrid columns="2" cellpadding="1">
-                                    <p:outputLabel for="metadosediaria" value="Doses Padrão" />
-                                    <p:spinner id="metadosediaria" value="#{evaluationController.evaluation.dosePadraoDiaria}" min="0"/>
+                                    <p:outputLabel value="Doses Padrão" />
+                                    <p:spinner id="metadosediaria" value="#{evaluationController.evaluation.dosePadraoDiaria}" min="0" required="true" requiredMessage="Campo em branco"/>
                                 </h:panelGrid>
+                            <p:message for="metadosediaria"/>
                                                                 
-                            <h4>#{messages['estrategia.dim.registro.elet.meta.mul.h4.3']}</h4> 
+                            <h4>#{messages['estrategia.dim.registro.elet.meta.hom.h4.3']}</h4> 
                             
                                 <h:panelGrid columns="2" cellpadding="1">
-                                    <p:outputLabel for="metadosesemanal" value="Doses Padrão" />
-                                    <p:spinner id="metadosesemanal" value="#{evaluationController.evaluation.dosePadraoSemanal}" min="0"/>
+                                    <p:outputLabel value="Doses Padrão" />
+                                    <p:spinner id="metadosesemanal" value="#{evaluationController.evaluation.dosePadraoSemanal}" min="0" required="true" requiredMessage="Campo em branco"/>
                                 </h:panelGrid>  
+                            <p:message for="metadosesemanal"/>
                                     
                         </div><!-- end pmtext -->  
                                                              
             
-                      <h:form>
+                      
 
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-registro.xhtml"></h:button>

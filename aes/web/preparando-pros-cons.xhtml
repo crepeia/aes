@@ -52,27 +52,43 @@
 
                             <h:form>
                                 <p:panel id="questoes" >
-                                    <p:growl id="messages" showDetail="true" />
+                                    
                                     <h:panelGrid columns="1"  cellpadding="5">
                                         <f:facet name="header">  
                                            Prós - Quais seria algumas das razões que poderiam ajudar você a mudar ?                                      
                                         </f:facet>
-                                        <h:outputText value="Melhorar minha saúde:" />
-                                        <p:rating value="#{evaluationController.evaluation.prosReasons1}" />
-                                        <h:outputText value="Melhorar os meus relacionamentos:" />
-                                        <p:rating value="#{evaluationController.evaluation.prosReasons2}" />
-                                        <h:outputText value="Evitar ressacas:" />
-                                        <p:rating value="#{evaluationController.evaluation.prosReasons3}" />
-                                        <h:outputText value="Melhor meu desempenho nos estudos:" />
-                                        <p:rating value="#{evaluationController.evaluation.prosReasons4}" />
-                                        <h:outputText value="Perder peso e ficar em forma:" />
-                                        <p:rating value="#{evaluationController.evaluation.prosReasons5}" />
-                                        <h:outputText value="Economizar dinheiro:" />
-                                        <p:rating value="#{evaluationController.evaluation.prosReasons6}" />
-                                        <h:outputText value="Evitar problemas mais sérios:" />
-                                        <p:rating value="#{evaluationController.evaluation.prosReasons7}" />
-                                        <h:outputText value="Atingir meus objetivos pessoais:" />
-                                        <p:rating value="#{evaluationController.evaluation.prosReasons8}" />                                                                        
+                                        <h:outputText value="1. Melhorar minha saúde:" />
+                                        <p:rating id="question1" value="#{evaluationController.evaluation.prosReasons1}" required="true" requiredMessage="Questão '1': campo em branco" />
+                                        <p:message for="question1"/>
+                                        
+                                        <h:outputText value="2. Melhorar os meus relacionamentos:" />
+                                        <p:rating id="question2" value="#{evaluationController.evaluation.prosReasons2}" required="true" requiredMessage="Questão '2': campo em branco"/>
+                                        <p:message for="question2"/>
+                                        
+                                        <h:outputText value="3. Evitar ressacas:" />
+                                        <p:rating id="question3" value="#{evaluationController.evaluation.prosReasons3}" required="true" requiredMessage="Questão '3': campo em branco"/>
+                                        <p:message for="question3"/>
+                                        
+                                        <h:outputText value="4. Melhor meu desempenho nos estudos:" />
+                                        <p:rating id="question4" value="#{evaluationController.evaluation.prosReasons4}" required="true" requiredMessage="Questão '4': campo em branco"/>
+                                        <p:message for="question4"/>
+                                        
+                                        <h:outputText value="5. Perder peso e ficar em forma:" />
+                                        <p:rating id="question5" value="#{evaluationController.evaluation.prosReasons5}" required="true" requiredMessage="Questão '5': campo em branco"/>
+                                        <p:message for="question5"/>
+                                        
+                                        <h:outputText value="6. Economizar dinheiro:" />
+                                        <p:rating id="question6" value="#{evaluationController.evaluation.prosReasons6}" required="true" requiredMessage="Questão '6': campo em branco"/>
+                                        <p:message for="question6"/>
+                                        
+                                        <h:outputText value="7. Evitar problemas mais sérios:" />
+                                        <p:rating id="question7" value="#{evaluationController.evaluation.prosReasons7}" required="true" requiredMessage="Questão '7': campo em branco"/>
+                                        <p:message for="question7"/>
+                                        
+                                        <h:outputText value="8. Atingir meus objetivos pessoais:" />
+                                        <p:rating id="question8" value="#{evaluationController.evaluation.prosReasons8}" required="true" requiredMessage="Questão '8': campo em branco"/>                                                                        
+                                        <p:message for="question8"/>
+                                        
                                     </h:panelGrid>
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao2">
                                         <f:facet name="header">  
@@ -94,6 +110,7 @@
                                 </p:panel>                            
 
                             
+                                
                                 
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>

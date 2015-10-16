@@ -48,19 +48,19 @@ public class Evaluation implements Serializable {
     @Column(name = "audit_3")
     private Integer audit3;
     @Column(name = "monday")
-    private int monday;
+    private Integer monday;
     @Column(name = "tuesday")
-    private int tuesday;
+    private Integer tuesday;
     @Column(name = "wednesday")
-    private int wednesday;
+    private Integer wednesday;
     @Column(name = "thursday")
-    private int thursday;
+    private Integer thursday;
     @Column(name = "friday")
-    private int friday;
+    private Integer friday;
     @Column(name = "saturday")
-    private int saturday;
+    private Integer saturday;
     @Column(name = "sunday")
-    private int sunday;
+    private Integer sunday;
     
     @Column(name = "audit_4")
     public Integer audit4;
@@ -130,9 +130,9 @@ public class Evaluation implements Serializable {
     private String possiveisDificuladesPlano;
 
     @Column(name = "dose_padrao_diaria")
-    private int dosePadraoDiaria;
+    private Integer dosePadraoDiaria;
     @Column(name = "dose_padrao_semanal")
-    private int dosePadraoSemanal;
+    private Integer dosePadraoSemanal;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User user;
@@ -222,59 +222,59 @@ public class Evaluation implements Serializable {
         this.audit3 = audit3;
     }
 
-    public int getMonday() {
+    public Integer getMonday() {
         return monday;
     }
 
-    public void setMonday(int monday) {
+    public void setMonday(Integer monday) {
         this.monday = monday;
     }
 
-    public int getTuesday() {
+    public Integer getTuesday() {
         return tuesday;
     }
 
-    public void setTuesday(int tuesday) {
+    public void setTuesday(Integer tuesday) {
         this.tuesday = tuesday;
     }
 
-    public int getWednesday() {
+    public Integer getWednesday() {
         return wednesday;
     }
 
-    public void setWednesday(int wednesday) {
+    public void setWednesday(Integer wednesday) {
         this.wednesday = wednesday;
     }
 
-    public int getThursday() {
+    public Integer getThursday() {
         return thursday;
     }
 
-    public void setThursday(int thursday) {
+    public void setThursday(Integer thursday) {
         this.thursday = thursday;
     }
 
-    public int getFriday() {
+    public Integer getFriday() {
         return friday;
     }
 
-    public void setFriday(int friday) {
+    public void setFriday(Integer friday) {
         this.friday = friday;
     }
 
-    public int getSaturday() {
+    public Integer getSaturday() {
         return saturday;
     }
 
-    public void setSaturday(int saturday) {
+    public void setSaturday(Integer saturday) {
         this.saturday = saturday;
     }
 
-    public int getSunday() {
+    public Integer getSunday() {
         return sunday;
     }
 
-    public void setSunday(int sunday) {
+    public void setSunday(Integer sunday) {
         this.sunday = sunday;
     }
 

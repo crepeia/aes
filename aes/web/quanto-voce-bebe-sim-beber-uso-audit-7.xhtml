@@ -52,7 +52,7 @@
                                         <f:facet name="header">  
                                             #{messages['audit.7.p.1']}
                                         </f:facet>
-                                        <p:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" layout="pageDirection">  
+                                        <p:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" requiredMessage="" layout="pageDirection">  
                                             <f:ajax event="change" execute="@this" render="audit5" />
                                             <f:selectItem itemLabel="#{messages['audit.7.select.1']}" itemValue="1" />
                                             <f:selectItem itemLabel="#{messages['audit.7.select.2']}" itemValue="2" />

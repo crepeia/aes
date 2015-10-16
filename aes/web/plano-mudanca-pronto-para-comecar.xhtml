@@ -51,7 +51,7 @@
                                         <f:facet name="header">  
                                             #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
                                         </f:facet>
-                                        <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy"/>
+                                        <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy" required="true" requiredMessage="'Data': Campo em branco"/>
                                     </h:panelGrid>
 
 
@@ -59,35 +59,35 @@
                                         <f:facet name="header">  
                                             #{messages['plano.mudanca.pronto.para.comecar.facet.2']}                                      
                                         </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2"/> 
+                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2" required="true" requiredMessage="'Razões': Campo em branco"/> 
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                         <f:facet name="header">  
                                             #{messages['plano.mudanca.pronto.para.comecar.facet.3']}                                      
                                         </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3"/> 
+                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3" required="true" requiredMessage="'Estratégias': Campo em branco"/> 
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao4">
                                         <f:facet name="header">  
                                             #{messages['plano.mudanca.pronto.para.comecar.facet.4']}                                      
                                         </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4"/> 
+                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4" required="true" requiredMessage="'Pessoas': Campo em branco"/> 
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao5">
                                         <f:facet name="header">  
                                             #{messages['plano.mudanca.pronto.para.comecar.facet.5']}                                       
                                         </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5"/> 
+                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5" required="true" requiredMessage="'Sinais Sucesso': Campo em branco"/> 
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao6">
                                         <f:facet name="header">  
                                             #{messages['plano.mudanca.pronto.para.comecar.facet.6']}                                       
                                         </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6"/> 
+                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="'Possíveis Dificuldades': Campo em branco"/> 
                                     </h:panelGrid>
 
                                 </p:panel>
@@ -129,8 +129,9 @@
 
 
 
+                        <p:messages id="msg" autoUpdate="true" showDetail="false"/>
 
-
+                        
                         </div><!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             
