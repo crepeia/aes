@@ -47,7 +47,9 @@ public class User implements Serializable {
     private boolean authorizeData;
     @Column(name = "pregnant")
     private Boolean pregnant;
-   
+    @Column(name = "prefered_language")
+    private String preferedLanguage;
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Evaluation> evaluations;
       
@@ -171,5 +173,15 @@ public class User implements Serializable {
     public void setEvaluations(List<Evaluation> evaluations) {
         this.evaluations = evaluations;
     }
+
+    public String getPreferedLanguage() {
+        return preferedLanguage;
+    }
+
+    public void setPreferedLanguage(String preferedLanguage) {
+        this.preferedLanguage = preferedLanguage;
+    }
+    
+    
      
 }

@@ -4,18 +4,14 @@ AES -
 
 Alta Prioridade
 ==========================
-*Correção completa do fluxo.
-*Validação formularios.
-*Verificar atributologinRequired de todas as páginas.
-*Programar email todos casos.
-*Desenvolver controle de idiomas.
+* estrategia-diminuir-registro-eletronico
+* Programar email todos casos.
+
 
 
 Média Prioridade
 ==========================
-*Audit 7 mover botão proximo
-*Corrigir login dialog caso usario/senha incorretos
-*Tirar campo busca	
+
 
 
 Heder
@@ -34,7 +30,6 @@ Baixa Prioridade
 * Seleção das imagens das páginas,
 * Otimização das imagens,
 * Logs do sistema,
-* Exibir mensagens para o usuário ao capturar excessão,
 * Limpar e organizar o projeto,
 * Atualizar GlassFish e bibliotecas,
 * Documentar o projeto,
@@ -72,3 +67,10 @@ Lembrete - verificar se todos os inputs estão sendo gravados no banco
 	-Número de dias da semana com consumo
 	-Consumo total por dia da semana
 	-Consumo total na semana
+*Correção completa do fluxo.
+*Validação formularios.
+*Verificar atributologinRequired de todas as páginas.
+*Tirar campo busca	
+* Desenvolver controle de idiomas.
+* Desenvolver controle de navegação.
+
