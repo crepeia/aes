@@ -29,6 +29,13 @@
             </div>
 
             <div id="rightheader">
+                <div id="languages">
+                    <h:form id="langform">                        
+                        <h:selectOneMenu value="#{languageController.language}" onchange="submit()">
+                            <f:selectItems value="#{languageController.languages}"/> 
+                        </h:selectOneMenu>                        
+                    </h:form>
+                </div>
                 <div id="fastsignin">
                     <h:form id="loginForm">
                         <p:panel id="groupPanel">
@@ -43,7 +50,7 @@
                             </p:panel>
                         </p:panel>
                         <div id="fastlogin">
-                            <p:overlayPanel id="loginDialog" for="entrarLink" hideEffect="fade" showEffect="fade" >  
+                            <p:overlayPanel id="loginDialog" for="entrarLink" hideEffect="fade" showEffect="fade" hideEvent="submit()" >  
                                 <p:panel id="loginInformationPanel" >
                                     <p:inputText id="emailTxt" value="#{loginController.user.email}" required="true" size="30" label="E-mail" >
                                         <f:validateLength maximum="50" />
@@ -53,7 +60,7 @@
                                         <f:validateLength maximum="16" />
                                     </p:password>
                                     <p:watermark for="passwordTxt" value="#{messages['password']}" />
-                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btnlogin" update="groupPanel loginDialog" actionListener="#{loginController.loginDialog}" />
+                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btnlogin" update="@all" actionListener="#{loginController.loginDialog}" />
                                 </p:panel>
                             </p:overlayPanel>
                         </div>    
