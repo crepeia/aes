@@ -151,7 +151,7 @@
                                                 #{messages['audit.7.p.7']}
                                             </f:facet>
                                             <p:selectOneRadio id="audit_10" value="#{evaluationController.evaluation.audit10}"  required="true" layout="pageDirection">  
-                                                <f:ajax event="change" execute="@this" render="enviar" />
+                                                <f:ajax event="change" execute="@this" render="backBtn saveBtn" />
                                                 <f:selectItem itemLabel="#{messages['audit.7.select.29']}" itemValue="1" />
                                                 <f:selectItem itemLabel="#{messages['audit.7.select.30']}" itemValue="3" />
                                                 <f:selectItem itemLabel="#{messages['audit.7.select.31']}" itemValue="5" />
@@ -162,18 +162,14 @@
 
 
                                 </p:panel>
-                                <h:panelGrid id="enviar">
-                                    <h:panelGrid id="enviarx" rendered ="#{evaluationController.q10()}">
                                         <div id="btnback">
-                                            <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
+                                            <h:button id="backBtn" rendered ="#{evaluationController.q10()}" class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
                                         </div>
 
 
                                         <div id="btnnext">
-                                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit7()}"/>                               
+                                            <p:commandButton rendered ="#{evaluationController.q10()}" id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit7()}"/>                               
                                         </div>
-                                    </h:panelGrid>
-                                </h:panelGrid>
 
                             </h:form>
 
