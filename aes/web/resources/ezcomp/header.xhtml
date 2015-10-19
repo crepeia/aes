@@ -18,6 +18,8 @@
 
         <h:inputHidden value="#{redirectController.redirect( cc.attrs.loginRequired )}" />
         <h:inputHidden value="#{redirectController.redirectLogged( cc.attrs.logoutRequired )}" />
+        <h:inputHidden value="#{pageNavigationController.saveNavigation()}" />
+
 
         <div id="header">
             <div class="headertop">

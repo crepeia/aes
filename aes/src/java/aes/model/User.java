@@ -50,7 +50,7 @@ public class User implements Serializable {
    
     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Evaluation> evaluations;
-     
+      
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
@@ -171,6 +171,5 @@ public class User implements Serializable {
     public void setEvaluations(List<Evaluation> evaluations) {
         this.evaluations = evaluations;
     }
-
-  
+     
 }
