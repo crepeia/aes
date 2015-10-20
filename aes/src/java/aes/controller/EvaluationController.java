@@ -11,32 +11,19 @@ import aes.model.Plan;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.EMailSSL;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import java.awt.Color;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
@@ -55,14 +42,17 @@ import org.primefaces.model.StreamedContent;
 public class EvaluationController extends BaseController<Evaluation> {
 
     private static final int HOURS_LIMIT = 24 * 7;
-
+    
     private Evaluation evaluation;
 
     private Integer day;
     private Integer month;
     private Integer year;
-    
+
     private String url;
+    
+    @ManagedProperty(value="#{languageController}")
+    private LanguageController languageController;
 
     public EvaluationController() {
         try {
@@ -97,13 +87,13 @@ public class EvaluationController extends BaseController<Evaluation> {
                 Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
                 url = ((HttpServletRequest) request).getRequestURI();
                 url = url.substring(url.lastIndexOf('/') + 1);
-                if(url.contains("quanto-voce-bebe-introducao")){
+                if (url.contains("quanto-voce-bebe-introducao")) {
                     User user = new User();
                     evaluation = new Evaluation();
                     evaluation.setDate(Calendar.getInstance());
                     evaluation.setUser(user);
                 }
-                
+
             }
         }
         return evaluation;
@@ -338,16 +328,16 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
         return "";
     }
-    
-    public void dependenceListener(){
-            try {
-                daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            } catch (SQLException ex) {
-                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+    public void dependenceListener() {
+        try {
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public String dependenceNext(){     
+    public String dependenceNext() {
         try {
             setURL();
             daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
@@ -358,7 +348,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
         return "";
     }
-    
+
     public String nextRegEleManAndWoman() {
         try {
             daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
@@ -370,24 +360,34 @@ public class EvaluationController extends BaseController<Evaluation> {
         return "";
     }
     
-    public String goToPlan(){
+    public String regEl(){
+         try {
+            daoBase.insertOrUpdate(getEvaluation(), getEntityManager());
+            return "estrategia-diminuir-alternativas.xhtml?faces-redirect=true";
+         }catch (SQLException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return "";
+    }
+
+    public String goToPlan() {
         setURL();
         return "plano-mudanca.xhtml?faces-redirect=true";
     }
-       
-    public String printPlan(){
-       try {
+
+    public String printPlan() {
+        try {
             daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
             return "plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true";
         } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-       return "";
+        }
+        return "";
     }
-    
-   public void sendPlan() {
+
+    public void sendPlan() {
         try {
-           daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
+            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
             Contact contact = new Contact();
             contact.setRecipient(getUser().getEmail());
             contact.setSender("alcoolesaude@gmail.com");
@@ -397,7 +397,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             contact.setAttachmentName("meuplano.pdf");
             contact.setAttachment(new Plan(getEvaluation()).getPdf());
             contact.setHTMLTemplate("/resources/default/templates/email-template.html",
-                    "Álcool e Saúde", "Seu Plano Personalizado","Em anexo está seu plano em formato PDF.");
+                    "Álcool e Saúde", "Seu Plano Personalizado", "Em anexo está seu plano em formato PDF.");
             EMailSSL eMailSSL = new EMailSSL();
             eMailSSL.send(contact);
             GenericDAO contactDAO = new GenericDAO(Contact.class);
@@ -411,29 +411,52 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     }
     
-    public StreamedContent getPlanPdf() {   
-            Plan plan = new Plan(getEvaluation());
-            return new DefaultStreamedContent(new ByteArrayInputStream(plan.getPdf().toByteArray()), 
-                    "application/pdf", "meuplano.pdf");
+    public StreamedContent getPlanPdf() {
+        Plan plan = new Plan(getEvaluation());
+        return new DefaultStreamedContent(new ByteArrayInputStream(plan.getPdf().toByteArray()),
+                "application/pdf", "meuplano.pdf");
+    }
+
+    public String getEndingDay() {
+        if (getEvaluation().getStartingDay() == null) {
+            return "";
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(getEvaluation().getStartingDay());
+        cal.add(Calendar.DATE, 6);
+        return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
     
+    public String getDayName(int day){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(getEvaluation().getStartingDay());
+        cal.add(Calendar.DATE, day-1);
+        return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, getLanguageController().getLocale());
+    }
+     
+    public String getDay(int day){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(getEvaluation().getStartingDay());
+        cal.add(Calendar.DATE, day-1);
+        return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
+    }
+
     public String getURL() {
         if (url == null) {
             return "index.xhtml?faces-redirect=true";
         }
         return url;
     }
-    
+
     public void setURL() {
         Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
         url = ((HttpServletRequest) request).getRequestURI();
         url = url.substring(url.lastIndexOf('/') + 1);
     }
-    
-    public Date getCurrentDate(){
+
+    public Date getCurrentDate() {
         return new Date();
     }
-
 
     public Integer getDay() {
         if (loggedUser()) {
@@ -467,9 +490,12 @@ public class EvaluationController extends BaseController<Evaluation> {
     public void setYear(Integer year) {
         this.year = year;
     }
-    
-    public String teste(){
-        return "existem campos em branco";
+
+    public LanguageController getLanguageController() {
+        return languageController;
     }
 
+    public void setLanguageController(LanguageController languageController) {
+        this.languageController = languageController;
+    }    
 }

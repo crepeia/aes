@@ -5,9 +5,8 @@
  */
 package aes.model;
 
-import java.util.Calendar;
+import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +22,7 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name = "tb_page_navigation")
-public class PageNavigation {
+public class PageNavigation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

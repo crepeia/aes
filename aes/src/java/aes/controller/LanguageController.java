@@ -42,7 +42,9 @@ public class LanguageController extends BaseController<Object> {
 
     public String getLanguage() {
         if(loggedUser()){
-            locale = new Locale(getLoggedUser().getPreferedLanguage());
+            if(getLoggedUser().getPreferedLanguage() != null){
+                locale = new Locale(getLoggedUser().getPreferedLanguage());
+            }
             FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
         }
         return locale.getLanguage();
