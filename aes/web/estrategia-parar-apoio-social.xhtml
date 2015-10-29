@@ -6,8 +6,9 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messsages['estrategia.parar.apoio.social.title.1']}</title>
+        <title>#{messages['estrategia.parar.apoio.social.title.1']}</title>
         <w:head_comum />
     </h:head>
 
@@ -39,15 +40,15 @@
                     
                     <div id="pagecontentstrategy">
                                                      
-                            <h3>#{messsages['estrategia.parar.apoio.social.h3.1']}</h3>
-                            <h4>#{messsages['estrategia.parar.apoio.social.h4.1']}</h4>
-                            <h3>#{messsages['estrategia.parar.apoio.social.h3.2']}</h3>
+                            <h3>#{messages['estrategia.parar.apoio.social.h3.1']}</h3>
+                            <h4>#{messages['estrategia.parar.apoio.social.h4.1']}</h4>
+                            <h3>#{messages['estrategia.parar.apoio.social.h3.2']}</h3>
                             <ul>
-                            <li>#{messsages['estrategia.parar.apoio.social.li.1']}</li>
-                            <li>#{messsages['estrategia.parar.apoio.social.li.2']}</li>
-                            <li>#{messsages['estrategia.parar.apoio.social.li.3']}</li>
-                            <li>#{messsages['estrategia.parar.apoio.social.li.4']}</li>
-                            <li>#{messsages['estrategia.parar.apoio.social.li.5']}</li> 
+                            <li>#{messages['estrategia.parar.apoio.social.li.1']}</li>
+                            <li>#{messages['estrategia.parar.apoio.social.li.2']}</li>
+                            <li>#{messages['estrategia.parar.apoio.social.li.3']}</li>
+                            <li>#{messages['estrategia.parar.apoio.social.li.4']}</li>
+                            <li>#{messages['estrategia.parar.apoio.social.li.5']}</li> 
                             </ul>
                             <h:form>
 
@@ -63,7 +64,7 @@
                             </h:form>                                            
 
                     <div class="referencias">
-                        <p>#{messsages['updated']}</p>
+                        <p>#{messages['updated']}</p>
                     </div>
              </div> 
  
@@ -75,4 +76,5 @@
         <!--Footer -->
         <w:footer />
     </h:body>
+    </f:view>
 </html>

@@ -7,7 +7,6 @@ package aes.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,8 +46,8 @@ public class User implements Serializable {
     private boolean authorizeData;
     @Column(name = "pregnant")
     private Boolean pregnant;
-    @Column(name = "prefered_language")
-    private String preferedLanguage;
+    @Column(name = "language")
+    private String language;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Evaluation> evaluations;
@@ -174,14 +173,12 @@ public class User implements Serializable {
         this.evaluations = evaluations;
     }
 
-    public String getPreferedLanguage() {
-        return preferedLanguage;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setPreferedLanguage(String preferedLanguage) {
-        this.preferedLanguage = preferedLanguage;
+    public void setLanguage(String language) {
+        this.language = language;
     }
-    
-    
-     
+   
 }

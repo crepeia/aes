@@ -6,6 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
     <h:head>
         <title>#{messages['plano.mudanca.pronto.para.comecar.title.1']}</title>
         <w:head_comum />
@@ -51,7 +52,7 @@
                                         <f:facet name="header">  
                                             #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
                                         </f:facet>
-                                        <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy" required="true" requiredMessage="'Data': Campo em branco"/>
+                                        <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy" required="true" requiredMessage="'Data': Campo em branco" />
                                     </h:panelGrid>
 
 
@@ -168,5 +169,6 @@
         <!--Footer -->
         <w:footer />
     </h:body>
+        </f:view>
 </html>
 
