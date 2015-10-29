@@ -6,6 +6,7 @@ package aes.utility;
 
 import aes.model.Contact;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -35,25 +36,25 @@ public class EMailSSL {
     private Authenticator authenticator;
 
     public EMailSSL() {
-        props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+        props = new Properties();      
+        try {
+            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/mail.properties"));
+            this.authenticator = new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(
+                        (String)props.get("mail.auth.username"), 
+                        (String)props.get("mail.auth.password"));
+                }
+            };
+        } catch (IOException ex) {
+            Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        this.authenticator = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("alcoolesaude", "forninhosenha");
-            }
-        };
-
         session = Session.getInstance(props, this.authenticator);
 
     }
 
-    public void send(String from, String to, String subject, String text, String html, ByteArrayOutputStream pdfAttachment, String attachmentName) {
+    public void send(String from, String to, String subject, String text, String html, ByteArrayOutputStream pdf, String pdfName) {
         try {
             //Message
             Message message = new MimeMessage(session);
@@ -84,15 +85,15 @@ public class EMailSSL {
             htmlAndTextBodyPart.setContent(htmlAndTextMultipart);
             mainMultipart.addBodyPart(htmlAndTextBodyPart);
 
-            //PDF Attachment
-            if (pdfAttachment != null) {
-                MimeBodyPart pdfBodyPart = new MimeBodyPart();
-                byte[] bytes = pdfAttachment.toByteArray();
-                DataSource dataSource = new ByteArrayDataSource(bytes, "application/pdf");
-                pdfBodyPart.setDataHandler(new DataHandler(dataSource));
-                pdfBodyPart.setFileName(attachmentName);
-                mainMultipart.addBodyPart(pdfBodyPart);
-            }
+            //PDF
+                if (pdf != null) {
+                    MimeBodyPart pdfBodyPart = new MimeBodyPart();
+                    byte[] bytes = pdf.toByteArray();
+                    DataSource dataSource = new ByteArrayDataSource(bytes, "application/pdf");
+                    pdfBodyPart.setDataHandler(new DataHandler(dataSource));
+                    pdfBodyPart.setFileName(pdfName);
+                    mainMultipart.addBodyPart(pdfBodyPart);
+                }
 
             message.setContent(mainMultipart);
 
@@ -102,14 +103,5 @@ public class EMailSSL {
             Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void send (Contact contact){
-        send(contact.getSender(), contact.getRecipient(), contact.getSubject(), contact.getTextContent(),
-            contact.getHtmlTemplate(), contact.getAttachment(), contact.getAttachmentName());
-    }
-    
-
-    
-
-    
+       
 }

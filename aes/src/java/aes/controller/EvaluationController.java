@@ -385,7 +385,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         return "";
     }
 
-    public void sendPlan() {
+   /* public void sendPlan() {
         try {
             daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
             Contact contact = new Contact();
@@ -409,7 +409,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
+    }*/
     
     public StreamedContent getPlanPdf() {
         Plan plan = new Plan(getEvaluation());

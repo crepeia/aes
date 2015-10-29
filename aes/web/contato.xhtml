@@ -26,13 +26,34 @@
                         <h4>#{messages['contato.h4.2']}</h4>
                         <h2>Envio</h2>
                         <h:form id="form" class="form-signup">
-                            <p:growl id="errorGrowl" sticky="true" />  
-                            <p:inputText id="sendEmail" value="#{contatoController.email}" required="true" label="E-mail"></p:inputText>
-                            <p:watermark for="sendEmail" value="E-mail" />
-                            <h4>#{messages['h4.message']}</h4>
-                            <p:inputTextarea rows="4" cols="60" autoResize="false" value="#{contatoController.message}" required="true" label="Mensagem" />
-                            <div id="signinsubmit"><p:commandButton value ="Enviar" update="@form" actionListener="#{contatoController.sendEmail}" /></div>
+                            <p:panelGrid columns="1">
+                                <p:panel>
+                                    <p:inputText id="sendEmail" value="#{contactController.contact.sender}" required="true" label="E-mail"></p:inputText>
+                                    <p:watermark for="sendEmail" value="E-mail" />
+                                    <h4>#{messages['h4.message']}</h4>
+                                    <p:inputTextarea rows="4" cols="60" autoResize="false" value="#{contactController.contact.text}" required="true" label="Mensagem" />
+                                    <div id="signinsubmit"><p:commandButton styleClass="btngen" value ="Enviar" update="@form" actionListener="#{contactController.contactFormSend()}" /></div>
+                                </p:panel>
+                                <p:panel>
+                                    <p:messages id="messages" showDetail="false" autoUpdate="true"/> 
+
+                                    <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;"  >
+                                        <f:facet name="default">
+
+                                        </f:facet>
+
+                                        <f:facet name="start">
+                                            <p:graphicImage library="default" name="/images/ajax-loader.gif" />
+                                            <p:outputLabel value="Por favor, aguarde."/>    
+                                        </f:facet>
+
+                                        <f:facet name="complete">
+                                        </f:facet>
+                                    </p:ajaxStatus>
+                                </p:panel>
+                            </p:panelGrid>
                         </h:form>
+
                     </div>	
                 </div>
             </div>

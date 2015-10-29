@@ -30,7 +30,7 @@ public class Scheduler {
 
     }
 
-    @Schedule(minute = "0", hour = "0", dayOfWeek = "*")
+    /*@Schedule(minute = "0", hour = "0", dayOfWeek = "*")
     public void scheduledEmails() {
         try {
             EMailSSL emailSSL = new EMailSSL();
@@ -70,6 +70,6 @@ public class Scheduler {
             Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
+    }*/
 
 }

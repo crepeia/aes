@@ -92,18 +92,5 @@ public abstract class BaseController<T> implements Serializable {
     return found[0];
 
     }   
-    
-    public String getText(String key) {
-        User user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
-        ResourceBundle bundle;
-        Locale locale;
-        if (user != null) {
-            locale = new Locale(user.getPreferedLanguage());
-        } else {
-            locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
-        }
-        bundle = PropertyResourceBundle.getBundle("wati.utility.messages", locale);
-        return bundle.getString(key);
-    }
 
 }
