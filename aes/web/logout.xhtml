@@ -5,6 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <f:view locale="#{languageController.locale}">
     <h:head>
         <title>#{messages['logout.title.1']}</title>
         <w:head_comum />
@@ -12,5 +13,6 @@
     <h:body>
 		<h:inputHidden value="#{loginController.logout}"/>
     </h:body>
+        </f:view>
 </html>
 
