@@ -969,13 +969,9 @@ img#artigotabaco{
 }
 
 .fotoframe{
-    width:289px;
+    max-width: 285px;
     float:right;
-    border:1px solid #bdc3c7;
-    background: #fff;
-    float:right;
-    margin: 30px 10px 40px 40px;        
-    border-radius: 20px;
+    margin: 50px 15px 40px 50px;        
 }
 
 .fotoframestrategy{
