@@ -10,15 +10,15 @@ import aes.model.Evaluation;
 import aes.model.Plan;
 import aes.model.User;
 import aes.persistence.GenericDAO;
-import aes.utility.EMailSSL;
+import aes.utility.PDFGenerator;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -42,7 +42,7 @@ import org.primefaces.model.StreamedContent;
 public class EvaluationController extends BaseController<Evaluation> {
 
     private static final int HOURS_LIMIT = 24 * 7;
-    
+
     private Evaluation evaluation;
 
     private Integer day;
@@ -50,9 +50,13 @@ public class EvaluationController extends BaseController<Evaluation> {
     private Integer year;
 
     private String url;
-    
-    @ManagedProperty(value="#{languageController}")
+
+    @ManagedProperty(value = "#{languageController}")
     private LanguageController languageController;
+    @ManagedProperty(value = "#{contactController}")
+    private ContactController contactController;
+    @ManagedProperty(value = "#{templateController}")
+    private TemplateController templateController;
 
     public EvaluationController() {
         try {
@@ -359,15 +363,15 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
         return "";
     }
-    
-    public String regEl(){
-         try {
+
+    public String regEl() {
+        try {
             daoBase.insertOrUpdate(getEvaluation(), getEntityManager());
             return "estrategia-diminuir-alternativas.xhtml?faces-redirect=true";
-         }catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
-         return "";
+        return "";
     }
 
     public String goToPlan() {
@@ -385,32 +389,39 @@ public class EvaluationController extends BaseController<Evaluation> {
         return "";
     }
 
-   /* public void sendPlan() {
+    public ByteArrayOutputStream createPlan() {
+        String content[] = new String[6];
+        content[0] = new SimpleDateFormat("dd/MM/yyyy").format(getEvaluation().getDataComecarPlano());
+        content[1] = getEvaluation().getRazoesPlano();
+        content[2] = getEvaluation().getEstrategiasPlano();
+        content[3] = getEvaluation().getPessoasPlano();
+        content[4] = getEvaluation().getSinaisSucessoPlano();
+        content[5] = getEvaluation().getPossiveisDificuladesPlano();
+        String plan = getTemplateController().fillPlanTemplate(content);
+        return new PDFGenerator().generatePDF(plan);
+    }
+
+    public void sendPlan() {
         try {
             daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            Contact contact = new Contact();
-            contact.setRecipient(getUser().getEmail());
-            contact.setSender("alcoolesaude@gmail.com");
-            contact.setSentDate(Calendar.getInstance());
-            contact.setSubject("Álcool e Saúde - Seu Plano");
-            contact.setTextContent("Em anexo está seu plano em formato PDF.");
-            contact.setAttachmentName("meuplano.pdf");
-            contact.setAttachment(new Plan(getEvaluation()).getPdf());
-            contact.setHTMLTemplate("/resources/default/templates/email-template.html",
-                    "Álcool e Saúde", "Seu Plano Personalizado", "Em anexo está seu plano em formato PDF.");
-            EMailSSL eMailSSL = new EMailSSL();
-            eMailSSL.send(contact);
-            GenericDAO contactDAO = new GenericDAO(Contact.class);
-            contactDAO.insertOrUpdate(contact, this.getEntityManager());
-            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Plano enviado."));
-        } catch (NamingException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Contact contact = new Contact();
+        contact.setRecipient(getUser().getEmail());
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setDate(new Date());
+        contact.setSubject("Álcool e Saúde - Seu Plano");
+        contact.setText("Em anexo está seu plano em formato PDF.");
+        contact.setPdfName("meuplano.pdf");
+        contact.setPdf(new Plan(getEvaluation()).getPdf());
+        contact.setHtml(getTemplateController().fillContactTemplate("Álcool e Saúde", "Seu Plano Personalizado", "Em anexo está seu plano em formato PDF."));
+        getContactController().setContact(contact);
+        getContactController().sendEmail();
+        FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Plano enviado."));
 
-    }*/
-    
+    }
+
     public StreamedContent getPlanPdf() {
         Plan plan = new Plan(getEvaluation());
         return new DefaultStreamedContent(new ByteArrayInputStream(plan.getPdf().toByteArray()),
@@ -426,18 +437,18 @@ public class EvaluationController extends BaseController<Evaluation> {
         cal.add(Calendar.DATE, 6);
         return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
-    
-    public String getDayName(int day){
+
+    public String getDayName(int day) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getEvaluation().getStartingDay());
-        cal.add(Calendar.DATE, day-1);
+        cal.add(Calendar.DATE, day - 1);
         return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, getLanguageController().getLocale());
     }
-     
-    public String getDay(int day){
+
+    public String getDay(int day) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getEvaluation().getStartingDay());
-        cal.add(Calendar.DATE, day-1);
+        cal.add(Calendar.DATE, day - 1);
         return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
 
@@ -497,5 +508,22 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void setLanguageController(LanguageController languageController) {
         this.languageController = languageController;
-    }    
+    }
+
+    public ContactController getContactController() {
+        return contactController;
+    }
+
+    public void setContactController(ContactController contactController) {
+        this.contactController = contactController;
+    }
+
+    public TemplateController getTemplateController() {
+        return templateController;
+    }
+
+    public void setTemplateController(TemplateController templateController) {
+        this.templateController = templateController;
+    }
+
 }

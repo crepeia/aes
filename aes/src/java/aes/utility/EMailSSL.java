@@ -82,7 +82,7 @@ public class EMailSSL {
             }
 
             MimeBodyPart htmlAndTextBodyPart = new MimeBodyPart();
-            htmlAndTextBodyPart.setContent(htmlAndTextMultipart);
+            htmlAndTextBodyPart.setContent(htmlAndTextMultipart,"charset=UTF-8");
             mainMultipart.addBodyPart(htmlAndTextBodyPart);
 
             //PDF
