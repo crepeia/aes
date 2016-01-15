@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
@@ -51,6 +52,9 @@ public class User implements Serializable {
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Evaluation> evaluations;
+    
+    @OneToOne(cascade=CascadeType.ALL, mappedBy = "user")
+    private KeepResults keepResults;
       
     @Override
     public String toString() {
@@ -180,5 +184,14 @@ public class User implements Serializable {
     public void setLanguage(String language) {
         this.language = language;
     }
-   
+
+    public KeepResults getKeepResults() {
+        return keepResults;
+    }
+
+    public void setKeepResults(KeepResults keepResults) {
+        this.keepResults = keepResults;
+    }
+
+    
 }

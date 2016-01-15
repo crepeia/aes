@@ -59,11 +59,11 @@
                                 </div>
                                 
                                 
-                                <div id="btnnext">
-                                    <h:button class="btngen" value ="#{messages['next']}" outcome="#{evaluationController.evaluation.user.female ? 'estrategia-diminuir-registro-eletronico-meta-mulher.xhtml?faces-redirect=true' : 'estrategia-diminuir-registro-eletronico-meta-homem.xhtml?faces-redirect=true'}"></h:button>
-                                </div>
+                              <div id="btnnext">
+                                  <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{keepResultsController.intro()}"/>      
+                               </div>
 
-                            </h:form>                                            
+                      </h:form>                                            
 
                     <div class="referencias">
                         <p>#{messages['updated']}</p>

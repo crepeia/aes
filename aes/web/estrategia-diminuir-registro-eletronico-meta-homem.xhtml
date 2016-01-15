@@ -135,7 +135,7 @@
                             
                                 <h:panelGrid columns="2" cellpadding="1">
                                     <p:outputLabel for="metadosediaria" value="Doses Padrão" />
-                                    <p:spinner id="metadosediaria" value="#{evaluationController.evaluation.dosePadraoDiaria}" min="0" required="true" requiredMessage="Campo em branco"/>
+                                    <p:spinner id="metadosediaria" value="#{keepResultsController.keepResults.dailyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
                                 </h:panelGrid>
                             <p:message for="metadosediaria"/>
                                                                 
@@ -143,7 +143,7 @@
                             
                                 <h:panelGrid columns="2" cellpadding="1">
                                     <p:outputLabel for="metadosesemanal" value="Doses Padrão" />
-                                    <p:spinner id="metadosesemanal" value="#{evaluationController.evaluation.dosePadraoSemanal}" min="0" required="true" requiredMessage="Campo em branco"/>
+                                    <p:spinner id="metadosesemanal" value="#{keepResultsController.keepResults.weeklyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
                                 </h:panelGrid>
                             <p:message for="metadosesemanal"/>
                                     
@@ -158,7 +158,7 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.nextRegEleManAndWoman()}"/>      
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{keepResultsController.goals()}"/>      
                                 </div>
                           
                             </h:form>                                            
