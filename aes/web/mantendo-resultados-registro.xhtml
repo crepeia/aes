@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['estrategia.dim.registro.elet.title.1']}</title>
+            <w:head_comum />
+        </h:head>
+
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header loginRequired="true" />
+
+
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
+
+                    <!--<w:leftmenu_2 cssClass="leftmenu2" />-->
+
+                    <div class="pagecontent">
+
+
+                        <div id="pagetop">
+
+                            <div id="progressbar">
+                                <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>
+
+                            <div class='fotoframestratety'>
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
+                        </div>
+
+                        <div id="pagecontentstrategy">                      
+                            <div id="pmtext">
+
+                                <h3>#{messages['estrategia.dim.registro.elet.h3.1']}</h3>
+                                <p>#{messages['estrategia.dim.registro.elet.p.1']}</p>
+                                <h4>#{messages['estrategia.dim.registro.elet.h4.1']}</h4>
+                                <ul>
+                                    <li>#{messages['estrategia.dim.registro.elet.li.1']}</li>
+                                    <li>#{messages['estrategia.dim.registro.elet.li.2']}<b>#{messages['estrategia.dim.registro.elet.li.2.b.1']}</b></li>
+                                    <li>#{messages['estrategia.dim.registro.elet.li.3']}</li>
+                                </ul>
+
+                            </div>
+                        </div>
+                        <div id="pagemiddle">
+                            <h3>#{messages['estrategia.dim.registro.elet.h3.2']}</h3>
+
+                            <h:panelGrid columns="2" cellpadding="5" >
+                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
+                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
+                                <p:inputText value="#{keepResultsController.keepResults.dailyGoal}" readonly="true" size="2"/>
+                                <p:inputText value="#{keepResultsController.keepResults.weeklyGoal}" readonly="true" size="2"/>
+                                <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
+                                <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
+                            </h:panelGrid>
+                        </div>
+                        <h:form>
+                            <div id="pagemiddle">    
+                                <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
+                                <p:panelGrid columns ="1" >
+                                    <p:calendar id="calendar" value="#{keepResultsController.date}" pattern="dd/MM/yyyy" mode="inline">
+                                        <p:ajax event="dateSelect" update="@form" listener="#{keepResultsController.fetchLog()}"/>
+                                    </p:calendar>   
+                                </p:panelGrid>
+
+                                <h:panelGrid columns="4" cellpadding="7" >
+                                    <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
+                                    <p:inputText id="popup1" value="#{keepResultsController.formattedDate}" readonly="true" />
+                                    <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
+                                    <p:spinner id="dose1" value="#{keepResultsController.dailyLog.drinks}" min="0"/>
+                                    <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
+                                    <p:inputText id="situation1" value="#{keepResultsController.dailyLog.context}"/> 
+                                    <p:outputLabel for="consequence1" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
+                                    <p:inputText id="consequence1" value="#{keepResultsController.dailyLog.consequences}"/>
+                                </h:panelGrid>
+
+                                <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{keepResultsController.saveLog()}" immediate="true"/>
+
+                            
+                            </div>                                             
+
+                            <div id="btnback">
+                                <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>
+                            </div>
+
+
+                            <div id="btnnext">
+                                <p:commandButton id="nxtBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.regEl()}" immediate="true"/>      
+                            </div>
+
+                        </h:form>                                            
+
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
+                    </div> 
+
+                </div>        
+            </div>
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
+</html>
