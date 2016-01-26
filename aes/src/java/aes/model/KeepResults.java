@@ -37,7 +37,7 @@ public class KeepResults implements Serializable{
     @OneToOne
     private User user;
     
-    @OneToMany(fetch = FetchType.EAGER, mappedBy="keepResults", cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<DailyLog> dailyLogs;
     
     public long getId() {

@@ -68,13 +68,13 @@
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
                                 <p:panelGrid columns ="1" >
                                     <p:calendar id="calendar" value="#{keepResultsController.date}" pattern="dd/MM/yyyy" mode="inline">
-                                        <p:ajax event="dateSelect" update="@form" listener="#{keepResultsController.fetchLog()}"/>
+                                        <p:ajax event="dateSelect" update="@form" listener="#{keepResultsController.fetchLog()}" process="@form"/>
                                     </p:calendar>   
                                 </p:panelGrid>
 
                                 <h:panelGrid columns="4" cellpadding="7" >
-                                    <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
-                                    <p:inputText id="popup1" value="#{keepResultsController.formattedDate}" readonly="true" />
+                                    <p:outputLabel for="date1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
+                                    <p:inputText id="date1" value="#{keepResultsController.formattedDate}" readonly="true" />
                                     <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
                                     <p:spinner id="dose1" value="#{keepResultsController.dailyLog.drinks}" min="0"/>
                                     <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
@@ -83,9 +83,9 @@
                                     <p:inputText id="consequence1" value="#{keepResultsController.dailyLog.consequences}"/>
                                 </h:panelGrid>
 
-                                <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{keepResultsController.saveLog()}" immediate="true"/>
+                                <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{keepResultsController.saveLog()}" />
+                                <p:messages/>
 
-                            
                             </div>                                             
 
                             <div id="btnback">
@@ -94,7 +94,8 @@
 
 
                             <div id="btnnext">
-                                <p:commandButton id="nxtBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.regEl()}" immediate="true"/>      
+                         
+                                
                             </div>
 
                         </h:form>                                            

@@ -11,8 +11,8 @@ import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -27,63 +27,60 @@ import javax.naming.NamingException;
  */
 @ManagedBean(name = "keepResultsController")
 @SessionScoped
-public class KeepResultsController extends BaseController<KeepResults>{
-    
+public class KeepResultsController extends BaseController<KeepResults> {
+
     private KeepResults keepResults;
     private DailyLog dailyLog;
     private Date date;
-    private Integer drinks;
-    private String context;
-    private String consequences;
-    
+
     private GenericDAO logDAO;
-    
+
     public KeepResultsController() {
-        dailyLog = new DailyLog();
         try {
-            this.daoBase = new GenericDAO<KeepResults>(KeepResults.class);
+            daoBase = new GenericDAO<KeepResults>(KeepResults.class);
             logDAO = new GenericDAO<DailyLog>(DailyLog.class);
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public KeepResults getKeepResults() {
-        if(keepResults == null && loggedUser()){
+        if (keepResults == null && loggedUser()) {
             keepResults = getLoggedUser().getKeepResults();
-            if(keepResults == null){
+            if (keepResults == null) {
                 keepResults = new KeepResults();
                 keepResults.setUser(getLoggedUser());
             }
         }
-        
+
         return keepResults;
     }
-    
-    public String intro(){
-        if(getUser().isFemale()){
+
+    public String intro() {
+        if (getUser().isFemale()) {
             return "mantendo-resultados-meta-mulher.xhtml?faces-redirect=true";
-        }else{
+        } else {
             return "mantendo-resultados-meta-homem.xhtml?faces-redirect=true";
         }
     }
-    
-    public String goals(){ 
+
+    public String goals() {
         try {
-            daoBase.insertOrUpdate(keepResults, getEntityManager());
+            daoBase.insertOrUpdate(getKeepResults(), getEntityManager());
             return "mantendo-resultados-registro.xhtml?faces-redirect=true";
+
         } catch (SQLException ex) {
-            Logger.getLogger(KeepResultsController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KeepResultsController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }
-    
-   public void saveLog(){
-       if(date == null){
-           dailyLog.setDate(date);
-           dailyLog.setKeepResults(keepResults);
-       }
-        
+
+    public void saveLog() {
+        System.out.println(dailyLog);
+        if(dailyLog.getDate() == null){
+            dailyLog.setDate(date);
+        }
         try {
             logDAO.insertOrUpdate(dailyLog, getEntityManager());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro salvo com sucesso.", null));
@@ -91,28 +88,40 @@ public class KeepResultsController extends BaseController<KeepResults>{
             Logger.getLogger(KeepResultsController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void fetchLog(){
-       dailyLog = new DailyLog();
-       for(DailyLog log : getKeepResults().getDailyLogs()){
-           if(log.getDate() == date){
-               dailyLog = log;
-           }
-       }                
+
+    public void fetchLog() {
+        dailyLog = new DailyLog();
+        try {
+            List<DailyLog> list = logDAO.list("keepResults", getKeepResults(), getEntityManager());
+            System.out.println(date);
+            for (DailyLog log : list) {
+                System.out.println(log);
+                if (log.getDate().equals(date)) {
+                    System.out.println("true");
+                    dailyLog = log;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(KeepResultsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(dailyLog);
     }
-    
+
     public String getFormattedDate() {
         if (date == null) {
             return "";
         }
         return new SimpleDateFormat("dd/MM/yyyy").format(date);
     }
-    
-    public User getUser(){
-            return getKeepResults().getUser();
+
+    public User getUser() {
+        return getKeepResults().getUser();
     }
 
     public DailyLog getDailyLog() {
+        if(dailyLog == null){
+            dailyLog = new DailyLog();
+        }
         return dailyLog;
     }
 
@@ -128,29 +137,4 @@ public class KeepResultsController extends BaseController<KeepResults>{
         this.date = date;
     }
 
-    public Integer getDrinks() {
-        return drinks;
-    }
-
-    public void setDrinks(Integer drinks) {
-        this.drinks = drinks;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
-
-    public String getConsequences() {
-        return consequences;
-    }
-
-    public void setConsequences(String consequences) {
-        this.consequences = consequences;
-    }
-
-   
 }

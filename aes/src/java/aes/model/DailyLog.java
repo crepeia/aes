@@ -6,6 +6,7 @@
 package aes.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,7 +29,7 @@ public class DailyLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name = "birth")
+    @Column(name = "date")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date date;
     @Column(name = "drinks")
@@ -38,8 +39,14 @@ public class DailyLog implements Serializable {
     @Column(name = "consequences")
     private String consequences;
     
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne
     private KeepResults keepResults;
+    
+    @Override
+    public String toString(){
+        return id + ", " + date + ", " + drinks + ", " + context + ", " + consequences;
+                
+    }
 
     public long getId() {
         return id;
@@ -58,6 +65,9 @@ public class DailyLog implements Serializable {
     }
 
     public Integer getDrinks() {
+        if(drinks == null){
+            return 0;
+        }
         return drinks;
     }
 
