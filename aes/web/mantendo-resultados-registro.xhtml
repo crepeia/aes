@@ -67,9 +67,18 @@
                             <div id="pagemiddle">    
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
                                 <p:panelGrid columns ="1" >
-                                    <p:calendar id="calendar" value="#{keepResultsController.date}" pattern="dd/MM/yyyy" mode="inline">
+                                    <p:calendar id="calendar" value="#{keepResultsController.date}" pattern="dd/MM/yyyy" mode="inline" beforeShowDay="color" >
                                         <p:ajax event="dateSelect" update="@form" listener="#{keepResultsController.fetchLog()}" process="@form"/>
-                                    </p:calendar>   
+                                    </p:calendar>  
+                                    <script type="text/javascript">
+                                        /* <![CDATA[ */
+                                        function color(date) {
+                                            var dates = ["2016-01-10","2016-01-22"];
+                                            
+                                            return [true, ''];
+                                        }
+                                        /* ]]> */
+                                    </script>-
                                 </p:panelGrid>
 
                                 <h:panelGrid columns="4" cellpadding="7" >
@@ -94,8 +103,27 @@
 
 
                             <div id="btnnext">
-                         
-                                
+                                <h:panelGrid columns="2" >
+                                    <p:panelGrid columns="1">
+                                        <div id ="planoimg1">
+                                            <div class="planoimg">                                                            
+                                                <p:commandLink ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
+                                                <p><p:commandLink >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                            </div>
+                                        </div>
+                                    </p:panelGrid>
+
+                                    <p:panelGrid columns="1">
+                                        <div id ="planoimg2">
+                                            <div class="planoimg">
+                                                <p:commandLink update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
+                                                <p><p:commandLink update="@form">E-Mail</p:commandLink></p>
+                                            </div>
+                                        </div>
+                                    </p:panelGrid>
+                                </h:panelGrid>  
+
+
                             </div>
 
                         </h:form>                                            
@@ -112,4 +140,6 @@
             <w:footer />
         </h:body>
     </f:view>
+
 </html>
+

@@ -11,8 +11,10 @@ import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -72,14 +74,14 @@ public class KeepResultsController extends BaseController<KeepResults> {
         } catch (SQLException ex) {
             Logger.getLogger(KeepResultsController.class
                     .getName()).log(Level.SEVERE, null, ex);
+            return "";
         }
-        return "";
     }
 
     public void saveLog() {
-        System.out.println(dailyLog);
         if(dailyLog.getDate() == null){
             dailyLog.setDate(date);
+            dailyLog.setKeepResults(getKeepResults());
         }
         try {
             logDAO.insertOrUpdate(dailyLog, getEntityManager());
@@ -93,18 +95,14 @@ public class KeepResultsController extends BaseController<KeepResults> {
         dailyLog = new DailyLog();
         try {
             List<DailyLog> list = logDAO.list("keepResults", getKeepResults(), getEntityManager());
-            System.out.println(date);
             for (DailyLog log : list) {
-                System.out.println(log);
-                if (log.getDate().equals(date)) {
-                    System.out.println("true");
+                if (log.getDate() != null && log.getDate().equals(date)) {
                     dailyLog = log;
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(KeepResultsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(dailyLog);
     }
 
     public String getFormattedDate() {
@@ -117,6 +115,25 @@ public class KeepResultsController extends BaseController<KeepResults> {
     public User getUser() {
         return getKeepResults().getUser();
     }
+       
+    public String[] getDates(){
+        try {
+            List<DailyLog> logs = logDAO.list("keepResults", getKeepResults(), getEntityManager());
+            ArrayList<String> dates = new ArrayList<String>();         
+            for(DailyLog log : logs){
+                if(log.getDate() != null)
+                dates.add(new SimpleDateFormat("yyyy-MM-dd").format(log.getDate()));
+            }
+            String[] datesArray = new String[dates.size()];
+            datesArray = dates.toArray(datesArray);
+
+            return datesArray;
+        } catch (SQLException ex) {
+            Logger.getLogger(KeepResultsController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }              
+        
+    }  
 
     public DailyLog getDailyLog() {
         if(dailyLog == null){
