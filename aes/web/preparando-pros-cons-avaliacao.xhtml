@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages}O quanto voce bebe ? | Álcool e Saude </title>
+        <title>#{messages['preparando.pros.cons.avaliacao.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -21,24 +21,18 @@
             <!--mainmenu-->         	
             <div class="main">
 
-
-
-
-
                 <div class="pagecontent">
-
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Pronto para mudar ? </h1> 
+                            <h1>#{messages['preparando.pros.cons.avaliacao.h1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
                             <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
                         </div>                        
                     </div>
-
-
+                    
                     <div id="pagemiddle">
 
                         <div class="fotoframe">                            
@@ -47,22 +41,22 @@
 
                         <div id="pmtext">
 
-                            <p> Abaixo você consegue observar a avalicão dos seus prós e contras </p>
+                            <p>#{messages['preparando.pros.cons.avaliacao.p1']} </p>
 
                             <p>
 
                                 <h:panelGrid columns="1"  cellpadding="5">
                                     <f:facet name="header">  
-                                        Prós                                     
+                                  #{messages['preparando.pros.cons.avaliacao.facet1']}                                
                                     </f:facet>
-                                    <h:outputText value="Melhorar minha saúde." rendered="#{!empty evaluationController.evaluation.prosReasons1}" />
-                                    <h:outputText value="Melhorar os meus relacionamentos." rendered="#{!empty evaluationController.evaluation.prosReasons2}" />
-                                    <h:outputText value="Evitar ressacas."  rendered="#{!empty evaluationController.evaluation.prosReasons3}"  />
-                                    <h:outputText value="Melhor meu desempenho nos estudos."  rendered="#{!empty evaluationController.evaluation.prosReasons4}" />
-                                    <h:outputText value="Perder peso e ficar em forma." rendered="#{!empty evaluationController.evaluation.prosReasons5}"  />
-                                    <h:outputText value="Economizar dinheiro."  rendered="#{!empty evaluationController.evaluation.prosReasons6}" />
-                                    <h:outputText value="Evitar problemas mais sérios."  rendered="#{!empty evaluationController.evaluation.prosReasons7}" />
-                                    <h:outputText value="Atingir meus objetivos pessoais."  rendered="#{!empty evaluationController.evaluation.prosReasons8}" />
+                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out1']}" rendered="#{!empty evaluationController.evaluation.prosReasons1}" />
+                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out2']}" rendered="#{!empty evaluationController.evaluation.prosReasons2}" />
+                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out3']}"  rendered="#{!empty evaluationController.evaluation.prosReasons3}"  />
+                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out4']}"  rendered="#{!empty evaluationController.evaluation.prosReasons4}" />
+                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out5']}" rendered="#{!empty evaluationController.evaluation.prosReasons5}"  />
+                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out6']}"  rendered="#{!empty evaluationController.evaluation.prosReasons6}" />
+                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out7']}"  rendered="#{!empty evaluationController.evaluation.prosReasons7}" />
+                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out8']}"  rendered="#{!empty evaluationController.evaluation.prosReasons8}" />
                                     <h:outputText value="#{evaluationController.evaluation.pros1}" rendered="#{!empty evaluationController.evaluation.pros1}"/> 
                                     <h:outputText value="#{evaluationController.evaluation.pros2}" rendered="#{!empty evaluationController.evaluation.pros2}"/> 
                                     <h:outputText value="#{evaluationController.evaluation.pros3}" rendered="#{!empty evaluationController.evaluation.pros3}"/>   
@@ -70,7 +64,7 @@
 
                                 <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                     <f:facet name="header">  
-                                        Contras                                      
+                                        #{messages['preparando.pros.cons.avaliacao.facet2']}                                    
                                     </f:facet>
                                     <h:outputText value="#{evaluationController.evaluation.cons1}" rendered="#{!empty evaluationController.evaluation.cons1}"/> 
                                     <h:outputText value="#{evaluationController.evaluation.cons2}" rendered="#{!empty evaluationController.evaluation.cons2}"/> 
@@ -83,11 +77,11 @@
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
-                                            Você está preparado(a) para mudar a forma com que bebe ? 
+                                           #{messages['preparando.pros.cons.avaliacao.facet3']}
                                         </f:facet> 
                                         <p:selectOneRadio id="options" value="#{evaluationController.evaluation.ready}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Não" itemValue="#{false}" /> 
+                                            <f:selectItem itemLabel="#{messages['preparando.pros.cons.avaliacao.sim']}" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="#{messages['preparando.pros.cons.avaliacao.nao']}" itemValue="#{false}" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>
@@ -101,22 +95,15 @@
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.prosConsEvaluation()}" />
                                 </div>
                             </h:form>
-
-
-
                         </div><!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
-
-
-
                 </div>        
             </div>
-
 
         </div><!-- end.corpo --> 
 

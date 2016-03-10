@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}" >
     <h:head>
-        <title>Programa de Prevenção à Problemas Relacionados ao Consumo de Álcool| Álcool e Saúde</title>
+        <title>#{messages['programa.title']}</title>
         <w:head_comum />
     </h:head>
     <h:body>
@@ -24,20 +24,18 @@
 
                                        
                     <h:graphicImage library="default" name="images/felicidade.png" alt="Artigo sobre sites para tabagismo na internet" id="artigotabaco" />
-                    <h2>Objetivo do Programa</h2>
-                    <p>Oferecer suporte e informações de qualidade em saúde para pessoas que usam álcool.</p>
-                    <h2>Desenvolvimento</h2>
-                    <p>Desenvolvido por especialistas da Universidade Federal de Juiz de Fora os princípios da <h:outputLink value="http://www.hon.ch/HONcode/Webmasters/intro.html">Health on the Net Foundation</h:outputLink>.</p>                    
-                    <p>Conteúdo baseado nas diretrizes para o tratamento de problemas relacionados ao uso de álcool - seguindo orientações da Organização Mundial de Saúde, Ministério da Saúde e NIAAA </p>
-                    <h2>Importante</h2>
-                    <p>Este site não substitui o atendimento realizado por um profissional de saúde. Todo o conteúdo do site está sendo avalaido por um pesquisa clínica registrada no Comitê de Ética em Pesquisa da UFJF</p>
+                    <h2>#{messages['programa.h2.1']}</h2>
+                    <p>#{messages['programa.p1']}</p>
+                    <h2>#{messages['programa.h2.2']}</h2>
+                    <p>#{messages['programa.p2']}<h:outputLink value="http://www.hon.ch/HONcode/Webmasters/intro.html">#{messages['programa.link']} </h:outputLink>.</p>                    
+                    <p>#{messages['programa.p3']} </p>
+                    <h2>#{messages['programa.h2.3']}</h2>
+                    <p>#{messages['programa.p4']}</p>
                     <p></p>
                     <div class="referencias">
-                        <p>Atualizado em 15/04/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
                     <div id="btnprog"><h:button class="btngen" value ="Cadastrar" outcome="./cadastrar-nova-conta.xhtml"  ></h:button></div>                                       
-
-                     
 
                 </div>
             </div>

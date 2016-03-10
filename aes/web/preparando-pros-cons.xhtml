@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title> O quanto voce bebe ? | Álcool e Saude </title>
+        <title>#{messages['preparando.pros.cons.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -20,16 +20,12 @@
             <!--mainmenu-->         	
             <div class="main">
 
-
-
-
-
                 <div class="pagecontent">
 
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Pensando em mudar ?</h1> 
+                            <h1>#{messages['preparando.pros.cons.h1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -46,54 +42,54 @@
 
                         <div id="pmtext">
                             
-                            <h3>Prós e Contras</h3>
+                            <h3>#{messages['preparando.pros.cons.h3']}</h3>
 
-                            <p> Cabe a você decidir se deve ou quando deve mudar a forma com que você bebe. Outras pessoas podem ajudar neste proceso, mas no final a decisão é sua.</p> 
-                            <h4>Uma boa estratégia decidir é considerar os prós e contras</h4>
+                            <p>#{messages['preparando.pros.cons.p1']}</p> 
+                            <h4>#{messages['preparando.pros.cons.h4']}</h4>
 
                             <h:form>
                                 <p:panel id="questoes" >
                                     
                                     <h:panelGrid columns="1"  cellpadding="5">
                                         <f:facet name="header">  
-                                           Prós - Quais seria algumas das razões que poderiam ajudar você a mudar ?                                      
+                                          #{messages['preparando.pros.cons.facet1']}                                      
                                         </f:facet>
-                                        <h:outputText value="1. Melhorar minha saúde:" />
-                                        <p:rating id="question1" value="#{evaluationController.evaluation.prosReasons1}" required="true" requiredMessage="Questão '1': campo em branco" />
+                                        <h:outputText value="#{messages['preparando.pros.cons.out1']}" />
+                                        <p:rating id="question1" value="#{evaluationController.evaluation.prosReasons1}" required="true" requiredMessage="#{messages['preparando.pros.cons.req1']}" />
                                         <p:message for="question1"/>
                                         
-                                        <h:outputText value="2. Melhorar os meus relacionamentos:" />
-                                        <p:rating id="question2" value="#{evaluationController.evaluation.prosReasons2}" required="true" requiredMessage="Questão '2': campo em branco"/>
+                                        <h:outputText value="#{messages['preparando.pros.cons.out2']}" />
+                                        <p:rating id="question2" value="#{evaluationController.evaluation.prosReasons2}" required="true" requiredMessage="#{messages['preparando.pros.cons.req2']} "/>
                                         <p:message for="question2"/>
                                         
-                                        <h:outputText value="3. Evitar ressacas:" />
-                                        <p:rating id="question3" value="#{evaluationController.evaluation.prosReasons3}" required="true" requiredMessage="Questão '3': campo em branco"/>
+                                        <h:outputText value="#{messages['preparando.pros.cons.out3']}" />
+                                        <p:rating id="question3" value="#{evaluationController.evaluation.prosReasons3}" required="true" requiredMessage="#{messages['preparando.pros.cons.req3']}"/>
                                         <p:message for="question3"/>
                                         
-                                        <h:outputText value="4. Melhor meu desempenho nos estudos:" />
-                                        <p:rating id="question4" value="#{evaluationController.evaluation.prosReasons4}" required="true" requiredMessage="Questão '4': campo em branco"/>
+                                        <h:outputText value="#{messages['preparando.pros.cons.out4']}" />
+                                        <p:rating id="question4" value="#{evaluationController.evaluation.prosReasons4}" required="true" requiredMessage="#{messages['preparando.pros.cons.req4']}"/>
                                         <p:message for="question4"/>
                                         
-                                        <h:outputText value="5. Perder peso e ficar em forma:" />
-                                        <p:rating id="question5" value="#{evaluationController.evaluation.prosReasons5}" required="true" requiredMessage="Questão '5': campo em branco"/>
+                                        <h:outputText value="#{messages['preparando.pros.cons.out5']}" />
+                                        <p:rating id="question5" value="#{evaluationController.evaluation.prosReasons5}" required="true" requiredMessage="#{messages['preparando.pros.cons.req5']}"/>
                                         <p:message for="question5"/>
                                         
-                                        <h:outputText value="6. Economizar dinheiro:" />
-                                        <p:rating id="question6" value="#{evaluationController.evaluation.prosReasons6}" required="true" requiredMessage="Questão '6': campo em branco"/>
+                                        <h:outputText value="#{messages['preparando.pros.cons.out6']}" />
+                                        <p:rating id="question6" value="#{evaluationController.evaluation.prosReasons6}" required="true" requiredMessage="#{messages['preparando.pros.cons.req6']}"/>
                                         <p:message for="question6"/>
                                         
-                                        <h:outputText value="7. Evitar problemas mais sérios:" />
-                                        <p:rating id="question7" value="#{evaluationController.evaluation.prosReasons7}" required="true" requiredMessage="Questão '7': campo em branco"/>
+                                        <h:outputText value="#{messages['preparando.pros.cons.out7']}" />
+                                        <p:rating id="question7" value="#{evaluationController.evaluation.prosReasons7}" required="true" requiredMessage="#{messages['preparando.pros.cons.req7']}"/>
                                         <p:message for="question7"/>
                                         
-                                        <h:outputText value="8. Atingir meus objetivos pessoais:" />
-                                        <p:rating id="question8" value="#{evaluationController.evaluation.prosReasons8}" required="true" requiredMessage="Questão '8': campo em branco"/>                                                                        
+                                        <h:outputText value="#{messages['preparando.pros.cons.out8']}" />
+                                        <p:rating id="question8" value="#{evaluationController.evaluation.prosReasons8}" required="true" requiredMessage="#{messages['preparando.pros.cons.req8']}"/>                                                                        
                                         <p:message for="question8"/>
                                         
                                     </h:panelGrid>
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao2">
                                         <f:facet name="header">  
-                                           Prós - Alguma outra razão ? Registre aqui                                      
+                                          #{messages['preparando.pros.cons.facet2']}                                   
                                         </f:facet>
                                             <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pros1}" id="campo1"/> 
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pros2}" id="campo2"/> 
@@ -102,16 +98,13 @@
                                     
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                         <f:facet name="header">  
-                                           Contras - Quais são razões que podem fazer que você não queira mudar ?                                      
+                                           #{messages['preparando.pros.cons.facet3']}                                 
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.cons1}" id="campo4"/> 
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.cons2}" id="campo5"/> 
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.cons3}" id="campo6"/>                               
                                     </h:panelGrid>
-                                </p:panel>                            
-
-                            
-                                
+                                </p:panel>                                                                                   
                                 
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>
@@ -128,19 +121,13 @@
                             </h:form>                     
 
 
-
-
-
-
                         </div><!-- end pmtext -->  
 
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
-
-
 
                 </div>        
             </div>
