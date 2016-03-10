@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['quanto.voce.bebe.convite.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -25,16 +25,16 @@
                         <div id="maintop">
                              
                             <div id="maincenter">
-                            <h3>Pronto para avaliar o quanto você bebe ?</h3>                                         
-                            <p>Para continuar e receber seus resultados é preciso que você crie uma conta. Dessa forma nós podemos lhe enviar informações personalizadas, assim como avaliar melhor o seu programa.</p>
+                            <h3>#{messages['quanto.voce.bebe.convite.h3.1']}</h3>                                         
+                            <p>#{messages['quanto.voce.bebe.convite.p.1']}</p>
                             
                             <div id="mainleft">
                                     
-                            <h3>Garantimos:</h3>
+                            <h3>#{messages['quanto.voce.bebe.convite.h3.2']}</h3>
                             <ul>
-                            <li>Seus dados serão analisados de forma anônima e sigilosa</li>
-                            <li>Não enviaremos e-mail com conteúdo de propaganda</li>
-                            <li>Este programa é completamente gratuito</li>
+                            <li>#{messages['quanto.voce.bebe.convite.li.1']}</li>
+                            <li>#{messages['quanto.voce.bebe.convite.li.2']}</li>
+                            <li>#{messages['quanto.voce.bebe.convite.li.3']}</li>
                             </ul>
 
                                     <div id="signup">
@@ -109,9 +109,9 @@
      
                                                 <div id="signup-terms">
                                                     <p:panelGrid columns="2" id="allowemail">
-                                                        <label for="chk1">Você gostaria de receber e-mails de acompanhamento?</label>
+                                                        <label for="chk1">#{messages['quanto.voce.bebe.convite.chk1']}</label>
                                                         <p:selectBooleanCheckbox value=""/>
-                                                        <label for="chk2">Autorizo o uso dos meus dados para fins de pesquisa</label>
+                                                        <label for="chk2">#{messages['quanto.voce.bebe.convite.chk2']}</label>
                                                         <p:selectBooleanCheckbox value=""/>
                                                     </p:panelGrid>
                                                 </div>
@@ -136,11 +136,10 @@
                                 </div><!-- end.main left -->
 
                                 <div id="mainright"> 
-                                    <h3>Importante</h3>
-                            <p>Este site não substitui o atendimento tradicional realizado por um profissional de saúde. A eficácia do conteúdo será testada e avaliada por uma pesquisa clínica.</p>
+                                    <h3>#{messages['quanto.voce.bebe.convite.h3.3']}</h3>
+                            <p>#{messages['quanto.voce.bebe.convite.p2']} </p>
                             
-
-                                    <h1>Já é cadastrado ?</h1>
+                                    <h1>#{messages['quanto.voce.bebe.convite.h1.1']}</h1>
                                     <h:form id="form1" class="form-signup">
                                         <p:messages />
                                         <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
@@ -163,16 +162,11 @@
                                         <div id="signinbtn">
                                             <p:commandButton id="entrarBtn" value="#{messages['signin']}" update="@form" actionListener="#{loginController.loginBegin}" ajax="false"/>
                                         </div>
-
-
-
+                                        
                                     </h:form>
 
-
-
                                 </div>
-
-
+                                
                             </div>
                         </div>
 
