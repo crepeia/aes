@@ -9,7 +9,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['quanto.voce.bebe.introducao.title']}</title>
         <w:head_comum />
     </h:head>
 
@@ -26,7 +26,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>O quanto você bebe?</h1> 
+                            <h1>#{messages['quanto.voce.bebe.introducao.h1.1']}</h1> 
                         </div>    
 
                         <div id="progressbar">
@@ -43,60 +43,57 @@
 
                         <div id="pmtext">
 
-                            <p>Olá!<br />
-                            Para avaliar melhor o quanto você bebe e oferecer uma experiência mais personalizada, precisamos das seguintes informações:</p>
+                            <p><br>#{messages['quanto.voce.bebe.introducao.p1']}<br />
+                            <p>#{messages['quanto.voce.bebe.introducao.br1']}</p>
 
                             <h:form>
                                 <p:panel id="questoes" >
                                    
-
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao1">
-                                        <h:outputText value="01 - Sexo:" style="font-weight: bold;"/>
+                                        <h:outputText value="#{messages['quanto.voce.bebe.introducao.text0']}" style="font-weight: bold;"/>
                                         <p:selectOneRadio id="options1" value="#{evaluationController.user.gender}" required="true" >  
                                             <f:ajax event="change" execute="@this" render="questao6" />
-                                            <f:selectItem itemLabel="Feminino" itemValue="F" />
-                                            <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                            <f:selectItem itemLabel="#{messages['naccount.female']}" itemValue="F" />
+                                            <f:selectItem itemLabel="#{messages['naccount.male']}" itemValue="M" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                         
                                     <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao6">
                                         <h:panelGrid columns="2" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{evaluationController.user.female}">
-                                        <h:outputText value="Você está grávida ou tem chance de estar grávida?" style="font-weight: bold"/>
+                                        <h:outputText value="#{messages['quanto.voce.bebe.introducao.text1']}" style="font-weight: bold"/>
                                         <p:selectOneRadio id="options6" value="#{evaluationController.user.pregnant}" required="true" >  
-                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Não" itemValue="#{false}" />
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.sim']}" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.nao']}" itemValue="#{false}" />
                                         </p:selectOneRadio> 
                                     </h:panelGrid> 
                                     </h:panelGrid> 
 
                                     <p:panelGrid columns="4" style="margin-bottom:10px"  id="nascimento">                                            
-                                        <h:outputText value="02 - Nascimento:" style="font-weight: bold;"/>
-                                        <p:selectOneMenu id="day" value="#{evaluationController.day}" required="true" label="Dia">  
-                                            <f:selectItem itemLabel="Dia" itemValue="" />  
+                                        <h:outputText value="#{messages['quanto.voce.bebe.introducao.text2']}" style="font-weight: bold;"/>
+                                        <p:selectOneMenu id="day" value="#{evaluationController.day}" required="true" label="#{messages['quanto.voce.bebe.introducao.menu2']}">  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.item2']}" itemValue="" />  
                                             <f:selectItems value="#{userController.days}" />  
                                         </p:selectOneMenu>
-                                        <p:selectOneMenu id="month" value="#{evaluationController.month}" required="true" label="Mês">  
-                                            <f:selectItem itemLabel="Mês" itemValue="" />  
+                                        <p:selectOneMenu id="month" value="#{evaluationController.month}" required="true" label="#{messages['quanto.voce.bebe.introducao.menu3']}">  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.item3']}" itemValue="" />  
                                             <f:selectItems value="#{userController.months}" />  
                                         </p:selectOneMenu>
-                                        <p:selectOneMenu id="year" value="#{evaluationController.year}" required="true" label="Ano">  
-                                            <f:selectItem itemLabel="Ano" itemValue="" />  
+                                        <p:selectOneMenu id="year" value="#{evaluationController.year}" required="true" label="#{messages['quanto.voce.bebe.introducao.menu4']}">  
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.item4']}" itemValue="" />  
                                             <f:selectItems value="#{userController.years}" />  
                                         </p:selectOneMenu>
                                     </p:panelGrid>                                                                                                         
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
-                                            03. Às vezes, você bebe cerveja, cachaça, vinho ou outras bebidas álcoolicas? 
+                                          #{messages['quanto.voce.bebe.introducao.facet1']}
                                         </f:facet> 
                                         <p:selectOneRadio id="options" value="#{evaluationController.evaluation.drink}" required="true">  
-                                            <f:selectItem itemLabel="Sim" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Não" itemValue="#{false}" /> 
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.sim']}" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.nao']}" itemValue="#{false}" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
                                     
-
-
 
                                 </p:panel>
                                 
