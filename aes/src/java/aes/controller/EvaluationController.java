@@ -410,14 +410,13 @@ public class EvaluationController extends BaseController<Evaluation> {
         Contact contact = new Contact();
         contact.setRecipient(getUser().getEmail());
         contact.setSender("alcoolesaude@gmail.com");
-        contact.setDate(new Date());
+        contact.setDateSent(new Date());
         contact.setSubject("Álcool e Saúde - Seu Plano");
         contact.setText("Em anexo está seu plano em formato PDF.");
         contact.setPdfName("meuplano.pdf");
         contact.setPdf(new Plan(getEvaluation()).getPdf());
         contact.setHtml(getTemplateController().fillContactTemplate("Álcool e Saúde", "Seu Plano Personalizado", "Em anexo está seu plano em formato PDF."));
-        getContactController().setContact(contact);
-        getContactController().sendEmail();
+        getContactController().sendEmail(contact);
         FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Plano enviado."));
 
     }

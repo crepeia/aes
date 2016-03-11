@@ -5,22 +5,20 @@
 package aes.controller;
 
 import aes.model.Contact;
-import aes.model.Evaluation;
-import aes.persistence.EvaluationDAO;
 import aes.persistence.GenericDAO;
+import aes.persistence.UserDAO;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
 import aes.utility.EMailSSL;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import javax.faces.bean.ApplicationScoped;
 import javax.naming.NamingException;
 
@@ -30,45 +28,106 @@ import javax.naming.NamingException;
  */
 @ManagedBean(name = "contactController")
 @ApplicationScoped
-@Stateless
 public class ContactController extends BaseController implements Serializable {
 
     private EMailSSL eMailSSL;
-    private Contact contact;
+    private String template;
+    private UserDAO userDAO;
 
     public ContactController() {
         eMailSSL = new EMailSSL();
-        contact = new Contact();
+        template = readTemplate();
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
+            userDAO = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }
-    
-    public void contactFormSend(){
-        contact.setDate(new Date());
-        contact.setSubject("Contato via formulário - " + contact.getSender());
-        contact.setRecipient("alcoolesaude@gmail.com");
-        sendEmail();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Mensagem enviada com sucesso.", null));
-
     }
 
-    public void sendEmail() {
-        try {          
+
+    public void sendEmail(Contact contact) {
+        try {
             eMailSSL.send(contact.getSender(), contact.getRecipient(), contact.getSubject(), contact.getText(),
-            contact.getHtml(), contact.getPdf(), contact.getPdfName());
+                    contact.getHtml(), contact.getPdf(), contact.getPdfName());
             daoBase.insertOrUpdate(contact, getEntityManager());
-            contact = new Contact();
         } catch (SQLException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-       
-        
+
+
+    /*public void sendDifferentDateEmail() {
+        List<User> users = userDAO.followUpDifferentDate(getEntityManager());
+        Contact contact;
+        if (!users.isEmpty()) {
+            for (User user : users) {
+                try {
+                    contact = new Contact();
+                    contact.setSender("watiufjf@gmail.com");
+                    contact.setRecipient(user.getEmail());
+                    contact.setSubject(getText("subject.email.followup", user.getPreferedLanguage()));
+                    contact.setHtml(fillTemplate(
+                            getText("vivasemtabaco", user.getPreferedLanguage()),
+                            getText("subject.email.followup", user.getPreferedLanguage()),
+                            getText("subject.email.followup", user.getPreferedLanguage()),
+                            getFooter(user.getPreferedLanguage())));
+                    contact.setDateSent(new Date());
+                    contact.setUser(user);
+                    sendEmail(contact);
+                    user.getProntoParaParar().setFollowUpCount(1);
+                    prontoDAO.insertOrUpdate(user.getProntoParaParar(), getEntityManager());
+                    daoBase.insertOrUpdate(contact, getEntityManager());
+                    Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Different date follow up email  sent to:" + user.getEmail());
+                } catch (SQLException ex) {
+                    Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+    }*/
+
+
+    public String getFooter(String language) {
+        return this.getText("vivasemtabaco", language) + "<br>"
+                + this.getText("crepeia", language) + "<br>"
+                + this.getText("ufjf", language);
+    }
+
+    public String readTemplate() {
+        try {
+            InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/contact-template.html");
+            byte[] buffer = new byte[10240];
+            return new String(buffer, 0, input.read(buffer), StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String fillTemplate(String title, String subtitle, String content, String footer) {
+        String newTemplate = template;
+        if (title != null) {
+            newTemplate = newTemplate.replace("#title#", title);
+        }
+        if (subtitle != null) {
+            newTemplate = newTemplate.replace("#subtitle#", subtitle);
+        }
+        if (content != null) {
+            newTemplate = newTemplate.replace("#content#", content);
+        }
+        if (footer != null) {
+            newTemplate = newTemplate.replace("#footer#", footer);
+        }
+
+        return newTemplate;
+    }
+
+    public String getText(String key, String language) {
+        ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(language));
+        return bundle.getString(key);
+    }
+
     public EMailSSL geteMailSSL() {
         return eMailSSL;
     }
@@ -77,12 +136,4 @@ public class ContactController extends BaseController implements Serializable {
         this.eMailSSL = eMailSSL;
     }
 
-    public Contact getContact() {
-        return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
-        
 }
