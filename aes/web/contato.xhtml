@@ -19,21 +19,22 @@
             <!--mainmenu-->         	
             <div class="main">
 
-
                 <div class="pagecontent">                 
                     <h1>#{messages['contact']}</h1>
                     <div id="contato">
                         <h4>#{messages['contato.h4.1']}</h4>
                         <h4>#{messages['contato.h4.2']}</h4>
-                        <h2>Envio</h2>
+                        <h4>#{messages['contato.h4.3']}</h4>
+                      
                         <h:form id="form" class="form-signup">
                             <p:panelGrid columns="1">
                                 <p:panel>
-                                    <p:inputText id="sendEmail" value="#{contactController.contact.sender}" required="true" label="E-mail"></p:inputText>
+                                    <h4>#{messages['contato.h4.4']}</h4>
+                                    <p:inputText id="sendEmail" value="#{contactController.contact.sender}" required="true" label="#{messages['email']}"></p:inputText>
                                     <p:watermark for="sendEmail" value="E-mail" />
                                     <h4>#{messages['h4.message']}</h4>
-                                    <p:inputTextarea rows="4" cols="60" autoResize="false" value="#{contactController.contact.text}" required="true" label="Mensagem" />
-                                    <div id="signinsubmit"><p:commandButton styleClass="btngen" value ="Enviar" update="@form" actionListener="#{contactController.contactFormSend()}" /></div>
+                                    <p:inputTextarea rows="4" cols="60" autoResize="false" value="#{contactController.contact.text}" required="true" label="#{messages['h4.message']}" />
+                                    <div id="signinbtn"><p:commandButton styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{contactController.contactFormSend()}" /></div>
                                 </p:panel>
                                 <p:panel>
                                     <p:messages id="messages" showDetail="false" autoUpdate="true"/> 
@@ -45,7 +46,7 @@
 
                                         <f:facet name="start">
                                             <p:graphicImage library="default" name="/images/ajax-loader.gif" />
-                                            <p:outputLabel value="Por favor, aguarde."/>    
+                                            <p:outputLabel value="#{messages['pleasewait']}."/>    
                                         </f:facet>
 
                                         <f:facet name="complete">

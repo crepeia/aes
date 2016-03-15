@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html lang="pt,en,es,de,ru" xml:lang="pt,en,es,de,ru"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['program.titlepage']}</title>
+            <w:head_comum />
+        </h:head>
+
+        <h:body>
+            <!-- header -->                    
+            <w:topmenu />
+
+            <div id="index-banner" class="parallax-container">
+                <div class="section no-pad-bot">
+                    <div class="container">
+                        <br /><br />
+                        <h1 class="header center white-text text-lighten-2">#{messages['aboutus.h1.authors']}</h1>                       
+                        <div class="row center">
+                            <h5 class="header col s12 light white-text">#{messages['aboutus.p.project.a']} #{messages['crepeia']} #{messages['aboutus.p.project.b']} #{messages['aboutus.p.project.c']}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="parallax black"><img src="resources/default/images/lwt2-bg.jpg" alt="#{messages['vivasemtabaco']}"/></div>                
+            </div>
+
+            <div class="container">
+                <h4>#{messages['aboutus.h1.project']}</h4>
+                <p>#{messages['aboutus.p.project.a']} <h:outputLink value="http://www.ufjf.br/crepeia/">#{messages['crepeia']}</h:outputLink> #{messages['aboutus.p.project.b']} <h:outputLink value="http://www.ufjf.br">#{messages['aboutus.p.project.c']} </h:outputLink></p>
+
+                <h4>#{messages['aboutus.h1.funding']}</h4>
+                <p>#{messages['aboutus.p.funding.a']} <h:outputLink value="http://www.fapemig.br/">#{messages['fapemig']}</h:outputLink> #{messages['aboutus.p.funding.b']} <h:outputLink value="http://www.cnpq.br/">#{messages['cnpq']}</h:outputLink>.</p>
+
+                <div class="row">
+                    <div class="col l2 m6 s6 hide-on-med-and-down">
+                        <h:outputLink value="http://www.ufjf.br" target="_blank"><h:graphicImage library="default" name="images/ufjf.png" alt="#{messages['ufjf']}" id="ufjf"/></h:outputLink>
+                    </div>
+                    <div class="col l2 m6 s6 hide-on-med-and-down">
+                        <h:outputLink value="http://www.ufjf.br/crepeia" target="_blank"><h:graphicImage library="default" name="images/crepeia.png" alt="#{messages['crepeia']}" id="crepeia" /></h:outputLink>
+                    </div>
+                    <div class="col l2 m6 s6 hide-on-med-and-down">
+                        <h:outputLink value="http://www.ufjf.br/deptocomputacao/" target="_blank"><h:graphicImage library="default" name="images/dcc-ufjf.png" alt="#{messages['dcc']}" id="csf"/></h:outputLink>
+                    </div>
+                    <div class="col l2 m6 s6 hide-on-med-and-down">
+                        <h:outputLink value="http://www.fapemig.br/" target="_blank"><h:graphicImage library="default" name="images/fapemig.png" alt="#{messages['fapemig']}" id="mainfapemig" /></h:outputLink>
+                    </div>
+                    <div class="col l2 m6 s6 hide-on-med-and-down">
+                        <h:outputLink value="http://www.cnpq.br/" target="_blank"><h:graphicImage library="default" name="images/cnpq.png" alt="#{messages['cnpq']}" id="cnpq" /></h:outputLink>
+                    </div>
+                    <div class="col l2 m6 s6 hide-on-med-and-down">
+                        <h:outputLink value="http://www.capes.gov.br/" target="_blank"><h:graphicImage library="default" name="images/capes.png" alt="#{messages['capes']}" id="capes" /></h:outputLink> 
+                    </div> 
+                </div>                                                                                                         
+                <br />
+                <h4>#{messages['aboutus.h1.authors']}</h4>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/henrique-gomide.png" alt="#{messages['aboutus.h3.henrique']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.henrique']}</h5>
+                                    <p>#{messages['aboutus.p.henrique']}<h:outputLink value="http://lattes.cnpq.br/6230665865154742" target="_blank">#{messages['aboutus.linkcv']} </h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/crrjf.telmo.ronzani.jpg" alt="#{messages['aboutus.h3.telmo']}" />                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.telmo']}</h5>
+                                    <p>#{messages['aboutus.p.telmo']} <h:outputLink value="http://lattes.cnpq.br/9239252166751422" target="_blank">#{messages['aboutus.linkcv']}</h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/heder-bernardino.png" alt="#{messages['aboutus.h3.heder']}" />                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.heder']}</h5>
+                                    <p>#{messages['aboutus.p.heder']} <h:outputLink value="http://lattes.cnpq.br/7733681743453751" target="_blank">#{messages['aboutus.linkcv']}</h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/kimber-richter.png" alt="#{messages['aboutus.h3.kimber']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.kimber']}</h5>
+                                    <p>#{messages['aboutus.p.kimber']} <h:outputLink value="/download/richter-cv.pdf" target="_blank">#{messages['aboutus.linkcv']}</h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>                                       
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/nathalia-munck.png" alt="#{messages['aboutus.h3.nathalia']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.nathalia']}</h5>
+                                    <p>#{messages['aboutus.p.nathalia']}<h:outputLink value="http://lattes.cnpq.br/4201335037258854" target="_blank">#{messages['aboutus.linkcv']}</h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/daniela-pereira.png" alt="#{messages['aboutus.h3.daniela']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.daniela']}</h5>
+                                    <p>#{messages['aboutus.p.daniela']}<h:outputLink value="http://lattes.cnpq.br/1532127658874690" target="_blank">#{messages['aboutus.linkcv']}</h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/daniela-carvalho.png" alt="#{messages['aboutus.h3.danielacarvalho']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.danielacarvalho']}</h5>
+                                    <p>#{messages['aboutus.p.danielacarvalho']}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/thiago-rizuti.png" alt="#{messages['aboutus.h3.thiago']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.thiago']}</h5>
+                                    <p>#{messages['aboutus.p.thiago']} <h:outputLink value="http://lattes.cnpq.br/8460752210499061" target="_blank">#{messages['aboutus.linkcv']}</h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>                    
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/leonardo-martins.png" alt="#{messages['aboutus.h3.leonardo']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.leonardo']}</h5>
+                                    <p>#{messages['aboutus.p.leonardo']} <h:outputLink value="http://lattes.cnpq.br/6867296937779440" target="_blank">#{messages['aboutus.linkcv']}</h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/laisa-sartes.png" alt="#{messages['aboutus.h3.leonardo']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.laisa']}</h5>
+                                    <p>#{messages['aboutus.p.laisa']} <h:outputLink value="http://lattes.cnpq.br/6143686606122269" target="_blank">#{messages['aboutus.linkcv']}</h:outputLink></p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>#{messages['aboutus.h1.translators']}</h4>                  
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/caroline-jansen.png" alt="#{messages['aboutus.h3.caroline']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.caroline']}</h5>
+                                    <p>#{messages['aboutus.p.caroline']}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/dmytro-khvostenko.png" alt="#{messages['aboutus.h3.zhaba']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.zhaba']}</h5>
+                                    <p>#{messages['aboutus.p.zhaba']}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/elena-shergina.png" alt="#{messages['aboutus.h3.elena']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.h3.elena']}</h5>
+                                    <p>#{messages['aboutus.p.elena']}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/sergio-marchesi.jpg" alt="#{messages['aboutus.sergio.h3']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.sergio.h3']}</h5>
+                                    <p>#{messages['aboutus.sergio.p']}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 offset-m2 l6 offset-l3">
+                    <div class="card-panel grey lighten-5">
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <h:graphicImage library="default" class="circle responsive-img" name="images/aleksandr.jpg" alt="#{messages['aboutus.aleksandr.h3']}"/>                                    
+                            </div>
+                            <div class="col s10">
+                                <span class="black-text">
+                                    <h5>#{messages['aboutus.aleksandr.h3']}</h5>
+                                    <p>#{messages['aboutus.aleksandr.p']}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="grey-text">#{messages['update.date']}</p>
+
+            </div>
+
+            <w:footer />
+        </h:body>
+    </f:view>
+</html>
