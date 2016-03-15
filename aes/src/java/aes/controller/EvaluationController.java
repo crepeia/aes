@@ -57,6 +57,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     private ContactController contactController;
     @ManagedProperty(value = "#{templateController}")
     private TemplateController templateController;
+    
 
     public EvaluationController() {
         try {

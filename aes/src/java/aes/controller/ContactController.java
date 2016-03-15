@@ -5,6 +5,7 @@
 package aes.controller;
 
 import aes.model.Contact;
+import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.persistence.UserDAO;
 import java.io.Serializable;
@@ -16,10 +17,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
+import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 
 /**
@@ -52,6 +57,53 @@ public class ContactController extends BaseController implements Serializable {
                     contact.getHtml(), contact.getPdf(), contact.getPdfName());
             daoBase.insertOrUpdate(contact, getEntityManager());
         } catch (SQLException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void sendPassword(String email, int code, String link){
+        
+    try{
+        List<User> userList = this.getDaoBase().list("email", email, this.getEntityManager());
+       
+            if (userList.isEmpty()) {
+                String message = "user.not.registered.password";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
+            } else {
+                User user = userList.get(0);
+                String name_user = userList.get(0).getName();
+                String email_user = userList.get(0).getEmail();
+               
+		
+		Logger.getLogger(UserController.class.getName()).log(Level.INFO, null, "User name: " + name_user + "\te-mail: " + email_user);
+
+               
+                Contact contact = new Contact();
+                contact.setSender("alcoolesaude@gmail.com");
+                contact.setSubject("subject.email.password");
+                contact.setRecipient(email);
+                contact.setText("hello" + " " + name_user + "," + "\n"
+                        + "\n"
+                        + "email.password.send" + email_user + "email.password.send.2" + " \n"
+                        + "\n"
+                        + "email.password.send.3" + "\n"
+                        + "email.password.send.4" + code + "\n"
+                        + "email.password.send.5" + link +  "\n\n"
+                        + "cordialmente"
+                        + "\n"
+                        + "equipe.aes"
+                        + "\n");
+                
+                contact.setDateSent(new Date());
+                sendEmail(contact);
+
+                user.setRecoverCode(code);
+                this.getDaoBase().insertOrUpdate(user, this.getEntityManager());
+                daoBase.insertOrUpdate(contact, getEntityManager());
+                String message = "email.sent.password";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+            }
+    }   catch (SQLException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
