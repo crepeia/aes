@@ -27,22 +27,22 @@ public class Contact implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name = "date")
+    @Column(name = "date_sent")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date date;
+    private Date dateSent;
     @Column(name = "sender")
     private String sender;
     @Column(name = "recipient")
     private String recipient;
     @Column (name = "subject")
     private String subject;
-    @Column(name = "text")
+    @Transient
     private String text;  
     @Transient
     private String html;
     @Transient
     ByteArrayOutputStream pdf;
-    @Column (name="pdf_name")
+    @Transient
     private String pdfName; 
 
     public long getId() {
@@ -53,13 +53,14 @@ public class Contact implements Serializable {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateSent() {
+        return dateSent;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateSent(Date dateSent) {
+        this.dateSent = dateSent;
     }
+
 
     public String getSender() {
         return sender;

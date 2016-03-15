@@ -50,6 +50,9 @@ public class User implements Serializable {
     @Column(name = "language")
     private String language;
     
+    @Column(name = "recover_code")
+    private Integer recoverCode;
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
     private List<Evaluation> evaluations;
     
@@ -193,5 +196,14 @@ public class User implements Serializable {
         this.keepResults = keepResults;
     }
 
+    public Integer getRecoverCode() {
+        return recoverCode;
+    }
+
+    public void setRecoverCode(Integer recoverCode) {
+        this.recoverCode = recoverCode;
+    }
+
+    
     
 }

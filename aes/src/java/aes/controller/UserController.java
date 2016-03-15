@@ -7,6 +7,7 @@ package aes.controller;
 import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import aes.utility.EMailSSL;
 import aes.utility.Encrypter;
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -18,6 +19,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -26,6 +28,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.el.ELContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -39,7 +42,9 @@ import javax.persistence.PersistenceContext;
 @ManagedBean(name = "userController")
 @SessionScoped
 public class UserController extends BaseFormController<User> {
-
+    
+    @ManagedProperty(value = "#{contactController}")
+    private ContactController contactController;
     private User user;
 
     private String password;
@@ -47,7 +52,8 @@ public class UserController extends BaseFormController<User> {
     private int day;
     private int month;
     private int year;
-
+    private String email;
+    
     private Boolean drink;
 
     private boolean showErrorMessage;
@@ -88,10 +94,24 @@ public class UserController extends BaseFormController<User> {
         }
 
     }
+    
+    public String teste(){
+        return "ua";
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     /**
      * @return the user
      */
+    
+    
     public User getUser() {
         if (user == null) {
             String id = this.getParameterMap().get("id");
@@ -294,5 +314,29 @@ public class UserController extends BaseFormController<User> {
         this.password = "";
         this.drink = null;
         this.user = new User();
+    }
+    
+    public String getLinkPassword() {
+        return "http://www.aes.com.br/esqueceu-sua-senha.xhtml";
+    }
+    
+    public int generateCode() {
+        long codigo = 0;
+        int base = 1;
+        float valor = 0;
+
+        Random generate = new Random();
+        valor = (float) generate.nextInt(100000) / 10;
+        while (valor > 999 && valor < 10000) {
+            valor = (float) generate.nextInt(10000) / 10;
+        }
+        valor *= 10;
+
+        codigo = (int) valor;
+        return (int) codigo;
+    }
+    
+    public void sendPasswordEmail(){
+        contactController.sendPassword(email, this.generateCode(), this.getLinkPassword());
     }
 }

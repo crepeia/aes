@@ -5,6 +5,7 @@
  */
 package aes.persistence;
 
+import aes.model.User;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,8 +19,8 @@ import javax.persistence.Query;
  */
 public class UserDAO extends GenericDAO {
     
-    public UserDAO(Class classe) throws NamingException {
-        super(classe);
+    public UserDAO() throws NamingException {
+        super(User.class);
     }
     
     public List getYearEmailUsers(EntityManager entityManager){
