@@ -16,8 +16,8 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
 
-        <h:inputHidden value="#{redirectController.redirect( cc.attrs.loginRequired )}" />
-        <h:inputHidden value="#{redirectController.redirectLogged( cc.attrs.logoutRequired )}" />
+        <h:inputHidden value="#{userController.redirectLogin( cc.attrs.loginRequired )}" />
+        <h:inputHidden value="#{userController.redirectIndex( cc.attrs.logoutRequired )}" />
         <h:inputHidden value="#{pageNavigationController.saveNavigation()}" />
 
 
@@ -39,28 +39,32 @@
                 <div id="fastsignin">
                     <h:form id="loginForm">
                         <p:panel id="groupPanel">
-                            <p:panel id="loginPanel" rendered="#{!loginController.showName}">
+                            <p:panel id="loginPanel" rendered="#{!userController.loggedIn}">
                                 <h:outputLink value="cadastrar-nova-conta.xhtml" >#{messages['register']}</h:outputLink> / 
                                 <p:commandLink value="#{messages['signin']}" id="entrarLink" /> 
-                                <p:messages id="loginMessages" />
                             </p:panel>
-                            <p:panel id="userPanel" rendered="#{loginController.showName}">
-                                Olá <h:outputText value="#{loginController.user.name}" />  ::  
+                            <p:panel id="userPanel" rendered="#{userController.loggedIn}">
+                                Olá <h:outputText value="#{userController.user.name}" />  ::  
                                 <h:outputLink value="logout.xhtml">Sair</h:outputLink>
                             </p:panel>
                         </p:panel>
                         <div id="fastlogin">
+                            <p:message for="passwordTxt" />
+                            <p:messages globalOnly="true"/>
+                            <p:message for="emailTxt" />
                             <p:overlayPanel id="loginDialog" for="entrarLink" hideEffect="fade" showEffect="fade" hideEvent="submit()" >  
                                 <p:panel id="loginInformationPanel" >
-                                    <p:inputText id="emailTxt" value="#{loginController.user.email}" required="true" size="30" label="E-mail" >
+                                    <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="E-mail" >
                                         <f:validateLength maximum="50" />
                                     </p:inputText>
                                     <p:watermark for="emailTxt" value="#{messages['email']}" />
-                                    <p:password id="passwordTxt" value="#{loginController.password}" required="true" size="30" label="Senha">  
+                                    <p:password id="passwordTxt" value="#{userController.password}" required="true" size="30" label="Senha">  
                                         <f:validateLength maximum="16" />
                                     </p:password>
-                                    <p:watermark for="passwordTxt" value="#{messages['password']}" />
-                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btnlogin" update="@all" actionListener="#{loginController.loginDialog}" />
+                                    <p:watermark for="passwordTxt" value="#{messages['password']}" />                                   
+                                    <h:outputLink value="enviar-email-senha.xhtml" style="float:left ">#{messages['forgot.password']}</h:outputLink>
+                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btnlogin" update="@form" actionListener="#{userController.signIn(cc.attrs.logoutRequired)}" />
+
                                 </p:panel>
                             </p:overlayPanel>
                         </div>    

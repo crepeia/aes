@@ -12,34 +12,38 @@
         </h:head>
 
         <h:body>
-            <!-- header -->     
-            <w:topmenu />
+            <div id="corpo"> 
+                <w:header logoutRequired="true"  />
+                <w:topmenu />
 
-            <div class="container">
-                <div class="row">
-                        <div class="col s12 m12 l12">
+                <div class="main">
+
+                    <div class="pagecontent">
+                        <div id="signin">
                             <h3 class="orange-text">#{messages['h1.recover.password']}</h3>
                             <p>#{messages['p.send.email']}</p>
-                            <h:form>  
-                                <p:message for="emailTxt" />
+                            <h:form class="form-signup">  
                                 <div class="signuptext"> 
-                                    <div class="input-field">
-                                        <p:inputText id="emailTxt" value="#{userController.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['naccount.invalidemail']}" styleClass="validate" type="email">
-                                            <!--<p:ajax update="loginMsg" event="blur" />-->
-                                            <f:validateLength maximum="50" />
-                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                        </p:inputText>
-                                        <label for="emailTxt"  data-error="wrong" data-success="right">#{messages['email']}</label>
-        <!--                                <p:watermark for="emailTxt" value="#{messages['email']}" />-->
+                                    <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['naccount.invalidemail']}" styleClass="validate" type="email">
+                                        <f:validateLength maximum="50" />
+                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                    </p:inputText>
+                                    <p:watermark for="emailTxt" value="#{messages['email']}" />
+                                    <p:message for="emailTxt"/>
+                                </div>
+                                <div id="signipbottom">
+                                    <div id="signinsubmit">
+                                        <div id="signinbtn" >
+                                            <p:messages globalOnly="true" redisplay="true" />
+
+                                            <p:commandButton id="entrarBtn" value="#{messages['send']}" update="@form" actionListener="#{userController.recoverPassword()}" />
+                                        </div>
                                     </div>
                                 </div>
-
-                                <p:commandButton id="entrarBtn" styleClass="btn waves-effect waves-light" value="#{messages['send']}" update="@form" actionListener="#{userController.teste()}" ajax="false"/>
-
                             </h:form>
                         </div>
-                    </div>
-
+                    </div > 
+                </div>
 
             </div>	
 

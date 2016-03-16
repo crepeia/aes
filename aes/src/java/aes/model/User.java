@@ -6,6 +6,7 @@ package aes.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,20 +37,24 @@ public class User implements Serializable {
     private String email;
     @Column(name = "password", length = 16)
     private byte[] password;
-    @Column(name = "birth")
+    @Column(name = "birth_date")
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Calendar birth;
+    private Date birthDate;
     @Column(name = "gender")
     private char gender;
     @Column(name = "receive_emails") 
     private boolean receiveEmails;
     @Column(name = "authorize_data")
     private boolean authorizeData;
+    @Column(name = "sign_up_date")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date signUpDate;
     @Column(name = "pregnant")
     private Boolean pregnant;
-    @Column(name = "language")
-    private String language;
-    
+    @Column (name = "drink")
+    private Boolean drink;
+    @Column(name = "prefered_language")
+    private String preferedLanguage;
     @Column(name = "recover_code")
     private Integer recoverCode;
     
@@ -58,6 +63,9 @@ public class User implements Serializable {
     
     @OneToOne(cascade=CascadeType.ALL, mappedBy = "user")
     private KeepResults keepResults;
+    
+    @OneToOne(cascade=CascadeType.ALL, mappedBy = "user")
+    private FollowUp followUp;
       
     @Override
     public String toString() {
@@ -66,22 +74,25 @@ public class User implements Serializable {
     
     public int getAge() {
         Calendar today = Calendar.getInstance(); 
+        Calendar birthCal = Calendar.getInstance();
+        birthCal.setTime(birthDate);
         
-        if (today.get(Calendar.MONTH) < this.getBirth().get(Calendar.MONTH)) {
-            return (today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR) - 1);
+        if (today.get(Calendar.MONTH) < birthCal.get(Calendar.MONTH)) {
+            return (today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR) - 1);
             
-        } else if (today.get(Calendar.MONTH) == this.getBirth().get(Calendar.MONTH) && 
-                today.get(Calendar.DAY_OF_MONTH) < this.getBirth().get(Calendar.DAY_OF_MONTH)) {
-            return (today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR) - 1);
+        } else if (today.get(Calendar.MONTH) == birthCal.get(Calendar.MONTH) && 
+                today.get(Calendar.DAY_OF_MONTH) < birthCal.get(Calendar.DAY_OF_MONTH)) {
+            return (today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR) - 1);
             
         }else 
-            return today.get(Calendar.YEAR) - this.getBirth().get(Calendar.YEAR);
+            return today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR);
 
     }
    
     public void setBirth(int year,int month,int day){     
-        birth = Calendar.getInstance();
-        birth.set(year,month,day);
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        birthDate = cal.getTime();
     }
     
     public boolean isUnderage(){
@@ -129,12 +140,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Calendar getBirth() {
-        return birth;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirth(Calendar birth) {
-        this.birth = birth;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public char getGender() {
@@ -162,9 +173,6 @@ public class User implements Serializable {
     }
 
     public Boolean getPregnant() {
-        if(pregnant == null){
-            return false;
-        }
         return pregnant;
     }
 
@@ -180,12 +188,12 @@ public class User implements Serializable {
         this.evaluations = evaluations;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getPreferedLanguage() {
+        return preferedLanguage;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setPreferedLanguage(String preferedLanguage) {
+        this.preferedLanguage = preferedLanguage;
     }
 
     public KeepResults getKeepResults() {
@@ -204,6 +212,33 @@ public class User implements Serializable {
         this.recoverCode = recoverCode;
     }
 
+    public Boolean getDrink() {
+        return drink;
+    }
+
+    public void setDrink(Boolean drink) {
+        this.drink = drink;
+    }
+
+    public FollowUp getFollowUp() {
+        if(followUp == null){
+            followUp = new FollowUp();
+        }
+        return followUp;
+    }
+
+    public void setFollowUp(FollowUp followUp) {
+        this.followUp = followUp;
+    }
+
+    public Date getSignUpDate() {
+        return signUpDate;
+    }
+
+    public void setSignUpDate(Date signUpDate) {
+        this.signUpDate = signUpDate;
+    }
+    
     
     
 }

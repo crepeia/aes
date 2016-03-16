@@ -38,8 +38,8 @@ public class LanguageController extends BaseController<User> {
         } catch (NamingException ex) {
             Logger.getLogger(LanguageController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (loggedUser() && getLoggedUser().getLanguage() != null) {
-            locale = new Locale(getLoggedUser().getLanguage());
+        if (loggedUser() && getLoggedUser().getPreferedLanguage() != null) {
+            locale = new Locale(getLoggedUser().getPreferedLanguage());
         } else {
             locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
         }
@@ -65,7 +65,7 @@ public class LanguageController extends BaseController<User> {
         locale = new Locale(language);
         FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
         if (loggedUser()) {
-            getLoggedUser().setLanguage(language);
+            getLoggedUser().setPreferedLanguage(language);
             try {
                 new GenericDAO(User.class).insertOrUpdate(getLoggedUser(), getEntityManager());
             } catch (NamingException ex) {
@@ -91,5 +91,7 @@ public class LanguageController extends BaseController<User> {
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
     }
+    
+    
 
 }
