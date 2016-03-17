@@ -62,10 +62,10 @@ public class User implements Serializable {
     private List<Evaluation> evaluations;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private KeepResults keepResults;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private FollowUp followUp;
+    private Record record;
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Contact> contacts;
 
     @Override
     public String toString() {
@@ -200,12 +200,12 @@ public class User implements Serializable {
         this.preferedLanguage = preferedLanguage;
     }
 
-    public KeepResults getKeepResults() {
-        return keepResults;
+    public Record getRecord() {
+        return record;
     }
 
-    public void setKeepResults(KeepResults keepResults) {
-        this.keepResults = keepResults;
+    public void setRecord(Record record) {
+        this.record = record;
     }
 
     public Integer getRecoverCode() {
@@ -224,24 +224,20 @@ public class User implements Serializable {
         this.drink = drink;
     }
 
-    public FollowUp getFollowUp() {
-        if (followUp == null) {
-            followUp = new FollowUp();
-            followUp.setUser(this);
-        }
-        return followUp;
-    }
-
-    public void setFollowUp(FollowUp followUp) {
-        this.followUp = followUp;
-    }
-
     public Date getSignUpDate() {
         return signUpDate;
     }
 
     public void setSignUpDate(Date signUpDate) {
         this.signUpDate = signUpDate;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 
 }

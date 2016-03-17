@@ -40,7 +40,7 @@ public class DailyLog implements Serializable {
     private String consequences;
     
     @ManyToOne
-    private KeepResults keepResults;
+    private Record record;
     
     @Override
     public String toString(){
@@ -91,12 +91,12 @@ public class DailyLog implements Serializable {
         this.consequences = consequences;
     }
 
-    public KeepResults getKeepResults() {
-        return keepResults;
+    public Record getRecord() {
+        return record;
     }
 
-    public void setKeepResults(KeepResults keepResults) {
-        this.keepResults = keepResults;
+    public void setRecord(Record record) {
+        this.record = record;
     }
 
    

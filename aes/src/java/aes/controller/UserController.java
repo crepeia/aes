@@ -5,7 +5,6 @@
  */
 package aes.controller;
 
-import aes.model.FollowUp;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.Encrypter;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -33,8 +31,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.inputtext.InputText;
 
 /**
  *
@@ -175,7 +171,7 @@ public class UserController extends BaseController<User> {
         contactController.sendPasswordRecoveryEmail(user.getEmail(), generateCode());
     }
     
-    public void annualScreening() {
+    /*public void annualScreening() {
             
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.YEAR, 1);
@@ -187,7 +183,7 @@ public class UserController extends BaseController<User> {
             if (!loggedIn) {
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
             }
-    }
+    }*/
     
     public String checkCode() {
         try {

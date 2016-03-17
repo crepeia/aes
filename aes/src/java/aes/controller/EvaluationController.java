@@ -6,21 +6,17 @@
 package aes.controller;
 
 import aes.model.Evaluation;
-import aes.model.Plan;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.PDFGenerator;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -30,7 +26,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.model.DefaultStreamedContent;
@@ -48,7 +43,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     private Evaluation evaluation;
 
-    private String planTemplate;
+    private String htmlTemplate;
 
     @ManagedProperty(value = "#{userController}")
     private UserController userController;
@@ -65,29 +60,27 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public Evaluation getEvaluation() {
-        if (evaluation == null) {
-            if (userController.isLoggedIn()) {
-                try {
-                    List<Evaluation> evaluations = this.getDaoBase().list("user", getUser(), this.getEntityManager());
-                    if (!evaluations.isEmpty()) {
-                        Calendar limit = Calendar.getInstance();
-                        limit.add(Calendar.DATE, EvaluationController.DAYS_LIMIT);
-                        Calendar evaluationDate = Calendar.getInstance();
-                        for (Evaluation e : evaluations) {
-                            evaluationDate.setTime(e.getDateCreated());
-                            if (evaluationDate.after(limit)) {
-                                evaluation = e;
-                            }
+        if (evaluation == null && userController.isLoggedIn()) {
+            try {
+                List<Evaluation> evaluations = this.getDaoBase().list("user", getUser(), this.getEntityManager());
+                if (!evaluations.isEmpty()) {
+                    Calendar limit = Calendar.getInstance();
+                    limit.add(Calendar.DATE, EvaluationController.DAYS_LIMIT);
+                    Calendar evaluationDate = Calendar.getInstance();
+                    for (Evaluation e : evaluations) {
+                        evaluationDate.setTime(e.getDateCreated());
+                        if (evaluationDate.after(limit)) {
+                            evaluation = e;
                         }
-                    } else {
-                        evaluation = new Evaluation();
-                        evaluation.setDateCreated(new Date());
-                        evaluation.setUser(getUser());
                     }
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+                } else {
+                    evaluation = new Evaluation();
+                    evaluation.setDateCreated(new Date());
+                    evaluation.setUser(getUser());
                 }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return evaluation;
@@ -183,133 +176,23 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
 
-    public String nextRegEleManAndWoman() {
-        try {
-            daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
-            saveURL();
-            return "estrategia-diminuir-registro-eletronico.xhtml?faces-redirect=true";
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
-    }
-
-    public String regEl() {
-        try {
-            daoBase.insertOrUpdate(getEvaluation(), getEntityManager());
-            return "estrategia-diminuir-alternativas.xhtml?faces-redirect=true";
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
-    }
-
     public String goToPlan() {
         saveURL();
         return "plano-mudanca.xhtml?faces-redirect=true";
     }
 
-    public String printPlan() {
-        try {
-            daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
-            return "plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true";
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
-    }
-
-    public ByteArrayOutputStream createPlan() {
-        String content[] = new String[6];
-        content[0] = new SimpleDateFormat("dd/MM/yyyy").format(getEvaluation().getDataComecarPlano());
-        content[1] = getEvaluation().getRazoesPlano();
-        content[2] = getEvaluation().getEstrategiasPlano();
-        content[3] = getEvaluation().getPessoasPlano();
-        content[4] = getEvaluation().getSinaisSucessoPlano();
-        content[5] = getEvaluation().getPossiveisDificuladesPlano();
-        String plan = fillPlanTemplate(content);
-        return new PDFGenerator().generatePDF(plan);
-    }
-
-    /* public void sendPlan() {
-        try {
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Contact contact = new Contact();
-        contact.setRecipient(getUser().getEmail());
-        contact.setSender("alcoolesaude@gmail.com");
-        contact.setDateSent(new Date());
-        contact.setSubject("Álcool e Saúde - Seu Plano");
-        contact.setText("Em anexo está seu plano em formato PDF.");
-        contact.setPdfName("meuplano.pdf");
-        contact.setPdf(new Plan(getEvaluation()).getPdf());
-        contact.setHtml(fillContactTemplate("Álcool e Saúde", "Seu Plano Personalizado", "Em anexo está seu plano em formato PDF."));
-        getContactController().sendEmail(contact);
+    public void sendPlan() {
+        contactController.sendPlanEmail(getUser(), getEvaluation().getPlanContent());
         FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Plano enviado."));
-
-    }*/
-    public String fillPlanTemplate(String content[]) {
-        try {
-            if (planTemplate == null) {
-                planTemplate = readTemplate("/resources/default/templates/plan-template.html");
-
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(EvaluationController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        String template = planTemplate;
-        String title = "Meu Plano";
-        String subtitle[] = new String[6];
-        subtitle[0] = "Data para começar";
-        subtitle[1] = "As razões mais importantes que eu tenho para mudar a forma que bebo são:";
-        subtitle[2] = "Eu irei usar as seguintes estratégias:";
-        subtitle[3] = "As pessoas que podem me ajudar são:";
-        subtitle[4] = "Eu saberei que meu plano está funcionando quando:";
-        subtitle[5] = "O que pode interferir e como posso lidar com estas situações:";
-        if (planTemplate == null) {
-            System.out.println("null1");
-        }
-        if (template == null) {
-            System.out.println("null2");
-        }
-        template = template.replace("#title#", title);
-        for (int i = 0; i < 6; i++) {
-            if (content[i] != null && !content[i].trim().isEmpty()) {
-                template = template.replace("#subtitle" + (i + 1) + "#", subtitle[i]);
-                template = template.replace("#content" + (i + 1) + "#", content[i]);
-            } else {
-                template = template.replace("#subtitle" + (i + 1) + "#", "");
-                template = template.replace("#content" + (i + 1) + "#", "");
-            }
-        }
-        return template;
-    }
-
-    public String readTemplate(String path) throws IOException {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        String absolutePath = servletContext.getRealPath(path);
-        byte[] encoded = Files.readAllBytes(Paths.get(absolutePath));
-        String template = new String(encoded, StandardCharsets.UTF_8);
-        return template;
     }
 
     public StreamedContent getPlanPdf() {
-        Plan plan = new Plan(getEvaluation());
-        return new DefaultStreamedContent(new ByteArrayInputStream(plan.getPdf().toByteArray()),
+        ByteArrayOutputStream pdf = (new PDFGenerator()).generatePDF(contactController.fillHTMLTemplate(getEvaluation().getPlanContent()));
+        return new DefaultStreamedContent(new ByteArrayInputStream(pdf.toByteArray()),
                 "application/pdf", "meuplano.pdf");
     }
 
-    public String getEndingDay() {
+    /*public String getEndingDay() {
         if (getEvaluation().getStartingDay() == null) {
             return "";
         }
@@ -319,18 +202,19 @@ public class EvaluationController extends BaseController<Evaluation> {
         return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
 
-    /*public String getDayName(int day) {
+    public String getDayName(int day) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getEvaluation().getStartingDay());
         cal.add(Calendar.DATE, day - 1);
-        return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, getLanguageController().getLocale());
-    }*/
+        return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale(getUser().getPreferedLanguage()));
+    }
+
     public String getDay(int day) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getEvaluation().getStartingDay());
         cal.add(Calendar.DATE, day - 1);
         return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
-    }
+    }*/
 
     public String getURL() {
         String url = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("url");
@@ -365,6 +249,14 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void setUserController(UserController userController) {
         this.userController = userController;
+    }
+
+    public String getHtmlTemplate() {
+        return htmlTemplate;
+    }
+
+    public void setHtmlTemplate(String htmlTemplate) {
+        this.htmlTemplate = htmlTemplate;
     }
 
 }

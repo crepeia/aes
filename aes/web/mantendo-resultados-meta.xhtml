@@ -7,56 +7,56 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['estrategia.dim.registro.elet.meta.mul.title.1']}</title>
-        <w:head_comum />
-    </h:head>
+        <h:head>
+            <title>#{messages['estrategia.dim.registro.elet.meta.mul.title.1']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true" />
-            
-           
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
-
-                <!--<w:leftmenu_2 cssClass="leftmenu2" />-->
-                
-                <div class="pagecontent">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header loginRequired="true" />
 
 
-                    <div id="pagetop">
-                        
-                        <div id="progressbar">
-                            <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
+
+                    <!--<w:leftmenu_2 cssClass="leftmenu2" />-->
+
+                    <div class="pagecontent">
+
+
+                        <div id="pagetop">
+
+                            <div id="progressbar">
+                                <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>
+
+                            <div class='fotoframestratety'>
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
                         </div>
-                        
-                        <div class='fotoframestratety'>
-                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
-                        </div>
-                    </div>
-                    
-                    <div id="pagecontentstrategy">
-                        
-                        <div id="pmtext">
 
-                            <h3>#{messages['estrategia.dim.registro.elet.meta.hom.h3.1']}</h3>
-                            <p>#{messages['estrategia.dim.registro.elet.meta.hom.p.1']}</p>
-                            <ul>
-                            <li>#{messages['estrategia.dim.registro.elet.meta.hom.li.1']}</li>
-                            </ul>         
-                            <h4>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1a']}<b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1.b1']}</b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1b']}</h4>
-                        </div>
-                    </div>    
-                         
-                            <div id="pmtext">     
-                            
-                                 <div id="standarddose">
-                                
+                        <div id="pagecontentstrategy">
+
+                            <div id="pmtext">
+
+                                <h3>#{messages['estrategia.dim.registro.elet.meta.hom.h3.1']}</h3>
+                                <p>#{messages['estrategia.dim.registro.elet.meta.hom.p.1']}</p>
+                                <ul>
+                                    <li>#{messages['estrategia.dim.registro.elet.meta.hom.li.1']}</li>
+                                </ul>         
+                                <h4>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1a']}<b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1.b1']}</b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1b']}</h4>
+                            </div>
+                        </div>    
+
+                        <div id="pmtext">     
+
+                            <div id="standarddose">
+
                                 <h1>#{messages['estrategia.dim.registro.elet.meta.hom.h1.1']}</h1>                                                                
-                                
+
                                 <div id="doseex1">
                                     <div class="doseexample">
 
@@ -67,7 +67,7 @@
 
                                     </div>
                                 </div>
-                                
+
                                 <div id="doseex2">
                                     <div class="doseexample">
 
@@ -78,7 +78,7 @@
 
                                     </div>
                                 </div>
-                                
+
                                 <div id="doseex3">
                                     <div class="doseexample">
 
@@ -89,7 +89,7 @@
 
                                     </div>
                                 </div>
-                                
+
                                 <div id="doseex4">
                                     <div class="doseexample">
 
@@ -100,7 +100,7 @@
 
                                     </div>
                                 </div>
-                                
+
                                 <div id="doseex5">
                                     <div class="doseexample">
 
@@ -111,68 +111,78 @@
 
                                     </div>
                                 </div>
-                                </div>
                             </div>
-       
-                    <div id="pagemiddle">
-                        <h:form>
-                        <div id="pmtext">
-                            
-                            <h3>#{messages['estrategia.dim.registro.elet.meta.mul.h3.2']}</h3>
-                            <p>#{messages['estrategia.dim.registro.elet.meta.mul.p.13']}</p>
-                            <h4>#{messages['estrategia.dim.registro.elet.meta.mul.p.14']}</h4>
-                            <ul>
-                            <li>#{messages['estrategia.dim.registro.elet.meta.mul.li.2']}</li>
-                            <li>#{messages['estrategia.dim.registro.elet.meta.mul.li.3']}</li>
-                            </ul>
-                            <h3>#{messages['estrategia.dim.registro.elet.meta.mul.h3.3']}</h3>
-                            
-                            <h4>#{messages['estrategia.dim.registro.elet.meta.mul.h4.2']}</h4> 
-                            
-                                <h:panelGrid columns="2" cellpadding="1">
-                                    <p:outputLabel value="Doses Padrão" />
-                                    <p:spinner id="metadosediaria" value="#{keepResultsController.keepResults.dailyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
-                                </h:panelGrid>
-                            <p:message for="metadosediaria"/>
-                                                                
-                            <h4>#{messages['estrategia.dim.registro.elet.meta.hom.h4.3']}</h4> 
-                            
-                                <h:panelGrid columns="2" cellpadding="1">
-                                    <p:outputLabel value="Doses Padrão" />
-                                    <p:spinner id="metadosesemanal" value="#{keepResultsController.keepResults.weeklyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
-                                </h:panelGrid>  
-                            <p:message for="metadosesemanal"/>
-                                    
-                        </div><!-- end pmtext -->  
-                                                             
-            
-                      
+                        </div>
+
+                        <div id="pagemiddle">
+                            <h:form>
+                                <div id="pmtext">
+
+                                    <h3>#{messages['estrategia.dim.registro.elet.meta.mul.h3.2']}</h3>
+                                    <p>#{messages['estrategia.dim.registro.elet.meta.mul.p.13']}</p>
+                                    <p:panel rendered=#{evaluationController.user.female}>
+                                        <h4>#{messages['estrategia.dim.registro.elet.meta.mul.p.14']}</h4>
+                                        <ul>
+                                            <li>#{messages['estrategia.dim.registro.elet.meta.mul.li.2']}</li>
+                                            <li>#{messages['estrategia.dim.registro.elet.meta.mul.li.3']}</li>
+                                        </ul>
+                                    </p:panel>
+                                    <p:panel rendered=#{evaluationController.user.male}>
+
+                                        <h4>#{messages['estrategia.dim.registro.elet.meta.hom.p.14']}</h4>
+                                        <ul>
+                                            <li>#{messages['estrategia.dim.registro.elet.meta.hom.li.2']}</li>
+                                            <li>#{messages['estrategia.dim.registro.elet.meta.hom.li.3']}</li>
+                                        </ul>
+                                    </p:panel>
+                                    <h3>#{messages['estrategia.dim.registro.elet.meta.mul.h3.3']}</h3>
+
+                                    <h4>#{messages['estrategia.dim.registro.elet.meta.mul.h4.2']}</h4> 
+
+                                    <h:panelGrid columns="2" cellpadding="1">
+                                        <p:outputLabel value="Doses Padrão" />
+                                        <p:spinner id="metadosediaria" value="#{keepResultsController.keepResults.dailyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
+                                    </h:panelGrid>
+                                    <p:message for="metadosediaria"/>
+
+                                    <h4>#{messages['estrategia.dim.registro.elet.meta.hom.h4.3']}</h4> 
+
+                                    <h:panelGrid columns="2" cellpadding="1">
+                                        <p:outputLabel value="Doses Padrão" />
+                                        <p:spinner id="metadosesemanal" value="#{keepResultsController.keepResults.weeklyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
+                                    </h:panelGrid>  
+                                    <p:message for="metadosesemanal"/>
+
+                                </div><!-- end pmtext -->  
+
+
+
 
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-registro.xhtml"></h:button>
                                 </div>
-                                
-                                
+
+
                                 <div id="btnnext">
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{keepResultsController.goals()}"/>      
                                 </div>
 
                             </h:form>                                            
 
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
-             </div> 
- 
-                </div>        
-            </div>
-                
-        </div><!-- end.corpo --> 
+                            <div class="referencias">
+                                <p>#{messages['updated']}</p>
+                            </div>
+                        </div> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+                    </div>        
+                </div>
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 
 

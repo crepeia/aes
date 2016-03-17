@@ -58,8 +58,8 @@
                         <h:panelGrid columns="2" cellpadding="5" >
                             <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
                             <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
-                            <p:inputText value="#{evaluationController.evaluation.dosePadraoDiaria}" readonly="true" size="2"/>
-                            <p:inputText value="#{evaluationController.evaluation.dosePadraoSemanal}" readonly="true" size="2"/>
+                            <p:inputText value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
+                            <p:inputText value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
                             <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
                             <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
                         </h:panelGrid>
@@ -200,7 +200,7 @@
 
 
                         <div id="btnnext">
-                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.regEl()}" immediate="true"/>      
+                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-alternativas.xhtml?faces-redirect=true" immediate="true"/>      
                         </div>
 
                     </h:form>                                            

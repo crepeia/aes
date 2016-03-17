@@ -23,8 +23,8 @@ import javax.persistence.Table;
  * @author thiago
  */
 @Entity
-@Table(name = "tb_keep_results")
-public class KeepResults implements Serializable{
+@Table(name = "tb_record")
+public class Record implements Serializable{
        
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
@@ -44,6 +45,9 @@ public class Contact implements Serializable {
     ByteArrayOutputStream pdf;
     @Transient
     private String pdfName; 
+    
+    @ManyToOne
+    private User user;
 
     public long getId() {
         return id;
@@ -117,5 +121,13 @@ public class Contact implements Serializable {
     public void setPdfName(String pdfName) {
         this.pdfName = pdfName;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }    
        
 }

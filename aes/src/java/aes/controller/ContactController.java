@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -37,13 +38,15 @@ import javax.naming.NamingException;
 public class ContactController extends BaseController implements Serializable {
 
     private EMailSSL eMailSSL;
-    private String htmlTemplate;
+    private String contactTemplate;
+    private String planTemplate;
     private UserDAO userDAO;
 
     @PostConstruct
     public void init() {
         eMailSSL = new EMailSSL();
-        htmlTemplate = readHTMLTemplate();
+        contactTemplate = readHTMLTemplate("aes/utility/contact-template.html");
+        planTemplate = readHTMLTemplate("aes/utility/contact-template.html");
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
             userDAO = new UserDAO();
@@ -107,45 +110,26 @@ public class ContactController extends BaseController implements Serializable {
         }
     }
 
+    public void sendPlanEmail(User user, String content[]) {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient(user.getEmail());
+        contact.setDateSent(new Date());
+        contact.setSubject("subject.email.plano");
+        contact.setHtml(fillHTMLTemplate(content));
+        sendEmail(contact);
+    }
 
-    /*public void sendDifferentDateEmail() {
-        List<User> users = userDAO.followUpDifferentDate(getEntityManager());
-        Contact contact;
-        if (!users.isEmpty()) {
-            for (User user : users) {
-                try {
-                    contact = new Contact();
-                    contact.setSender("watiufjf@gmail.com");
-                    contact.setRecipient(user.getEmail());
-                    contact.setSubject(getText("subject.email.followup", user.getPreferedLanguage()));
-                    contact.setHtml(fillTemplate(
-                            getText("vivasemtabaco", user.getPreferedLanguage()),
-                            getText("subject.email.followup", user.getPreferedLanguage()),
-                            getText("subject.email.followup", user.getPreferedLanguage()),
-                            getFooter(user.getPreferedLanguage())));
-                    contact.setDateSent(new Date());
-                    contact.setUser(user);
-                    sendEmail(contact);
-                    user.getProntoParaParar().setFollowUpCount(1);
-                    prontoDAO.insertOrUpdate(user.getProntoParaParar(), getEntityManager());
-                    daoBase.insertOrUpdate(contact, getEntityManager());
-                    Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Different date follow up email  sent to:" + user.getEmail());
-                } catch (SQLException ex) {
-                    Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        }
-    }*/
     public String getFooter(String language) {
-        return this.getText("vivasemtabaco", language) + "<br>"
+        return this.getText("title.1", language) + "<br>"
                 + this.getText("crepeia", language) + "<br>"
                 + this.getText("ufjf", language);
     }
 
-    public String readHTMLTemplate() {
+    public String readHTMLTemplate(String path) {
         try {
-            InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/contact-template.html");
+            InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
             byte[] buffer = new byte[10240];
             return new String(buffer, 0, input.read(buffer), StandardCharsets.UTF_8);
         } catch (IOException ex) {
@@ -155,7 +139,7 @@ public class ContactController extends BaseController implements Serializable {
     }
 
     public String fillHTMLTemplate(String title, String subtitle, String content, String footer) {
-        String newTemplate = htmlTemplate;
+        String newTemplate = contactTemplate;
         if (title != null) {
             newTemplate = newTemplate.replace("#title#", title);
         }
@@ -167,6 +151,27 @@ public class ContactController extends BaseController implements Serializable {
         }
         if (footer != null) {
             newTemplate = newTemplate.replace("#footer#", footer);
+        }
+
+        return newTemplate;
+    }
+
+    public String fillHTMLTemplate(String content[]) {
+        String newTemplate = planTemplate;
+
+        String subtitle[] = new String[6];
+        String title = "Meu Plano";
+        subtitle[0] = "Data para começar";
+        subtitle[1] = "As razões mais importantes que eu tenho para mudar a forma que bebo são:";
+        subtitle[2] = "Eu irei usar as seguintes estratégias:";
+        subtitle[3] = "As pessoas que podem me ajudar são:";
+        subtitle[4] = "Eu saberei que meu plano está funcionando quando:";
+        subtitle[5] = "O que pode interferir e como posso lidar com estas situações:";
+
+        newTemplate = newTemplate.replace("#title#", title);
+        for (int i = 0; i < 6; i++) {
+            newTemplate = newTemplate.replace("#subtitle" + (i + 1) + "#", subtitle[i]);
+            newTemplate = newTemplate.replace("#content" + (i + 1) + "#", content[i]);
         }
 
         return newTemplate;

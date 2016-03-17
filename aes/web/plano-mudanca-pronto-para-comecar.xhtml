@@ -7,163 +7,152 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['plano.mudanca.pronto.para.comecar.title.1']}</title>
-        <w:head_comum />
-    </h:head>
+        <h:head>
+            <title>#{messages['plano.mudanca.pronto.para.comecar.title.1']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true" />
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header loginRequired="true" />
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
-                <div class="pagecontent">
-
-
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['plano.mudanca.pronto.para.comecar.h1.1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['plano.mudanca.pronto.para.comecar.h1.1']}</h1> 
+                            </div>    
 
-                        <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <div id="progressbar">
+                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
                         </div>
 
-                        <div id="pmtext">
 
-                            <p>#{messages['plano.mudanca.pronto.para.comecar.p.1']}</p>
-                            <h4>#{messages['plano.mudanca.pronto.para.comecar.h4.1']}</h4>
-                            <h3>#{messages['plano.mudanca.pronto.para.comecar.h3.1']}</h3>
-                            <h:form>
-                                <p:panel id="questoes" >
+                        <div id="pagemiddle">
 
-                                    <h:panelGrid columns="1"  cellpadding="5">
-                                        <f:facet name="header">  
-                                            #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
-                                        </f:facet>
-                                        <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy" required="true" requiredMessage="'Data': Campo em branco" />
-                                    </h:panelGrid>
+                            <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
+
+                            <div id="pmtext">
+
+                                <p>#{messages['plano.mudanca.pronto.para.comecar.p.1']}</p>
+                                <h4>#{messages['plano.mudanca.pronto.para.comecar.h4.1']}</h4>
+                                <h3>#{messages['plano.mudanca.pronto.para.comecar.h3.1']}</h3>
+                                <h:form>
+                                    <p:panel id="questoes" >
+
+                                        <h:panelGrid columns="1"  cellpadding="5">
+                                            <f:facet name="header">  
+                                                #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
+                                            </f:facet>
+                                            <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy" required="true" locale="#{languageController.locale}" requiredMessage="'Data': Campo em branco" showOn="button" >
+                                                <p:ajax event="change" update="dataM" />
+                                            </p:calendar>
+                                        </h:panelGrid>
 
 
-                                    <h:panelGrid columns="1"  cellpadding="5" id="questao2">
-                                        <f:facet name="header">  
-                                            #{messages['plano.mudanca.pronto.para.comecar.facet.2']}                                      
-                                        </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2" required="true" requiredMessage="'Razões': Campo em branco"/> 
-                                    </h:panelGrid>
+                                        <h:panelGrid columns="1"  cellpadding="5" id="questao2">
+                                            <f:facet name="header">  
+                                                #{messages['plano.mudanca.pronto.para.comecar.facet.2']}                                      
+                                            </f:facet>
+                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2" required="true" requiredMessage="'Razões': Campo em branco"/> 
+                                        </h:panelGrid>
 
-                                    <h:panelGrid columns="1"  cellpadding="5" id="questao3">
-                                        <f:facet name="header">  
-                                            #{messages['plano.mudanca.pronto.para.comecar.facet.3']}                                      
-                                        </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3" required="true" requiredMessage="'Estratégias': Campo em branco"/> 
-                                    </h:panelGrid>
+                                        <h:panelGrid columns="1"  cellpadding="5" id="questao3">
+                                            <f:facet name="header">  
+                                                #{messages['plano.mudanca.pronto.para.comecar.facet.3']}                                      
+                                            </f:facet>
+                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3" required="true" requiredMessage="'Estratégias': Campo em branco"/> 
+                                        </h:panelGrid>
 
-                                    <h:panelGrid columns="1"  cellpadding="5" id="questao4">
-                                        <f:facet name="header">  
-                                            #{messages['plano.mudanca.pronto.para.comecar.facet.4']}                                      
-                                        </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4" required="true" requiredMessage="'Pessoas': Campo em branco"/> 
-                                    </h:panelGrid>
+                                        <h:panelGrid columns="1"  cellpadding="5" id="questao4">
+                                            <f:facet name="header">  
+                                                #{messages['plano.mudanca.pronto.para.comecar.facet.4']}                                      
+                                            </f:facet>
+                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4" required="true" requiredMessage="'Pessoas': Campo em branco"/> 
+                                        </h:panelGrid>
 
-                                    <h:panelGrid columns="1"  cellpadding="5" id="questao5">
-                                        <f:facet name="header">  
-                                            #{messages['plano.mudanca.pronto.para.comecar.facet.5']}                                       
-                                        </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5" required="true" requiredMessage="'Sinais Sucesso': Campo em branco"/> 
-                                    </h:panelGrid>
+                                        <h:panelGrid columns="1"  cellpadding="5" id="questao5">
+                                            <f:facet name="header">  
+                                                #{messages['plano.mudanca.pronto.para.comecar.facet.5']}                                       
+                                            </f:facet>
+                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5" required="true" requiredMessage="'Sinais Sucesso': Campo em branco"/> 
+                                        </h:panelGrid>
 
-                                    <h:panelGrid columns="1"  cellpadding="5" id="questao6">
-                                        <f:facet name="header">  
-                                            #{messages['plano.mudanca.pronto.para.comecar.facet.6']}                                       
-                                        </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="'Possíveis Dificuldades': Campo em branco"/> 
-                                    </h:panelGrid>
+                                        <h:panelGrid columns="1"  cellpadding="5" id="questao6">
+                                            <f:facet name="header">  
+                                                #{messages['plano.mudanca.pronto.para.comecar.facet.6']}                                       
+                                            </f:facet>
+                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="'Possíveis Dificuldades': Campo em branco"/> 
+                                        </h:panelGrid>
 
-                                </p:panel>
+                                    </p:panel>
 
-                                <h:panelGrid columns="2" >
-                                    <p:panelGrid columns="1">
-                                        <div id ="planoimg1">
-                                            <div class="planoimg">                                                            
-                                                <p:commandLink action="#{evaluationController.printPlan()}"  ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
-                                                <p><p:commandLink action="#{evaluationController.printPlan()}"  >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                    <h:panelGrid columns="2" >
+                                        <p:panelGrid columns="1">
+                                            <div id ="planoimg1">
+                                                <div class="planoimg">                                                            
+                                                    <p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true" update="@form" actionListener="#{evaluationController.printPlan()}"  ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
+                                                    <p><p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true" update="@form"  >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </p:panelGrid>
+                                        </p:panelGrid>
 
-                                    <p:panelGrid columns="1">
-                                        <div id ="planoimg2">
-                                            <div class="planoimg">
-                                                <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
-                                                <p><p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form">E-Mail</p:commandLink></p>
+                                        <p:panelGrid columns="1">
+                                            <div id ="planoimg2">
+                                                <div class="planoimg">
+                                                    <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
+                                                    <p><p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form">E-Mail</p:commandLink></p>
+                                                </div>
                                             </div>
+                                        </p:panelGrid>
+
+
+                                    </h:panelGrid>  
+
+                                    <p:panel>
+                                        <p:messages id="messages" redisplay="true"/> 
+
+                                    </p:panel>
+
+                                    <h:panelGrid>   
+                                        <div id="btnback">
+                                            <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
                                         </div>
-                                    </p:panelGrid>
-
-
-                                </h:panelGrid>  
-
-                                <p:panel>
-                                <p:messages id="messages" showDetail="true" autoUpdate="true"/> 
-                                    
-                                 <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;"  >
-                                    <f:facet name="default">
-
-                                    </f:facet>
-
-                                    <f:facet name="start">
-                                        <p:graphicImage library="default" name="/images/ajax-loader.gif" />
-                                        <p:outputLabel value="Por favor, aguarde."/>    
-                                    </f:facet>
-
-                                    <f:facet name="complete">
-                                    </f:facet>
-                                </p:ajaxStatus>
-                                </p:panel>
-                                
-                                <h:panelGrid>   
-                                    <div id="btnback">
-                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
-                                    </div>
-                                </h:panelGrid>   
+                                    </h:panelGrid>   
 
 
 
 
-                            </h:form>                     
-
-                        
-                        </div><!-- end pmtext -->  
-
-                    </div><!-- end page middle -->                                             
-
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
+                                </h:form>                     
 
 
+                            </div><!-- end pmtext -->  
 
-                </div>        
-            </div>
+                        </div><!-- end page middle -->                                             
+
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
 
 
-        </div><!-- end.corpo --> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+                    </div>        
+                </div>
+
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 
