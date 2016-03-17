@@ -55,6 +55,7 @@ public class UserController extends BaseController<User> {
     private String email;
     private Integer recoverCode;
     private String passwordd;
+    private boolean showErrorMessage;
     
     @PostConstruct
     public void init() {
@@ -173,6 +174,56 @@ public class UserController extends BaseController<User> {
 
     public void recoverPassword() {
         contactController.sendPasswordRecoveryEmail(user.getEmail(), generateCode());
+    }
+    
+    public void alterPassword() throws SQLException, InvalidKeyException, IOException {
+        this.showErrorMessage = true;
+        List<User> userList = this.getDaoBase().list("email", this.email, this.getEntityManager());
+        try{
+                if (!userList.isEmpty() && userList.get(0).getId() != 0) {
+                    user = userList.get(0);
+                    this.user.setPassword(Encrypter.encrypt(this.passwordd));
+                    /*if (!Encrypter.compare(this.passwordd, this.user.getPassword())) {
+                        //incluir criptografia da senha
+                        this.user.setPassword(Encrypter.encrypt(this.passwordd));
+                    }*/
+                    this.getDaoBase().insertOrUpdate(user, this.getEntityManager());
+                    String message = "password.changed";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+                    //this.returnIndex();
+                }
+                else{
+                    String message = "user.not.registered.requesting.password.change";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
+                }
+            
+        }catch (InvalidKeyException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"problemas.gravar.usuario", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problemas.gravar.usuario", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problemas.gravar.usuario", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problemas.gravar.usuario", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problemas.gravar.usuario", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problemas.gravar.usuario", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setPasswordAlter(user);
+        this.getDaoBase().insertOrUpdate(user, this.getEntityManager());
+    }
+    
+    public void setPasswordAlter(User user){
+        int setCode = 0;
+        user.setRecoverCode(setCode);
     }
     
     public void annualScreening() {
