@@ -14,16 +14,16 @@
         <h:body>
             <!-- header -->     
             <w:topmenu />
-
-            <div class="container">
-                <div class="row">
-                    <div class="col s12 m12 l12">
+            
+            <div class="main">
+                <div class="pagecontent">
+                    <div id="signin">
                         <h3 class="headertop orange-text text-lighten-2">#{messages['i.forgot.password']}</h3>
                         <p>#{messages['p.send.email']}</p>
+                        
+                        <h:form class="form-signup">
 
-                        <h:form>
-
-                            <div class="input-field">
+                            <div class="signuptext">
                                 <p:inputText id="emailTxt" value="#{userController.email}" required="true" size="30" label="#{messages['enter.email']}" styleClass="validate" type="email" >
                                     <f:validateLength maximum="50" />
                                 </p:inputText>
@@ -31,7 +31,7 @@
                                 <p:watermark for="emailTxt" value="#{messages['enter.email']}" />
                             </div>
 
-                            <div class="input-field">
+                            <div class="signuptext">
                                 <p:inputText id="codeTxt" value="#{userController.recoverCode}" required="true" size="30" label="#{messages['enter.code']}">
                                     <f:validateLength maximum="50"/>
                                 </p:inputText>
@@ -40,27 +40,21 @@
                             </div>
 
                             <br />
-                            <div class="center">
+                            <div id="signipbottom">
+                                    <div id="signinsubmit">
+                                        <div id="signinbtn" >
                                 <p:commandButton id="nexttBtn" styleClass="btn waves-effect waves-light" value="#{messages['next']}" update="@form" action="#{userController.checkCode()}" ajax="false"/> 
+                                        </div>
+                                    </div>
                             </div>
                             
-                            <!--<div class="modal" style="display: none" id="HiddenDiv">
-                            <div class="modal-content">
-                                <h2>#{messages['preparando.aed.result']}</h2>
-                                <h:outputText id="texto1" value="#{prontoParaPararController.texto1}" />
-                            </div>
-                            <div class="modal-footer">
-                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">#{messages['close']}</a>
-                            </div>
-                            </div>-->
+ 
                         </h:form>
-
+                        
                     </div>
                 </div>
             </div>
-
-
-
+          
 
             <w:footer />
         </h:body>
