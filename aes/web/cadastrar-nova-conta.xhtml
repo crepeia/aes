@@ -7,42 +7,41 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['cadastrar.nova.conta.title.1']}</title>
-        <w:head_comum />
-    </h:head>
+        <h:head>
+            <title>#{messages['cadastrar.nova.conta.title.1']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>    
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header logoutRequired="true"/>
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
+        <h:body>    
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header logoutRequired="true"/>
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
-                <div class="pagecontent">
-                  
+                    <div class="pagecontent">
+
                         <div id="maintop">
-                             
+
                             <div id="maincenter">
-                            <h3>#{messages['cadastrar.nova.conta.h3.1']}</h3>                                         
-                            <p>#{messages['cadastrar.nova.conta.p.1']}</p>
-                            
-                            <div id="mainleft">
-                                    
-                            <h3>#{messages['cadastrar.nova.conta.h3.2']}</h3>
-                            <ul>
-                            <li>#{messages['cadastrar.nova.conta.li.1']}</li>
-                            <li>#{messages['cadastrar.nova.conta.li.2']}</li>
-                            <li>#{messages['cadastrar.nova.conta.li.3']}</li>
-                            </ul>
+                                <h3>#{messages['cadastrar.nova.conta.h3.1']}</h3>                                         
+                                <p>#{messages['cadastrar.nova.conta.p.1']}</p>
+
+                                <div id="mainleft">
+
+                                    <h3>#{messages['cadastrar.nova.conta.h3.2']}</h3>
+                                    <ul>
+                                        <li>#{messages['cadastrar.nova.conta.li.1']}</li>
+                                        <li>#{messages['cadastrar.nova.conta.li.2']}</li>
+                                        <li>#{messages['cadastrar.nova.conta.li.3']}</li>
+                                    </ul>
 
                                     <div id="signup">
                                         <h3>#{messages['naccount.register']}</h3>
                                         <h:form id="form" class="form-signup">
                                             <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                             <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
-                                            <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
                                             <div class="signuptext">
                                                 <p:inputText id="nameTxt" value="#{userController.user.name}" required="true" size="30" label="#{messages['naccount.name']}" >
 
@@ -77,77 +76,73 @@
                                             </div>
 
                                             <div id="signupbottom">
-                                                
-                                                <p:panelGrid columns="4" id="nascimento">
-                                                    <h:outputText value="#{messages['naccount.birthdate']}"/>
-                                                    <p:selectOneMenu id="day" value="#{userController.day}" required="true" label="#{messages['naccount.day']}">  
-                                                        <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue="" />  
-                                                        <f:selectItems value="#{userController.days}" />  
-                                                    </p:selectOneMenu>
-                                                    <p:selectOneMenu id="month" value="#{userController.month}" required="true" label="#{messages['naccount.month']}">  
-                                                        <f:selectItem itemLabel="Mês" itemValue="" />  
-                                                        <f:selectItems value="#{userController.months}" />  
-                                                    </p:selectOneMenu>
-                                                    <p:selectOneMenu id="year" value="#{userController.year}" required="true" label="#{messages['naccount.year']}">  
-                                                        <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
-                                                        <f:selectItems value="#{userController.years}" />  
-                                                    </p:selectOneMenu>
+
+                                                <p:panelGrid columns="2" id="nascimento">
+                                                    <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
+
+                                                    <p:calendar id="birthdate" label="#{messages['naccount.birthdate']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" showOn="button" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true">
+                                                        <p:ajax event="change" update="birthdate" />
+                                                    </p:calendar>
                                                 </p:panelGrid>
-                                                <p:message for="day" />
-                                                <p:message for="month" />
-                                                <p:message for="year" />
+                                                <p:message for="birthdate" />
+
                                                 <p:panelGrid columns="2" id="sexo" style="margin-bottom:10px">
                                                     <h:outputText value="#{messages['naccount.sex']}" style="font-weight: bold;"/>
-                                                    <p:selectOneRadio id="options" value="#{userController.user.gender}" required="true" label="#{messages['naccount.sex']}">  
+                                                    <p:selectOneRadio id="gender" value="#{userController.user.gender}" required="true" label="#{messages['naccount.sex']}">  
                                                         <f:ajax event="change" execute="@this" render="questao" />
                                                         <f:selectItem itemLabel="#{messages['naccount.female']}" itemValue="F" />  
                                                         <f:selectItem itemLabel="#{messages['naccount.male']}" itemValue="M" />  
                                                     </p:selectOneRadio> 
                                                 </p:panelGrid>
-                                                
-                                                 <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao">
-                                                     <h:panelGrid columns="1" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.user.female}">
-                                        <h:outputText value="#{messages['cadastrar.nova.conta.outputText.1']}" style="font-weight: bold"/>
-                                        <p:selectOneRadio id="options6" value="#{userController.user.pregnant}" required="true">  
-                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="#{true}"/>
-                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="#{false}"/>
-                                        </p:selectOneRadio> 
-                                    </h:panelGrid> 
-                                    </h:panelGrid>
-                                                
+
+                                                <p:message for="gender" />
+
+
+                                                <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao">
+                                                    <h:panelGrid columns="1" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.user.female}">
+                                                        <h:outputText value="#{messages['cadastrar.nova.conta.outputText.1']}" style="font-weight: bold"/>
+                                                        <p:selectOneRadio id="pregnant" value="#{userController.user.pregnant}" required="#{userController.user.female}" label="#{messages['cadastrar.nova.conta.outputText.1']}">  
+                                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="#{true}"/>
+                                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="#{false}"/>
+                                                        </p:selectOneRadio> 
+                                                    </h:panelGrid> 
+                                                </h:panelGrid>
+
+                                                <p:message for="pregnant" />
+
                                                 <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
-                                        <f:facet name="header">  
-                                            #{messages['cadastrar.nova.conta.facet.1']}
-                                        </f:facet> 
-                                                    <p:selectOneRadio id="options1" value="#{userController.drink}" required="true">  
-                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="#{false}" /> 
-                                        </p:selectOneRadio> 
-                                    </h:panelGrid>
-                                                
-                                                
-                                                                                                                                          
-                                                <p:message for="options" />
-                                                 
-      
-                                               <div id="signup-terms">
+                                                    <f:facet name="header">  
+                                                        #{messages['cadastrar.nova.conta.facet.1']}
+                                                    </f:facet> 
+                                                    <p:selectOneRadio id="drink" value="#{userController.user.drink}" required="true" label="#{messages['cadastrar.nova.conta.facet.1']}">  
+                                                        <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="#{true}" />
+                                                        <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="#{false}" /> 
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+
+                                                <p:message for="drink" />
+
+
+                                                <div id="signup-terms">
                                                     <p:panelGrid columns="2" id="allowemail">
                                                         <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>
                                                         <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}"/>
                                                         <label for="chk2">#{messages['cadastrar.nova.conta.chk2']}</label>
                                                         <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
                                                     </p:panelGrid>
+                                                    <p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink>. #{messages['naccount.already.registered']} <h:outputLink value="login.xhtml">#{messages['signin']}</h:outputLink></p>                                            
+
                                                 </div>
 
                                                 <div id="signupsubmit">			                                            
-                                                    <div id="signupp"><p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink>. #{messages['naccount.already.registered']} <h:outputLink value="login.xhtml">#{messages['signin']}</h:outputLink></p></div>                                            
+                                                    <div>
+                                                        <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
+                                                    </div>
                                                     <div id="signupbtn">
-                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.save}">
-                                                            <f:attribute name="object" value="#{userController.user}" />
-                                                            <f:attribute name="typeName" value="user" />
-                                                        </p:commandButton>
+                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.signUp()}"/>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </h:form>	    		
                                     </div>
@@ -156,35 +151,33 @@
 
                                 <div id="mainright"> 
                                     <h3>#{messages['cadastrar.nova.conta.h3.3']}</h3>
-                            <p>#{messages['cadastrar.nova.conta.p.2']}</p>
-                           
+                                    <p>#{messages['cadastrar.nova.conta.p.2']}</p>
+
                                     <h1>#{messages['cadastrar.nova.conta.h1']}</h1>
                                     <h:form id="form1" class="form-signup">
-                                        <p:messages />
                                         <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                         <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>						
                                         <div class="signuptext">
-                                            <p:inputText id="emailTxt" value="#{loginController.user.email}" required="true" size="30" label="#{messages['email']}" >
+                                            <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" >
                                                 <!--<p:ajax update="loginMsg" event="blur" />-->
                                                 <f:validateLength maximum="50" />
                                             </p:inputText>
                                             <p:watermark for="emailTxt" value="#{messages['email']}" />
                                         </div>
                                         <div class="signuptext">
-                                            <p:password id="passwordTxt" value="#{loginController.password}" required="true" redisplay="true" size="30" label="#{messages['psw']}">  
+                                            <p:password id="passwordTxt" value="#{userController.password}" required="true" redisplay="true" size="30" label="#{messages['psw']}">  
                                                 <f:validateLength maximum="16" />
                                                 <!--<p:ajax update="passwordMsg" event="blur" />-->
                                             </p:password>
                                             <p:watermark for="passwordTxt" value="#{messages['password']}" />
                                         </div>
-
                                         <div id="signinbtn">
-                                            <p:commandButton id="entrarBtn" value="#{messages['signin']}" update="@form" actionListener="#{loginController.login()}" ajax="false"/>
+                                            <p:messages redisplay="true" />
+                                            <p:commandButton id="entrarBtn" value="#{messages['signin']}" update="@form" actionListener="#{userController.signIn(true)}" />
+                                        </div>
+                                        <div>
                                             <h:outputLink value="enviar-email-senha.xhtml" style="position:relative; top: 12px;">#{messages['forgot.password']}</h:outputLink>
                                         </div>
-                                        
-                                        
-
 
 
                                     </h:form>
@@ -205,12 +198,12 @@
 
 
 
-        </div><!-- end.corpo --> 
+            </div><!-- end.corpo --> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 
 

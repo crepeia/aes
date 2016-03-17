@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['naccount.titlepage']}</title>
+            <w:head_comum />
+        </h:head>
+
+        <h:body>
+            <!-- header -->     
+            <w:topmenu />
+
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <h3 class="headertop orange-text text-lighten-2">#{messages['change.password']}</h3>
+                        <p>#{messages['p.send.email']}</p>
+
+                        <h:form>
+
+                            <div class="input-field">
+                                <p:inputText id="emailTxt" value="#{userController.email}" required="true" size="30" label="#{messages['enter.email']}" styleClass="validate" type="email" >
+                                    <f:validateLength maximum="50" />
+                                </p:inputText>
+                                <label for="emailTxt"  data-error="wrong" data-success="right">#{messages['email']}</label>
+                                <p:watermark for="emailTxt" value="#{messages['enter.email']}" />
+                            </div>
+
+                            <div class="input-field">
+                                <p:inputText id="codeTxt" value="#{userController.recoverCode}" required="true" size="30" label="#{messages['enter.code']}">
+                                    <f:validateLength maximum="50"/>
+                                </p:inputText>
+                                <label for="codeTxt"  data-error="wrong" data-success="right">#{messages['enter.code']}</label>
+                                <p:watermark for="codeTxt" value="#{messages['enter.code']}"/>
+                            </div>
+
+
+                            <br />
+                            <div class="center">
+                                <p:commandButton id="nexttBtn" styleClass="btn waves-effect waves-light" value="#{messages['next']}" update="@form" actionListener="#{userController.checkCode()}" ajax="false"/>
+                            </div>
+
+
+                            <div class="section"></div>
+                            <br />
+
+                            <div class="input-field">
+                                <p:password id="passwordTxt" value="#{userController.passwordd}" required="true" redisplay="true" size="30" label="#{messages['enter.new.password']}">  
+                                    <f:validateLength maximum="16" />
+                                    <!--                                        <p:ajax update="passwordMsg" event="blur" />-->
+                                </p:password>
+                                <label for="passwordTxt"  data-error="wrong" data-success="right">#{messages['enter.new.password']}</label>
+                                <p:watermark for="passwordTxt" value="#{messages['enter.new.password']}" />
+                            </div>
+
+
+
+                            <p:commandButton id="alterarBtn" value="#{messages['change']}" update="@form" actionListener="#{userController.alterPassword()}" styleClass="btn waves-effect waves-light" ajax="false"/>
+
+                        </h:form>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <w:footer />
+        </h:body>
+    </f:view>
+</html>

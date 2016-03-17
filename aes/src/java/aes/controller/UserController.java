@@ -1,227 +1,110 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package aes.controller;
 
-import aes.model.Evaluation;
+import aes.model.FollowUp;
 import aes.model.User;
 import aes.persistence.GenericDAO;
-import aes.utility.EMailSSL;
 import aes.utility.Encrypter;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.LinkedHashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.el.ELContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.inputtext.InputText;
 
 /**
  *
- * @author hedersb
+ * @author thiago
  */
 @ManagedBean(name = "userController")
 @SessionScoped
-public class UserController extends BaseFormController<User> {
-    
+public class UserController extends BaseController<User> {
+
+    private User user;
+    private boolean loggedIn;
+    private String password;
+    ResourceBundle bundle;
+
     @ManagedProperty(value = "#{contactController}")
     private ContactController contactController;
-    private User user;
-
-    private String password;
-
-    private int day;
-    private int month;
-    private int year;
+    
     private String email;
+    private Integer recoverCode;
+    private String passwordd;
     
-    private Boolean drink;
-
-    private boolean showErrorMessage;
-
-    private Map<String, String> days = new LinkedHashMap<String, String>();
-    private Map<String, String> months = new LinkedHashMap<String, String>();
-    private Map<String, String> years = new LinkedHashMap<String, String>();
-    private String[] monthsName = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
-
-    @PersistenceContext
-    private EntityManager entityManager = null;
-
-    private GenericDAO dao = null;
-
-    /**
-     * Creates a new instance of UserController
-     */
-    public UserController() {
-
-        super(User.class);
-
-        this.showErrorMessage = false;
-
-        month = -1;
-
-        for (int i = 1; i <= 31; i++) {
-            days.put(String.valueOf(i), String.valueOf(i));
+    @PostConstruct
+    public void init() {
+        try {
+            daoBase = new GenericDAO<User>(User.class);
+            user = new User();
+        } catch (NamingException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        for (int i = 1; i < this.monthsName.length; i++) {
-            months.put(this.monthsName[i - 1], String.valueOf(i - 1));
-        }
-
-        GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
-        int lastYear = gc.get(GregorianCalendar.YEAR);
-        for (int i = lastYear; i > lastYear - 100; i--) {
-            years.put(String.valueOf(i), String.valueOf(i));
-        }
-
-    }
-    
-    public String teste(){
-        return "ua";
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * @return the user
-     */
-    
-    
-    public User getUser() {
-        if (user == null) {
-            String id = this.getParameterMap().get("id");
-            if (id == null || id.isEmpty()) {
-                this.user = new User();
-            } else {
-                try {
-                    List<User> list = this.getDaoBase().list("id", Long.parseLong(id), this.entityManager);
-                    if (list.isEmpty()) {
-                        this.user = new User();
-                    } else {
-                        this.user = list.get(0);
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                    this.user = new User();
-                }
-            }
-
-        }
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        if (this.password == null) {
-            this.password = this.user == null || this.user.getPassword() == null ? "" : this.user.getPassword().toString();
-        }
-        return this.password;
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void save(ActionEvent actionEvent) {
-
-        this.showErrorMessage = true;
-        this.user.setBirth(year, month, day);
+    public void signIn(boolean redirect) {
 
         try {
+            List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
 
-            if (user.getId() == 0) {
-                this.user.setPassword(Encrypter.encrypt(this.password));
-            } else {
-                if (!Encrypter.compare(this.password, this.user.getPassword())) {
-                    this.user.setPassword(Encrypter.encrypt(this.password));
+            if (!userList.isEmpty() && Encrypter.compare(password, userList.get(0).getPassword())) {
+                user = userList.get(0);
+                loggedIn = true;
+                password = null;
+
+                if (redirect) {
+                    Object object = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("url");
+                    if (object != null) {
+                        String url = (String) object;
+                        FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+
+                    } else {
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+                    }
                 }
 
-            }
-            
-            Evaluation evaluation = new Evaluation();
-            evaluation.setDate(Calendar.getInstance());
-            evaluation.setDrink(drink);
-            evaluation.setUser(user);
-            user.setEvaluations(new ArrayList<Evaluation>());
-            user.getEvaluations().add(evaluation);
+                Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "' logou no sistema.");
 
-            super.save(actionEvent, entityManager);
-            
-            
-            ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-            LoginController login = (LoginController) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "loginController");
-            login.setUser(user);
-            login.setShowName(true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedUser", user);
-            String url;
-            if (getUser().getPregnant() && !evaluation.getDrink()) {
-                url = "quanto-voce-bebe-nao-gravidez.xhtml";
-            } else if (getUser().getPregnant() && evaluation.getDrink()) {
-                url =  "quanto-voce-bebe-sim-gravidez.xhtml";
-            } else if (getUser().isUnderage() && !evaluation.getDrink()) {
-                url = "quanto-voce-bebe-nao-adoles.xhtml";
-            } else if (getUser().isUnderage() && evaluation.getDrink()) {
-                url = "quanto-voce-bebe-sim-adoles.xhtml";
-            } else if (!evaluation.getDrink()) {
-                url = "quanto-voce-bebe-abstemio.xhtml";
             } else {
-                url = "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml";
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Usuário '" + user.getEmail() + "' não conseguiu logar.");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.", null));
             }
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 
-            this.clear();
-
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeyException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalBlockSizeException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BadPaddingException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchAlgorithmException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchPaddingException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problemas ao gravar usuário.", null));
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -229,101 +112,53 @@ public class UserController extends BaseFormController<User> {
 
     }
 
-    public int getDay() {
-        return day;
+    public void signOut() {
+        String email = user.getEmail();
+        user = null;
+        loggedIn = false;
+        password = null;
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+            Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + email + "'saiu no sistema.");
+
+        } catch (IOException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void setDay(int day) {
-        this.day = day;
+    public void signUp() {
+        try {
+            List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
+            if (!userList.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail já está sendo usado.", null));
+            } else {
+                user.setPassword(Encrypter.encrypt(password));
+                user.setSignUpDate(new Date());
+                save();
+                Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'cadastrou no sistema.");
+                signIn(true);
+            }
+
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public Map<String, String> getDays() {
-        return days;
-    }
-
-    public void setDays(Map<String, String> days) {
-        this.days = days;
-    }
-
-    public Map<String, String> getMonths() {
-        return months;
-    }
-
-    public void setMonths(Map<String, String> months) {
-        this.months = months;
-    }
-
-    public Map<String, String> getYears() {
-        return years;
-    }
-
-    public void setYears(Map<String, String> years) {
-        this.years = years;
-    }
-
-    public String[] getMonthsName() {
-        return monthsName;
-    }
-
-    public void setMonthsName(String[] monthsName) {
-        this.monthsName = monthsName;
-    }
-
-    public Boolean getDrink() {
-        return drink;
-    }
-
-    public void setDrink(Boolean drink) {
-        this.drink = drink;
-    }
-
-    /**
-     * @return the showErrorMessage
-     */
-    public boolean isShowErrorMessage() {
-        return showErrorMessage;
-    }
-
-    /**
-     * @param showErrorMessage the showErrorMessage to set
-     */
-    public void setShowErrorMessage(boolean showErrorMessage) {
-        this.showErrorMessage = showErrorMessage;
-    }
-
-    private void clear() {
-        this.year = 0;
-        this.day = 0;
-        this.month = -1;
-        this.password = "";
-        this.drink = null;
-        this.user = new User();
-    }
-    
-    public String getLinkPassword() {
-        return "http://www.aes.com.br/esqueceu-sua-senha.xhtml";
-    }
-    
     public int generateCode() {
-        long codigo = 0;
-        int base = 1;
-        float valor = 0;
+        long codigo;
+        float valor;
 
         Random generate = new Random();
         valor = (float) generate.nextInt(100000) / 10;
@@ -335,8 +170,157 @@ public class UserController extends BaseFormController<User> {
         codigo = (int) valor;
         return (int) codigo;
     }
-    
-    public void sendPasswordEmail(){
-        contactController.sendPassword(email, this.generateCode(), this.getLinkPassword());
+
+    public void recoverPassword() {
+        contactController.sendPasswordRecoveryEmail(user.getEmail(), generateCode());
     }
+    
+    public void annualScreening() {
+            
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.YEAR, 1);
+            user.getFollowUp().setAnnualScreening(cal.getTime());
+            save();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Você será contactado em breve.", null));
+            ((InputText) getComponent("email")).setDisabled(true);
+            ((CommandButton) getComponent("sendButton")).setDisabled(true);
+            if (!loggedIn) {
+                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            }
+    }
+    
+    public String checkCode() {
+        try {
+            String message;
+            List<User> userList = this.getDaoBase().list("email", this.email, this.getEntityManager());
+            if (!userList.isEmpty() && userList.get(0).getRecoverCode() != null && userList.get(0).getRecoverCode().equals(recoverCode) && recoverCode != 0) {
+                return "esqueceu-sua-senha-concluir.xhtml";
+            } else {
+                message = "email.code.incorrect";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
+                return "";
+            }
+        } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problemas.gravar.usuario", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
+        }
+    }
+
+    public String preEvaluation() {
+        if (user.getDrink() != null) {
+            if (user.getPregnant() && !user.getDrink()) {
+                return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
+            } else if (user.getPregnant() && user.getDrink()) {
+                return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
+            } else if (user.isUnderage() && !user.getDrink()) {
+                return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
+            } else if (user.isUnderage() && user.getDrink()) {
+                return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
+            } else if (!user.getDrink()) {
+                return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
+            } else {
+                return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
+            }
+        }
+        else{
+            return "cadastrar-nova-conta.xhtml?faces-redirect=true";
+        }
+    }
+
+    public void save() {
+        try {
+            daoBase.insertOrUpdate(user, getEntityManager());
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void redirectLogin(boolean redirect) {
+        if (redirect && !loggedIn) {
+            try {
+                Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                String url = ((HttpServletRequest) request).getRequestURI();
+                url = url.substring(url.lastIndexOf('/') + 1);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("url", url);
+                FacesContext.getCurrentInstance().getExternalContext().redirect("cadastrar-nova-conta.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+
+    public void redirectIndex(boolean redirect) {
+        if (redirect && loggedIn) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public String getTranslation(String key) {
+        bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
+        return bundle.getString(key);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public ContactController getContactController() {
+        return contactController;
+    }
+
+    public void setContactController(ContactController contactController) {
+        this.contactController = contactController;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public Integer getRecoverCode() {
+        return recoverCode;
+    }
+
+    public void setRecoverCode(Integer recoverCode) {
+        this.recoverCode = recoverCode;
+    }
+    
+    public String getPasswordd() {
+        return passwordd;
+    }
+
+    public void setPasswordd(String passwordd) {
+        this.passwordd = passwordd;
+    }
+    
+
 }

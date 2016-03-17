@@ -65,7 +65,7 @@
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5X" rendered ="#{evaluationController.q4()}">
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5X" rendered ="#{not empty evaluationController.evaluation.audit4}">
                                             <f:facet name="header">  
                                                 #{messages['audit.7.p.2']}
                                             </f:facet>
@@ -82,7 +82,7 @@
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6X" rendered ="#{evaluationController.q5()}">
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6X" rendered ="#{not empty evaluationController.evaluation.audit5}">
                                             <f:facet name="header">  
                                                 #{messages['audit.7.p.3']}
                                             </f:facet>
@@ -98,7 +98,7 @@
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7X" rendered ="#{evaluationController.q6()}">
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7X" rendered="#{not empty evaluationController.evaluation.audit6}">
                                             <f:facet name="header">  
                                                 #{messages['audit.7.p.4']}
                                             </f:facet>
@@ -114,7 +114,7 @@
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8X" rendered ="#{evaluationController.q7()}">
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8X" rendered ="#{not empty evaluationController.evaluation.audit7}">
                                             <f:facet name="header">  
                                                 #{messages['audit.7.p.5']}
                                             </f:facet>
@@ -131,7 +131,7 @@
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9X" rendered ="#{evaluationController.q8()}">
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9X" rendered ="#{not empty evaluationController.evaluation.audit8}">
                                             <f:facet name="header">  
                                                 #{messages['audit.7.p.6']}
                                             </f:facet>
@@ -147,7 +147,7 @@
 
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10X" rendered ="#{evaluationController.q9()}">
+                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10X" rendered ="#{not empty evaluationController.evaluation.audit9}">
                                             <f:facet name="header">  
                                                 #{messages['audit.7.p.7']}
                                             </f:facet>
@@ -164,12 +164,12 @@
 
                                 </p:panel>
                                         <div id="btnback">
-                                            <h:button id="backBtn" rendered ="#{evaluationController.q10()}" class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
+                                            <h:button id="backBtn"  class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
                                         </div>
 
 
                                         <div id="btnnext">
-                                            <p:commandButton rendered ="#{evaluationController.q10()}" id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit7()}"/>                               
+                                            <p:commandButton rendered ="#{not empty evaluationController.evaluation.audit10}" id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit7()}" actionListener="#{evaluationController.save()}"/>                               
                                         </div>
 
                             </h:form>

@@ -2,75 +2,71 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:p="http://primefaces.org/ui"
-	  xmlns:f="http://java.sun.com/jsf/core"
-	  xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['login']}</title>
-		<w:head_comum />
-    </h:head>
-    <h:body>
-		<div id="corpo"> 
-			<!-- header -->    
-			<w:header logoutRequired="true"  />
-			<w:topmenu />
+        <h:head>
+            <title>#{messages['login']}</title>
+            <w:head_comum />
+        </h:head>
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header logoutRequired="true"  />
+                <w:topmenu />
 
-			<!--mainmenu-->
-			<div class="main">
+                <!--mainmenu-->
+                <div class="main">
 
 
-				<div class="pagecontent">
+                    <div class="pagecontent">
 
-					<div id="signin">
-						<h1>#{messages['enter']}</h1>
-						<h:form id="form" class="form-signup">
-							<p:messages />
-							<div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
-							<div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>						
-							<div class="signuptext">
-								<p:inputText id="emailTxt" value="#{loginController.user.email}" required="true" size="30" >
-									<!--<p:ajax update="loginMsg" event="blur" />-->
-									<f:validateLength maximum="50" />
-								</p:inputText>
-								<p:watermark for="emailTxt" value="E-mail" />
-							</div>
-							<div class="signuptext">
-								<p:password id="passwordTxt" value="#{loginController.password}" required="true" redisplay="true" size="30">  
-									<f:validateLength maximum="16" />
-									<!--<p:ajax update="passwordMsg" event="blur" />-->
-								</p:password>
-								<p:watermark for="passwordTxt" value="Senha" />
-							</div>							
-							<div id="signipbottom">	
+                        <div id="signin">
+                            <h1>#{messages['enter']}</h1>
+                            <h:form id="form" class="form-signup">
+                                <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
+                                <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>						
+                                <div class="signuptext">
+                                    <p:inputText id="emailTxt" label="#{messages['email']}" value="#{userController.user.email}" required="true" size="30" >
+                                        <!--<p:ajax update="loginMsg" event="blur" />-->
+                                        <f:validateLength maximum="50" />
+                                    </p:inputText>
+                                    <p:watermark for="emailTxt" value="#{messages['email']}" />
+                                    <p:message for="emailTxt"/>
+                                </div>
+                                <div class="signuptext">
+                                    <p:password id="passwordTxt" label="#{messages['psw']}" value="#{userController.password}" required="true" redisplay="true" size="30">  
+                                        <f:validateLength maximum="16" />
+                                        <!--<p:ajax update="passwordMsg" event="blur" />-->
+                                    </p:password>
+                                    <p:watermark for="passwordTxt" value="#{messages['psw']}" />
+                                    <p:message for="passwordTxt"/>
+                                </div>							
+                                <div id="signipbottom">	
 
-								<div id="signinsubmit">
-									<div id="signinbtn">
-										<p:commandButton id="entrarBtn" value="Entrar" update="@form" actionListener="#{loginController.login}" />
-									</div>
+                                    <div id="signinsubmit">
+                                        <div id="signinbtn" >
+                                            <p:messages globalOnly="true" redisplay="true" />
 
-									<!--<div id="signincheck">
+                                            <p:commandButton id="entrarBtn" value="Entrar" update="@form" actionListener="#{userController.signIn(true)}" />
+                                        </div>
+                                        <div style="clear:both; position:relative; top: 12px;">
+                                        <h:outputLink value="enviar-email-senha.xhtml">#{messages['forgot.password']}</h:outputLink>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:form>	    		
+                        </div>	
 
-										<p:selectBooleanCheckbox id="contConect" value="Continuar conectado"></p:selectBooleanCheckbox>
-										<h:outputText value="Continuar conectado"/>
+                    </div>
+                </div>
 
-									</div>-->
+            </div><!-- end.corpo --> 
 
-                                                                    <p><h:outputLink value="contato.xhtml">#{messages['account.not']}</h:outputLink></p>
-
-								</div>
-							</div>
-						</h:form>	    		
-					</div>	
-
-				</div>
-			</div>
-
-		</div><!-- end.corpo --> 
-
-		<!--Footer -->
-		<w:footer />
-	</h:body>
-        </f:view>
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 

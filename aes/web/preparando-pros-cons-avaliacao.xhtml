@@ -92,7 +92,7 @@
 
 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.prosConsEvaluation()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.readyToChange()}" actionListener="#{evaluationController.save()}" />
                                 </div>
                             </h:form>
                         </div><!-- end pmtext -->  
