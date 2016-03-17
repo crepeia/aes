@@ -51,7 +51,11 @@ public class UserController extends BaseController<User> {
 
     @ManagedProperty(value = "#{contactController}")
     private ContactController contactController;
-
+    
+    private String email;
+    private Integer recoverCode;
+    private String passwordd;
+    
     @PostConstruct
     public void init() {
         try {
@@ -184,6 +188,24 @@ public class UserController extends BaseController<User> {
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
             }
     }
+    
+    public String checkCode() {
+        try {
+            String message;
+            List<User> userList = this.getDaoBase().list("email", this.email, this.getEntityManager());
+            if (!userList.isEmpty() && userList.get(0).getRecoverCode() != null && userList.get(0).getRecoverCode().equals(recoverCode) && recoverCode != 0) {
+                return "esqueceu-sua-senha-concluir.xhtml";
+            } else {
+                message = "email.code.incorrect";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
+                return "";
+            }
+        } catch (SQLException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problemas.gravar.usuario", null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
+        }
+    }
 
     public String preEvaluation() {
         if (user.getDrink() != null) {
@@ -275,5 +297,30 @@ public class UserController extends BaseController<User> {
     public void setContactController(ContactController contactController) {
         this.contactController = contactController;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public Integer getRecoverCode() {
+        return recoverCode;
+    }
+
+    public void setRecoverCode(Integer recoverCode) {
+        this.recoverCode = recoverCode;
+    }
+    
+    public String getPasswordd() {
+        return passwordd;
+    }
+
+    public void setPasswordd(String passwordd) {
+        this.passwordd = passwordd;
+    }
+    
 
 }
