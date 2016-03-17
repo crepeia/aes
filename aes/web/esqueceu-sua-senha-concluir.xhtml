@@ -14,42 +14,33 @@
         <h:body>
             <!-- header -->     
             <w:topmenu />
+            
+             <div class="main">
 
-            <div class="container">
-                <div class="row">
-                    <div class="col s12 m12 l12">
-                        <h3 class="headertop orange-text text-lighten-2">#{messages['change.password']}</h3>
+                    <div class="pagecontent">
+                        <div id="signin">
+                            <h3 class="headertop orange-text text-lighten-2">#{messages['change.password']}</h3>
                         <p>#{messages['p.send.email']}</p>
+                        
+                         <h:form class="form-signup">
 
-                        <h:form>
-
-                            <div class="input-field">
+                            <div class="signuptext">
                                 <p:inputText id="emailTxt" value="#{userController.email}" required="true" size="30" label="#{messages['enter.email']}" styleClass="validate" type="email" >
                                     <f:validateLength maximum="50" />
                                 </p:inputText>
                                 <label for="emailTxt"  data-error="wrong" data-success="right">#{messages['email']}</label>
                                 <p:watermark for="emailTxt" value="#{messages['enter.email']}" />
                             </div>
-
-                            <div class="input-field">
+                        
+                            <div class="signuptext">
                                 <p:inputText id="codeTxt" value="#{userController.recoverCode}" required="true" size="30" label="#{messages['enter.code']}">
                                     <f:validateLength maximum="50"/>
                                 </p:inputText>
                                 <label for="codeTxt"  data-error="wrong" data-success="right">#{messages['enter.code']}</label>
                                 <p:watermark for="codeTxt" value="#{messages['enter.code']}"/>
                             </div>
-
-
-                            <br />
-                            <div class="center">
-                                <p:commandButton id="nexttBtn" styleClass="btn waves-effect waves-light" value="#{messages['next']}" update="@form" actionListener="#{userController.checkCode()}" ajax="false"/>
-                            </div>
-
-
-                            <div class="section"></div>
-                            <br />
-
-                            <div class="input-field">
+                        
+                             <div class="signuptext">
                                 <p:password id="passwordTxt" value="#{userController.passwordd}" required="true" redisplay="true" size="30" label="#{messages['enter.new.password']}">  
                                     <f:validateLength maximum="16" />
                                     <!--                                        <p:ajax update="passwordMsg" event="blur" />-->
@@ -57,19 +48,23 @@
                                 <label for="passwordTxt"  data-error="wrong" data-success="right">#{messages['enter.new.password']}</label>
                                 <p:watermark for="passwordTxt" value="#{messages['enter.new.password']}" />
                             </div>
-
-
-
-                            <p:commandButton id="alterarBtn" value="#{messages['change']}" update="@form" actionListener="#{userController.alterPassword()}" styleClass="btn waves-effect waves-light" ajax="false"/>
-
+                        
+                             <br />
+                            <div id="signipbottom">
+                                    <div id="signinsubmit">
+                                        <div id="signinbtn" >
+                                            <p:commandButton id="alterarBtn" value="#{messages['change']}" update="@form" actionListener="#{userController.alterPassword()}" styleClass="btn waves-effect waves-light" ajax="false"/>
+                                        </div>
+                                    </div>    
+                            </div>    
                         </h:form>
-
+                        
+                        </div>
                     </div>
-                </div>
-            </div>
+             </div>
 
-
-
+           
+          
 
             <w:footer />
         </h:body>
