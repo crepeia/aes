@@ -9,7 +9,7 @@
     <f:view locale="#{languageController.locale}">
     <h:head>
         <title>#{messages['estrategia.dim.alt.plan.fis.title.1']}</title>
-        <w:head_comum />
+    <w:head_comum />
     </h:head>
 
     <h:body>
@@ -29,17 +29,20 @@
 
                     <div id="pagetop">
                         
-                        <div id="progressbar">
+                       <!-- <div id="progressbar">
                             <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>
+                        </div> -->
                         
-                        <div class='fotoframestratety'>
+                        <!--<div class='fotoframestratety'>
                              <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
-                        </div>
+                        </div> -->
                     </div>
                     
                     <div id="pagecontentstrategy">
+                        <div id="pagecontentstrategyH3">
                             <h3>#{messages['estrategia.dim.alt.plan.fis.h3.1']}</h3>
+                        </div>
+                            
                                 <h4>#{messages['estrategia.dim.alt.plan.fis.h4.1']}</h4>
                                     <ul>
                                         <li>#{messages['estrategia.dim.alt.plan.fis.li.1']}</li>

@@ -9,9 +9,9 @@
     <f:view locale="#{languageController.locale}">
     <h:head>
         <title>#{messages['estrategia.dim.alter.title.1']}</title>
-        <w:head_comum />
+    <w:head_comum />
     </h:head>
-
+        
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
@@ -29,17 +29,20 @@
 
                     <div id="pagetop">
                         
-                        <div id="progressbar">
+                      <!-- <div id="progressbar">
                             <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>
+                        </div>  -->
                         
-                        <div class='fotoframestratety'>
+                   <!--  <div class='fotoframestratety'>
                              <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
-                        </div>
+                        </div> -->
                     </div>
                     
                     <div id="pagecontentstrategy">
-                            <h3>#{messages['estrategia.dim.alter.h3.1']}</h3>
+                        <div id="pagecontentstrategyH3">
+                             <h3>#{messages['estrategia.dim.alter.h3.1']}</h3>
+                        </div>
+                           
                             <h4>#{messages['estrategia.dim.alter.h4.1']}</h4>  
                             <ul>
                             <li>#{messages['estrategia.dim.alter.li.1']}</li>
@@ -52,26 +55,23 @@
                             <li>#{messages['estrategia.dim.alter.li.5]']}</li>
                             </ul>
                       <h:form>
-
-                                                                <div id="btnback">
+                                <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-registro-eletronico.xhtml"></h:button>
                                 </div>
-                                
-                                
+                          
                                 <div id="btnnext">
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-alternativas-plano-fissura?faces-redirect=true"/>      
                                 </div>
-
-                            </h:form>                                            
+                          
+                      </h:form>                                            
 
                     <div class="referencias">
                         <p>#{messages['updated']}</p>
                     </div>
-             </div> 
+             </div>
  
                 </div>        
-            </div>
-                
+            </div> <!--main-->   
         </div><!-- end.corpo --> 
 
         <!--Footer -->
