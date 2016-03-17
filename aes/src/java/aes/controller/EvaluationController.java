@@ -5,7 +5,6 @@
  */
 package aes.controller;
 
-import aes.model.Contact;
 import aes.model.Evaluation;
 import aes.model.Plan;
 import aes.model.User;
@@ -21,10 +20,10 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -34,7 +33,6 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.inputtext.InputText;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -46,27 +44,21 @@ import org.primefaces.model.StreamedContent;
 @SessionScoped
 public class EvaluationController extends BaseController<Evaluation> {
 
-    private static final int HOURS_LIMIT = 24 * 7;
+    private static final int DAYS_LIMIT = -7;
 
     private Evaluation evaluation;
 
-    private Integer day;
-    private Integer month;
-    private Integer year;
-
-    private String url;
     private String planTemplate;
 
-    @ManagedProperty(value = "#{languageController}")
-    private LanguageController languageController;
+    @ManagedProperty(value = "#{userController}")
+    private UserController userController;
     @ManagedProperty(value = "#{contactController}")
     private ContactController contactController;
 
-    
-
-    public EvaluationController() {
+    @PostConstruct
+    public void init() {
         try {
-            this.daoBase = new GenericDAO<Evaluation>(Evaluation.class);
+            daoBase = new GenericDAO<Evaluation>(Evaluation.class);
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,298 +66,132 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public Evaluation getEvaluation() {
         if (evaluation == null) {
-            GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
-            gc.add(GregorianCalendar.HOUR, EvaluationController.HOURS_LIMIT);
-
-            if (loggedUser()) {
+            if (userController.isLoggedIn()) {
                 try {
-                    List<Evaluation> evaluations = this.getDaoBase().list("user", getLoggedUser(), this.getEntityManager());
-                    for (Evaluation e : evaluations) {
-                        if (gc.after(e.getDate())) {
-                            evaluation = e;
+                    List<Evaluation> evaluations = this.getDaoBase().list("user", getUser(), this.getEntityManager());
+                    if (!evaluations.isEmpty()) {
+                        Calendar limit = Calendar.getInstance();
+                        limit.add(Calendar.DATE, EvaluationController.DAYS_LIMIT);
+                        Calendar evaluationDate = Calendar.getInstance();
+                        for (Evaluation e : evaluations) {
+                            evaluationDate.setTime(e.getDateCreated());
+                            if (evaluationDate.after(limit)) {
+                                evaluation = e;
+                            }
                         }
-                    }
-                    if (evaluation == null) {
+                    } else {
                         evaluation = new Evaluation();
-                        evaluation.setDate(Calendar.getInstance());
-                        evaluation.setUser(getLoggedUser());
+                        evaluation.setDateCreated(new Date());
+                        evaluation.setUser(getUser());
                     }
+
                 } catch (SQLException ex) {
                     Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } else {
-                Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
-                url = ((HttpServletRequest) request).getRequestURI();
-                url = url.substring(url.lastIndexOf('/') + 1);
-                if (url.contains("quanto-voce-bebe-introducao")) {
-                    User user = new User();
-                    evaluation = new Evaluation();
-                    evaluation.setDate(Calendar.getInstance());
-                    evaluation.setUser(user);
-                }
-
             }
         }
         return evaluation;
     }
 
     public User getUser() {
-        return getEvaluation().getUser();
+        return userController.getUser();
     }
 
-    public String intro() {
+    public void save() {
         try {
-            getUser().setBirth(year, month, day);
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            if (getUser().getPregnant() && !getEvaluation().getDrink()) {
-                return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
-            } else if (getUser().getPregnant() && getEvaluation().getDrink()) {
-                return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
-            } else if (getUser().isUnderage() && !getEvaluation().getDrink()) {
-                return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
-            } else if (getUser().isUnderage() && getEvaluation().getDrink()) {
-                return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
-            } else if (!getEvaluation().getDrink()) {
-                return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
-            } else if (loggedUser()) {
-                return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
-            } else {
-                return "quanto-voce-bebe-convite.xhtml?faces-redirect=true";
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-            return "";
-        }
-
-    }
-
-    public void yearEmail() {
-        try {
-            getEvaluation().setYearEmail(true);
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Você será contactado em breve."));
-            ((InputText) getComponent("email")).setDisabled(true);
-            ((CommandButton) getComponent("sendButton")).setDisabled(true);
-            if (!loggedUser()) {
-                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-            }
+            daoBase.insertOrUpdate(getEvaluation(), getEntityManager());
         } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public String audit3() {
-        try {
-            this.getDaoBase().insertOrUpdate(getEvaluation(), this.getEntityManager());
-
-            int age = getUser().getAge();
-            int drinkingnDays = getEvaluation().getDrinkingDays();
-            int weekTotal = getEvaluation().getWeekTotal();
-            int audit3sum = getEvaluation().getAudit3Sum();
-
-            if (audit3sum > 6 || (getUser().isFemale() && drinkingnDays > 1) || (getUser().isMale() && drinkingnDays > 2) || (getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10)) {
-                return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml?faces-redirect=true";
-            } else if (audit3sum <= 6 && (((getUser().isFemale() && drinkingnDays <= 1) || (getUser().isMale() && drinkingnDays <= 2)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10)))) {
-                if (getUser().isMale() && age <= 65) {
-                    return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
-                } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
-                    return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
-                }
+        int age = getUser().getAge();
+        int drinkingDays = getEvaluation().getDrinkingDays();
+        int weekTotal = getEvaluation().getWeekTotal();
+        int audit3sum = getEvaluation().getAudit3Sum();
+        if (audit3sum > 6 || (getUser().isFemale() && drinkingDays > 1) || (getUser().isMale() && drinkingDays > 2) || (getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10)) {
+            return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml?faces-redirect=true";
+        } else if (audit3sum <= 6 && (((getUser().isFemale() && drinkingDays <= 1) || (getUser().isMale() && drinkingDays <= 2)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10)))) {
+            if (getUser().isMale() && age <= 65) {
+                return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
+            } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
+                return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
+
     }
 
     public String audit7() {
-        try {
-            this.getDaoBase().insertOrUpdate(getEvaluation(), this.getEntityManager());
-
-            int age = getUser().getAge();
-            int drinkingDays = getEvaluation().getDrinkingDays();
-            int weekTotal = getEvaluation().getWeekTotal();
-            int auditFull = getEvaluation().getAuditFullSum();
-
-            if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays <= 1) || (getUser().isMale() && drinkingDays <= 2)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10))) {
-                if (getUser().isFemale() && age <= 65) {
-                    return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
-                } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
-                    return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
-                }
-            } else if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays > 1) || (getUser().isMale() && drinkingDays > 2)) && ((getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10))) {
-                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites?faces-redirect=true";
-            } else if (auditFull >= 18 && auditFull <= 25) {
-                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml?faces-redirect=true";
-            } else if (auditFull >= 26 && auditFull <= 29) {
-                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-nocivo.xhtml?faces-redirect=true";
-            } else if (auditFull >= 30 && auditFull <= 50) {
-                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-dependencia.xhtml?faces-redirect=true";
+        int age = getUser().getAge();
+        int drinkingDays = getEvaluation().getDrinkingDays();
+        int weekTotal = getEvaluation().getWeekTotal();
+        int auditFull = getEvaluation().getAuditFullSum();
+        if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays <= 1) || (getUser().isMale() && drinkingDays <= 2)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10))) {
+            if (getUser().isFemale() && age <= 65) {
+                return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
+            } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
+                return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        } else if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays > 1) || (getUser().isMale() && drinkingDays > 2)) && ((getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10))) {
+            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites?faces-redirect=true";
+        } else if (auditFull >= 18 && auditFull <= 25) {
+            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml?faces-redirect=true";
+        } else if (auditFull >= 26 && auditFull <= 29) {
+            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-nocivo.xhtml?faces-redirect=true";
+        } else if (auditFull >= 30 && auditFull <= 50) {
+            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-dependencia.xhtml?faces-redirect=true";
         }
         return "";
-
     }
 
-    public boolean q4() {
-        try {
-            return getEvaluation().getAudit4() != 0;
-        } catch (NullPointerException e) {
-            return false;
+    public String readyToChange() {
+        if (getEvaluation().getReady()) {
+            saveURL();
+            return "preparando-diminuir-ou-parar.xhtml?faces-redirect=true";
+        } else {
+            return "preparando-diminuir-parar-nao.xhtml?faces-redirect=true";
+
         }
-
     }
 
-    public boolean q5() {
-        try {
-            return getEvaluation().getAudit5() != 0;
-        } catch (NullPointerException e) {
-            return false;
-        }
-
-    }
-
-    public boolean q6() {
-        try {
-            return getEvaluation().getAudit6() != 0;
-        } catch (NullPointerException e) {
-            return false;
-        }
-
-    }
-
-    public boolean q7() {
-        try {
-            return getEvaluation().getAudit7() != 0;
-        } catch (NullPointerException e) {
-            return false;
-        }
-
-    }
-
-    public boolean q8() {
-        try {
-            return getEvaluation().getAudit8() != 0;
-        } catch (NullPointerException e) {
-            return false;
-        }
-
-    }
-
-    public boolean q9() {
-        try {
-            return getEvaluation().getAudit9() != 0;
-        } catch (NullPointerException e) {
-            return false;
-        }
-
-    }
-
-    public boolean q10() {
-        try {
-            return getEvaluation().getAudit10() != 0;
-        } catch (NullPointerException e) {
-            return false;
-        }
-
-    }
-
-    public String symptoms() {
-        setURL();
-        return "preparando-pros-cons.xhtml?faces-redirect=true";
-    }
-
-    public String prosCons() {
-        try {
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            return "preparando-pros-cons-avaliacao.xhtml?faces-redirect=true";
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+    public String goBack() {
+        if (getEvaluation().getGoBack()) {
+            saveURL();
+            return "preparando-diminuir-ou-parar.xhtml?faces-redirect=true";
+        } else {
+            ((CommandButton) getComponent("saveBtn")).setDisabled(true);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Você será contactado dentro de um ano.", null));
             return "";
         }
     }
 
-    public String prosConsEvaluation() {
-        try {
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            if (getEvaluation().getReady()) {
-                setURL();
-                return "preparando-diminuir-ou-parar.xhtml?faces-redirect=true";
-            } else {
-                return "preparando-diminuir-parar-nao.xhtml?faces-redirect=true";
-
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
-    }
-
-    public String cutDownQuitNo() {
-        try {
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            if (getEvaluation().getBackPlan()) {
-                setURL();
-                return "preparando-diminuir-ou-parar.xhtml?faces-redirect=true";
-            } else {
-                getEvaluation().setYearEmail(true);
-                daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-                ((CommandButton) getComponent("saveBtn")).setDisabled(true);
-                FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Você será contactado dentro de um ano."));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
+    public String dependenceContinue() {
+        getEvaluation().setQuit(true);
+        saveURL();
+        return ("estrategia-parar-apoio-intro.xhtml?faces-redirect=true");
     }
 
     public String cutDownQuit() {
-        try {
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            if (getEvaluation().getQuit()) {
-                return "estrategia-diminuir-introducao.xhtml?faces-redirect=true";
-            } else {
-                setURL();
-                return "estrategia-parar-apoio-intro.xhtml?faces-redirect=true";
-            }
+        if (getEvaluation().getQuit()) {
+            return "estrategia-diminuir-introducao.xhtml?faces-redirect=true";
+        } else {
+            saveURL();
+            return "estrategia-parar-apoio-intro.xhtml?faces-redirect=true";
 
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "";
-    }
-
-    public void dependenceListener() {
-        try {
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public String dependenceNext() {
-        try {
-            setURL();
-            daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
-            return ("estrategia-parar-apoio-intro.xhtml?faces-redirect=true");
-
-        } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
     }
 
     public String nextRegEleManAndWoman() {
         try {
             daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
-            setURL();
+            saveURL();
             return "estrategia-diminuir-registro-eletronico.xhtml?faces-redirect=true";
+
         } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }
@@ -374,14 +200,16 @@ public class EvaluationController extends BaseController<Evaluation> {
         try {
             daoBase.insertOrUpdate(getEvaluation(), getEntityManager());
             return "estrategia-diminuir-alternativas.xhtml?faces-redirect=true";
+
         } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }
 
     public String goToPlan() {
-        setURL();
+        saveURL();
         return "plano-mudanca.xhtml?faces-redirect=true";
     }
 
@@ -389,8 +217,10 @@ public class EvaluationController extends BaseController<Evaluation> {
         try {
             daoBase.insertOrUpdate(this.getEvaluation(), this.getEntityManager());
             return "plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true";
+
         } catch (SQLException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }
@@ -407,7 +237,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         return new PDFGenerator().generatePDF(plan);
     }
 
-   /* public void sendPlan() {
+    /* public void sendPlan() {
         try {
             daoBase.insertOrUpdate(getEvaluation(), this.getEntityManager());
         } catch (SQLException ex) {
@@ -426,15 +256,17 @@ public class EvaluationController extends BaseController<Evaluation> {
         FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Plano enviado."));
 
     }*/
-    
     public String fillPlanTemplate(String content[]) {
         try {
-            if(planTemplate == null)
-            planTemplate = readTemplate("/resources/default/templates/plan-template.html");
+            if (planTemplate == null) {
+                planTemplate = readTemplate("/resources/default/templates/plan-template.html");
+
+            }
         } catch (IOException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvaluationController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
-        String template = planTemplate;     
+        String template = planTemplate;
         String title = "Meu Plano";
         String subtitle[] = new String[6];
         subtitle[0] = "Data para começar";
@@ -443,10 +275,10 @@ public class EvaluationController extends BaseController<Evaluation> {
         subtitle[3] = "As pessoas que podem me ajudar são:";
         subtitle[4] = "Eu saberei que meu plano está funcionando quando:";
         subtitle[5] = "O que pode interferir e como posso lidar com estas situações:";
-        if(planTemplate == null){
+        if (planTemplate == null) {
             System.out.println("null1");
         }
-        if(template == null){
+        if (template == null) {
             System.out.println("null2");
         }
         template = template.replace("#title#", title);
@@ -461,7 +293,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
         return template;
     }
-    
+
     public String readTemplate(String path) throws IOException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
@@ -487,13 +319,12 @@ public class EvaluationController extends BaseController<Evaluation> {
         return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
 
-    public String getDayName(int day) {
+    /*public String getDayName(int day) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getEvaluation().getStartingDay());
         cal.add(Calendar.DATE, day - 1);
         return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, getLanguageController().getLocale());
-    }
-
+    }*/
     public String getDay(int day) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getEvaluation().getStartingDay());
@@ -502,67 +333,22 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public String getURL() {
+        String url = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("url");
         if (url == null) {
             return "index.xhtml?faces-redirect=true";
         }
         return url;
     }
 
-    public void setURL() {
+    public void saveURL() {
         Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        url = ((HttpServletRequest) request).getRequestURI();
+        String url = ((HttpServletRequest) request).getRequestURI();
         url = url.substring(url.lastIndexOf('/') + 1);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("url", url);
     }
 
     public Date getCurrentDate() {
         return new Date();
-    }
-
-    public Integer getDay() {
-        if (loggedUser()) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(getUser().getBirthDate());
-            return cal.get(Calendar.DAY_OF_MONTH);
-        }
-        return day;
-    }
-
-    public void setDay(Integer day) {
-        this.day = day;
-    }
-
-    public Integer getMonth() {
-        if (loggedUser()) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(getUser().getBirthDate());
-            return cal.get(Calendar.MONTH);
-        }
-        return month;
-    }
-
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    public Integer getYear() {
-        if (loggedUser()) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(getUser().getBirthDate());
-            return cal.get(Calendar.YEAR);
-        }
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public LanguageController getLanguageController() {
-        return languageController;
-    }
-
-    public void setLanguageController(LanguageController languageController) {
-        this.languageController = languageController;
     }
 
     public ContactController getContactController() {
@@ -573,6 +359,12 @@ public class EvaluationController extends BaseController<Evaluation> {
         this.contactController = contactController;
     }
 
-   
+    public UserController getUserController() {
+        return userController;
+    }
+
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    }
 
 }

@@ -62,12 +62,12 @@
                                         <f:facet name="header">  
                                             #{messages['preparando.diminuir.facet.1']}
                                         </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.backPlan}" required="true">  
+                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}" required="true">  
                                             <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.yes']}" itemValue="#{true}" />
                                             <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.no']}" itemValue="#{false}" /> 
                                         </p:selectOneRadio> 
                                     </h:panelGrid>
-                                    <!--<p:messages id="messages" showDetail="true" autoUpdate="true" />-->
+                                    <p:messages id="messages" redisplay="true" globalOnly="true" />
 
                                 </p:panel>
                                 <div id="btnback">
@@ -76,7 +76,7 @@
 
 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.cutDownQuitNo()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" />
                                 </div>
                             </h:form>
                         </div><!-- end pmtext -->  

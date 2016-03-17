@@ -6,19 +6,16 @@
 package aes.controller;
 
 import aes.model.User;
-import aes.persistence.GenericDAO;
-import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.naming.NamingException;
 
 /**
  *
@@ -28,54 +25,38 @@ import javax.naming.NamingException;
 @SessionScoped
 public class LanguageController extends BaseController<User> {
 
-    private Locale locale;
     private Map<String, String> languages = new LinkedHashMap<String, String>();
-    private ResourceBundle bundle;
-
-    public LanguageController() {
-        try {
-            daoBase = new GenericDAO(User.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(LanguageController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (loggedUser() && getLoggedUser().getPreferedLanguage() != null) {
-            locale = new Locale(getLoggedUser().getPreferedLanguage());
-        } else {
-            locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
-        }
+    
+    @ManagedProperty(value = "#{userController}")
+    private UserController userController;
+    
+    @PostConstruct
+    public void init(){
         languages.put("English", "en");
         languages.put("Español", "es");
         languages.put("Português", "pt");
     }
-
-    public String getText(String key) {
-        bundle = PropertyResourceBundle.getBundle("aes.utility.messages", locale);
-        return bundle.getString(key);
+    
+    public String getLanguage(){
+        return getLocale().getLanguage();
     }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public String getLanguage() {
-        return locale.getLanguage();
-    }
-
+    
     public void setLanguage(String language) {
-        locale = new Locale(language);
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
-        if (loggedUser()) {
-            getLoggedUser().setPreferedLanguage(language);
-            try {
-                new GenericDAO(User.class).insertOrUpdate(getLoggedUser(), getEntityManager());
-            } catch (NamingException ex) {
-                Logger.getLogger(LanguageController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(LanguageController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
+        if (userController.isLoggedIn()) {
+            userController.getUser().setPreferedLanguage(language);
+            userController.save();
         }
     }
 
+    public Locale getLocale() {
+        if (userController.getUser().getPreferedLanguage() != null) {
+            return new Locale(userController.getUser().getPreferedLanguage());
+        } else {
+            return FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+        }
+    }
+    
     public Map<String, String> getLanguages() {
         return languages;
     }
@@ -84,14 +65,12 @@ public class LanguageController extends BaseController<User> {
         this.languages = languages;
     }
 
-    public ResourceBundle getBundle() {
-        return bundle;
+    public UserController getUserController() {
+        return userController;
     }
 
-    public void setBundle(ResourceBundle bundle) {
-        this.bundle = bundle;
+    public void setUserController(UserController userController) {
+        this.userController = userController;
     }
     
-    
-
 }

@@ -45,7 +45,7 @@
                             </p:panel>
                             <p:panel id="userPanel" rendered="#{userController.loggedIn}">
                                 Olá <h:outputText value="#{userController.user.name}" />  ::  
-                                <h:outputLink value="logout.xhtml">Sair</h:outputLink>
+                                <p:commandLink value="Sair" actionListener="#{userController.signOut()}"/>
                             </p:panel>
                         </p:panel>
                         <div id="fastlogin">

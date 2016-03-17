@@ -32,12 +32,14 @@ public class Evaluation implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar date;
+    @Column(name = "date_created")
+    private Date dateCreated;
     @Column(name = "drink")
     private Boolean drink;
 
     @Column(name = "year_email")
     private Boolean yearEmail;
+    @Temporal(TemporalType.DATE)
     @Column(name = "year_email_date")
     private Calendar yearEmailDate;
 
@@ -108,13 +110,13 @@ public class Evaluation implements Serializable {
 
     @Column(name = "ready")
     private Boolean ready;
-    @Column(name = "back_plan")
-    private Boolean backPlan;
+    @Column(name = "go_back")
+    private Boolean goBack;
+    @Column(name = "dependence_continue")
+    private Boolean dependenceContinue;
+    
     @Column(name = "quit")
     private Boolean quit;
-
-    @Column(name = "dependence")
-    private Boolean dependence;
 
     @Column(name = "data_comecar_plano")
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -190,36 +192,36 @@ public class Evaluation implements Serializable {
     
    
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne
     private User user;
 
     @Override
     public String toString() {
         return this.id + ", " + this.user.getId() + ", "
-                + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(date.getTime()) + ", " + this.drink;
+                + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(dateCreated) + ", " + this.drink;
     }
 
     public int getDrinkingDays() {
         int drinkingDays = 0;
-        if (sunday != 0) {
+        if (sunday != null && sunday != 0) {
             drinkingDays++;
         }
-        if (monday != 0) {
+        if (monday != null && monday != 0) {
             drinkingDays++;
         }
-        if (tuesday != 0) {
+        if (tuesday != null && tuesday != 0) {
             drinkingDays++;
         }
-        if (wednesday != 0) {
+        if (wednesday != null && wednesday != 0) {
             drinkingDays++;
         }
-        if (thursday != 0) {
+        if (thursday != null && thursday != 0) {
             drinkingDays++;
         }
-        if (friday != 0) {
+        if (friday != null && friday != 0) {
             drinkingDays++;
         }
-        if (saturday != 0) {
+        if (saturday != null && saturday != 0) {
             drinkingDays++;
         }
 
@@ -365,12 +367,12 @@ public class Evaluation implements Serializable {
         this.user = user;
     }
 
-    public Calendar getDate() {
-        return date;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Integer getAudit4() {
@@ -437,18 +439,22 @@ public class Evaluation implements Serializable {
         this.ready = ready;
     }
 
-    public Boolean getBackPlan() {
-        return backPlan;
+    public Boolean getGoBack() {
+        return goBack;
     }
 
-    public void setBackPlan(Boolean backPlan) {
-        this.backPlan = backPlan;
+    public void setGoBack(Boolean goBack) {
+        this.goBack = goBack;
     }
 
-    public Boolean getDependence() {
-        return dependence;
+    public Boolean getDependenceContinue() {
+        return dependenceContinue;
     }
 
+    public void setDependenceContinue(Boolean dependenceContinue) {
+        this.dependenceContinue = dependenceContinue;
+    }
+    
     public Boolean getQuit() {
         return quit;
     }
@@ -456,11 +462,7 @@ public class Evaluation implements Serializable {
     public void setQuit(Boolean quit) {
         this.quit = quit;
     }
-
-    public void setDependence(Boolean dependence) {
-        this.dependence = dependence;
-    }
-
+    
     public Date getDataComecarPlano() {
         return dataComecarPlano;
     }

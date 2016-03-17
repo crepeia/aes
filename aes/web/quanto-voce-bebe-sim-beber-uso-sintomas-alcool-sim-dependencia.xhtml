@@ -63,15 +63,15 @@
                                 
                                 <p:panel id="qrecaida" >                
                                 <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
-                                    <p:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependence}" required="true">  
+                                    <p:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependenceContinue}" required="true">  
                                         <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.yes']}" itemValue="#{true}" />
                                         <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.no']}" itemValue="#{false}" /> 
-                                        <p:ajax event="change" update="@form" listener="#{evaluationController.dependenceListener()}"/>
+                                        <p:ajax event="change" update="@form" listener="#{evaluationController.save()}"/>
                                     </p:selectOneRadio> 
                                 </h:panelGrid>
                                 </p:panel>
                                 
-                                <p:panel id="panelYes" rendered="#{!evaluationController.evaluation.dependence and !empty evaluationController.evaluation.dependence}" >               
+                                <p:panel id="panelYes" rendered="#{!evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}" >               
                                     <p><b>Apesar de você optar no momento não continuar no programa você pode retornar a qualquer momento.</b></p>
                                     <p>Recomendamos fortemente que você procure ajuda de um profissional de saúde ou ligue para o programa gratuito 132 "Viva Voz"</p>
                                     <p>Estes passo podem lhe ajudar a conhecer melhor como o seu consumo de álcool pode prejudicar a sua saúde no momento.      </p>
@@ -83,7 +83,7 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceNext()}" disabled="#{!evaluationController.evaluation.dependence or empty evaluationController.evaluation.dependence}"/>
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceContinue()}" actionListener="#{evaluationController.save()}" disabled="#{!evaluationController.evaluation.dependenceContinue or empty evaluationController.evaluation.dependenceContinue}"/>
                                                    
                                 </div>
                                 

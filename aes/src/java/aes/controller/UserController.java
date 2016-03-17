@@ -1,10 +1,11 @@
-    /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package aes.controller;
 
+import aes.model.FollowUp;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.Encrypter;
@@ -12,9 +13,13 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -28,6 +33,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.inputtext.InputText;
 
 /**
  *
@@ -40,6 +47,7 @@ public class UserController extends BaseController<User> {
     private User user;
     private boolean loggedIn;
     private String password;
+    ResourceBundle bundle;
 
     @ManagedProperty(value = "#{contactController}")
     private ContactController contactController;
@@ -162,22 +170,39 @@ public class UserController extends BaseController<User> {
     public void recoverPassword() {
         contactController.sendPasswordRecoveryEmail(user.getEmail(), generateCode());
     }
+    
+    public void annualScreening() {
+            
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.YEAR, 1);
+            user.getFollowUp().setAnnualScreening(cal.getTime());
+            save();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Você será contactado em breve.", null));
+            ((InputText) getComponent("email")).setDisabled(true);
+            ((CommandButton) getComponent("sendButton")).setDisabled(true);
+            if (!loggedIn) {
+                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            }
+    }
 
-    public String intro() {
-        if (user.getPregnant() && !user.getDrink()) {
-            return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
-        } else if (user.getPregnant() && user.getDrink()) {
-            return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
-        } else if (user.isUnderage() && !user.getDrink()) {
-            return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
-        } else if (getUser().isUnderage() && user.getDrink()) {
-            return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
-        } else if (!user.getDrink()) {
-            return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
-        } else if (loggedIn) {
-            return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
-        } else {
-            return "quanto-voce-bebe-convite.xhtml?faces-redirect=true";
+    public String preEvaluation() {
+        if (user.getDrink() != null) {
+            if (user.getPregnant() && !user.getDrink()) {
+                return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
+            } else if (user.getPregnant() && user.getDrink()) {
+                return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
+            } else if (user.isUnderage() && !user.getDrink()) {
+                return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
+            } else if (user.isUnderage() && user.getDrink()) {
+                return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
+            } else if (!user.getDrink()) {
+                return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
+            } else {
+                return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
+            }
+        }
+        else{
+            return "cadastrar-nova-conta.xhtml?faces-redirect=true";
         }
     }
 
@@ -196,7 +221,7 @@ public class UserController extends BaseController<User> {
                 String url = ((HttpServletRequest) request).getRequestURI();
                 url = url.substring(url.lastIndexOf('/') + 1);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("url", url);
-                FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("cadastrar-nova-conta.xhtml");
             } catch (IOException ex) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -205,13 +230,18 @@ public class UserController extends BaseController<User> {
     }
 
     public void redirectIndex(boolean redirect) {
-        if(redirect && loggedIn){
-           try {
+        if (redirect && loggedIn) {
+            try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
             } catch (IOException ex) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }   
+        }
+    }
+
+    public String getTranslation(String key) {
+        bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
+        return bundle.getString(key);
     }
 
     public User getUser() {

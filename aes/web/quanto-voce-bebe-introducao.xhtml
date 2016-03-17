@@ -8,125 +8,121 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['quanto.voce.bebe.introducao.title']}</title>
-        <w:head_comum />
-    </h:head>
+        <h:head>
+            <title>#{messages['quanto.voce.bebe.introducao.title']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header />
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header />
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
-                <div class="pagecontent">
-
-
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['quanto.voce.bebe.introducao.h1.1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="10" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
-                        
-                       <!-- <div class="fotoframe">                            
-                           <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/quanto-bebe.jpg" alt="Gratuito" />
-                        </div> -->
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['quanto.voce.bebe.introducao.h1.1']}</h1> 
+                            </div>    
 
-                        <div id="pmtext">
+                            <div id="progressbar">
+                                <p:progressBar value="10" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
+                        </div>
 
-                            <p>#{messages['quanto.voce.bebe.introducao.p1']}</p>
-                            <p> #{messages['quanto.voce.bebe.introducao.br1']}</p>
 
-                            <h:form>
-                                <p:panel id="questoes" >
-                                   
-                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao1">
-                                        <h:outputText value="#{messages['quanto.voce.bebe.introducao.text0']}" style="font-weight: bold;"/>
-                                        <p:selectOneRadio id="options1" value="#{evaluationController.user.gender}" required="true" >  
-                                            <f:ajax event="change" execute="@this" render="questao6" />
-                                            <f:selectItem itemLabel="#{messages['naccount.female']}" itemValue="F" />
-                                            <f:selectItem itemLabel="#{messages['naccount.male']}" itemValue="M" />
-                                        </p:selectOneRadio> 
-                                    </h:panelGrid>
-                                        
-                                    <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao6">
-                                        <h:panelGrid columns="2" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{evaluationController.user.female}">
-                                        <h:outputText value="#{messages['quanto.voce.bebe.introducao.text1']}" style="font-weight: bold"/>
-                                        <p:selectOneRadio id="options6" value="#{evaluationController.user.pregnant}" required="true" >  
-                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.sim']}" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.nao']}" itemValue="#{false}" />
-                                        </p:selectOneRadio> 
-                                    </h:panelGrid> 
-                                    </h:panelGrid> 
+                        <div id="pagemiddle">
 
-                                    <p:panelGrid columns="4" style="margin-bottom:10px"  id="nascimento">                                            
-                                        <h:outputText value="#{messages['quanto.voce.bebe.introducao.text2']}" style="font-weight: bold;"/>
-                                        <p:selectOneMenu id="day" value="#{evaluationController.day}" required="true" label="#{messages['quanto.voce.bebe.introducao.menu2']}">  
-                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.item2']}" itemValue="" />  
-                                            <f:selectItems value="#{userController.days}" />  
-                                        </p:selectOneMenu>
-                                        <p:selectOneMenu id="month" value="#{evaluationController.month}" required="true" label="#{messages['quanto.voce.bebe.introducao.menu3']}">  
-                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.item3']}" itemValue="" />  
-                                            <f:selectItems value="#{userController.months}" />  
-                                        </p:selectOneMenu>
-                                        <p:selectOneMenu id="year" value="#{evaluationController.year}" required="true" label="#{messages['quanto.voce.bebe.introducao.menu4']}">  
-                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.item4']}" itemValue="" />  
-                                            <f:selectItems value="#{userController.years}" />  
-                                        </p:selectOneMenu>
-                                    </p:panelGrid>                                                                                                         
+                            <!-- <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/quanto-bebe.jpg" alt="Gratuito" />
+                             </div> -->
 
-                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
-                                        <f:facet name="header">  
-                                          #{messages['quanto.voce.bebe.introducao.facet1']}
-                                        </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.drink}" required="true">  
-                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.sim']}" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.nao']}" itemValue="#{false}" /> 
-                                        </p:selectOneRadio> 
-                                    </h:panelGrid>
-                                    
+                            <div id="pmtext">
 
-                                </p:panel>
-                                
-                                <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
-                                </div>
-                                
-                                
-                                <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.intro()}" />
-                                </div>
+                                <p>#{messages['quanto.voce.bebe.introducao.p1']}</p>
+                                <p> #{messages['quanto.voce.bebe.introducao.br1']}</p>
 
-                        </h:form>
+                                <h:form>
+                                    <p:panel id="questoes" >
 
-                        </div><!-- end pmtext -->  
+                                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao1">
+                                            <h:outputText value="#{messages['quanto.voce.bebe.introducao.text0']}" style="font-weight: bold;"/>
+                                            <p:selectOneRadio label="#{messages['naccount.sex']}" id="gender" value="#{userController.user.gender}" required="true" >  
+                                                <f:ajax event="change" execute="@this" render="questao6" />
+                                                <f:selectItem itemLabel="#{messages['naccount.female']}" itemValue="F" />
+                                                <f:selectItem itemLabel="#{messages['naccount.male']}" itemValue="M" />
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
+                                        <p:message for="gender" />
 
-                    </div><!-- end page middle -->                                             
+                                        <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao6">
+                                            <h:panelGrid columns="2" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.user.female}">
+                                                <h:outputText value="#{messages['quanto.voce.bebe.introducao.text1']}" style="font-weight: bold"/>
+                                                <p:selectOneRadio id="pregnant" value="#{userController.user.pregnant}" required="#{userController.user.female}" label="#{messages['cadastrar.nova.conta.outputText.1']}">  
+                                                    <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.sim']}" itemValue="#{true}" />
+                                                    <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.nao']}" itemValue="#{false}" />
+                                                </p:selectOneRadio> 
+                                            </h:panelGrid> 
+                                        </h:panelGrid> 
+                                        <p:message for="pregnant" />
 
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
+                                        <p:panelGrid columns="2" id="nascimento">
+                                            <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
+
+                                            <p:calendar id="birthdate" label="#{messages['naccount.birthdate']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" showOn="button" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true">
+                                                <p:ajax event="change" update="birthdate" />
+                                            </p:calendar>
+                                        </p:panelGrid>
+                                        <p:message for="birthdate" />                                                                                                         
+
+                                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                            <f:facet name="header">  
+                                                #{messages['quanto.voce.bebe.introducao.facet1']}
+                                            </f:facet> 
+                                            <p:selectOneRadio id="drink" value="#{userController.user.drink}" required="true" label="#{messages['cadastrar.nova.conta.facet.1']}">  
+                                                <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.sim']}" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.nao']}" itemValue="#{false}" /> 
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
+                                        <p:message for="drink" />
+
+
+                                    </p:panel>
+
+                                    <div id="btnback">
+                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
+                                    </div>
+
+
+                                    <div id="btnnext">
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{userController.preEvaluation()}" actionListener="#{userController.save()}" />
+                                    </div>
+
+                                </h:form>
+
+                            </div><!-- end pmtext -->  
+
+                        </div><!-- end page middle -->                                             
+
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
 
 
 
-                </div>        
-            </div>
+                    </div>        
+                </div>
 
 
-        </div><!-- end.corpo --> 
+            </div><!-- end.corpo --> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 

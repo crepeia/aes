@@ -39,9 +39,9 @@ public class ContactController extends BaseController implements Serializable {
     private EMailSSL eMailSSL;
     private String htmlTemplate;
     private UserDAO userDAO;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         eMailSSL = new EMailSSL();
         htmlTemplate = readHTMLTemplate();
         try {
@@ -49,13 +49,17 @@ public class ContactController extends BaseController implements Serializable {
             userDAO = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }
 
     public void sendEmail(Contact contact) {
+        eMailSSL.send(contact.getSender(), contact.getRecipient(), contact.getSubject(), contact.getText(),
+                contact.getHtml(), contact.getPdf(), contact.getPdfName());
+        save(contact);
+    }
+
+    public void save(Contact contact) {
         try {
-            eMailSSL.send(contact.getSender(), contact.getRecipient(), contact.getSubject(), contact.getText(),
-                    contact.getHtml(), contact.getPdf(), contact.getPdfName());
             daoBase.insertOrUpdate(contact, getEntityManager());
         } catch (SQLException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
@@ -95,7 +99,6 @@ public class ContactController extends BaseController implements Serializable {
 
                 user.setRecoverCode(code);
                 userDAO.insertOrUpdate(user, getEntityManager());
-                daoBase.insertOrUpdate(contact, getEntityManager());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "email.sent.password", null));
                 Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Password recovery email  sent to:" + user.getEmail());
             }

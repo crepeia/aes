@@ -42,7 +42,7 @@ public class User implements Serializable {
     private Date birthDate;
     @Column(name = "gender")
     private char gender;
-    @Column(name = "receive_emails") 
+    @Column(name = "receive_emails")
     private boolean receiveEmails;
     @Column(name = "authorize_data")
     private boolean authorizeData;
@@ -51,60 +51,61 @@ public class User implements Serializable {
     private Date signUpDate;
     @Column(name = "pregnant")
     private Boolean pregnant;
-    @Column (name = "drink")
+    @Column(name = "drink")
     private Boolean drink;
     @Column(name = "prefered_language")
     private String preferedLanguage;
     @Column(name = "recover_code")
     private Integer recoverCode;
-    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
-    
-    @OneToOne(cascade=CascadeType.ALL, mappedBy = "user")
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private KeepResults keepResults;
-    
-    @OneToOne(cascade=CascadeType.ALL, mappedBy = "user")
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private FollowUp followUp;
-      
+
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
     }
-    
+
     public int getAge() {
-        Calendar today = Calendar.getInstance(); 
+        Calendar today = Calendar.getInstance();
         Calendar birthCal = Calendar.getInstance();
         birthCal.setTime(birthDate);
-        
+
         if (today.get(Calendar.MONTH) < birthCal.get(Calendar.MONTH)) {
             return (today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR) - 1);
-            
-        } else if (today.get(Calendar.MONTH) == birthCal.get(Calendar.MONTH) && 
-                today.get(Calendar.DAY_OF_MONTH) < birthCal.get(Calendar.DAY_OF_MONTH)) {
+
+        } else if (today.get(Calendar.MONTH) == birthCal.get(Calendar.MONTH)
+                && today.get(Calendar.DAY_OF_MONTH) < birthCal.get(Calendar.DAY_OF_MONTH)) {
             return (today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR) - 1);
-            
-        }else 
+
+        } else {
             return today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR);
+        }
 
     }
-   
-    public void setBirth(int year,int month,int day){     
+
+    public void setBirth(int year, int month, int day) {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
         birthDate = cal.getTime();
     }
-    
-    public boolean isUnderage(){
+
+    public boolean isUnderage() {
         return getAge() < 18;
-          
+
     }
-    
-    public boolean isFemale(){
+
+    public boolean isFemale() {
         return gender == 'F';
     }
-    
-    public boolean isMale(){
+
+    public boolean isMale() {
         return gender == 'M';
     }
 
@@ -173,6 +174,9 @@ public class User implements Serializable {
     }
 
     public Boolean getPregnant() {
+        if (pregnant == null) {
+            return false;
+        }
         return pregnant;
     }
 
@@ -221,8 +225,9 @@ public class User implements Serializable {
     }
 
     public FollowUp getFollowUp() {
-        if(followUp == null){
+        if (followUp == null) {
             followUp = new FollowUp();
+            followUp.setUser(this);
         }
         return followUp;
     }
@@ -238,7 +243,5 @@ public class User implements Serializable {
     public void setSignUpDate(Date signUpDate) {
         this.signUpDate = signUpDate;
     }
-    
-    
-    
+
 }

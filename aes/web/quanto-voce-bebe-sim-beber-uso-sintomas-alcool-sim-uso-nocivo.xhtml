@@ -111,7 +111,7 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.symptoms()}"/>
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="preparando-pros-cons.xhtml?faces-redirect=true" actionListener="#{evaluationController.saveURL()}"/>
                                
                                                          
                                 </div>

@@ -63,7 +63,7 @@
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.cutDownQuit()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.cutDownQuit()}" actionListener="#{evaluationController.save()}"/>
                                 </div>
                         </h:form>
                             

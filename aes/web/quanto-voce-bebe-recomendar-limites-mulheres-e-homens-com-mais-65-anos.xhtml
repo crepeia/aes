@@ -5,106 +5,106 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
-     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['quanto.voce.bebe.limites.homens.mulheres.65.title']}</title>
-        <w:head_comum />
-    </h:head>
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['quanto.voce.bebe.limites.homens.mulheres.65.title']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true"/>
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
-
-
-                <div class="pagecontent">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header loginRequired="true"/>
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
 
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['quanto.voce.bebe.limites.homens.mulheres.h1.1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['quanto.voce.bebe.limites.homens.mulheres.h1.1']}</h1> 
+                            </div>    
 
-                        <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="#{messages['quanto.voce.bebe.limites.homens.mulheres.graphicimage.1']}" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <div id="progressbar">
+                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
                         </div>
 
-                        <div id="pmtext">                                               
+
+                        <div id="pagemiddle">
+
+                            <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="cartoonman" title="#{messages['quanto.voce.bebe.limites.homens.mulheres.graphicimage.1']}" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
+
+                            <div id="pmtext">                                               
 
 
-                            <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.1']}</h3>
-                            <ul>
-                                <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.1']}</li>
-                                <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.2']}</li>
-                            </ul>
+                                <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.1']}</h3>
+                                <ul>
+                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.1']}</li>
+                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.2']}</li>
+                                </ul>
 
-                            <h2>#{messages['quanto.voce.bebe.limites.homens.mulheres.h2.1']}</h2>
-                            <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.1']}</p>
+                                <h2>#{messages['quanto.voce.bebe.limites.homens.mulheres.h2.1']}</h2>
+                                <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.1']}</p>
 
-                            <ul>
-                                <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.3']}</li>
-                                <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.4']}</li>                            
-                                <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.5']}</li>                            
-                            </ul>
-
-
-                            <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.2']}</h3>
-                            <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.2']}<h:outputLink value="https://www.informalcool.org.br/bebermenos"> link</h:outputLink>.</p>        
-
-                            <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.3']}</h3>                        
-                            <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.3']}</p>
-
-                            
+                                <ul>
+                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.3']}</li>
+                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.4']}</li>                            
+                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.5']}</li>                            
+                                </ul>
 
 
-                            <h:form id="form" class="form-signup">
+                                <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.2']}</h3>
+                                <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.2']}<h:outputLink value="https://www.informalcool.org.br/bebermenos"> link</h:outputLink>.</p>        
 
-                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                    <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
-                                        <!--<p:ajax update="loginMsg" event="blur" />-->
-                                        <f:validateLength maximum="50" />
-                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                    </p:inputText>
-                                    <p:watermark for="email" value="E-mail" />
-                                    <p:message for="email" />
-                                </h:panelGrid>
-                                <p:messages id="messages" showDetail="true" autoUpdate="true" />
-
-
-                                <div id="btnback">
-                                    <p:commandButton id="sendButton" styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.yearEmail()}" />
-                                </div>
-                            </h:form>
-
-                        </div><!-- end pmtext -->  
-                    </div><!-- end page middle -->                                             
-
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
+                                <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.3']}</h3>                        
+                                <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.3']}</p>
 
 
 
-                </div>        
-            </div>
+
+                                <h:form id="form" class="form-signup">
+
+                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                        <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" disabled="true">
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="50" />
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <p:watermark for="email" value="E-mail" />
+                                        <p:message for="email"/>
+                                    </h:panelGrid>
+                                    <p:messages id="messages" redisplay="true" globalOnly="true" />
 
 
-        </div><!-- end.corpo --> 
+                                    <div id="btnback">
+                                        <p:commandButton id="sendButton" styleClass="btngen" value ="Enviar" update="@form" actionListener="#{userController.annualScreening()}" />
+                                    </div>
+                                </h:form>
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-         </f:view>
+                            </div><!-- end pmtext -->  
+                        </div><!-- end page middle -->                                             
+
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
+
+
+
+                    </div>        
+                </div>
+
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 

@@ -27,7 +27,7 @@ public class Scheduler {
         
     }
     
-    @Schedule(second = "*/5", minute = "*", hour = "*", dayOfWeek = "*")
+    //@Schedule(second = "*/5", minute = "*", hour = "*", dayOfWeek = "*")
     public void testTask() {
        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "Scheduled task running");
 
