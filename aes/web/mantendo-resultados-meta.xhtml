@@ -120,14 +120,14 @@
 
                                     <h3>#{messages['estrategia.dim.registro.elet.meta.mul.h3.2']}</h3>
                                     <p>#{messages['estrategia.dim.registro.elet.meta.mul.p.13']}</p>
-                                    <p:panel rendered=#{evaluationController.user.female}>
+                                    <p:panel rendered="#{evaluationController.user.female}">
                                         <h4>#{messages['estrategia.dim.registro.elet.meta.mul.p.14']}</h4>
                                         <ul>
                                             <li>#{messages['estrategia.dim.registro.elet.meta.mul.li.2']}</li>
                                             <li>#{messages['estrategia.dim.registro.elet.meta.mul.li.3']}</li>
                                         </ul>
                                     </p:panel>
-                                    <p:panel rendered=#{evaluationController.user.male}>
+                                    <p:panel rendered="#{evaluationController.user.male}">
 
                                         <h4>#{messages['estrategia.dim.registro.elet.meta.hom.p.14']}</h4>
                                         <ul>
@@ -141,7 +141,7 @@
 
                                     <h:panelGrid columns="2" cellpadding="1">
                                         <p:outputLabel value="Doses Padrão" />
-                                        <p:spinner id="metadosediaria" value="#{keepResultsController.keepResults.dailyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
+                                        <p:spinner id="metadosediaria" value="#{recordController.record.dailyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
                                     </h:panelGrid>
                                     <p:message for="metadosediaria"/>
 
@@ -149,7 +149,7 @@
 
                                     <h:panelGrid columns="2" cellpadding="1">
                                         <p:outputLabel value="Doses Padrão" />
-                                        <p:spinner id="metadosesemanal" value="#{keepResultsController.keepResults.weeklyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
+                                        <p:spinner id="metadosesemanal" value="#{recordController.record.weeklyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
                                     </h:panelGrid>  
                                     <p:message for="metadosesemanal"/>
 
@@ -164,7 +164,7 @@
 
 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{keepResultsController.goals()}"/>      
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="mantendo-resultados-registro.xhtml?faces-redirect=true" actionListener="#{recordController.save()}"/>      
                                 </div>
 
                             </h:form>                                            

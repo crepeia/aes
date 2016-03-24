@@ -7,214 +7,214 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['estrategia.dim.registro.elet.title.1']}</title>
-        <w:head_comum />
-    </h:head>
+        <h:head>
+            <title>#{messages['estrategia.dim.registro.elet.title.1']}</title>
+            <w:head_comum />
+            <style>
+                .markedDate {
+                    background-color: #B6DEF2;
+                }
+            </style>
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true" />
-
-
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
-
-                <w:leftmenu_2 cssClass="leftmenu2" />
-
-                <div class="pagecontent">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header loginRequired="true" />
 
 
-                    <div id="pagetop">
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
-                        <div id="progressbar">
-                            <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
+                    <w:leftmenu_2 cssClass="leftmenu2" />
+
+                    <div class="pagecontent">
+
+
+                        <div id="pagetop">
+
+                            <div id="progressbar">
+                                <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>
+
+                            <div class='fotoframestratety'>
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
                         </div>
 
-                        <div class='fotoframestratety'>
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                        <div id="pagecontentstrategy">                      
+                            <div id="pmtext">
+
+                                <h3>#{messages['estrategia.dim.registro.elet.h3.1']}</h3>
+                                <p>#{messages['estrategia.dim.registro.elet.p.1']}</p>
+                                <h4>#{messages['estrategia.dim.registro.elet.h4.1']}</h4>
+                                <ul>
+                                    <li>#{messages['estrategia.dim.registro.elet.li.1']}</li>
+                                    <li>#{messages['estrategia.dim.registro.elet.li.2']}<b>#{messages['estrategia.dim.registro.elet.li.2.b.1']}</b></li>
+                                    <li>#{messages['estrategia.dim.registro.elet.li.3']}</li>
+                                </ul>
+
+                            </div>
                         </div>
-                    </div>
+                        <div id="pagemiddle">
+                            <h3>#{messages['estrategia.dim.registro.elet.h3.2']}</h3>
 
-                    <div id="pagecontentstrategy">                      
-                        <div id="pmtext">
 
-                            <h3>#{messages['estrategia.dim.registro.elet.h3.1']}</h3>
-                            <p>#{messages['estrategia.dim.registro.elet.p.1']}</p>
-                            <h4>#{messages['estrategia.dim.registro.elet.h4.1']}</h4>
-                            <ul>
-                                <li>#{messages['estrategia.dim.registro.elet.li.1']}</li>
-                                <li>#{messages['estrategia.dim.registro.elet.li.2']}<b>#{messages['estrategia.dim.registro.elet.li.2.b.1']}</b></li>
-                                <li>#{messages['estrategia.dim.registro.elet.li.3']}</li>
-                            </ul>
 
+                            <h:panelGrid columns="2" cellpadding="5" >
+                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
+                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
+                                <p:inputText value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
+                                <p:inputText value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
+                                <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
+                                <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
+                            </h:panelGrid>
                         </div>
-                    </div>
-                    <div id="pagemiddle">
-                        <h3>#{messages['estrategia.dim.registro.elet.h3.2']}</h3>
+                        <h:form>
+                            <div id="pagemiddle">    
+                                <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
+                                <p:outputLabel value="Sua semana:"/>
 
-                        <h:panelGrid columns="2" cellpadding="5" >
-                            <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
-                            <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
-                            <p:inputText value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
-                            <p:inputText value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
-                            <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
-                            <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
-                        </h:panelGrid>
-                    </div>
-                    <h:form>
-                        <div id="pagemiddle">    
-                            <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
-                            <p:outputLabel value="Sua semana:"/>
-                            <p:panelGrid columns ="4">
-                                <p:outputLabel value="De"/>
-                                <p:calendar id="calendar" value="#{evaluationController.evaluation.startingDay}" mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy" >
-                                    <p:ajax event="dateSelect" update="@form"  />
-                                </p:calendar>
-                                <p:outputLabel value="a" />  
-                                <p:inputText id="endingDay" readonly="true" value="#{evaluationController.endingDay}"/>
-                            </p:panelGrid>
-                            <p:accordionPanel rendered="#{!empty evaluationController.evaluation.startingDay}">
-                                <p:tab title="#{evaluationController.getDayName(1)}">
-                                    <h:panelGrid columns="4" cellpadding="7">
-                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
-                                        <p:inputText id="popup1" value="#{evaluationController.getDay(1)}" readonly="true" />
-                                        <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
-                                        <p:spinner id="dose1" value="#{evaluationController.evaluation.drinksDay1}" min="0">
-                                            <p:ajax event="change" update="dose8"  />
-                                        </p:spinner>
-                                        <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                        <p:inputText id="situation1" value="#{evaluationController.evaluation.contextDay1}"/> 
-                                        <p:outputLabel for="consequence1" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                        <p:inputText id="consequence1" value="#{evaluationController.evaluation.consequencesDay1}"/>
+                                <p:panelGrid columns ="4">
+                                    <p:outputLabel value="De"/>
+                                    <p:inputText id="startingDay" value="#{recordController.weekFirstDay}" readonly="true" />
+                                    <p:outputLabel value="a" />  
+                                    <p:inputText id="endingDay"  value="#{recordController.weekLastDay}" readonly="true" />
+                                </p:panelGrid>
 
-                                    </h:panelGrid>
-                                </p:tab>
+                                <p:panelGrid columns ="1" >
+                                    <p:calendar id="calendar" value="#{recordController.date}" pattern="dd/MM/yyyy" mode="inline" beforeShowDay="disableDates" locale="#{languageController.locale}"  >
+                                        <p:ajax event="dateSelect" listener="#{recordController.fetchLog()}"  update="@form"  process="@form"/>
+                                    </p:calendar>  
+                                    <script type="text/javascript">
+                                        //<![CDATA[
+                                        function disableDates(date) {
+                                            var week = isOnWeek(date);
+                                            var recorded = isRecorded(date);
+                                            if(week && recorded) {
+                                                return [true, 'markedDate'];
+                                            }
+                                            if(week)  {
+                                                return [true, '']
+                                            }
+                                            else{
+                                                return [false, ''];
+                                            }
+                                                
+                                        }
+                                        
+                                        function isOnWeek(date){
+                                            var week = #{recordController.week};
+                                            var weekArray = week.split(",");
+                                            var dateStr = formatDate(date);
+                                            for (i = 0; i < weekArray.length; i++) {
+                                                if (weekArray[i] == dateStr) {
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        }
+                                        
+                                        function isRecorded(date){
+                                            var dates = #{recordController.dates};
+                                            var datesArray = dates.split(",");
+                                            var dateStr = formatDate(date);
+                                            for (i = 0; i < datesArray.length; i++) {
+                                                if (datesArray[i] == dateStr) {
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        }
 
-                                <p:tab title="#{evaluationController.getDayName(2)}">
-                                    <h:panelGrid columns="4" cellpadding="7">
-                                        <p:outputLabel for="popup2" value="#{messages['estrategia.dim.registro.elet.day']}"/>
-                                        <p:inputText id="popup2" value="#{evaluationController.getDay(2)}" readonly="true" />
-                                        <p:outputLabel for="dose2" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
-                                        <p:spinner id="dose2" value="#{evaluationController.evaluation.drinksDay2}" min="0">
-                                            <p:ajax event="change" update="dose8"  />
-                                        </p:spinner>
-                                        <p:outputLabel for="situation2" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                        <p:inputText id="situation2" value="#{evaluationController.evaluation.contextDay2}"/> 
-                                        <p:outputLabel for="consequence2" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                        <p:inputText id="consequence2" value="#{evaluationController.evaluation.consequencesDay2}"/>
-                                    </h:panelGrid>
-                                </p:tab>
+                                        function formatDate(date) {
+                                            var dateStr = "";
+                                            dateStr = dateStr.concat(date.getFullYear());
+                                            dateStr = dateStr.concat("-");
+                                            if (date.getMonth() < 10) {
+                                                dateStr = dateStr.concat("0");
+                                            }
+                                            dateStr = dateStr.concat(date.getMonth() + 1)
+                                            dateStr = dateStr.concat("-");
+                                            if (date.getDate() < 10) {
+                                                dateStr = dateStr.concat("0");
+                                            }
+                                            dateStr = dateStr.concat(date.getDate());
 
-                                <p:tab title="#{evaluationController.getDayName(3)}">
-                                    <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}" />
-                                        <p:inputText id="popup3" value="#{evaluationController.getDay(3)}" readonly="true"/>
-                                        <p:outputLabel for="dose3" value="#{messages['estrategia.dim.registro.elet.doses']}" />
-                                        <p:spinner id="dose3" value="#{evaluationController.evaluation.drinksDay3}" min="0">
-                                            <p:ajax event="change" update="dose8"  />
-                                        </p:spinner>
-                                        <p:outputLabel for="situation3" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                        <p:inputText id="situation3" value="#{evaluationController.evaluation.contextDay3}"/> 
-                                        <p:outputLabel for="consequence3" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                        <p:inputText id="consequence3" value="#{evaluationController.evaluation.consequencesDay3}"/>
-                                    </h:panelGrid>
-                                </p:tab>
+                                            return dateStr;
 
-                                <p:tab title="#{evaluationController.getDayName(4)}">
-                                    <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
-                                        <p:inputText id="popup4" value="#{evaluationController.getDay(4)}" readonly="true"/>
-                                        <p:outputLabel for="dose4" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
-                                        <p:spinner id="dose4" value="#{evaluationController.evaluation.drinksDay4}" min="0">
-                                            <p:ajax event="change" update="dose8"  />
-                                        </p:spinner>
-                                        <p:outputLabel for="situation4" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                        <p:inputText id="situation4" value="#{evaluationController.evaluation.contextDay4}"/> 
-                                        <p:outputLabel for="consequence4" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                        <p:inputText id="consequence4" value="#{evaluationController.evaluation.consequencesDay4}"/>
-                                    </h:panelGrid>
-                                </p:tab>
-
-                                <p:tab title="#{evaluationController.getDayName(5)}">
-                                    <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}" />
-                                        <p:inputText id="popup5" value="#{evaluationController.getDay(5)}" readonly="true"/>
-                                        <p:outputLabel for="dose5" value="#{messages['estrategia.dim.registro.elet.doses']}" />
-                                        <p:spinner id="dose5" value="#{evaluationController.evaluation.drinksDay5}" min="0">
-                                            <p:ajax event="change" update="dose8"  />
-                                        </p:spinner>
-                                        <p:outputLabel for="situation5" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                        <p:inputText id="situation5" value="#{evaluationController.evaluation.contextDay5}"/> 
-                                        <p:outputLabel for="consequence5" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                        <p:inputText id="consequence5" value="#{evaluationController.evaluation.consequencesDay5}"/>
-                                    </h:panelGrid>
-                                </p:tab>
-
-                                <p:tab title="#{evaluationController.getDayName(6)}">
-                                    <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}" />
-                                        <p:inputText id="popup6" value="#{evaluationController.getDay(6)}" readonly="true"/>
-                                        <p:outputLabel for="dose6" value="#{messages['estrategia.dim.registro.elet.doses']}" />
-                                        <p:spinner id="dose6" value="#{evaluationController.evaluation.drinksDay6}" min="0">
-                                            <p:ajax event="change" update="dose8"  />
-                                        </p:spinner>
-                                        <p:outputLabel for="situation6" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                        <p:inputText id="situation6" value="#{evaluationController.evaluation.contextDay6}"/> 
-                                        <p:outputLabel for="consequence6" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                        <p:inputText id="consequence6" value="#{evaluationController.evaluation.consequencesDay6}"/>
-                                    </h:panelGrid>
-                                </p:tab> 
+                                        }
 
 
-                                <p:tab title="#{evaluationController.getDayName(7)}">
-                                    <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="popup1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
-                                        <p:inputText id="popup7" value="#{evaluationController.getDay(7)}" readonly="true"/>
-                                        <p:outputLabel for="dose7" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
-                                        <p:spinner id="dose7" value="#{evaluationController.evaluation.drinksDay7}" min="0">
-                                            <p:ajax event="change" update="dose8"  />
-                                        </p:spinner>
-                                        <p:outputLabel for="situation7" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                        <p:inputText id="situation7" value="#{evaluationController.evaluation.contextDay7}"/> 
-                                        <p:outputLabel for="consequence7" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                        <p:inputText id="consequence7" value="#{evaluationController.evaluation.consequencesDay7}"/>
-                                    </h:panelGrid>
-                                </p:tab>
+                                        //]]>
+                                    </script>
+                                </p:panelGrid>
 
-                                <p:tab title="#{messages['estrategia.dim.registro.elet.total']}">
-                                    <h:panelGrid columns="4" cellpadding="2">
-                                        <p:outputLabel for="dose8" value="#{messages['estrategia.dim.registro.elet.doses']}"/>
-                                        <p:inputText id="dose8" value="#{evaluationController.evaluation.drinksSum}"/>
-                                    </h:panelGrid>
-                                </p:tab>
+                                <h:panelGrid columns="4" cellpadding="7" >
+                                    <p:outputLabel for="date1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
+                                    <p:inputText id="date1" value="#{recordController.formattedDate}" readonly="true" />
+                                    <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
+                                    <p:spinner id="dose1" value="#{recordController.dailyLog.drinks}" min="0"/>
+                                    <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
+                                    <p:inputText id="situation1" value="#{recordController.dailyLog.context}"/> 
+                                    <p:outputLabel for="consequence1" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
+                                    <p:inputText id="consequence1" value="#{recordController.dailyLog.consequences}"/>
+                                </h:panelGrid>
 
-                            </p:accordionPanel>
-                        </div>                                             
+                                <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
+                                <p:messages/>
 
-                        <div id="btnback">
-                            <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>
+                            </div>                                             
+
+                            <div id="btnback">
+                                <h:button class="btngen" value ="#{messages['back']}" outcome="mantendo-resultados-meta.xhtml?faces-redirect=true"></h:button>
+                            </div>
+
+
+                            <div id="btnnext">
+                                <h:panelGrid columns="2" >
+                                    <p:panelGrid columns="1">
+                                        <div id ="planoimg1">
+                                            <div class="planoimg">                                                            
+                                                <p:commandLink ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
+                                                <p><p:commandLink >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                            </div>
+                                        </div>
+                                    </p:panelGrid>
+
+                                    <p:panelGrid columns="1">
+                                        <div id ="planoimg2">
+                                            <div class="planoimg">
+                                                <p:commandLink update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
+                                                <p><p:commandLink update="@form">E-Mail</p:commandLink></p>
+                                            </div>
+                                        </div>
+                                    </p:panelGrid>
+                                </h:panelGrid>  
+                            </div>                                             
+
+                            <div id="btnback">
+                                <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>
+                            </div>
+
+
+                            <div id="btnnext">
+                                <p:commandButton id="nextBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-alternativas.xhtml?faces-redirect=true" immediate="true"/>      
+                            </div>
+
+                        </h:form>                                            
+
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
                         </div>
+                    </div> 
 
+                </div>        
+            </div>
 
-                        <div id="btnnext">
-                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-alternativas.xhtml?faces-redirect=true" immediate="true"/>      
-                        </div>
-
-                    </h:form>                                            
-
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
-                </div> 
-
-            </div>        
-        </div>
-
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>

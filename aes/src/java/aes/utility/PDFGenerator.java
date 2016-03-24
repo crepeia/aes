@@ -5,6 +5,7 @@
  */
 package aes.utility;
 
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -27,8 +28,8 @@ public class PDFGenerator {
         try {
             Document document = new Document();
             PdfWriter pdfWriter = PdfWriter.getInstance(document, pdf);
-            InputStream is = new ByteArrayInputStream(html.getBytes());
-            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, is);
+            document.open();
+            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, new ByteArrayInputStream(html.getBytes()));
             document.close();
             pdf.close();
         } catch (DocumentException ex) {

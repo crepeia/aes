@@ -12,11 +12,9 @@ import aes.utility.PDFGenerator;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -191,30 +189,6 @@ public class EvaluationController extends BaseController<Evaluation> {
         return new DefaultStreamedContent(new ByteArrayInputStream(pdf.toByteArray()),
                 "application/pdf", "meuplano.pdf");
     }
-
-    /*public String getEndingDay() {
-        if (getEvaluation().getStartingDay() == null) {
-            return "";
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(getEvaluation().getStartingDay());
-        cal.add(Calendar.DATE, 6);
-        return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
-    }
-
-    public String getDayName(int day) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(getEvaluation().getStartingDay());
-        cal.add(Calendar.DATE, day - 1);
-        return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale(getUser().getPreferedLanguage()));
-    }
-
-    public String getDay(int day) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(getEvaluation().getStartingDay());
-        cal.add(Calendar.DATE, day - 1);
-        return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
-    }*/
 
     public String getURL() {
         String url = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("url");

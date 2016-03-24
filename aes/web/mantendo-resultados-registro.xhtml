@@ -4,11 +4,18 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
     <f:view locale="#{languageController.locale}">
         <h:head>
             <title>#{messages['estrategia.dim.registro.elet.title.1']}</title>
             <w:head_comum />
+
+            <style>
+                .markedDate {
+                    background-color: #B6DEF2;
+                }
+            </style>
         </h:head>
 
         <h:body>
@@ -57,8 +64,8 @@
                             <h:panelGrid columns="2" cellpadding="5" >
                                 <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
                                 <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
-                                <p:inputText value="#{keepResultsController.keepResults.dailyGoal}" readonly="true" size="2"/>
-                                <p:inputText value="#{keepResultsController.keepResults.weeklyGoal}" readonly="true" size="2"/>
+                                <p:inputText value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
+                                <p:inputText value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
                                 <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
                                 <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
                             </h:panelGrid>
@@ -67,38 +74,70 @@
                             <div id="pagemiddle">    
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
                                 <p:panelGrid columns ="1" >
-                                    <p:calendar id="calendar" value="#{keepResultsController.date}" pattern="dd/MM/yyyy" mode="inline" beforeShowDay="color" >
-                                        <p:ajax event="dateSelect" update="@form" listener="#{keepResultsController.fetchLog()}" process="@form"/>
+                                    <p:calendar id="calendar" value="#{recordController.date}" pattern="dd/MM/yyyy" mode="inline" beforeShowDay="colorDates" locale="#{languageController.locale}" pagedate="#{recordController.weekFirstDay}" >
+                                        <p:ajax event="dateSelect" listener="#{recordController.fetchLog()}" update="@form"  process="@form" />
                                     </p:calendar>  
                                     <script type="text/javascript">
-                                        /* <![CDATA[ */
-                                        function color(date) {
-                                            var dates = ["2016-01-10","2016-01-22"];
-                                            
+                                        //<![CDATA[
+                                        function colorDates(date) {
+                                            var dates = #{recordController.dates};
+                                            var datesArray = dates.split(",");
+                                            var dateStr = formatDate(date);
+                                            for (i = 0; i < datesArray.length; i++) {
+                                                console.log(dateStr);
+                                                if (datesArray[i] == dateStr) {
+                                                    console.log(datesArray[i]);
+                                                    console.log(dateStr);
+                                                    return [true, 'markedDate'];
+                                                }
+                                            }
+
+
+
                                             return [true, ''];
                                         }
-                                        /* ]]> */
-                                    </script>-
+
+                                        function formatDate(date) {
+                                            var dateStr = "";
+                                            dateStr = dateStr.concat(date.getFullYear());
+                                            dateStr = dateStr.concat("-");
+                                            if (date.getMonth() < 10) {
+                                                dateStr = dateStr.concat("0");
+                                            }
+                                            dateStr = dateStr.concat(date.getMonth() + 1)
+                                            dateStr = dateStr.concat("-");
+                                            if (date.getDate() < 10) {
+                                                dateStr = dateStr.concat("0");
+                                            }
+                                            dateStr = dateStr.concat(date.getDate());
+                                            
+                                            return dateStr;
+
+                                        }
+
+
+                                        //]]>
+                                    </script>
                                 </p:panelGrid>
 
                                 <h:panelGrid columns="4" cellpadding="7" >
                                     <p:outputLabel for="date1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
-                                    <p:inputText id="date1" value="#{keepResultsController.formattedDate}" readonly="true" />
+                                    <p:inputText id="date1" value="#{recordController.formattedDate}" readonly="true" />
                                     <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
-                                    <p:spinner id="dose1" value="#{keepResultsController.dailyLog.drinks}" min="0"/>
+                                    <p:spinner id="dose1" value="#{recordController.dailyLog.drinks}" min="0"/>
                                     <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                    <p:inputText id="situation1" value="#{keepResultsController.dailyLog.context}"/> 
+                                    <p:inputText id="situation1" value="#{recordController.dailyLog.context}"/> 
                                     <p:outputLabel for="consequence1" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                    <p:inputText id="consequence1" value="#{keepResultsController.dailyLog.consequences}"/>
+                                    <p:inputText id="consequence1" value="#{recordController.dailyLog.consequences}"/>
                                 </h:panelGrid>
 
-                                <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{keepResultsController.saveLog()}" />
+                                <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form"  action="#{recordController.saveLog()}" />
                                 <p:messages/>
 
                             </div>                                             
 
                             <div id="btnback">
-                                <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>
+                                <h:button class="btngen" value ="#{messages['back']}" outcome="mantendo-resultados-meta.xhtml?faces-redirect=true"></h:button>
                             </div>
 
 

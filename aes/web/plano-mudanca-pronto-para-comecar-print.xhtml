@@ -1,23 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <!--<f:view locale="#{languageController.locale}">-->
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <f:view locale="#{languageController.locale}">
         <h:head>
             <title>#{messages['plano.mudanca.pronto.para.comecar.1.title.1']} </title>
-            <w:head_comum />
+                <w:header loginRequired="true" rendered="false"/>
         </h:head>
         <h:body>
-
-            <p:media value="#{evaluationController.planPdf}" width="100%" height="100%" player="pdf"/>  
-            
-
+            <p:media value="#{evaluationController.planPdf}" width="100%" height="100%" player="pdf"/>        
         </h:body>
-    <!--</f:view>-->
-
+    </f:view>
 </html>
 

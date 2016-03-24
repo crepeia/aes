@@ -46,7 +46,7 @@ public class ContactController extends BaseController implements Serializable {
     public void init() {
         eMailSSL = new EMailSSL();
         contactTemplate = readHTMLTemplate("aes/utility/contact-template.html");
-        planTemplate = readHTMLTemplate("aes/utility/contact-template.html");
+        planTemplate = readHTMLTemplate("aes/utility/plan-template.html");
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
             userDAO = new UserDAO();
@@ -130,7 +130,7 @@ public class ContactController extends BaseController implements Serializable {
     public String readHTMLTemplate(String path) {
         try {
             InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-            byte[] buffer = new byte[10240];
+            byte[] buffer = new byte[102400];
             return new String(buffer, 0, input.read(buffer), StandardCharsets.UTF_8);
         } catch (IOException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
@@ -157,6 +157,7 @@ public class ContactController extends BaseController implements Serializable {
     }
 
     public String fillHTMLTemplate(String content[]) {
+        System.out.println(planTemplate);
         String newTemplate = planTemplate;
 
         String subtitle[] = new String[6];

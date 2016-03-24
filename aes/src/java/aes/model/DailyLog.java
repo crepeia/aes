@@ -29,9 +29,9 @@ public class DailyLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name = "date")
+    @Column(name = "logDate")
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date date;
+    private Date logDate;
     @Column(name = "drinks")
     private Integer drinks;
     @Column(name = "context")
@@ -44,7 +44,7 @@ public class DailyLog implements Serializable {
     
     @Override
     public String toString(){
-        return id + ", " + date + ", " + drinks + ", " + context + ", " + consequences;
+        return id + ", " + logDate + ", " + drinks + ", " + context + ", " + consequences;
                 
     }
 
@@ -55,15 +55,15 @@ public class DailyLog implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
-
-    public Date getDate() {
-        return date;
+    
+    public Date getLogDate() {
+        return logDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setLogDate(Date logDate) {
+        this.logDate = logDate;
     }
-
+      
     public Integer getDrinks() {
         if(drinks == null){
             return 0;

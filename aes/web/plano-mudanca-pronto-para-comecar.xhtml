@@ -99,8 +99,8 @@
                                         <p:panelGrid columns="1">
                                             <div id ="planoimg1">
                                                 <div class="planoimg">                                                            
-                                                    <p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true" update="@form" actionListener="#{evaluationController.printPlan()}"  ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
-                                                    <p><p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true" update="@form"  >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                                    <p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true" update="@form" target="_blank" actionListener="#{evaluationController.save()}"   ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
+                                                    <p><p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true" update="@form" target="_blank" >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
                                                 </div>
                                             </div>
                                         </p:panelGrid>
