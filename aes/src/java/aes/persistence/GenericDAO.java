@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.persistence;
 
 import java.io.Serializable;
@@ -16,10 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 
-/**
- *
- * @author hedersb
- */
 public class GenericDAO<T> implements Serializable {
 
 	public final int E = 0, OU = 1;

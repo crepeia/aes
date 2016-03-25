@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.controller;
 
 import aes.model.PageNavigation;
@@ -12,7 +7,9 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
@@ -28,7 +25,11 @@ public class PageNavigationController extends BaseController<PageNavigation> {
 
     private PageNavigation pageNavigation;
 
-    public PageNavigationController() {
+    @ManagedProperty(value = "#{userController}")
+    private UserController userController;
+
+    @PostConstruct
+    public void init() {
         try {
             this.daoBase = new GenericDAO<PageNavigation>(PageNavigation.class);
         } catch (NamingException ex) {
@@ -49,12 +50,16 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         }
         return "";
     }
-    
-    public User getUser(){
-        return getLoggedUser();
+
+    public User getUser() {
+        if (userController.isLoggedIn()) {
+            return userController.getUser();
+        }else{
+            return null;
+        }
     }
 
-    public String getIpAdress() {
+    private String getIpAdress() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
         if (ipAddress == null) {
@@ -62,15 +67,13 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         }
         return ipAddress;
     }
-    
-    public String getURL(){
+
+    private String getURL() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String url = ((HttpServletRequest) request).getRequestURI();
-	url = url.substring( url.lastIndexOf('/') + 1 );
+        url = url.substring(url.lastIndexOf('/') + 1);
         return url;
-        
+
     }
-    
-    
 
 }

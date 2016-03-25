@@ -1,26 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.controller;
 
 import aes.model.User;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-/**
- *
- * @author thiagorizuti
- */
 @ManagedBean(name = "languageController")
 @SessionScoped
 public class LanguageController extends BaseController<User> {
@@ -63,14 +52,6 @@ public class LanguageController extends BaseController<User> {
 
     public void setLanguages(Map<String, String> languages) {
         this.languages = languages;
-    }
-
-    public UserController getUserController() {
-        return userController;
-    }
-
-    public void setUserController(UserController userController) {
-        this.userController = userController;
     }
     
 }

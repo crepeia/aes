@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.model;
 
 import java.io.Serializable;
@@ -16,10 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
-/**
- *
- * @author thiagorizuti
- */
 @Entity
 @Table(name = "tb_page_navigation")
 public class PageNavigation implements Serializable {

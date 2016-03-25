@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.model;
 
 import java.io.Serializable;
@@ -20,10 +16,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
-/**
- *
- * @author hedersb
- */
 @Entity
 @Table(name = "tb_user")
 public class User implements Serializable {

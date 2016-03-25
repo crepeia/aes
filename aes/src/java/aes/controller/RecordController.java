@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.controller;
 
 import aes.model.DailyLog;
@@ -14,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -25,10 +19,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 
-/**
- *
- * @author thiago
- */
 @ManagedBean(name = "recordController")
 @SessionScoped
 public class RecordController extends BaseController<Record> {
@@ -81,18 +71,6 @@ public class RecordController extends BaseController<Record> {
             return "mantendo-resultados-meta-mulher.xhtml?faces-redirect=true";
         } else {
             return "mantendo-resultados-meta-homem.xhtml?faces-redirect=true";
-        }
-    }
-
-    public String goals() {
-        try {
-            daoBase.insertOrUpdate(getRecord(), getEntityManager());
-            return "mantendo-resultados-registro.xhtml?faces-redirect=true";
-
-        } catch (SQLException ex) {
-            Logger.getLogger(RecordController.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            return "";
         }
     }
 
@@ -183,7 +161,6 @@ public class RecordController extends BaseController<Record> {
         return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
     
-
     public DailyLog getDailyLog() {
         if (dailyLog == null) {
             dailyLog = new DailyLog();
@@ -203,12 +180,5 @@ public class RecordController extends BaseController<Record> {
         this.date = date;
     }
 
-    public UserController getUserController() {
-        return userController;
-    }
-
-    public void setUserController(UserController userController) {
-        this.userController = userController;
-    }
 
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.controller;
 
 import aes.model.User;
@@ -132,6 +127,7 @@ public class UserController extends BaseController<User> {
                 user.setPassword(Encrypter.encrypt(password));
                 user.setSignUpDate(new Date());
                 save();
+                contactController.sendSignUpEmail(user);
                 Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'cadastrou no sistema.");
                 signIn(true);
             }
@@ -257,7 +253,7 @@ public class UserController extends BaseController<User> {
         }
     }
 
-    public String getTranslation(String key) {
+    public String getString(String key) {
         bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
         return bundle.getString(key);
     }
@@ -274,24 +270,12 @@ public class UserController extends BaseController<User> {
         return loggedIn;
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public ContactController getContactController() {
-        return contactController;
-    }
-
-    public void setContactController(ContactController contactController) {
-        this.contactController = contactController;
     }
 
     public String getEmail() {

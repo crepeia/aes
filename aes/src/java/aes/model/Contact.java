@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.model;
 
 import java.io.ByteArrayOutputStream;
@@ -18,10 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 
-/**
- *
- * @author thiago
- */
 @Entity
 @Table(name = "tb_contact")
 public class Contact implements Serializable {
@@ -37,6 +28,8 @@ public class Contact implements Serializable {
     private String recipient;
     @Column (name = "subject")
     private String subject;
+    @Column (name = "sent")
+    private Boolean sent;
     @Transient
     private String text;  
     @Transient
@@ -129,5 +122,13 @@ public class Contact implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }    
-       
+
+    public Boolean getSent() {
+        return sent;
+    }
+
+    public void setSent(Boolean sent) {
+        this.sent = sent;
+    }
+     
 }

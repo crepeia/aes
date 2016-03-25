@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.controller;
 
 import aes.model.Contact;
 import aes.model.User;
 import aes.persistence.GenericDAO;
-import aes.persistence.UserDAO;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -29,10 +23,6 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 
-/**
- *
- * @author hedersb
- */
 @ManagedBean(name = "contactController")
 @ApplicationScoped
 public class ContactController extends BaseController implements Serializable {
@@ -40,7 +30,7 @@ public class ContactController extends BaseController implements Serializable {
     private EMailSSL eMailSSL;
     private String contactTemplate;
     private String planTemplate;
-    private UserDAO userDAO;
+    private GenericDAO userDAO;
 
     @PostConstruct
     public void init() {
@@ -49,22 +39,8 @@ public class ContactController extends BaseController implements Serializable {
         planTemplate = readHTMLTemplate("aes/utility/plan-template.html");
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
-            userDAO = new UserDAO();
+            userDAO = new GenericDAO<User>(User.class);
         } catch (NamingException ex) {
-            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void sendEmail(Contact contact) {
-        eMailSSL.send(contact.getSender(), contact.getRecipient(), contact.getSubject(), contact.getText(),
-                contact.getHtml(), contact.getPdf(), contact.getPdfName());
-        save(contact);
-    }
-
-    public void save(Contact contact) {
-        try {
-            daoBase.insertOrUpdate(contact, getEntityManager());
-        } catch (SQLException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -115,19 +91,39 @@ public class ContactController extends BaseController implements Serializable {
         contact.setUser(user);
         contact.setSender("alcoolesaude@gmail.com");
         contact.setRecipient(user.getEmail());
-        contact.setDateSent(new Date());
         contact.setSubject("subject.email.plano");
-        contact.setHtml(fillHTMLTemplate(content));
+        contact.setDateSent(new Date());
+        contact.setHtml(getHTMLPlan(content,user.getPreferedLanguage()));
         sendEmail(contact);
     }
-
-    public String getFooter(String language) {
-        return this.getText("title.1", language) + "<br>"
-                + this.getText("crepeia", language) + "<br>"
-                + this.getText("ufjf", language);
+    
+    public void sendSignUpEmail(User user) {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient(user.getEmail());
+        contact.setSubject(getSubject("welcome_subj", user.getPreferedLanguage()));
+        contact.setDateSent(new Date());
+        contact.setHtml(getHTMLMessage("welcome", user.getPreferedLanguage()));
+        sendEmail(contact);
+    }
+    
+    private void sendEmail(Contact contact) {
+        eMailSSL.send(contact.getSender(), contact.getRecipient(), contact.getSubject(), contact.getText(),
+                contact.getHtml(), contact.getPdf(), contact.getPdfName());
+        contact.setSent(true);
+        save(contact);
     }
 
-    public String readHTMLTemplate(String path) {
+    private void save(Contact contact) {
+        try {
+            daoBase.insertOrUpdate(contact, getEntityManager());
+        } catch (SQLException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private String readHTMLTemplate(String path) {
         try {
             InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
             byte[] buffer = new byte[102400];
@@ -138,36 +134,30 @@ public class ContactController extends BaseController implements Serializable {
         return null;
     }
 
-    public String fillHTMLTemplate(String title, String subtitle, String content, String footer) {
-        String newTemplate = contactTemplate;
-        if (title != null) {
-            newTemplate = newTemplate.replace("#title#", title);
-        }
-        if (subtitle != null) {
-            newTemplate = newTemplate.replace("#subtitle#", subtitle);
-        }
-        if (content != null) {
-            newTemplate = newTemplate.replace("#content#", content);
-        }
-        if (footer != null) {
-            newTemplate = newTemplate.replace("#footer#", footer);
-        }
-
-        return newTemplate;
+    private String getHTMLMessage(String content, String language) {
+        String htmlMessage = contactTemplate;
+        ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(language));
+        htmlMessage = htmlMessage.replace("#title#", bundle.getString("title.1"));
+        htmlMessage = htmlMessage.replace("#content#", bundle.getString(content));
+        htmlMessage = htmlMessage.replace("#footer#", 
+                    bundle.getString("title.1") + "<br>" + 
+                    bundle.getString("crepeia") + "<br>" + 
+                    bundle.getString("ufjf"));
+        
+        return htmlMessage;
     }
 
-    public String fillHTMLTemplate(String content[]) {
-        System.out.println(planTemplate);
+    public String getHTMLPlan(String content[], String language) {
         String newTemplate = planTemplate;
-
+        ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(language));
         String subtitle[] = new String[6];
-        String title = "Meu Plano";
-        subtitle[0] = "Data para começar";
-        subtitle[1] = "As razões mais importantes que eu tenho para mudar a forma que bebo são:";
-        subtitle[2] = "Eu irei usar as seguintes estratégias:";
-        subtitle[3] = "As pessoas que podem me ajudar são:";
-        subtitle[4] = "Eu saberei que meu plano está funcionando quando:";
-        subtitle[5] = "O que pode interferir e como posso lidar com estas situações:";
+        String title = bundle.getString("plan.0");
+        subtitle[0] = bundle.getString("plan.1");
+        subtitle[1] = bundle.getString("plan.2");
+        subtitle[2] = bundle.getString("plan.3");
+        subtitle[3] = bundle.getString("plan.4");
+        subtitle[4] = bundle.getString("plan.5");
+        subtitle[5] = bundle.getString("plan.6");
 
         newTemplate = newTemplate.replace("#title#", title);
         for (int i = 0; i < 6; i++) {
@@ -178,17 +168,9 @@ public class ContactController extends BaseController implements Serializable {
         return newTemplate;
     }
 
-    public String getText(String key, String language) {
+    private String getSubject(String subject, String language) {
         ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(language));
-        return bundle.getString(key);
-    }
-
-    public EMailSSL geteMailSSL() {
-        return eMailSSL;
-    }
-
-    public void seteMailSSL(EMailSSL eMailSSL) {
-        this.eMailSSL = eMailSSL;
+        return bundle.getString(subject );
     }
 
 }

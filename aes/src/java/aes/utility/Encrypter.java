@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.utility;
 
 import java.security.InvalidKeyException;
@@ -14,10 +10,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.faces.context.FacesContext;
 
-/**
- *
- * @author hedersb
- */
 public class Encrypter {
 
 	private static final byte[] key = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("key").getBytes();
@@ -28,9 +20,6 @@ public class Encrypter {
 	public Encrypter() {
 	}
 
-	/**
-	 * @return the aesCipher
-	 */
 	public static Cipher getAesCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
 		if (Encrypter.aesCipher == null) {
 			Encrypter.aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");

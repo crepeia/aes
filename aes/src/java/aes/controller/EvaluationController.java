@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.controller;
 
 import aes.model.Evaluation;
@@ -29,10 +24,6 @@ import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
-/**
- *
- * @author thiagorizuti and danielapereira
- */
 @ManagedBean(name = "evaluationController")
 @SessionScoped
 public class EvaluationController extends BaseController<Evaluation> {
@@ -40,8 +31,6 @@ public class EvaluationController extends BaseController<Evaluation> {
     private static final int DAYS_LIMIT = -7;
 
     private Evaluation evaluation;
-
-    private String htmlTemplate;
 
     @ManagedProperty(value = "#{userController}")
     private UserController userController;
@@ -185,7 +174,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public StreamedContent getPlanPdf() {
-        ByteArrayOutputStream pdf = (new PDFGenerator()).generatePDF(contactController.fillHTMLTemplate(getEvaluation().getPlanContent()));
+        ByteArrayOutputStream pdf = (new PDFGenerator()).generatePDF(contactController.getHTMLPlan(getEvaluation().getPlanContent(), getUser().getPreferedLanguage()));
         return new DefaultStreamedContent(new ByteArrayInputStream(pdf.toByteArray()),
                 "application/pdf", "meuplano.pdf");
     }
@@ -207,30 +196,6 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public Date getCurrentDate() {
         return new Date();
-    }
-
-    public ContactController getContactController() {
-        return contactController;
-    }
-
-    public void setContactController(ContactController contactController) {
-        this.contactController = contactController;
-    }
-
-    public UserController getUserController() {
-        return userController;
-    }
-
-    public void setUserController(UserController userController) {
-        this.userController = userController;
-    }
-
-    public String getHtmlTemplate() {
-        return htmlTemplate;
-    }
-
-    public void setHtmlTemplate(String htmlTemplate) {
-        this.htmlTemplate = htmlTemplate;
     }
 
 }
