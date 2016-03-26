@@ -76,4 +76,13 @@ public class PageNavigationController extends BaseController<PageNavigation> {
 
     }
 
+    public UserController getUserController() {
+        return userController;
+    }
+
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    }
+   
+
 }

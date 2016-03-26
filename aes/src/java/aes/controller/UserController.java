@@ -301,6 +301,13 @@ public class UserController extends BaseController<User> {
     public void setPasswordd(String passwordd) {
         this.passwordd = passwordd;
     }
-    
+
+    public ContactController getContactController() {
+        return contactController;
+    }
+
+    public void setContactController(ContactController contactController) {
+        this.contactController = contactController;
+    }
 
 }

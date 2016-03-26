@@ -53,5 +53,13 @@ public class LanguageController extends BaseController<User> {
     public void setLanguages(Map<String, String> languages) {
         this.languages = languages;
     }
+
+    public UserController getUserController() {
+        return userController;
+    }
+
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    } 
     
 }

@@ -198,4 +198,21 @@ public class EvaluationController extends BaseController<Evaluation> {
         return new Date();
     }
 
+    public UserController getUserController() {
+        return userController;
+    }
+
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    }
+
+    public ContactController getContactController() {
+        return contactController;
+    }
+
+    public void setContactController(ContactController contactController) {
+        this.contactController = contactController;
+    }
+    
+    
 }

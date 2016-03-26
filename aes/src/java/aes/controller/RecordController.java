@@ -180,5 +180,12 @@ public class RecordController extends BaseController<Record> {
         this.date = date;
     }
 
+    public UserController getUserController() {
+        return userController;
+    }
 
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    }
+    
 }
