@@ -74,10 +74,14 @@ public class UserController extends BaseController<User> {
                     if (object != null) {
                         String url = (String) object;
                         FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-
                     } else {
                         FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
                     }
+                }else{
+                    Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                    String url = ((HttpServletRequest) request).getRequestURI();
+                    url = url.substring(url.lastIndexOf('/') + 1);
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
                 }
 
                 Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "' logou no sistema.");
