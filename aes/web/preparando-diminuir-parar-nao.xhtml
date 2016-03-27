@@ -7,96 +7,98 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title> #{messages['preparando.diminuir.parar.nao.title.1']}</title>
-        <w:head_comum />
-    </h:head>
+        <h:head>
+            <title> #{messages['preparando.diminuir.parar.nao.title.1']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true" />
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
-
-
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header loginRequired="true" />
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
 
 
-                <div class="pagecontent">
 
 
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['preparando.diminuir.h1.1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['preparando.diminuir.h1.1']}</h1> 
+                            </div>    
 
-                        <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <div id="progressbar">
+                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
                         </div>
 
-                        <div id="pmtext">
-                            <h:panelGrid columns="1"  cellpadding="5">
-                                <p>#{messages['preparando.diminuir.p.1']}</p>
-                                <h4>#{messages['preparando.diminuir.h4.1']}</h4>
-                                <li>#{messages['preparando.diminuir.li.1']}</li>
-                                <li>#{messages['preparando.diminuir.li.2']}</li>
-                                <li>#{messages['preparando.diminuir.li.3']}</li>
-                                <li>#{messages['preparando.diminuir.li.4']}</li>
-                                <li>#{messages['preparando.diminuir.li.5']}</li>
-                                <h4>#{messages['preparando.diminuir.li.6']}</h4>
-                                <p>#{messages['preparando.diminuir.li.7']}</p>
-                            </h:panelGrid>
-                            <h:form> 
-                                <p:panel id="questoes" >
-                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
-                                        <f:facet name="header">  
-                                            #{messages['preparando.diminuir.facet.1']}
-                                        </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}" required="true">  
-                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.yes']}" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.no']}" itemValue="#{false}" /> 
-                                        </p:selectOneRadio> 
-                                    </h:panelGrid>
-                                    <p:messages id="messages" redisplay="true" globalOnly="true" />
 
-                                </p:panel>
-                                <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./preparando-pros-cons-avaliacao.xhtml"></h:button>
-                                </div>
+                        <div id="pagemiddle">
 
+                            <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
 
-                                <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" />
-                                </div>
-                            </h:form>
-                        </div><!-- end pmtext -->  
+                            <div id="pmtext">
+                                <h:panelGrid columns="1"  cellpadding="5">
+                                    <p>#{messages['preparando.diminuir.p.1']}</p>
+                                    <h4>#{messages['preparando.diminuir.h4.1']}</h4>
+                                    <li>#{messages['preparando.diminuir.li.1']}</li>
+                                    <li>#{messages['preparando.diminuir.li.2']}</li>
+                                    <li>#{messages['preparando.diminuir.li.3']}</li>
+                                    <li>#{messages['preparando.diminuir.li.4']}</li>
+                                    <li>#{messages['preparando.diminuir.li.5']}</li>
+                                    <h4>#{messages['preparando.diminuir.li.6']}</h4>
+                                    <p>#{messages['preparando.diminuir.li.7']}</p>
+                                </h:panelGrid>
+                                <h:form> 
+                                    <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
-                    </div><!-- end page middle -->                                             
+                                    <p:panel id="questoes" >
+                                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                            <f:facet name="header">  
+                                                #{messages['preparando.diminuir.facet.1']}
+                                            </f:facet> 
+                                            <p:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}" required="true">  
+                                                <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.yes']}" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.no']}" itemValue="#{false}" /> 
+                                                <f:ajax event="change" render="saveBtn"/>
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
 
-                    <div class="referencias">
-                        <p>#{messages['updated']} </p>
-                    </div>
+                                    </p:panel>
+                                    <div id="btnback">
+                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./preparando-pros-cons-avaliacao.xhtml"></h:button>
+                                    </div>
 
 
+                                    <div id="btnnext">
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" disabled="#{empty evaluationController.evaluation.goBack}"/>
+                                    </div>
+                                </h:form>
+                            </div><!-- end pmtext -->  
 
-                </div>        
-            </div>
+                        </div><!-- end page middle -->                                             
+
+                        <div class="referencias">
+                            <p>#{messages['updated']} </p>
+                        </div>
 
 
-        </div><!-- end.corpo --> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+                    </div>        
+                </div>
+
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>

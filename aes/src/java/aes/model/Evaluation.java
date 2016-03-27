@@ -166,7 +166,10 @@ public class Evaluation implements Serializable {
     public String[] getPlanContent() {
         String content[] = new String[6];
         content[0] = new SimpleDateFormat("dd/MM/yyyy").format(dataComecarPlano);
+        if(razoesPlano != null)
         content[1] = razoesPlano;
+        else
+            content[1]= "";
         content[2] = estrategiasPlano;
         content[3] = pessoasPlano;
         content[4] = sinaisSucessoPlano;

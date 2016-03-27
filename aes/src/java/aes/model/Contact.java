@@ -16,29 +16,29 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "tb_contact")
 public class Contact implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name = "date_sent")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Column(name = "date_sent")
     private Date dateSent;
     @Column(name = "sender")
     private String sender;
     @Column(name = "recipient")
     private String recipient;
-    @Column (name = "subject")
+    @Column(name = "subject")
     private String subject;
-    @Column (name = "sent")
-    private Boolean sent;
-    @Transient
-    private String text;  
-    @Transient
-    private String html;
+    @Column(name = "content")
+    private String content;
+    @Column(name = "attachment")
+    private String attachment;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name = "date_scheduled")
+    private Date dateScheduled;
     @Transient
     ByteArrayOutputStream pdf;
-    @Transient
-    private String pdfName; 
-    
+
     @ManyToOne
     private User user;
 
@@ -57,7 +57,6 @@ public class Contact implements Serializable {
     public void setDateSent(Date dateSent) {
         this.dateSent = dateSent;
     }
-
 
     public String getSender() {
         return sender;
@@ -83,20 +82,36 @@ public class Contact implements Serializable {
         this.subject = subject;
     }
 
-    public String getText() {
-        return text;
+    public User getUser() {
+        return user;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getHtml() {
-        return html;
+    public Date getDateScheduled() {
+        return dateScheduled;
     }
 
-    public void setHtml(String html) {
-        this.html = html;
+    public void setDateScheduled(Date dateScheduled) {
+        this.dateScheduled = dateScheduled;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 
     public ByteArrayOutputStream getPdf() {
@@ -107,28 +122,4 @@ public class Contact implements Serializable {
         this.pdf = pdf;
     }
 
-    public String getPdfName() {
-        return pdfName;
-    }
-
-    public void setPdfName(String pdfName) {
-        this.pdfName = pdfName;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }    
-
-    public Boolean getSent() {
-        return sent;
-    }
-
-    public void setSent(Boolean sent) {
-        this.sent = sent;
-    }
-     
 }

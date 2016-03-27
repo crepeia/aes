@@ -45,8 +45,7 @@ public class EMailSSL {
 
     }
 
-    public void send(String from, String to, String subject, String text, String html, ByteArrayOutputStream pdf, String pdfName) {
-        try {
+    public void send(String from, String to, String subject, String content, ByteArrayOutputStream pdf, String pdfName) throws MessagingException {
             //Message
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
@@ -58,17 +57,10 @@ public class EMailSSL {
             MimeMultipart mainMultipart = new MimeMultipart("related");
             MimeMultipart htmlAndTextMultipart = new MimeMultipart("alternative");
 
-            //Text
-            if (text != null) {
-                MimeBodyPart textBodyPart = new MimeBodyPart();
-                textBodyPart.setText(text);
-                htmlAndTextMultipart.addBodyPart(textBodyPart);
-            }
-
-            //HTML
-            if (html != null) {
+            //CONTENT
+            if (content != null) {
                 MimeBodyPart htmlBodyPart = new MimeBodyPart();
-                htmlBodyPart.setContent(html, "text/html");
+                htmlBodyPart.setContent(content, "text/html");
                 htmlAndTextMultipart.addBodyPart(htmlBodyPart);
             }
 
@@ -90,9 +82,6 @@ public class EMailSSL {
 
             Transport.send(message);
 
-        } catch (MessagingException ex) {
-            Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
        
 }

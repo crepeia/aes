@@ -6,10 +6,16 @@ import aes.persistence.GenericDAO;
 import aes.utility.PDFGenerator;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -21,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.inputtext.InputText;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -60,7 +67,8 @@ public class EvaluationController extends BaseController<Evaluation> {
                             evaluation = e;
                         }
                     }
-                } else {
+                }
+                if (evaluation == null) {
                     evaluation = new Evaluation();
                     evaluation.setDateCreated(new Date());
                     evaluation.setUser(getUser());
@@ -141,8 +149,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             saveURL();
             return "preparando-diminuir-ou-parar.xhtml?faces-redirect=true";
         } else {
-            ((CommandButton) getComponent("saveBtn")).setDisabled(true);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Você será contactado dentro de um ano.", null));
+            annualScreening();
             return "";
         }
     }
@@ -168,15 +175,62 @@ public class EvaluationController extends BaseController<Evaluation> {
         return "plano-mudanca.xhtml?faces-redirect=true";
     }
 
-    public void sendPlan() {
-        contactController.sendPlanEmail(getUser(), getEvaluation().getPlanContent());
-        FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Plano enviado."));
+    public void annualScreening() {
+        contactController.clearScheduledEmails(getUserController().getUser());
+        contactController.scheduleAnnualScreeningEmail(getUserController().getUser());
+        ((CommandButton) getComponent("saveBtn")).setDisabled(true);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Parabéns por completar sua avaliação. Entraremos em contato dentro de um ano.", null));
+        if (!userController.isLoggedIn()) {
+            ((InputText) getComponent("email")).setDisabled(true);
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        }
     }
 
-    public StreamedContent getPlanPdf() {
-        ByteArrayOutputStream pdf = (new PDFGenerator()).generatePDF(contactController.getHTMLPlan(getEvaluation().getPlanContent(), getUser().getPreferedLanguage()));
+    public void savePlan() {
+        save();
+        contactController.clearScheduledEmails(getUser());
+        contactController.scheduleWeeklyEmail(getUser());
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Parabéns por completar sua avaliação. Você pode imprimir seu plano ou podemos enviá-lo via email.", null));
+    }
+
+    public void sendPlan() {
+        contactController.sendPlanEmail(getUser(), "meuplano.pdf", getPlanPDF());
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Plano enviado.", null));
+    }
+
+    public StreamedContent printPlan() {
+        ByteArrayOutputStream pdf = getPlanPDF();
         return new DefaultStreamedContent(new ByteArrayInputStream(pdf.toByteArray()),
                 "application/pdf", "meuplano.pdf");
+    }
+
+    public ByteArrayOutputStream getPlanPDF() {
+        try {
+            InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/plan-template.html");
+            byte[] buffer = new byte[102400];
+            String template = new String(buffer, 0, input.read(buffer), StandardCharsets.UTF_8);
+
+            ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
+            String subtitle[] = new String[6];
+            String title = bundle.getString("plan0");
+            subtitle[0] = bundle.getString("plan1");
+            subtitle[1] = bundle.getString("plan2");
+            subtitle[2] = bundle.getString("plan3");
+            subtitle[3] = bundle.getString("plan4");
+            subtitle[4] = bundle.getString("plan5");
+            subtitle[5] = bundle.getString("plan6");
+            template = template.replace("#title#", title);
+            for (int i = 0; i < 6; i++) {
+                template = template.replace("#subtitle" + (i + 1) + "#", subtitle[i]);
+                template = template.replace("#content" + (i + 1) + "#", getEvaluation().getPlanContent()[i]);
+            }
+
+            PDFGenerator pdfGenerator = new PDFGenerator();
+            return pdfGenerator.generatePDF(template);
+        } catch (IOException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public String getURL() {
@@ -213,6 +267,5 @@ public class EvaluationController extends BaseController<Evaluation> {
     public void setContactController(ContactController contactController) {
         this.contactController = contactController;
     }
-    
-    
+
 }

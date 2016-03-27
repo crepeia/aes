@@ -26,5 +26,10 @@ public class Scheduler {
        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "Scheduled task running");
 
     }
+    
+    //@Schedule(second = "0", minute = "0", hour = "0", dayOfWeek = "*")
+    public void sendEmails(){
+        contactController.sendScheduledEmails();
+    }
 
 }

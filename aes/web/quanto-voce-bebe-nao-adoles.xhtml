@@ -88,10 +88,9 @@
                                     <p:watermark for="email" value="#{messages['email']}" />
                                     <p:message for="email" />
                                 </h:panelGrid>
-                                <p:messages id="messages" showDetail="true" autoUpdate="true" />
 
                                 <div id="btnback">
-                                    <p:commandButton id="sendButton" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.yearEmail()}"/>
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}"/>
                                 </div>
                                 
                             </h:form>

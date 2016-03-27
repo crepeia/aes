@@ -77,7 +77,7 @@
 
                                                            
                                 <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                    <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" >
+                                    <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
                                         <!--<p:ajax update="loginMsg" event="blur" />-->
                                         <f:validateLength maximum="50" />
                                         <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
@@ -85,11 +85,10 @@
                                     <p:watermark for="email" value="#{messages['email']}" />
                                     <p:message for="email" />
                                 </h:panelGrid>
-                                <p:messages id="messages" showDetail="true" autoUpdate="true" />
-
                                 <div id="btnback">
-                                    <p:commandButton id="sendButton" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.yearEmail()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
                                 </div>
+                                
                                 
                             </h:form>
                             

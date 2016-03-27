@@ -69,6 +69,7 @@
 
 
                                 <h:form id="form" class="form-signup">
+                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
                                     <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
                                         <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" disabled="true">
@@ -79,11 +80,10 @@
                                         <p:watermark for="email" value="E-mail" />
                                         <p:message for="email"/>
                                     </h:panelGrid>
-                                    <p:messages id="messages" redisplay="true" globalOnly="true" />
 
 
                                     <div id="btnback">
-                                        <p:commandButton id="sendButton" styleClass="btngen" value ="Enviar" update="@form" actionListener="#{userController.annualScreening()}" />
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.annualScreening()}" />
                                     </div>
                                 </h:form>
 

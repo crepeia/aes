@@ -26,6 +26,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
+import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.inputtext.InputText;
 
 /**
  *
@@ -38,15 +40,15 @@ public class UserController extends BaseController<User> {
     private User user;
     private boolean loggedIn;
     private String password;
-    ResourceBundle bundle;
+    private ResourceBundle bundle;
 
     @ManagedProperty(value = "#{contactController}")
     private ContactController contactController;
-    
+
     private String email;
     private Integer recoverCode;
     private String passwordd;
-    
+
     @PostConstruct
     public void init() {
         try {
@@ -104,18 +106,20 @@ public class UserController extends BaseController<User> {
     }
 
     public void signOut() {
-        String email = user.getEmail();
-        user = null;
-        loggedIn = false;
-        password = null;
         try {
+            Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'saiu do sistema.");
+            user = null;
+            loggedIn = false;
+            password = null;
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-            Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + email + "'saiu no sistema.");
-
+            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");           
         } catch (IOException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void clearSession(){
+    
     }
 
     public void signUp() {
@@ -126,10 +130,11 @@ public class UserController extends BaseController<User> {
             } else {
                 user.setPassword(Encrypter.encrypt(password));
                 user.setSignUpDate(new Date());
+                user.setPreferedLanguage(FacesContext.getCurrentInstance().getExternalContext().getRequestLocale().getLanguage());
                 save();
                 contactController.sendSignUpEmail(user);
-                Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'cadastrou no sistema.");
                 signIn(true);
+                Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'cadastrou no sistema.");
             }
 
         } catch (InvalidKeyException ex) {
@@ -166,20 +171,18 @@ public class UserController extends BaseController<User> {
     public void recoverPassword() {
         contactController.sendPasswordRecoveryEmail(user.getEmail(), generateCode());
     }
-    
-    /*public void annualScreening() {
-            
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.YEAR, 1);
-            user.getFollowUp().setAnnualScreening(cal.getTime());
+
+    public void annualScreening() {                     
             save();
+            contactController.scheduleAnnualScreeningEmail(user);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Você será contactado em breve.", null));
             ((InputText) getComponent("email")).setDisabled(true);
             ((CommandButton) getComponent("sendButton")).setDisabled(true);
-            if (!loggedIn) {
-                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-            }
-    }*/
+            user = null;
+            loggedIn = false;
+            password = null;
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+    }
     
     public String checkCode() {
         try {
@@ -214,8 +217,7 @@ public class UserController extends BaseController<User> {
             } else {
                 return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
             }
-        }
-        else{
+        } else {
             return "cadastrar-nova-conta.xhtml?faces-redirect=true";
         }
     }
@@ -285,7 +287,7 @@ public class UserController extends BaseController<User> {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public Integer getRecoverCode() {
         return recoverCode;
     }
@@ -293,7 +295,7 @@ public class UserController extends BaseController<User> {
     public void setRecoverCode(Integer recoverCode) {
         this.recoverCode = recoverCode;
     }
-    
+
     public String getPasswordd() {
         return passwordd;
     }
