@@ -43,6 +43,8 @@ public class EvaluationController extends BaseController<Evaluation> {
     private UserController userController;
     @ManagedProperty(value = "#{contactController}")
     private ContactController contactController;
+    @ManagedProperty(value = "#{pageNavigationController}")
+    private PageNavigationController pageNavigationController;
 
     @PostConstruct
     public void init() {
@@ -189,7 +191,19 @@ public class EvaluationController extends BaseController<Evaluation> {
     public void savePlan() {
         save();
         contactController.clearScheduledEmails(getUser());
-        contactController.scheduleWeeklyEmail(getUser());
+        contactController.scheduleDiaryReminderEmail(getUser(), getEvaluation().getDataComecarPlano());
+        contactController.scheduleWeeklyEmail(getUser(), getEvaluation().getDataComecarPlano());
+        if (getEvaluation().getQuit()) {
+            contactController.scheduleKeepingResultQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
+            if (!pageNavigationController.visitedQuitPages(3)) {
+                contactController.schedulePersistChallengesQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
+            }
+        } else {
+            contactController.scheduleKeepingResultReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
+            if (!pageNavigationController.visitedCutDownPages(1)) {
+                contactController.schedulePersistChallengesReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
+            }
+        }
         FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Parabéns por completar sua avaliação. Você pode imprimir seu plano ou podemos enviá-lo via email.", null));
     }
 

@@ -77,7 +77,7 @@ public class UserController extends BaseController<User> {
                     } else {
                         FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
                     }
-                }else{
+                } else {
                     Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
                     String url = ((HttpServletRequest) request).getRequestURI();
                     url = url.substring(url.lastIndexOf('/') + 1);
@@ -116,14 +116,14 @@ public class UserController extends BaseController<User> {
             loggedIn = false;
             password = null;
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");           
+            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void clearSession(){
-    
+
+    public void clearSession() {
+
     }
 
     public void signUp() {
@@ -173,36 +173,52 @@ public class UserController extends BaseController<User> {
     }
 
     public void recoverPassword() {
-        contactController.sendPasswordRecoveryEmail(user.getEmail(), generateCode());
-    }
-
-    public void annualScreening() {                     
-            save();
-            contactController.scheduleAnnualScreeningEmail(user);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Você será contactado em breve.", null));
-            ((InputText) getComponent("email")).setDisabled(true);
-            ((CommandButton) getComponent("sendButton")).setDisabled(true);
-            user = null;
-            loggedIn = false;
-            password = null;
-            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-    }
-    
-    public String checkCode() {
         try {
-            String message;
-            List<User> userList = this.getDaoBase().list("email", this.email, this.getEntityManager());
-            if (!userList.isEmpty() && userList.get(0).getRecoverCode() != null && userList.get(0).getRecoverCode().equals(recoverCode) && recoverCode != 0) {
-                return "esqueceu-sua-senha-concluir.xhtml";
+            List<User> userList = daoBase.list("email", user.getEmail(), this.getEntityManager());
+            if (userList.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email não registrado", null));
             } else {
-                message = "email.code.incorrect";
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
-                return "";
+                User foundUser = userList.get(0);
+                foundUser.setRecoverCode(generateCode());
+                daoBase.insertOrUpdate(foundUser, getEntityManager());
+                contactController.sendPasswordRecoveryEmail(foundUser);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Você receberá um email com as instruções.", null));
             }
         } catch (SQLException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "problemas.gravar.usuario", null));
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            return "";
+        }
+
+    }
+
+    public void checkCode() {
+        try {
+            List<User> userList = this.getDaoBase().list("email", user.getEmail(), this.getEntityManager());
+            if (!userList.isEmpty()) {
+                User foundUser = userList.get(0);
+                if (foundUser.getRecoverCode() != null && user.getRecoverCode().equals(foundUser.getRecoverCode())) {
+                    foundUser.setPassword(Encrypter.encrypt(password));
+                    password = null;
+                    foundUser.setRecoverCode(null);
+                    daoBase.insertOrUpdate(foundUser, getEntityManager());
+                    FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, "Senha redefinida com sucesso.", null));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código de recuperação inválido.", null));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email não cadastrado.", null));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

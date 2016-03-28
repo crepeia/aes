@@ -20,9 +20,7 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
-import javax.faces.context.FacesContext;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 
@@ -46,45 +44,14 @@ public class ContactController extends BaseController implements Serializable {
         }
     }
 
-    public void sendPasswordRecoveryEmail(String email, int code) {
-
-        try {
-            List<User> userList = userDAO.list("email", email, this.getEntityManager());
-
-            if (userList.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "user.not.registered.password", null));
-            } else {
-                User user = userList.get(0);
-                String name_user = userList.get(0).getName();
-                String email_user = userList.get(0).getEmail();
-
-                Contact contact = new Contact();
-                contact.setSender("alcoolesaude@gmail.com");
-                contact.setSubject("subject.email.password");
-                contact.setRecipient(email);
-                contact.setContent("hello" + " " + name_user + "," + "<br>"
-                        + "<br>"
-                        + "email.password.send" + email_user + "email.password.send.2" + " <br>"
-                        + "<br>"
-                        + "email.password.send.3" + "<br>"
-                        + "email.password.send.4" + code + "\n"
-                        + "email.password.send.5" + "http://www.aes.com.br/esqueceu-sua-senha.xhtml" + "<br><br>"
-                        + "cordialmente"
-                        + "<br>"
-                        + "equipe.aes"
-                        + "<br>");
-
-                contact.setDateSent(new Date());
-                sendEmail(contact);
-
-                user.setRecoverCode(code);
-                userDAO.insertOrUpdate(user, getEntityManager());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "email.sent.password", null));
-                Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Password recovery email  sent to:" + user.getEmail());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void sendPasswordRecoveryEmail(User user) {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient(user.getEmail());
+        contact.setSubject("passwordrecovery_subj");
+        contact.setContent("passwordrecovery");
+        sendEmail(contact);
     }
 
     public void sendPlanEmail(User user, String attachment, ByteArrayOutputStream pdf) {
@@ -109,18 +76,96 @@ public class ContactController extends BaseController implements Serializable {
         sendEmail(contact);
     }
 
-    public void scheduleWeeklyEmail(User user) {
+    public void scheduleDiaryReminderEmail(User user, Date date) {
         Contact contact;
-        int weeks[] = {1, 2, 3, 4, 8, 12, 36, 48};
+        int weeks[] = {2, 3, 4};
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
             contact.setSender("alcoolesaude@gmail.com");
             contact.setRecipient(user.getEmail());
-            contact.setSubject("week_" + week + "_subj");
-            contact.setContent("week_" + week);
+            contact.setSubject("email.msg.subject.diary_started_subj");
+            contact.setContent("email.msg.subject.diary_started");
             Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
+            cal.add(Calendar.DATE, 1);
+            contact.setDateScheduled(cal.getTime());
+            save(contact);
+        }
+    }
+
+    public void schedulePersistChallengesReduceEmail(User user, Date date) {
+        Contact contact;
+        int weeks[] = {2, 3, 4};
+        for (int week : weeks) {
+            contact = new Contact();
+            contact.setUser(user);
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setRecipient(user.getEmail());
+            contact.setSubject("progress_persistchallenges_reduce_subj");
+            contact.setContent("progress_persistchallenges_reduce");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, 7 * week);
+            cal.add(Calendar.DATE, 3);
+            contact.setDateScheduled(cal.getTime());
+            save(contact);
+        }
+    }
+
+    public void schedulePersistChallengesQuitEmail(User user, Date date) {
+        Contact contact;
+        int weeks[] = {2, 3, 4};
+        for (int week : weeks) {
+            contact = new Contact();
+            contact.setUser(user);
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setRecipient(user.getEmail());
+            contact.setSubject("progress_persistchallenges_quit_subj");
+            contact.setContent("progress_persistchallenges_quit");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, 7 * week);
+            cal.add(Calendar.DATE, 3);
+            contact.setDateScheduled(cal.getTime());
+            save(contact);
+        }
+    }
+
+    public void scheduleKeepingResultQuitEmail(User user, Date date) {
+        Contact contact;
+        int weeks[] = {2, 3, 4};
+        for (int week : weeks) {
+            contact = new Contact();
+            contact.setUser(user);
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setRecipient(user.getEmail());
+            contact.setSubject("progress_keepingresult_quit_subj");
+            contact.setContent("progress_keepingresult_quit");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, 7 * week);
+            cal.add(Calendar.DATE, 3);
+            contact.setDateScheduled(cal.getTime());
+            save(contact);
+        }
+    }
+
+    public void scheduleKeepingResultReduceEmail(User user, Date date) {
+        Contact contact;
+        int weeks[] = {2, 3, 4};
+        for (int week : weeks) {
+            contact = new Contact();
+            contact.setUser(user);
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setRecipient(user.getEmail());
+            contact.setSubject("progress_keepingresult_reduce_subj");
+            contact.setContent("progress_keepingresult_reduce");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, 7 * week);
+            cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
             save(contact);
         }
@@ -141,6 +186,41 @@ public class ContactController extends BaseController implements Serializable {
 
     }
 
+    public void scheduleWeeklyEmail(User user, Date date) {
+        Contact contact;
+        int weeks[] = {1, 2, 3, 4, 8, 12, 36, 48};
+        for (int week : weeks) {
+            contact = new Contact();
+            contact.setUser(user);
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setRecipient(user.getEmail());
+            contact.setSubject("week_" + week + "_subj");
+            contact.setContent("week_" + week);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, 7 * week);
+            contact.setDateScheduled(cal.getTime());
+            save(contact);
+        }
+    }
+
+    public void clearScheduledKeepingResultEmails(User user) {
+        try {
+            if (user.getRecord() != null) {
+                List<Contact> contacts = daoBase.list("user", user, getEntityManager());
+                for (Contact contact : contacts) {
+                    if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("progress_keepingresult")) {
+                        daoBase.delete(contact, getEntityManager());
+
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ContactController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void clearScheduledEmails(User user) {
         try {
             List<Contact> contacts = daoBase.list("user", user, getEntityManager());
@@ -155,13 +235,14 @@ public class ContactController extends BaseController implements Serializable {
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void sendScheduledEmails() {
         try {
             List<Contact> contacts = daoBase.list(getEntityManager());
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null) {
                     sendEmail(contact);
+
                 }
             }
         } catch (SQLException ex) {
@@ -169,8 +250,6 @@ public class ContactController extends BaseController implements Serializable {
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
 
     private void sendEmail(Contact contact) {
         try {
@@ -179,7 +258,10 @@ public class ContactController extends BaseController implements Serializable {
             eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());
             contact.setDateSent(new Date());
             save(contact);
-            Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getUser().getEmail());
+            Logger
+                    .getLogger(ContactController.class
+                            .getName()).log(Level.INFO, "Email enviado para:" + contact.getUser().getEmail());
+
         } catch (MessagingException ex) {
             Logger.getLogger(ContactController.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -189,6 +271,7 @@ public class ContactController extends BaseController implements Serializable {
     private void save(Contact contact) {
         try {
             daoBase.insertOrUpdate(contact, getEntityManager());
+
         } catch (SQLException ex) {
             Logger.getLogger(ContactController.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -217,7 +300,9 @@ public class ContactController extends BaseController implements Serializable {
                 bundle.getString("title.1") + "<br>"
                 + bundle.getString("crepeia") + "<br>"
                 + bundle.getString("ufjf"));
-
+        htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
+        htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
+        htmlMessage = htmlMessage.replace("#code#", String.valueOf(contact.getUser().getRecoverCode()));
         return htmlMessage;
     }
 

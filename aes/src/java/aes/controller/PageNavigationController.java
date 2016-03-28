@@ -5,6 +5,7 @@ import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -54,7 +55,7 @@ public class PageNavigationController extends BaseController<PageNavigation> {
     public User getUser() {
         if (userController.isLoggedIn()) {
             return userController.getUser();
-        }else{
+        } else {
             return null;
         }
     }
@@ -73,7 +74,63 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         String url = ((HttpServletRequest) request).getRequestURI();
         url = url.substring(url.lastIndexOf('/') + 1);
         return url;
+    }
+    
+    public boolean visitedQuitPages(int numPages){
+       String pages[] = {"estrategia-parar-apoio-intro","estrategia-parar-apoio-profissiona",
+           "estrategia-parar-apoio-social","estrategia-parar-apoio-social-aa", 
+           "estrategia-parar-apoio-social-outros", "estrategia-parar-apoio-profissional-terapia",
+           "estrategia-parar-apoio-depressao-e-ansiedade"};
+       int count = 0;
+       for(String page : pages){
+          if(checkAccess(page)){
+              count++;
+          }
+          if(count == numPages){
+              return true;
+          }
+       }
+       return false;
+    }
+    
+    public boolean visitedCutDownPages(int numPages){
+       String pages[] = {"estrategia-parar-apoio-intro","estrategia-parar-apoio-profissiona",
+           "estrategia-parar-apoio-social","estrategia-parar-apoio-social-aa", 
+           "estrategia-parar-apoio-social-outros", "estrategia-parar-apoio-profissional-terapia",
+           "estrategia-parar-apoio-depressao-e-ansiedade"};
+       int count = 0;
+       for(String page : pages){
+          if(checkAccess(page)){
+              count++;
+          }
+          if(count == numPages){
+              return true;
+          }
+       }
+       return false;
+    }
 
+    public boolean checkAccess(String page) {
+        try {
+            List<PageNavigation> list = daoBase.list("user", userController.getUser(), getEntityManager());
+            for (PageNavigation pg : list) {
+                if (pg.getUrl().contains(page)) {
+                    return true;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public boolean checkAccess(String[] pages) {
+        for (String page : pages) {
+            if(checkAccess(page)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public UserController getUserController() {
@@ -83,6 +140,5 @@ public class PageNavigationController extends BaseController<PageNavigation> {
     public void setUserController(UserController userController) {
         this.userController = userController;
     }
-   
 
 }

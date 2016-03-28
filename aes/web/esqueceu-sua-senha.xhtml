@@ -12,50 +12,64 @@
         </h:head>
 
         <h:body>
-            <!-- header -->     
-            <w:topmenu />
-            
-            <div class="main">
-                <div class="pagecontent">
-                    <div id="signin">
-                        <h3 class="headertop orange-text text-lighten-2">#{messages['i.forgot.password']}</h3>
-                        <p>#{messages['p.send.email']}</p>
-                        
-                        <h:form class="form-signup">
+            <div id="corpo"> 
+                <w:header logoutRequired="true"  />
+                <w:topmenu />
 
-                            <div class="signuptext">
-                                <p:inputText id="emailTxt" value="#{userController.email}" required="true" size="30" label="#{messages['enter.email']}" styleClass="validate" type="email" >
-                                    <f:validateLength maximum="50" />
-                                </p:inputText>
-                                <label for="emailTxt"  data-error="wrong" data-success="right">#{messages['email']}</label>
-                                <p:watermark for="emailTxt" value="#{messages['enter.email']}" />
-                            </div>
+                <div class="main">                    
+                    <div class="pagecontent">
 
-                            <div class="signuptext">
-                                <p:inputText id="codeTxt" value="#{userController.recoverCode}" required="true" size="30" label="#{messages['enter.code']}">
-                                    <f:validateLength maximum="50"/>
-                                </p:inputText>
-                                <label for="codeTxt"  data-error="wrong" data-success="right">#{messages['enter.code']}</label>
-                                <p:watermark for="codeTxt" value="#{messages['enter.code']}"/>
-                            </div>
+                        <div id="signin">
+                            <h3 class="headertop orange-text text-lighten-2">#{messages['i.forgot.password']}</h3>
 
-                            <br />
-                            <div id="signipbottom">
+                            <h:form class="form-signup">
+                                <p:growl id="errorGrowl" for="info" sticky="true" redisplay="true" globalOnly="true"/>
+                                <div class="signuptext">
+                                    <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" styleClass="validate" type="email" >
+                                        <f:validateLength maximum="50" />
+                                    </p:inputText>
+                                    <p:watermark for="emailTxt" value="#{messages['email']}" />
+                                    <p:message for="emailTxt" />
+                                </div>
+
+                                <div class="signuptext">
+                                    <p:inputText id="codeTxt" value="#{userController.user.recoverCode}" required="true" size="30" label="#{messages['code']}">
+                                        <f:validateLength maximum="50"/>
+                                    </p:inputText>
+                                    <p:watermark for="codeTxt" value="#{messages['code']}"/>
+                                    <p:message for="codeTxt" />
+                                </div>
+                                <div class="signuptext">
+                                    <p:password id="passwordTxt" value="#{userController.password}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="#{messages['password.new']}">  
+                                        <f:validateLength maximum="16" />
+                                        <!--<p:ajax update="passwordMsg" event="blur" />-->
+                                    </p:password>
+                                    <p:watermark for="passwordTxt" value="#{messages['password.new']}" />
+                                    <p:message for="passwordTxt" />
+                                </div>
+                                <div class="signuptext">
+                                    <p:password id="confirmPasswordTxt" value="#{userController.password}" required="true" redisplay="true" label="#{messages['password.new.repeat']}">  
+                                        <f:validateLength maximum="16" />
+                                        <!--<p:ajax update="passwordMsg" event="blur" />-->
+                                    </p:password>
+                                    <p:watermark for="confirmPasswordTxt" value="#{messages['password.new.repeat']}" />
+                                </div>
+                                <p:messages for="error" autoUpdate="true"  redisplay="false"/>
+          
+                                <div id="signipbottom">
                                     <div id="signinsubmit">
                                         <div id="signinbtn" >
-                                <p:commandButton id="nexttBtn" styleClass="btn waves-effect waves-light" value="#{messages['next']}" update="@form" action="#{userController.checkCode()}" ajax="false"/> 
+                                            <p:commandButton id="nexttBtn" styleClass="btn waves-effect waves-light" value="#{messages['save']}" update="@form" action="#{userController.checkCode()}"/> 
                                         </div>
                                     </div>
-                            </div>
-                            
- 
-                        </h:form>
-                        
+                                </div>
+
+
+                            </h:form>
+                        </div>
                     </div>
                 </div>
             </div>
-          
-
             <w:footer />
         </h:body>
     </f:view>
