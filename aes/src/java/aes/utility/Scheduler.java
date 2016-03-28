@@ -29,6 +29,7 @@ public class Scheduler {
     
     //@Schedule(second = "0", minute = "0", hour = "0", dayOfWeek = "*")
     public void sendEmails(){
+        contactController.clearScheduledKeepingResultEmails();
         contactController.sendScheduledEmails();
     }
 

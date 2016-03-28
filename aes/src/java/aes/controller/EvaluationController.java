@@ -95,6 +95,24 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
 
+    public String preEvaluation() {
+        if(getUser().getDrink() == null){
+            return "cadastrar-nova-conta.xhtml?faces-redirect=true";
+        }else if (getUser().getPregnant() && !getUser().getDrink()) {
+            return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
+        } else if (getUser().getPregnant() && getUser().getDrink()) {
+            return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
+        } else if (getUser().isUnderage() && !getUser().getDrink()) {
+            return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
+        } else if (getUser().isUnderage() && getUser().getDrink()) {
+            return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
+        } else if (!getUser().getDrink()) {
+            return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
+        } else {
+            return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
+        }
+    }
+
     public String audit3() {
         int age = getUser().getAge();
         int drinkingDays = getEvaluation().getDrinkingDays();

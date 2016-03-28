@@ -204,14 +204,13 @@ public class ContactController extends BaseController implements Serializable {
         }
     }
 
-    public void clearScheduledKeepingResultEmails(User user) {
+    public void clearScheduledKeepingResultEmails() {
         try {
-            if (user.getRecord() != null) {
-                List<Contact> contacts = daoBase.list("user", user, getEntityManager());
-                for (Contact contact : contacts) {
-                    if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("progress_keepingresult")) {
+            List<Contact> contacts = daoBase.list(getEntityManager());
+            for (Contact contact : contacts) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("progress_keepingresult")) {             
+                    if (contact.getUser().getRecord() != null) {
                         daoBase.delete(contact, getEntityManager());
-
                     }
                 }
             }
