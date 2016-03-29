@@ -62,11 +62,12 @@ public class EvaluationController extends BaseController<Evaluation> {
                 if (!evaluations.isEmpty()) {
                     Calendar limit = Calendar.getInstance();
                     limit.add(Calendar.DATE, EvaluationController.DAYS_LIMIT);
-                    Calendar evaluationDate = Calendar.getInstance();
+                    Calendar eDate = Calendar.getInstance();
                     for (Evaluation e : evaluations) {
-                        evaluationDate.setTime(e.getDateCreated());
-                        if (evaluationDate.after(limit)) {
+                        eDate.setTime(e.getDateCreated());
+                        if (eDate.after(limit)) {
                             evaluation = e;
+                            limit.setTime(evaluation.getDateCreated());                   
                         }
                     }
                 }
@@ -97,18 +98,25 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public String preEvaluation() {
         if(getUser().getDrink() == null){
+            System.out.println("1");
             return "cadastrar-nova-conta.xhtml?faces-redirect=true";
         }else if (getUser().getPregnant() && !getUser().getDrink()) {
+            System.out.println("2");
             return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
         } else if (getUser().getPregnant() && getUser().getDrink()) {
+            System.out.println("3");
             return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
         } else if (getUser().isUnderage() && !getUser().getDrink()) {
+            System.out.println("4");
             return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
         } else if (getUser().isUnderage() && getUser().getDrink()) {
+            System.out.println("5");
             return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
         } else if (!getUser().getDrink()) {
+            System.out.println("6");
             return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
         } else {
+            System.out.println("7");
             return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
         }
     }
