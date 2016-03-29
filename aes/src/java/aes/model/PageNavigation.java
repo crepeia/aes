@@ -24,9 +24,15 @@ public class PageNavigation implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date timeStamp;
     @Column(name = "url")
-    private String url;
+    private String url;  
+    @Column(name = "referer")
+    private String referer;
+    @Column (name = "campaign")
+    private String campaign;
     @ManyToOne
     private User user;
+    @ManyToOne
+    private UserAgent userAgent;
 
     public long getId() {
         return id;
@@ -67,6 +73,32 @@ public class PageNavigation implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getReferer() {
+        return referer;
+    }
+    
+    public void setReferer(String referer) {
+        this.referer = referer;
+    }
+
+    public String getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(String campaign) {
+        this.campaign = campaign;
+    }
+
+    public UserAgent getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(UserAgent userAgent) {
+        this.userAgent = userAgent;
+    }
+    
+    
 
 }
 

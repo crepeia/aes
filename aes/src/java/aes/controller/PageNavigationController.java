@@ -2,6 +2,7 @@ package aes.controller;
 
 import aes.model.PageNavigation;
 import aes.model.User;
+import aes.model.UserAgent;
 import aes.persistence.GenericDAO;
 import java.sql.SQLException;
 import java.util.Date;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PageNavigationController extends BaseController<PageNavigation> {
 
     private PageNavigation pageNavigation;
+    private GenericDAO<UserAgent> userAgentDAO;
 
     @ManagedProperty(value = "#{userController}")
     private UserController userController;
@@ -33,23 +35,22 @@ public class PageNavigationController extends BaseController<PageNavigation> {
     public void init() {
         try {
             this.daoBase = new GenericDAO<PageNavigation>(PageNavigation.class);
+            this.userAgentDAO = new GenericDAO<UserAgent>( UserAgent.class );
         } catch (NamingException ex) {
             Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public String saveNavigation() {
+    public void saveNavigation() {
         pageNavigation = new PageNavigation();
         pageNavigation.setIp(getIpAdress());
         pageNavigation.setTimeStamp(new Date());
         pageNavigation.setUrl(getURL());
         pageNavigation.setUser(getUser());
-        try {
-            this.daoBase.insert(pageNavigation, this.getEntityManager());
-        } catch (SQLException ex) {
-            Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
+        pageNavigation.setCampaign(this.getCampaign());
+        pageNavigation.setReferer(this.getReferer());
+        pageNavigation.setUserAgent(this.getUserAgent());
+        save();     
     }
 
     public User getUser() {
@@ -57,6 +58,14 @@ public class PageNavigationController extends BaseController<PageNavigation> {
             return userController.getUser();
         } else {
             return null;
+        }
+    }
+    
+    public void save(){
+         try {
+            daoBase.insert(pageNavigation, this.getEntityManager());
+        } catch (SQLException ex) {
+            Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -74,6 +83,34 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         String url = ((HttpServletRequest) request).getRequestURI();
         url = url.substring(url.lastIndexOf('/') + 1);
         return url;
+    }
+    
+    public String getReferer(){
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return request.getHeader("referer");
+    }
+    
+    
+    public String getCampaign(){
+        return FacesContext.getCurrentInstance().getExternalContext().
+                getRequestParameterMap().get("id");
+    }
+    
+      private UserAgent getUserAgent() {
+        try {
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String description = ((HttpServletRequest) request).getHeader("user-agent");
+            List<UserAgent> uaList = this.userAgentDAO.list("description", description, this.getEntityManager());
+            if (uaList.isEmpty()) {
+                UserAgent ua = new UserAgent();
+                ua.setDescription(description);
+                this.userAgentDAO.insert(ua, this.getEntityManager());
+                return ua;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;       
     }
     
     public boolean visitedQuitPages(int numPages){

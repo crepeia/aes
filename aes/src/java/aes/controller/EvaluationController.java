@@ -300,4 +300,12 @@ public class EvaluationController extends BaseController<Evaluation> {
         this.contactController = contactController;
     }
 
+    public PageNavigationController getPageNavigationController() {
+        return pageNavigationController;
+    }
+
+    public void setPageNavigationController(PageNavigationController pageNavigationController) {
+        this.pageNavigationController = pageNavigationController;
+    }
+
 }
