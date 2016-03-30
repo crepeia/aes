@@ -98,25 +98,18 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public String preEvaluation() {
         if(getUser().getDrink() == null){
-            System.out.println("1");
             return "cadastrar-nova-conta.xhtml?faces-redirect=true";
         }else if (getUser().getPregnant() && !getUser().getDrink()) {
-            System.out.println("2");
             return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
         } else if (getUser().getPregnant() && getUser().getDrink()) {
-            System.out.println("3");
             return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
         } else if (getUser().isUnderage() && !getUser().getDrink()) {
-            System.out.println("4");
             return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
         } else if (getUser().isUnderage() && getUser().getDrink()) {
-            System.out.println("5");
             return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
         } else if (!getUser().getDrink()) {
-            System.out.println("6");
             return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
         } else {
-            System.out.println("7");
             return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
         }
     }

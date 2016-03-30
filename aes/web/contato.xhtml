@@ -6,65 +6,65 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['contato.title']}</title>
-        <w:head_comum />
-    </h:head>
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header />
-            <w:topmenu />
+        <h:head>
+            <title>#{messages['contato.title']}</title>
+            <w:head_comum />
+        </h:head>
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header />
+                <w:topmenu />
 
-            <!--mainmenu-->         	
-            <div class="main">
+                <!--mainmenu-->         	
+                <div class="main">
 
-                <div class="pagecontent">                 
-                    <h1>#{messages['contact']}</h1>
-                    <div id="contato">
-                        <h4>#{messages['contato.h4.1']}</h4>
-                        <h4>#{messages['contato.h4.2']}</h4>
-                        <h4>#{messages['contato.h4.3']}</h4>
-                      
-                        <h:form id="form" class="form-signup">
-                            <p:panelGrid columns="1">
-                                <p:panel>
-                                    <h4>#{messages['contato.h4.4']}</h4>
-                                    <p:inputText id="sendEmail" value="#{contactController.contact.sender}" required="true" label="#{messages['email']}"></p:inputText>
-                                    <p:watermark for="sendEmail" value="E-mail" />
-                                    <h4>#{messages['h4.message']}</h4>
-                                    <p:inputTextarea rows="4" cols="60" autoResize="false" value="#{contactController.contact.text}" required="true" label="#{messages['h4.message']}" />
-                                    <div id="signinbtn"><p:commandButton styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{contactController.contactFormSend()}" /></div>
-                                </p:panel>
-                                <p:panel>
-                                    <p:messages id="messages" showDetail="false" autoUpdate="true"/> 
+                    <div class="pagecontent">                 
+                        <h1>#{messages['contact']}</h1>
+                        <div id="contato">
+                            <h4>#{messages['contato.h4.1']}</h4>
+                            <h4>#{messages['contato.h4.2']}</h4>
+                            <h4>#{messages['contato.h4.3']}</h4>
 
-                                    <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;"  >
-                                        <f:facet name="default">
+                            <h:form id="form" class="form-signup">
+                                <p:growl id="errorGrowl" for="info" sticky="true" redisplay="true" globalOnly="true"/>
 
-                                        </f:facet>
+                                <p:panelGrid columns="1">
+                                    <p:panel>
+                                        <h4>#{messages['contato.h4.4']}</h4>
+                                        <p:inputText id="email" required="true" value="#{userController.user.email}" binding="#{email}" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                            <f:validateLength maximum="50" />
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <p:watermark for="email" value="E-mail" />
+                                        <p:message for="email"/>
+                                        <h4>#{messages['h4.message']}</h4>
+                                        <p:inputTextarea id="message" binding="#{message}" rows="4" cols="60" autoResize="false" required="true" label="#{messages['h4.message']}" />
+                                        <p:message for="message"/>
+                                        <p:inputText id="user" binding="#{user}" value="#{userController.user.id}" rendered="false" />
+                                        <div id="signinbtn">
+                                            <p:commandButton styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{contactController.sendContactFormEmail}" >
+                                                <f:attribute name="email" value="#{email.value}" />
+                                                <f:attribute name="message" value="#{message.value}" />
+                                                <f:attribute name="user" value="#{user.value}" />
+                                            </p:commandButton>
+                                        </div>
+                                    </p:panel>
+                                    <p:panel>
 
-                                        <f:facet name="start">
-                                            <p:graphicImage library="default" name="/images/ajax-loader.gif" />
-                                            <p:outputLabel value="#{messages['pleasewait']}."/>    
-                                        </f:facet>
+                                    </p:panel>
+                                </p:panelGrid>
+                            </h:form>
 
-                                        <f:facet name="complete">
-                                        </f:facet>
-                                    </p:ajaxStatus>
-                                </p:panel>
-                            </p:panelGrid>
-                        </h:form>
-
-                    </div>	
+                        </div>	
+                    </div>
                 </div>
-            </div>
 
-        </div><!-- end.corpo --> 
+            </div><!-- end.corpo --> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 
