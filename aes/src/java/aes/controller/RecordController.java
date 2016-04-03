@@ -4,11 +4,20 @@ import aes.model.DailyLog;
 import aes.model.Record;
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import aes.utility.PDFGenerator;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -18,6 +27,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @ManagedBean(name = "recordController")
 @SessionScoped
@@ -31,6 +42,8 @@ public class RecordController extends BaseController<Record> {
 
     @ManagedProperty(value = "#{userController}")
     private UserController userController;
+    @ManagedProperty(value = "#{contactController}")
+    private ContactController contactController;
 
     @PostConstruct()
     public void init() {
@@ -132,15 +145,15 @@ public class RecordController extends BaseController<Record> {
     }
 
     public String getWeek() {
-        String dates = new String();    
+        String dates = new String();
         String dateStr;
         Calendar cal;
         dates = dates.concat("\"");
         for (int i = 1; i <= 7; i++) {
-           cal = Calendar.getInstance();
-           cal.add(Calendar.DATE, -i); 
-           dateStr = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
-           dates = dates.concat(dateStr + ",");
+            cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, -i);
+            dateStr = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+            dates = dates.concat(dateStr + ",");
         }
         dates = dates.substring(0, dates.length() - 1);
         dates = dates.concat("\"");
@@ -148,19 +161,90 @@ public class RecordController extends BaseController<Record> {
         System.out.println(dates);
         return dates;
     }
-    
-    public String getWeekFirstDay(){
+
+    public String getWeekFirstDay() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -7);
         return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
-    
-    public String getWeekLastDay(){
+
+    public String getWeekLastDay() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         return new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
     }
-    
+
+    public void sendRecord() {
+        contactController.sendRecordEmail(getUser(), "meuregistro.pdf", getRecordPDF());
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro enviado.", null));
+    }
+
+    public StreamedContent printRecord() {
+        ByteArrayOutputStream pdf = getRecordPDF();
+        return new DefaultStreamedContent(new ByteArrayInputStream(pdf.toByteArray()),
+                "application/pdf", "meuregistro.pdf");
+    }
+
+    public ByteArrayOutputStream getRecordPDF() {
+        try {
+            InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/record-template.html");
+            byte[] buffer = new byte[102400];
+            String template = new String(buffer, 0, input.read(buffer), StandardCharsets.UTF_8);
+
+            ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
+            template = template.replace("#title#", bundle.getString("record0"));
+            template = template.replace("#header1#", bundle.getString("estrategia.dim.registro.elet.day"));
+            template = template.replace("#header2#", bundle.getString("estrategia.dim.registro.elet.doses"));
+            template = template.replace("#header3#", bundle.getString("estrategia.dim.registro.elet.context"));
+            template = template.replace("#header4#", bundle.getString("estrategia.dim.registro.elet.outcomes"));
+
+            List<DailyLog> logs = logDAO.listOrdered("record", getRecord(), "logDate", getEntityManager());
+            for (DailyLog log : logs) {
+                template  = template.replace("#row#", 
+                        "<tr>"
+                        + "<td align='left'>"
+                        + "<p  style='text-align:center;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>"
+                        + new SimpleDateFormat("dd/MM/yyyy").format(log.getLogDate())
+                        + "</p>"
+                        + "</td>"
+                        + "<td align='left'>"
+                        + "<p  style='text-align:center;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>"
+                        + String.valueOf(log.getDrinks())
+                        + "</p>"
+                        + "</td>"
+                        + "<td align='left'>"
+                        + "<p  style='text-align:center;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>"
+                        + log.getContext()
+                        + "</p>"
+                        + "</td>"
+                        + "<td align='left'>"
+                        + "<p  style='text-align:center;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>"
+                        + log.getConsequences()
+                        + "</p>"
+                        + "</td>"
+                        + "</tr>" + 
+                        "#row#");
+            }
+            template = template.replace("#row#", " ");
+
+            PDFGenerator pdfGenerator = new PDFGenerator();
+            return pdfGenerator.generatePDF(template);
+        } catch (IOException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String getURL() {
+        String url = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("url");
+        if (url == null) {
+            return "index.xhtml?faces-redirect=true";
+        }
+        return url;
+    }
+
     public DailyLog getDailyLog() {
         if (dailyLog == null) {
             dailyLog = new DailyLog();
@@ -187,5 +271,13 @@ public class RecordController extends BaseController<Record> {
     public void setUserController(UserController userController) {
         this.userController = userController;
     }
-    
+
+    public ContactController getContactController() {
+        return contactController;
+    }
+
+    public void setContactController(ContactController contactController) {
+        this.contactController = contactController;
+    }
+
 }

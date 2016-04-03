@@ -184,6 +184,47 @@ public class GenericDAO<T> implements Serializable {
 			throw new SQLException(erro);
 		}
 	}
+        
+        public List<T> listOrdered(String campoStr, EntityManager entityManager) throws SQLException {
+
+		try {
+
+			campoStr = campoStr.substring(0, 1).toLowerCase() + campoStr.substring(1);
+
+			Query query;
+				query = entityManager.createQuery("select obj from " + classe.getSimpleName()
+						+ " obj order by obj." + campoStr);
+			
+			query.setHint("toplink.refresh", "true");
+			return query.getResultList();
+		} catch (Exception erro) {
+			throw new SQLException(erro);
+		}
+	}
+        
+        public List<T> listOrdered(String fieldCompare, Object objectCompare, String fieldOrder, EntityManager entityManager) throws SQLException {
+
+		try {
+
+			fieldCompare = fieldCompare.substring(0, 1).toLowerCase() + fieldCompare.substring(1);
+                        fieldOrder = fieldOrder.substring(0, 1).toLowerCase() + fieldOrder.substring(1);
+
+
+			Query query;
+			if (objectCompare != null) {
+				query = entityManager.createQuery("select obj from " + classe.getSimpleName()
+						+ " obj where obj." + fieldCompare + " = :objectCompare order by obj." + fieldOrder);
+				query.setParameter("objectCompare", objectCompare);
+			} else {
+				query = entityManager.createQuery("select obj from " + classe.getSimpleName()
+						+ " obj where obj." + fieldCompare + " is Null order by obj." + fieldOrder);
+			}
+			query.setHint("toplink.refresh", "true");
+			return query.getResultList();
+		} catch (Exception erro) {
+			throw new SQLException(erro);
+		}
+	}
 
 	public T listOnce(String campoStr, Object objeto, EntityManager entityManager) throws SQLException {
 		try {

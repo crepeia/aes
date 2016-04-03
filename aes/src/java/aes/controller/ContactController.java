@@ -90,6 +90,18 @@ public class ContactController extends BaseController implements Serializable {
         contact.setPdf(pdf);
         sendHTMLEmail(contact);
     }
+    
+    public void sendRecordEmail(User user, String attachment, ByteArrayOutputStream pdf) {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient(user.getEmail());
+        contact.setSubject("record_subj");
+        contact.setContent("record");
+        contact.setAttachment(attachment);
+        contact.setPdf(pdf);
+        sendHTMLEmail(contact);
+    }
 
     public void sendSignUpEmail(User user) {
         Contact contact = new Contact();

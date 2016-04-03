@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['plano.mudanca.pronto.para.comecar.1.title.1']} </title>
+                <w:header loginRequired="true" rendered="false"/>
+        </h:head>
+        <h:body>
+            <p:media value="#{recordController.printRecord()}" width="100%" height="100%" player="pdf"/>        
+        </h:body>
+    </f:view>
+</html>
+    

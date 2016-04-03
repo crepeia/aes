@@ -146,8 +146,8 @@
                                     <p:panelGrid columns="1">
                                         <div id ="planoimg1">
                                             <div class="planoimg">                                                            
-                                                <p:commandLink ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
-                                                <p><p:commandLink >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                                <p:commandLink action="mantendo-resultados-registro-print.xhtml?faces-redirect=true" update="@form" target="_blank" ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
+                                                <p><p:commandLink action="mantendo-resultados-registro-print.xhtml?faces-redirect=true" update="@form" target="_blank" >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
                                             </div>
                                         </div>
                                     </p:panelGrid>
@@ -155,14 +155,12 @@
                                     <p:panelGrid columns="1">
                                         <div id ="planoimg2">
                                             <div class="planoimg">
-                                                <p:commandLink update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
-                                                <p><p:commandLink update="@form">E-Mail</p:commandLink></p>
+                                                <p:commandLink actionListener="#{recordController.sendRecord()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
+                                                <p><p:commandLink actionListener="#{recordController.sendRecord()}" update="@form">E-Mail</p:commandLink></p>
                                             </div>
                                         </div>
                                     </p:panelGrid>
                                 </h:panelGrid>  
-
-
                             </div>
 
                         </h:form>                                            
