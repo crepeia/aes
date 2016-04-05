@@ -90,7 +90,7 @@ public class RecordController extends BaseController<Record> {
     public void saveLog() {
         try {
             logDAO.insertOrUpdate(dailyLog, getEntityManager());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro salvo com sucesso.", null));
+            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro salvo com sucesso.", null));
         } catch (SQLException ex) {
             Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -128,13 +128,15 @@ public class RecordController extends BaseController<Record> {
         try {
             List<DailyLog> logs = logDAO.list("record", getRecord(), getEntityManager());
             dates = dates.concat("\"");
-            for (DailyLog log : logs) {
-                if (log.getLogDate() != null) {
-                    dateStr = new SimpleDateFormat("yyyy-MM-dd").format(log.getLogDate());
-                    dates = dates.concat(dateStr + ",");
+            if(!logs.isEmpty()){                
+                for (DailyLog log : logs) {
+                    if (log.getLogDate() != null) {
+                        dateStr = new SimpleDateFormat("yyyy-MM-dd").format(log.getLogDate());
+                        dates = dates.concat(dateStr + ",");
+                    }
                 }
+                dates = dates.substring(0, dates.length() - 1);                
             }
-            dates = dates.substring(0, dates.length() - 1);
             dates = dates.concat("\"");
             return dates;
         } catch (SQLException ex) {

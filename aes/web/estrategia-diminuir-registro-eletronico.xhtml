@@ -72,6 +72,7 @@
                             </h:panelGrid>
                         </div>
                         <h:form>
+                            <p:growl id="errorGrowl" for="msg" sticky="true" redisplay="true" globalOnly="true"/>
                             <div id="pagemiddle">    
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
                                 <p:outputLabel value="Sua semana:"/>
@@ -92,19 +93,18 @@
                                         function disableDates(date) {
                                             var week = isOnWeek(date);
                                             var recorded = isRecorded(date);
-                                            if(week && recorded) {
+                                            if (week && recorded) {
                                                 return [true, 'markedDate'];
                                             }
-                                            if(week)  {
+                                            if (week) {
                                                 return [true, '']
-                                            }
-                                            else{
+                                            } else {
                                                 return [false, ''];
                                             }
-                                                
+
                                         }
-                                        
-                                        function isOnWeek(date){
+
+                                        function isOnWeek(date) {
                                             var week = #{recordController.week};
                                             var weekArray = week.split(",");
                                             var dateStr = formatDate(date);
@@ -115,8 +115,8 @@
                                             }
                                             return false;
                                         }
-                                        
-                                        function isRecorded(date){
+
+                                        function isRecorded(date) {
                                             var dates = #{recordController.dates};
                                             var datesArray = dates.split(",");
                                             var dateStr = formatDate(date);
@@ -163,7 +163,6 @@
                                 </h:panelGrid>
 
                                 <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
-                                <p:messages/>
 
                             </div>                                             
 

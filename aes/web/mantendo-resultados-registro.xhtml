@@ -71,6 +71,7 @@
                             </h:panelGrid>
                         </div>
                         <h:form>
+                            <p:growl id="errorGrowl" for="msg" sticky="true" redisplay="true" globalOnly="true"/>
                             <div id="pagemiddle">    
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
                                 <p:panelGrid columns ="1" >
@@ -110,7 +111,7 @@
                                                 dateStr = dateStr.concat("0");
                                             }
                                             dateStr = dateStr.concat(date.getDate());
-                                            
+
                                             return dateStr;
 
                                         }
@@ -132,7 +133,6 @@
                                 </h:panelGrid>
 
                                 <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form"  action="#{recordController.saveLog()}" />
-                                <p:messages/>
 
                             </div>                                             
 
