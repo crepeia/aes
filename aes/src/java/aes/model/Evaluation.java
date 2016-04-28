@@ -113,6 +113,8 @@ public class Evaluation implements Serializable {
     private String sinaisSucessoPlano;
     @Column(name = "possiveis_dificuldades_plano")
     private String possiveisDificuladesPlano;
+    @Column(name = "tips_frequency")
+    private Integer tipsFrequency;
 
 
     @ManyToOne
@@ -527,6 +529,14 @@ public class Evaluation implements Serializable {
 
     public void setProsReasons8(Integer prosReasons8) {
         this.prosReasons8 = prosReasons8;
+    }
+
+    public Integer getTipsFrequency() {
+        return tipsFrequency;
+    }
+
+    public void setTipsFrequency(Integer tipsFrequency) {
+        this.tipsFrequency = tipsFrequency;
     }
 
 }

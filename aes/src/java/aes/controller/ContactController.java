@@ -1,6 +1,7 @@
 package aes.controller;
 
 import aes.model.Contact;
+import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
+import java.util.Random;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -31,17 +33,24 @@ import javax.naming.NamingException;
 @ApplicationScoped
 public class ContactController extends BaseController implements Serializable {
 
+    private static final int RANDOM_MAX = 67; //amount of tips
+    private static final int RANDOM_MIN = 1;
+
     private EMailSSL eMailSSL;
     private String htmlTemplate;
     private GenericDAO userDAO;
+    private GenericDAO evaluationDAO;
+    private Random random;
 
     @PostConstruct
     public void init() {
         eMailSSL = new EMailSSL();
         htmlTemplate = readHTMLTemplate("aes/utility/contact-template.html");
+        random = new Random();
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
             userDAO = new GenericDAO<User>(User.class);
+            evaluationDAO = new GenericDAO<Evaluation>(Evaluation.class);
         } catch (NamingException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -90,7 +99,7 @@ public class ContactController extends BaseController implements Serializable {
         contact.setPdf(pdf);
         sendHTMLEmail(contact);
     }
-    
+
     public void sendRecordEmail(User user, String attachment, ByteArrayOutputStream pdf) {
         Contact contact = new Contact();
         contact.setUser(user);
@@ -241,6 +250,21 @@ public class ContactController extends BaseController implements Serializable {
         }
     }
 
+    public void scheduleTipsEmail(User user) {
+        int randomNumber = random.nextInt((RANDOM_MAX - RANDOM_MIN) + 1) + RANDOM_MIN;
+        int frequency = getLatestEvaluation(user).getTipsFrequency();        
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient(user.getEmail());
+        contact.setSubject("tips_subj");
+        contact.setContent("tips" + String.valueOf(randomNumber));
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, frequency);
+        contact.setDateScheduled(cal.getTime());
+        save(contact);
+    }
+
     public void clearScheduledKeepingResultEmails() {
         try {
             List<Contact> contacts = daoBase.list(getEntityManager());
@@ -280,8 +304,14 @@ public class ContactController extends BaseController implements Serializable {
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null) {
                     scheduledDate.setTime(contact.getDateScheduled());
-                    if(today.compareTo(scheduledDate) >= 0){
+                    if (today.compareTo(scheduledDate) >= 0) {
                         sendHTMLEmail(contact);
+                    }
+                    if(contact.getSubject().contains("annualscreening_subj")){
+                        scheduleAnnualScreeningEmail(contact.getUser());
+                    }
+                    if(contact.getSubject().contains("tips_subj")){
+                        scheduleTipsEmail(contact.getUser());
                     }
                 }
             }
@@ -306,7 +336,7 @@ public class ContactController extends BaseController implements Serializable {
 
     private void sendPlainTextEmail(Contact contact) {
         try {
-            eMailSSL.send(contact.getSender(), contact.getRecipient(),contact.getSubject() , contact.getContent(), contact.getPdf(), contact.getAttachment());
+            eMailSSL.send(contact.getSender(), contact.getRecipient(), contact.getSubject(), contact.getContent(), contact.getPdf(), contact.getAttachment());
             contact.setDateSent(new Date());
             save(contact);
             Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getRecipient());
@@ -354,6 +384,18 @@ public class ContactController extends BaseController implements Serializable {
     private String getSubject(Contact contact) {
         ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(contact.getUser().getPreferedLanguage()));
         return bundle.getString(contact.getSubject());
+    }
+
+    private Evaluation getLatestEvaluation(User user) {
+        try {
+            List evaluations = evaluationDAO.listOrdered("user", user, "date_created", getEntityManager());
+            if (!evaluations.isEmpty()) {
+               return  (Evaluation) evaluations.get(evaluations.size() - 1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }
