@@ -24,8 +24,8 @@
 
                 <div class="pagecontent">
                     <div id="maintop">
-                        <div id="mainleft">
                             <h1>#{messages['h1.index']}</h1>
+                            <div id="mainleft">
                             <div class="maindescribe">
                                 <h:graphicImage library="default" name="images/people.png" alt="Especialistas" />
                                 <p>#{messages['p.index']}</p>
@@ -60,7 +60,7 @@
                             <div class="passos">
                                 <h2><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['h2.index']}</h:outputLink></h2>
                                         <h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/preparando-parar.png" alt="Especialistas" /></h:outputLink>
-                                        <h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" />
+                                        <h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" /></h:outputLink>
                                         <div class="passos-txt">
                                                <ul>
                                                    <li><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.1']}</h:outputLink></li>
@@ -68,14 +68,14 @@
                                                    <li><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.3']}</h:outputLink></li>
                                                    <li><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.4']}</h:outputLink></li>
                                                </ul>
-                                           
+                                          
                                         </div>
                                     </div>
                                    
                                     <div class="passos">
                                         <h2><h:outputLink value="#{evaluationControllers.preEvaluation()}">#{messages['h2.index.1']}</h:outputLink></h2>
                                         <h:outputLink value="#{evaluationController.preEvaluation()}"><h:graphicImage library="default" class ="passos-img" name="images/pronto-parar.png" alt="Especialistas" /></h:outputLink>
-                                        <h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" />
+                                        <h:outputLink value="#{evaluationController.preEvaluation()}"><h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" /></h:outputLink>
                                         <div class="passos-txt">
                                                <ul>
                                                    <li><h:outputLink value="#{evaluationController.preEvaluation()}">#{messages['index.li.5']}</h:outputLink></li>
