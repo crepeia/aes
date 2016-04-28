@@ -275,9 +275,14 @@ public class ContactController extends BaseController implements Serializable {
     public void sendScheduledEmails() {
         try {
             List<Contact> contacts = daoBase.list(getEntityManager());
+            Calendar today = Calendar.getInstance();
+            Calendar scheduledDate = Calendar.getInstance();
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null) {
-                    sendHTMLEmail(contact);
+                    scheduledDate.setTime(contact.getDateScheduled());
+                    if(today.compareTo(scheduledDate) >= 0){
+                        sendHTMLEmail(contact);
+                    }
                 }
             }
         } catch (SQLException ex) {
