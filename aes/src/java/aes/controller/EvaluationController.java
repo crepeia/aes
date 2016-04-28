@@ -225,6 +225,9 @@ public class EvaluationController extends BaseController<Evaluation> {
                 }
             }
         }
+        if(getEvaluation().getTipsFrequency() != 0){
+            contactController.scheduleTipsEmail(getUser());
+        }
         FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Parabéns por completar sua avaliação. Você pode imprimir seu plano ou podemos enviá-lo via email.", null));
     }
 

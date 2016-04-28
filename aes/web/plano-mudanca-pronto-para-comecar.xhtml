@@ -46,7 +46,7 @@
                                 <h4>#{messages['plano.mudanca.pronto.para.comecar.h4.1']}</h4>
                                 <h3>#{messages['plano.mudanca.pronto.para.comecar.h3.1']}</h3>
                                 <h:form>
-                                   <p:growl id="errorGrowl" for="msg" sticky="true" redisplay="true" globalOnly="true"/>
+                                    <p:growl id="errorGrowl" for="msg" sticky="true" redisplay="true" globalOnly="true"/>
                                     <p:panel id="questoes" >
 
                                         <h:panelGrid columns="1"  cellpadding="5">
@@ -92,19 +92,36 @@
                                             </f:facet>
                                             <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="'Possíveis Dificuldades': Campo em branco"/> 
                                         </h:panelGrid>
-                                        
-                                        <h:panelGrid columns="1">
-                                        <div id="btnback">
-                                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['save']}" update="@form"  actionListener="#{evaluationController.savePlan()}"/>      
-                                        </div>
+
+                                        <h:panelGrid columns="1"  cellpadding="5" id="questao7">
+                                            <f:facet name="header">  
+                                                #{messages['tips.frequency.choice']}                                       
+                                            </f:facet>
+                                            <p:selectOneMenu id="frequency" value="#{evaluationController.evaluation.tipsFrequency}" style="width:125px"  required="true" requiredMessage="'Frequência': Campo em branco">
+                                                <f:selectItem itemLabel="" itemValue="" />
+                                                <f:selectItem itemLabel="#{messages['tips.frequency.choice.0']}" itemValue="0" />
+                                                <f:selectItem itemLabel="#{messages['tips.frequency.choice.1']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['tips.frequency.choice.2']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['tips.frequency.choice.3']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['tips.frequency.choice.4']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['tips.frequency.choice.5']}" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['tips.frequency.choice.7']}" itemValue="6" />
+                                            </p:selectOneMenu>
                                         </h:panelGrid>
+
+                                        <h:panelGrid columns="1">
+                                            <div id="btnback">
+                                                <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['save']}" update="@form"  actionListener="#{evaluationController.savePlan()}"/>      
+                                            </div>
+                                        </h:panelGrid>
+
                                         <p:panel>
                                             <p:messages autoUpdate="true"  redisplay="false"/> 
 
-                                    </p:panel>
+                                        </p:panel>
 
                                     </p:panel>
-                                    
+
                                     <div >
                                         <h:panelGrid columns="2" >
                                             <p:panelGrid columns="1">
@@ -129,26 +146,26 @@
                                         </h:panelGrid> 
                                     </div>
 
-                                    
 
-                                    
+
+
 
 
 
 
                                 </h:form>       
-                                
+
 
 
                             </div><!-- end pmtext -->
-                           
+
 
                         </div><!-- end page middle -->   
-                         <h:panelGrid>   
-                                        <div id="btnback">
-                                            <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
-                                        </div>
-                                    </h:panelGrid>   
+                        <h:panelGrid>   
+                            <div id="btnback">
+                                <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
+                            </div>
+                        </h:panelGrid>   
 
                         <div class="referencias">
                             <p>#{messages['updated']}</p>
