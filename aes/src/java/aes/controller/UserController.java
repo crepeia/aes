@@ -130,7 +130,7 @@ public class UserController extends BaseController<User> {
         try {
             List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
             if (!userList.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail já está sendo usado.", null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.used"), null));
             } else {
                 user.setPassword(Encrypter.encrypt(password));
                 user.setSignUpDate(new Date());
@@ -176,13 +176,13 @@ public class UserController extends BaseController<User> {
         try {
             List<User> userList = daoBase.list("email", user.getEmail(), this.getEntityManager());
             if (userList.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email não registrado", null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registred"), null));
             } else {
                 User foundUser = userList.get(0);
                 foundUser.setRecoverCode(generateCode());
                 daoBase.insertOrUpdate(foundUser, getEntityManager());
                 contactController.sendPasswordRecoveryEmail(foundUser);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Você receberá um email com as instruções.", null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.intructions.password"), null));
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -200,12 +200,12 @@ public class UserController extends BaseController<User> {
                     password = null;
                     foundUser.setRecoverCode(null);
                     daoBase.insertOrUpdate(foundUser, getEntityManager());
-                    FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, "Senha redefinida com sucesso.", null));
+                    FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("redefined.password"), null));
                 } else {
-                    FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código de recuperação inválido.", null));
+                    FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("code.invalid"), null));
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email não cadastrado.", null));
+                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registered"), null));
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
