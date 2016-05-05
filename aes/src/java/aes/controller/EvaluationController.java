@@ -200,7 +200,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         contactController.clearScheduledEmails(getUserController().getUser());
         contactController.scheduleAnnualScreeningEmail(getUserController().getUser());
         ((CommandButton) getComponent("saveBtn")).setDisabled(true);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Parabéns por completar sua avaliação. Entraremos em contato dentro de um ano.", null));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "quanto.voce.bebe.sim.adoles.h1.1", null));
         if (!userController.isLoggedIn()) {
             ((InputText) getComponent("email")).setDisabled(true);
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();

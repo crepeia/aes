@@ -43,8 +43,8 @@
 
                             <div id="pmtext">
 
-                                <p>#{messages['quanto.voce.bebe.introducao.p1']}</p>
-                                <p> #{messages['quanto.voce.bebe.introducao.br1']}</p>
+                                <b><p>#{messages['quanto.voce.bebe.introducao.p1']}</p></b>
+                                <b><p> #{messages['quanto.voce.bebe.introducao.br1']}</p></b>
 
                                 <h:form>
                                     <p:panel id="questoes" >
@@ -71,9 +71,9 @@
                                         <p:message for="pregnant" />
 
                                         <p:panelGrid columns="2" id="nascimento">
-                                            <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
+                                            <h:outputText value="#{messages['quanto.voce.bebe.introducao.text2']}" style="font-weight: bold;"/>
 
-                                            <p:calendar id="birthdate" label="#{messages['naccount.birthdate']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" showOn="button" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true">
+                                            <p:calendar id="birthdate" label="#{messages['quanto.voce.bebe.introducao.text2']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" showOn="button" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true">
                                                 <p:ajax event="change" update="birthdate" />
                                             </p:calendar>
                                         </p:panelGrid>
