@@ -134,7 +134,6 @@ public class UserController extends BaseController<User> {
             } else {
                 user.setPassword(Encrypter.encrypt(password));
                 user.setSignUpDate(new Date());
-                user.setPreferedLanguage(FacesContext.getCurrentInstance().getExternalContext().getRequestLocale().getLanguage());
                 save();
                 contactController.sendSignUpEmail(user);
                 signIn(true);

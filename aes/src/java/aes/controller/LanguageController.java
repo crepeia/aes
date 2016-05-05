@@ -30,8 +30,10 @@ public class LanguageController extends BaseController<User> {
             locale = new Locale(getUser().getPreferedLanguage());
         }else{
             locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+            userController.getUser().setPreferedLanguage(getLanguage());
         }
         FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
+        
     }
     
     

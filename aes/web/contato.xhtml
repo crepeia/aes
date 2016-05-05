@@ -32,7 +32,7 @@
                                 <p:panelGrid columns="1">
                                     <p:panel>
                                         <h4>#{messages['contato.h4.4']}</h4>
-                                        <p:inputText id="email" required="true" value="#{userController.user.email}" binding="#{email}" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                        <p:inputText id="email" required="true" value="#{userController.user.email}"  size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
                                             <f:validateLength maximum="50" />
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
@@ -41,10 +41,10 @@
                                         <h4>#{messages['h4.message']}</h4>
                                         <p:inputTextarea id="message" binding="#{message}" rows="4" cols="60" autoResize="false" required="true" label="#{messages['h4.message']}" />
                                         <p:message for="message"/>
-                                        <p:inputText id="user" binding="#{user}" value="#{userController.user.id}" rendered="false" />
+                                        <h:inputHidden id="user" binding="#{user}" value="#{userController.user}"  rendered="false"/>
+                                        <h:inputHidden id="language" binding="#{language}" value="#{localeController.language}"  rendered="false"/>
                                         <div id="signinbtn">
                                             <p:commandButton styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{contactController.sendContactFormEmail}" >
-                                                <f:attribute name="email" value="#{email.value}" />
                                                 <f:attribute name="message" value="#{message.value}" />
                                                 <f:attribute name="user" value="#{user.value}" />
                                             </p:commandButton>
