@@ -20,13 +20,17 @@ public class LanguageController extends BaseController<User> {
     private UserController userController;
     
     private Locale locale;
+
+    public LanguageController() {
+        
+    }
     
     @PostConstruct
     public void init(){
         languages.put("English", "en");
         languages.put("Español", "es");
         languages.put("Português", "pt");
-        if(getUser().getPreferedLanguage() != null){            
+        if(getUser() != null && getUser().getPreferedLanguage() != null){            
             locale = new Locale(getUser().getPreferedLanguage());
         }else{
             locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
@@ -53,8 +57,12 @@ public class LanguageController extends BaseController<User> {
         return locale;
     }
     
-    public User getUser(){
-       return userController.getUser();
+    public User getUser() {
+        if (userController!=null) {
+            return userController.getUser();
+        } else {
+            return null;
+        }
     }
     
     public Map<String, String> getLanguages() {
