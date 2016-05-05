@@ -19,31 +19,42 @@ public class LanguageController extends BaseController<User> {
     @ManagedProperty(value = "#{userController}")
     private UserController userController;
     
+    private Locale locale;
+    
     @PostConstruct
     public void init(){
         languages.put("English", "en");
         languages.put("Español", "es");
         languages.put("Português", "pt");
+        if(getUser().getPreferedLanguage() != null){            
+            locale = new Locale(getUser().getPreferedLanguage());
+        }else{
+            locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+        }
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
+    }
+    
+    
+    
+    public void setLanguage(String language) {
+        userController.getUser().setPreferedLanguage(language);
+        locale = new Locale(language);
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
+        if (userController.isLoggedIn()) {
+            userController.save();
+        }
     }
     
     public String getLanguage(){
         return getLocale().getLanguage();
     }
     
-    public void setLanguage(String language) {
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
-        if (userController.isLoggedIn()) {
-            userController.getUser().setPreferedLanguage(language);
-            userController.save();
-        }
-    }
-
     public Locale getLocale() {
-        if (userController.getUser().getPreferedLanguage() != null) {
-            return new Locale(userController.getUser().getPreferedLanguage());
-        } else {
-            return FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
-        }
+        return locale;
+    }
+    
+    public User getUser(){
+       return userController.getUser();
     }
     
     public Map<String, String> getLanguages() {

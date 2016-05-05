@@ -37,7 +37,7 @@
                     </h:form>
                 </div>
                 <div id="fastsignin">
-                    <h:form id="loginForm">
+                    <h:form id="loginForm" >
                         <p:panel id="groupPanel">
                             <p:panel id="loginPanel" rendered="#{!userController.loggedIn}">
                                 <h:outputLink value="cadastrar-nova-conta.xhtml" >#{messages['register']}</h:outputLink> / 
@@ -45,7 +45,7 @@
                             </p:panel>
                             <p:panel id="userPanel" rendered="#{userController.loggedIn}">
                                 Olá <h:outputText value="#{userController.user.name}" />  ::  
-                                <p:commandLink value="Sair" actionListener="#{userController.signOut()}"/>
+                                <p:commandLink value="Sair" actionListener="#{userController.signOut()}" immediate="true"/>
                             </p:panel>
                         </p:panel>
                         <div id="fastlogin">

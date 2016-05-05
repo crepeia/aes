@@ -200,7 +200,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         contactController.clearScheduledEmails(getUserController().getUser());
         contactController.scheduleAnnualScreeningEmail(getUserController().getUser());
         ((CommandButton) getComponent("saveBtn")).setDisabled(true);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Parabéns por completar sua avaliação. Entraremos em contato dentro de um ano.", null));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation"), null));
         if (!userController.isLoggedIn()) {
             ((InputText) getComponent("email")).setDisabled(true);
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -209,26 +209,31 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void savePlan() {
         save();
-        contactController.clearScheduledEmails(getUser());
-        contactController.scheduleDiaryReminderEmail(getUser(), getEvaluation().getDataComecarPlano());
-        contactController.scheduleWeeklyEmail(getUser(), getEvaluation().getDataComecarPlano());
-        if (getEvaluation().getQuit()) {
-            contactController.scheduleKeepingResultQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
-            if (!pageNavigationController.visitedQuitPages(3)) {
-                contactController.schedulePersistChallengesQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
-            }
-        } else {
-            contactController.scheduleKeepingResultReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
-            if (!pageNavigationController.visitedCutDownPages(1)) {
-                contactController.schedulePersistChallengesReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
+        if(getUser().isReceiveEmails()){
+            contactController.clearScheduledEmails(getUser());
+            contactController.scheduleDiaryReminderEmail(getUser(), getEvaluation().getDataComecarPlano());
+            contactController.scheduleWeeklyEmail(getUser(), getEvaluation().getDataComecarPlano());
+            if (getEvaluation().getQuit()) {
+                contactController.scheduleKeepingResultQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
+                if (!pageNavigationController.visitedQuitPages(3)) {
+                    contactController.schedulePersistChallengesQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
+                }
+            } else {
+                contactController.scheduleKeepingResultReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
+                if (!pageNavigationController.visitedCutDownPages(1)) {
+                    contactController.schedulePersistChallengesReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
+                }
             }
         }
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Parabéns por completar sua avaliação. Você pode imprimir seu plano ou podemos enviá-lo via email.", null));
+        if(getEvaluation().getTipsFrequency() != 0){
+            contactController.scheduleTipsEmail(getUser());
+        }
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation.plan"), null));
     }
 
     public void sendPlan() {
         contactController.sendPlanEmail(getUser(), "meuplano.pdf", getPlanPDF());
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Plano enviado.", null));
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("send.plan"), null));
     }
 
     public StreamedContent printPlan() {

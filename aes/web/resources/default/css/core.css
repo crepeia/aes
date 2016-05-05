@@ -553,6 +553,7 @@ INDEX***********************/
 }
 
 #mainbottom{
+    float: left;
     padding-top: 10px;
     clear: both;
 }
