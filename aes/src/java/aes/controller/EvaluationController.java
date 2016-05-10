@@ -98,7 +98,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public String preEvaluation() {
         if(getUser().getDrink() == null){
-            return "cadastrar-nova-conta.xhtml?faces-redirect=true";
+            return "quanto-voce-bebe-introducao.xhtml?faces-redirect=true";
         }else if ((getUser().isFemale() && getUser().getPregnant()) && !getUser().getDrink()) {
             return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
         } else if ((getUser().isFemale() && getUser().getPregnant()) && getUser().getDrink()) {
