@@ -52,9 +52,9 @@
                                 <ul>
                                     <li>#{messages['estrategia.dim.registro.elet.li.1']}</li>
                                     <li>#{messages['estrategia.dim.registro.elet.li.2']}
-                                    <h:outputLink value="estrategia-diminuir-registro-impresso.xhtml">#{messages['estrategia.dim.registro.elet.li.2.b.1']}</h:outputLink></li>
-                                         
-                                   
+                                        <h:outputLink value="estrategia-diminuir-registro-impresso.xhtml">#{messages['estrategia.dim.registro.elet.li.2.b.1']}</h:outputLink></li>
+
+
                                     <li>#{messages['estrategia.dim.registro.elet.li.3']}</li>
                                 </ul>
 
@@ -167,30 +167,31 @@
 
                                 <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
 
-                            </div>                                             
 
-                            <div id="btnnext">
-                                <h:panelGrid columns="2" >
-                                    <p:panelGrid columns="1">
-                                        <div id ="planoimg1">
-                                            <div class="planoimg">                                                            
-                                                <p:commandLink action="mantendo-resultados-registro-print.xhtml?faces-redirect=true" update="@form" target="_blank" ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
-                                                <p><p:commandLink action="mantendo-resultados-registro-print.xhtml?faces-redirect=true" update="@form" target="_blank" >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+
+                                <div id ="mailandprint" > 
+                                    <h:panelGrid columns="2" >
+                                        <p:panelGrid columns="1">
+                                            <div id ="planoimg1">
+                                                <div class="planoimg">                                                            
+                                                    <p:commandLink action="mantendo-resultados-registro-print.xhtml?faces-redirect=true" update="@form" target="_blank" ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
+                                                    <p><p:commandLink action="mantendo-resultados-registro-print.xhtml?faces-redirect=true" update="@form" target="_blank" >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </p:panelGrid>
+                                        </p:panelGrid>
+                                        
 
-                                    <p:panelGrid columns="1">
-                                        <div id ="planoimg2">
-                                            <div class="planoimg">
-                                                <p:commandLink actionListener="#{recordController.sendRecord()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
-                                                <p><p:commandLink actionListener="#{recordController.sendRecord()}" update="@form">E-Mail</p:commandLink></p>
+                                        <p:panelGrid columns="1">
+                                            <div id ="planoimg2">
+                                                <div class="planoimg">
+                                                    <p:commandLink actionListener="#{recordController.sendRecord()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>
+                                                    <p><p:commandLink actionListener="#{recordController.sendRecord()}" update="@form">E-Mail</p:commandLink></p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </p:panelGrid>
-                                </h:panelGrid>  
-                            </div>                                            
-
+                                        </p:panelGrid>
+                                    </h:panelGrid>  
+                                 </div>                                           
+                            </div>   
                             <div id="btnback">
                                 <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>
                             </div>
