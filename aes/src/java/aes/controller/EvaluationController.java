@@ -98,10 +98,10 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public String preEvaluation() {
         if(getUser().getDrink() == null){
-            return "cadastrar-nova-conta.xhtml?faces-redirect=true";
-        }else if (getUser().getPregnant() && !getUser().getDrink()) {
+            return "quanto-voce-bebe-introducao.xhtml?faces-redirect=true";
+        }else if ((getUser().isFemale() && getUser().getPregnant()) && !getUser().getDrink()) {
             return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
-        } else if (getUser().getPregnant() && getUser().getDrink()) {
+        } else if ((getUser().isFemale() && getUser().getPregnant()) && getUser().getDrink()) {
             return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
         } else if (getUser().isUnderage() && !getUser().getDrink()) {
             return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
@@ -200,7 +200,11 @@ public class EvaluationController extends BaseController<Evaluation> {
         contactController.clearScheduledEmails(getUserController().getUser());
         contactController.scheduleAnnualScreeningEmail(getUserController().getUser());
         ((CommandButton) getComponent("saveBtn")).setDisabled(true);
+<<<<<<< HEAD
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "quanto.voce.bebe.sim.adoles.h1.1", null));
+=======
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation"), null));
+>>>>>>> refs/remotes/origin/master
         if (!userController.isLoggedIn()) {
             ((InputText) getComponent("email")).setDisabled(true);
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -228,12 +232,12 @@ public class EvaluationController extends BaseController<Evaluation> {
         if(getEvaluation().getTipsFrequency() != 0){
             contactController.scheduleTipsEmail(getUser());
         }
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Parabéns por completar sua avaliação. Você pode imprimir seu plano ou podemos enviá-lo via email.", null));
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation.plan"), null));
     }
 
     public void sendPlan() {
         contactController.sendPlanEmail(getUser(), "meuplano.pdf", getPlanPDF());
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Plano enviado.", null));
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("send.plan"), null));
     }
 
     public StreamedContent printPlan() {

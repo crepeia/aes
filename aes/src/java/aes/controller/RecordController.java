@@ -90,7 +90,7 @@ public class RecordController extends BaseController<Record> {
     public void saveLog() {
         try {
             logDAO.insertOrUpdate(dailyLog, getEntityManager());
-            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro salvo com sucesso.", null));
+            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("record.save"), null));
         } catch (SQLException ex) {
             Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -178,7 +178,7 @@ public class RecordController extends BaseController<Record> {
 
     public void sendRecord() {
         contactController.sendRecordEmail(getUser(), "meuregistro.pdf", getRecordPDF());
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro enviado.", null));
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("record.send"), null));
     }
 
     public StreamedContent printRecord() {

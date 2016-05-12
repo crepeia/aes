@@ -38,9 +38,10 @@ public class ContactController extends BaseController implements Serializable {
 
     private EMailSSL eMailSSL;
     private String htmlTemplate;
-    private GenericDAO userDAO;
     private GenericDAO evaluationDAO;
     private Random random;
+    private ResourceBundle bundle;
+
 
     @PostConstruct
     public void init() {
@@ -49,7 +50,6 @@ public class ContactController extends BaseController implements Serializable {
         random = new Random();
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
-            userDAO = new GenericDAO<User>(User.class);
             evaluationDAO = new GenericDAO<Evaluation>(Evaluation.class);
         } catch (NamingException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,24 +57,18 @@ public class ContactController extends BaseController implements Serializable {
     }
 
     public void sendContactFormEmail(ActionEvent event) {
-        String email = (String) event.getComponent().getAttributes().get("email");
         String message = (String) event.getComponent().getAttributes().get("message");
-        Long id = (Long) event.getComponent().getAttributes().get("user");
+        User user = (User) event.getComponent().getAttributes().get("user");
         Contact contact = new Contact();
-        try {
-            List<User> userList = userDAO.list("id", id, getEntityManager());
-            if (!userList.isEmpty()) {
-                contact.setUser(userList.get(0));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        if (user.getId() != 0) {
+            contact.setUser(user);
         }
-        contact.setSender(email);
+        contact.setSender(user.getEmail());
         contact.setRecipient("alcoolesaude@gmail.com");
-        contact.setSubject("Contato via formulario - " + email);
+        contact.setSubject("Contato via formulario - " + user.getEmail());
         contact.setContent(message);
         sendPlainTextEmail(contact);
-        FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, "Email enviado com sucesso.", null));
+        FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.sent", user), null));
 
     }
 
@@ -368,13 +362,12 @@ public class ContactController extends BaseController implements Serializable {
 
     private String getContent(Contact contact) {
         String htmlMessage = htmlTemplate;
-        ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(contact.getUser().getPreferedLanguage()));
-        htmlMessage = htmlMessage.replace("#title#", bundle.getString("title.1"));
-        htmlMessage = htmlMessage.replace("#content#", bundle.getString(contact.getContent()));
+        htmlMessage = htmlMessage.replace("#title#", getString("title.1",contact.getUser()));
+        htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(),contact.getUser()));
         htmlMessage = htmlMessage.replace("#footer#",
-                bundle.getString("title.1") + "<br>"
-                + bundle.getString("crepeia") + "<br>"
-                + bundle.getString("ufjf"));
+                getString("title.1",contact.getUser()) + "<br>"
+                + getString("crepeia",contact.getUser()) + "<br>"
+                + getString("ufjf",contact.getUser()));
         htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
         htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
         htmlMessage = htmlMessage.replace("#code#", String.valueOf(contact.getUser().getRecoverCode()));
@@ -382,8 +375,12 @@ public class ContactController extends BaseController implements Serializable {
     }
 
     private String getSubject(Contact contact) {
-        ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(contact.getUser().getPreferedLanguage()));
-        return bundle.getString(contact.getSubject());
+        return getString(contact.getSubject(), contact.getUser());
+    }
+    
+    private String getString(String key, User user){
+        bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
+        return bundle.getString(key);
     }
 
     private Evaluation getLatestEvaluation(User user) {

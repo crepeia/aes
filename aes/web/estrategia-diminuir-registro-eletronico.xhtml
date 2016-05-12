@@ -51,7 +51,10 @@
                                 <h4>#{messages['estrategia.dim.registro.elet.h4.1']}</h4>
                                 <ul>
                                     <li>#{messages['estrategia.dim.registro.elet.li.1']}</li>
-                                    <li>#{messages['estrategia.dim.registro.elet.li.2']}<b>#{messages['estrategia.dim.registro.elet.li.2.b.1']}</b></li>
+                                    <li>#{messages['estrategia.dim.registro.elet.li.2']}
+                                    <h:outputLink value="estrategia-diminuir-registro-impresso.xhtml">#{messages['estrategia.dim.registro.elet.li.2.b.1']}</h:outputLink></li>
+                                         
+                                   
                                     <li>#{messages['estrategia.dim.registro.elet.li.3']}</li>
                                 </ul>
 
@@ -165,11 +168,6 @@
                                 <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
 
                             </div>                                             
-
-                            <div id="btnback">
-                                <h:button class="btngen" value ="#{messages['back']}" outcome="mantendo-resultados-meta.xhtml?faces-redirect=true"></h:button>
-                            </div>
-
 
                             <div id="btnnext">
                                 <h:panelGrid columns="2" >
