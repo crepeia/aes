@@ -7,7 +7,7 @@
     <f:view locale="#{languageController.locale}">
         <h:head>
             <title>#{messages['plano.mudanca.pronto.para.comecar.1.title.1']} </title>
-                <w:header loginRequired="true" rendered="false"/>
+                <w:header loginRequired="true" evaluationRequired="true"  rendered="false"/>
         </h:head>
         <h:body>
             <p:media value="#{evaluationController.printPlan()}" width="100%" height="100%" player="pdf"/>        

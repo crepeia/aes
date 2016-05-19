@@ -56,7 +56,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public Evaluation getEvaluation() {
-        if (evaluation == null && userController.isLoggedIn()) {
+        if (evaluation == null) {
             try {
                 List<Evaluation> evaluations = this.getDaoBase().list("user", getUser(), this.getEntityManager());
                 if (!evaluations.isEmpty()) {
@@ -96,23 +96,6 @@ public class EvaluationController extends BaseController<Evaluation> {
         }
     }
 
-    public String preEvaluation() {
-        if(getUser().getDrink() == null){
-            return "quanto-voce-bebe-introducao.xhtml?faces-redirect=true";
-        }else if ((getUser().isFemale() && getUser().getPregnant()) && !getUser().getDrink()) {
-            return "quanto-voce-bebe-nao-gravidez.xhtml?faces-redirect=true";
-        } else if ((getUser().isFemale() && getUser().getPregnant()) && getUser().getDrink()) {
-            return "quanto-voce-bebe-sim-gravidez.xhtml?faces-redirect=true";
-        } else if (getUser().isUnderage() && !getUser().getDrink()) {
-            return "quanto-voce-bebe-nao-adoles.xhtml?faces-redirect=true";
-        } else if (getUser().isUnderage() && getUser().getDrink()) {
-            return "quanto-voce-bebe-sim-adoles.xhtml?faces-redirect=true";
-        } else if (!getUser().getDrink()) {
-            return "quanto-voce-bebe-abstemio.xhtml?faces-redirect=true";
-        } else {
-            return "quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true";
-        }
-    }
 
     public String audit3() {
         int age = getUser().getAge();
