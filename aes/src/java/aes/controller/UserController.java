@@ -261,12 +261,22 @@ public class UserController extends BaseController<User> {
                 if (user.getDrink() == null) {
                     url = "quanto-voce-bebe-introducao.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                } else if ((user.isFemale() && user.getPregnant()) && !user.getDrink()) {
+                } else if ((!user.isUnderage() && user.isFemale() && user.getPregnant()) && !user.getDrink()) {
                     url = "quanto-voce-bebe-nao-gravidez.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                } else if ((user.isFemale() && user.getPregnant()) && user.getDrink()) {
+
+                } else if ((user.isUnderage() && user.isFemale() && user.getPregnant()) && !user.getDrink()) {
+                    url = "quanto-voce-bebe-nao-adoles-gravidez.xhtml";
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+
+                } else if ((!user.isUnderage() && user.isFemale() && user.getPregnant()) && user.getDrink()) {
                     url = "quanto-voce-bebe-sim-gravidez.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+
+                } else if ((user.isUnderage() && user.isFemale() && user.getPregnant()) && user.getDrink()) {
+                    url = "quanto-voce-bebe-sim-adoles-gravidez.xhtml";
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+
                 } else if (user.isUnderage() && !user.getDrink()) {
                     url = "quanto-voce-bebe-nao-adoles.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
@@ -276,7 +286,7 @@ public class UserController extends BaseController<User> {
                 } else if (!user.getDrink()) {
                     url = "quanto-voce-bebe-abstemio.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                }                       
+                }
             } catch (IOException ex) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }

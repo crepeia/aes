@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
+  
+    <h:head>
+        <title>#{messages['quanto.voce.bebe.sim.gravidez.adoles.title']}</title>
+        <w:head_comum />
+    </h:head>
+
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header />
+            <w:topmenu />
+            <!--mainmenu-->         	
+            <div class="main">
+
+
+                <div class="pagecontent">
+
+
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1>#{messages['quanto.voce.bebe.sim.gravidez.adoles.h1.1']}</h1> 
+                        </div>    
+
+                        <div id="progressbar">
+                            <p:progressBar value="95" labelTemplate="{value}%" displayOnly="true"/>
+                        </div>                        
+                    </div>
+
+
+                    <div id="pagemiddle">
+
+                        <div class="fotoframe">                            
+                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/pregnantw.png" alt="Vodka" />
+                        </div>
+
+                        <div id="pmtext">                                               
+                                            
+                                                
+                        <h3>#{messages['quanto.voce.bebe.sim.gravidez.adoles.h3.1']}</h3>
+                        
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.1']}</p>
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.2']}</p>
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.3']}</p>
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.4']}</p> 
+                        
+                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.5']}</p>
+                        
+                        <p:accordionPanel>
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.tab.title.1']}">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.6']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.7']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.8']}</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                      
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.tab.title.2']}">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.9']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.10']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.11']}</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                                         
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.tab.title.3']}">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.12']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.13']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.14']}</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                        
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.tab.title.4']}">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.15']}</p>
+                                            <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.16']}</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                        
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.tab.title.5']}">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.17']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.18']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.19']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.20']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.21']}</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                   
+                                <p:tab title="#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.tab.title.6']}">
+                                    <h:panelGrid columns="4" cellpadding="7">
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.22']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.23']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.24']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.25']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.26']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.27']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.28']}</p>
+                                        <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.29']}</p>
+                                    </h:panelGrid>
+                                </p:tab>
+                        </p:accordionPanel>
+                                             
+                            <h3>#{messages['quanto.voce.bebe.sim.gravidez.adoles.h3.2']}</h3>
+                            <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.30']}<h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.30.link' ]}</h:outputLink></p>        
+
+                            <h3>#{messages['quanto.voce.bebe.sim.gravidez.adoles.h3.3']}</h3>                        
+                            <p>#{messages['quanto.voce.bebe.sim.gravidez.adoles.p.31']}</p>
+
+
+                            
+                            <h:form id="form" class="form-signup">
+                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+
+                                
+                                
+                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                    <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
+                                        <!--<p:ajax update="loginMsg" event="blur" />-->
+                                        <f:validateLength maximum="50" />
+                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                    </p:inputText>
+                                    <p:watermark for="email" value="E-mail" />
+                                    <p:message for="email" />
+                                </h:panelGrid>
+
+                                <div id="btnback">
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                </div>
+                                
+                            </h:form>
+                            
+                            
+                        </div><!-- end pmtext -->  
+                    </div><!-- end page middle -->                                             
+
+                    <div class="referencias">
+                        <p>#{messages['updated']}</p>
+                        <p>http://pubs.niaaa.nih.gov/publications/DrinkingPregnancy_HTML/pregnancy.pdf</p>
+                    </div>
+                    
+                </div>        
+            </div>
+
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+        </f:view>
+</html>
+
+
