@@ -1269,6 +1269,10 @@ thead{
     padding-left: 50px;
 }
 
+#mailandprint {
+    float: right;
+}
+
 #planoimg2 p {
     position:relative;
     left:12px;
