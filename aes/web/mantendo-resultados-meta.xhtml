@@ -141,17 +141,26 @@
 
                                     <h:panelGrid columns="2" cellpadding="1">
                                         <p:outputLabel value="Doses Padrão" />
-                                        <p:spinner id="metadosediaria" value="#{recordController.record.dailyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
+                                        <p:spinner id="metadosediaria" value="#{recordController.record.dailyGoal}" min="0" required="true" requiredMessage="Campo em branco" onchange="#{recordController.checkDailyGoal()}">
+                                            <p:ajax update="@form"/>
+                                        </p:spinner>
                                     </h:panelGrid>
-                                    <p:message for="metadosediaria"/>
+                                    <p:messages for="warn1" autoUpdate="true" />
+
+                                    <p:message for="metadosediaria" />
 
                                     <h4>#{messages['estrategia.dim.registro.elet.meta.hom.h4.3']}</h4> 
 
                                     <h:panelGrid columns="2" cellpadding="1">
                                         <p:outputLabel value="Doses Padrão" />
-                                        <p:spinner id="metadosesemanal" value="#{recordController.record.weeklyGoal}" min="0" required="true" requiredMessage="Campo em branco"/>
+                                        <p:spinner id="metadosesemanal" value="#{recordController.record.weeklyGoal}" min="0" required="true" requiredMessage="Campo em branco" onchange="#{recordController.checkWeeklyGoal()}">
+                                            <p:ajax update="@form"/>
+                                        </p:spinner>
                                     </h:panelGrid>  
                                     <p:message for="metadosesemanal"/>
+
+                                    <p:messages for="warn2" />
+
 
                                 </div><!-- end pmtext -->  
 
@@ -159,7 +168,7 @@
 
 
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-registro.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./mantendo-resultados-introducao.xhtml"></h:button>
                                 </div>
 
 
