@@ -117,16 +117,16 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public String audit7() {
         int age = getUser().getAge();
-        int drinkingDays = getEvaluation().getDrinkingDays();
+        boolean drinkingDays = getEvaluation().getDrinkingDays();
         int weekTotal = getEvaluation().getWeekTotal();
         int auditFull = getEvaluation().getAuditFullSum();
-        if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays <= 1) || (getUser().isMale() && drinkingDays <= 2)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10))) {
+        if ((auditFull <= 17) && ((getUser().isFemale() && !drinkingDays) || (getUser().isMale() && !drinkingDays)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10))) {
             if (getUser().isFemale() && age <= 65) {
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
             } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
                 return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
             }
-        } else if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays > 1) || (getUser().isMale() && drinkingDays > 2)) && ((getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10))) {
+        } else if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays) || (getUser().isMale() && drinkingDays)) && ((getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10))) {
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites?faces-redirect=true";
         } else if (auditFull >= 18 && auditFull <= 25) {
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml?faces-redirect=true";
