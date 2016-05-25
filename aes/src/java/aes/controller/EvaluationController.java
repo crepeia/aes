@@ -99,12 +99,12 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public String audit3() {
         int age = getUser().getAge();
-        int drinkingDays = getEvaluation().getDrinkingDays();
+        boolean drinkingDays = getEvaluation().getDrinkingDays();
         int weekTotal = getEvaluation().getWeekTotal();
         int audit3sum = getEvaluation().getAudit3Sum();
-        if (audit3sum > 6 || (getUser().isFemale() && drinkingDays > 1) || (getUser().isMale() && drinkingDays > 2) || (getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10)) {
+        if (audit3sum > 6 || (getUser().isFemale() && drinkingDays) || (getUser().isMale() && drinkingDays) || (getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10)) {
             return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml?faces-redirect=true";
-        } else if (audit3sum <= 6 && (((getUser().isFemale() && drinkingDays <= 1) || (getUser().isMale() && drinkingDays <= 2)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10)))) {
+        } else if (audit3sum <= 6 && (((getUser().isFemale() && !drinkingDays) || (getUser().isMale() && !drinkingDays)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10)))) {
             if (getUser().isMale() && age <= 65) {
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
             } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
