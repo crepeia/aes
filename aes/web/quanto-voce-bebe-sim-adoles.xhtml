@@ -88,27 +88,27 @@
                                 <p:graphicImage library="default" name="images/loading.gif" />
                             </p:dialog>
                             
-                            <h:form id="form" class="form-signup">
-                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+                                <h:form id="form" class="form-signup">
+                                    <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
-                                
-                                
-                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                    <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="E-mail" validatorMessage="E-mail com formato inválido" >
-                                        <!--<p:ajax update="loginMsg" event="blur" />-->
-                                        <f:validateLength maximum="50" />
-                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                    </p:inputText>
-                                    <p:watermark for="email" value="E-mail" />
-                                    <p:message for="email" />
-                                </h:panelGrid>
+                                    <h:form id="form" class="form-signup">
+                                        <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
-                                <div id="btnback">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.annualScreening()}" />
-                                </div>
-                                
-                            </h:form>
-                            
+
+                                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                            <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                                <!--<p:ajax update="loginMsg" event="blur" />-->
+                                                <f:validateLength maximum="50" />
+                                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                            </p:inputText>
+                                            <p:watermark for="email" value="#{messages['email']}" />
+                                            <p:message for="email" />
+                                        </h:panelGrid>
+                                        <div id="btnback">
+                                            <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                        </div>
+
+                                    </h:form>                            
                             
                         </div><!-- end pmtext -->  
                     </div><!-- end page middle -->                                             

@@ -7,108 +7,108 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
-  
-    <h:head>
-        <title>#{messages['quanto.voce.bebe.abstemio.title']}</title>
-        <w:head_comum />
-    </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header />
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
+        <h:head>
+            <title>#{messages['quanto.voce.bebe.abstemio.title']}</title>
+            <w:head_comum />
+        </h:head>
 
-
-                <div class="pagecontent">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header />
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
 
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['quanto.voce.bebe.abstemio.h1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['quanto.voce.bebe.abstemio.h1']}</h1> 
+                            </div>    
 
-                        <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <div id="progressbar">
+                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
                         </div>
 
-                        <div id="pmtext">                                               
-                                            
-                                                
-                        <p>#{messages['quanto.voce.bebe.abstemio.p1']}</p>
-                        
-                        <p>#{messages['quanto.voce.bebe.abstemio.p2']}</p>
-                        <p>#{messages['quanto.voce.bebe.abstemio.p3']}</p>
-                        
-                        <h3>#{messages['quanto.voce.bebe.abstemio.h3.1']} </h3>
-                        <p>#{messages['quanto.voce.bebe.abstemio.p4']}</p>
-                        
-                        <h3>#{messages['quanto.voce.bebe.abstemio.h3.2']} </h3>
-                        
-                        <p>#{messages['quanto.voce.bebe.abstemio.p5']}</p>
-                        
-                        <h3>#{messages['quanto.voce.bebe.abstemio.h3.3']}</h3>
-                        
-                        <ul>
-                        <li>#{messages['quanto.voce.bebe.abstemio.li.1']}</li>
-                        <li>#{messages['quanto.voce.bebe.abstemio.li.2']}</li>
-                        <li>#{messages['quanto.voce.bebe.abstemio.li.3']}</li>
-                        </ul>
-                        
-                        <h3>#{messages['quanto.voce.bebe.abstemio.h3.4']}</h3>
-                        <p>#{messages['quanto.voce.bebe.abstemio.p6']}<h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['quanto.voce.bebe.abstemio.link']}</h:outputLink></p>        
 
-                        <h3>#{messages['quanto.voce.bebe.abstemio.h3.5']}</h3>                        
-                            <p>#{messages['quanto.voce.bebe.abstemio.p7']}</p>
+                        <div id="pagemiddle">
+
+                            <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
+
+                            <div id="pmtext">                                               
 
 
-                            <h:form id="form" class="form-signup">
-                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+                                <p>#{messages['quanto.voce.bebe.abstemio.p1']}</p>
 
-                                                           
-                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                    <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
-                                        <!--<p:ajax update="loginMsg" event="blur" />-->
-                                        <f:validateLength maximum="50" />
-                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                    </p:inputText>
-                                    <p:watermark for="email" value="#{messages['email']}" />
-                                    <p:message for="email" />
-                                </h:panelGrid>
-                                <div id="btnback">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
-                                </div>
-                                
-                                
-                            </h:form>
-                            
-                            
-                        </div><!-- end pmtext -->  
-                    </div><!-- end page middle -->                                             
+                                <p>#{messages['quanto.voce.bebe.abstemio.p2']}</p>
+                                <p>#{messages['quanto.voce.bebe.abstemio.p3']}</p>
 
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
-                    
-                </div>        
-            </div>
+                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.1']} </h3>
+                                <p>#{messages['quanto.voce.bebe.abstemio.p4']}</p>
+
+                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.2']} </h3>
+
+                                <p>#{messages['quanto.voce.bebe.abstemio.p5']}</p>
+
+                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.3']}</h3>
+
+                                <ul>
+                                    <li>#{messages['quanto.voce.bebe.abstemio.li.1']}</li>
+                                    <li>#{messages['quanto.voce.bebe.abstemio.li.2']}</li>
+                                    <li>#{messages['quanto.voce.bebe.abstemio.li.3']}</li>
+                                </ul>
+
+                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.4']}</h3>
+                                <p>#{messages['quanto.voce.bebe.abstemio.p6']}<h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['quanto.voce.bebe.abstemio.link']}</h:outputLink></p>        
+
+                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.5']}</h3>                        
+                                <p>#{messages['quanto.voce.bebe.abstemio.p7']}</p>
 
 
-        </div><!-- end.corpo --> 
+                                <h:form id="form" class="form-signup">
+                                    <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+
+                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                        <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="50" />
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <p:watermark for="email" value="#{messages['email']}" />
+                                        <p:message for="email" />
+                                    </h:panelGrid>
+                                    <div id="btnback">
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                    </div>
+
+
+                                </h:form>
+
+
+                            </div><!-- end pmtext -->  
+                        </div><!-- end page middle -->                                             
+
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
+
+                    </div>        
+                </div>
+
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 

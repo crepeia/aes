@@ -6,110 +6,106 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
-     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.title']}</title>
-        <w:head_comum />
-    </h:head>
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.title']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header  evaluationRequired="true"/>
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
-
-
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header  evaluationRequired="true"/>
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
 
 
-                <div class="pagecontent">
 
 
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h1']}</h1> 
+                            </div>    
 
-                        <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <div id="progressbar">
+                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
                         </div>
 
-                        <div id="pmtext">                                               
-                            <h2>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h2']}</h2>
-                            <ul>
-                                <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.1']}</p>
-                                <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.1']}</li>
-                                <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.2']}</li>
-                                <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.3']}</li>
-                                <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.4']}</li>
-                            </ul>
 
-                            <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.1']}</h3>
-                            <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.2']}</p>
+                        <div id="pagemiddle">
 
-                            <ul>
-                                <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.5']}</li>
-                                <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.6']}</li>                            
-                            </ul>
+                            <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
 
-                            <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.2']}</h3>
-                            <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.3']}
-                                <h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['link']}</h:outputLink>.
-                            </p>        
+                            <div id="pmtext">                                               
+                                <h2>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h2']}</h2>
+                                <ul>
+                                    <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.1']}</p>
+                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.1']}</li>
+                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.2']}</li>
+                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.3']}</li>
+                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.4']}</li>
+                                </ul>
 
-                            <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.3']}</h3>                        
-                            <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.4']}</p>
+                                <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.1']}</h3>
+                                <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.2']}</p>
 
-                            
+                                <ul>
+                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.5']}</li>
+                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.6']}</li>                            
+                                </ul>
 
+                                <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.2']}</h3>
+                                <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.3']}
+                                    <h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['link']}</h:outputLink>.
+                                </p>        
 
-                            <h:form id="form" class="form-signup">
-                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true" />
+                                <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.3']}</h3>                        
+                                <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.4']}</p>
 
-                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                    <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="true">
-                                        <!--<p:ajax update="loginMsg" event="blur" />-->
-                                        <f:validateLength maximum="50" />
-                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                    </p:inputText>
-                                    <p:watermark for="email" value="#{messages['email']}" />
-                                    <p:message for="email" />
-                                </h:panelGrid>
+                                <h:form id="form" class="form-signup">
+                                    <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
 
-                                <div id="btnback">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value ="Enviar" update="@form" actionListener="#{evaluationController.annualScreening()}" />
-                                </div>
-                            </h:form>
+                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                        <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="50" />
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <p:watermark for="email" value="#{messages['email']}" />
+                                        <p:message for="email" />
+                                    </h:panelGrid>
+                                    <div id="btnback">
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                    </div>
+                                </h:form>
 
-                        </div><!-- end pmtext -->  
-                    </div><!-- end page middle -->                                             
+                            </div><!-- end pmtext -->  
+                        </div><!-- end page middle -->                                             
 
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
-
-
-
-                </div>        
-            </div>
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
 
 
-        </div><!-- end.corpo --> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-         </f:view>
+                    </div>        
+                </div>
+
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 

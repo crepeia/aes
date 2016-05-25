@@ -6,154 +6,151 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
-     <f:view locale="#{languageController.locale}">
-  
-    <h:head>
-        <title>#{messages['quanto.voce.bebe.nao.gravidez.title']}</title>
-        <w:head_comum />
-    </h:head>
+    <f:view locale="#{languageController.locale}">
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header />
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
+        <h:head>
+            <title>#{messages['quanto.voce.bebe.nao.gravidez.title']}</title>
+            <w:head_comum />
+        </h:head>
 
-
-                <div class="pagecontent">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header />
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
 
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['quanto.voce.bebe.nao.gravidez.h1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['quanto.voce.bebe.nao.gravidez.h1']}</h1> 
+                            </div>    
 
-                        <div class="fotoframeclean">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <div id="progressbar">
+                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
                         </div>
 
-                        <div id="pmtext">                                               
-                                            
-                                                
-                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.1']}</p>                        
-                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.2']}</p>
-                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.3']}</p>
-                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.4']}</p>
-                           
-                        <p:accordionPanel>
-                                <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab1']}">
-                                    <h:panelGrid columns="4" cellpadding="7">
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.5']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.6']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.7']}</p>
+
+                        <div id="pagemiddle">
+
+                            <div class="fotoframeclean">                            
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
+
+                            <div id="pmtext">                                               
+
+
+                                <p>#{messages['quanto.voce.bebe.nao.gravidez.p.1']}</p>                        
+                                <p>#{messages['quanto.voce.bebe.nao.gravidez.p.2']}</p>
+                                <p>#{messages['quanto.voce.bebe.nao.gravidez.p.3']}</p>
+                                <p>#{messages['quanto.voce.bebe.nao.gravidez.p.4']}</p>
+
+                                <p:accordionPanel>
+                                    <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab1']}">
+                                        <h:panelGrid columns="4" cellpadding="7">
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.5']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.6']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.7']}</p>
+                                        </h:panelGrid>
+                                    </p:tab>
+
+                                    <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab2']}">
+                                        <h:panelGrid columns="4" cellpadding="7">
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.8']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.9']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.10']}</p>
+                                        </h:panelGrid>
+                                    </p:tab>
+
+                                    <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab3']}">
+                                        <h:panelGrid columns="4" cellpadding="7">
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.11']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.12']} </p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.13']} </p>
+                                        </h:panelGrid>
+                                    </p:tab>
+
+                                    <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab4']}">
+                                        <h:panelGrid columns="4" cellpadding="7">
+                                            <p> #{messages['quanto.voce.bebe.nao.gravidez.p.14']}</p>
+                                            <p> #{messages['quanto.voce.bebe.nao.gravidez.p.15']}</p>
+                                        </h:panelGrid>
+                                    </p:tab>
+
+                                    <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab5']}">
+                                        <h:panelGrid columns="4" cellpadding="7">
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.16']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.17']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.18']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.19']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.20']}</p>
+                                        </h:panelGrid>
+                                    </p:tab>
+
+                                    <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab6']}">
+                                        <h:panelGrid columns="4" cellpadding="7">
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.21']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.22']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.23']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.24']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.25']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.26']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.27']}</p>
+                                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.28']}</p>
+                                        </h:panelGrid>
+                                    </p:tab>
+                                </p:accordionPanel>
+
+                                <h3>#{messages['quanto.voce.bebe.nao.gravidez.h3.1']}</h3>
+                                <p>#{messages['quanto.voce.bebe.nao.gravidez.p.29']}
+                                    <h:outputLink value="https://www.informalcool.org.br/bebermenos">
+                                        #{messages['link']}
+                                    </h:outputLink>.
+                                </p>        
+                                <h3>#{messages['quanto.voce.bebe.nao.gravidez.h3.2']}</h3>                        
+                                <p>#{messages['quanto.voce.bebe.nao.gravidez.p.30']}</p>
+
+                                <h:form id="form" class="form-signup">
+                                    <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+
+
+                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                        <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="50" />
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <p:watermark for="email" value="#{messages['email']}" />
+                                        <p:message for="email" />
                                     </h:panelGrid>
-                                </p:tab>
-                      
-                                <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab2']}">
-                                    <h:panelGrid columns="4" cellpadding="7">
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.8']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.9']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.10']}</p>
-                                    </h:panelGrid>
-                                </p:tab>
-                                         
-                                <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab3']}">
-                                    <h:panelGrid columns="4" cellpadding="7">
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.11']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.12']} </p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.13']} </p>
-                                    </h:panelGrid>
-                                </p:tab>
-                        
-                                <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab4']}">
-                                    <h:panelGrid columns="4" cellpadding="7">
-                                        <p> #{messages['quanto.voce.bebe.nao.gravidez.p.14']}</p>
-                                        <p> #{messages['quanto.voce.bebe.nao.gravidez.p.15']}</p>
-                                    </h:panelGrid>
-                                </p:tab>
-                        
-                                <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab5']}">
-                                    <h:panelGrid columns="4" cellpadding="7">
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.16']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.17']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.18']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.19']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.20']}</p>
-                                    </h:panelGrid>
-                                </p:tab>
-                   
-                                <p:tab title="#{messages['quanto.voce.bebe.nao.gravidez.ptab6']}">
-                                    <h:panelGrid columns="4" cellpadding="7">
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.21']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.22']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.23']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.24']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.25']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.26']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.27']}</p>
-                                        <p>#{messages['quanto.voce.bebe.nao.gravidez.p.28']}</p>
-                                    </h:panelGrid>
-                                </p:tab>
-                        </p:accordionPanel>
-                                             
-                            <h3>#{messages['quanto.voce.bebe.nao.gravidez.h3.1']}</h3>
-                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.29']}
-                                <h:outputLink value="https://www.informalcool.org.br/bebermenos">
-                                    #{messages['link']}
-                                </h:outputLink>.
-                            </p>        
-                            <h3>#{messages['quanto.voce.bebe.nao.gravidez.h3.2']}</h3>                        
-                            <p>#{messages['quanto.voce.bebe.nao.gravidez.p.30']}</p>
+                                    <div id="btnback">
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                    </div>
 
-                            
-                            <h:form id="form" class="form-signup">
-                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+                                </h:form>
 
-                                
-                                
-                                <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                    <p:inputText id="email" value="#{userController.user.email}" required="true" size="30" label="#{message['email']}" validatorMessage="#{message['email.wrong.format']}">
-                                        <!--<p:ajax update="loginMsg" event="blur" />-->
-                                        <f:validateLength maximum="50" />
-                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                    </p:inputText>
-                                    <p:watermark for="email" value="#{messages['email']}" />
-                                    <p:message for="email" />
-                                </h:panelGrid>
+                            </div><!-- end pmtext -->  
+                        </div><!-- end page middle -->                                             
 
-                                <div id="btnback">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{userController.annualScreening()}" />
-                                </div>
-                                
-                            </h:form>
-                            
-                        </div><!-- end pmtext -->  
-                    </div><!-- end page middle -->                                             
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
 
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
-                    
-                </div>        
-            </div>
+                    </div>        
+                </div>
 
 
-        </div><!-- end.corpo --> 
+            </div><!-- end.corpo --> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-         </f:view>
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 
 

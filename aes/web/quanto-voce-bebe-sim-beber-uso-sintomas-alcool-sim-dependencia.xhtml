@@ -7,107 +7,126 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.title']}</title>
-        <w:head_comum />
-    </h:head>
+        <h:head>
+            <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.title']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true" evaluationRequired="true" />
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
-
-
-                <div class="pagecontent">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header loginRequired="false" evaluationRequired="true" />
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
 
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h1.1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h1.1']}</h1> 
+                            </div>    
 
-                        <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            <div id="progressbar">
+                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
                         </div>
 
-                        <div id="pmtext">                                               
-                            <h2>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h2.1']}</h2>
-                            <ul>
-                                <!-- Incluir feedback e diminuir tamanho da paǵina -->
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.1']}</li>
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.2']}</li>
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.3']} </li>
-            
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.4']}</li>
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.5']}</li>
-                            </ul>
-                            
-                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h4.1']}</h4>
-                                                   
-                            <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.b.1']}</b></p>
-                            
-                            <h:form>
-                            
-                                
-                                
-                                <p:panel id="qrecaida" >                
-                                <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
-                                    <p:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependenceContinue}" required="true">  
-                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.yes']}" itemValue="#{true}" />
-                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.no']}" itemValue="#{false}" /> 
-                                        <p:ajax event="change" update="@form" listener="#{evaluationController.save()}"/>
-                                    </p:selectOneRadio> 
-                                </h:panelGrid>
-                                </p:panel>
-                                
-                                <p:panel id="panelYes" rendered="#{!evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}" >               
-                                    <p><b>Apesar de você optar no momento não continuar no programa você pode retornar a qualquer momento.</b></p>
-                                    <p>Recomendamos fortemente que você procure ajuda de um profissional de saúde ou ligue para o programa gratuito 132 "Viva Voz"</p>
-                                    <p>Estes passo podem lhe ajudar a conhecer melhor como o seu consumo de álcool pode prejudicar a sua saúde no momento.      </p>
-                                </p:panel>
-                                
-                                <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
-                                </div>
-                                
-                                
-                                <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceContinue()}" actionListener="#{evaluationController.save()}" disabled="#{!evaluationController.evaluation.dependenceContinue or empty evaluationController.evaluation.dependenceContinue}"/>
-                                                   
-                                </div>
-                                
-                           </h:form> 
-                        </div><!-- end pmtext -->  
-                    </div><!-- end page middle -->      
-                    
-                    
 
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
+                        <div id="pagemiddle">
+
+                            <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                            </div>
+
+                            <div id="pmtext">                                               
+                                <h2>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h2.1']}</h2>
+                                <ul>
+                                    <!-- Incluir feedback e diminuir tamanho da paǵina -->
+                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.1']}</li>
+                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.2']}</li>
+                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.3']} </li>
+
+                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.4']}</li>
+                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.5']}</li>
+                                </ul>
+
+                                <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h4.1']}</h4>
+
+                                <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.b.1']}</b></p>
+
+                                <h:form>
 
 
 
-                </div>        
-            </div>
+                                    <p:panel id="qrecaida" >                
+                                        <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
+                                            <p:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependenceContinue}" required="true">  
+                                                <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.yes']}" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.no']}" itemValue="#{false}" /> 
+                                                <p:ajax event="change" update="@form" listener="#{evaluationController.save()}"/>
+                                            </p:selectOneRadio> 
+                                        </h:panelGrid>
+                                    </p:panel>
+
+                                    <p:panel id="panelYes" rendered="#{!evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}" >               
+                                        <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p1']}</b></p>
+                                        <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p2']}</p>
+                                        <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p3']}</p>
+                                        
+                                        <h4><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.h4']}</b></h4>
+                                        
+                                <h:form id="form" class="form-signup">
+                                    <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+
+                                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                            <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                                <!--<p:ajax update="loginMsg" event="blur" />-->
+                                                <f:validateLength maximum="50" />
+                                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                            </p:inputText>
+                                            <p:watermark for="email" value="#{messages['email']}" />
+                                            <p:message for="email" />
+                                        </h:panelGrid>
+                                        <div id="btnback">
+                                            <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                        </div>
+                                    </h:form>
+                                    </p:panel>
+
+                                    <div id="btnback">
+                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
+                                    </div>
 
 
-        </div><!-- end.corpo --> 
+                                    <div id="btnnext">
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceContinue()}" actionListener="#{evaluationController.save()}" disabled="#{!evaluationController.evaluation.dependenceContinue or empty evaluationController.evaluation.dependenceContinue}"/>
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-        </f:view>
+                                    </div>
+
+                                </h:form> 
+                            </div><!-- end pmtext -->  
+                        </div><!-- end page middle -->      
+
+
+
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
+
+
+
+                    </div>        
+                </div>
+
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 
