@@ -7,7 +7,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
-        <title>Introdução - O quanto você bebe ? | Álcool e Saúde </title>
+        <title>#{messages['estrategia.parar.apoio.profissional.nao.desista.title']} </title>
         <w:head_comum />
     </h:head>
 
@@ -24,11 +24,11 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>Não desista</h1> 
+                            <h1>#{messages['estrategia.parar.apoio.profissional.nao.desista.h1.1']} </h1> 
                         </div>    
 
                         <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                            <p:progressBar value="75" labelTemplate="{value}%" displayOnly="true"/>
                         </div>                        
                     </div>
 
@@ -41,17 +41,17 @@
 
                         <div id="pmtext">
 
-                            <h3>Mudando seu comportamento - Não desista</h3>
-                            <p>Mudar comportamentos como fumar, comer demais ou beber muito, pode demandar muito esforço, podendo não ter resultados positivos logo na primeira tentativa</p>
-                            <li>Algumas falhas durante o percurso são comuns, mas você sempre aprende mais a cada vez que passa por elas</li>
-                            <li>Cada uma destas tentativas o trará mais próximo ao seu objetivo</li>
-                            <h3>Qualquer que seja o caminho que você escolha - tente-o de forma justa</h3>
-                            <li>Caso esta abordagem não funcione, tente alguma outra coisa</li>
-                            <li>Caso alguma falha aconteça durante este caminho, busque voltar para os trilhos o mais rápido possível </li>
-                            <h4>Lembre-se:</h4>
-                            <li>Apesar desta ser uma longa jornada, você  tem grandes chances de sucesso</h4>
-                            <li>Quanto mais persistir tentando maiores são estas chances de sucesso</li>
-                            <li>Diversas pesquisas apoiam isto, mostrando que é possível mudar seu comportamento com relação ao álcool</li>
+                            <h3>#{messages['estrategia.parar.apoio.profissional.nao.desista.h3.1']}</h3>
+                            <p>#{messages['estrategia.parar.apoio.profissional.nao.desista.p1 ']} </p>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li1']}</li>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li2']}</li>
+                            <h3>#{messages['estrategia.parar.apoio.profissional.nao.desista.h3.2']}</h3>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li3']}</li>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li4']}</li>
+                            <h4>#{messages['estrategia.parar.apoio.profissional.nao.desista.h4.1']}</h4>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li5']}</h4>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li6']}</li>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li7']}</li>
                           
                             <h:form>
 
@@ -71,10 +71,8 @@
                     </div><!-- end page middle -->                                             
 
                     <div class="referencias">
-                        <p>Atualizado em 12/01/2014</p>
+                        <p>#{messages['updated']}</p>
                     </div>
-
-
 
                 </div>        
             </div>

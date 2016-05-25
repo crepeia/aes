@@ -118,11 +118,7 @@
 
                                 <h:form id="form" class="form-signup">
                                     <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
-
-                                    <h:form id="form" class="form-signup">
-                                        <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
-
-
+                                    
                                         <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
                                             <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
                                                 <!--<p:ajax update="loginMsg" event="blur" />-->
@@ -143,7 +139,6 @@
 
                     <div class="referencias">
                         <p>#{messages['updated']}</p>
-                        <p>http://pubs.niaaa.nih.gov/publications/DrinkingPregnancy_HTML/pregnancy.pdf</p>
                     </div>
                     
                 </div>        
