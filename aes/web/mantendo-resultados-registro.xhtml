@@ -71,7 +71,7 @@
                             </h:panelGrid>
                         </div>
                         <h:form>
-                            <p:growl id="errorGrowl" for="msg" sticky="true" redisplay="true" globalOnly="true"/>
+                            <p:growl id="errorGrowl" for="info" sticky="true" redisplay="true" globalOnly="true"/>
                             <div id="pagemiddle">    
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
                                 <p:panelGrid columns ="1" >
@@ -134,10 +134,13 @@
 
                                 <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form"  action="#{recordController.saveLog()}" />
 
+                                <p:messages for="warn1" />        
+                                <p:messages for="warn2" />         
+
                             </div>                                             
 
                             <div id="btnback">
-                                <h:button class="btngen" value ="#{messages['back']}" outcome="mantendo-resultados-meta.xhtml?faces-redirect=true"></h:button>
+                                <h:button class="btngen" value ="#{messages['back']}" outcome="./mantendo-resultados-meta.xhtml"></h:button>
                             </div>
 
 

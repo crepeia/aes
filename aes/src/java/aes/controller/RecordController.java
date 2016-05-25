@@ -86,11 +86,29 @@ public class RecordController extends BaseController<Record> {
             return "mantendo-resultados-meta-homem.xhtml?faces-redirect=true";
         }
     }
+    
+    public void checkDailyGoal(){
+        if((getUser().isFemale() && getRecord().getDailyGoal() > 1) || (getUser().isMale() && getRecord().getDailyGoal() > 2)){
+                FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.dailyGoal"), null));
+        }
+    }
+    
+    public void checkWeeklyGoal(){
+        if((getUser().isFemale() && getRecord().getWeeklyGoal() > 5) || (getUser().isMale() && getRecord().getWeeklyGoal() > 10)){
+                FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.weeklyGoal"), null));
+        }
+    }
+
 
     public void saveLog() {
         try {
             logDAO.insertOrUpdate(dailyLog, getEntityManager());
-            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("record.save"), null));
+            FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("record.save"), null));
+            if((getUser().isFemale() && dailyLog.getDrinks() > 1) || (getUser().isMale() && dailyLog.getDrinks() > 2)){
+                FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.limit"), null));
+            }if(dailyLog.getDrinks() > getRecord().getDailyGoal()){
+                FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.goal"), null));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -159,8 +177,6 @@ public class RecordController extends BaseController<Record> {
         }
         dates = dates.substring(0, dates.length() - 1);
         dates = dates.concat("\"");
-        System.out.println("getWeek()");
-        System.out.println(dates);
         return dates;
     }
 
