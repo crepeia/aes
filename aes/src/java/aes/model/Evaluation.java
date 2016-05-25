@@ -1,5 +1,6 @@
 package aes.model;
 
+import com.sun.xml.ws.binding.FeatureListUtil;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -126,31 +127,32 @@ public class Evaluation implements Serializable {
                 + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(dateCreated);
     }
 
-    public int getDrinkingDays() {
-        int drinkingDays = 0;
-        if (sunday != null && sunday != 0) {
-            drinkingDays++;
+    public boolean getDrinkingDays() {
+        int limit =  getUser().isFemale() ? 1 : 2;
+        if (sunday != null && sunday > limit){
+            return true;
         }
-        if (monday != null && monday != 0) {
-            drinkingDays++;
+        if (monday != null && monday > limit) {
+            return true;
         }
-        if (tuesday != null && tuesday != 0) {
-            drinkingDays++;
+        if (tuesday != null && tuesday > limit) {
+            return true;
         }
-        if (wednesday != null && wednesday != 0) {
-            drinkingDays++;
+        if (wednesday != null && wednesday > limit) {
+            return true;
         }
-        if (thursday != null && thursday != 0) {
-            drinkingDays++;
+        if (thursday != null && thursday > limit) {
+            return true;
         }
-        if (friday != null && friday != 0) {
-            drinkingDays++;
+        if (friday != null && friday > limit) {
+            return true;
         }
-        if (saturday != null && saturday != 0) {
-            drinkingDays++;
+        if (saturday != null && saturday > limit) {
+            return true;
         }
-
-        return drinkingDays;
+        else{
+            return false;
+        }
     }
 
     public int getWeekTotal() {
