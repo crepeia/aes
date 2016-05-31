@@ -58,8 +58,10 @@
                                 <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.b.1']}</b></p>
 
                                 <h:form>
-
-
+                                    <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+                                        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                            <p:graphicImage library="default" name="images/loading.gif" />
+                                        </p:dialog>
 
                                     <p:panel id="qrecaida" >                
                                         <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
