@@ -299,6 +299,10 @@ public class UserController extends BaseController<User> {
         return bundle.getString(key);
     }
 
+    public Date getCurrentDate(){
+        return new Date();        
+    }
+    
     public User getUser() {
         return user;
     }
