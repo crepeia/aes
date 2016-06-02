@@ -59,6 +59,10 @@
 
                                 <h:form>
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+                                            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                                <p:graphicImage library="default" name="images/loading.gif" />
+                                            </p:dialog>
+                                    <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
                                         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                                             <p:graphicImage library="default" name="images/loading.gif" />
                                         </p:dialog>
