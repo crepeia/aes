@@ -86,14 +86,14 @@
 
                                 <p:panelGrid columns ="4">
                                     <p:outputLabel value="De"/>
-                                    <p:inputText id="startingDay" value="#{recordController.weekFirstDay}" readonly="true" />
+                                    <p:outputLabel id="startingDay" value="#{recordController.weekFirstDay}"  />
                                     
                                     <p:outputLabel value="a" />  
-                                    <p:inputText id="endingDay"  value="#{recordController.weekLastDay}" readonly="true" />
+                                    <p:outputLabel id="endingDay"  value="#{recordController.weekLastDay}" />
                                 </p:panelGrid>
 
                                 <p:panelGrid columns ="1" >
-                                    <p:calendar id="calendar" value="#{recordController.date}" pattern="dd/MM/yyyy" mode="inline" beforeShowDay="disableDates" locale="#{languageController.locale}"  >
+                                    <p:calendar id="calendar" value="#{recordController.date}"  pattern="dd/MM/yyyy" mode="inline" beforeShowDay="disableDates" locale="#{languageController.locale}"  showOtherMonths="true" pagedate="#{recordController.weekFirstDay}" >
                                         <p:ajax event="dateSelect" listener="#{recordController.fetchLog()}"  update="@form"  process="@form"/>
                                     </p:calendar>  
                                     <script type="text/javascript">
@@ -161,7 +161,7 @@
 
                                 <h:panelGrid columns="4" cellpadding="7" >
                                     <p:outputLabel for="date1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
-                                    <p:inputText id="date1" value="#{recordController.formattedDate}" readonly="true" />
+                                    <p:outputLabel id="date1" value="#{recordController.formattedDate}"  />
                                     <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
                                     <p:spinner id="dose1" value="#{recordController.dailyLog.drinks}" min="0"/>
                                     <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
@@ -170,12 +170,11 @@
                                     <p:inputText id="consequence1" value="#{recordController.dailyLog.consequences}"/>
                                 </h:panelGrid>
 
-                                <p:commandButton id="saveBtn" styleClass="btngen" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
+                                <p:commandButton id="saveBtn" styleClass="btngen" style="float:right;" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
 
                                 <p:messages for="warn1" />        
                                 <p:messages for="warn2" />        
 
-                                <div id ="mailandprint" > 
                                     <h:panelGrid columns="2" >
                                         <p:panelGrid columns="1">
                                             <div id ="planoimg1">
@@ -196,7 +195,6 @@
                                             </div>
                                         </p:panelGrid>
                                     </h:panelGrid>  
-                                 </div>                                           
                             </div>   
                             <div id="btnback">
                                 <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>

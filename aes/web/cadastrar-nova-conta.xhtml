@@ -84,7 +84,7 @@
                                                 <p:panelGrid columns="2" id="nascimento">
                                                     <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
 
-                                                    <p:calendar id="birthdate" label="#{messages['naccount.birthdate']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" showOn="button" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true" maxdate="#{userController.currentDate}">
+                                                    <p:calendar id="birthdate" label="#{messages['naccount.birthdate']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" readonlyInput="true" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true" maxdate="#{userController.currentDate}">
                                                         <p:ajax event="change" update="birthdate" />
                                                     </p:calendar>
                                                 </p:panelGrid>
