@@ -109,18 +109,19 @@ public class UserController extends BaseController<User> {
 
     }
 
-    public void signOut() {
+    public void signOut(){
+        Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'saiu do sistema.");
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         try {
-            Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'saiu do sistema.");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
             user = null;
             loggedIn = false;
             password = null;
-            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+   
 
     public void clearSession() {
 
