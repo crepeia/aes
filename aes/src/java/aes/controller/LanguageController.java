@@ -33,7 +33,6 @@ public class LanguageController extends BaseController<User> {
             userController.getUser().setPreferedLanguage(getLanguage());
         }
         FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
-        
     }
     
     
