@@ -39,6 +39,9 @@ public class Record implements Serializable{
     }
 
     public Integer getDailyGoal() {
+        if(dailyGoal == null){
+            return 0;
+        }
         return dailyGoal;
     }
 
@@ -47,6 +50,9 @@ public class Record implements Serializable{
     }
 
     public Integer getWeeklyGoal() {
+        if(weeklyGoal == null){
+            return 0;
+        }
         return weeklyGoal;
     }
 
