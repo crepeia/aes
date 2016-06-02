@@ -71,6 +71,10 @@
                                 <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.4']}</p>
 
                                 <h:form id="form" class="form-signup">
+                                    <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+                                            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                                <p:graphicImage library="default" name="images/loading.gif" />
+                                            </p:dialog>
                                     <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
                                     <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
