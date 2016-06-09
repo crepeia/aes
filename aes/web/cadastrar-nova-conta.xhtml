@@ -81,14 +81,39 @@
 
                                             <div id="signupbottom">
 
-                                                <p:panelGrid columns="2" id="nascimento">
+                                               <!-- <p:panelGrid columns="2" id="nascimento">
                                                     <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
 
                                                     <p:calendar id="birthdate" label="#{messages['naccount.birthdate']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" readonlyInput="true" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true" maxdate="#{userController.currentDate}">
                                                         <p:ajax event="change" update="birthdate" />
                                                     </p:calendar>
                                                 </p:panelGrid>
-                                                <p:message for="birthdate" />
+                                                <p:message for="birthdate" />-->
+                                                
+                                     <!--#########################-->
+                                            <p:panelGrid columns="4" id="birthdate" style="margin-bottom:10px">
+                                                <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
+                                                <h:selectOneMenu id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}">  
+                                                    <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
+                                                    <f:selectItems value="#{userController.dias}"/>
+                                                </h:selectOneMenu>
+                            
+                                                <h:selectOneMenu id="month" value="#{userController.mes}" required="true" label="#{messages['naccount.month']}">  
+                                                    <f:selectItem itemLabel="#{messages['naccount.month']}" itemValue="" />  
+                                                    <f:selectItems value="#{userController.meses}" />  
+                                                </h:selectOneMenu>
+                                     
+                                                <h:selectOneMenu id="year" value="#{userController.ano}" required="true" label="#{messages['naccount.year']}">  
+                                                    <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
+                                                    <f:selectItems value="#{userController.anos}" />  
+                                                </h:selectOneMenu>
+   
+                                            </p:panelGrid>
+                                            <p:message for="day" />
+                                            <p:message for="month"/>
+                                            <p:message for="year"/>
+                                     
+                                     <!--#################################-->
 
                                                 <p:panelGrid columns="2" id="sexo" style="margin-bottom:10px">
                                                     <h:outputText value="#{messages['naccount.sex']}" style="font-weight: bold;"/>
