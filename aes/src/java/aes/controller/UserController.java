@@ -8,8 +8,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -48,9 +51,29 @@ public class UserController extends BaseController<User> {
     private String email;
     private Integer recoverCode;
     private String passwordd;
+    
+    private int dia;
+    private int mes;
+    private int ano;
 
+    private Map<String, String> dias = new LinkedHashMap<String, String>();
+    private Map<String, String> meses = new LinkedHashMap<String, String>();
+    private Map<String, String> anos = new LinkedHashMap<String, String>();
+    private String[] nomeMeses;
+    
+    
     @PostConstruct
     public void init() {
+        mes = -1;
+        for( int i = 1; i <= 31; i++){
+            dias.put(String.valueOf(i), String.valueOf(i));
+        }
+        GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
+        int lastYear = gc.get(GregorianCalendar.YEAR) - 1;
+        for(int i = lastYear; i > lastYear - 100; i--){
+            anos.put(String.valueOf(i), String.valueOf(i));
+        }        
+        
         try {
             daoBase = new GenericDAO<User>(User.class);
             user = new User();
@@ -109,18 +132,19 @@ public class UserController extends BaseController<User> {
 
     }
 
-    public void signOut() {
+    public void signOut(){
+        Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'saiu do sistema.");
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         try {
-            Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'saiu do sistema.");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
             user = null;
             loggedIn = false;
             password = null;
-            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+   
 
     public void clearSession() {
 
@@ -353,6 +377,65 @@ public class UserController extends BaseController<User> {
 
     public void setContactController(ContactController contactController) {
         this.contactController = contactController;
+    }
+
+    public int getDia() {
+        return dia;
+    }
+
+    public void setDia(int dia) {
+        this.dia = dia;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public Map<String, String> getDias() {
+        return dias;
+    }
+
+    public void setDias(Map<String, String> dias) {
+        this.dias = dias;
+    }
+    
+    public Map<String, String> getMeses() {
+        meses.clear();
+        for (int i = 1; i <= 12; i++) {
+            meses.put(getString("month." + String.valueOf(i)),
+                    String.valueOf(i - 1));
+        }
+        return meses;
+    }
+    
+    public void setMeses(Map<String, String> meses) {
+        this.meses = meses;
+    }
+
+    /**
+     * @return the anos
+     */
+    public Map<String, String> getAnos() {
+        return anos;
+    }
+
+    /**
+     * @param anos the anos to set
+     */
+    public void setAnos(Map<String, String> anos) {
+        this.anos = anos;
     }
 
 }

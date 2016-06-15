@@ -30,23 +30,29 @@
  
                         <div id="progressbar">
                             <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
+                        </div>
+
                     </div>
  
  
                     <div id="pagemiddle">
- 
-                        <!-- <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
-                        </div> -->
+                        
+                        <div class="fotoframe">                            
+                            <h:graphicImage library="default" id="stop" title="#{messages['title.image']}" name="images/meta_dimparar.png" alt="Diminuir ou parar" />
+                        </div> 
+      
  
                         <div id="pmtext">
  
                             <p>#{messages['preparando.diminuir.parar.p.1']}</p>      
 <h:form>
                                 <p:panel id="questoes" >
+
                                     
-                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                    <h:panelGrid columns="2" style="margin-bottom:100px" cellpadding="10" id="questao2">
+                                        
+
+                                        
                                         <f:facet name="header">  
                                             #{messages['preparando.diminuir.parar.facet.1']}
                                         </f:facet> 

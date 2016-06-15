@@ -36,9 +36,9 @@
 
                         <div id="pagemiddle">
 
-                         <!--   <div class="fotoframe">                            
-                                <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
-                            </div> -->
+                           <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="start" title="#{messages['title.image']}" name="images/plan_comecar.png" alt="Para de beber" />
+                            </div> 
 
                             <div id="pmtext">
 
@@ -57,7 +57,7 @@
                                             <f:facet name="header">  
                                                 #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
                                             </f:facet>
-                                            <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" pattern="dd/MM/yyyy" required="true" locale="#{languageController.locale}" requiredMessage="'Data': Campo em branco" showOn="button" >
+                                            <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" readonlyInput="true" pattern="dd/MM/yyyy" required="true" locale="#{languageController.locale}" requiredMessage="'Data': Campo em branco" >
                                             </p:calendar>
                                         </h:panelGrid>
 
