@@ -21,7 +21,7 @@
 
 
                 <div class="pagecontent">
-                    <h:graphicImage library="default" name="images/logo-alcool-e-saude.png" alt="Álcool e Saúde" id="vstpaisagem" />	
+                  <!--  <h:graphicImage library="default" name="images/logo-alcool-e-saude.png" alt="Álcool e Saúde" id="vstpaisagem" />-->
                     <h1>#{messages['termos.de.uso.h1.1']}</h1>
                     <div class="referencias">
                         <p>#{messages['updated']}</p>
@@ -29,8 +29,9 @@
                     </div>
                     <p>#{messages['termos.de.uso.p.1']}</p>
                     <p>#{messages['termos.de.uso.p.2']}</p>
-                    <p>#{messages['termos.de.uso.p.3']}</p><strong>#{messages['termos.de.uso.strong.1']}</strong><p>#{messages['termos.de.uso.p.3.1']}</p>
-                    <p>#{messages['termos.de.uso.p.4']}</p><em>#{messages['termos.de.uso.p.4']}</em><p>#{messages['termos.de.uso.p.4.1']}</p>
+                    <p>#{messages['termos.de.uso.p.3']}<strong> #{messages['termos.de.uso.strong.1']}</strong> #{messages['termos.de.uso.p.3.1']}</p>
+                    <p>#{messages['termos.de.uso.p.4']}<em> #{messages['termos.de.uso.p.4.1']}</em>.</p>
+                    
                     <h3>#{messages['termos.de.uso.h3.1']}</h3>
                     <p>#{messages['termos.de.uso.p.5']}</p>
                     <h3>#{messages['termos.de.uso.h3.2']}</h3>
@@ -42,7 +43,7 @@
                         <li>#{messages['termos.de.uso.li.5']}</li>
                     </ul>    
 
-                    <h3></h3>
+                    <h3>#{messages['termos.de.uso.h3.3']} </h3>
                     <p>#{messages['termos.de.uso.p.6']}</p>
                     <p>#{messages['termos.de.uso.p.7']}</p>
                     <p>#{messages['termos.de.uso.p.8']}</p>
@@ -55,12 +56,16 @@
                     <h3>#{messages['termos.de.uso.h3.7']}</h3>
                     <p>#{messages['termos.de.uso.p.12']}</p>
                     <h3>#{messages['termos.de.uso.h3.8']}</h3>
-                    <p>#{messages['termos.de.uso.p.13']}</p><center><object type="image/svg+xml" data="resources/default/images/gpl.svg">#{messages['termos.de.uso.object.1']}</object></center>
+                    <p>#{messages['termos.de.uso.p.13']}</p>
+                    <h:outputLink value="http://www.gnu.org/licenses/gpl.html">#{messages['termos.de.uso.p.13.1']}</h:outputLink>
+                    <center><object type="image/svg+xml" data="resources/default/images/gpl.svg">#{messages['termos.de.uso.object.1']}</object></center>
                     <h3>#{messages['termos.de.uso.h3.9']}</h3>
                     <p>#{messages['termos.de.uso.p.14']}</p>
-                    <h3>T#{messages['termos.de.uso.h3.10']}</h3>
-                    <p>#{messages['termos.de.uso.p.15']}</p>                                    
-
+                    <h3>#{messages['termos.de.uso.h3.10']}</h3>
+                    <p>#{messages['termos.de.uso.p.15']}</p>
+                    <div id="btnprog">
+                        <h:button class="btngen" value ="#{messages['termo.consentimento.p.9']}" outcome="./cadastrar-nova-conta.xhtml"  ></h:button>
+                    </div> 
                 </div>
             </div>
 

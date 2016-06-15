@@ -78,6 +78,13 @@
                                                 </p:password>
                                                 <p:watermark for="confirmPasswordTxt" value="#{messages['naccount.rpt.psw']}" />
                                             </div>
+                                            <div class="signuptext">
+                                                <p:inputMask id="PhoneTxt" value="#" mask="(99) 99999999?9" required="no" size="12" label="#{messages['naccount.phone']}"> 
+                                                    <f:validateLength maximum="13" />
+                                                </p:inputMask>
+                                                <p:watermark for="PhoneTxt" value="#{messages['naccount.fullphone']}" />
+                                                <p:message for="PhoneTxt" />
+                                            </div> 
 
                                             <div id="signupbottom">
 
@@ -101,7 +108,6 @@
 
                                                 <p:message for="gender" />
 
-
                                                 <h:panelGrid columns="1" style="margin-bottom:10px; margin-top:-45px" cellpadding="10" id="questao">
                                                     <h:panelGrid columns="1" style="margin-top:10px; margin-bottom:-20px" cellpadding="10" id="questaoX" rendered="#{userController.user.female}">
                                                         <h:outputText value="#{messages['cadastrar.nova.conta.outputText.1']}" style="font-weight: bold"/>
@@ -114,7 +120,7 @@
 
                                                 <p:message for="pregnant" />
 
-                                                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
+                                                <h:panelGrid columns="2" style="margin-bottom:-10px" cellpadding="10" id="questao2">
                                                     <f:facet name="header">  
                                                         #{messages['cadastrar.nova.conta.facet.1']}
                                                     </f:facet> 
@@ -126,16 +132,17 @@
 
                                                 <p:message for="drink" />
 
-
-                                                <div id="signup-terms">
-                                                    <p:panelGrid columns="2" id="allowemail">
-                                                        <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>
+                                                    <p:panelGrid columns="2"  id="allowterm">
+                                                        <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>                                                        
                                                         <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}"/>
-                                                        <label for="chk2">#{messages['cadastrar.nova.conta.chk2']}</label>
+                                                    </p:panelGrid>                                             
+                                                    <p:panelGrid columns="4" >
+                                                        <label for="chk2">#{messages['naccount.p.termo']}<h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink></label>
                                                         <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
                                                     </p:panelGrid>
-                                                    <p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink>. #{messages['naccount.already.registered']} <h:outputLink value="login.xhtml">#{messages['signin']}</h:outputLink></p>                                            
-
+                                     
+                                                <div id="signup-terms">
+                                                    <p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink></p>                                            
                                                 </div>
 
                                                 <div id="signupsubmit">			                                            
@@ -154,7 +161,7 @@
                                     <h3>#{messages['cadastrar.nova.conta.h3.3']}</h3>
                                     <p>#{messages['cadastrar.nova.conta.p.2']}</p>
 
-                                    <h1>#{messages['cadastrar.nova.conta.h1']}</h1>
+                                    <h3>#{messages['cadastrar.nova.conta.h1']}</h3>
                                     <h:form id="form1" class="form-signup">
                                         <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                         <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>						

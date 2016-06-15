@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['termo.consentimento.title.1']}</title>
+            <w:head_comum />
+        </h:head>
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header />
+                <w:topmenu />
+
+                <!--mainmenu-->         	
+                <div class="main">
+
+
+                    <div class="pagecontent">	
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
+
+                        <h1>#{messages['termo.consentimento.h1.1']}</h1>
+                        <p><strong>#{messages['termo.consentimento.p.1.a']}</strong></p>
+                        <p>#{messages['termo.consentimento.p.1.b']}</p>
+                        <p><strong>#{messages['termo.consentimento.p.2.a']}</strong></p>
+                        <p>#{messages['termo.consentimento.p.2.b']} </p>
+                        <p>#{messages['termo.consentimento.p.3']}</p>
+                        <p>#{messages['termo.consentimento.p.4a']}<strong>#{messages['termo.consentimento.p.4b']}</strong>#{messages['termo.consentimento.p.4b']}</p>
+                        <p><strong>#{messages['termo.consentimento.p.5a']}</strong></p>
+                        <p><strong>#{messages['termo.consentimento.p.5b']}</strong></p>
+                        <p>#{messages['termo.consentimento.p.6']}<strong>#{messages['termo.consentimento.p.6a']}</strong></p>
+                        <p>#{messages['termo.consentimento.p.6b']}<b>#{messages['termo.consentimento.p.6c']}</b>#{messages['termo.consentimento.p.6d']}</p>
+                        <p>#{messages['termo.consentimento.p.7']}</p>
+                        <p>#{messages['termo.consentimento.p.8']}<strong>#{messages['termo.consentimento.p.8a']}</strong></p>
+
+                        <div id="btnprog">
+                            <h:button class="btngen" value ="#{messages['termo.consentimento.p.9']}" outcome="./cadastrar-nova-conta.xhtml"  ></h:button>
+                        </div>                                       
+                </div>
+            </div>
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
+</html>
