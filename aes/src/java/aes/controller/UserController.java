@@ -244,6 +244,10 @@ public class UserController extends BaseController<User> {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void setBirth(){
+        user.setBirth(ano, mes, dia);
+    }
 
     public void save() {
         try {
