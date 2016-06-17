@@ -30,6 +30,8 @@ import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.hibernate.TransientObjectException;
+
 
 @ManagedBean(name = "evaluationController")
 @SessionScoped
@@ -56,7 +58,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public Evaluation getEvaluation() {
-        if (evaluation == null) {
+        if (evaluation == null && getUser().getId() != 0) {
             try {
                 List<Evaluation> evaluations = this.getDaoBase().list("user", getUser(), this.getEntityManager());
                 if (!evaluations.isEmpty()) {
@@ -80,6 +82,10 @@ public class EvaluationController extends BaseController<Evaluation> {
             } catch (SQLException ex) {
                 Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
             }
+            catch(TransientObjectException ex){
+                
+            }
+
         }
         return evaluation;
     }

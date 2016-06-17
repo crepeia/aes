@@ -292,6 +292,7 @@ public class ContactController extends BaseController implements Serializable {
 
     public void sendScheduledEmails() {
         try {
+            Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "AES - Sending scheduled emails");
             List<Contact> contacts = daoBase.list(getEntityManager());
             Calendar today = Calendar.getInstance();
             Calendar scheduledDate = Calendar.getInstance();
@@ -300,13 +301,14 @@ public class ContactController extends BaseController implements Serializable {
                     scheduledDate.setTime(contact.getDateScheduled());
                     if (today.compareTo(scheduledDate) >= 0) {
                         sendHTMLEmail(contact);
+                        if(contact.getSubject().contains("annualscreening_subj")){
+                            scheduleAnnualScreeningEmail(contact.getUser());
+                        }
+                        if(contact.getSubject().contains("tips_subj")){
+                            scheduleTipsEmail(contact.getUser());
+                        }
                     }
-                    if(contact.getSubject().contains("annualscreening_subj")){
-                        scheduleAnnualScreeningEmail(contact.getUser());
-                    }
-                    if(contact.getSubject().contains("tips_subj")){
-                        scheduleTipsEmail(contact.getUser());
-                    }
+                   
                 }
             }
         } catch (SQLException ex) {
