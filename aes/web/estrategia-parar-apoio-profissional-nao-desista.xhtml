@@ -34,32 +34,34 @@
 
 
                     <div id="pagemiddle">
-                        
-                       <!-- <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
-                        </div> -->
+
+                        <!-- <div class="fotoframe">                            
+                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                         </div> -->
 
                         <div id="pmtext">
 
                             <h3>#{messages['estrategia.parar.apoio.profissional.nao.desista.h3.1']}</h3>
-                            <p>#{messages['estrategia.parar.apoio.profissional.nao.desista.p1 ']} </p>
+                            <p>#{messages['estrategia.parar.apoio.profissional.nao.desista.p1']} </p>
                             <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li1']}</li>
                             <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li2']}</li>
                             <h3>#{messages['estrategia.parar.apoio.profissional.nao.desista.h3.2']}</h3>
                             <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li3']}</li>
                             <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li4']}</li>
                             <h4>#{messages['estrategia.parar.apoio.profissional.nao.desista.h4.1']}</h4>
-                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li5']}</h4>
-                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li6']}</li>
-                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li7']}</li>
-                          
+                            <ul>
+                                <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li5']}</li>
+                                <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li6']}</li>
+                                <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li7']}</li>
+                            </ul>
+                            
                             <h:form>
 
                                 <div id="btnback">
                                     <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-introducao.xhtml"></h:button>
                                 </div>
-                                
-                                
+
+
                                 <div id="btnnext">
                                     <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit3()}"/>      
                                 </div>
