@@ -23,7 +23,11 @@
                             <h3 class="orange-text">#{messages['h1.recover.password']}</h3>
                             <p>#{messages['p.send.email']}</p>
                             <h:form class="form-signup">  
-                                <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+                                 <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+                                            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                                <p:graphicImage library="default" name="images/loading.gif" />
+                                            </p:dialog>
+                                <p:growl id="errorGrowl" for="info" sticky="true" redisplay="true" globalOnly="true"/>
                                 <div class="signuptext"> 
                                     <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['naccount.invalidemail']}" styleClass="validate" type="email">
                                         <f:validateLength maximum="50" />
@@ -31,6 +35,7 @@
                                     </p:inputText>
                                     <p:watermark for="emailTxt" value="#{messages['email']}" />
                                     <p:message for="emailTxt"/>
+                                    <p:messages for="error"/>
                                 </div>
                                 <div id="signipbottom">
                                     <div id="signinsubmit">

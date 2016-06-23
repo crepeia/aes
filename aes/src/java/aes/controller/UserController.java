@@ -200,13 +200,13 @@ public class UserController extends BaseController<User> {
         try {
             List<User> userList = daoBase.list("email", user.getEmail(), this.getEntityManager());
             if (userList.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registred"), null));
+                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registred"), null));
             } else {
                 User foundUser = userList.get(0);
                 foundUser.setRecoverCode(generateCode());
                 daoBase.insertOrUpdate(foundUser, getEntityManager());
                 contactController.sendPasswordRecoveryEmail(foundUser);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
+                FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
