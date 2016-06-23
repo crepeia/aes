@@ -103,16 +103,19 @@
                                                 <h:selectOneMenu id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}">  
                                                     <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
                                                     <f:selectItems value="#{userController.dias}"/>
+                                                    <f:ajax listener="#{userController.setBirth()}" />
                                                 </h:selectOneMenu>
                             
                                                 <h:selectOneMenu id="month" value="#{userController.mes}" required="true" label="#{messages['naccount.month']}">  
                                                     <f:selectItem itemLabel="#{messages['naccount.month']}" itemValue="" />  
-                                                    <f:selectItems value="#{userController.meses}" />  
+                                                    <f:selectItems value="#{userController.meses}" /> 
+                                                    <f:ajax listener="#{userController.setBirth()}" />
                                                 </h:selectOneMenu>
                                      
                                                 <h:selectOneMenu id="year" value="#{userController.ano}" required="true" label="#{messages['naccount.year']}">  
                                                     <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
                                                     <f:selectItems value="#{userController.anos}" />  
+                                                    <f:ajax listener="#{userController.setBirth()}" />
                                                 </h:selectOneMenu>
    
                                             </p:panelGrid>

@@ -12,6 +12,7 @@
         <cc:attribute name="loginRequired" default="false" rendered="false"/>
         <cc:attribute name="logoutRequired" default="false" rendered="false"/>
         <cc:attribute name="evaluationRequired" default="false" rendered="false"/>
+        <cc:attribute name="auditRequired" default="false" rendered="false"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -19,7 +20,8 @@
 
         <h:inputHidden value="#{userController.redirectLogin( cc.attrs.loginRequired )}" />
         <h:inputHidden value="#{userController.redirectIndex( cc.attrs.logoutRequired )}" />
-        <!--<h:inputHidden value="#{userController.redirectEvaluation( cc.attrs.evaluationRequired )}" />-->
+        <h:inputHidden value="#{userController.redirectEvaluation( cc.attrs.evaluationRequired )}" />
+        <h:inputHidden value="#{evaluationController.redirectAudit( cc.attrs.auditRequired )}" />
         <h:inputHidden value="#{pageNavigationController.saveNavigation()}" />
 
 

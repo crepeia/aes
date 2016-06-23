@@ -63,7 +63,9 @@
             <definitions>./lib/nblibraries.properties</definitions>
         </libraries>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>adicionalmente</word>
             <word>consequência</word>
+            <word>mail</word>
             <word>Tramissíveis</word>
         </spellchecker-wordlist>
     </configuration>

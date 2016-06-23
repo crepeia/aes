@@ -1,5 +1,6 @@
 package aes.controller;
 
+import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.Encrypter;
@@ -243,6 +244,10 @@ public class UserController extends BaseController<User> {
         } catch (NoSuchPaddingException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void setBirth(){
+        user.setBirth(ano, mes, dia);
     }
 
     public void save() {

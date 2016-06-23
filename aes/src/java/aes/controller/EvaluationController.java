@@ -30,6 +30,7 @@ import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.hibernate.TransientObjectException;
 
 @ManagedBean(name = "evaluationController")
 @SessionScoped
@@ -56,7 +57,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public Evaluation getEvaluation() {
-        if (evaluation == null) {
+        if (evaluation == null && getUser().getId() != 0) {
             try {
                 List<Evaluation> evaluations = this.getDaoBase().list("user", getUser(), this.getEntityManager());
                 if (!evaluations.isEmpty()) {
@@ -67,7 +68,7 @@ public class EvaluationController extends BaseController<Evaluation> {
                         eDate.setTime(e.getDateCreated());
                         if (eDate.after(limit)) {
                             evaluation = e;
-                            limit.setTime(evaluation.getDateCreated());                   
+                            limit.setTime(evaluation.getDateCreated());
                         }
                     }
                 }
@@ -79,7 +80,10 @@ public class EvaluationController extends BaseController<Evaluation> {
 
             } catch (SQLException ex) {
                 Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (TransientObjectException ex) {
+
             }
+
         }
         return evaluation;
     }
@@ -95,7 +99,6 @@ public class EvaluationController extends BaseController<Evaluation> {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 
     public String audit3() {
         int age = getUser().getAge();
@@ -192,7 +195,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void savePlan() {
         save();
-        if(getUser().isReceiveEmails()){
+        if (getUser().isReceiveEmails()) {
             contactController.clearScheduledEmails(getUser());
             contactController.scheduleDiaryReminderEmail(getUser(), getEvaluation().getDataComecarPlano());
             contactController.scheduleWeeklyEmail(getUser(), getEvaluation().getDataComecarPlano());
@@ -208,7 +211,7 @@ public class EvaluationController extends BaseController<Evaluation> {
                 }
             }
         }
-        if(getEvaluation().getTipsFrequency() != 0){
+        if (getEvaluation().getTipsFrequency() != 0) {
             contactController.scheduleTipsEmail(getUser());
         }
         FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation.plan"), null));
@@ -252,6 +255,29 @@ public class EvaluationController extends BaseController<Evaluation> {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public void redirectAudit(boolean redirect) {
+        if (redirect) {
+            try {
+                List<Evaluation> evaluations = this.getDaoBase().listOrdered("user", getUser(), "dateCreated", getEntityManager());
+                Evaluation evaluation = null;
+                if (evaluations.isEmpty()) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-3.xhtml");
+                } else {
+                    evaluation = evaluations.get(evaluations.size() - 1);
+                    if (evaluation.getAudit3() == null) {
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-3.xhtml");
+                    } else if (evaluation.getAudit3Sum() > 6 && evaluation.getAudit10() == null) {
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-3.xhtml");
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public String getURL() {
