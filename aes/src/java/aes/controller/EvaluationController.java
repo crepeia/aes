@@ -248,7 +248,9 @@ public class EvaluationController extends BaseController<Evaluation> {
                 template = template.replace("#subtitle" + (i + 1) + "#", subtitle[i]);
                 template = template.replace("#content" + (i + 1) + "#", getEvaluation().getPlanContent()[i]);
             }
-
+            template=template.replace("#subintro#", bundle.getString("plan.subintro"));
+            template=template.replace("#intro#", bundle.getString("plan.intro"));
+                    
             PDFGenerator pdfGenerator = new PDFGenerator();
             return pdfGenerator.generatePDF(template);
         } catch (IOException ex) {
