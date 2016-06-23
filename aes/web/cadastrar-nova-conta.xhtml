@@ -145,24 +145,24 @@
 
                                                 <p:message for="pregnant" />
 
-                                                <h:panelGrid columns="2" style="margin-bottom:-10px" cellpadding="10" id="questao2">
+                                                <h:panelGrid columns="2" style="margin-bottom:-10px; margin-top: -5px " cellpadding="20" id="questao2">
                                                     <f:facet name="header">  
                                                         #{messages['cadastrar.nova.conta.facet.1']}
                                                     </f:facet> 
-                                                    <p:selectOneRadio id="drink" value="#{userController.user.drink}" required="true" label="#{messages['cadastrar.nova.conta.facet.1']}">  
+                                                    <p:selectOneRadio id="drink" style="margin-bottom:10px; margin-top:-35px" value="#{userController.user.drink}" required="true" label="#{messages['cadastrar.nova.conta.facet.1']}">  
                                                         <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="#{true}" />
                                                         <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="#{false}" /> 
                                                     </p:selectOneRadio> 
                                                 </h:panelGrid>
 
                                                 <p:message for="drink" />
-
+                                                
                                                     <p:panelGrid columns="2"  id="allowterm">
                                                         <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>                                                        
                                                         <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}"/>
                                                     </p:panelGrid>                                             
-                                                    <p:panelGrid columns="4" >
-                                                        <label for="chk2">#{messages['naccount.p.termo']}<h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink></label>
+                                                    <p:panelGrid columns="3" id="consent" >
+                                                        <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
                                                         <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
                                                     </p:panelGrid>
                                      
