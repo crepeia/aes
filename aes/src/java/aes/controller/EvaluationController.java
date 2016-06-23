@@ -248,6 +248,10 @@ public class EvaluationController extends BaseController<Evaluation> {
                 template = template.replace("#subtitle" + (i + 1) + "#", subtitle[i]);
                 template = template.replace("#content" + (i + 1) + "#", getEvaluation().getPlanContent()[i]);
             }
+            template = template.replace("#footer#",
+                bundle.getString("title.1") + "<br/>"
+                + bundle.getString("crepeia") + "<br/>"
+                + bundle.getString("ufjf"));
 
             PDFGenerator pdfGenerator = new PDFGenerator();
             return pdfGenerator.generatePDF(template);
