@@ -206,7 +206,7 @@ public class UserController extends BaseController<User> {
                 foundUser.setRecoverCode(generateCode());
                 daoBase.insertOrUpdate(foundUser, getEntityManager());
                 contactController.sendPasswordRecoveryEmail(foundUser);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.intructions.password"), null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
