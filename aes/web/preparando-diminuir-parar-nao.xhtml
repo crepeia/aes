@@ -84,7 +84,8 @@
 
 
                                     <div id="btnnext">
-                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" disabled="#{empty evaluationController.evaluation.goBack}"/>
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" disabled="#{empty evaluationController.evaluation.goBack}"/> 
+                                        <f:ajax execute="@form" render="@form" />
                                     </div>
                                 </h:form>
                             </div><!-- end pmtext -->  

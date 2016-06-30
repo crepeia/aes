@@ -49,6 +49,8 @@ public class User implements Serializable {
     private String preferedLanguage;
     @Column(name = "recover_code")
     private Integer recoverCode;
+    @Column(name = "phone")
+    private String phone;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
@@ -231,5 +233,15 @@ public class User implements Serializable {
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
+    
 
 }
