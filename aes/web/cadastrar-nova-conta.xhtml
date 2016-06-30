@@ -78,14 +78,18 @@
                                                 </p:password>
                                                 <p:watermark for="confirmPasswordTxt" value="#{messages['naccount.rpt.psw']}" />
                                             </div>
-                                            <div class="signuptext">
+                                            <!--<div class="signuptext">
                                                 <p:inputMask id="PhoneTxt" value="#" mask="(99) 99999999?9" required="no" size="12" label="#{messages['naccount.phone']}"> 
                                                     <f:validateLength maximum="13" />
                                                 </p:inputMask>
                                                 <p:watermark for="PhoneTxt" value="#{messages['naccount.fullphone']}" />
                                                 <p:message for="PhoneTxt" />
-                                            </div> 
-
+                                            </div>--> 
+                                            <div class="signuptext">
+                                                    <p:inputText id="telTxt" value="#{userController.user.phone}" required="false" size="30" label="#{messages['telephone.number']}"/>
+                                                    <p:watermark for="telTxt" value="#{messages['naccount.phone']}" />
+                                            </div>
+                                            
                                             <div id="signupbottom">
 
                                                <!-- <p:panelGrid columns="2" id="nascimento">
@@ -147,6 +151,9 @@
                                                 </h:panelGrid>
 
                                                 <p:message for="pregnant" />
+                                                
+                                                
+                                                
 
                                                 <h:panelGrid columns="2" style="margin-bottom:-10px; margin-top: -5px " cellpadding="20" id="questao2">
                                                     <f:facet name="header">  
