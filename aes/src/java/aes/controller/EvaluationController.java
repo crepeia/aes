@@ -154,13 +154,14 @@ public class EvaluationController extends BaseController<Evaluation> {
     public String goBack() {
         if (getEvaluation().getGoBack()) {
             saveURL();
+            contactController.clearAnnualScreeningEmails(getUser());
             return "preparando-diminuir-ou-parar.xhtml?faces-redirect=true";
         } else {
             annualScreening();
             return "";
         }
     }
-
+     
     public String dependenceContinue() {
         getEvaluation().setQuit(true);
         saveURL();
@@ -185,13 +186,22 @@ public class EvaluationController extends BaseController<Evaluation> {
     public void annualScreening() {
         contactController.clearScheduledEmails(getUserController().getUser());
         contactController.scheduleAnnualScreeningEmail(getUserController().getUser());
-        ((CommandButton) getComponent("saveBtn")).setDisabled(true);
+        disableSaveBtn();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation"), null));
         if (!userController.isLoggedIn()) {
             ((InputText) getComponent("email")).setDisabled(true);
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         }
     }
+    
+    public void enableSaveBtn(){
+      ((CommandButton) getComponent("saveBtn")).setDisabled(false);
+    }
+    
+    public void disableSaveBtn(){
+      ((CommandButton) getComponent("saveBtn")).setDisabled(true);
+    }
+    
 
     public void savePlan() {
         save();
