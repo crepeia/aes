@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+       
+         <h:form> 
+             <p:outputLabel  style="display: block; font-size: 15px " value="#{messages['ratings.question']}"/>
+             <p:commandLink actionListener="#{ratingController.rate}" id="upvote" update="@form">
+                 <h:graphicImage  style="width: 40px" library="default"  name="#{ratingController.imageLike}" alt="Yes"/>
+                 <f:attribute name="button" value="like" />
+             </p:commandLink>
+             <p:spacer width="40px"/>
+             <p:commandLink actionListener="#{ratingController.rate}" id="downvote" update="@form">
+                 <h:graphicImage  style="width: 40px" library="default" name="#{ratingController.imageUnlike}" alt="No" />
+                 <f:attribute name="button" value="unlike" />
+             </p:commandLink>
+         </h:form>
+
+    </cc:implementation>
+</html>

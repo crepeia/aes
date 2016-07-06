@@ -70,11 +70,12 @@
                                             <f:facet name="header">  
                                                 #{messages['preparando.diminuir.facet.1']}
                                             </f:facet> 
-                                            <p:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}" required="true">  
+                                            <p:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}"  required="true" requiredMessage="#{messages['preparando.diminuir.validator']}">  
                                                 <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.yes']}" itemValue="#{true}" />
                                                 <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.no']}" itemValue="#{false}" /> 
-                                                <f:ajax event="change" render="saveBtn"/>
-                                            </p:selectOneRadio> 
+                                                <f:ajax render="saveBtn" listener="#{evaluationController.enableSaveBtn()}"/>
+                                            </p:selectOneRadio>
+                                            <p:message for="options"/>
                                         </h:panelGrid>
 
                                     </p:panel>
@@ -84,7 +85,7 @@
 
 
                                     <div id="btnnext">
-                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" disabled="#{empty evaluationController.evaluation.goBack}"/>
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" disabled="#{!evaluationController.evaluation.goBack}"/> 
                                     </div>
                                 </h:form>
                             </div><!-- end pmtext -->  

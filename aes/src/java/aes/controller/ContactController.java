@@ -274,6 +274,20 @@ public class ContactController extends BaseController implements Serializable {
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+      public void clearAnnualScreeningEmails(User user) {
+        try {
+            List<Contact> contacts = daoBase.list("user", user, getEntityManager());
+            for (Contact contact : contacts) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("annualscreening_subj")) {
+                        daoBase.delete(contact, getEntityManager());
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ContactController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public void clearScheduledEmails(User user) {
         try {
