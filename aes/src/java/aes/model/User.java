@@ -60,6 +60,9 @@ public class User implements Serializable {
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Contact> contacts;
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    private List<Rating> ratings;
 
     @Override
     public String toString() {
