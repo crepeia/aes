@@ -130,9 +130,12 @@
                                         <h:panelGrid columns="2" >
                                             <p:panelGrid columns="1">
                                                 <div id ="planoimg1">
-                                                    <div class="planoimg">                                                            
-                                                        <p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true" update="@form" target="_blank"  ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
-                                                        <p><p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml?faces-redirect=true" update="@form" target="_blank" >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>
+                                                    <div class="planoimg">  
+                                                        <!--styleClass="waves-effect waves-light btn"-->
+                                                        <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}"><h:graphicImage  library="default" title="E-Mail" name="images/impressao.png" alt="#{messages['pronto.plano.print']}" /></h:outputLink>
+                                                        <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}"><p><b>#{messages['pronto.plano.print']}</b></p></h:outputLink>
+                                                        <!--<p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml" update="@form" target="_blank"  ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></p:commandLink>                                                            
+                                                        <p><p:commandLink action="plano-mudanca-pronto-para-comecar-print.xhtml" update="@form" target="_blank" >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</p:commandLink></p>-->
                                                     </div>
                                                 </div>
                                             </p:panelGrid>
