@@ -101,42 +101,35 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public String audit3() {
-        int age = getUser().getAge();
-        boolean drinkingDays = getEvaluation().getDrinkingDays();
-        int weekTotal = getEvaluation().getWeekTotal();
-        int audit3sum = getEvaluation().getAudit3Sum();
-        if (audit3sum > 6 || (getUser().isFemale() && drinkingDays) || (getUser().isMale() && drinkingDays) || (getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10)) {
+        if (getEvaluation().audit3LimitExceeded() || getEvaluation().dayLimitExceeded() || getEvaluation().weekLimitExceeded()) {
             return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml?faces-redirect=true";
-        } else if (audit3sum <= 6 && (((getUser().isFemale() && !drinkingDays) || (getUser().isMale() && !drinkingDays)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10)))) {
-            if (getUser().isMale() && age <= 65) {
-                return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
-            } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
-                return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
-            }
+        } else if (getUser().isMale() && getUser().getAge() <= 65) {
+            return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
+        } else if (getUser().isMale() && getUser().getAge() > 65 || getUser().isFemale()) {
+            return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
+        } else {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, "audit3 - expressão booleana não satisfeita" + getUser().getGender() + getUser().getAge() + getEvaluation().getAudit3Sum() + getEvaluation().getWeekTotal() + getEvaluation().dayLimitExceeded());
         }
         return "";
-
     }
 
     public String audit7() {
-        int age = getUser().getAge();
-        boolean drinkingDays = getEvaluation().getDrinkingDays();
-        int weekTotal = getEvaluation().getWeekTotal();
-        int auditFull = getEvaluation().getAuditFullSum();
-        if ((auditFull <= 17) && ((getUser().isFemale() && !drinkingDays) || (getUser().isMale() && !drinkingDays)) && ((getUser().isFemale() && weekTotal <= 5) || (getUser().isMale() && weekTotal <= 10))) {
-            if (getUser().isFemale() && age <= 65) {
+        if (getEvaluation().getAuditFullSum() <= 17) {
+            if (getEvaluation().dayLimitExceeded() || getEvaluation().weekLimitExceeded()) {
+                return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites?faces-redirect=true";
+           } else if (getUser().isMale() && getUser().getAge() <= 65) {
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
-            } else if ((getUser().isMale() && age > 65) || getUser().isFemale()) {
-                return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
-            }
-        } else if ((auditFull <= 17) && ((getUser().isFemale() && drinkingDays) || (getUser().isMale() && drinkingDays)) || ((getUser().isFemale() && weekTotal > 5) || (getUser().isMale() && weekTotal > 10))) {
-            return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-baixo-risco-limites?faces-redirect=true";
-        } else if (auditFull >= 18 && auditFull <= 25) {
+           }else if (getUser().isMale() && getUser().getAge() > 65 || getUser().isFemale()){
+               return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
+           }
+        } else if (getEvaluation().getAuditFullSum() >= 17 && getEvaluation().getAuditFullSum() <= 25) {
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml?faces-redirect=true";
-        } else if (auditFull >= 26 && auditFull <= 29) {
+        } else if (getEvaluation().getAuditFullSum() >= 26 && getEvaluation().getAuditFullSum() <= 29) {
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-nocivo.xhtml?faces-redirect=true";
-        } else if (auditFull >= 30 && auditFull <= 50) {
+        } else if (getEvaluation().getAuditFullSum() >= 30 && getEvaluation().getAuditFullSum() <= 50) {
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-dependencia.xhtml?faces-redirect=true";
+        }else {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, "audit7 - expressão booleana não satisfeita" + getUser().getGender() + getUser().getAge() + getEvaluation().getAuditFullSum() + getEvaluation().getWeekTotal()+ getEvaluation().dayLimitExceeded());
         }
         return "";
     }
@@ -161,7 +154,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             return "";
         }
     }
-     
+
     public String dependenceContinue() {
         getEvaluation().setQuit(true);
         saveURL();
@@ -193,15 +186,14 @@ public class EvaluationController extends BaseController<Evaluation> {
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         }
     }
-    
-    public void enableSaveBtn(){
-      ((CommandButton) getComponent("saveBtn")).setDisabled(false);
+
+    public void enableSaveBtn() {
+        ((CommandButton) getComponent("saveBtn")).setDisabled(false);
     }
-    
-    public void disableSaveBtn(){
-      ((CommandButton) getComponent("saveBtn")).setDisabled(true);
+
+    public void disableSaveBtn() {
+        ((CommandButton) getComponent("saveBtn")).setDisabled(true);
     }
-    
 
     public void savePlan() {
         save();
@@ -258,13 +250,13 @@ public class EvaluationController extends BaseController<Evaluation> {
                 template = template.replace("#subtitle" + (i + 1) + "#", subtitle[i]);
                 template = template.replace("#content" + (i + 1) + "#", getEvaluation().getPlanContent()[i]);
             }
-            template=template.replace("#subintro#", bundle.getString("plan.subintro"));
-            template=template.replace("#intro#", bundle.getString("plan.intro"));
-template=template.replace("#user#", getUser().getName());
+            template = template.replace("#subintro#", bundle.getString("plan.subintro"));
+            template = template.replace("#intro#", bundle.getString("plan.intro"));
+            template = template.replace("#user#", getUser().getName());
             template = template.replace("#footer#",
-                bundle.getString("title.1") + "<br/>"
-                + bundle.getString("crepeia") + "<br/>"
-                + bundle.getString("ufjf"));
+                    bundle.getString("title.1") + "<br/>"
+                    + bundle.getString("crepeia") + "<br/>"
+                    + bundle.getString("ufjf"));
             PDFGenerator pdfGenerator = new PDFGenerator();
             return pdfGenerator.generatePDF(template);
         } catch (IOException ex) {

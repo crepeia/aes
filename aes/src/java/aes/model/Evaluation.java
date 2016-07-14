@@ -126,8 +126,13 @@ public class Evaluation implements Serializable {
         return this.id + ", " + this.user.getId() + ", "
                 + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(dateCreated);
     }
-
-    public boolean getDrinkingDays() {
+    
+    public boolean audit3LimitExceeded(){
+        return getAudit3Sum() > 6;
+    }
+    
+    
+    public boolean dayLimitExceeded() {
         int limit =  getUser().isFemale() ? 1 : 2;
         if (sunday != null && sunday > limit){
             return true;
@@ -154,7 +159,11 @@ public class Evaluation implements Serializable {
             return false;
         }
     }
-
+    
+    public boolean weekLimitExceeded(){
+        int limit =  getUser().isFemale() ? 5 : 10;
+        return getWeekTotal() > limit;
+    }
     public int getWeekTotal() {
         return sunday + monday + tuesday + wednesday + thursday + friday + saturday;
     }
