@@ -6,149 +6,148 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
-     <f:view locale="#{languageController.locale}">
-    <h:head>
-        <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.title']}</title>
-        <w:head_comum />
-    </h:head>
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.title']}</title>
+            <w:head_comum />
+        </h:head>
 
-    <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="false" evaluationRequired="true" />
-            <w:topmenu />
-            <!--mainmenu-->         	
-            <div class="main">
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header loginRequired="false" evaluationRequired="true" />
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
 
-                <div class="pagecontent">
-
-
-                    <div id="pagetop">
-                        <div id="hpagetop">
-                            <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h1.1']}</h1> 
-                        </div>    
-
-                        <div id="progressbar">
-                            <p:progressBar value="70" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
-                    </div>
+                    <div class="pagecontent">
 
 
-                    <div id="pagemiddle">
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h1.1']}</h1> 
+                            </div>    
 
-                       <!-- <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
-                        </div> -->
-                        
-                                   <div id="pmtext">                                               
-                            <h2><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.1']}</b></h2>
-                            
+                            <div id="progressbar">
+                                <p:progressBar value="70" labelTemplate="{value}%" displayOnly="true"/>
+                            </div>                        
+                        </div>
+
+
+                        <div id="pagemiddle">
+
+                            <!-- <div class="fotoframe">                            
+                                 <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
+                             </div> -->
+
+                            <div id="pmtext">                                               
+                                <h2><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.1']}</b></h2>
+
                                 <!-- Incluir feedback e diminuir tamanho da paǵina -->
                                 <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.1']}</li>
                                 <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.2']}</li>                               
-                                
+
                                 <h3>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h3.1']}</h3>
-                                
+
                                 <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.1']}</h4>
-                                
+
                                 <ul>
                                     <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.3']}</b> #{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.3']}</li>
                                     <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.4']}</b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.4']}</li>
                                     <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.2']}</h4>
                                 </ul>
-                                
+
                                 <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.3']}</h4>
-                                
+
                                 <ul>
                                     <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.3']}</b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.5']}</li>
                                     <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.4']}</b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.6']}</li>
                                     <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.4']}</h4>
                                 </ul>
-                                
-                                
+
+
                                 <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.1']}</p>
                                 <p:accordionPanel>
                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.1']}">
                                         <h:panelGrid columns="4" cellpadding="7">
                                             <div id="pagemiddle">
-                                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.5']}</h4>
-                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.7']}</li></ul>
-                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.8']}</li></ul>
-                                            <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.9']}</li></ul>
+                                                <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.5']}</h4>
+                                                <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.7']}</li></ul>
+                                                <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.8']}</li></ul>
+                                                <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.9']}</li></ul>
                                             </div>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.2']}">
+                                    <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.2']}">
                                         <h:panelGrid columns="4" cellpadding="7">
                                             <div id="pagemiddle">
-                                            <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.6']}</h4>
-                                            <ul>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.10']}</li>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.11']}</li>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.12']}</li>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.13']}</li>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.14']}</li>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.15']}</li>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.16']}</li>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.17']}</li>
-                                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.18']}</li></ul>
+                                                <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.6']}</h4>
+                                                <ul>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.10']}</li>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.11']}</li>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.12']}</li>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.13']}</li>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.14']}</li>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.15']}</li>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.16']}</li>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.17']}</li>
+                                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.18']}</li></ul>
                                             </div>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.3']}">
+                                    <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.3']}">
                                         <h:panelGrid columns="4" cellpadding="7">
                                             <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.2']}</p>
                                             <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.19']}</li>
                                             <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.20']}</li>
-                                            <li><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.7']}</b></li>
                                         </h:panelGrid>
                                     </p:tab>
-                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.4']}">
+                                    <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.4']}">
                                         <h:panelGrid columns="4" cellpadding="7">
                                             <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.21']}</li>
                                             <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.22']}</li>
-                                         
+
                                         </h:panelGrid>
                                     </p:tab>
-                                 </p:accordionPanel>
-                           
+                                </p:accordionPanel>
+
 
                            <!-- <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.2']}</b></p>-->
-                            
-                            <h:form>
-                                
-                                <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
-                                </div>
-                                
-                                
-                                <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="preparando-pros-cons.xhtml?faces-redirect=true" actionListener="#{evaluationController.saveURL()}"/>
-                               
-                                                         
-                                </div>
-                                
-                           </h:form> 
-                        </div><!-- end pmtext -->  
-                    </div><!-- end page middle -->      
-                    
-                    
 
-                    <div class="referencias">
-                        <p>#{messages['updated']}</p>
-                    </div>
+                                <h:form>
+
+                                    <div id="btnback">
+                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
+                                    </div>
+
+
+                                    <div id="btnnext">
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="preparando-pros-cons.xhtml?faces-redirect=true" actionListener="#{evaluationController.saveURL()}"/>
+
+
+                                    </div>
+
+                                </h:form> 
+                            </div><!-- end pmtext -->  
+                        </div><!-- end page middle -->      
 
 
 
-                </div>        
-            </div>
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
 
 
-        </div><!-- end.corpo --> 
 
-        <!--Footer -->
-        <w:footer />
-    </h:body>
-         </f:view>
+                    </div>        
+                </div>
+
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
 </html>
 
