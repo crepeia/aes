@@ -293,6 +293,10 @@ public class Evaluation implements Serializable {
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
+    
+    public void setDateCreated(long time){
+       dateCreated.setTime(time);
+    }
 
     public Integer getAudit4() {
         return audit4;

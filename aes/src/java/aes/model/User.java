@@ -92,7 +92,10 @@ public class User implements Serializable {
         cal.set(year, month, day);
         birthDate = cal.getTime();
     }
-
+    
+    public void setBirth(long time){
+        birthDate.setTime(time);
+    }
     public boolean isUnderage() {
         return getAge() < 18;
 

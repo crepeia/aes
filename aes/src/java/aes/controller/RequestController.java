@@ -1,0 +1,93 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package aes.controller;
+
+import aes.model.Evaluation;
+import aes.model.Rating;
+import aes.model.User;
+import aes.persistence.GenericDAO;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ *
+ * @author thiago
+ */
+@RequestScoped
+@ManagedBean(name = "requestController")
+public class RequestController extends BaseController<User> {
+
+    private final String key = "11VzuKzy5k";
+    private GenericDAO daoUser;
+    private GenericDAO daoEvaluation;
+
+    @PostConstruct
+    public void init() {
+        try {
+            daoUser = new GenericDAO<User>(User.class);
+            daoEvaluation = new GenericDAO<Evaluation>(Evaluation.class);
+        } catch (NamingException ex) {
+            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public String getRequest() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        if (request.getParameter("key").contains(key)) {
+            try {
+                User user = null;
+                String email = request.getParameter("email");
+                if (email != null) {
+                    List<User> users = daoUser.list("email", email, getEntityManager());
+                    if (!users.isEmpty()) {
+                        user = users.get(0);
+                    }         
+                }
+                if (user == null) {
+                    user = new User();
+                }
+                user.setEmail(email);
+                user.setBirth(Long.parseLong(request.getParameter("birth")));
+                user.setGender(request.getParameter("birth").charAt(0));
+                user.setDrink(Boolean.valueOf(request.getParameter("drink")));
+                daoUser.insertOrUpdate(user, getEntityManager());
+
+                Evaluation evaluation = new Evaluation();
+                evaluation.setUser(user);
+                evaluation.setDateCreated(Long.parseLong(request.getParameter("dateCreated")));
+                evaluation.setAudit1(Integer.valueOf(request.getParameter("audit1")));
+                evaluation.setAudit2(Integer.valueOf(request.getParameter("audit2")));
+                evaluation.setAudit3(Integer.valueOf(request.getParameter("audit3")));
+                evaluation.setAudit4(Integer.valueOf(request.getParameter("audit4")));
+                evaluation.setAudit5(Integer.valueOf(request.getParameter("audit5")));
+                evaluation.setAudit6(Integer.valueOf(request.getParameter("audit6")));
+                evaluation.setAudit7(Integer.valueOf(request.getParameter("audit7")));
+                evaluation.setAudit8(Integer.valueOf(request.getParameter("audit8")));
+                evaluation.setAudit9(Integer.valueOf(request.getParameter("audit9")));
+                evaluation.setAudit10(Integer.valueOf(request.getParameter("audit10")));
+                evaluation.setMonday(Integer.valueOf(request.getParameter("monday")));
+                evaluation.setTuesday(Integer.valueOf(request.getParameter("tuesday")));
+                evaluation.setWednesday(Integer.valueOf(request.getParameter("wednesday")));
+                evaluation.setThursday(Integer.valueOf(request.getParameter("thursday")));
+                evaluation.setFriday(Integer.valueOf(request.getParameter("friday")));
+                evaluation.setSaturday(Integer.valueOf(request.getParameter("saturday")));
+                evaluation.setSunday(Integer.valueOf(request.getParameter("sunday")));
+                daoEvaluation.insertOrUpdate(evaluation, getEntityManager());
+            } catch (SQLException ex) {
+                Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return request.getParameter("key");
+    }
+}
