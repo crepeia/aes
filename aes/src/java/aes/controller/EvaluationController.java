@@ -234,7 +234,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         try {
             InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/plan-template.html");
             byte[] buffer = new byte[102400];
-            String template = new String(buffer, 0, input.read(buffer), StandardCharsets.UTF_8);
+            String template = new String(buffer, 0, input.read(buffer), StandardCharsets.US_ASCII);
 
             ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
             String subtitle[] = new String[6];

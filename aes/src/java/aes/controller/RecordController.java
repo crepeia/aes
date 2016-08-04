@@ -207,7 +207,7 @@ public class RecordController extends BaseController<Record> {
         try {
             InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/record-template.html");
             byte[] buffer = new byte[102400];
-            String template = new String(buffer, 0, input.read(buffer), StandardCharsets.UTF_8);
+            String template = new String(buffer, 0, input.read(buffer), StandardCharsets.US_ASCII);
 
             ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
             template = template.replace("#dailyGoal#", bundle.getString("daily.goal") + String.valueOf(getRecord().getDailyGoal()));
