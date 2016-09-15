@@ -47,11 +47,11 @@ public class EMailSSL {
 
     public void send(String from, String to, String subject, String content, ByteArrayOutputStream pdf, String pdfName) throws MessagingException {
             //Message
-            Message message = new MimeMessage(session);
+            MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(to));
-            message.setSubject(subject);
+            message.setSubject(subject,"utf-8");
             message.setSentDate(new Date());
 
             MimeMultipart mainMultipart = new MimeMultipart("related");
