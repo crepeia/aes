@@ -1,0 +1,142 @@
+
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+     <f:view locale="#{languageController.locale}">
+    <h:head>
+        <title>#{messages['audit.7.title']}</title>
+        <w:head_comum />
+    </h:head>
+
+    <h:body>
+        <div id="corpo"> 
+            <!-- header -->    
+            <w:header  evaluationRequired="false" />
+            <w:topmenu />
+            <!--mainmenu-->         	
+            <div class="main">
+
+                <div class="pagecontent">
+
+
+                    <div id="pagetop">
+                        <div id="hpagetop">
+                            <h1>#{messages['satisfaction.scale.intro']}</h1> 
+                        </div>    
+                     
+                    </div>
+
+
+                    <div id="pagemiddle">
+
+                         <div class="fotoframe">                            
+                                <h:graphicImage library="default" id="interrogacao" title="Parar de fumar" name="images/interrogacao.png" alt="Gratuito" />
+                        </div>
+
+                        <div id="pmtext">
+
+                            <h:form>
+
+                                
+                                <p:panel id="questoes" >
+
+<h:form>                            
+                        <h5 class="headertop orange-text text-lighten-2">1. #{messages['satisfaction.scale.q1']}</h5>
+                        <h:selectOneRadio  value="#{pesquisaSatisfacao.getPesquisaSatisfacao().q1}" layout="pageDirection">  
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.q1f']}" itemValue="f" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                        </h:selectOneRadio > 
+
+                        <h5 class="headertop orange-text text-lighten-2">2. #{messages['satisfaction.scale.q2']}</h5>
+                        <h:selectOneRadio  value="#{pesquisaSatisfacao.getPesquisaSatisfacao().q2}" layout="lineDirection">  
+                            <f:selectItem itemLabel="#{messages['no']}" itemValue="a" />
+                            <f:selectItem itemLabel="#{messages['yes']}" itemValue="b" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.maybe']}" itemValue="c" />
+                        </h:selectOneRadio > 
+
+                        <h5 class="headertop orange-text text-lighten-2">3. #{messages['satisfaction.scale.4q']}</h5>
+                        <h:selectOneRadio  value="#{pesquisaSatisfacao.getPesquisaSatisfacao().q3}" layout="pageDirection">  
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.r.5']}" itemValue="a" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.r.4']}" itemValue="f" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                        </h:selectOneRadio > 
+
+                        <h5 class="headertop orange-text text-lighten-2">4. #{messages['satisfaction.scale.5q']}</h5>
+                        <h:selectOneRadio  value="#{pesquisaSatisfacao.getPesquisaSatisfacao().q4}" layout="pageDirection">  
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.r.5']}" itemValue="a" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.q1f']}" itemValue="f" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                        </h:selectOneRadio > 
+
+                        <h5 class="headertop orange-text text-lighten-2">5. #{messages['satisfaction.scale.6q']}</h5>
+                        <h:selectOneRadio  value="#{pesquisaSatisfacao.getPesquisaSatisfacao().q5}" layout="pageDirection">  
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                            <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                        </h:selectOneRadio > 
+
+                        <h5 class="headertop orange-text text-lighten-2">6. #{messages['satisfaction.scale.r.6']}</h5>
+                        <p:inputTextarea id="msg" autoResize="true" value="#{pesquisaSatisfacao.getPesquisaSatisfacao().q6}" required="false" label="#{messages['contact.h4.msg']}" styleClass="materialize-textarea" />
+                        <p:watermark for="msg" value="#{messages['contact.h4.msg']}" /> 
+                        <br />
+
+              
+
+                                    
+                                </p:panel>
+                                        <div id="btnback">
+                                            <h:button id="backBtn"  class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
+                                        </div>
+                                    <h:panelGrid id="gridSalvar" columns="12" style="margin-top:14px;float:right;">
+                                        <h:panelGrid  id="salvarGrid" rendered ="#{not empty evaluationController.evaluation.audit10}">
+
+                                            <div id="btnnext">
+                                                <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.audit7()}" actionListener="#{evaluationController.save()}"/>                               
+                                            </div>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+
+                            </h:form>
+
+                        </div><!-- end pmtext -->  
+
+                    </div><!-- end page middle -->                                             
+
+                    <div class="referencias">
+                        <p>#{messages['updated']}</p>
+                    </div>
+
+
+
+                </div>        
+            </div>
+
+
+        </div><!-- end.corpo --> 
+
+        <!--Footer -->
+        <w:footer />
+    </h:body>
+         </f:view>
+</html>
