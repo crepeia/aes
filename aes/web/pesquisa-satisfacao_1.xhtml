@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['satisfaction.3.title']}</title>
+            <w:head_comum />
+            <!-- Facebook Pixel Code to track our adverts -->
+            <h:outputScript>
+                !function (f, b, e, v, n, t, s) {
+                if (f.fbq)
+                return;
+                n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq)
+                f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s)
+                }(window,
+                document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+                fbq('init', '597384437104437');
+                fbq('track', "ViewContent");</h:outputScript>            
+            <noscript><![CDATA[<img height="1" width="1" style="display:none"
+                                    src="https://www.facebook.com/tr?id=597384437104437&ev=PageView&noscript=1"
+                                    />
+                ]]></noscript>
+
+            <!-- End Facebook Pixel Code -->
+        </h:head>
+
+        <h:body>
+            <div id="corpo"> 
+                <!-- header -->    
+                <w:header evaluationRequired="false"/>
+                <w:topmenu />
+                <!--mainmenu-->         	
+                <div class="main">
+
+                    <div class="pagecontent">
+
+
+                        <div id="pagetop">
+                            <div id="hpagetop">
+                                <h1>#{messages['satisfaction.h1.1']}</h1> 
+                            </div>    
+
+                        </div>
+
+                        <div id="pagemiddle">
+
+
+                            <div id="pmtext">
+
+                                <h3>#{messages['satisfaction.3.h3.1']}</h3>
+
+                                <p>#{messages['satisfaction.3.p.1']}</p>
+
+                                <div id="satisfaction3evaluation">
+
+                                    <h:form>
+
+                                        <p:panel id="questoes" >
+
+
+                                            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" id="satisfaction1">
+                                                <f:facet name="header">  
+                                                    #{messages['satisfaction.scale.q1']}
+                                                </f:facet>
+                                                <p:selectOneRadio id="satisfaction_1" value="#" required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.1']}">  
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1f']}" itemValue="f" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                                                </p:selectOneRadio> 
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction2">
+                                                <f:facet name="header">  
+                                                    #{messages['satisfaction.scale.q2']}
+                                                </f:facet>
+                                                <p:selectOneRadio id="satisfaction_2" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.2']}">  
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.yes']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.no']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.maybe']}" itemValue="c" />
+
+                                                </p:selectOneRadio> 
+                                            </h:panelGrid>
+
+
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction3">
+                                                <f:facet name="header">  
+                                                    #{messages['satisfaction.scale.3q']}
+                                                </f:facet>
+                                                <p:selectOneRadio id="satisfaction_3" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.r.3']}" itemValue="f" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                                                </p:selectOneRadio> 
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction4">
+                                                <f:facet name="header">  
+                                                    #{messages['satisfaction.scale.4q']}
+                                                </f:facet>
+                                                <p:selectOneRadio id="satisfaction_4" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.r.4']}" itemValue="f" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                                                </p:selectOneRadio> 
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction5">
+                                                <f:facet name="header">  
+                                                    #{messages['satisfaction.scale.5q']}
+                                                </f:facet>
+                                                <p:selectOneRadio id="satisfaction_5" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.r.5']}" itemValue="f" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                                                </p:selectOneRadio> 
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction6">
+                                                <f:facet name="header">  
+                                                    #{messages['satisfaction.scale.6q']}
+                                                </f:facet>
+                                                <p:selectOneRadio id="satisfaction_6" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
+                                                         <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="f" />
+                                                </p:selectOneRadio> 
+                                            </h:panelGrid>
+                                            
+                                            <h:panelGrid columns="1"  cellpadding="5" id="satisfaction_7">
+                                        <f:facet name="header">  
+                                                    #{messages['satisfaction.scale.r.7']}                         
+                                        </f:facet>
+                                        <p:inputTextarea rows="2" cols="70" value="#" id="campo1"/>                              
+                                    </h:panelGrid> 
+
+                                            <h2>#{messages['satisfaction.3.h2.6']}</h2>    
+
+
+
+                                            <p><h:outputText value="#{messages['satisfaction.3.outputtext.1']}"/></p>
+
+                                        </p:panel>
+
+                                        <p:messages id="msg" autoUpdate="true" showDetail="false"/>
+
+
+                                        <div id="btnback">
+                                            <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-introducao.xhtml"></h:button>
+                                        </div>
+
+
+                                        <div id="btnnext">
+                                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#" actionListener="#"/>      
+                                        </div>
+
+                                    </h:form>
+
+                                </div><!-- end satisfaction3evalution -->        
+                            </div><!-- end pmtext -->  
+                        </div><!-- end page middle -->                                             
+                        <div class="referencias">
+                            <p>#{messages['updated']}</p>
+                        </div>
+
+
+
+                    </div>        
+                </div>
+
+
+            </div><!-- end.corpo --> 
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
+</html>
+
