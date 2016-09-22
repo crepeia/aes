@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -234,7 +235,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         try {
             InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/plan-template.html");
             byte[] buffer = new byte[102400];
-            String template = new String(buffer, 0, input.read(buffer), StandardCharsets.US_ASCII);
+            String template = new String(buffer, 0, input.read(buffer), Charset.forName("UTF-8"));
 
             ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
             String subtitle[] = new String[6];

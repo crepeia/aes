@@ -7,6 +7,7 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +19,7 @@ public class PDFGenerator {
             Document document = new Document();
             PdfWriter pdfWriter = PdfWriter.getInstance(document, pdf);
             document.open();
-            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, new ByteArrayInputStream(html.getBytes()));
+            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, new ByteArrayInputStream(html.getBytes()),StandardCharsets.UTF_8);
             document.close();
             pdf.close();
         } catch (DocumentException ex) {

@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['logout.title.1']}</title>
+            <meta http-equiv="refresh" content="0; url=http://www.alcoolesaude.com.br/quanto-voce-bebe-introducao.xhtml" />
+            <script type="text/javascript">
+                + window.location.href = "http://www.alcoolesaude.com.br/quanto-voce-bebe-introducao.xhtml"
+                        +</script>
+            <w:head_comum />
+        </h:head>
+        <h:body>
+            <div id="corpo">
+                <!-- header -->    
+                <w:header />
+                <w:topmenu />
+
+                <!--mainmenu-->         	
+                <div class="main">
+                    <div class="pagecontent">            
+                        <h1>#{messages['redirect.page.header']}</h1>             
+                        <p>#{messages['redirect.page.text']}: <h:outputLink value="quanto-voce-bebe-introducao.xhtml">http://www.alcoolesaude.com.br/quanto-voce-bebe-introducao.xhtml</h:outputLink> </p>                
+                    </div>
+                </div>
+            </div>
+        </h:body>
+        <!--Footer -->
+        <w:footer />
+    </f:view>
+</html>
