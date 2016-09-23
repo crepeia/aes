@@ -64,6 +64,13 @@ public class User implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
     private List<Rating> ratings;
 
+     
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    private List<Satisfaction> satisfactions;
+    
+     @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    private List<FollowUp> followUps;
+    
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
@@ -247,7 +254,30 @@ public class User implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
-    
 
+    public List<Satisfaction> getSatisfactions() {
+        return satisfactions;
+    }
+
+    public void setSatisfactions(List<Satisfaction> satisfactions) {
+        this.satisfactions = satisfactions;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    public List<FollowUp> getFollowUps() {
+        return followUps;
+    }
+
+    public void setFollowUps(List<FollowUp> followUps) {
+        this.followUps = followUps;
+    }
+    
+    
 }

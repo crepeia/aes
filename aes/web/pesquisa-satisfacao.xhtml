@@ -46,7 +46,7 @@
         <h:body>
             <div id="corpo"> 
                 <!-- header -->    
-                <w:header evaluationRequired="false"/>
+                <w:header />
                 <w:topmenu />
                 <!--mainmenu-->         	
                 <div class="main">
@@ -81,7 +81,7 @@
                                                 <f:facet name="header">  
                                                     #{messages['satisfaction.scale.q1']}
                                                 </f:facet>
-                                                <p:selectOneRadio id="satisfaction_1" value="#" required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.1']}">  
+                                                <p:selectOneRadio id="satisfaction_1" label="1" value="#{satisfactionController.satisfaction.question1}" required="true" layout="pageDirection" >  
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
@@ -96,7 +96,7 @@
                                                 <f:facet name="header">  
                                                     #{messages['satisfaction.scale.q2']}
                                                 </f:facet>
-                                                <p:selectOneRadio id="satisfaction_2" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.2']}">  
+                                                <p:selectOneRadio id="satisfaction_2" label="2" value="#{satisfactionController.satisfaction.question2}"  required="true" layout="pageDirection" >  
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.yes']}" itemValue="a" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.no']}" itemValue="b" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.maybe']}" itemValue="c" />
@@ -109,7 +109,7 @@
                                                 <f:facet name="header">  
                                                     #{messages['satisfaction.scale.3q']}
                                                 </f:facet>
-                                                <p:selectOneRadio id="satisfaction_3" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
+                                                <p:selectOneRadio id="satisfaction_3" label="3" value="#{satisfactionController.satisfaction.question3}"  required="true" layout="pageDirection"  >  
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
@@ -124,7 +124,7 @@
                                                 <f:facet name="header">  
                                                     #{messages['satisfaction.scale.4q']}
                                                 </f:facet>
-                                                <p:selectOneRadio id="satisfaction_4" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
+                                                <p:selectOneRadio id="satisfaction_4" label="4"  value="#{satisfactionController.satisfaction.question4}" required="true" layout="pageDirection"  >  
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
@@ -139,7 +139,7 @@
                                                 <f:facet name="header">  
                                                     #{messages['satisfaction.scale.5q']}
                                                 </f:facet>
-                                                <p:selectOneRadio id="satisfaction_5" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
+                                                <p:selectOneRadio id="satisfaction_5"  label="5" value="#{satisfactionController.satisfaction.question5}"  required="true" layout="pageDirection"  >  
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
@@ -150,26 +150,26 @@
                                                 </p:selectOneRadio> 
                                             </h:panelGrid>
 
-                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction6">
+                                           <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction6">
                                                 <f:facet name="header">  
                                                     #{messages['satisfaction.scale.6q']}
                                                 </f:facet>
-                                                <p:selectOneRadio id="satisfaction_6" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
-                                                         <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
+                                                <p:selectOneRadio id="satisfaction_6" label="6" value="#{satisfactionController.satisfaction.question6}" required="true" layout="pageDirection"  >  
+                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
                                                     <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="f" />
                                                 </p:selectOneRadio> 
-                                            </h:panelGrid>
-                                            
-                                            <h:panelGrid columns="1"  cellpadding="5" id="satisfaction_7">
-                                        <f:facet name="header">  
+                                            </h:panelGrid> 
+
+                                            <h:panelGrid columns="1"  cellpadding="5" id="satisfaction_7"  >
+                                                <f:facet name="header">  
                                                     #{messages['satisfaction.scale.r.7']}                         
-                                        </f:facet>
-                                        <p:inputTextarea rows="2" cols="70" value="#" id="campo1"/>                              
-                                    </h:panelGrid> 
+                                                </f:facet>
+                                                <p:inputTextarea rows="2" cols="70" value="#{satisfactionController.satisfaction.commentary}" id="campo1" />                              
+                                            </h:panelGrid> 
 
                                             <h2>#{messages['satisfaction.3.h2.6']}</h2>    
 
@@ -182,13 +182,11 @@
                                         <p:messages id="msg" autoUpdate="true" showDetail="false"/>
 
 
-                                        <div id="btnback">
-                                            <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-introducao.xhtml"></h:button>
-                                        </div>
+
 
 
                                         <div id="btnnext">
-                                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#" actionListener="#"/>      
+                                            <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" actionListener="#{satisfactionController.save()}"/>      
                                         </div>
 
                                     </h:form>
