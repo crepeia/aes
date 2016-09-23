@@ -2,7 +2,7 @@
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
+        <param-value>Production</param-value>
     </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -12,7 +12,7 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <!--<url-pattern>/faces/*</url-pattern>-->
-		<url-pattern>*.xhtml</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -22,9 +22,8 @@
     <welcome-file-list>
         <welcome-file>./index.xhtml</welcome-file>
     </welcome-file-list>
-	<context-param>
+    <context-param>
         <param-name>key</param-name>
         <param-value>ekhilAitcapWarHy</param-value>
     </context-param>
-
 </web-app>

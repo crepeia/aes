@@ -204,14 +204,10 @@ public class EvaluationController extends BaseController<Evaluation> {
             contactController.scheduleWeeklyEmail(getUser(), getEvaluation().getDataComecarPlano());
             if (getEvaluation().getQuit()) {
                 contactController.scheduleKeepingResultQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
-                if (!pageNavigationController.visitedQuitPages(3)) {
-                    contactController.schedulePersistChallengesQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
-                }
+                contactController.schedulePersistChallengesQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
             } else {
                 contactController.scheduleKeepingResultReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
-                if (!pageNavigationController.visitedCutDownPages(1)) {
-                    contactController.schedulePersistChallengesReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
-                }
+                contactController.schedulePersistChallengesReduceEmail(getUser(), getEvaluation().getDataComecarPlano());                
             }
         }
         if (getEvaluation().getTipsFrequency() != 0) {
@@ -228,14 +224,15 @@ public class EvaluationController extends BaseController<Evaluation> {
     public StreamedContent printPlan() {
         ByteArrayOutputStream pdf = getPlanPDF();
         return new DefaultStreamedContent(new ByteArrayInputStream(pdf.toByteArray()),
-                "application/pdf", "meuplano.pdf");
+                "application/pdf", "meuplano.pdf", "UTF-8");
     }
 
     public ByteArrayOutputStream getPlanPDF() {
         try {
             InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/plan-template.html");
             byte[] buffer = new byte[102400];
-            String template = new String(buffer, 0, input.read(buffer), Charset.forName("UTF-8"));
+            String template = new String(buffer, 0, input.read(buffer),StandardCharsets.UTF_8);
+            System.out.println(template);
 
             ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
             String subtitle[] = new String[6];

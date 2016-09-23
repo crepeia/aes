@@ -19,7 +19,7 @@ public class PDFGenerator {
             Document document = new Document();
             PdfWriter pdfWriter = PdfWriter.getInstance(document, pdf);
             document.open();
-            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, new ByteArrayInputStream(html.getBytes()),StandardCharsets.UTF_8);
+            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, new ByteArrayInputStream(html.getBytes("UTF-8")),StandardCharsets.UTF_8);
             document.close();
             pdf.close();
         } catch (DocumentException ex) {
