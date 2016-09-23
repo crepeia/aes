@@ -29,14 +29,14 @@
                             </div>    
 
                             <div id="progressbar">
-                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+                                <p:progressBar value="95" labelTemplate="{value}%" displayOnly="true"/>
                             </div>                        
                         </div>
 
 
                         <div id="pagemiddle">
 
-                           <div class="fotoframe">                            
+                            <div class="fotoframe">                            
                                 <h:graphicImage library="default" id="start" title="#{messages['title.image']}" name="images/plan_comecar.png" alt="Para de beber" />
                             </div> 
 
@@ -127,12 +127,12 @@
                                     </p:panel>
 
                                     <div >
-                                            <p:panelGrid columns="2">
-                                                        <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}"><h:graphicImage  library="default" title="E-Mail" name="images/impressao.png" alt="#{messages['pronto.plano.print']}" /></h:outputLink>
-                                                        <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>                                                                                                                                   
-                                                        <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}">#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</h:outputLink>
-                                                        <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form">E-Mail</p:commandLink>
-                                            </p:panelGrid>
+                                        <p:panelGrid columns="2">
+                                            <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}"><h:graphicImage  library="default" title="E-Mail" name="images/impressao.png" alt="#{messages['pronto.plano.print']}" /></h:outputLink>
+                                            <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>                                                                                                                                   
+                                            <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}">#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</h:outputLink>
+                                            <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form">E-Mail</p:commandLink>
+                                        </p:panelGrid>
                                     </div>
 
 
@@ -154,12 +154,15 @@
                             <div id="btnback">
                                 <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
                             </div>
+                            <div id="btnnext">
+                                <h:button class="btngen" value ="#{messages['next']}" outcome="obrigado-participar.xhtml?faces-redirect=true"></h:button>      
+                            </div>
+
                         </h:panelGrid>   
 
                         <div class="referencias">
                             <p>#{messages['updated']}</p>
                         </div>
-
 
 
                     </div>        

@@ -30,7 +30,7 @@
                         <div id="pagetop">
 
                             <div id="progressbar">
-                                <p:progressBar value="70" labelTemplate="{value}%" displayOnly="true"/>
+                             <!--    <p:progressBar value="70" labelTemplate="{value}%" displayOnly="true"/>    -->
                             </div>
 
                          <!--   <div class='fotoframestratety'>
@@ -43,11 +43,11 @@
                             <div id="pmtext">
 
                                 <h3>#{messages['estrategia.dim.registro.elet.meta.hom.h3.1']}</h3>
-                                <p>#{messages['estrategia.dim.registro.elet.meta.hom.p.1']}</p>
+                                <h4>#{messages['estrategia.dim.registro.elet.meta.hom.p.1']}</h4>
                                 <ul>
                                     <li>#{messages['estrategia.dim.registro.elet.meta.hom.li.1']}</li>
                                 </ul>         
-                                <h4>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1a']}<b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1.b1']}</b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1b']}</h4>
+                                <h3>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1a']}<b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1.b1']}</b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1b']}</h3>
                             </div>
                         </div>    
 
@@ -163,16 +163,13 @@
 
                                 </div><!-- end pmtext -->  
 
-
-
-
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-registro.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-introducao.xhtml"></h:button>
                                 </div>
 
 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-registro-eletronico.xhtml?faces-redirect=true" actionListener="#{recordController.save()}"/>      
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-registro.xhtml?faces-redirect=true" actionListener="#{recordController.save()}"/>      
                                 </div>
 
                             </h:form>                                            

@@ -8,7 +8,7 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['estrategia.parar.apoio.prof.terapia.title.1']}</title>
+        <title>#{messages['estrategia.parar.apoio.profissional.nao.desista.title']} </title>
             <w:head_comum />
         </h:head>
 
@@ -22,7 +22,7 @@
                 <!--mainmenu-->         	
                 <div class="main">
 
-                    <w:leftmenu_1 cssClass="leftmenu1" />
+                <w:leftmenu_3 cssClass="leftmenu1" />
 
                     <div class="pagecontent">
 
@@ -30,7 +30,7 @@
                         <div id="pagetop">
 
                             <div id="progressbar">
-                                <p:progressBar value="80" labelTemplate="{value}%" displayOnly="true"/>
+                                <p:progressBar value="85" labelTemplate="{value}%" displayOnly="true"/>
                             </div>
 
                             <!-- <div class='fotoframestratety'>
@@ -39,28 +39,24 @@
                         </div>
 
                         <div id="pagecontentstrategy">
-
-                            <h3>#{messages['estrategia.parar.apoio.prof.terapia.h3.1']}</h3>
-                            <h4>#{messages['estrategia.parar.apoio.prof.terapia.h4.1']}</h4>
-                            <p>#{messages['estrategia.parar.apoio.prof.terapia.p.1']}</p>
-                            <ul>
-                                <li>#{messages['estrategia.parar.apoio.prof.terapia.li.1']}</li>
-                                <li>#{messages['estrategia.parar.apoio.prof.terapia.li.2']} </li>
-                            </ul>
-                            <h4>#{messages['estrategia.parar.apoio.prof.terapia.h4.2']}</h4>
-                            <ul>
-                                <li>#{messages['estrategia.parar.apoio.prof.terapia.li.3']}</li>
-                            </ul>
+                        <h3>#{messages['estrategia.parar.apoio.profissional.nao.desista.h3.1']}</h3>
+                        <p>#{messages['estrategia.parar.apoio.profissional.nao.desista.p1']} </p>
+                        <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li1']}</li>
+                        <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li2']}</li>
+                        <h3>#{messages['estrategia.parar.apoio.profissional.nao.desista.h3.2']}</h3>
+                        <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li3']}</li>
+                        <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li4']}</li>
+                        <h4>#{messages['estrategia.parar.apoio.profissional.nao.desista.h4.1']}</h4>
+                        <ul>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li5']}</li>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li6']}</li>
+                            <li>#{messages['estrategia.parar.apoio.profissional.nao.desista.li7']}</li>
+                        </ul>
                             <w:rating/>
                             <h:form>
 
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-parar-apoio-social-outros.xhtml"></h:button>
-                                </div>
-
-
-                                <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-parar-apoio-depressao-e-ansiedade.xhtml?faces-redirect=true"/>      
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./mantendo-parar-apoio-depressao-e-ansiedade.xhtml"></h:button>
                                 </div>
 
                             </h:form>                                            
@@ -80,5 +76,3 @@
         </h:body>
     </f:view>
 </html>
-
-

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="cssClass" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <div class="#{cc.attrs.cssClass}">
+            <nav style="background-color: ">
+                <ul>
+                <li><a href="mantendo-resultados-introducao.xhtml">#{messages['menu.left1']}</a></li>
+                <li><a href="mantendo-resultados-registro.xhtml">#{messages['menu.left10']}</a></li>
+                <li><a href="mantendo-diminuir-alternativas.xhtml">#{messages['menu.left11']}</a></li>
+                <li><a href="mantendo-diminuir-alternativas-plano-fissura.xhtml">#{messages['menu.left12']}</a></li>
+                <li><a href="mantendo-diminuir-alternativas-gatilhos.xhtml">#{messages['menu.left13']}</a></li>
+                <li><a href="mantendo-diminuir-alternativas-dizer-nao.xhtml">#{messages['menu.left14']}</a></li>
+                <li><a href="mantendo-diminuir-devagar.xhtml">#{messages['menu.left15']}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </cc:implementation>
+</html>

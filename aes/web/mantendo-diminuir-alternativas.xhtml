@@ -8,75 +8,70 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['estrategia.dim.dev.title.1']}</title>
-        <w:head_comum />
+        <title>#{messages['estrategia.dim.alter.title.1']}</title>
+    <w:head_comum />
     </h:head>
-
+        
     <h:body>
         <div id="corpo"> 
             <!-- header -->    
-            <w:header loginRequired="true" evaluationRequired="true"  />
+            <w:header loginRequired="true" evaluationRequired="true" />
             
            
             <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
 
-                <w:leftmenu_2 cssClass="leftmenu2" />
+                    <w:leftmenu_4 cssClass="leftmenu2" />
                 
                 <div class="pagecontent">
 
 
                     <div id="pagetop">
                         
-                        <!-- <div id="progressbar">
+                      <!-- <div id="progressbar">
                             <p:progressBar value="22" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>
+                        </div>  -->
                         
-                        <div class='fotoframestratety'>
+                   <!--  <div class='fotoframestratety'>
                              <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div> -->
                     </div>
                     
                     <div id="pagecontentstrategy">
                         <div id="pagecontentstrategyH3">
-                         <h3>#{messages['estrategia.dim.dev.h3.1']}</h3>                 
-                        </div>    
-                            <h4>#{messages['estrategia.dim.dev.h4.1']}</h4>
+                             <h3>#{messages['estrategia.dim.alter.h3.1']}</h3>
+                        </div>
+                           
+                            <h4>#{messages['estrategia.dim.alter.h4.1']}</h4>  
                             <ul>
-                            <li>#{messages['estrategia.dim.dev.li.1']}</li>
-                            <li>#{messages['estrategia.dim.dev.li.2']}</li>                        
-                            <li>#{messages['estrategia.dim.dev.li.3']}</li>
-                            <li>#{messages['estrategia.dim.dev.li.4']}</li>
+                            <li>#{messages['estrategia.dim.alter.li.1']}</li>
+                            <li>#{messages['estrategia.dim.alter.l1.2']}</li>
                             </ul>
-                            <h4>#{messages['estrategia.dim.dev.h4.2']}</h4>
+                            <h4>#{messages['estrategia.dim.alter.h4.2]']}</h4>
                             <ul>
-                            <li>#{messages['estrategia.dim.dev.li.5']}</li>
-                            <li>#{messages['estrategia.dim.dev.li.6']}</li>
-                            <li>#{messages['estrategia.dim.dev.li.7']}</li>
+                            <li>#{messages['estrategia.dim.alter.li.3]']}</li>
+                            <li>#{messages['estrategia.dim.alter.li.4]']}</li>
+                            <li>#{messages['estrategia.dim.alter.li.5]']}</li>
                             </ul>
                             <w:rating/>
                       <h:form>
-
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-alternativas-dizer-nao.xhtml"></h:button>
+                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./mantendo-resultados-registro.xhtml"></h:button>
                                 </div>
-                                
-                                
+                          
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goToPlan()}"/>     
+                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" action="mantendo-diminuir-alternativas-plano-fissura.xhtml?faces-redirect=true"/>      
                                 </div>
-
-                            </h:form>                                            
-
+                          
+                      </h:form>                                            
                     <div class="referencias">
                         <p>#{messages['updated']}</p>
                     </div>
-             </div> 
+             </div>
  
                 </div>        
-            </div>
-                
+            </div> <!--main-->   
         </div><!-- end.corpo --> 
 
         <!--Footer -->

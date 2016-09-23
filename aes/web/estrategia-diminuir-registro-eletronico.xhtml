@@ -35,7 +35,7 @@
                         <div id="pagetop">
 
                             <div id="progressbar">
-                                <p:progressBar value="75" labelTemplate="{value}%" displayOnly="true"/>
+                              <!--  <p:progressBar value="75" labelTemplate="{value}%" displayOnly="true"/> -->
                             </div>
 
                            <!-- <div class='fotoframestratety'>
@@ -65,12 +65,14 @@
 
 
 
-                            <h:panelGrid columns="2" cellpadding="5" >
+                            <h:panelGrid columns="3" cellpadding="5" >
                                 <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
-                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
                                 <p:inputText value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
-                                <p:inputText value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
                                 <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
+                                </h:panelGrid>
+                                 <h:panelGrid columns="3" cellpadding="5" >
+                                     <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
+                                <p:inputText value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
                                 <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
                             </h:panelGrid>
                         </div>
@@ -82,7 +84,7 @@
                                 <p:growl id="errorGrowl" for="info" sticky="true" redisplay="true" globalOnly="true"/>
                             <div id="pagemiddle">    
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
-                                <p:outputLabel value="Sua semana:"/>
+                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.calendar']}" style="font-weight: bold"/>
 
                                 <p:panelGrid columns ="4">
                                     <p:outputLabel value="De"/>
@@ -158,7 +160,7 @@
                                         //]]>
                                     </script>
                                 </p:panelGrid>
-
+                                <h3>#{messages['estrategia.dim.registro.elet.h3.reg']}</h3>
                                 <h:panelGrid columns="4" cellpadding="7" >
                                     <p:outputLabel for="date1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
                                     <p:outputLabel id="date1" value="#{recordController.formattedDate}"  />
@@ -197,7 +199,7 @@
                                     </h:panelGrid>  
                             </div>   
                             <div id="btnback">
-                                <h:button class="btngen" value ="#{messages['back']}" outcome="#{evaluationController.URL}"></h:button>
+                                <h:button class="btngen" value ="#{messages['back']}" outcome="estrategia-diminuir-registro.xhtml"></h:button>
                             </div>
 
 
