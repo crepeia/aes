@@ -42,7 +42,6 @@ public class FollowUpController extends BaseController<FollowUp> {
         Map<String, String> params = context.getExternalContext().getRequestParameterMap();
         id = params.get("hid") != null ? Long.parseLong(params.get("hid")) : 0;
         week = params.get("hwk") != null ? Integer.parseInt(params.get("hwk")) : 0;
-        System.out.println(id + " " + week);
         try {
             daoBase = new GenericDAO<>(FollowUp.class);
             daoUser = new GenericDAO<>(User.class);
@@ -59,7 +58,6 @@ public class FollowUpController extends BaseController<FollowUp> {
     }
 
     private User getUser() {
-        System.out.println("id: " + id + " % 1357 " + id % 1357);
         try {
             if (id % 1357 != 0) {
                 Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, "User answering follow up form with invalid id: " + id);
@@ -81,7 +79,6 @@ public class FollowUpController extends BaseController<FollowUp> {
     }
 
     private Integer getWeek() {
-        System.out.println("week: " + week + " % 1357 " + week % 1357);
         if (week % 1357 != 0) {
             Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, "User answering satisfaction form with invalid week: " + week);
             return null;
