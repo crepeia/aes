@@ -1,6 +1,7 @@
 package aes.controller;
 
 import aes.model.DailyLog;
+import aes.model.Evaluation;
 import aes.model.Record;
 import aes.model.User;
 import aes.persistence.GenericDAO;
@@ -45,6 +46,8 @@ public class RecordController extends BaseController<Record> {
     @ManagedProperty(value = "#{contactController}")
     private ContactController contactController;
 
+    private Evaluation lastEvaluation;
+
     @PostConstruct()
     public void init() {
         try {
@@ -86,27 +89,27 @@ public class RecordController extends BaseController<Record> {
             return "mantendo-resultados-meta-homem.xhtml?faces-redirect=true";
         }
     }
-    
-    public void checkDailyGoal(){
-        if((getUser().isFemale() && getRecord().getDailyGoal() > 1) || (getUser().isMale() && getRecord().getDailyGoal() > 2)){
-                FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.dailyGoal"), null));
-        }
-    }
-    
-    public void checkWeeklyGoal(){
-        if((getUser().isFemale() && getRecord().getWeeklyGoal() > 5) || (getUser().isMale() && getRecord().getWeeklyGoal() > 10)){
-                FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.weeklyGoal"), null));
+
+    public void checkDailyGoal() {
+        if ((getUser().isFemale() && getRecord().getDailyGoal() > 1) || (getUser().isMale() && getRecord().getDailyGoal() > 2)) {
+            FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.dailyGoal"), null));
         }
     }
 
+    public void checkWeeklyGoal() {
+        if ((getUser().isFemale() && getRecord().getWeeklyGoal() > 5) || (getUser().isMale() && getRecord().getWeeklyGoal() > 10)) {
+            FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.weeklyGoal"), null));
+        }
+    }
 
     public void saveLog() {
         try {
             logDAO.insertOrUpdate(dailyLog, getEntityManager());
             FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("record.save"), null));
-            if((getUser().isFemale() && dailyLog.getDrinks() > 1) || (getUser().isMale() && dailyLog.getDrinks() > 2)){
+            if ((getUser().isFemale() && dailyLog.getDrinks() > 1) || (getUser().isMale() && dailyLog.getDrinks() > 2)) {
                 FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.limit"), null));
-            }if(dailyLog.getDrinks() > getRecord().getDailyGoal()){
+            }
+            if (dailyLog.getDrinks() > getRecord().getDailyGoal()) {
                 FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.goal"), null));
             }
         } catch (SQLException ex) {
@@ -146,14 +149,14 @@ public class RecordController extends BaseController<Record> {
         try {
             List<DailyLog> logs = logDAO.list("record", getRecord(), getEntityManager());
             dates = dates.concat("\"");
-            if(!logs.isEmpty()){                
+            if (!logs.isEmpty()) {
                 for (DailyLog log : logs) {
                     if (log.getLogDate() != null) {
                         dateStr = new SimpleDateFormat("yyyy-MM-dd").format(log.getLogDate());
                         dates = dates.concat(dateStr + ",");
                     }
                 }
-                dates = dates.substring(0, dates.length() - 1);                
+                dates = dates.substring(0, dates.length() - 1);
             }
             dates = dates.concat("\"");
             return dates;
@@ -221,7 +224,7 @@ public class RecordController extends BaseController<Record> {
 
             List<DailyLog> logs = logDAO.listOrdered("record", getRecord(), "logDate", getEntityManager());
             for (DailyLog log : logs) {
-                template  = template.replace("#row#", 
+                template = template.replace("#row#",
                         "<tr>"
                         + "<td align='left'>"
                         + "<p  style='text-align:center;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>"
@@ -245,11 +248,11 @@ public class RecordController extends BaseController<Record> {
                         + "</td>"
                         + "<td align='left'>"
                         + "<p  style='text-align:center;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>"
-                        + (log.getDrinks() >= getRecord().getDailyGoal() ? bundle.getString("no"):bundle.getString("yes"))
+                        + (log.getDrinks() >= getRecord().getDailyGoal() ? bundle.getString("no") : bundle.getString("yes"))
                         + "</p>"
                         + "</td>"
-                        + "</tr>" + 
-                        "#row#");
+                        + "</tr>"
+                        + "#row#");
             }
             template = template.replace("#row#", " ");
 
@@ -276,6 +279,29 @@ public class RecordController extends BaseController<Record> {
             dailyLog = new DailyLog();
         }
         return dailyLog;
+    }
+
+    public Evaluation getLatestEvaluation() {
+
+        try {
+            GenericDAO daoEvaluation = new GenericDAO<Evaluation>(Evaluation.class);
+            if (userController.isLoggedIn()) {
+                List<Evaluation> evaluations = daoEvaluation.listOrdered("user", getUser(), "dateCreated", getEntityManager());
+                if (!evaluations.isEmpty()) {
+                    lastEvaluation = evaluations.get(evaluations.size() - 1);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (NamingException ex) {
+            Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lastEvaluation;
+    }
+
+    public void setLastEvaluation(Evaluation lastEvaluation) {
+        this.lastEvaluation = lastEvaluation;
     }
 
     public void setDailyLog(DailyLog dailyLog) {

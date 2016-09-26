@@ -1,6 +1,5 @@
 package aes.controller;
 
-import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.Encrypter;
@@ -30,8 +29,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.inputtext.InputText;
+import java.lang.IllegalStateException;
 
 /**
  *
@@ -257,6 +255,21 @@ public class UserController extends BaseController<User> {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public int redirect(boolean redirectLogin, boolean redirectIndex, boolean redirectEvaluation ){
+        if(redirectIndex){
+            redirectIndex(true);
+            return 0;
+        }else if(redirectLogin){
+            redirectLogin(true);
+            return 0;
+        }else if(redirectEvaluation){
+            redirectEvaluation(true);
+            return 0;
+        }else{
+            return 1;
+        }
+    }
 
     public void redirectLogin(boolean redirect) {
         if (redirect && !loggedIn) {
@@ -290,19 +303,19 @@ public class UserController extends BaseController<User> {
                 if (user.getDrink() == null) {
                     url = "quanto-voce-bebe-introducao.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                } else if ((!user.isUnderage() && user.isFemale() && user.getPregnant()) && !user.getDrink()) {
+                } else if (!user.isUnderage() && user.isFemale() && user.getPregnant() && !user.getDrink()) {
                     url = "quanto-voce-bebe-nao-gravidez.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 
-                } else if ((user.isUnderage() && user.isFemale() && user.getPregnant()) && !user.getDrink()) {
+                } else if (user.isUnderage() && user.isFemale() && user.getPregnant() && !user.getDrink()) {
                     url = "quanto-voce-bebe-nao-adoles-gravidez.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 
-                } else if ((!user.isUnderage() && user.isFemale() && user.getPregnant()) && user.getDrink()) {
+                } else if (!user.isUnderage() && user.isFemale() && user.getPregnant() && user.getDrink()) {
                     url = "quanto-voce-bebe-sim-gravidez.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 
-                } else if ((user.isUnderage() && user.isFemale() && user.getPregnant()) && user.getDrink()) {
+                } else if (user.isUnderage() && user.isFemale() && user.getPregnant() && user.getDrink()) {
                     url = "quanto-voce-bebe-sim-adoles-gravidez.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 
@@ -316,7 +329,7 @@ public class UserController extends BaseController<User> {
                     url = "quanto-voce-bebe-abstemio.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
                 }
-            } catch (IOException ex) {
+            } catch (IOException ex ) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
