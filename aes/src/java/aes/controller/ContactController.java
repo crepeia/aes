@@ -387,6 +387,7 @@ public class ContactController extends BaseController implements Serializable {
         htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
         htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
         htmlMessage = htmlMessage.replace("#code#", String.valueOf(contact.getUser().getRecoverCode()));
+        htmlMessage = htmlMessage.replace("#id#", contact.getUser().getHashedId());
         return htmlMessage;
     }
 

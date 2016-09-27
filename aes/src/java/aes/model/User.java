@@ -115,6 +115,10 @@ public class User implements Serializable {
     public boolean isMale() {
         return gender == 'M';
     }
+    
+    public String getHashedId(){
+        return String.valueOf(id*1357);
+    }
 
     public long getId() {
         return id;
