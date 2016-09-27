@@ -40,8 +40,8 @@ public class SatisfactionController extends BaseController<Satisfaction> {
     @PostConstruct
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, String> params = context.getExternalContext().getRequestParameterMap();   
-        id = params.get("uid") != null ? Long.parseLong(params.get("uid")) : 0;
+        Map<String, String> params = context.getExternalContext().getRequestParameterMap(); 
+        id = params.get("hid") != null ? Long.parseLong(params.get("hid")) : 0;
         try {
             daoBase = new GenericDAO<Satisfaction>(Satisfaction.class);
             daoUser = new GenericDAO<User>(User.class);
@@ -60,13 +60,13 @@ public class SatisfactionController extends BaseController<Satisfaction> {
     private User getUser() {
         try {
             if (id % 1357 != 0) {
-                Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, "User answering satisfaction form with invalid id: " + id);
+                Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, "User answering satisfaction form with invalid id: " );
                 return null;
             } else {
                 id = id / 1357;
                 List users = daoUser.list("id", id, getEntityManager());
                 if (users.isEmpty()) {
-                    Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, "User answering satisfaction form with invalid id: " + id);
+                    Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, "User answering satisfaction form with invalid id: ");
                     return null;
                 } else {
                     return (User) users.get(0);
