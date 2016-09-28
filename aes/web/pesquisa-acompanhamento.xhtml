@@ -8,38 +8,38 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['audit.3.title']}</title>
+            <title>#{messages['acompanhamento.title1']}</title>
             <w:head_comum />
-                                             <!-- Facebook Pixel Code to track our adverts -->
-             <h:outputScript>
+            <!-- Facebook Pixel Code to track our adverts -->
+            <h:outputScript>
                 !function (f, b, e, v, n, t, s) {
-                    if (f.fbq)
-                        return;
-                    n = f.fbq = function () {
-                        n.callMethod ?
-                                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                    };
-                    if (!f._fbq)
-                        f._fbq = n;
-                    n.push = n;
-                    n.loaded = !0;
-                    n.version = '2.0';
-                    n.queue = [];
-                    t = b.createElement(e);
-                    t.async = !0;
-                    t.src = v;
-                    s = b.getElementsByTagName(e)[0];
-                    s.parentNode.insertBefore(t, s)
+                if (f.fbq)
+                return;
+                n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq)
+                f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s)
                 }(window,
-                        document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+                document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
                 fbq('init', '597384437104437');
                 fbq('track', "ViewContent");</h:outputScript>            
             <noscript><![CDATA[<img height="1" width="1" style="display:none"
-                           src="https://www.facebook.com/tr?id=597384437104437&ev=PageView&noscript=1"
-                           />
-            ]]></noscript>
-               
+                                    src="https://www.facebook.com/tr?id=597384437104437&ev=PageView&noscript=1"
+                                    />
+                ]]></noscript>
+
             <!-- End Facebook Pixel Code -->
         </h:head>
 
@@ -56,11 +56,11 @@
 
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1>#{messages['audit.3.h1.1']}</h1> 
+                                <h1>#{messages['acompanhamento.3.h1.1']}</h1> 
                             </div>    
 
                             <div id="progressbar">
-                                <p:progressBar value="30" labelTemplate="{value}%" displayOnly="true"/>
+                              <!--  <p:progressBar value="30" labelTemplate="{value}%" displayOnly="true"/> -->
                             </div>                        
                         </div>
 
@@ -71,10 +71,10 @@
                             <div id="pmtext">
 
                                 <!-- Este texto precisa ser atualizado -->
-                                <h3>#{messages['audit.3.h3.1']}</h3>
+                                <h3>#{messages['acompanhamentot.3.h3.1']}</h3>
 
-                                <p>#{messages['audit.3.p.1']}</p>
-                                <p>#{messages['audit.3.p.2']}</p>
+                                <p>#{messages['acompanhamento.3.p.1']}</p>
+                                <p>#{messages['acompanhamento.3.p.2']}</p>
 
                                 <div id="standarddose">
 
@@ -189,115 +189,115 @@
                                                 </p:selectOneRadio> 
                                             </h:panelGrid>
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit4">
-                                        <f:facet name="header">  
-                                            #{messages['audit.7.p.1']}
-                                        </f:facet>
-                                        <p:selectOneRadio id="audit_4" value="#{followUpController.followUp.audit4}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.3.Message.4']}">  
-                                            <f:ajax event="change" execute="@this" render="audit5" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.1']}" itemValue="1" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.2']}" itemValue="2" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.3']}" itemValue="3" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.4']}" itemValue="4" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.5']}" itemValue="5" />
-                                        </p:selectOneRadio> 
-                                    </h:panelGrid>
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit4">
+                                                <f:facet name="header">  
+                                                    #{messages['audit.7.p.1']}
+                                                </f:facet>
+                                                <p:selectOneRadio id="audit_4" value="#{followUpController.followUp.audit4}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.7.Message.4']}">  
+                                                    <f:ajax event="change" execute="@this" render="audit5" />
+                                                    <f:selectItem itemLabel="#{messages['audit.7.select.1']}" itemValue="1" />
+                                                    <f:selectItem itemLabel="#{messages['audit.7.select.2']}" itemValue="2" />
+                                                    <f:selectItem itemLabel="#{messages['audit.7.select.3']}" itemValue="3" />
+                                                    <f:selectItem itemLabel="#{messages['audit.7.select.4']}" itemValue="4" />
+                                                    <f:selectItem itemLabel="#{messages['audit.7.select.5']}" itemValue="5" />
+                                                </p:selectOneRadio> 
+                                            </h:panelGrid>
 
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5X" >
-                                            <f:facet name="header">  
-                                                #{messages['audit.7.p.2']}
-                                            </f:facet>
-                                            <p:selectOneRadio id="audit_5" value="#{followUpController.followUp.audit5}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.3.Message.5']}">  
-                                                <f:ajax event="change" execute="@this" render="audit6" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.6']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.7']}" itemValue="2" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.8']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.9']}" itemValue="4" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.10']}" itemValue="5" />
-                                            </p:selectOneRadio> 
-                                        </h:panelGrid>
-                                    </h:panelGrid>
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5X" >
+                                                    <f:facet name="header">  
+                                                        #{messages['audit.7.p.2']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit_5" value="#{followUpController.followUp.audit5}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.7.Message.5']}">  
+                                                        <f:ajax event="change" execute="@this" render="audit6" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.6']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.7']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.8']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.9']}" itemValue="4" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.10']}" itemValue="5" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
 
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6X"   >
-                                            <f:facet name="header">  
-                                                #{messages['audit.7.p.3']}
-                                            </f:facet>
-                                            <p:selectOneRadio id="audit_6" value="#{followUpController.followUp.audit6}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.3.Message.6']}">  
-                                                <f:ajax event="change" execute="@this" render="audit7" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.11']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.12']}" itemValue="2" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.13']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.14']}" itemValue="4" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.15']}" itemValue="5" />
-                                            </p:selectOneRadio> 
-                                        </h:panelGrid>
-                                    </h:panelGrid>
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6X"   >
+                                                    <f:facet name="header">  
+                                                        #{messages['audit.7.p.3']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit_6" value="#{followUpController.followUp.audit6}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.7.Message.6']}">  
+                                                        <f:ajax event="change" execute="@this" render="audit7" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.11']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.12']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.13']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.14']}" itemValue="4" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.15']}" itemValue="5" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7X" >
-                                            <f:facet name="header">  
-                                                #{messages['audit.7.p.4']}
-                                            </f:facet>
-                                            <p:selectOneRadio id="audit_7" value="#{followUpController.followUp.audit7}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.3.Message.7']}">  
-                                                <f:ajax event="change" execute="@this" render="audit8" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.16']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.17']}" itemValue="2" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.18']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.19']}" itemValue="4" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.20']}" itemValue="5" />
-                                            </p:selectOneRadio> 
-                                        </h:panelGrid>
-                                    </h:panelGrid>
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7X" >
+                                                    <f:facet name="header">  
+                                                        #{messages['audit.7.p.4']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit_7" value="#{followUpController.followUp.audit7}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.7.Message.7']}">  
+                                                        <f:ajax event="change" execute="@this" render="audit8" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.16']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.17']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.18']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.19']}" itemValue="4" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.20']}" itemValue="5" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8X" >
-                                            <f:facet name="header">  
-                                                #{messages['audit.7.p.5']}
-                                            </f:facet>
-                                            <p:selectOneRadio id="audit_8" value="#{followUpController.followUp.audit8}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.3.Message.8']}">  
-                                                <f:ajax event="change" execute="@this" render="audit9" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.21']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.22']}" itemValue="2" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.23']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.24']}" itemValue="4" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.25']}" itemValue="5" />
-                                            </p:selectOneRadio> 
-                                        </h:panelGrid>
-                                    </h:panelGrid>
-
-
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9X" >
-                                            <f:facet name="header">  
-                                                #{messages['audit.7.p.6']}
-                                            </f:facet>
-                                            <p:selectOneRadio id="audit_9" value="#{followUpController.followUp.audit9}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.3.Message.9']}">  
-                                                <f:ajax event="change" execute="@this" render="audit10" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.26']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.27']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.28']}" itemValue="5" />
-                                            </p:selectOneRadio>
-                                        </h:panelGrid>
-                                    </h:panelGrid>
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8X" >
+                                                    <f:facet name="header">  
+                                                        #{messages['audit.7.p.5']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit_8" value="#{followUpController.followUp.audit8}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.7.Message.8']}">  
+                                                        <f:ajax event="change" execute="@this" render="audit9" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.21']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.22']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.23']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.24']}" itemValue="4" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.25']}" itemValue="5" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
 
 
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9X" >
+                                                    <f:facet name="header">  
+                                                        #{messages['audit.7.p.6']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit_9" value="#{followUpController.followUp.audit9}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.7.Message.9']}">  
+                                                        <f:ajax event="change" execute="@this" render="audit10" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.26']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.27']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.28']}" itemValue="5" />
+                                                    </p:selectOneRadio>
+                                                </h:panelGrid>
+                                            </h:panelGrid>
 
-                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10">
-                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10X" >
-                                            <f:facet name="header">  
-                                                #{messages['audit.7.p.7']}
-                                            </f:facet>
-                                            <p:selectOneRadio id="audit_10" value="#{followUpController.followUp.audit10}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.3.Message.10']}">  
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.29']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.30']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.31']}" itemValue="5" />
-                                            </p:selectOneRadio> 
-                                        </h:panelGrid>
-                                    </h:panelGrid>
+
+
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10X" >
+                                                    <f:facet name="header">  
+                                                        #{messages['audit.7.p.7']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit_10" value="#{followUpController.followUp.audit10}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit.7.Message.10']}">  
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.29']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.30']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['audit.7.select.31']}" itemValue="5" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
 
                                             <h2>#{messages['audit.3.h2.6']}</h2>    
 
@@ -325,13 +325,40 @@
                                                 </p:row>
 
                                             </p:panelGrid>
+                                            <h2>#{messages['phq2']}</h2> 
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="followupPHQ1">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="followupPHQ1X" >
+                                                    <f:facet name="header">  
+                                                        #{messages['phq2.1']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="followupPHQ1q" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['phq2.Message.1']}">  
+                                                        <f:selectItem itemLabel="#{messages['phq2.r1']}" itemValue="a" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r2']}" itemValue="b" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r3']}" itemValue="c" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r4']}" itemValue="d" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+                                                                                        <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="followupPHQ2">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="followupPHQ2X" >
+                                                    <f:facet name="header">  
+                                                        #{messages['phq2.2']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="followupPHQ2q" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['phq2.Message.2']}">  
+                                                        <f:selectItem itemLabel="#{messages['phq2.r1']}" itemValue="a" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r2']}" itemValue="b" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r3']}" itemValue="c" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r4']}" itemValue="d" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
 
                                         </p:panel>
 
                                         <p:messages id="msg" autoUpdate="true" showDetail="false"/>
 
 
-                               
+
 
                                         <div id="btnnext">
                                             <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" actionListener="#{followUpController.save()}"/>      
