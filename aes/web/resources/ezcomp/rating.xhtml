@@ -16,13 +16,13 @@
        
          <h:form> 
              <p:outputLabel  style="display: block; font-size: 15px " value="#{messages['ratings.question']}"/>
-             <p:commandLink actionListener="#{ratingController.rate}" id="upvote" update="@form">
-                 <h:graphicImage  style="width: 40px" library="default"  name="#{ratingController.imageLike}" alt="Yes"/>
+             <p:commandLink actionListener="#{pageRatingController.ratePage}" id="upvote" update="@form">
+                 <h:graphicImage  style="width: 40px" library="default"  name="#{pageRatingController.imageLike}" alt="Yes"/>
                  <f:attribute name="button" value="like" />
              </p:commandLink>
              <p:spacer width="40px"/>
-             <p:commandLink actionListener="#{ratingController.rate}" id="downvote" update="@form">
-                 <h:graphicImage  style="width: 40px" library="default" name="#{ratingController.imageUnlike}" alt="No" />
+             <p:commandLink actionListener="#{pageRatingController.ratePage}" id="downvote" update="@form">
+                 <h:graphicImage  style="width: 40px" library="default" name="#{pageRatingController.imageUnlike}" alt="No" />
                  <f:attribute name="button" value="unlike" />
              </p:commandLink>
          </h:form>

@@ -5,6 +5,7 @@
  */
 package aes.model;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,14 +21,16 @@ import javax.persistence.Table;
  * @author thiago
  */
 @Entity
-@Table(name = "tb_page")
-public class Page {
+@Table(name = "tb_item")
+public class Item implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name = "url")
-    private String url;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "type")
+    private String type;
     
     @OneToMany(fetch = FetchType.LAZY)
     private List<Rating> ratings;
@@ -40,12 +43,12 @@ public class Page {
         this.id = id;
     }
 
-    public String getUrl() {
-        return url;
+    public String getName() {
+        return name;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Rating> getRatings() {
@@ -54,6 +57,14 @@ public class Page {
 
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
     
     
