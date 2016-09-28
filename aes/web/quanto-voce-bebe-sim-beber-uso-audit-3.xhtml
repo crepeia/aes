@@ -10,36 +10,36 @@
         <h:head>
             <title>#{messages['audit.3.title']}</title>
             <w:head_comum />
-                                             <!-- Facebook Pixel Code to track our adverts -->
-             <h:outputScript>
+            <!-- Facebook Pixel Code to track our adverts -->
+            <h:outputScript>
                 !function (f, b, e, v, n, t, s) {
-                    if (f.fbq)
-                        return;
-                    n = f.fbq = function () {
-                        n.callMethod ?
-                                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                    };
-                    if (!f._fbq)
-                        f._fbq = n;
-                    n.push = n;
-                    n.loaded = !0;
-                    n.version = '2.0';
-                    n.queue = [];
-                    t = b.createElement(e);
-                    t.async = !0;
-                    t.src = v;
-                    s = b.getElementsByTagName(e)[0];
-                    s.parentNode.insertBefore(t, s)
+                if (f.fbq)
+                return;
+                n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq)
+                f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s)
                 }(window,
-                        document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+                document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
                 fbq('init', '597384437104437');
                 fbq('track', "ViewContent");</h:outputScript>            
             <noscript><![CDATA[<img height="1" width="1" style="display:none"
-                           src="https://www.facebook.com/tr?id=597384437104437&ev=PageView&noscript=1"
-                           />
-            ]]></noscript>
-               
+                                    src="https://www.facebook.com/tr?id=597384437104437&ev=PageView&noscript=1"
+                                    />
+                ]]></noscript>
+
             <!-- End Facebook Pixel Code -->
         </h:head>
 
@@ -187,10 +187,8 @@
                                                     <f:selectItem itemLabel="#{messages['audit.3.selectitem.15']}" itemValue="5" />
                                                 </p:selectOneRadio> 
                                             </h:panelGrid>
-                                           
+
                                             <h2>#{messages['audit.3.h2.6']}</h2>    
-
-
 
                                             <p><h:outputText value="#{messages['audit.3.outputtext.1']}"/></p>
 
@@ -216,6 +214,51 @@
                                                 </p:row>
 
                                             </p:panelGrid>
+
+                                            <h2>#{messages['audit.3.mais']}</h2> 
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit3escola">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit3escolaX" >
+                                                    <f:facet name="header">  
+                                                        #{messages['sd.2']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit3escolaq" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['audit3.Message.escola']}">  
+                                                        <f:selectItem itemLabel="#{messages['sd.2.a']}" itemValue="a" />
+                                                        <f:selectItem itemLabel="#{messages['sd.2.b']}" itemValue="b" />
+                                                        <f:selectItem itemLabel="#{messages['sd.2.c']}" itemValue="c" />
+                                                        <f:selectItem itemLabel="#{messages['sd.2.d']}" itemValue="d" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit3emprego">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit3empregoX" >
+                                                    <f:facet name="header">  
+                                                        #{messages['sd.3']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit3empregoq" value="#"  required="true" requiredMessage="#{messages['audit3.Message.emprego']}">  
+                                                        <f:selectItem itemLabel="#{messages['sd.3.r1']}" itemValue="a" />
+                                                        <f:selectItem itemLabel="#{messages['sd.3.r2']}" itemValue="b" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit3ref">
+                                                <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit3refX" >
+                                                    <f:facet name="header">  
+                                                        #{messages['baseline.q0.h5']}
+                                                    </f:facet>
+                                                    <p:selectOneRadio id="audit3refq" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['audit3.Message.referencia']}">  
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a1']}" itemValue="a" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a2']}" itemValue="b" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a3']}" itemValue="c" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a4']}" itemValue="d" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a5']}" itemValue="f" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a6']}" itemValue="g" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a7']}" itemValue="h" />
+                                                    </p:selectOneRadio> 
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+
 
                                         </p:panel>
 
