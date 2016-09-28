@@ -159,6 +159,9 @@ public class UserController extends BaseController<User> {
                 user.setSignUpDate(new Date());
                 save();
                 contactController.sendSignUpEmail(user);
+                if(user.isReceiveEmails()){
+                    contactController.scheduleTipsEmail(user);
+                }
                 signIn(true);
                 Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'cadastrou no sistema.");
             }

@@ -5,6 +5,8 @@
  */
 package aes.model;
 
+import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -19,18 +23,20 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tb_rating")
-public class Rating {
+public class Rating implements Serializable {
    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column(name = "relevant")
     private Boolean relevant;
-    
+    @Column (name = "date_rated")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateRated;
     @ManyToOne
     private User user;
     @ManyToOne
-    private Page page;
+    private Item item;
 
     public long getId() {
         return id;
@@ -56,13 +62,19 @@ public class Rating {
         this.user = user;
     }
 
-    public Page getPage() {
-        return page;
+    public Date getDateRated() {
+        return dateRated;
     }
 
-    public void setPage(Page page) {
-        this.page = page;
+    public void setDateRated(Date dateRated) {
+        this.dateRated = dateRated;
     }
-    
-    
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }   
 }

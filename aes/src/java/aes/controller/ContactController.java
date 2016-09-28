@@ -246,7 +246,7 @@ public class ContactController extends BaseController implements Serializable {
 
     public void scheduleTipsEmail(User user) {
         int randomNumber = random.nextInt((RANDOM_MAX - RANDOM_MIN) + 1) + RANDOM_MIN;
-        int frequency = getLatestEvaluation(user).getTipsFrequency();        
+        int frequency = user.getTipsFrequency();        
         Contact contact = new Contact();
         contact.setUser(user);
         contact.setSender("alcoolesaude@gmail.com");
@@ -293,7 +293,7 @@ public class ContactController extends BaseController implements Serializable {
         try {
             List<Contact> contacts = daoBase.list("user", user, getEntityManager());
             for (Contact contact : contacts) {
-                if (contact.getDateScheduled() != null && contact.getDateSent() == null) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && !contact.getSubject().contains("tips_subj")) {
                     daoBase.delete(contact, getEntityManager());
 
                 }
@@ -388,6 +388,7 @@ public class ContactController extends BaseController implements Serializable {
         htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
         htmlMessage = htmlMessage.replace("#code#", String.valueOf(contact.getUser().getRecoverCode()));
         htmlMessage = htmlMessage.replace("#id#", contact.getUser().getHashedId());
+        htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
         return htmlMessage;
     }
 

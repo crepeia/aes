@@ -51,6 +51,8 @@ public class User implements Serializable {
     private Integer recoverCode;
     @Column(name = "phone")
     private String phone;
+    @Column(name = "tips_frequency")
+    private Integer tipsFrequency;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
@@ -282,6 +284,15 @@ public class User implements Serializable {
     public void setFollowUps(List<FollowUp> followUps) {
         this.followUps = followUps;
     }
+
+    public Integer getTipsFrequency() {
+        return tipsFrequency;
+    }
+
+    public void setTipsFrequency(Integer tipsFrequency) {
+        this.tipsFrequency = tipsFrequency;
+    }
+    
     
     
 }

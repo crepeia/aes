@@ -5,11 +5,12 @@
  */
 package aes.controller;
 
-import aes.model.Page;
+import aes.model.Item;
 import aes.model.Rating;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,35 +27,35 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author thiago
  */
-@ManagedBean(name = "ratingController")
+@ManagedBean(name = "pageRatingController")
 @ViewScoped
-public class RatingController extends BaseController<Rating> {
+public class PageRatingController extends BaseController<Rating> {
 
-    private GenericDAO daoPage;
+    private GenericDAO daoItem;
     private Rating rating;
-    private Page page;
+    private Item page;
     
     @ManagedProperty(value = "#{userController}")
     private UserController userController;
     
 
-    public RatingController() {
+    public PageRatingController() {
         try {
             daoBase = new GenericDAO<Rating>(Rating.class);
-            daoPage = new GenericDAO<Page>(Page.class);
+            daoItem = new GenericDAO<Item>(Item.class);
         } catch (NamingException ex) {
-            Logger.getLogger(RatingController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PageRatingController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public Rating getRating() {
+    public Rating getPageRating() {
         if (rating == null) {
             try {
                 if (getUser() != null) {
                     List<Rating> ratings = daoBase.list("user", getUser(), getEntityManager());
                     if (!ratings.isEmpty()) {
                         for (Rating r : ratings) {
-                            if (r.getPage() != null && r.getPage().getUrl().contains(getURL())) {
+                            if (r.getItem() != null && r.getItem().getName().contains(getURL())) {
                                 rating = r;
                             }
                         }
@@ -63,51 +64,53 @@ public class RatingController extends BaseController<Rating> {
                 if (rating == null) {
                     rating = new Rating();
                     rating.setUser(getUser());
-                    rating.setPage(getPage());
+                    rating.setItem(getPage());
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(RatingController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PageRatingController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return rating;
     }
 
-    public Page getPage() {
+    public Item getPage() {
         if (page == null) {
             try {
-                List<Page> pages = daoPage.list("url", getURL(), getEntityManager());
+                List<Item> pages = daoItem.list("name", getURL(), getEntityManager());
                 if (pages.isEmpty()) {
-                    page = new Page();
-                    page.setUrl(getURL());
-                    daoPage.insert(page, getEntityManager());
+                    page = new Item();
+                    page.setName(getURL());
+                    page.setType("page");
+                    daoItem.insert(page, getEntityManager());
                 } else {
                     page = pages.get(0);
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(RatingController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PageRatingController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return page;
     }
 
-    public void rate(ActionEvent event) {
+    public void ratePage(ActionEvent event) {
         try {
             String action = (String) event.getComponent().getAttributes().get("button");
             if (action.contains("like")) {
-                getRating().setRelevant(true);
+                getPageRating().setRelevant(true);
             } if(action.contains("unlike")) {
-                getRating().setRelevant(false);
+                getPageRating().setRelevant(false);
             }
-            daoBase.insertOrUpdate(getRating(), getEntityManager());
+            getPageRating().setDateRated(new Date());
+            daoBase.insertOrUpdate(getPageRating(), getEntityManager());
         } catch (SQLException ex) {
-            Logger.getLogger(RatingController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PageRatingController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public String getURL() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String url = ((HttpServletRequest) request).getRequestURI();
-        url = url.substring(url.lastIndexOf('/') + 1);
+        url = url.substring(url.indexOf('-') + 1);
         return url;
     }
 
@@ -116,9 +119,9 @@ public class RatingController extends BaseController<Rating> {
     }
 
     public String getImageLike() {
-        if (getRating().getRelevant() == null) {
+        if (getPageRating().getRelevant() == null) {
             return "images/like.png";
-        } else if (!getRating().getRelevant()) {
+        } else if (!getPageRating().getRelevant()) {
             return "images/like.png";
         } else {
             return "images/like-pressed.png";
@@ -126,9 +129,9 @@ public class RatingController extends BaseController<Rating> {
     }
 
     public String getImageUnlike() {
-        if (getRating().getRelevant() == null) {
+        if (getPageRating().getRelevant() == null) {
             return "images/unlike.png";
-        } else if (getRating().getRelevant()) {
+        } else if (getPageRating().getRelevant()) {
             return "images/unlike.png";
         } else {
             return "images/unlike-pressed.png";
