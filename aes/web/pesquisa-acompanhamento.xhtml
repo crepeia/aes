@@ -331,11 +331,11 @@
                                                     <f:facet name="header">  
                                                         #{messages['phq2.1']}
                                                     </f:facet>
-                                                    <p:selectOneRadio id="followupPHQ1q" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['phq2.Message.1']}">  
-                                                        <f:selectItem itemLabel="#{messages['phq2.r1']}" itemValue="a" />
-                                                        <f:selectItem itemLabel="#{messages['phq2.r2']}" itemValue="b" />
-                                                        <f:selectItem itemLabel="#{messages['phq2.r3']}" itemValue="c" />
-                                                        <f:selectItem itemLabel="#{messages['phq2.r4']}" itemValue="d" />
+                                                    <p:selectOneRadio id="followupPHQ1q" value="#{followUpController.followUp.lowInterest}"  required="true" layout="pageDirection" requiredMessage="#{messages['phq2.Message.1']}">  
+                                                        <f:selectItem itemLabel="#{messages['phq2.r1']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r2']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r3']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r4']}" itemValue="4" />
                                                     </p:selectOneRadio> 
                                                 </h:panelGrid>
                                             </h:panelGrid>
@@ -344,11 +344,11 @@
                                                     <f:facet name="header">  
                                                         #{messages['phq2.2']}
                                                     </f:facet>
-                                                    <p:selectOneRadio id="followupPHQ2q" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['phq2.Message.2']}">  
-                                                        <f:selectItem itemLabel="#{messages['phq2.r1']}" itemValue="a" />
-                                                        <f:selectItem itemLabel="#{messages['phq2.r2']}" itemValue="b" />
-                                                        <f:selectItem itemLabel="#{messages['phq2.r3']}" itemValue="c" />
-                                                        <f:selectItem itemLabel="#{messages['phq2.r4']}" itemValue="d" />
+                                                    <p:selectOneRadio id="followupPHQ2q" value="#{followUpController.followUp.feelingDown}"  required="true" layout="pageDirection" requiredMessage="#{messages['phq2.Message.2']}">  
+                                                        <f:selectItem itemLabel="#{messages['phq2.r1']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r2']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r3']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['phq2.r4']}" itemValue="4" />
                                                     </p:selectOneRadio> 
                                                 </h:panelGrid>
                                             </h:panelGrid>

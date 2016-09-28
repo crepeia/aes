@@ -221,11 +221,11 @@
                                                     <f:facet name="header">  
                                                         #{messages['sd.2']}
                                                     </f:facet>
-                                                    <p:selectOneRadio id="audit3escolaq" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['audit3.Message.escola']}">  
-                                                        <f:selectItem itemLabel="#{messages['sd.2.a']}" itemValue="a" />
-                                                        <f:selectItem itemLabel="#{messages['sd.2.b']}" itemValue="b" />
-                                                        <f:selectItem itemLabel="#{messages['sd.2.c']}" itemValue="c" />
-                                                        <f:selectItem itemLabel="#{messages['sd.2.d']}" itemValue="d" />
+                                                    <p:selectOneRadio id="audit3escolaq" value="#{userController.user.education}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit3.Message.escola']}">  
+                                                        <f:selectItem itemLabel="#{messages['sd.2.a']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['sd.2.b']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['sd.2.c']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['sd.2.d']}" itemValue="4" />
                                                     </p:selectOneRadio> 
                                                 </h:panelGrid>
                                             </h:panelGrid>
@@ -235,9 +235,9 @@
                                                     <f:facet name="header">  
                                                         #{messages['sd.3']}
                                                     </f:facet>
-                                                    <p:selectOneRadio id="audit3empregoq" value="#"  required="true" requiredMessage="#{messages['audit3.Message.emprego']}">  
-                                                        <f:selectItem itemLabel="#{messages['sd.3.r1']}" itemValue="a" />
-                                                        <f:selectItem itemLabel="#{messages['sd.3.r2']}" itemValue="b" />
+                                                    <p:selectOneRadio id="audit3empregoq" value="#{userController.user.employed}"  required="true" requiredMessage="#{messages['audit3.Message.emprego']}">  
+                                                        <f:selectItem itemLabel="#{messages['sd.3.r1']}" itemValue="#{true}" />
+                                                        <f:selectItem itemLabel="#{messages['sd.3.r2']}" itemValue="#{false}" />
                                                     </p:selectOneRadio> 
                                                 </h:panelGrid>
                                             </h:panelGrid>
@@ -247,14 +247,14 @@
                                                     <f:facet name="header">  
                                                         #{messages['baseline.q0.h5']}
                                                     </f:facet>
-                                                    <p:selectOneRadio id="audit3refq" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['audit3.Message.referencia']}">  
-                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a1']}" itemValue="a" />
-                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a2']}" itemValue="b" />
-                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a3']}" itemValue="c" />
-                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a4']}" itemValue="d" />
-                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a5']}" itemValue="f" />
-                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a6']}" itemValue="g" />
-                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a7']}" itemValue="h" />
+                                                    <p:selectOneRadio id="audit3refq" value="#{userController.user.knowWebsite}"  required="true" layout="pageDirection" requiredMessage="#{messages['audit3.Message.referencia']}">  
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a1']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a2']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a3']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a4']}" itemValue="4" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a5']}" itemValue="5" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a6']}" itemValue="6" />
+                                                        <f:selectItem itemLabel="#{messages['baseline.q0.a7']}" itemValue="7" />
                                                     </p:selectOneRadio> 
                                                 </h:panelGrid>
                                             </h:panelGrid>

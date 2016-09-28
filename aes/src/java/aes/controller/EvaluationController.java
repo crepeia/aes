@@ -102,6 +102,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public String audit3() {
+        userController.save();
         if (getEvaluation().audit3LimitExceeded() || getEvaluation().dayLimitExceeded() || getEvaluation().weekLimitExceeded()) {
             return "quanto-voce-bebe-sim-beber-uso-audit-7.xhtml?faces-redirect=true";
         } else if (getUser().isMale() && getUser().getAge() <= 65) {

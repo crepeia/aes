@@ -21,16 +21,11 @@ public class Scheduler {
     public Scheduler() {
         
     }
+   
     
-    //@Schedule(second = "*/5", minute = "*", hour = "*", dayOfWeek = "*")
-    public void testTask() {
-       Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES test task running");
-
-    }
-    
-    @Schedule(second = "0", minute = "*/30", hour = "*", dayOfWeek = "*")
+    @Schedule(second = "0", minute = "0", hour = "9", dayOfWeek = "*")
     public void sendEmails(){
-        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - iniciando envio de emails");
+        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Morning Task Running");
         contactController.sendScheduledEmails();
     }
 

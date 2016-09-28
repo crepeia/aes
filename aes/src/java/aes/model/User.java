@@ -53,7 +53,13 @@ public class User implements Serializable {
     private String phone;
     @Column(name = "tips_frequency")
     private Integer tipsFrequency;
-
+    @Column(name = "education")
+    private Integer education;  
+    @Column(name = "employed")
+    private Boolean employed;
+    @Column(name = "know_website")
+    private Integer knowWebsite;
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
 
@@ -291,6 +297,30 @@ public class User implements Serializable {
 
     public void setTipsFrequency(Integer tipsFrequency) {
         this.tipsFrequency = tipsFrequency;
+    }
+
+    public Integer getEducation() {
+        return education;
+    }
+
+    public void setEducation(Integer education) {
+        this.education = education;
+    }
+
+    public Boolean getEmployed() {
+        return employed;
+    }
+
+    public void setEmployed(Boolean employed) {
+        this.employed = employed;
+    }
+
+    public Integer getKnowWebsite() {
+        return knowWebsite;
+    }
+
+    public void setKnowWebsite(Integer knowWebsite) {
+        this.knowWebsite = knowWebsite;
     }
     
     

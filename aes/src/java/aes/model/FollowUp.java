@@ -64,8 +64,15 @@ public class FollowUp implements Serializable {
     @Column(name = "audit_10")
     private Integer audit10;
     
+    @Column(name = "low_interest")
+    private Integer lowInterest;
+    @Column(name = "feeling_down")
+    private Integer feelingDown;
+    
+    
     @Column(name = "week_count")
     private Integer weekCount;
+    
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_answered")
@@ -240,6 +247,22 @@ public class FollowUp implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getLowInterest() {
+        return lowInterest;
+    }
+
+    public void setLowInterest(Integer lowInterest) {
+        this.lowInterest = lowInterest;
+    }
+
+    public Integer getFeelingDown() {
+        return feelingDown;
+    }
+
+    public void setFeelingDown(Integer feelingDown) {
+        this.feelingDown = feelingDown;
     }
     
     
