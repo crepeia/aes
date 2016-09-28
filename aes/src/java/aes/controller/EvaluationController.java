@@ -163,6 +163,18 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public String cutDownQuit() {
+         if (getUser().isReceiveEmails()) {
+            contactController.clearScheduledEmails(getUser());
+            contactController.scheduleDiaryReminderEmail(getUser(), new Date());
+            contactController.scheduleWeeklyEmail(getUser(), new Date());
+            if (getEvaluation().getQuit()) {
+                contactController.scheduleKeepingResultQuitEmail(getUser(), new Date());
+                contactController.schedulePersistChallengesQuitEmail(getUser(), new Date());
+            } else {
+                contactController.scheduleKeepingResultReduceEmail(getUser(), new Date());
+                contactController.schedulePersistChallengesReduceEmail(getUser(), new Date());                
+            }
+        }
         if (getEvaluation().getQuit()) {
             return "estrategia-diminuir-introducao.xhtml?faces-redirect=true";
         } else {
@@ -198,21 +210,6 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void savePlan() {
         save();
-        if (getUser().isReceiveEmails()) {
-            contactController.clearScheduledEmails(getUser());
-            contactController.scheduleDiaryReminderEmail(getUser(), getEvaluation().getDataComecarPlano());
-            contactController.scheduleWeeklyEmail(getUser(), getEvaluation().getDataComecarPlano());
-            if (getEvaluation().getQuit()) {
-                contactController.scheduleKeepingResultQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
-                contactController.schedulePersistChallengesQuitEmail(getUser(), getEvaluation().getDataComecarPlano());
-            } else {
-                contactController.scheduleKeepingResultReduceEmail(getUser(), getEvaluation().getDataComecarPlano());
-                contactController.schedulePersistChallengesReduceEmail(getUser(), getEvaluation().getDataComecarPlano());                
-            }
-        }
-        if (getEvaluation().getTipsFrequency() != 0) {
-            contactController.scheduleTipsEmail(getUser());
-        }
         FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation.plan"), null));
     }
 
@@ -232,7 +229,6 @@ public class EvaluationController extends BaseController<Evaluation> {
             InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/plan-template.html");
             byte[] buffer = new byte[102400];
             String template = new String(buffer, 0, input.read(buffer),StandardCharsets.UTF_8);
-            System.out.println(template);
 
             ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
             String subtitle[] = new String[6];
