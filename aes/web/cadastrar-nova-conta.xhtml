@@ -10,37 +10,37 @@
         <h:head>
             <title>#{messages['cadastrar.nova.conta.title.1']}</title>
             <w:head_comum />
-             <!-- Facebook Pixel Code to track our adverts -->
-             <h:outputScript>
+            <!-- Facebook Pixel Code to track our adverts -->
+            <h:outputScript>
                 !function (f, b, e, v, n, t, s) {
-                    if (f.fbq)
-                        return;
-                    n = f.fbq = function () {
-                        n.callMethod ?
-                                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                    };
-                    if (!f._fbq)
-                        f._fbq = n;
-                    n.push = n;
-                    n.loaded = !0;
-                    n.version = '2.0';
-                    n.queue = [];
-                    t = b.createElement(e);
-                    t.async = !0;
-                    t.src = v;
-                    s = b.getElementsByTagName(e)[0];
-                    s.parentNode.insertBefore(t, s)
+                if (f.fbq)
+                return;
+                n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq)
+                f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s)
                 }(window,
-                        document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+                document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
                 fbq('init', '597384437104437');
                 fbq('track', "CompleteRegistration");</h:outputScript>            
             <noscript><![CDATA[<img height="1" width="1" style="display:none"
-                           src="https://www.facebook.com/tr?id=597384437104437&ev=PageView&noscript=1"
-                           />
-            ]]></noscript>
-            
-            
+                                    src="https://www.facebook.com/tr?id=597384437104437&ev=PageView&noscript=1"
+                                    />
+                ]]></noscript>
+
+
             <!-- End Facebook Pixel Code -->
         </h:head>
 
@@ -57,11 +57,11 @@
                         <div id="maintop">
 
                             <div id="maincenter">
-                            
-                            <div class="fotoframe">                            
-                                <h:graphicImage library="default" id="tempo" title="Tempo" name="images/min.png" alt="Gratuito" />
-                             </div> 
-                                
+
+                                <div class="fotoframe">                            
+                                    <h:graphicImage library="default" id="tempo" title="Tempo" name="images/min.png" alt="Gratuito" />
+                                </div> 
+
                                 <h3>#{messages['cadastrar.nova.conta.h3.1']}</h3>                                         
                                 <p>#{messages['cadastrar.nova.conta.p.1']}</p>
 
@@ -117,48 +117,48 @@
                                                 <p:message for="PhoneTxt" />
                                             </div>--> 
                                             <div class="signuptext">
-                                                    <p:inputText id="telTxt" value="#{userController.user.phone}" required="false" size="30" label="#{messages['telephone.number']}"/>
-                                                    <p:watermark for="telTxt" value="#{messages['naccount.phone']}" />
+                                                <p:inputText id="telTxt" value="#{userController.user.phone}" required="false" size="30" label="#{messages['telephone.number']}"/>
+                                                <p:watermark for="telTxt" value="#{messages['naccount.phone']}" />
                                             </div>
-                                            
+
                                             <div id="signupbottom">
 
-                                               <!-- <p:panelGrid columns="2" id="nascimento">
-                                                    <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
+                                                <!-- <p:panelGrid columns="2" id="nascimento">
+                                                     <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
+ 
+                                                     <p:calendar id="birthdate" label="#{messages['naccount.birthdate']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" readonlyInput="true" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true" maxdate="#{userController.currentDate}">
+                                                         <p:ajax event="change" update="birthdate" />
+                                                     </p:calendar>
+                                                 </p:panelGrid>
+                                                 <p:message for="birthdate" />-->
 
-                                                    <p:calendar id="birthdate" label="#{messages['naccount.birthdate']}" value="#{userController.user.birthDate}" navigator="true" yearRange="-100" readonlyInput="true" locale="#{languageController.locale}" pattern="dd/MM/yyyy" required="true" maxdate="#{userController.currentDate}">
-                                                        <p:ajax event="change" update="birthdate" />
-                                                    </p:calendar>
+                                                <!--#########################-->
+                                                <p:panelGrid columns="4" id="birthdate" style="margin-bottom:10px">
+                                                    <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
+                                                    <h:selectOneMenu id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}">  
+                                                        <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
+                                                        <f:selectItems value="#{userController.dias}"/>
+                                                        <f:ajax listener="#{userController.setBirth()}" />
+                                                    </h:selectOneMenu>
+
+                                                    <h:selectOneMenu id="month" value="#{userController.mes}" required="true" label="#{messages['naccount.month']}">  
+                                                        <f:selectItem itemLabel="#{messages['naccount.month']}" itemValue="" />  
+                                                        <f:selectItems value="#{userController.meses}" /> 
+                                                        <f:ajax listener="#{userController.setBirth()}" />
+                                                    </h:selectOneMenu>
+
+                                                    <h:selectOneMenu id="year" value="#{userController.ano}" required="true" label="#{messages['naccount.year']}">  
+                                                        <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
+                                                        <f:selectItems value="#{userController.anos}" />  
+                                                        <f:ajax listener="#{userController.setBirth()}" />
+                                                    </h:selectOneMenu>
+
                                                 </p:panelGrid>
-                                                <p:message for="birthdate" />-->
-                                                
-                                     <!--#########################-->
-                                            <p:panelGrid columns="4" id="birthdate" style="margin-bottom:10px">
-                                                <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
-                                                <h:selectOneMenu id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}">  
-                                                    <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
-                                                    <f:selectItems value="#{userController.dias}"/>
-                                                    <f:ajax listener="#{userController.setBirth()}" />
-                                                </h:selectOneMenu>
-                            
-                                                <h:selectOneMenu id="month" value="#{userController.mes}" required="true" label="#{messages['naccount.month']}">  
-                                                    <f:selectItem itemLabel="#{messages['naccount.month']}" itemValue="" />  
-                                                    <f:selectItems value="#{userController.meses}" /> 
-                                                    <f:ajax listener="#{userController.setBirth()}" />
-                                                </h:selectOneMenu>
-                                     
-                                                <h:selectOneMenu id="year" value="#{userController.ano}" required="true" label="#{messages['naccount.year']}">  
-                                                    <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
-                                                    <f:selectItems value="#{userController.anos}" />  
-                                                    <f:ajax listener="#{userController.setBirth()}" />
-                                                </h:selectOneMenu>
-   
-                                            </p:panelGrid>
-                                            <p:message for="day" />
-                                            <p:message for="month"/>
-                                            <p:message for="year"/>
-                                     
-                                     <!--#################################-->
+                                                <p:message for="day" />
+                                                <p:message for="month"/>
+                                                <p:message for="year"/>
+
+                                                <!--#################################-->
 
                                                 <p:panelGrid columns="2" id="sexo" style="margin-bottom:10px">
                                                     <h:outputText value="#{messages['naccount.sex']}" style="font-weight: bold;"/>
@@ -182,9 +182,9 @@
                                                 </h:panelGrid>
 
                                                 <p:message for="pregnant" />
-                                                
-                                                
-                                                
+
+
+
 
                                                 <h:panelGrid columns="2" style="margin-bottom:-10px; margin-top: -5px " cellpadding="20" id="questao2">
                                                     <f:facet name="header">  
@@ -196,17 +196,41 @@
                                                     </p:selectOneRadio> 
                                                 </h:panelGrid>
 
+
                                                 <p:message for="drink" />
-                                                
-                                                    <p:panelGrid columns="2"  id="allowterm">
-                                                        <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>                                                        
-                                                        <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}"/>
-                                                    </p:panelGrid>                                             
-                                                    <p:panelGrid columns="3" id="consent" >
-                                                        <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
-                                                        <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
-                                                    </p:panelGrid>
-                                     
+
+
+
+                                                <p:panelGrid columns="2"  id="allowterm">
+                                                    <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>                                                        
+                                                    <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}">
+                                                        <f:ajax event="change" execute="@this" render="@form" />
+                                                    </p:selectBooleanCheckbox>
+                                                </p:panelGrid>
+
+                                                <h:panelGrid columns="1"  cellpadding="5" id="questao7" rendered="#{userController.user.receiveEmails}">
+                                                    <f:facet name="header">  
+                                                        #{messages['tips.frequency.choice']}                                       
+                                                    </f:facet>
+                                                    <p:selectOneMenu id="frequency" value="#{userController.user.tipsFrequency}" style="width:125px"  label="#{messages['tips.frequency.choice']}" required="true" >
+                                                        <f:selectItem itemLabel="" itemValue="" />
+                                                        <f:selectItem itemLabel="#{messages['tips.frequency.choice.0']}" itemValue="0" />
+                                                        <f:selectItem itemLabel="#{messages['tips.frequency.choice.1']}" itemValue="1" />
+                                                        <f:selectItem itemLabel="#{messages['tips.frequency.choice.2']}" itemValue="2" />
+                                                        <f:selectItem itemLabel="#{messages['tips.frequency.choice.3']}" itemValue="3" />
+                                                        <f:selectItem itemLabel="#{messages['tips.frequency.choice.4']}" itemValue="4" />
+                                                        <f:selectItem itemLabel="#{messages['tips.frequency.choice.5']}" itemValue="5" />
+                                                        <f:selectItem itemLabel="#{messages['tips.frequency.choice.7']}" itemValue="6" />
+                                                    </p:selectOneMenu>
+                                                </h:panelGrid>
+
+                                                <p:message for="frequency" />
+
+                                                <p:panelGrid columns="3" id="consent" >
+                                                    <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
+                                                    <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
+                                                </p:panelGrid>
+
                                                 <div id="signup-terms">
                                                     <p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink></p>                                            
                                                 </div>
@@ -224,7 +248,7 @@
                                     </div>
                                 </div><!-- end.main left -->
                                 <div id="mainright"> 
-                          
+
                                     <h3>#{messages['cadastrar.nova.conta.h1']}</h3>
                                     <h:form id="form1" class="form-signup">
                                         <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
@@ -251,15 +275,15 @@
                                             <h:outputLink value="enviar-email-senha.xhtml" style="position:relative; top: 12px;">#{messages['forgot.password']}</h:outputLink>
                                         </div>
                                     </h:form>
-                                    
-                                     <h3>#{messages['cadastrar.nova.conta.h3.2']}</h3>
+
+                                    <h3>#{messages['cadastrar.nova.conta.h3.2']}</h3>
                                     <ul>
                                         <li>#{messages['cadastrar.nova.conta.li.1']}</li>
                                         <li>#{messages['cadastrar.nova.conta.li.2']}</li>
                                         <li>#{messages['cadastrar.nova.conta.li.3']}</li>
                                     </ul>
-                                     
-                                              <h3>#{messages['cadastrar.nova.conta.h3.3']}</h3>
+
+                                    <h3>#{messages['cadastrar.nova.conta.h3.3']}</h3>
                                     <p>#{messages['cadastrar.nova.conta.p.2']}</p>
 
                                 </div>
