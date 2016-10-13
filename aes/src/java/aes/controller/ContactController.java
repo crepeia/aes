@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -306,7 +307,6 @@ public class ContactController extends BaseController implements Serializable {
 
     public void sendScheduledEmails() {
         try {
-            Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "AES - Sending scheduled emails");
             List<Contact> contacts = daoBase.list(getEntityManager());
             Calendar today = Calendar.getInstance();
             Calendar scheduledDate = Calendar.getInstance();
@@ -339,7 +339,7 @@ public class ContactController extends BaseController implements Serializable {
             save(contact);
             Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getRecipient());
 
-        } catch (MessagingException ex) {
+        } catch (MessagingException |  MissingResourceException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -376,7 +376,7 @@ public class ContactController extends BaseController implements Serializable {
         return null;
     }
 
-    private String getContent(Contact contact) {
+    private String getContent(Contact contact) throws MissingResourceException {
         String htmlMessage = htmlTemplate;
         htmlMessage = htmlMessage.replace("#title#", getString("title.1",contact.getUser()));
         htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(),contact.getUser()));
@@ -392,11 +392,11 @@ public class ContactController extends BaseController implements Serializable {
         return htmlMessage;
     }
 
-    private String getSubject(Contact contact) {
+    private String getSubject(Contact contact) throws MissingResourceException {
         return getString(contact.getSubject(), contact.getUser());
     }
     
-    private String getString(String key, User user){
+    private String getString(String key, User user) throws MissingResourceException{
         bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
         return bundle.getString(key);
     }
