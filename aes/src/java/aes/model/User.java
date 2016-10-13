@@ -78,6 +78,10 @@ public class User implements Serializable {
     
      @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
     private List<FollowUp> followUps;
+     
+    @Column(name = "dt_cadastro")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dt_cadastro;
     
     @Override
     public String toString() {
@@ -322,6 +326,17 @@ public class User implements Serializable {
     public void setKnowWebsite(Integer knowWebsite) {
         this.knowWebsite = knowWebsite;
     }
+    
+    public Date getDtCadastro() {
+        return dt_cadastro;
+    }
+
+    /**
+     */
+    public void setDtCadastro(Date dt) {
+        this.dt_cadastro = dt;
+    }
+    
     
     
     

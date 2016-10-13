@@ -1,5 +1,6 @@
 package aes.controller;
 
+import aes.model.User;
 import aes.persistence.GenericDAO;
 import com.sun.faces.component.visit.FullVisitContext;
 import java.io.Serializable;
@@ -58,6 +59,14 @@ public abstract class BaseController<T> implements Serializable {
 
     return found[0];
 
-    }   
+    }  
+    
+    public boolean loggedUser() {
+        return getLoggedUser() != null;
+    }
+
+    public User getLoggedUser() {
+        return (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
+    }
 
 }

@@ -10,7 +10,6 @@ import aes.model.Satisfaction;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.io.IOException;
-import static java.lang.Math.toIntExact;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;

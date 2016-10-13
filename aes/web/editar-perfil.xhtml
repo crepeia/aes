@@ -15,7 +15,7 @@
         <h:body>    
             <div id="corpo"> 
                 <!-- header -->    
-                <w:header logoutRequired="true"/>
+                <w:header loginRequired="true"/>
                 <w:topmenu />
                 <!--mainmenu-->         	
                 <div class="main">
@@ -63,7 +63,7 @@
                                                 <p:message for="emailTxt" />
                                             </div>
                                             <div class="signuptext">
-                                                <p:password id="passwordTxt" value="#{userController.password}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="#{messages['psw']}">  
+                                                <p:password id="passwordTxt" value="#{userController.editPassword}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="#{messages['psw']}">  
                                                     <f:validateLength maximum="16" />
                                                     <!--<p:ajax update="passwordMsg" event="blur" />-->
                                                 </p:password>
@@ -71,7 +71,7 @@
                                                 <p:message for="passwordTxt" />
                                             </div>
                                             <div class="signuptext">
-                                                <p:password id="confirmPasswordTxt" value="#{userController.password}" required="true" redisplay="true" label="#{messages['naccount.rpt.psw']}">  
+                                                <p:password id="confirmPasswordTxt" value="#{userController.editPassword}" required="true" redisplay="true" label="#{messages['naccount.rpt.psw']}">  
                                                     <f:validateLength maximum="16" />
                                                     <!--<p:ajax update="passwordMsg" event="blur" />-->
                                                 </p:password>
@@ -103,19 +103,19 @@
                                                 <!--#########################-->
                                                 <p:panelGrid columns="4" id="birthdate" style="margin-bottom:10px">
                                                     <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
-                                                    <h:selectOneMenu id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}">  
+                                                    <h:selectOneMenu id="day" value="#{userController.editDia}" required="true" label="#{messages['naccount.day']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
                                                         <f:selectItems value="#{userController.dias}"/>
                                                         <f:ajax listener="#{userController.setBirth()}" />
                                                     </h:selectOneMenu>
 
-                                                    <h:selectOneMenu id="month" value="#{userController.mes}" required="true" label="#{messages['naccount.month']}">  
+                                                    <h:selectOneMenu id="month" value="#{userController.editMes}" required="true" label="#{messages['naccount.month']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.month']}" itemValue="" />  
                                                         <f:selectItems value="#{userController.meses}" /> 
                                                         <f:ajax listener="#{userController.setBirth()}" />
                                                     </h:selectOneMenu>
 
-                                                    <h:selectOneMenu id="year" value="#{userController.ano}" required="true" label="#{messages['naccount.year']}">  
+                                                    <h:selectOneMenu id="year" value="#{userController.editAno}" required="true" label="#{messages['naccount.year']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
                                                         <f:selectItems value="#{userController.anos}" />  
                                                         <f:ajax listener="#{userController.setBirth()}" />
@@ -208,53 +208,14 @@
                                                         <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
                                                     </div>
                                                     <div id="signupbtn">
-                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.signUp()}"/>
+                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.editProfile()}"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </h:form>	    		
                                     </div>
                                 </div><!-- end.main left -->
-                                <div id="mainright"> 
-
-                                    <h3>#{messages['cadastrar.nova.conta.h1']}</h3>
-                                    <h:form id="form1" class="form-signup">
-                                        <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
-                                        <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>						
-                                        <div class="signuptext">
-                                            <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" >
-                                                <!--<p:ajax update="loginMsg" event="blur" />-->
-                                                <f:validateLength maximum="50" />
-                                            </p:inputText>
-                                            <p:watermark for="emailTxt" value="#{messages['email']}" />
-                                        </div>
-                                        <div class="signuptext">
-                                            <p:password id="passwordTxt" value="#{userController.password}" required="true" redisplay="true" size="30" label="#{messages['psw']}">  
-                                                <f:validateLength maximum="16" />
-                                                <!--<p:ajax update="passwordMsg" event="blur" />-->
-                                            </p:password>
-                                            <p:watermark for="passwordTxt" value="#{messages['password']}" />
-                                        </div>
-                                        <div id="signinbtn">
-                                            <p:messages redisplay="true" />
-                                            <p:commandButton id="entrarBtn" value="#{messages['signin']}" update="@form" actionListener="#{userController.signIn(true)}" />
-                                        </div>
-                                        <div>
-                                            <h:outputLink value="enviar-email-senha.xhtml" style="position:relative; top: 12px;">#{messages['forgot.password']}</h:outputLink>
-                                        </div>
-                                    </h:form>
-
-                                    <h3>#{messages['cadastrar.nova.conta.h3.2']}</h3>
-                                    <ul>
-                                        <li>#{messages['cadastrar.nova.conta.li.1']}</li>
-                                        <li>#{messages['cadastrar.nova.conta.li.2']}</li>
-                                        <li>#{messages['cadastrar.nova.conta.li.3']}</li>
-                                    </ul>
-
-                                    <h3>#{messages['cadastrar.nova.conta.h3.3']}</h3>
-                                    <p>#{messages['cadastrar.nova.conta.p.2']}</p>
-
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

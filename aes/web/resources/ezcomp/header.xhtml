@@ -48,6 +48,7 @@
                             </p:panel>
                             <p:panel id="userPanel" rendered="#{userController.loggedIn}">
                                 Olá <h:outputText value="#{userController.user.name}" />  ::  
+                                <h:outputLink value="editar-perfil.xhtml">#{messages['edit.profile']}</h:outputLink> ::
                                 <p:commandLink value="Sair" actionListener="#{userController.signOut()}" immediate="true"/>
                             </p:panel>
                         </p:panel>
