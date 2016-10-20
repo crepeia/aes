@@ -39,6 +39,7 @@ public class ContactController extends BaseController implements Serializable {
 
     private EMailSSL eMailSSL;
     private String htmlTemplate;
+    private String tipsTemplate;
     private GenericDAO evaluationDAO;
     private Random random;
     private ResourceBundle bundle;
@@ -48,6 +49,7 @@ public class ContactController extends BaseController implements Serializable {
     public void init() {
         eMailSSL = new EMailSSL();
         htmlTemplate = readHTMLTemplate("aes/utility/contact-template.html");
+        tipsTemplate = readHTMLTemplate("aes/utility/tips-template.html");
         random = new Random();
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
@@ -314,12 +316,14 @@ public class ContactController extends BaseController implements Serializable {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null) {
                     scheduledDate.setTime(contact.getDateScheduled());
                     if (today.compareTo(scheduledDate) >= 0) {
-                        sendHTMLEmail(contact);
-                        if(contact.getSubject().contains("annualscreening_subj")){
-                            scheduleAnnualScreeningEmail(contact.getUser());
-                        }
                         if(contact.getSubject().contains("tips_subj")){
+                            sendTipsEmail(contact);
                             scheduleTipsEmail(contact.getUser());
+                        }else{
+                            sendHTMLEmail(contact);
+                            if(contact.getSubject().contains("annualscreening_subj")){
+                                scheduleAnnualScreeningEmail(contact.getUser());
+                            }
                         }
                     }
                    
@@ -329,10 +333,33 @@ public class ContactController extends BaseController implements Serializable {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void sendTestEmail(){
+        Contact contact = new Contact();
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient("leomartinsjf@gmail.com");
+        contact.setSubject("teste de envio");
+        contact.setContent("teste de envio");
+        sendPlainTextEmail(contact);
+    }
 
     private void sendHTMLEmail(Contact contact) {
         try {
-            String content = getContent(contact);
+            String content = getContent(contact, htmlTemplate);
+            String subject = getSubject(contact);
+            eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());
+            contact.setDateSent(new Date());
+            save(contact);
+            Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getRecipient());
+
+        } catch (MessagingException |  MissingResourceException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void sendTipsEmail(Contact contact) {
+        try {
+            String content = getContent(contact, tipsTemplate);
             String subject = getSubject(contact);
             eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());
             contact.setDateSent(new Date());
@@ -376,8 +403,8 @@ public class ContactController extends BaseController implements Serializable {
         return null;
     }
 
-    private String getContent(Contact contact) throws MissingResourceException {
-        String htmlMessage = htmlTemplate;
+    private String getContent(Contact contact, String template) throws MissingResourceException {
+        String htmlMessage = template;
         htmlMessage = htmlMessage.replace("#title#", getString("title.1",contact.getUser()));
         htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(),contact.getUser()));
         htmlMessage = htmlMessage.replace("#footer#",
