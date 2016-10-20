@@ -51,12 +51,12 @@ public class UserController extends BaseController<User> {
     private String email;
     private Integer recoverCode;
     private String passwordd;
-    
+    private String confirmEmail;
     private String editPassword;
     private int editDia;
     private int editMes;
     private int editAno;
-    
+
     private int dia;
     private int mes;
     private int ano;
@@ -66,20 +66,19 @@ public class UserController extends BaseController<User> {
     private Map<String, String> anos = new LinkedHashMap<String, String>();
     private String[] nomeMeses;
     private boolean showErrorMessage;
-    
-    
+
     @PostConstruct
     public void init() {
         mes = -1;
-        for( int i = 1; i <= 31; i++){
+        for (int i = 1; i <= 31; i++) {
             dias.put(String.valueOf(i), String.valueOf(i));
         }
         GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
         int lastYear = gc.get(GregorianCalendar.YEAR) - 1;
-        for(int i = lastYear; i > lastYear - 100; i--){
+        for (int i = lastYear; i > lastYear - 100; i--) {
             anos.put(String.valueOf(i), String.valueOf(i));
-        }        
-        
+        }
+
         try {
             daoBase = new GenericDAO<User>(User.class);
             user = new User();
@@ -138,7 +137,7 @@ public class UserController extends BaseController<User> {
 
     }
 
-    public void signOut(){
+    public void signOut() {
         Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'saiu do sistema.");
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         try {
@@ -150,7 +149,6 @@ public class UserController extends BaseController<User> {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   
 
     public void clearSession() {
 
@@ -158,19 +156,24 @@ public class UserController extends BaseController<User> {
 
     public void signUp() throws InvalidKeyException {
         try {
-            List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
-            if (!userList.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.used"), null));
+            if (!confirmEmail.equals(user.getEmail())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.equals"), null));
             } else {
-                user.setPassword(Encrypter.encrypt(password));
-                user.setSignUpDate(new Date());
-                save();
-                contactController.sendSignUpEmail(user);
-                if(user.isReceiveEmails()){
-                    contactController.scheduleTipsEmail(user);
+                List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
+
+                if (!userList.isEmpty()) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.used"), null));
+                } else {
+                    user.setPassword(Encrypter.encrypt(password));
+                    user.setSignUpDate(new Date());
+                    save();
+                    contactController.sendSignUpEmail(user);
+                    if (user.isReceiveEmails()) {
+                        contactController.scheduleTipsEmail(user);
+                    }
+                    signIn(true);
+                    Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'cadastrou no sistema.");
                 }
-                signIn(true);
-                Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'cadastrou no sistema.");
             }
 
         } catch (InvalidKeyException ex) {
@@ -188,17 +191,16 @@ public class UserController extends BaseController<User> {
         }
 
     }
-    
-    
-    public void editProfile(){
+
+    public void editProfile() {
         User user = getUser();
         this.showErrorMessage = true;
-        
-        try {            
+
+        try {
             boolean emailAvailable = true;
-        
+
             List<User> list = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
-            
+
             if (list.isEmpty()) {
                 for (User usr : list) {
                     if (usr.getId() != user.getId()) {
@@ -208,7 +210,7 @@ public class UserController extends BaseController<User> {
                     }
                 }
             }
-            if(emailAvailable = true){
+            if (emailAvailable = true) {
                 if (editPassword != null && !editPassword.trim().isEmpty()) {
                     user.setPassword(Encrypter.encrypt(editPassword));
                 }
@@ -247,8 +249,8 @@ public class UserController extends BaseController<User> {
 
         }
     }
-  
-     /*public void editProfile() {
+
+    /*public void editProfile() {
         User user = getLoggedUser();
         this.showErrorMessage = true;
 
@@ -308,7 +310,6 @@ public class UserController extends BaseController<User> {
         }
 
     }*/
-
     public int generateCode() {
         long codigo;
         float valor;
@@ -373,12 +374,12 @@ public class UserController extends BaseController<User> {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void setBirth(){
+
+    public void setBirth() {
         user.setBirth(ano, mes, dia);
     }
-    
-    public void setBirthEdit(){
+
+    public void setBirthEdit() {
         user.setBirth(editAno, editMes, editDia);
     }
 
@@ -389,18 +390,18 @@ public class UserController extends BaseController<User> {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public int redirect(boolean redirectLogin, boolean redirectIndex, boolean redirectEvaluation ){
-        if(redirectIndex){
+
+    public int redirect(boolean redirectLogin, boolean redirectIndex, boolean redirectEvaluation) {
+        if (redirectIndex) {
             redirectIndex(true);
             return 0;
-        }else if(redirectLogin){
+        } else if (redirectLogin) {
             redirectLogin(true);
             return 0;
-        }else if(redirectEvaluation){
+        } else if (redirectEvaluation) {
             redirectEvaluation(true);
             return 0;
-        }else{
+        } else {
             return 1;
         }
     }
@@ -463,7 +464,7 @@ public class UserController extends BaseController<User> {
                     url = "quanto-voce-bebe-abstemio.xhtml";
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
                 }
-            } catch (IOException ex ) {
+            } catch (IOException ex) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -475,10 +476,10 @@ public class UserController extends BaseController<User> {
         return bundle.getString(key);
     }
 
-    public Date getCurrentDate(){
-        return new Date();        
+    public Date getCurrentDate() {
+        return new Date();
     }
-    
+
     public User getUser() {
         return user;
     }
@@ -562,7 +563,7 @@ public class UserController extends BaseController<User> {
     public void setDias(Map<String, String> dias) {
         this.dias = dias;
     }
-    
+
     public Map<String, String> getMeses() {
         meses.clear();
         for (int i = 1; i <= 12; i++) {
@@ -571,7 +572,7 @@ public class UserController extends BaseController<User> {
         }
         return meses;
     }
-    
+
     public void setMeses(Map<String, String> meses) {
         this.meses = meses;
     }
@@ -589,13 +590,12 @@ public class UserController extends BaseController<User> {
     public void setAnos(Map<String, String> anos) {
         this.anos = anos;
     }
-    
-    
+
     @Override
     public User getLoggedUser() {
         return super.getLoggedUser();
     }
-    
+
     public String getEditPassword() {
         return editPassword;
     }
@@ -603,7 +603,7 @@ public class UserController extends BaseController<User> {
     public void setEditPassword(String editPassword) {
         this.editPassword = editPassword;
     }
-    
+
     public int getEditDia() {
         Calendar birth = Calendar.getInstance();
         birth.setTime(getUser().getBirthDate());
@@ -636,6 +636,13 @@ public class UserController extends BaseController<User> {
     public void setEditAno(int editAno) {
         this.editAno = editAno;
     }
-    
+
+    public String getConfirmEmail() {
+        return confirmEmail;
+    }
+
+    public void setConfirmEmail(String confirmEmail) {
+        this.confirmEmail = confirmEmail;
+    }
 
 }
