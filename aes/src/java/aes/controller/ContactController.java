@@ -317,8 +317,8 @@ public class ContactController extends BaseController implements Serializable {
                     scheduledDate.setTime(contact.getDateScheduled());
                     if (today.compareTo(scheduledDate) >= 0) {
                         if(contact.getSubject().contains("tips_subj")){
-                            sendTipsEmail(contact);
-                            scheduleTipsEmail(contact.getUser());
+                            //sendTipsEmail(contact);
+                            //scheduleTipsEmail(contact.getUser());
                         }else{
                             sendHTMLEmail(contact);
                             if(contact.getSubject().contains("annualscreening_subj")){
@@ -416,6 +416,7 @@ public class ContactController extends BaseController implements Serializable {
         htmlMessage = htmlMessage.replace("#code#", String.valueOf(contact.getUser().getRecoverCode()));
         htmlMessage = htmlMessage.replace("#id#", contact.getUser().getHashedId());
         htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
+        htmlMessage = htmlMessage.replace("#ratingheader#", getString("email.rating.header",contact.getUser()));
         return htmlMessage;
     }
 

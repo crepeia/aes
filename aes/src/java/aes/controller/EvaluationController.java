@@ -165,9 +165,6 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public String cutDownQuit() {
          if (getUser().isReceiveEmails()) {
-            contactController.clearScheduledEmails(getUser());
-            contactController.scheduleDiaryReminderEmail(getUser(), new Date());
-            contactController.scheduleWeeklyEmail(getUser(), new Date());
             if (getEvaluation().getQuit()) {
                 contactController.scheduleKeepingResultQuitEmail(getUser(), new Date());
                 contactController.schedulePersistChallengesQuitEmail(getUser(), new Date());
