@@ -160,37 +160,37 @@
                                                             <f:selectItem itemLabel="#{messages['tips.frequency.choice.7']}" itemValue="6" />
                                                         </p:selectOneMenu>
                                                     </h:panelGrid>
-                                                     </h:panelGrid>
+                                                </h:panelGrid>
 
-                                                    <p:message for="frequency" />
+                                                <p:message for="frequency" />
 
-                                                    <p:panelGrid columns="3" id="consent" >
-                                                        <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
-                                                        <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
-                                                    </p:panelGrid>
+                                                <p:panelGrid columns="3" id="consent" >
+                                                    <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
+                                                    <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
+                                                </p:panelGrid>
 
-                                                    <div id="signup-terms">
-                                                        <p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink></p>                                            
+                                                <div id="signup-terms">
+                                                    <p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink></p>                                            
+                                                </div>
+
+                                                <div id="signupsubmit">			                                            
+                                                    <div>
+                                                        <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
                                                     </div>
+                                                    <div id="signupbtn">
+                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form"  actionListener="#{userController.signUp()}"/>
 
-                                                    <div id="signupsubmit">			                                            
-                                                        <div>
-                                                            <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
-                                                        </div>
-                                                        <div id="signupbtn">
-                                                            <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form"  actionListener="#{userController.signUp()}"/>
-                                                        </div>
                                                     </div>
+                                                </div>
                                             </div>
                                         </h:form>	    		
                                     </div>
                                 </div><!-- end.main left -->
                                 <div id="mainright"> 
-
-                                    <h:outputLink value="./login.xhtml"><h3>#{messages['cadastrar.nova.conta.h1']}</h3></h:outputLink>
-
-
-
+                                    <h1>#{messages['cadastrar.nova.conta.h1']}</h1>
+                                            <div id="signupsubmit">			                                            
+                                                    <p:button style="background: orange; color: white; text-transform: uppercase" id="loginBtn" value="#{messages['signin']}"  outcome="login.xhtml"/>
+                                            </div>			                                            
 
 
 
