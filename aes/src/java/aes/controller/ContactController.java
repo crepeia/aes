@@ -317,8 +317,8 @@ public class ContactController extends BaseController implements Serializable {
                     scheduledDate.setTime(contact.getDateScheduled());
                     if (today.compareTo(scheduledDate) >= 0) {
                         if(contact.getSubject().contains("tips_subj")){
-                            //sendTipsEmail(contact);
-                            //scheduleTipsEmail(contact.getUser());
+                            sendTipsEmail(contact);
+                            scheduleTipsEmail(contact.getUser());
                         }else{
                             sendHTMLEmail(contact);
                             if(contact.getSubject().contains("annualscreening_subj")){
