@@ -78,10 +78,11 @@ public class UserController extends BaseController<User> {
         for (int i = lastYear; i > lastYear - 100; i--) {
             anos.put(String.valueOf(i), String.valueOf(i));
         }
-
         try {
             daoBase = new GenericDAO<User>(User.class);
             user = new User();
+            user.setDateCreated(new Date());
+            user.setIpCreated(getIpAdress());
         } catch (NamingException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -646,5 +647,13 @@ public class UserController extends BaseController<User> {
     public void setConfirmEmail(String confirmEmail) {
         this.confirmEmail = confirmEmail;
     }
-
+    
+     private String getIpAdress() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String ipAddress = request.getHeader("X-FORWARDED-FOR");
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+        return ipAddress;
+    }
 }

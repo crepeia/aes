@@ -35,7 +35,7 @@ public class PageNavigationController extends BaseController<PageNavigation> {
     public void init() {
         try {
             this.daoBase = new GenericDAO<PageNavigation>(PageNavigation.class);
-            this.userAgentDAO = new GenericDAO<UserAgent>( UserAgent.class );
+            this.userAgentDAO = new GenericDAO<UserAgent>(UserAgent.class);
         } catch (NamingException ex) {
             Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -50,19 +50,22 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         pageNavigation.setCampaign(this.getCampaign());
         pageNavigation.setReferer(this.getReferer());
         pageNavigation.setUserAgent(this.getUserAgent());
-        save();     
+        save();
     }
 
     public User getUser() {
-        if (userController.isLoggedIn()) {
+        if (userController.getUser().getId() > 0) {
             return userController.getUser();
         } else {
             return null;
         }
-    }
+    }  
     
-    public void save(){
-         try {
+    
+    
+
+    public void save() {
+        try {
             daoBase.insert(pageNavigation, this.getEntityManager());
         } catch (SQLException ex) {
             Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,19 +87,18 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         url = url.substring(url.lastIndexOf('/') + 1);
         return url;
     }
-    
-    public String getReferer(){
+
+    public String getReferer() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         return request.getHeader("referer");
     }
-    
-    
-    public String getCampaign(){
+
+    public String getCampaign() {
         return FacesContext.getCurrentInstance().getExternalContext().
                 getRequestParameterMap().get("id");
     }
-    
-      private UserAgent getUserAgent() {
+
+    private UserAgent getUserAgent() {
         try {
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             String description = ((HttpServletRequest) request).getHeader("user-agent");
@@ -110,41 +112,41 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         } catch (SQLException ex) {
             Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;       
+        return null;
     }
-    
-    public boolean visitedQuitPages(int numPages){
-       String pages[] = {"estrategia-parar-apoio-intro","estrategia-parar-apoio-profissiona",
-           "estrategia-parar-apoio-social","estrategia-parar-apoio-social-aa", 
-           "estrategia-parar-apoio-social-outros", "estrategia-parar-apoio-profissional-terapia",
-           "estrategia-parar-apoio-depressao-e-ansiedade"};
-       int count = 0;
-       for(String page : pages){
-          if(checkAccess(page)){
-              count++;
-          }
-          if(count == numPages){
-              return true;
-          }
-       }
-       return false;
+
+    public boolean visitedQuitPages(int numPages) {
+        String pages[] = {"estrategia-parar-apoio-intro", "estrategia-parar-apoio-profissiona",
+            "estrategia-parar-apoio-social", "estrategia-parar-apoio-social-aa",
+            "estrategia-parar-apoio-social-outros", "estrategia-parar-apoio-profissional-terapia",
+            "estrategia-parar-apoio-depressao-e-ansiedade"};
+        int count = 0;
+        for (String page : pages) {
+            if (checkAccess(page)) {
+                count++;
+            }
+            if (count == numPages) {
+                return true;
+            }
+        }
+        return false;
     }
-    
-    public boolean visitedCutDownPages(int numPages){
-       String pages[] = {"estrategia-parar-apoio-intro","estrategia-parar-apoio-profissiona",
-           "estrategia-parar-apoio-social","estrategia-parar-apoio-social-aa", 
-           "estrategia-parar-apoio-social-outros", "estrategia-parar-apoio-profissional-terapia",
-           "estrategia-parar-apoio-depressao-e-ansiedade"};
-       int count = 0;
-       for(String page : pages){
-          if(checkAccess(page)){
-              count++;
-          }
-          if(count == numPages){
-              return true;
-          }
-       }
-       return false;
+
+    public boolean visitedCutDownPages(int numPages) {
+        String pages[] = {"estrategia-parar-apoio-intro", "estrategia-parar-apoio-profissiona",
+            "estrategia-parar-apoio-social", "estrategia-parar-apoio-social-aa",
+            "estrategia-parar-apoio-social-outros", "estrategia-parar-apoio-profissional-terapia",
+            "estrategia-parar-apoio-depressao-e-ansiedade"};
+        int count = 0;
+        for (String page : pages) {
+            if (checkAccess(page)) {
+                count++;
+            }
+            if (count == numPages) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean checkAccess(String page) {
@@ -163,7 +165,7 @@ public class PageNavigationController extends BaseController<PageNavigation> {
 
     public boolean checkAccess(String[] pages) {
         for (String page : pages) {
-            if(checkAccess(page)){
+            if (checkAccess(page)) {
                 return true;
             }
         }

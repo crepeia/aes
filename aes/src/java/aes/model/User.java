@@ -59,7 +59,11 @@ public class User implements Serializable {
     private Boolean employed;
     @Column(name = "know_website")
     private Integer knowWebsite;
-    
+    @Column(name = "date_created")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreated;
+    @Column(name = "ip_created")
+    private String ipCreated;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
 
@@ -335,6 +339,31 @@ public class User implements Serializable {
      */
     public void setDtCadastro(Date dt) {
         this.dt_cadastro = dt;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    
+    public String getIpCreated() {
+        return ipCreated;
+    }
+
+    public void setIpCreated(String ipCreated) {
+        this.ipCreated = ipCreated;
+    }
+
+    public Date getDt_cadastro() {
+        return dt_cadastro;
+    }
+
+    public void setDt_cadastro(Date dt_cadastro) {
+        this.dt_cadastro = dt_cadastro;
     }
     
     
