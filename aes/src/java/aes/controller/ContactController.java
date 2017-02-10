@@ -407,10 +407,12 @@ public class ContactController extends BaseController implements Serializable {
         String htmlMessage = template;
         htmlMessage = htmlMessage.replace("#title#", getString("title.1",contact.getUser()));
         htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(),contact.getUser()));
-        htmlMessage = htmlMessage.replace("#footer#",
+        htmlMessage = htmlMessage.replace("#footer#",   
                 getString("title.1",contact.getUser()) + "<br>"
                 + getString("crepeia",contact.getUser()) + "<br>"
                 + getString("ufjf",contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe.2", contact.getUser()));
         htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
         htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
         htmlMessage = htmlMessage.replace("#code#", String.valueOf(contact.getUser().getRecoverCode()));
