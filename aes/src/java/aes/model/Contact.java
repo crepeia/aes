@@ -33,7 +33,7 @@ public class Contact implements Serializable {
     private String content;
     @Column(name = "attachment")
     private String attachment;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "date_scheduled")
     private Date dateScheduled;
     @Transient

@@ -39,7 +39,7 @@ public class User implements Serializable {
     @Column(name = "authorize_data")
     private boolean authorizeData;
     @Column(name = "sign_up_date")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date signUpDate;
     @Column(name = "pregnant")
     private Boolean pregnant;
@@ -80,7 +80,7 @@ public class User implements Serializable {
     private List<FollowUp> followUps;
      
     @Column(name = "dt_cadastro")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dt_cadastro;
     
     @Override

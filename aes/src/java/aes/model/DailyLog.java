@@ -19,7 +19,7 @@ public class DailyLog implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column(name = "logDate")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date logDate;
     @Column(name = "drinks")
     private Integer drinks;
