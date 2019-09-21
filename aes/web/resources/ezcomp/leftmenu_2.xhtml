@@ -14,7 +14,14 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <div class="#{cc.attrs.cssClass}">
-            <nav style="background-color: ">
+            <nav>
+                <label for="toggler-leftmenu" class="hamburguer">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </label>
+                <input type="checkbox" id="toggler-leftmenu"/>
+                
                 <ul>
                 <li><a href="estrategia-diminuir-introducao.xhtml">#{messages['menu.left1']}</a></li>
                 <li><a href="estrategia-diminuir-registro-eletronico-meta.xhtml">#{messages['menu.left8']}</a></li>

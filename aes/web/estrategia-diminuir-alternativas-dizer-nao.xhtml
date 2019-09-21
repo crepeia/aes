@@ -21,65 +21,67 @@
                 <w:topmenu />
                 <!--mainmenu-->         	
                 <div class="main">
+                    <div class="main-strategy">
+                        <w:leftmenu_2 cssClass="leftmenu2" />
 
-                    <w:leftmenu_2 cssClass="leftmenu2" />
-
-                    <div class="pagecontent">
+                        <div class="pagecontent">
 
 
-                        <div id="pagetop">
+                            <div id="pagetop">
 
-                            <!--    <div id="progressbar">
-                                    <p:progressBar value="23" labelTemplate="{value}%" displayOnly="true"/>
-                                </div> -->
+                                <!--    <div id="progressbar">
+                                        <p:progressBar value="23" labelTemplate="{value}%" displayOnly="true"/>
+                                    </div> -->
 
-                            <!--      <div class='fotoframestratety'>
-                                       <h:graphicImage library="default" id="cartoonman" title="Dizendo não" name="images/deixar-cigarro.png" alt="Gratuito" />
-                                  </div> -->
+                                <!--      <div class='fotoframestratety'>
+                                           <h:graphicImage library="default" id="cartoonman" title="Dizendo não" name="images/deixar-cigarro.png" alt="Gratuito" />
+                                      </div> -->
+
+                            </div>
+
+                            <div id="pagecontentstrategy">
+                                <div id="pagecontentstrategyH3">
+                                    <h1>#{messages['estrategia.dim.alt.dize.nao.h3.1']}</h1>
+                                    <h4>#{messages['estrategia.dim.alt.dize.nao.h4.1']} </h4>  
+                                </div>   
+
+
+                                
+
+                                <ul>
+                                    <li>#{messages['estrategia.dim.alt.dize.nao.l1.1']} </li>  
+                                </ul>
+                                <ul>
+                                    <li>#{messages['estrategia.dim.alt.dize.nao.p.1']} </li>
+                                </ul>
+                                <ul>
+                                    <li>#{messages['estrategia.dim.alt.dize.nao.l1.2']} </li> 
+                                </ul>
+                                <ul>
+                                    <li>#{messages['estrategia.dim.alt.dize.nao.l1.2']} </li>
+                                </ul>   
+                                <h3>#{messages['estrategia.dim.alt.dize.nao.h3.2']} </h3>
+                                <w:rating/>
+                                <h:form>
+
+                                    <div id="btnback">
+                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-alternativas-gatilhos.xhtml"></h:button>
+                                    </div>
+
+
+                                    <div id="btnnext">
+                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-devagar.xhtml?faces-redirect=true"/>          
+                                    </div>
+
+                                </h:form>                                            
+
+                                <div class="referencias">
+                                    <p>#{messages['updated']}</p>
+                                </div>
+                            </div> 
 
                         </div>
-
-                        <div id="pagecontentstrategy">
-                            <div id="pagecontentstrategyH3">
-                                <h3>#{messages['estrategia.dim.alt.dize.nao.h3.1']}</h3>
-                            </div>   
-
-
-                            <h4>#{messages['estrategia.dim.alt.dize.nao.h4.1']} </h4>  
-
-                            <ul>
-                                <li>#{messages['estrategia.dim.alt.dize.nao.l1.1']} </li>  
-                            </ul>
-                            <ul>
-                                <li>#{messages['estrategia.dim.alt.dize.nao.p.1']} </li>
-                            </ul>
-                            <ul>
-                                <li>#{messages['estrategia.dim.alt.dize.nao.l1.2']} </li> 
-                            </ul>
-                            <ul>
-                                <li>#{messages['estrategia.dim.alt.dize.nao.l1.2']} </li>
-                            </ul>   
-                            <h3>#{messages['estrategia.dim.alt.dize.nao.h3.2']} </h3>
-                            <w:rating/>
-                            <h:form>
-
-                                <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./estrategia-diminuir-alternativas-gatilhos.xhtml"></h:button>
-                                </div>
-
-
-                                <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-devagar.xhtml?faces-redirect=true"/>          
-                                </div>
-
-                            </h:form>                                            
-
-                            <div class="referencias">
-                                <p>#{messages['updated']}</p>
-                            </div>
-                        </div> 
-
-                    </div>        
+                    </div>
                 </div>
 
             </div><!-- end.corpo --> 

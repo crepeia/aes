@@ -57,19 +57,31 @@
                         <div id="maintop">
 
                             <div id="maincenter">
-
-                                <div class="fotoframe">                            
-                                    <h:graphicImage library="default" id="tempo" title="Tempo" name="images/min.png" alt="Gratuito" />
-                                </div> 
-
-                                <h3>#{messages['cadastrar.nova.conta.h3.1']}</h3>                                         
-                                <p>#{messages['cadastrar.nova.conta.p.1']}</p>
-
-                                <div id="mainleft">                                   
-
-
+                                <div>
+                                    <div>
+                                    <h3>#{messages['cadastrar.nova.conta.h3.1']}</h3>                                         
+                                    <p>#{messages['cadastrar.nova.conta.p.1']}</p>
+                                    </div>
+                                    <div class="fotoframe">                            
+                                        <h:graphicImage library="default" id="tempo" title="Tempo" name="images/min.png" alt="Gratuito" />
+                                    </div> 
+                                </div>
+                                <div>
+                                    <div id="signupleft">
+                                        <div>
+                                        <h1>#{messages['cadastrar.nova.conta.h1']}</h1>
+                                        <div id="signupsubmit">			                                            
+                                            <p:button style="background: orange; color: white; text-transform: uppercase" id="loginBtn" value="#{messages['signin']}"  outcome="login.xhtml"/>
+                                        </div>
+                                        </div>
+                                        <div>
+                                        <h3>#{messages['cadastrar.nova.conta.h3.3']}</h3>
+                                        <p>#{messages['cadastrar.nova.conta.p.2']}</p>
+                                        </div>
+                                    </div>
+                                    <div id="signupright">
                                     <div id="signup">
-                                        <h3>#{messages['naccount.register']}</h3>
+                                        <h1>#{messages['naccount.register']}</h1>
                                         <h:form id="form" class="form-signup">
                                             <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
                                             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
@@ -130,14 +142,6 @@
                                             </div>
 
                                             <div id="signupbottom">
-
-
-
-
-
-
-
-
                                                 <p:panelGrid columns="2"  id="allowterm">
                                                     <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>                                                        
                                                     <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}">
@@ -185,19 +189,7 @@
                                             </div>
                                         </h:form>	    		
                                     </div>
-                                </div><!-- end.main left -->
-                                <div id="mainright"> 
-                                    <h1>#{messages['cadastrar.nova.conta.h1']}</h1>
-                                            <div id="signupsubmit">			                                            
-                                                    <p:button style="background: orange; color: white; text-transform: uppercase" id="loginBtn" value="#{messages['signin']}"  outcome="login.xhtml"/>
-                                            </div>			                                            
-
-
-
-
-                                    <h3>#{messages['cadastrar.nova.conta.h3.3']}</h3>
-                                    <p>#{messages['cadastrar.nova.conta.p.2']}</p>
-
+                                    </div><!-- end.main left -->
                                 </div>
                             </div>
                         </div>

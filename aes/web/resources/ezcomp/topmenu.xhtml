@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://java.sun.com/jsf/composite"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
     <!-- INTERFACE -->
@@ -11,8 +12,50 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
+        <!--
+        <div class="container">
+                
+            <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary px-lg-5">
+                
+                <a class="navbar-brand" href="#">
+                <h:outputLink value="." title="#{messages['header.title']}">
+                    <h:graphicImage library="default" name="images/logo.png" alt="LogomarcadoÁlcoolSaúde " id="logo" width="30" height="33" style="filter: brightness(0) invert(1);"/>
+                </h:outputLink>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./index.xhtml">#{messages['menu.top.li1']}</h:outputLink></li>
+                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./programa.xhtml">#{messages['menu.top.li2']}</h:outputLink></li>
+                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./quem-somos-os-autores.xhtml">#{messages['menu.top.li3']}</h:outputLink></li>
+                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./contato.xhtml">#{messages['menu.top.li4']}</h:outputLink></li>
+                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./para-pesquisadores.xhtml">#{messages['menu.top.li5']}</h:outputLink></li>
+                        <li class="form-inline px-md-3">
+                            <h:form class="dropdown show" id="langform">                        
+                                <h:selectOneMenu class="btn btn-primary dropdown-toggle" value="#{languageController.language}" onchange="submit()">
+                                    <f:selectItems value="#{languageController.languages}"/>
+                                </h:selectOneMenu>                        
+                            </h:form>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        -->
+        
         <div class="topmenu">
+                
             <nav>
+                <label for="toggler" class="hamburguer">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </label>
+                <input type="checkbox" id="toggler"/>
+                
                 <ul>
                     <li><h:outputLink value="./index.xhtml">#{messages['menu.top.li1']}</h:outputLink></li>
                     <li><h:outputLink value="./programa.xhtml">#{messages['menu.top.li2']}</h:outputLink></li>
@@ -22,5 +65,31 @@
                 </ul>
             </nav>
         </div>
+        
+        <!--
+        <nav>
+            <div class="nav-wrapper">
+            
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><h:outputLink value="./index.xhtml">#{messages['menu.top.li1']}</h:outputLink></li>
+                    <li><h:outputLink value="./programa.xhtml">#{messages['menu.top.li2']}</h:outputLink></li>
+                    <li><h:outputLink value="./quem-somos-os-autores.xhtml">#{messages['menu.top.li3']}</h:outputLink></li>
+                    <li><h:outputLink value="./contato.xhtml">#{messages['menu.top.li4']}</h:outputLink></li>
+                    <li><h:outputLink value="./para-pesquisadores.xhtml">#{messages['menu.top.li5']}</h:outputLink></li>
+                </ul>
+               
+            </div>
+        </nav>
+        <ul class="sidenav" id="mobile-demo">
+                    <li><h:outputLink value="./index.xhtml">#{messages['menu.top.li1']}</h:outputLink></li>
+                    <li><h:outputLink value="./programa.xhtml">#{messages['menu.top.li2']}</h:outputLink></li>
+                    <li><h:outputLink value="./quem-somos-os-autores.xhtml">#{messages['menu.top.li3']}</h:outputLink></li>
+                    <li><h:outputLink value="./contato.xhtml">#{messages['menu.top.li4']}</h:outputLink></li>
+                    <li><h:outputLink value="./para-pesquisadores.xhtml">#{messages['menu.top.li5']}</h:outputLink></li>
+                </ul>
+        
+        -->
     </cc:implementation>
 </html>

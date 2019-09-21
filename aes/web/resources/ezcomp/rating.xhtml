@@ -14,7 +14,7 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
        
-         <h:form> 
+         <h:form class="rating"> 
              <p:outputLabel  style="display: block; font-size: 15px " value="#{messages['ratings.question']}"/>
              <p:commandLink actionListener="#{pageRatingController.ratePage}" id="upvote" update="@form">
                  <h:graphicImage  style="width: 40px" library="default"  name="#{pageRatingController.imageLike}" alt="Yes"/>
