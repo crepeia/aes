@@ -41,41 +41,30 @@
             ]]></noscript>
                
             <!-- End Facebook Pixel Code -->
+        <!-- header -->    
+        <w:header  evaluationRequired="true" />
+        <w:topmenu />
     </h:head>
 
     <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header  evaluationRequired="true" />
-            <w:topmenu />
+        <div id="corpo">     
             <!--mainmenu-->         	
             <div class="main">
-
-
-
-
-
                 <div class="pagecontent">
-
-
-<div id="pagetop">
+                    <div id="pagetop">
                        <!-- <div id="hpagetop"> </div --> 
-                    <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.h1.1']}</h1> 
-                           
-
-                        <div id="progressbar">
-                            <p:progressBar value="70" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
+                        <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.h1.1']}</h1> 
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">70%</div>
+                        </div>                      
                     </div>
-
-
                     <div id="pagemiddle">
 
                         <!-- <div class="fotoframe">                            
                             <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
                         </div> -->
                         
-           <div id="pmtext">                                               
+                        <div id="pmtext">                                               
                             <h2><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.nocivo.b.1']}</b></h2>
                             <ul>
                                 <!-- Incluir feedback e diminuir tamanho da paǵina -->
@@ -137,12 +126,12 @@
                             <h:form>
                             
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
+                                    <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
                                 </div>
                                 
                                 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="preparando-pros-cons.xhtml?faces-redirect=true" actionListener="#{evaluationController.saveURL()}"/>
+                                    <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary" value="#{messages['next']}" update="@form" action="preparando-pros-cons.xhtml?faces-redirect=true" actionListener="#{evaluationController.saveURL()}"/>
                                
                                                          
                                 </div>
@@ -150,19 +139,12 @@
                            </h:form> 
                         </div><!-- end pmtext -->  
                     </div><!-- end page middle -->      
-                    
-                    
 
                     <div class="referencias">
                         <p>#{messages['updated']}</p>
                     </div>
-
-
-
                 </div>        
             </div>
-
-
         </div><!-- end.corpo --> 
 
         <!--Footer -->

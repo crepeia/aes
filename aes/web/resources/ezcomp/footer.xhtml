@@ -45,8 +45,20 @@ s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
+
+$("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+      console.log(this);
+    });
+$("#menu-close").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+      console.log(this);
+    });
 </script>
 <!--End of Tawk.to Script-->
-        <!--<h:outputScript library="default" name="js/bootstrap.min.js"/>-->
+        <h:outputScript library="default" name="js/bootstrap.min.js"/>
+        <h:outputScript library="js" name="js/init.js"/> 
     </cc:implementation>
 </html>

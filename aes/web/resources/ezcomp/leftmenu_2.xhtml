@@ -13,6 +13,72 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
+        <div class="#{cc.attrs.cssClass} navbar navbar-dark w-100 bg-dark"></div>
+        <nav class="navbar navbar-dark bg-dark leftmenu-navbar justify-content-center text-center">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebarDropdown" aria-controls="sidebarDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse " id="sidebarDropdown">
+                    <ul class="navbar-nav justify-content-center">
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-introducao.xhtml">#{messages['menu.left1']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-registro-eletronico-meta.xhtml">#{messages['menu.left8']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-registro.xhtml">#{messages['menu.left9']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-registro-eletronico.xhtml">#{messages['menu.left10']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-alternativas.xhtml">#{messages['menu.left11']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-alternativas-plano-fissura.xhtml">#{messages['menu.left12']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-alternativas-gatilhos.xhtml">#{messages['menu.left13']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-alternativas-dizer-nao.xhtml">#{messages['menu.left14']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-diminuir-devagar.xhtml">#{messages['menu.left15']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="plano-mudanca.xhtml">#{messages['menu.left.plano']}</a></li>
+                    </ul>
+                </div>
+            </nav>
+        
+        
+        <!--
+        <div class="#{cc.attrs.cssClass} sidebar" id="wrapper">
+                <div class="bg-light border-right" id="sidebar-wrapper">
+                    <div class="list-group list-group-flush">
+                        <button class="close btn-lg" id="menu-close"><span aria-hidden="true">&times;</span></button>
+                        <a class="list-group-item list-group-item-action bg-light" href="estrategia-diminuir-registro-eletronico-meta.xhtml">#{messages['menu.left8']}</a>
+                        <a class="list-group-item list-group-item-action bg-light" href="estrategia-diminuir-registro.xhtml">#{messages['menu.left9']}</a>
+                        <a class="list-group-item list-group-item-action bg-light" href="estrategia-diminuir-registro-eletronico.xhtml">#{messages['menu.left10']}</a>
+                        <a class="list-group-item list-group-item-action bg-light" href="estrategia-diminuir-alternativas.xhtml">#{messages['menu.left11']}</a>
+                        <a class="list-group-item list-group-item-action bg-light" href="estrategia-diminuir-alternativas-plano-fissura.xhtml">#{messages['menu.left12']}</a>
+                        <a class="list-group-item list-group-item-action bg-light" href="estrategia-diminuir-alternativas-gatilhos.xhtml">#{messages['menu.left13']}</a>
+                        <a class="list-group-item list-group-item-action bg-light" href="estrategia-diminuir-alternativas-dizer-nao.xhtml">#{messages['menu.left14']}</a>
+                        <a class="list-group-item list-group-item-action bg-light" href="estrategia-diminuir-devagar.xhtml">#{messages['menu.left15']}</a>
+                        <a class="list-group-item list-group-item-action bg-light" href="plano-mudanca.xhtml">#{messages['menu.left.plano']}</a>  
+
+                    </div>
+                </div>
+        </div>
+        
+       
+        <button class="btn btn-primary btn-lg ml-5 mt-5" id="menu-toggle">Menu</button>
+
+        
+        <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Bootstrap Sidebar</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li><a href="estrategia-diminuir-introducao.xhtml">#{messages['menu.left1']}</a></li>
+                <li><a href="estrategia-diminuir-registro-eletronico-meta.xhtml">#{messages['menu.left8']}</a></li>
+                <li><a href="estrategia-diminuir-registro.xhtml">#{messages['menu.left9']}</a></li>
+                <li><a href="estrategia-diminuir-registro-eletronico.xhtml">#{messages['menu.left10']}</a></li>
+                <li><a href="estrategia-diminuir-alternativas.xhtml">#{messages['menu.left11']}</a></li>
+                <li><a href="estrategia-diminuir-alternativas-plano-fissura.xhtml">#{messages['menu.left12']}</a></li>
+                <li><a href="estrategia-diminuir-alternativas-gatilhos.xhtml">#{messages['menu.left13']}</a></li>
+                <li><a href="estrategia-diminuir-alternativas-dizer-nao.xhtml">#{messages['menu.left14']}</a></li>
+                <li><a href="estrategia-diminuir-devagar.xhtml">#{messages['menu.left15']}</a></li>
+                <li><a href="plano-mudanca.xhtml">#{messages['menu.left.plano']}</a></li>
+        </ul>
+
+    </nav>
+        
         <div class="#{cc.attrs.cssClass}">
             <nav>
                 <label for="toggler-leftmenu" class="hamburguer">
@@ -36,5 +102,9 @@
                 </ul>
             </nav>
         </div>
+        
+        -->
+        
+        
     </cc:implementation>
 </html>

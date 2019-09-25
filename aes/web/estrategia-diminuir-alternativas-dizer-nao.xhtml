@@ -10,24 +10,27 @@
         <h:head>
             <title>#{messages['estrategia.dim.alt.dize.nao.title.1']}</title>
             <w:head_comum />
+            <!-- header -->    
+            <w:header loginRequired="true" evaluationRequired="true"  />
+            <w:topmenu />
         </h:head>
 
         <h:body>
+            
+            <w:leftmenu_2 cssClass="leftmenu2" />
             <div id="corpo"> 
-                <!-- header -->    
-                <w:header loginRequired="true" evaluationRequired="true"  />
+                
 
-
-                <w:topmenu />
                 <!--mainmenu-->         	
                 <div class="main">
+                    
                     <div class="main-strategy">
-                        <w:leftmenu_2 cssClass="leftmenu2" />
 
                         <div class="pagecontent">
 
 
                             <div id="pagetop">
+                                
 
                                 <!--    <div id="progressbar">
                                         <p:progressBar value="23" labelTemplate="{value}%" displayOnly="true"/>
@@ -86,9 +89,10 @@
 
             </div><!-- end.corpo --> 
 
-            <!--Footer -->
-            <w:footer />
+            
         </h:body>
+        <!--Footer -->
+            <w:footer />
     </f:view>
 </html>
 

@@ -10,21 +10,21 @@
         <h:head>
             <title>#{messages['cadastrar.nova.conta.title.1']}</title>
             <w:head_comum />
+            <!-- header -->    
+            <w:header loginRequired="true"/>
+            <w:topmenu />
         </h:head>
 
         <h:body>    
             <div id="corpo"> 
-                <!-- header -->    
-                <w:header loginRequired="true"/>
-                <w:topmenu />
+                
                 <!--mainmenu-->         	
                 <div class="main">
 
                     <div class="pagecontent">
 
                         <div id="maintop">
-
-                            <div id="maincenter">
+                            <!--
                                 <div>
                                     <div>
                                     <h3>#{messages['cadastrar.nova.conta.h3.1']}</h3>                                         
@@ -34,11 +34,11 @@
                                         <h:graphicImage library="default" id="tempo" title="Tempo" name="images/min.png" alt="Gratuito" />
                                     </div> 
                                 </div>
-                                
+                            -->    
                                 <div id="editprofile">                                   
                                     <div id="signup">
                                         
-                                        <h3>#{messages['naccount.register']}</h3>
+                                        <h2>#{messages['edit.profile']}</h2>
                                         <h:form id="form" class="form-signup">
                                             <div id="signuptop">
                                             <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
@@ -47,16 +47,17 @@
                                             </p:dialog>
                                             <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                             <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
-                                            <div class="signuptext">
-                                                <p:inputText id="nameTxt" value="#{userController.user.name}" required="true" size="30" label="#{messages['naccount.name']}" >
-
+                                            <div class="signuptext form-group row">
+                                                <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['naccount.name']}</label>
+                                                <p:inputText styleClass="col-sm-10 form-control" id="nameTxt" value="#{userController.user.name}" required="true" size="30" label="#{messages['naccount.name']}" >
                                                     <f:validateLength maximum="100" />
                                                 </p:inputText>
                                                 <p:watermark for="nameTxt" value="#{messages['naccount.fullname']}" />
                                                 <p:message for="nameTxt" />
                                             </div>
-                                            <div class="signuptext">
-                                                <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['naccount.invalidemail']}" >
+                                            <div class="signuptext form-group row">
+                                                <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['email']}</label>
+                                                <p:inputText styleClass="col-sm-10 form-control" id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['naccount.invalidemail']}" >
                                                     <!--<p:ajax update="loginMsg" event="blur" />-->
                                                     <f:validateLength maximum="50" />
                                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
@@ -64,16 +65,18 @@
                                                 <p:watermark for="emailTxt" value="#{messages['email']}" />
                                                 <p:message for="emailTxt" />
                                             </div>
-                                            <div class="signuptext">
-                                                <p:password id="passwordTxt" value="#{userController.editPassword}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="#{messages['psw']}">  
+                                            <div class="signuptext form-group row">
+                                                <label for="passwordTxt" class="col-sm-2 col-form-label">#{messages['psw']}</label>
+                                                <p:password styleClass="col-sm-10 form-control" id="passwordTxt" value="#{userController.editPassword}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="#{messages['psw']}">  
                                                     <f:validateLength maximum="16" />
                                                     <!--<p:ajax update="passwordMsg" event="blur" />-->
                                                 </p:password>
                                                 <p:watermark for="passwordTxt" value="#{messages['psw']}" />
                                                 <p:message for="passwordTxt" />
                                             </div>
-                                            <div class="signuptext">
-                                                <p:password id="confirmPasswordTxt" value="#{userController.editPassword}" required="true" redisplay="true" label="#{messages['naccount.rpt.psw']}">  
+                                            <div class="signuptext form-group row">
+                                                <label for="confirmPasswordTxt" class="col-sm-2 col-form-label">#{messages['naccount.rpt.psw']}</label>
+                                                <p:password styleClass="col-sm-10 form-control" id="confirmPasswordTxt" value="#{userController.editPassword}" required="true" redisplay="true" label="#{messages['naccount.rpt.psw']}">  
                                                     <f:validateLength maximum="16" />
                                                     <!--<p:ajax update="passwordMsg" event="blur" />-->
                                                 </p:password>
@@ -86,8 +89,9 @@
                                                 <p:watermark for="PhoneTxt" value="#{messages['naccount.fullphone']}" />
                                                 <p:message for="PhoneTxt" />
                                             </div>--> 
-                                            <div class="signuptext">
-                                                <p:inputText id="telTxt" value="#{userController.user.phone}" required="false" size="30" label="#{messages['telephone.number']}"/>
+                                            <div class="signuptext form-group row">
+                                                <label for="telTxt" class="col-sm-3 col-form-label">#{messages['telephone.number']}</label>
+                                                <p:inputText styleClass="col-sm-9 form-control" id="telTxt" value="#{userController.user.phone}" required="false" size="30" label="#{messages['telephone.number']}"/>
                                                 <p:watermark for="telTxt" value="#{messages['naccount.phone']}" />
                                             </div>
                                             </div> 
@@ -105,19 +109,19 @@
                                                 <!--#########################-->
                                                 <h:panelGrid columns="4" id="birthdate" style="margin-bottom:10px">
                                                     <h:outputText value="#{messages['naccount.birthdate']}" style="font-weight: bold;"/>
-                                                    <h:selectOneMenu id="day" value="#{userController.editDia}" required="true" label="#{messages['naccount.day']}">  
+                                                    <h:selectOneMenu class="custom-select" id="day" value="#{userController.editDia}" required="true" label="#{messages['naccount.day']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
                                                         <f:selectItems value="#{userController.dias}"/>
                                                         <f:ajax listener="#{userController.setBirth()}" />
                                                     </h:selectOneMenu>
 
-                                                    <h:selectOneMenu id="month" value="#{userController.editMes}" required="true" label="#{messages['naccount.month']}">  
+                                                    <h:selectOneMenu class="custom-select" id="month" value="#{userController.editMes}" required="true" label="#{messages['naccount.month']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.month']}" itemValue="" />  
                                                         <f:selectItems value="#{userController.meses}" /> 
                                                         <f:ajax listener="#{userController.setBirth()}" />
                                                     </h:selectOneMenu>
 
-                                                    <h:selectOneMenu id="year" value="#{userController.editAno}" required="true" label="#{messages['naccount.year']}">  
+                                                    <h:selectOneMenu class="custom-select" id="year" value="#{userController.editAno}" required="true" label="#{messages['naccount.year']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
                                                         <f:selectItems value="#{userController.anos}" />  
                                                         <f:ajax listener="#{userController.setBirth()}" />
@@ -132,11 +136,11 @@
 
                                                 <h:panelGrid columns="1" id="sexo" style="margin-bottom:10px">
                                                     <h:outputText value="#{messages['naccount.sex']}" style="font-weight: bold;"/>
-                                                    <p:selectOneRadio id="gender" value="#{userController.user.gender}" required="true" label="#{messages['naccount.sex']}">  
+                                                    <h:selectOneRadio id="gender" value="#{userController.user.gender}" required="true" label="#{messages['naccount.sex']}">  
                                                         <f:ajax event="change" execute="@this" render="questao" />
                                                         <f:selectItem itemLabel="#{messages['naccount.female']}" itemValue="F" />  
                                                         <f:selectItem itemLabel="#{messages['naccount.male']}" itemValue="M" />  
-                                                    </p:selectOneRadio> 
+                                                    </h:selectOneRadio> 
                                                 </h:panelGrid>
 
                                                 <p:message for="gender" />
@@ -144,10 +148,10 @@
                                                 <h:panelGrid columns="1" cellpadding="10" id="questao">
                                                     <h:panelGrid columns="1" cellpadding="10" id="questaoX" rendered="#{userController.user.female}">
                                                         <h:outputText value="#{messages['cadastrar.nova.conta.outputText.1']}" style="font-weight: bold"/>
-                                                        <p:selectOneRadio id="pregnant" value="#{userController.user.pregnant}" required="#{userController.user.female}" label="#{messages['cadastrar.nova.conta.outputText.1']}">  
+                                                        <h:selectOneRadio id="pregnant" value="#{userController.user.pregnant}" required="#{userController.user.female}" label="#{messages['cadastrar.nova.conta.outputText.1']}">  
                                                             <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="#{true}"/>
                                                             <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="#{false}"/>
-                                                        </p:selectOneRadio> 
+                                                        </h:selectOneRadio> 
                                                     </h:panelGrid> 
                                                 </h:panelGrid>
 
@@ -160,10 +164,10 @@
                                                     <f:facet name="header">  
                                                         #{messages['cadastrar.nova.conta.facet.1']}
                                                     </f:facet> 
-                                                    <p:selectOneRadio id="drink" value="#{userController.user.drink}" required="true" label="#{messages['cadastrar.nova.conta.facet.1']}">  
+                                                    <h:selectOneRadio id="drink" value="#{userController.user.drink}" required="true" label="#{messages['cadastrar.nova.conta.facet.1']}">  
                                                         <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.sim']}" itemValue="#{true}" />
                                                         <f:selectItem itemLabel="#{messages['cadastrar.nova.conta.nao']}" itemValue="#{false}" /> 
-                                                    </p:selectOneRadio> 
+                                                    </h:selectOneRadio> 
                                                 </h:panelGrid>
 
 
@@ -173,16 +177,16 @@
 
                                                 <h:panelGrid columns="2"  id="allowterm">
                                                     <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>                                                        
-                                                    <p:selectBooleanCheckbox value="#{userController.user.receiveEmails}">
+                                                    <h:selectBooleanCheckbox value="#{userController.user.receiveEmails}">
                                                         <f:ajax event="change" execute="@this" render="@form" />
-                                                    </p:selectBooleanCheckbox>
+                                                    </h:selectBooleanCheckbox>
                                                 </h:panelGrid>
 
                                                 <h:panelGrid columns="1"  cellpadding="5" id="questao7" rendered="#{userController.user.receiveEmails}">
                                                     <f:facet name="header">  
                                                         #{messages['tips.frequency.choice']}                                       
                                                     </f:facet>
-                                                    <p:selectOneMenu id="frequency" value="#{userController.user.tipsFrequency}" style="width:125px"  label="#{messages['tips.frequency.choice']}" required="true" >
+                                                    <h:selectOneMenu class="custom-select" id="frequency" value="#{userController.user.tipsFrequency}" style="width:125px"  label="#{messages['tips.frequency.choice']}" required="true" >
                                                         <f:selectItem itemLabel="" itemValue="" />
                                                         <f:selectItem itemLabel="#{messages['tips.frequency.choice.0']}" itemValue="0" />
                                                         <f:selectItem itemLabel="#{messages['tips.frequency.choice.1']}" itemValue="1" />
@@ -191,14 +195,14 @@
                                                         <f:selectItem itemLabel="#{messages['tips.frequency.choice.4']}" itemValue="4" />
                                                         <f:selectItem itemLabel="#{messages['tips.frequency.choice.5']}" itemValue="5" />
                                                         <f:selectItem itemLabel="#{messages['tips.frequency.choice.7']}" itemValue="6" />
-                                                    </p:selectOneMenu>
+                                                    </h:selectOneMenu>
                                                 </h:panelGrid>
 
                                                 <p:message for="frequency" />
 
                                                 <h:panelGrid columns="3" id="consent" >
                                                     <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
-                                                    <p:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
+                                                    <h:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
                                                 </h:panelGrid>
 
                                                 <div id="signup-terms">
@@ -210,15 +214,14 @@
                                                         <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
                                                     </div>
                                                     <div id="signupbtn">
-                                                        <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.editProfile()}"/>
+                                                        <p:commandButton styleClass="btngen btn btn-primary" id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.editProfile()}"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </h:form>	    		
                                     </div>
                                 </div><!-- end.main left -->
-                                
-                            </div>
+                             
                         </div>
                     </div>
                 </div>        

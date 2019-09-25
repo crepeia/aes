@@ -40,12 +40,13 @@
             ]]></noscript>
                
             <!-- End Facebook Pixel Code -->
+            <!-- header -->    
+                <w:header logoutRequired="true"  />
+                <w:topmenu />
         </h:head>
         <h:body>
             <div id="corpo"> 
-                <!-- header -->    
-                <w:header logoutRequired="true"  />
-                <w:topmenu />
+                
 
                 <!--mainmenu-->
                 <div class="main">
@@ -59,7 +60,7 @@
                                 <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                 <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>						
                                 <div class="signuptext">
-                                    <p:inputText id="emailTxt" label="#{messages['email']}" value="#{userController.user.email}" required="true" size="30" >
+                                    <p:inputText styleClass="form-control" id="emailTxt" label="#{messages['email']}" value="#{userController.user.email}" required="true" size="30" >
                                         <!--<p:ajax update="loginMsg" event="blur" />-->
                                         <f:validateLength maximum="50" />
                                     </p:inputText>
@@ -67,7 +68,7 @@
                                     <p:message for="emailTxt"/>
                                 </div>
                                 <div class="signuptext">
-                                    <p:password id="passwordTxt" label="#{messages['psw']}" value="#{userController.password}" required="true" redisplay="true" size="30">  
+                                    <p:password styleClass="form-control" id="passwordTxt" label="#{messages['psw']}" value="#{userController.password}" required="true" redisplay="true" size="30">  
                                         <f:validateLength maximum="16" />
                                         <!--<p:ajax update="passwordMsg" event="blur" />-->
                                     </p:password>
@@ -80,7 +81,7 @@
                                         <div id="signinbtn" >
                                             <p:messages globalOnly="true" redisplay="true" />
 
-                                            <p:commandButton id="entrarBtn" value="Entrar" update="@form" actionListener="#{userController.signIn(true)}" />
+                                            <p:commandButton styleClass="btn btn-primary btn-sm" id="entrarBtn" value="Entrar" update="@form" actionListener="#{userController.signIn(true)}" />
                                         </div>
                                         <div style="clear:both; position:relative; top: 12px;">
                                         <h:outputLink value="enviar-email-senha.xhtml">#{messages['forgot.password']}</h:outputLink>

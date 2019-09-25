@@ -10,23 +10,19 @@
         <h:head>
             <title>#{messages['estrategia.dim.registro.elet.meta.mul.title.1']}</title>
             <w:head_comum />
+            <!-- header -->    
+            <w:header loginRequired="true" evaluationRequired="true"  />
+            <w:topmenu />
         </h:head>
 
         <h:body>
+            <w:leftmenu_2 cssClass="leftmenu2" />
             <div id="corpo"> 
-                <!-- header -->    
-                <w:header loginRequired="true" evaluationRequired="true"  />
-
-
-                <w:topmenu />
                 <!--mainmenu-->         	
                 <div class="main">
                     <div class="main-strategy">
-                    <w:leftmenu_2 cssClass="leftmenu2" />
 
                     <div class="pagecontent">
-
-
                         <!--<div id="pagetop">
                            <div id="progressbar">     <p:progressBar value="70" labelTemplate="{value}%" displayOnly="true"/>    </div>
                          <div class='fotoframestratety'>
@@ -37,23 +33,21 @@
                         <div id="pagecontentstrategy">
 
                             <div id="pagecontentstrategyH3">
-                                
                                 <h1>#{messages['estrategia.dim.registro.elet.meta.hom.h3.1']}</h1>
+                                <div class="callout callout-default bd-callout-warning">
                                 <h4>#{messages['estrategia.dim.registro.elet.meta.hom.p.1']}</h4>
+                                <p>#{messages['estrategia.dim.registro.elet.meta.hom.li.1']}</p>
                             </div>
-                            <ul>
-                                <li>#{messages['estrategia.dim.registro.elet.meta.hom.li.1']}</li>
-                            </ul>         
+                            </div>
+
                             <h3>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1a']}<b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1.b1']}</b>#{messages['estrategia.dim.registro.elet.meta.hom.h4.1b']}</h3>
                             
                         </div>    
 
                         <div id="pmtext">     
-
+                            
                             <div id="standarddose">
-
-                                <h1>#{messages['estrategia.dim.registro.elet.meta.hom.h1.1']}</h1>                                                                
-
+                                <h1>#{messages['estrategia.dim.registro.elet.meta.hom.h1.1']}</h1>
                                 <div id="doseex1">
                                     <div class="doseexample">
 

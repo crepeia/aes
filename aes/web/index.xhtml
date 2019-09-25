@@ -41,15 +41,12 @@
             ]]></noscript>
                
             <!-- End Facebook Pixel Code -->
-            
+            <w:topmenu />
+            <w:header />
     </h:head>
     <h:body>
         <div id="corpo">
             <!-- header -->
-            <w:topmenu />
-            <w:header />
-
-          
             <!--mainmenu-->            
             <div class="main">
                 <!-- tentar colocar as definicoes de class no componente -->
@@ -59,17 +56,23 @@
                     <div id="maintop">
                         <h1>#{messages['h1.index']}</h1>
                         <div id="mainleft">
-                            <div class="maindescribe">
-                                <h:graphicImage library="default" name="images/people.png" alt="Especialistas" />
+                            <div class="media">
+                                <h:graphicImage class="align-self-start mr-3" library="default" name="images/people.png" alt="Especialistas" />
+                                <div class="media-body">
                                 <p>#{messages['p.index']}</p>
+                                </div>
                             </div>
-                            <div class="maindescribe">
-                                <h:graphicImage library="default" name="images/book.png" alt="Ciências" />
-                                <p>#{messages['p1.index']}<h:outputLink value="quem-somos-os-autores.xhtml">#{messages['p1.1.index']}</h:outputLink>.</p>                               
+                            <div class="media">
+                                <h:graphicImage class="align-self-start mr-3" library="default" name="images/book.png" alt="Ciências" />
+                                <div class="media-body">
+                                <p>#{messages['p1.index']}<h:outputLink value="quem-somos-os-autores.xhtml">#{messages['p1.1.index']}</h:outputLink>.</p>
+                                </div>
                             </div>
-                            <div class="maindescribe">
-                                <h:graphicImage library="default" name="images/padlock.png" alt="Gratuito" />
+                            <div class="media">
+                                <h:graphicImage class="align-self-start mr-3" library="default" name="images/padlock.png" alt="Gratuito" />
+                                <div class="media-body">
                                 <p>#{messages['p2.index']}<h:outputLink value="cadastrar-nova-conta.xhtml">#{messages['p2.2.index']}</h:outputLink>.</p>
+                                </div>
                             </div>                                                                                                                                         
                         </div>
                         <div id="mainright"> 
@@ -91,46 +94,50 @@
                                     </div>-->
                         
                         <div id="passosbottom">
-                            <div class="passos">
-                                <h2><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['h2.index']}</h:outputLink></h2>
-                                    <h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/preparando-parar.png" alt="Especialistas" /></h:outputLink>
-                                    <div class="passos-txt">
+                            <div class="card passos">
+                                    <h:graphicImage library="default" class ="card-img-top passos-img" name="images/preparando-parar.png" alt="Especialistas" />
+                                    <div class="card-body passos-txt">
+                                        <h2 class="card-title">#{messages['h2.index']}</h2>
                                            <ul>
-                                               <li><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.1']}</h:outputLink></li>
-                                               <li><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.2']}</h:outputLink></li>                                   
-                                               <li><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.3']}</h:outputLink></li>
-                                               <li><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.4']}</h:outputLink></li>
+                                               <li class="card-text"><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.1']}</h:outputLink></li>
+                                               <li class="card-text"><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.2']}</h:outputLink></li>                                   
+                                               <li class="card-text"><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.3']}</h:outputLink></li>
+                                               <li class="card-text"><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.4']}</h:outputLink></li>
                                            </ul>
+                                        <h:outputLink class="btn btn-outline-primary" value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.5']}</h:outputLink>
                                     </div>
                             </div>
-                            <h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" /></h:outputLink>
-                            <div class="passos">
-                                <h2><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['h2.index.1']}</h:outputLink></h2>
-                                <h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/pronto-parar.png" alt="Especialistas" /></h:outputLink>
-                                <div class="passos-txt">
+                            <!--<h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" /></h:outputLink>-->
+                            <div class="card passos">
+                                
+                                <h:graphicImage library="default" class ="card-img-top passos-img" name="images/pronto-parar.png" alt="Especialistas" />
+                                <div class="card-body passos-txt">
+                                    <h2 class="card-title">#{messages['h2.index.1']}</h2>
                                        <ul>
                                            <li><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.5']}</h:outputLink></li>
                                            <li><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.6']}</h:outputLink></li>
                                            <li><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.7']}</h:outputLink></li>                                     
                                            <li><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.8']}</h:outputLink></li>
                                        </ul>
-
+                                    <h:outputLink class="btn btn-outline-primary" value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.5']}</h:outputLink>
                                 </div>
                             </div>
-                            <h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"><h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" /></h:outputLink>
+                            <!--<h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"><h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" /></h:outputLink>-->
 
                                    
-                            <div class="passos">
-                                <h2><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['h2.index.2']}</h:outputLink></h2>
-                                <h:outputLink value="mantendo-resultados-introducao.xhtml"><h:graphicImage library="default" class ="passos-img" name="images/acompanhamento.png" alt="Especialistas"/></h:outputLink>
+                            <div class="card passos">
+                                
+                                <h:graphicImage library="default" class ="card-img-top passos-img" name="images/acompanhamento.png" alt="Especialistas"/>
 
-                                <div class="passos-txt">
+                                <div class="card-body passos-txt">
+                                    <h2 class="card-title">#{messages['h2.index.2']}</h2>
                                        <ul>                                                                                                     
                                            <li><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['index.li.9']}</h:outputLink></li>
                                            <li><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['index.li.10']}</h:outputLink></li>                                     
                                            <li><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['index.li.11']}</h:outputLink></li>
                                            <li><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['index.li.12']}</h:outputLink></li>
                                        </ul>
+                                    <h:outputLink class="btn btn-outline-primary" value="mantendo-resultados-introducao.xhtml">#{messages['index.li.5']}</h:outputLink>
                                 </div>
                             </div>
                         </div>

@@ -32,6 +32,7 @@
             </div>
 
             <div id="rightheader">
+                <!--
                 <div id="languages">
                     <h:form id="langform">                        
                         <h:selectOneMenu value="#{languageController.language}" onchange="submit()">
@@ -39,35 +40,40 @@
                         </h:selectOneMenu>                        
                     </h:form>
                 </div>
+                -->
                 <div id="fastsignin">
                     <h:form id="loginForm" >
                         <p:panel id="groupPanel">
                             <p:panel id="loginPanel" rendered="#{!userController.loggedIn}">
-                                <h:outputLink value="cadastrar-nova-conta.xhtml" >#{messages['register']}</h:outputLink> / 
-                                <p:commandLink value="#{messages['signin']}" id="entrarLink" /> 
+                                <div class="loginbtns">
+                                <h:outputLink class="btn btn-outline-primary text-nowrap" value="cadastrar-nova-conta.xhtml" >#{messages['register']}</h:outputLink>
+                                <p:commandLink styleClass="btn btn-outline-info" value="#{messages['signin']}" id="entrarLink" /> 
+                                </div>
                             </p:panel>
                             <p:panel id="userPanel" rendered="#{userController.loggedIn}">
-                                Olá <h:outputText value="#{userController.user.name}" />  ::  
-                                <h:outputLink value="editar-perfil.xhtml">#{messages['edit.profile']}</h:outputLink> ::
-                                <p:commandLink value="Sair" actionListener="#{userController.signOut()}" immediate="true"/>
+                                <p class="text-nowrap">Olá <h:outputText style="font-weight: bold" value="#{userController.user.name}" /></p>
+                                <div class="loginbtns">
+                                    <h:outputLink class="btn btn-outline-primary text-nowrap" value="editar-perfil.xhtml">#{messages['edit.profile']}</h:outputLink>
+                                    <p:commandLink styleClass="btn btn-outline-danger" value="Sair" actionListener="#{userController.signOut()}" immediate="true"/>
+                                </div>
                             </p:panel>
                         </p:panel>
                         <div id="fastlogin">
                             <p:message for="passwordTxt" />
                             <p:messages globalOnly="true"/>
                             <p:message for="emailTxt" />
-                            <p:overlayPanel id="loginDialog" for="entrarLink" hideEffect="fade" showEffect="fade" hideEvent="submit()" >  
+                            <p:overlayPanel styleClass="card" style="position:absolute;" id="loginDialog" for="entrarLink" hideEffect="fade" showEffect="fade" hideEvent="submit()" >  
                                 <p:panel id="loginInformationPanel" >
-                                    <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="E-mail" >
+                                    <p:inputText styleClass="form-control" id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="E-mail" >
                                         <f:validateLength maximum="50" />
                                     </p:inputText>
                                     <p:watermark for="emailTxt" value="#{messages['email']}" />
-                                    <p:password id="passwordTxt" value="#{userController.password}" required="true" size="30" label="Senha">  
+                                    <p:password styleClass="form-control" id="passwordTxt" value="#{userController.password}" required="true" size="30" label="Senha">  
                                         <f:validateLength maximum="16" />
                                     </p:password>
                                     <p:watermark for="passwordTxt" value="#{messages['password']}" />                                   
                                     <h:outputLink value="enviar-email-senha.xhtml" style="float:left ">#{messages['forgot.password']}</h:outputLink>
-                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btnlogin" update="@form" actionListener="#{userController.signIn(cc.attrs.logoutRequired)}" />
+                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btn btn-primary btn-sm" update="@form" actionListener="#{userController.signIn(cc.attrs.logoutRequired)}" />
 
                                 </p:panel>
                             </p:overlayPanel>

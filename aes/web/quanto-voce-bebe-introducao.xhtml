@@ -42,13 +42,14 @@
             ]]></noscript>
                
             <!-- End Facebook Pixel Code -->
+            <w:header />
+                <w:topmenu />
         </h:head>
 
         <h:body>
             <div id="corpo"> 
                 <!-- header -->    
-                <w:header />
-                <w:topmenu />
+                
                 <!--mainmenu-->         	
                 <div class="main">
 
@@ -59,10 +60,14 @@
                             <div id="hpagetop">
                                 <h1>#{messages['quanto.voce.bebe.introducao.h1.1']}</h1> 
                             </div>    
-
+                            <!--
                             <div id="progressbar">
                                 <p:progressBar value="10" labelTemplate="{value}%" displayOnly="true"/>
-                            </div>                        
+                            </div>
+                            -->
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 10%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">10%</div>
+                            </div>
                         </div>
 
 
@@ -82,21 +87,21 @@
 
                                         <h:panelGrid columns="1" cellpadding="10" id="questao1" style="margin:10px 0">
                                             <h:outputText value="#{messages['quanto.voce.bebe.introducao.text0']}" style="font-weight: bold;"/>
-                                            <p:selectOneRadio label="#{messages['naccount.sex']}" id="gender" value="#{userController.user.gender}" required="true" >  
+                                            <h:selectOneRadio label="#{messages['naccount.sex']}" id="gender" value="#{userController.user.gender}" required="true" >  
                                                 <f:ajax event="change" execute="@this" render="questao6" />
                                                 <f:selectItem itemLabel="#{messages['naccount.female']}" itemValue="F" />
                                                 <f:selectItem itemLabel="#{messages['naccount.male']}" itemValue="M" />
-                                            </p:selectOneRadio> 
+                                            </h:selectOneRadio> 
                                         </h:panelGrid>
                                         <p:message for="gender" />
 
                                         <h:panelGrid columns="1" cellpadding="10" id="questao6" style="margin-left:20px">
                                             <h:panelGrid columns="1" cellpadding="10" id="questaoX" rendered="#{userController.user.female}">
                                                 <h:outputText value="#{messages['quanto.voce.bebe.introducao.text1']}" style="font-weight: bold"/>
-                                                <p:selectOneRadio id="pregnant" value="#{userController.user.pregnant}" required="#{userController.user.female}" label="#{messages['cadastrar.nova.conta.outputText.1']}">  
+                                                <h:selectOneRadio id="pregnant" value="#{userController.user.pregnant}" required="#{userController.user.female}" label="#{messages['cadastrar.nova.conta.outputText.1']}">  
                                                     <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.sim']}" itemValue="#{true}" />
                                                     <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.nao']}" itemValue="#{false}" />
-                                                </p:selectOneRadio> 
+                                                </h:selectOneRadio> 
                                             </h:panelGrid> 
                                         </h:panelGrid> 
                                         <p:message for="pregnant" />
@@ -110,19 +115,19 @@
                                         </p:panelGrid>-->
                                         <h:panelGrid columns="4" id="birthdate" style="margin:10px 0">
                                             <h:outputText value="#{messages['quanto.voce.bebe.introducao.text2']}" style="font-weight: bold;"/>
-                                            <h:selectOneMenu id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}" >  
+                                            <h:selectOneMenu class="custom-select" id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}" >  
                                                 <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
                                                 <f:selectItems value="#{userController.dias}"/>
                                                 <f:ajax listener="#{userController.setBirth()}" />
                                             </h:selectOneMenu>
 
-                                            <h:selectOneMenu id="month" value="#{userController.mes}" required="true" label="#{messages['naccount.month']}" >  
+                                            <h:selectOneMenu class="custom-select" id="month" value="#{userController.mes}" required="true" label="#{messages['naccount.month']}" >  
                                                 <f:selectItem itemLabel="#{messages['naccount.month']}" itemValue="" />  
                                                 <f:selectItems value="#{userController.meses}" /> 
                                                 <f:ajax listener="#{userController.setBirth()}" />
                                             </h:selectOneMenu>
 
-                                            <h:selectOneMenu id="year" value="#{userController.ano}" required="true" label="#{messages['naccount.year']}"  >  
+                                            <h:selectOneMenu class="custom-select" id="year" value="#{userController.ano}" required="true" label="#{messages['naccount.year']}"  >  
                                                 <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
                                                 <f:selectItems value="#{userController.anos}" />
                                                 <f:ajax listener="#{userController.setBirth()}" />
@@ -136,25 +141,23 @@
                                             <f:facet name="header">  
                                                 #{messages['quanto.voce.bebe.introducao.facet1']}
                                             </f:facet> 
-                                            <p:selectOneRadio id="drink" value="#{userController.user.drink}" required="true" label="#{messages['cadastrar.nova.conta.facet.1']}">  
+                                            <h:selectOneRadio id="drink" value="#{userController.user.drink}" required="true" label="#{messages['cadastrar.nova.conta.facet.1']}">  
                                                 <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.sim']}" itemValue="#{true}" />
                                                 <f:selectItem itemLabel="#{messages['quanto.voce.bebe.introducao.nao']}" itemValue="#{false}" /> 
-                                            </p:selectOneRadio> 
+                                            </h:selectOneRadio> 
                                         </h:panelGrid>
                                         <p:message for="drink" />
 
 
                                     </p:panel>
-
                                     <div id="btnback">
-                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
+                                        <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./index.xhtml"></h:button>
                                     </div>
 
 
                                     <div id="btnnext">
-                                        <p:commandButton styleClass="btngen" id="saveBtn" value="#{messages['next']}" update="@form" action="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true" actionListener="#{userController.save()}" />
+                                        <p:commandButton styleClass="btngen btn btn-primary" id="saveBtn" value="#{messages['next']}" update="@form" action="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml?faces-redirect=true" actionListener="#{userController.save()}" />
                                     </div>
-
                                 </h:form>
 
                             </div><!-- end pmtext -->  

@@ -12,27 +12,27 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <!--
-        <div class="container">
+        <nav class="navbar navbar-dark bg-primary fixed-top navbar-expand-lg justify-content-center px-5">
                 
-            <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary px-lg-5">
                 
-                <a class="navbar-brand" href="#">
-                <h:outputLink value="." title="#{messages['header.title']}">
-                    <h:graphicImage library="default" name="images/logo.png" alt="LogomarcadoÁlcoolSaúde " id="logo" width="30" height="33" style="filter: brightness(0) invert(1);"/>
+                <h:outputLink class="navbar-brand d-flex mx-auto" value="." title="#{messages['header.title']}">
+                    <h:graphicImage class="d-inline-block align-top" library="default" name="images/logo.png" alt="LogomarcadoÁlcoolSaúde " id="logo" width="30" height="33" style="filter: brightness(0) invert(1);"/>
                 </h:outputLink>
-                </a>
+                
                 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./index.xhtml">#{messages['menu.top.li1']}</h:outputLink></li>
-                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./programa.xhtml">#{messages['menu.top.li2']}</h:outputLink></li>
-                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./quem-somos-os-autores.xhtml">#{messages['menu.top.li3']}</h:outputLink></li>
-                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./contato.xhtml">#{messages['menu.top.li4']}</h:outputLink></li>
-                        <li class="nav-item px-md-3"><h:outputLink class="nav-link" value="./para-pesquisadores.xhtml">#{messages['menu.top.li5']}</h:outputLink></li>
+                <div class="navbar-collapse collapse w-100" id="navbarNavDropdown">
+                    <ul class="navbar-nav w-100 justify-content-center">
+                        <li class="nav-item px-md-3 text-nowrap"><h:outputLink class="nav-link" value="./index.xhtml">#{messages['menu.top.li1']}</h:outputLink></li>
+                        <li class="nav-item px-md-3 text-nowrap"><h:outputLink class="nav-link" value="./programa.xhtml">#{messages['menu.top.li2']}</h:outputLink></li>
+                        <li class="nav-item px-md-3 text-nowrap"><h:outputLink class="nav-link" value="./quem-somos-os-autores.xhtml">#{messages['menu.top.li3']}</h:outputLink></li>
+                        <li class="nav-item px-md-3 text-nowrap"><h:outputLink class="nav-link" value="./contato.xhtml">#{messages['menu.top.li4']}</h:outputLink></li>
+                        <li class="nav-item px-md-3 text-nowrap"><h:outputLink class="nav-link" value="./para-pesquisadores.xhtml">#{messages['menu.top.li5']}</h:outputLink></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-navjustify-content-end">
                         <li class="form-inline px-md-3">
                             <h:form class="dropdown show" id="langform">                        
                                 <h:selectOneMenu class="btn btn-primary dropdown-toggle" value="#{languageController.language}" onchange="submit()">
@@ -43,9 +43,7 @@
                     </ul>
                 </div>
             </nav>
-        </div>
-        -->
-        
+        <!--
         <div class="topmenu">
                 
             <nav>
@@ -65,7 +63,7 @@
                 </ul>
             </nav>
         </div>
-        
+        -->
         <!--
         <nav>
             <div class="nav-wrapper">

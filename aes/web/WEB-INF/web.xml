@@ -26,4 +26,8 @@
         <param-name>key</param-name>
         <param-value>ekhilAitcapWarHy</param-value>
     </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>none</param-value>
+    </context-param>
 </web-app>

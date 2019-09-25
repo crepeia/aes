@@ -41,35 +41,39 @@
             
             
             <!-- End Facebook Pixel Code -->
+        <!-- header -->    
+        <w:header />
+        <w:topmenu />
     </h:head>
     <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header />
-            <w:topmenu />
-
+        <div id="carousel-programa" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <h:graphicImage class="d-block w-100" library="default" name="images/felicidade.png" alt="O programa" id="artigotabaco" title="#{messages['title.image1']}"/>
+                <div class="carousel-caption d-md-block">
+                    <h1>#{messages['programa.h2.1']}</h1>
+                    <p style="font-weight: bold;">#{messages['programa.p1']}</p>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div id="corpo">
+            
             <!--mainmenu-->         	
             <div class="main">
-
-
                 <div class="pagecontent">
-
-                                       
-                    <h:graphicImage library="default" name="images/felicidade.png" alt="O programa" id="artigotabaco" title="#{messages['title.image1']}"/>
-
-                    <h2>#{messages['programa.h2.1']}</h2>
-                    <p>#{messages['programa.p1']}</p>
                     <h2>#{messages['programa.h2.2']}</h2>
                     <p>#{messages['programa.p2']}<h:outputLink value="http://www.hon.ch/HONcode/Webmasters/intro.html">#{messages['programa.link']} </h:outputLink>.</p>                    
                     <p>#{messages['programa.p3']} </p>
                     <h2>#{messages['programa.h2.3']}</h2>
                     <p>#{messages['programa.p4']}</p>
                     <p></p>
+               
+                    <div id="btnprog"><h:button class="btngen btn btn-primary btn-lg" value ="#{messages['termo.consentimento.p.9']}" outcome="./cadastrar-nova-conta.xhtml"  ></h:button></div>
+                    
                     <div class="referencias">
                         <p>#{messages['updated']}</p>
                     </div>
-                    <div id="btnprog"><h:button class="btngen" value ="#{messages['termo.consentimento.p.9']}" outcome="./cadastrar-nova-conta.xhtml"  ></h:button></div>                                       
-
                 </div>
             </div>
 
