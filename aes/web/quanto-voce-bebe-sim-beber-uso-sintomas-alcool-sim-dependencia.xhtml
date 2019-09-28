@@ -94,11 +94,11 @@
 
                                     <p:panel id="qrecaida" >                
                                         <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
-                                            <p:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependenceContinue}" required="true">  
+                                            <h:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependenceContinue}" required="true">  
                                                 <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.yes']}" itemValue="#{true}" />
                                                 <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.no']}" itemValue="#{false}" /> 
                                                 <p:ajax event="change" update="@form" listener="#{evaluationController.save()}"/>
-                                            </p:selectOneRadio> 
+                                            </h:selectOneRadio> 
                                         </h:panelGrid>
                                     </p:panel>
 
@@ -113,7 +113,7 @@
                                     <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
                                         <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                            <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                            <p:inputText styleClass="form-control" id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
                                                 <!--<p:ajax update="loginMsg" event="blur" />-->
                                                 <f:validateLength maximum="50" />
                                                 <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
@@ -122,7 +122,7 @@
                                             <p:message for="email" />
                                         </h:panelGrid>
                                         <div id="btnback">
-                                            <p:commandButton id="saveBtn" styleClass="btngen" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                            <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
                                         </div>
                                     </h:form>
                                     </p:panel>
@@ -134,7 +134,6 @@
 
                                     <div id="btnnext">
                                         <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceContinue()}" actionListener="#{evaluationController.save()}" disabled="#{!evaluationController.evaluation.dependenceContinue or empty evaluationController.evaluation.dependenceContinue}"/>
-
                                     </div>
 
                                 </h:form> 

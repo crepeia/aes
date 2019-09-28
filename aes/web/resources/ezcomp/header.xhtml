@@ -17,9 +17,6 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-
-       
-        
         <h:inputHidden value="#{userController.redirect(  cc.attrs.loginRequired, cc.attrs.logoutRequired, cc.attrs.evaluationRequired )}" />
         <h:inputHidden value="#{pageNavigationController.saveNavigation()}" />
 
@@ -80,7 +77,6 @@
                         </div>    
                     </h:form>
                 </div>
-
             </div>    
         </div>
     </cc:implementation>

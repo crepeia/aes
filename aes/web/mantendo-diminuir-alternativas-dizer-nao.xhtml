@@ -10,20 +10,17 @@
         <h:head>
             <title>#{messages['estrategia.dim.alt.dize.nao.title.1']}</title>
             <w:head_comum />
+            <!-- header -->    
+            <w:header loginRequired="true" evaluationRequired="true"  />
+            <w:topmenu />
         </h:head>
 
         <h:body>
+            <w:leftmenu_4 cssClass="leftmenu2" />
             <div id="corpo"> 
-                <!-- header -->    
-                <w:header loginRequired="true" evaluationRequired="true"  />
-
-
-                <w:topmenu />
+                
                 <!--mainmenu-->         	
                 <div class="main">
-
-                    <w:leftmenu_4 cssClass="leftmenu2" />
-
                     <div class="pagecontent">
 
 
@@ -64,12 +61,12 @@
                             <h:form>
 
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./mantendo-diminuir-alternativas-gatilhos.xhtml"></h:button>
+                                    <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./mantendo-diminuir-alternativas-gatilhos.xhtml"></h:button>
                                 </div>
 
 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="mantendo-diminuir-devagar.xhtml?faces-redirect=true"/>          
+                                    <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary" value="#{messages['next']}" update="@form" action="mantendo-diminuir-devagar.xhtml?faces-redirect=true"/>          
                                 </div>
 
                             </h:form>                                            

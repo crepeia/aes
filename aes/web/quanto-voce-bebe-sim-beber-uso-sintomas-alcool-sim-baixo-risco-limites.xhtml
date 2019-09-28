@@ -48,13 +48,9 @@
 
         <h:body>
             <div id="corpo"> 
-                
                 <!--mainmenu-->         	
                 <div class="main">
-
                     <div class="pagecontent">
-
-
                         <div id="pagetop">
                             <div id="hpagetop">
                                 <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h1.1']}</h1> 
@@ -76,9 +72,10 @@
                                 <h2><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.b.1']}</b></h2>
 
                                 <!-- Incluir feedback e diminuir tamanho da paǵina -->
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.1']}</li>
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.2']}</li>                               
-
+                                <ul>
+                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.1']}</li>
+                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.2']}</li>                               
+                                </ul>
                                 <h3>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h3.1']}</h3>
 
                                 <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.1']}</h4>
@@ -99,10 +96,10 @@
 
 
                                 <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.1']}</p>
-                                <p:accordionPanel>
+                                <p:accordionPanel styleClass="card">
                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.1']}">
                                         <h:panelGrid columns="4" cellpadding="7">
-                                            <div id="pagemiddle">
+                                            <div>
                                                 <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.5']}</h4>
                                                 <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.7']}</li></ul>
                                                 <ul><li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.8']}</li></ul>
@@ -112,7 +109,7 @@
                                     </p:tab>
                                     <p:tab title="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.p.tab.title.2']}">
                                         <h:panelGrid columns="4" cellpadding="7">
-                                            <div id="pagemiddle">
+                                            <div>
                                                 <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.h4.6']}</h4>
                                                 <ul>
                                                     <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.limites.li.10']}</li>

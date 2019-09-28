@@ -10,20 +10,16 @@
         <h:head>
             <title> #{messages['preparando.diminuir.parar.nao.title.1']}</title>
             <w:head_comum />
+            <!-- header -->    
+            <w:header loginRequired="true" evaluationRequired="true" />
+            <w:topmenu />
         </h:head>
 
         <h:body>
             <div id="corpo"> 
-                <!-- header -->    
-                <w:header loginRequired="true" evaluationRequired="true" />
-                <w:topmenu />
+                
                 <!--mainmenu-->         	
                 <div class="main">
-
-
-
-
-
                     <div class="pagecontent">
 
 
@@ -32,9 +28,10 @@
                                 <h1>#{messages['preparando.diminuir.h1.1']}</h1> 
                             </div>    
 
-                            <div id="progressbar">
-                                <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                            </div>                        
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+                            </div>
+                     
                         </div>
 
 
@@ -70,22 +67,22 @@
                                             <f:facet name="header">  
                                                 #{messages['preparando.diminuir.facet.1']}
                                             </f:facet> 
-                                            <p:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}"  required="true" requiredMessage="#{messages['preparando.diminuir.validator']}">  
+                                            <h:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}"  required="true" requiredMessage="#{messages['preparando.diminuir.validator']}">  
                                                 <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.yes']}" itemValue="#{true}" />
                                                 <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.no']}" itemValue="#{false}" /> 
                                                 <f:ajax render="saveBtn" listener="#{evaluationController.enableSaveBtn()}"/>
-                                            </p:selectOneRadio>
+                                            </h:selectOneRadio>
                                             <p:message for="options"/>
                                         </h:panelGrid>
 
                                     </p:panel>
                                     <div id="btnback">
-                                        <h:button class="btngen" value ="#{messages['back']}" outcome="./preparando-pros-cons-avaliacao.xhtml"></h:button>
+                                        <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./preparando-pros-cons-avaliacao.xhtml"></h:button>
                                     </div>
 
 
                                     <div id="btnnext">
-                                        <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" disabled="#{!evaluationController.evaluation.goBack}"/> 
+                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary" value="#{messages['next']}" update="@form" action="#{evaluationController.goBack()}" disabled="#{!evaluationController.evaluation.goBack}"/> 
                                     </div>
                                 </h:form>
                             </div><!-- end pmtext -->  
@@ -95,9 +92,6 @@
                         <div class="referencias">
                             <p>#{messages['updated']} </p>
                         </div>
-
-
-
                     </div>        
                 </div>
 

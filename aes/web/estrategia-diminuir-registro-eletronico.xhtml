@@ -15,23 +15,18 @@
                     background-color: #B6DEF2;
                 }
             </style>
+            <!-- header -->    
+            <w:header loginRequired="true" evaluationRequired="true"  />
+            <w:topmenu />
         </h:head>
 
         <h:body>
-            <div id="corpo"> 
-                <!-- header -->    
-                <w:header loginRequired="true" evaluationRequired="true"  />
-
-
-                <w:topmenu />
+            <w:leftmenu_2 cssClass="leftmenu2" />
+            <div id="corpo">             
                 <!--mainmenu-->         	
                 <div class="main">
                     <div class="main-strategy">
-                    <w:leftmenu_2 cssClass="leftmenu2" />
-
                     <div class="pagecontent">
-
-
                         <div id="pagetop">
 
                             <div id="progressbar">
@@ -63,16 +58,14 @@
                         <div id="pagemiddle">
                             <h3>#{messages['estrategia.dim.registro.elet.h3.2']}</h3>
 
-
-
                             <h:panelGrid columns="3" cellpadding="5" >
                                 <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
-                                <p:inputText value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
+                                <p:inputText styleClass="form-control" value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
                                 <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
                                 </h:panelGrid>
                                  <h:panelGrid columns="3" cellpadding="5" >
                                      <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
-                                <p:inputText value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
+                                <p:inputText styleClass="form-control" value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
                                 <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
                             </h:panelGrid>
                         </div>
@@ -107,7 +100,7 @@
                                                 return [true, 'markedDate'];
                                             }
                                             if (week) {
-                                                return [true, '']
+                                                return [true, ''];
                                             } else {
                                                 return [false, ''];
                                             }
@@ -119,7 +112,7 @@
                                             var weekArray = week.split(",");
                                             var dateStr = formatDate(date);
                                             for (i = 0; i < weekArray.length; i++) {
-                                                if (weekArray[i] == dateStr) {
+                                                if (weekArray[i] === dateStr) {
                                                     return true;
                                                 }
                                             }
@@ -131,7 +124,7 @@
                                             var datesArray = dates.split(",");
                                             var dateStr = formatDate(date);
                                             for (i = 0; i < datesArray.length; i++) {
-                                                if (datesArray[i] == dateStr) {
+                                                if (datesArray[i] === dateStr) {
                                                     return true;
                                                 }
                                             }
@@ -167,12 +160,12 @@
                                     <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
                                     <p:spinner id="dose1" value="#{recordController.dailyLog.drinks}" min="0"/>
                                     <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
-                                    <p:inputText id="situation1" value="#{recordController.dailyLog.context}"/> 
+                                    <p:inputText styleClass="form-control" id="situation1" value="#{recordController.dailyLog.context}"/> 
                                     <p:outputLabel for="consequence1" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
-                                    <p:inputText id="consequence1" value="#{recordController.dailyLog.consequences}"/>
+                                    <p:inputText styleClass="form-control" id="consequence1" value="#{recordController.dailyLog.consequences}"/>
                                 </h:panelGrid>
 
-                                <p:commandButton id="saveBtn" styleClass="btngen" style="float:right;" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
+                                <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" style="float:right;" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
 
                                 <p:messages for="warn1" />        
                                 <p:messages for="warn2" />        
@@ -199,12 +192,12 @@
                                     </h:panelGrid>  
                             </div>   
                             <div id="btnback">
-                                <h:button class="btngen" value ="#{messages['back']}" outcome="estrategia-diminuir-registro.xhtml"></h:button>
+                                <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="estrategia-diminuir-registro.xhtml"></h:button>
                             </div>
 
 
                             <div id="btnnext">
-                                <p:commandButton id="nextBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="estrategia-diminuir-alternativas.xhtml?faces-redirect=true" immediate="true"/>      
+                                <p:commandButton id="nextBtn" styleClass="btngen btn btn-primary" value="#{messages['next']}" update="@form" action="estrategia-diminuir-alternativas.xhtml?faces-redirect=true" immediate="true"/>      
                             </div>
 
                         </h:form>                                            

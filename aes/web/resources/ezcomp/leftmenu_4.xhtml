@@ -13,18 +13,26 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <div class="#{cc.attrs.cssClass}">
-            <nav style="background-color: ">
-                <ul>
-                <li><a href="mantendo-resultados-introducao.xhtml">#{messages['menu.left1']}</a></li>
-                <li><a href="mantendo-resultados-registro.xhtml">#{messages['menu.left10']}</a></li>
-                <li><a href="mantendo-diminuir-alternativas.xhtml">#{messages['menu.left11']}</a></li>
-                <li><a href="mantendo-diminuir-alternativas-plano-fissura.xhtml">#{messages['menu.left12']}</a></li>
-                <li><a href="mantendo-diminuir-alternativas-gatilhos.xhtml">#{messages['menu.left13']}</a></li>
-                <li><a href="mantendo-diminuir-alternativas-dizer-nao.xhtml">#{messages['menu.left14']}</a></li>
-                <li><a href="mantendo-diminuir-devagar.xhtml">#{messages['menu.left15']}</a></li>
-                </ul>
+        <div class="#{cc.attrs.cssClass} navbar navbar-dark w-100 bg-dark"></div>
+        <nav class="navbar navbar-dark bg-dark leftmenu-navbar justify-content-center text-center">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebarDropdown" aria-controls="sidebarDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse " id="sidebarDropdown">
+                    <ul class="navbar-nav justify-content-center">
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="mantendo-resultados-introducao.xhtml">#{messages['menu.left1']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="mantendo-resultados-registro.xhtml">#{messages['menu.left10']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="mantendo-diminuir-alternativas.xhtml">#{messages['menu.left11']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="mantendo-diminuir-alternativas-plano-fissura.xhtml">#{messages['menu.left12']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="mantendo-diminuir-alternativas-gatilhos.xhtml">#{messages['menu.left13']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="mantendo-diminuir-alternativas-dizer-nao.xhtml">#{messages['menu.left14']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="mantendo-diminuir-devagar.xhtml">#{messages['menu.left15']}</a></li>
+                        
+                    </ul>
+                </div>
             </nav>
-        </div>
+        
+
     </cc:implementation>
 </html>

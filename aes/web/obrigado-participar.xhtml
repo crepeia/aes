@@ -10,17 +10,15 @@
     <h:head>
         <title>#{messages['obrigado.title.1']}</title>
         <w:head_comum />
+        <!-- header --> 
+        <w:header loginRequired="true" evaluationRequired="true"  />
+        <w:topmenu />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
-            <!-- header --> 
-            <w:header loginRequired="true" evaluationRequired="true"  />
-            <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
-
-
                 <div class="pagecontent">
 
 
@@ -29,9 +27,9 @@
                             <h1>#{messages['obrigado.h1.1']}</h1> 
                         </div>    
 
-                        <div id="progressbar">
-                            <p:progressBar value="100" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                        </div>                           
                     </div>
 
 
@@ -54,18 +52,16 @@
                             <h4>#{messages['obrigado.li.4']}</h4>                      
 
                         </div><!-- end pmtext -->  
-
-                    </div><!-- end page middle -->                                             
-                    <h:form>
-                    <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca-pronto-para-comecar.xhtml"></h:button>
-                                </div>
+                        <h:form>
+                            <div id="btnback">
+                                <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./plano-mudanca-pronto-para-comecar.xhtml"></h:button>
+                            </div>
+                            
+                        </h:form>
+                    </div><!-- end page middle -->
                     <div class="referencias">
                         <p>#{messages['updated']} </p>
                     </div>
-                        </h:form>
-
-
                 </div>        
             </div>
 

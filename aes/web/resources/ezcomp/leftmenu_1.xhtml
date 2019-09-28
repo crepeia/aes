@@ -12,22 +12,28 @@
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
-    <cc:implementation>	
-        <div class="#{cc.attrs.cssClass}">			
-                <nav>
-                    <ul>
-                        <li><a href="estrategia-parar-apoio-intro.xhtml">#{messages['menu.left1']}</a></li>
-                        <li><a href="estrategia-parar-apoio-profissional.xhtml">#{messages['menu.left1.1']}</a></li>
-                        <li><a href="estrategia-parar-apoio-social.xhtml">#{messages['menu.left2']}</a></li>
-                        <li><a href="estrategia-parar-apoio-social-aa.xhtml">#{messages['menu.left3']}</a></li>
-                        <li><a href="estrategia-parar-apoio-social-outros.xhtml">#{messages['menu.left7']}</a></li>
-                        <li><a href="estrategia-parar-apoio-profissional-terapia.xhtml">#{messages['menu.left5']}</a></li>
-                        <li><a href="estrategia-parar-apoio-depressao-e-ansiedade.xhtml">#{messages['menu.left6']}</a></li>
-                       <li><a href="estrategia-parar-apoio-profissional-nao-desista.xhtml">#{messages['menu.left5.1']}</a></li>
-                       <li><a href="plano-mudanca.xhtml">#{messages['menu.left.plano']}</a></li>
+    <cc:implementation>
+        <div class="#{cc.attrs.cssClass} navbar navbar-dark w-100 bg-info"></div>
+        <nav class="navbar navbar-dark bg-info leftmenu-navbar justify-content-center text-center">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebarDropdown" aria-controls="sidebarDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse " id="sidebarDropdown">
+                    <ul class="navbar-nav justify-content-center">
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-parar-apoio-intro.xhtml">#{messages['menu.left1']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-parar-apoio-profissional.xhtml">#{messages['menu.left1.1']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-parar-apoio-social.xhtml">#{messages['menu.left2']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-parar-apoio-social-aa.xhtml">#{messages['menu.left3']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-parar-apoio-social-outros.xhtml">#{messages['menu.left7']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-parar-apoio-profissional-terapia.xhtml">#{messages['menu.left5']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-parar-apoio-depressao-e-ansiedade.xhtml">#{messages['menu.left6']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="estrategia-parar-apoio-profissional-nao-desista.xhtml">#{messages['menu.left5.1']}</a></li>
+                        <li class="nav-item text-nowrap"><a class="nav-link" href="plano-mudanca.xhtml">#{messages['menu.left.plano']}</a></li>
+
                     </ul>
-                </nav>              
-        </div>
+                </div>
+            </nav>
 
     </cc:implementation>
 </html>

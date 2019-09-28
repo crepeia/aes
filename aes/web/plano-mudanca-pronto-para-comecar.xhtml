@@ -10,13 +10,14 @@
         <h:head>
             <title>#{messages['plano.mudanca.pronto.para.comecar.title.1']}</title>
             <w:head_comum />
+            <!-- header -->    
+            <w:header loginRequired="true" evaluationRequired="true"  />
+            <w:topmenu />
         </h:head>
 
         <h:body>
             <div id="corpo"> 
-                <!-- header -->    
-                <w:header loginRequired="true" evaluationRequired="true"  />
-                <w:topmenu />
+                
                 <!--mainmenu-->         	
                 <div class="main">
 
@@ -28,9 +29,9 @@
                                 <h1>#{messages['plano.mudanca.pronto.para.comecar.h1.1']}</h1> 
                             </div>    
 
-                            <div id="progressbar">
-                                <p:progressBar value="95" labelTemplate="{value}%" displayOnly="true"/>
-                            </div>                        
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">95%</div>
+                            </div>                     
                         </div>
 
 
@@ -66,42 +67,42 @@
                                             <f:facet name="header">  
                                                 #{messages['plano.mudanca.pronto.para.comecar.facet.2']}                                      
                                             </f:facet>
-                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2" required="true" requiredMessage="'Razões': Campo em branco"/> 
+                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2" required="true" requiredMessage="'Razões': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                             <f:facet name="header">  
                                                 #{messages['plano.mudanca.pronto.para.comecar.facet.3']}                                      
                                             </f:facet>
-                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3" required="true" requiredMessage="'Estratégias': Campo em branco"/> 
+                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3" required="true" requiredMessage="'Estratégias': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao4">
                                             <f:facet name="header">  
                                                 #{messages['plano.mudanca.pronto.para.comecar.facet.4']}                                      
                                             </f:facet>
-                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4" required="true" requiredMessage="'Pessoas': Campo em branco"/> 
+                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4" required="true" requiredMessage="'Pessoas': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao5">
                                             <f:facet name="header">  
                                                 #{messages['plano.mudanca.pronto.para.comecar.facet.5']}                                       
                                             </f:facet>
-                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5" required="true" requiredMessage="'Sinais Sucesso': Campo em branco"/> 
+                                            <p:inputTextarea  styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5" required="true" requiredMessage="'Sinais Sucesso': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao6">
                                             <f:facet name="header">  
                                                 #{messages['plano.mudanca.pronto.para.comecar.facet.6']}                                       
                                             </f:facet>
-                                            <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="'Possíveis Dificuldades': Campo em branco"/> 
+                                            <p:inputTextarea  styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="'Possíveis Dificuldades': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         
 
                                         <h:panelGrid columns="1">
                                             <div id="btnback">
-                                                <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['save']}" update="@form"  actionListener="#{evaluationController.savePlan()}"/>      
+                                                <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value="#{messages['save']}" update="@form"  actionListener="#{evaluationController.savePlan()}"/>      
                                             </div>
                                         </h:panelGrid>
 
@@ -112,7 +113,7 @@
 
                                     </p:panel>
 
-                                    <div >
+                                    <div class="email-print-icons">
                                         <p:panelGrid columns="2">
                                             <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}"><h:graphicImage  library="default" title="E-Mail" name="images/impressao.png" alt="#{messages['pronto.plano.print']}" /></h:outputLink>
                                             <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>                                                                                                                                   
@@ -120,31 +121,18 @@
                                             <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form">E-Mail</p:commandLink>
                                         </p:panelGrid>
                                     </div>
-
-
-
-
-
-
-
-
                                 </h:form>       
 
-
-
                             </div><!-- end pmtext -->
-
-
-                        </div><!-- end page middle -->   
-                        <h:panelGrid>   
                             <div id="btnback">
-                                <h:button class="btngen" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
+                                <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./plano-mudanca.xhtml"></h:button>
                             </div>
                             <div id="btnnext">
-                                <h:button class="btngen" value ="#{messages['next']}" outcome="obrigado-participar.xhtml?faces-redirect=true"></h:button>      
+                                <h:button class="btngen btn btn-primary" value ="#{messages['next']}" outcome="obrigado-participar.xhtml?faces-redirect=true"></h:button>      
                             </div>
 
-                        </h:panelGrid>   
+                        </div><!-- end page middle -->   
+                           
 
                         <div class="referencias">
                             <p>#{messages['updated']}</p>

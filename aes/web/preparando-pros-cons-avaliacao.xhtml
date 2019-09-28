@@ -10,14 +10,15 @@
     <h:head>
         <title>#{messages['preparando.pros.cons.avaliacao.title']}</title>
         <w:head_comum />
+        <!-- header -->    
+        <w:header loginRequired="true" evaluationRequired="true"/>
+
+        <w:topmenu />
     </h:head>
 
     <h:body>
         <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true" evaluationRequired="true"/>
-
-            <w:topmenu />
+            
             <!--mainmenu-->         	
             <div class="main">
 
@@ -28,9 +29,9 @@
                             <h1>#{messages['preparando.pros.cons.avaliacao.h1']}</h1> 
                         </div>    
 
-                        <div id="progressbar">
-                            <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
-                        </div>                        
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+                        </div>                     
                     </div>
                     
                     <div id="pagemiddle">
@@ -79,20 +80,20 @@
                                         <f:facet name="header">  
                                            #{messages['preparando.pros.cons.avaliacao.facet3']}
                                         </f:facet> 
-                                        <p:selectOneRadio id="options" value="#{evaluationController.evaluation.ready}" required="true">  
+                                        <h:selectOneRadio id="options" value="#{evaluationController.evaluation.ready}" required="true">  
                                             <f:selectItem itemLabel="#{messages['preparando.pros.cons.avaliacao.sim']}" itemValue="#{true}" />
                                             <f:selectItem itemLabel="#{messages['preparando.pros.cons.avaliacao.nao']}" itemValue="#{false}" /> 
-                                        </p:selectOneRadio> 
+                                        </h:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>
 
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./preparando-pros-cons.xhtml"></h:button>
+                                    <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./preparando-pros-cons.xhtml"></h:button>
                                 </div>
 
 
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" update="@form" action="#{evaluationController.readyToChange()}" actionListener="#{evaluationController.save()}" />
+                                    <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary" value="#{messages['next']}" update="@form" action="#{evaluationController.readyToChange()}" actionListener="#{evaluationController.save()}" />
                                 </div>
                             </h:form>
                         </div><!-- end pmtext -->  

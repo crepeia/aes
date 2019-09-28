@@ -73,7 +73,63 @@ ul {
     background-position: -64px -16px;
 }
 
+.ui-panel .ui-panel-content {    
+    padding:10px 11px 5px 0!important;
+}
 
+.ui-datepicker{
+    background-color: #3498db;
+    border-radius: 3px;
+}
+
+.ui-datepicker-calendar{
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    background-position: -32px 0;
+}
+.ui-icon-circle-triangle-e{
+    background-position: -32px -16px;
+}
+.ui-icon-circle-triangle-w{
+    background-position: -96px -16px;
+}
+.ui-growl {
+    background: #3498db;
+    border-radius: 3px;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.5);
+    top:200px;
+}
+
+.ui-growl-item-container{
+    box-shadow:  0 0 0 0;
+}
+
+.ui-growl-icon-close{
+    background-position: -96px -128px;
+}
+
+.ui-inputfield{
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.ui-inputfield:focus{
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}
 /*
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
     border: 1px solid rgb(168, 168, 168);
@@ -174,12 +230,17 @@ LEFTMENUS***********************/
 
 /*LEFTMENU-1*/
 
-.leftmenu1 {	
+.leftmenu1 {
+    position: absolute;
+    height: 56px;
+    z-index: 1;
+    /*
     float:left;
     width: 260px;
+    */
 }
 
-
+/*
 .leftmenu1 nav ul {
     background: #38b394;
     box-shadow: 1px 0px 8px rgba(0,0,0,0.15);
@@ -226,7 +287,7 @@ LEFTMENUS***********************/
     display: block; padding: 6px 15px;
     color: #f8f8f8; text-decoration: none;
 }
-
+*/
 
 
 /*LEFTMENU-2*/
@@ -234,10 +295,12 @@ LEFTMENUS***********************/
 .leftmenu2 {	
     position: absolute;
     height: 56px;
+    z-index: 1;
 }
 .leftmenu-navbar {
     width: 20rem;
     position: absolute;
+    z-index: 999;
 }
 
 /*
@@ -276,12 +339,17 @@ LEFTMENUS***********************/
 */
 /*LEFTMENU-3*/
 
-.leftmenu3 {	
+.leftmenu3 {
+    position: absolute;
+    height: 56px;
+    z-index: 1;
+    /*
     float:left;
     width: 250px;
+    */
 }
 
-
+/*
 .leftmenu3 nav ul {
     background: #5a4cbc; 
     box-shadow: 1px 0px 8px rgba(0,0,0,0.15);
@@ -312,7 +380,7 @@ LEFTMENUS***********************/
     display: block; padding: 6px 15px;
     color: #fff; text-decoration: none;
 }
-
+*/
 
 /*LAYOUT*/
 body {
@@ -407,15 +475,10 @@ html, body {
     /*color: #2980b9;*/
 }
 
-.ui-panel .ui-panel-content {    
-    padding:10px 11px 5px 0!important;
-}
 
 #fastsignin .ui-widget {
     font-family: 'Open Sans', sans-serif!important;    
-
 }
-
 
 #searchbar {
      
@@ -622,6 +685,11 @@ html, body {
     text-decoration: none;
 }
 
+.email-print-icons{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
 
 /*PAGECONTENT*/
 
@@ -641,7 +709,7 @@ html, body {
 #footer {
     clear:both;
     width:100%;
-    height: 20vh;
+    min-height: 20vh;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -892,9 +960,6 @@ INDEX***********************/
     outline: 0;  
 }
 
-
-
-
 #signupbottom td{
     border-width: 0;
     border-style: none;
@@ -967,7 +1032,7 @@ INDEX***********************/
     height: 350px;
     width: 50%;
     padding: 15px 20px;
-    border-radius: 5px;
+    border-radius: 3px;
     background: #f8f8f8;
     box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
 }
@@ -1202,7 +1267,7 @@ img#artigotabaco{
 
 #pagemiddle{
     clear:both;
-    border-radius: 5px;
+    border-radius: 3px;
     background: whitesmoke;
     border: 1px solid #bdc3c7;
     padding-bottom:15px;
@@ -1275,12 +1340,12 @@ img#artigotabaco{
 
 .btngen {
     text-transform: uppercase!important;
+    margin: 10px!important;
     /*
     display:block!important;
     color: #fff!important;
     overflow: visible!important;
     border: 0!important;
-    padding: 0 10px 0 10px!important;
     cursor: pointer!important;
     height: 40px!important;
     width: auto!important;
@@ -1643,7 +1708,7 @@ hr {
 /* Mobile Styles */
 @media only screen and (max-width: 780px) {
   body {
-    background-color: #F09A9D; /* Red */
+    /* background-color: #F09A9D;  Red */
     margin: auto;
     justify-content: center;
   }
@@ -1772,14 +1837,14 @@ hr {
 /* Tablet Styles */
 @media only screen and (min-width: 781px) and (max-width: 960px) {
   body {
-    background-color: #F5CF8E; /* Yellow */
+   /* background-color: #F5CF8E; Yellow */
   }
 }
 
 /* Desktop Styles */
 @media only screen and (min-width: 961px) {
   body {
-    background-color: #B2D6FF; /* Blue */
+    /*background-color: #B2D6FF; Blue */
   }
 
 

@@ -9,24 +9,19 @@
     <f:view locale="#{languageController.locale}">
     <h:head>
         <title>#{messages['estrategia.dim.alter.title.1']}</title>
-    <w:head_comum />
+        <w:head_comum />
+        <!-- header -->    
+        <w:header loginRequired="true" evaluationRequired="true" />
+        <w:topmenu />
     </h:head>
         
     <h:body>
+        <w:leftmenu_4 cssClass="leftmenu2" />
         <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true" evaluationRequired="true" />
             
-           
-            <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
-
-                    <w:leftmenu_4 cssClass="leftmenu2" />
-                
                 <div class="pagecontent">
-
-
                     <div id="pagetop">
                         
                       <!-- <div id="progressbar">
@@ -57,11 +52,11 @@
                             <w:rating/>
                       <h:form>
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./mantendo-resultados-registro.xhtml"></h:button>
+                                    <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./mantendo-resultados-registro.xhtml"></h:button>
                                 </div>
                           
                                 <div id="btnnext">
-                                    <p:commandButton id="saveBtn" styleClass="btngen" value="#{messages['next']}" action="mantendo-diminuir-alternativas-plano-fissura.xhtml?faces-redirect=true"/>      
+                                    <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary" value="#{messages['next']}" action="mantendo-diminuir-alternativas-plano-fissura.xhtml?faces-redirect=true"/>      
                                 </div>
                           
                       </h:form>                                            

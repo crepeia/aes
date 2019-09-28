@@ -10,23 +10,18 @@
     <h:head>
         <title>#{messages['estrategia.dim.dev.title.1']}</title>
         <w:head_comum />
+        <!-- header -->    
+        <w:header loginRequired="true" evaluationRequired="true"  />
+        <w:topmenu />
     </h:head>
 
     <h:body>
+        <w:leftmenu_4 cssClass="leftmenu2" />
         <div id="corpo"> 
-            <!-- header -->    
-            <w:header loginRequired="true" evaluationRequired="true"  />
             
-           
-            <w:topmenu />
             <!--mainmenu-->         	
             <div class="main">
-
-                    <w:leftmenu_4 cssClass="leftmenu2" />
-                
                 <div class="pagecontent">
-
-
                     <div id="pagetop">
                         
                         <!-- <div id="progressbar">
@@ -59,7 +54,7 @@
                       <h:form>
 
                                 <div id="btnback">
-                                    <h:button class="btngen" value ="#{messages['back']}" outcome="./mantendo-diminuir-alternativas-dizer-nao.xhtml"></h:button>
+                                    <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./mantendo-diminuir-alternativas-dizer-nao.xhtml"></h:button>
                                 </div>
                                 
                                 

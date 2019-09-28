@@ -9,17 +9,14 @@
     <h:head>
         <title>#{messages['termos.de.uso.title.1']}</title>
         <w:head_comum />
+        <!-- header -->    
+        <w:header />
+        <w:topmenu />
     </h:head>
     <h:body>
-        <div id="corpo"> 
-            <!-- header -->    
-            <w:header />
-            <w:topmenu />
-
+        <div id="corpo">
             <!--mainmenu-->         	
             <div class="main">
-
-
                 <div class="pagecontent">
                   <!--  <h:graphicImage library="default" name="images/logo-alcool-e-saude.png" alt="Álcool & Saúde" id="vstpaisagem" />-->
                     <h1>#{messages['termos.de.uso.h1.1']}</h1>
@@ -64,7 +61,7 @@
                     <h3>#{messages['termos.de.uso.h3.10']}</h3>
                     <p>#{messages['termos.de.uso.p.15']}</p>
                     <div id="btnprog">
-                        <h:button class="btngen" value ="#{messages['termo.consentimento.p.9']}" outcome="./cadastrar-nova-conta.xhtml"  ></h:button>
+                        <h:button class="btngen btn btn-primary btn-lg" value ="#{messages['termo.consentimento.p.9']}" outcome="./cadastrar-nova-conta.xhtml"  ></h:button>
                     </div> 
                 </div>
             </div>
