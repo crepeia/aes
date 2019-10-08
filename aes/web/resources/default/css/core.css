@@ -77,6 +77,13 @@ ul {
     padding:10px 11px 5px 0!important;
 }
 
+.calendar-grid td {
+    padding: 0;
+}
+.ui-datepicker-header{
+        background-color: #3498db;
+
+}
 .ui-datepicker{
     background-color: #3498db;
     border-radius: 3px;
@@ -130,6 +137,8 @@ ul {
     outline: 0;
     box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
 }
+
+
 /*
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
     border: 1px solid rgb(168, 168, 168);
@@ -805,8 +814,8 @@ INDEX***********************/
 .callout {
   padding: 20px;
   margin: 20px 0;
-  border: 1px solid #eee;
-  border-left-width: 5px;
+  border: 1px solid #eee!important;
+  border-left-width: 5px!important;
   border-radius: 3px;
   display: flex;
   flex-direction: column;
@@ -815,7 +824,7 @@ INDEX***********************/
 }
 
 .bd-callout-warning {
-    border-left-color: #f0ad4e
+    border-left-color: #f0ad4e!important;
 }
 
 .bd-callout-warning h4 {
@@ -888,6 +897,9 @@ INDEX***********************/
 .ui-messages ul li{
     display:inline;
 
+}
+.ui-messages-error ul li{
+    display: inline-block;
 }
 
 #signupleft{
@@ -1365,6 +1377,12 @@ img#artigotabaco{
     -moz-box-shadow: 0 0 0 0!important;
     -webkit-box-shadow: 0 0 0 0!important;
     */
+}
+
+.date-display{
+    padding: 5px;
+    background: white;
+    font-weight: bold;
 }
 
 

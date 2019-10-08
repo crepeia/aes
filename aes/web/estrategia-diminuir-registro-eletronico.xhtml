@@ -55,39 +55,38 @@
 
                             </div>
                         </div>
-                        <div id="pagemiddle">
-                            <h3>#{messages['estrategia.dim.registro.elet.h3.2']}</h3>
+                        <div class="callout callout-default bd-callout-warning">
+                            <h4>#{messages['estrategia.dim.registro.elet.h3.2']}</h4>
 
                             <h:panelGrid columns="3" cellpadding="5" >
                                 <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
                                 <p:inputText styleClass="form-control" value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
                                 <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
-                                </h:panelGrid>
-                                 <h:panelGrid columns="3" cellpadding="5" >
-                                     <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
+                                
+                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
                                 <p:inputText styleClass="form-control" value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
                                 <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
                             </h:panelGrid>
                         </div>
-                        <h:form>
+                        <h:form style="width:95%">
                             <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
                             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                                 <p:graphicImage library="default" name="images/loading.gif" />
                             </p:dialog>
                                 <p:growl id="errorGrowl" for="info" sticky="true" redisplay="true" globalOnly="true"/>
-                            <div id="pagemiddle">    
+                            <div id="pagemiddle">  
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
                                 <p:outputLabel value="#{messages['estrategia.dim.registro.elet.calendar']}" style="font-weight: bold"/>
 
                                 <p:panelGrid columns ="4">
                                     <p:outputLabel value="De"/>
-                                    <p:outputLabel id="startingDay" value="#{recordController.weekFirstDay}"  />
+                                    <p:outputLabel styleClass="date-display" id="startingDay" value="#{recordController.weekFirstDay}"  />
                                     
                                     <p:outputLabel value="a" />  
-                                    <p:outputLabel id="endingDay"  value="#{recordController.weekLastDay}" />
+                                    <p:outputLabel styleClass="date-display" id="endingDay"  value="#{recordController.weekLastDay}" />
                                 </p:panelGrid>
 
-                                <p:panelGrid columns ="1" >
+                                <p:panelGrid styleClass="calendar-grid" columns ="1" >
                                     <p:calendar id="calendar" value="#{recordController.date}"  pattern="dd/MM/yyyy" mode="inline" beforeShowDay="disableDates" locale="#{languageController.locale}"  showOtherMonths="true" pagedate="#{recordController.weekFirstDay}" >
                                         <p:ajax event="dateSelect" listener="#{recordController.fetchLog()}"  update="@form"  process="@form"/>
                                     </p:calendar>  
@@ -154,22 +153,41 @@
                                     </script>
                                 </p:panelGrid>
                                 <h3>#{messages['estrategia.dim.registro.elet.h3.reg']}</h3>
-                                <h:panelGrid columns="4" cellpadding="7" >
+                                <div class="row">
+                                    
+                                    <div class="col">
                                     <p:outputLabel for="date1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
-                                    <p:outputLabel id="date1" value="#{recordController.formattedDate}"  />
+                                    <br></br>
+                                    <p:outputLabel styleClass="date-display" id="date1" value="#{recordController.formattedDate}"  />
+                                
+                                    </div>
+                                    <div class="col">
                                     <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
+                                    <br></br>
                                     <p:spinner id="dose1" value="#{recordController.dailyLog.drinks}" min="0"/>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    
+                                    <div class="col-11">
                                     <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
+                                    <br></br>
                                     <p:inputText styleClass="form-control" id="situation1" value="#{recordController.dailyLog.context}"/> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-11">
                                     <p:outputLabel for="consequence1" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
+                                    <br></br>
                                     <p:inputText styleClass="form-control" id="consequence1" value="#{recordController.dailyLog.consequences}"/>
-                                </h:panelGrid>
+                                    </div>
+                                </div>
 
-                                <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" style="float:right;" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
+                                <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value="Gravar Dia" update="@form" action="#{recordController.saveLog()}" />
 
                                 <p:messages for="warn1" />        
                                 <p:messages for="warn2" />        
-
+                                <div class="email-print-icons">
                                     <h:panelGrid columns="2" >
                                         <p:panelGrid columns="1">
                                             <div id ="planoimg1">
@@ -189,7 +207,8 @@
                                                 </div>
                                             </div>
                                         </p:panelGrid>
-                                    </h:panelGrid>  
+                                    </h:panelGrid>
+                                </div>
                             </div>   
                             <div id="btnback">
                                 <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="estrategia-diminuir-registro.xhtml"></h:button>
