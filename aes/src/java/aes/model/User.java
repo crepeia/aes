@@ -1,5 +1,7 @@
 package aes.model;
 
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,13 +13,23 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "tb_user")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "User.login", query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password"),
+    @NamedQuery(name = "User.password", query = "SELECT u.password FROM User u WHERE u.email = :email AND u.password IS NOT NULL")
+
+})
 public class User implements Serializable {
 
     @Id
@@ -64,23 +76,28 @@ public class User implements Serializable {
     private Date dateCreated;
     @Column(name = "ip_created")
     private String ipCreated;
+    
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
-
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Record record;
     
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Contact> contacts;
     
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
     private List<Rating> ratings;
 
-     
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
     private List<Satisfaction> satisfactions;
     
-     @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
     private List<FollowUp> followUps;
      
     @Column(name = "dt_cadastro")
@@ -91,7 +108,7 @@ public class User implements Serializable {
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
     }
-
+    
     public int getAge() {
         Calendar today = Calendar.getInstance();
         Calendar birthCal = Calendar.getInstance();
@@ -211,6 +228,7 @@ public class User implements Serializable {
         this.pregnant = pregnant;
     }
 
+    @XmlTransient
     public List<Evaluation> getEvaluations() {
         return evaluations;
     }
@@ -259,6 +277,7 @@ public class User implements Serializable {
         this.signUpDate = signUpDate;
     }
 
+    @XmlTransient
     public List<Contact> getContacts() {
         return contacts;
     }
@@ -275,6 +294,7 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
+    @XmlTransient
     public List<Satisfaction> getSatisfactions() {
         return satisfactions;
     }
@@ -283,6 +303,7 @@ public class User implements Serializable {
         this.satisfactions = satisfactions;
     }
 
+    @XmlTransient
     public List<Rating> getRatings() {
         return ratings;
     }
@@ -291,6 +312,7 @@ public class User implements Serializable {
         this.ratings = ratings;
     }
 
+    @XmlTransient
     public List<FollowUp> getFollowUps() {
         return followUps;
     }

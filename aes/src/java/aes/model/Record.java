@@ -11,9 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "tb_record")
+@XmlRootElement
 public class Record implements Serializable{
        
     @Id
@@ -26,7 +30,7 @@ public class Record implements Serializable{
   
     @OneToOne
     private User user;
-    
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     private List<DailyLog> dailyLogs;
     
@@ -59,7 +63,8 @@ public class Record implements Serializable{
     public void setWeeklyGoal(Integer weeklyGoal) {
         this.weeklyGoal = weeklyGoal;
     }
-
+    @JsonIgnore
+    @XmlTransient
     public User getUser() {
         return user;
     }
@@ -68,6 +73,7 @@ public class Record implements Serializable{
         this.user = user;
     }
 
+    @XmlTransient
     public List<DailyLog> getDailyLogs() {
         return dailyLogs;
     }
