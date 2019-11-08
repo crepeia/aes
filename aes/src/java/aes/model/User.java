@@ -108,7 +108,7 @@ public class User implements Serializable {
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
     }
-    
+    @JsonIgnore
     public int getAge() {
         Calendar today = Calendar.getInstance();
         Calendar birthCal = Calendar.getInstance();
@@ -136,6 +136,8 @@ public class User implements Serializable {
     public void setBirth(long time){
         birthDate.setTime(time);
     }
+    
+    @JsonIgnore
     public boolean isUnderage() {
         return getAge() < 18;
 

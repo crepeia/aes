@@ -113,8 +113,9 @@
                                                 <p:ajax event="change" update="birthdate" />
                                             </p:calendar>
                                         </p:panelGrid>-->
-                                        <h:panelGrid columns="4" id="birthdate" style="margin:10px 0">
-                                            <h:outputText value="#{messages['quanto.voce.bebe.introducao.text2']}" style="font-weight: bold;"/>
+                                        
+                                        <h:outputText value="#{messages['quanto.voce.bebe.introducao.text2']}" style="font-weight: bold;"/>
+                                        <h:panelGrid columns="3" id="birthdate" style="margin:10px 0">
                                             <h:selectOneMenu class="custom-select" id="day" value="#{userController.dia}" required="true" label="#{messages['naccount.day']}" >  
                                                 <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
                                                 <f:selectItems value="#{userController.dias}"/>

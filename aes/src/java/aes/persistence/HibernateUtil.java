@@ -1,9 +1,7 @@
 package aes.persistence;
 
-import java.sql.Blob;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.SessionFactory;
-import org.hibernate.engine.jdbc.BlobProxy;
 
 public class HibernateUtil {
 
@@ -24,8 +22,4 @@ public class HibernateUtil {
 	public static SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
-        
-        public Blob generateBlob(byte [] b){
-            return BlobProxy.generateProxy(b);
-        }
 }

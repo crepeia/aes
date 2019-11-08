@@ -34,7 +34,7 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     public RecordFacadeREST() {
         super(Record.class);
     }
-
+    /*
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -75,7 +75,7 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     public List<Record> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
-
+    */
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)

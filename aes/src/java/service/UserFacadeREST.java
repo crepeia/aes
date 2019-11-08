@@ -27,6 +27,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.codec.DecoderException;
 
 /**
  *
@@ -42,7 +43,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public UserFacadeREST() {
         super(User.class);
     }
-
+    /*
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -83,7 +84,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
-
+    */
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
@@ -94,7 +95,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("login/{email}/{password}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public User login(@PathParam("email") String e, @PathParam("password") String p) {
+    public User login(@PathParam("email") String e, @PathParam("password") String p) throws DecoderException {
         return super.login(e, p);
     }
     /*

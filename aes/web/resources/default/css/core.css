@@ -702,13 +702,17 @@ html, body {
 
 /*PAGECONTENT*/
 
-.pagecontent  h1{
+.pagecontent h1{
     font-size:1.8em;
+    padding: 0 10px 0 0;
+    text-align: left;
+    width: 90%
 
 }
 
 .pagecontent p {
     text-align:left;
+    width: 90%;
 }
 
 
@@ -764,8 +768,8 @@ INDEX***********************/
 
 #maintop{
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: row;
     padding: 5px 0 5px 0;
     clear:both;
     width: 90%;
@@ -778,16 +782,14 @@ INDEX***********************/
 }
 
 #mainbottom h1 {
-    margin: auto;
     padding: 10px 0;
     width: 90%;
 }
 
 #maintop h1 {
-    padding: 10px 0;
+    padding: 0 10px 0 0;
     width: 90%;
-    text-align: center;
-    margin:auto;
+    text-align: left;
 }
 
 #mainleft{
@@ -795,7 +797,6 @@ INDEX***********************/
     flex-direction: column;
     justify-content: space-around;
     padding: 10px 0;
-    width: 50%;
 }
 
 
@@ -885,10 +886,6 @@ INDEX***********************/
     padding-top: 25px;
 }
 
-#signup h1{
-    padding-left: 5px; 
-}
-
 .ui-messages-info-summary, .ui-messages-warn-summary, .ui-messages-error-summary, .ui-messages-fatal-summary, .ui-message-info-summary, .ui-message-warn-summary, .ui-message-error-summary, .ui-message-fatal-summary {
     font-size: .7em;
     line-height: 0;
@@ -915,9 +912,6 @@ INDEX***********************/
     flex-direction: column;
 }
 
-#signupright > div {
-    padding: 0 15px;
-}
 
 #editprofile {
     display: flex;
@@ -1001,7 +995,7 @@ INDEX***********************/
 
 #signupsubmit {
     padding:0 10px;
-    width:440px;
+    /*width:440px;*/
 }
 
 #signupp{
@@ -1251,8 +1245,8 @@ img#artigotabaco{
 }
 
 
-#hpagetop{
-    float:left;
+#hpagetop h1{
+    width: 100%;
 }
 
 #progressbar{
@@ -1281,13 +1275,15 @@ img#artigotabaco{
     clear:both;
     border-radius: 3px;
     background: whitesmoke;
-    border: 1px solid #bdc3c7;
     padding-bottom:15px;
     padding-top:15px;
     padding-left: 10px;
+    /*
+    border: 1px solid #bdc3c7;
     box-shadow:  0px 1px 5px 0px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14),
     0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+    */
 }
 
 #pagemiddle .ui-widget-content {
@@ -1444,10 +1440,7 @@ img#artigotabaco{
 
 .passos-img {
     object-fit: cover;
-    object-position: 50% 50%;
-
-    transform: scale(1.1);
-    height: 120px;
+    height: 150px;
 }
 
 
@@ -1723,6 +1716,46 @@ hr {
     transform: scale(0.8);
 }
 
+/* Bootstrap Overrides */
+
+.jumbo-header {
+    background-image: url("#{resource['default/images/aes-bg2.png']}");
+    background-size: cover;
+    background-position: center; 
+}
+
+
+.btn-primary{
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #3285ce;
+    border-color: #347ddb;
+}
+
+.btn-outline-primary {
+    color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.bg-primary {
+    background-color: #3498db !important;
+}
+
+.show > .btn-primary.dropdown-toggle {
+    background-color: #3285ce;
+    border-color: #347ddb;
+}
+
+
+
 /* Mobile Styles */
 @media only screen and (max-width: 780px) {
   body {
@@ -1747,12 +1780,6 @@ hr {
   #mainleft, #mainright {
       margin: auto;
       width: 90%;
-  }
-
-  #mainright {
-    position: relative;
-    overflow: hidden;
-    padding-top: 56.25%;
   }
   
   #mainright iframe{
