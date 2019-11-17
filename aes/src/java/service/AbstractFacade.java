@@ -9,7 +9,6 @@ import java.io.UnsupportedEncodingException;
 import org.apache.commons.codec.binary.Base64;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 /**

@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['cadastrar.nova.conta.title.1']}</title>
+            <w:head_comum />
+            <!-- header -->    
+            <w:header loginRequired="true"/>
+            <w:topmenu />
+        </h:head>
+
+        <h:body>    
+            
+            <div id="corpo">
+                <div class="main">
+                    <div class="pagecontent">
+                        <div id="mainbottom">
+                            <h1>#{messages['h1.index.lets.start']}</h1>
+
+                            <!--<h:graphicImage library="default" id="opcoes-img" name="images/opcoes.png" alt="Especialistas" />
+                                        <div id="topo-avaliar">
+                                            <ul>                                                                        
+                                                <li>Abaixo estão as três fases da avaliação.</li>
+                                                <li>Você deve começar pela primeira etapa.</li>
+                                                <li>Login é necessário nas etapas 2 e 3. É seguro e totalmente sigiloso.</li>
+                                            </ul>
+                                        </div>-->
+
+                            <div id="passosbottom">
+                                <div class="card passos">
+                                        <h:graphicImage library="default" class ="card-img-top passos-img" name="images/preparando-parar-square.png" alt="Especialistas" />
+                                        <div class="card-body passos-txt">
+                                            <h2 class="card-title">#{messages['h2.index']}</h2>
+                                               <ul>
+                                                   <li class="card-text"><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.1']}</h:outputLink></li>
+                                                   <li class="card-text"><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.2']}</h:outputLink></li>                                   
+                                                   <li class="card-text"><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.3']}</h:outputLink></li>
+                                                   <li class="card-text"><h:outputLink value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.4']}</h:outputLink></li>
+                                               </ul>
+                                            <h:outputLink class="btn btn-outline-primary" value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.1']}</h:outputLink>
+                                        </div>
+                                </div>
+                                <!--<h:outputLink value="quanto-voce-bebe-introducao.xhtml"><h:graphicImage library="default" id="seta1-img" name="images/seta.png" alt="Especialistas" /></h:outputLink>-->
+                                <div class="card passos">
+                                    <h:graphicImage library="default" class ="card-img-top passos-img img-fluid" name="images/pronto-parar-square.png" alt="Especialistas" />
+
+                                    <div class="card-body passos-txt">
+                                        <h2 class="card-title">#{messages['h2.index.1']}</h2>
+                                           <ul>
+                                               <li><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.5']}</h:outputLink></li>
+                                               <li><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.6']}</h:outputLink></li>
+                                               <li><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.7']}</h:outputLink></li>                                     
+                                               <li><h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.8']}</h:outputLink></li>
+                                           </ul>
+                                        <h:outputLink class="btn btn-outline-primary" value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml">#{messages['index.li.5']}</h:outputLink>
+                                    </div>
+                                </div>
+                                <!--<h:outputLink value="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"><h:graphicImage library="default" id="seta2-img" name="images/seta.png" alt="Especialistas" /></h:outputLink>-->
+                                <div class="card passos">
+
+                                    <h:graphicImage library="default" class ="card-img-top passos-img" name="images/acompanhamento-square.png" alt="Especialistas"/>
+
+                                    <div class="card-body passos-txt">
+                                        <h2 class="card-title">#{messages['h2.index.2']}</h2>
+                                        <ul>                                                                                                     
+                                            <li><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['index.li.9']}</h:outputLink></li>
+                                            <li><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['index.li.10']}</h:outputLink></li>                                     
+                                            <li><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['index.li.11']}</h:outputLink></li>
+                                            <li><h:outputLink value="mantendo-resultados-introducao.xhtml">#{messages['index.li.12']}</h:outputLink></li>
+                                        </ul>
+                                        <h:outputLink class="btn btn-outline-primary" value="mantendo-resultados-introducao.xhtml">#{messages['index.li.9']}</h:outputLink>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end.corpo -->
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
+</html>

@@ -108,7 +108,17 @@ public class ContactController extends BaseController implements Serializable {
         contact.setPdf(pdf);
         sendHTMLEmail(contact);
     }
-
+    
+    public void sendSignInEmail(User user) {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient(user.getEmail());
+        contact.setSubject("start_subj");
+        contact.setContent("start_msg");
+        sendHTMLEmail(contact);
+    }
+    
     public void sendSignUpEmail(User user) {
         Contact contact = new Contact();
         contact.setUser(user);
@@ -402,6 +412,7 @@ public class ContactController extends BaseController implements Serializable {
         }
         return null;
     }
+    
 
     private String getContent(Contact contact, String template) throws MissingResourceException {
         String htmlMessage = template;

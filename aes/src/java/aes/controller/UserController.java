@@ -104,7 +104,7 @@ public class UserController extends BaseController<User> {
                         String url = (String) object;
                         FacesContext.getCurrentInstance().getExternalContext().redirect(url);
                     } else {
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("escolha-uma-etapa.xhtml");
                     }
                 } else {
                     Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();

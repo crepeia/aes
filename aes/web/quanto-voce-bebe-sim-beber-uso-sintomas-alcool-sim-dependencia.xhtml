@@ -79,6 +79,9 @@
                                 </ul>
 
                                 <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h4.1']}</h4>
+                                
+                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p2']}</p>
+                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p3']}</p>
 
                                 <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.b.1']}</b></p>
 
@@ -101,30 +104,38 @@
                                             </h:selectOneRadio> 
                                         </h:panelGrid>
                                     </p:panel>
-
+                                    
+                                    
                                     <p:panel id="panelYes" rendered="#{!evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}" >               
                                         <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p1']}</b></p>
-                                        <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p2']}</p>
-                                        <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p3']}</p>
-                                        
-                                        <h4><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.h4']}</b></h4>
-                                        
-                                <h:form id="form" class="form-signup">
-                                    <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
-                                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                            <p:inputText styleClass="form-control" id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
-                                                <!--<p:ajax update="loginMsg" event="blur" />-->
-                                                <f:validateLength maximum="50" />
-                                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                            </p:inputText>
-                                            <p:watermark for="email" value="#{messages['email']}" />
-                                            <p:message for="email" />
-                                        </h:panelGrid>
-                                        <div id="btnback">
-                                            <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
-                                        </div>
-                                    </h:form>
+                                        <h4><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.h4']}</b></h4>
+
+                                        <h:form id="form" class="form-signup">
+                                            <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
+
+                                            <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
+                                                <p:inputText styleClass="form-control" id="email" value="#{evaluationController.user.email}" required="true" size="100" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                                    <!--<p:ajax update="loginMsg" event="blur" />-->
+                                                    <f:validateLength maximum="50" />
+                                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                                </p:inputText>
+                                                <p:watermark for="email" value="#{messages['email']}" />
+                                                <p:message for="email" />
+                                                <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                            </h:panelGrid>
+
+                                        </h:form>
+                                    </p:panel>
+
+                                    <p:panel rendered="#{evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}" >
+                                        <h4><b>Continue para receber mais informações sobre o seu consumo!</b></h4>
+                                        <p:panel rendered="#{!userController.loggedIn}">
+                                            <p><b>Para continuar acessando as informações do site, será necessário realizar um cadastro na próxima página</b></p>
+                                            <p><b>Clique em "Próximo" para continuar</b></p>
+
+                                        </p:panel>
+                                        
                                     </p:panel>
 
                                     <div id="btnback">
@@ -133,7 +144,7 @@
 
 
                                     <div id="btnnext">
-                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceContinue()}" actionListener="#{evaluationController.save()}" disabled="#{!evaluationController.evaluation.dependenceContinue or empty evaluationController.evaluation.dependenceContinue}"/>
+                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceContinue()}" actionListener="#{evaluationController.save()}" rendered="#{evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}"/>
                                     </div>
 
                                 </h:form> 

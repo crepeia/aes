@@ -162,6 +162,12 @@ public class EvaluationController extends BaseController<Evaluation> {
         saveURL();
         return ("estrategia-parar-apoio-intro.xhtml?faces-redirect=true");
     }
+    
+    public String goToIndex() {
+        getEvaluation().setQuit(true);
+        saveURL();
+        return ("index.xhtml");
+    }
 
     public String cutDownQuit() {
          if (getUser().isReceiveEmails()) {
@@ -188,6 +194,9 @@ public class EvaluationController extends BaseController<Evaluation> {
     }
 
     public void annualScreening() {
+        if(getUserController().getUser().getName() == null){
+            getUserController().getUser().setName(getUserController().getUser().getEmail());
+        }
         contactController.clearScheduledEmails(getUserController().getUser());
         contactController.scheduleAnnualScreeningEmail(getUserController().getUser());
         disableSaveBtn();
@@ -197,7 +206,19 @@ public class EvaluationController extends BaseController<Evaluation> {
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         }
     }
-
+    
+    public void registerInfo(){
+        if(getUserController().getUser().getName() == null){
+            getUserController().getUser().setName(getUserController().getUser().getEmail());
+        }
+        contactController.sendSignInEmail(getUserController().getUser());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation"), null));
+        if (!userController.isLoggedIn()) {
+            ((InputText) getComponent("email")).setDisabled(true);
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        }
+    }
+    
     public void enableSaveBtn() {
         ((CommandButton) getComponent("saveBtn")).setDisabled(false);
     }

@@ -47,11 +47,10 @@
     <h:body>
         <div class="jumbotron jumbotron-fluid jumbo-header">
             <div class="container">
-                <h2 class="display-4 text-light">#{messages['h2.index']}</h2>
-                <hr class="my-4"></hr>
-
+                <h2 class="display-4">#{messages['h2.index']}</h2>
                 <p class="lead text-light">#{messages['p.index']}</p>
-                <h:outputLink class="btn btn-lg btn-info" value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.1']}</h:outputLink>
+                <hr class="my-4"></hr>
+                <h:outputLink class="btn btn-lg btn-primary" value="quanto-voce-bebe-introducao.xhtml">#{messages['index.li.1']}</h:outputLink>
             </div>        
         </div>
         <div id="corpo">
@@ -94,6 +93,20 @@
                          </div>
                     </div>
                     
+                </div>
+            </div>
+        </div>
+            
+        <div class="jumbotron jumbotron-fluid jumbo-programa text-right">
+            <div class="container">
+                <h2 class="display-4">#{messages['programa.h2.1']}</h2>
+                <p class="lead">#{messages['programa.p1']}</p>
+            </div>        
+        </div>
+        
+        <div id="corpo">
+            <div class="main">
+                <div class="pagecontent">
                     <div id="mainbottom">
                         <h1>#{messages['h1.index.lets.start']}</h1>
   

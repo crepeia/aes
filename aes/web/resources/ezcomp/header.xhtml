@@ -70,7 +70,7 @@
                                     </p:password>
                                     <p:watermark for="passwordTxt" value="#{messages['password']}" />                                   
                                     <h:outputLink value="enviar-email-senha.xhtml" style="float:left ">#{messages['forgot.password']}</h:outputLink>
-                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btn btn-primary btn-sm" update="@form" actionListener="#{userController.signIn(cc.attrs.logoutRequired)}" />
+                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btn btn-primary btn-sm" update="@form" actionListener="#{userController.signIn(true)}" />
 
                                 </p:panel>
                             </p:overlayPanel>
