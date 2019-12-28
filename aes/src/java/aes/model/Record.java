@@ -30,7 +30,7 @@ public class Record implements Serializable{
   
     @OneToOne
     private User user;
-    @JsonIgnore
+    
     @OneToMany(fetch = FetchType.LAZY)
     private List<DailyLog> dailyLogs;
     
@@ -63,6 +63,7 @@ public class Record implements Serializable{
     public void setWeeklyGoal(Integer weeklyGoal) {
         this.weeklyGoal = weeklyGoal;
     }
+    
     @JsonIgnore
     @XmlTransient
     public User getUser() {
@@ -72,7 +73,8 @@ public class Record implements Serializable{
     public void setUser(User user) {
         this.user = user;
     }
-
+    
+    @JsonIgnore
     @XmlTransient
     public List<DailyLog> getDailyLogs() {
         return dailyLogs;

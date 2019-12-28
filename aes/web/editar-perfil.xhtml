@@ -112,19 +112,19 @@
                                                     <h:selectOneMenu class="custom-select" id="day" value="#{userController.editDia}" required="true" label="#{messages['naccount.day']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.day']}" itemValue=""/>  
                                                         <f:selectItems value="#{userController.dias}"/>
-                                                        <f:ajax listener="#{userController.setBirth()}" />
+                                                        <f:ajax listener="#{userController.setBirthEdit()}" />
                                                     </h:selectOneMenu>
 
                                                     <h:selectOneMenu class="custom-select" id="month" value="#{userController.editMes}" required="true" label="#{messages['naccount.month']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.month']}" itemValue="" />  
                                                         <f:selectItems value="#{userController.meses}" /> 
-                                                        <f:ajax listener="#{userController.setBirth()}" />
+                                                        <f:ajax listener="#{userController.setBirthEdit()}" />
                                                     </h:selectOneMenu>
 
                                                     <h:selectOneMenu class="custom-select" id="year" value="#{userController.editAno}" required="true" label="#{messages['naccount.year']}">  
                                                         <f:selectItem itemLabel="#{messages['naccount.year']}" itemValue="" />  
                                                         <f:selectItems value="#{userController.anos}" />  
-                                                        <f:ajax listener="#{userController.setBirth()}" />
+                                                        <f:ajax listener="#{userController.setBirthEdit()}" />
                                                     </h:selectOneMenu>
 
                                                 </h:panelGrid>
@@ -214,7 +214,7 @@
                                                         <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
                                                     </div>
                                                     <div id="signupbtn">
-                                                        <p:commandButton styleClass="btngen btn btn-primary" id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.editProfile()}"/>
+                                                        <p:commandButton styleClass="btngen btn btn-primary" id="saveBtn" value="#{messages['edit.profile']}" update="@form" actionListener="#{userController.editProfile()}"/>
                                                     </div>
                                                 </div>
                                             </div>

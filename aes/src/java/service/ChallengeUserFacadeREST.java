@@ -5,7 +5,7 @@
  */
 package service;
 
-import aes.model.Record;
+import aes.model.ChallengeUser;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,27 +25,27 @@ import javax.ws.rs.core.MediaType;
  * @author bruno
  */
 @Stateless
-@Path("aes.model.record")
-public class RecordFacadeREST extends AbstractFacade<Record> {
+@Path("aes.model.challengeuser")
+public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
 
-    public RecordFacadeREST() {
-        super(Record.class);
+    public ChallengeUserFacadeREST() {
+        super(ChallengeUser.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Record entity) {
+    public void create(ChallengeUser entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Record entity) {
+    public void edit(@PathParam("id") Long id, ChallengeUser entity) {
         super.edit(entity);
     }
 
@@ -58,21 +58,21 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Record find(@PathParam("id") Long id) {
+    public ChallengeUser find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Record> findAll() {
+    public List<ChallengeUser> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Record> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<ChallengeUser> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

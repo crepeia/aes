@@ -7,8 +7,6 @@ package service;
 
 import aes.model.User;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,7 +35,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public UserFacadeREST() {
         super(User.class);
     }
-    /*
+
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -78,34 +76,22 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
-    */
+
     @GET
     @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String countREST() {
         return String.valueOf(super.count());
     }
-    
+
     @GET
     @Path("login/{email}/{password}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Override
     public User login(@PathParam("email") String e, @PathParam("password") String p) throws DecoderException {
         return super.login(e, p);
     }
-    /*
-    @GET
-    @Path("encrypt/{password}")
-    @Produces({MediaType.TEXT_PLAIN})
-    public String encryption(@PathParam("password") String p) {
-        byte[] a = null;
-        try {
-            a = Encrypter.encrypt(p);
-        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return a.toString();
-    }
-    */
+
     @Override
     protected EntityManager getEntityManager() {
         return em;

@@ -5,8 +5,6 @@
  */
 package service;
 
-import java.io.UnsupportedEncodingException;
-import org.apache.commons.codec.binary.Base64;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.apache.commons.codec.DecoderException;
@@ -18,9 +16,11 @@ import org.apache.commons.codec.binary.Hex;
 public abstract class AbstractFacade<T> {
 
     private Class<T> entityClass;
+   //private GenericDAO<T> genDAO;
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
+        //this.genDAO = new GenericDAO<>(entityClass);
     }
 
     protected abstract EntityManager getEntityManager();
@@ -66,10 +66,6 @@ public abstract class AbstractFacade<T> {
     
     public T login(String e, String p) throws DecoderException{
         byte[] b =  Hex.decodeHex(p.toCharArray());
-        //String decodedString = new String(b);
-        //byte[] pass = (byte[]) getEntityManager().createNamedQuery("User.password").setParameter("email", e).getSingleResult();
-        //String s = new String(pass);
         return (T) getEntityManager().createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
     }
-    
 }

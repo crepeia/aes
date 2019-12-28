@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
 @Table(name = "tb_user")
@@ -77,7 +78,7 @@ public class User implements Serializable {
     @Column(name = "ip_created")
     private String ipCreated;
     
-    @JsonIgnore
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
     
@@ -99,7 +100,15 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
     private List<FollowUp> followUps;
-     
+    
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<TipUser> tips;
+    
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<ChallengeUser> challenges;
+
     @Column(name = "dt_cadastro")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dt_cadastro;
@@ -231,6 +240,7 @@ public class User implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Evaluation> getEvaluations() {
         return evaluations;
     }
@@ -390,7 +400,25 @@ public class User implements Serializable {
         this.dt_cadastro = dt_cadastro;
     }
     
+    @JsonIgnore
+    @XmlTransient
+    public List<TipUser> getTips() {
+        return tips;
+    }
+
+    public void setTips(List<TipUser> tips) {
+        this.tips = tips;
+    }
     
+    @JsonIgnore
+    @XmlTransient
+    public List<ChallengeUser> getChallenges() {
+        return challenges;
+    }
+
+    public void setChallenges(List<ChallengeUser> challenges) {
+        this.challenges = challenges;
+    }
     
     
 }

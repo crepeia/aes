@@ -32,7 +32,7 @@ public class Item implements Serializable {
     @Column(name = "type")
     private String type;
     
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<Rating> ratings;
 
     public long getId() {

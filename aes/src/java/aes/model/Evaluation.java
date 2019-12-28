@@ -4,16 +4,22 @@ import com.sun.xml.ws.binding.FeatureListUtil;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "tb_evaluation")
@@ -121,6 +127,7 @@ public class Evaluation implements Serializable {
 
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Override
@@ -166,18 +173,20 @@ public class Evaluation implements Serializable {
         int limit =  getUser().isFemale() ? 5 : 10;
         return getWeekTotal() > limit;
     }
+    
+    @JsonIgnore
     public int getWeekTotal() {
         return sunday + monday + tuesday + wednesday + thursday + friday + saturday;
     }
-
+    @JsonIgnore
     public int getAudit3Sum() {
         return audit1 + audit2 + audit3;
     }
-
+    @JsonIgnore
     public int getAuditFullSum() {
         return audit1 + audit2 + audit3 + audit4 + audit5 + audit6 + audit7 + audit8 + audit9 + audit10;
     }
-    
+    @JsonIgnore
     public String[] getPlanContent() {
         String content[] = new String[6];
         content[0] = new SimpleDateFormat("dd/MM/yyyy").format(dataComecarPlano);
@@ -279,7 +288,7 @@ public class Evaluation implements Serializable {
     public void setSunday(Integer sunday) {
         this.sunday = sunday;
     }
-
+    
     public User getUser() {
         return user;
     }

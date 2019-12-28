@@ -609,8 +609,13 @@ public class UserController extends BaseController<User> {
 
     public int getEditDia() {
         Calendar birth = Calendar.getInstance();
-        birth.setTime(getUser().getBirthDate());
-        editDia = birth.get(Calendar.DAY_OF_MONTH);
+        if(getUser().getBirthDate() != null){
+            birth.setTime(getUser().getBirthDate());
+            editDia = birth.get(Calendar.DAY_OF_MONTH);
+        } else {
+            editDia = 0;
+
+        }
         return editDia;
     }
 
@@ -620,8 +625,12 @@ public class UserController extends BaseController<User> {
 
     public int getEditMes() {
         Calendar birth = Calendar.getInstance();
-        birth.setTime(getUser().getBirthDate());
-        editMes = birth.get(Calendar.MONTH);
+        if(getUser().getBirthDate() != null){
+            birth.setTime(getUser().getBirthDate());
+            editMes = birth.get(Calendar.MONTH);
+        } else {
+            editMes = 12; //Months are being counted from 0 to 11, so 12 is "none"
+        }
         return editMes;
     }
 
@@ -631,8 +640,12 @@ public class UserController extends BaseController<User> {
 
     public int getEditAno() {
         Calendar birth = Calendar.getInstance();
-        birth.setTime(getUser().getBirthDate());
-        editAno = birth.get(Calendar.YEAR);
+        if(getUser().getBirthDate() != null){
+           birth.setTime(getUser().getBirthDate());
+           editAno = birth.get(Calendar.YEAR);
+        } else {
+            editAno = 0;
+        }
         return editAno;
     }
 

@@ -34,7 +34,6 @@ public class DailyLog implements Serializable {
     @Override
     public String toString(){
         return id + ", " + logDate + ", " + drinks + ", " + context + ", " + consequences;
-                
     }
 
     public long getId() {
