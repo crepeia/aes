@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  * @author bruno
  */
 @Stateless
-@Path("aes.model.evaluation")
+@Path("evaluation")
 public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
 
     @PersistenceContext(unitName = "aesPU")

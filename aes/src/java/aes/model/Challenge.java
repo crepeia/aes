@@ -8,6 +8,8 @@ package aes.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,6 +49,7 @@ public class Challenge implements Serializable {
     private Float modifier;
     
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private ChallengeType type;
 
     public String getTitle() {

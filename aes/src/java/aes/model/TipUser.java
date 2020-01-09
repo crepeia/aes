@@ -40,8 +40,8 @@ public class TipUser implements Serializable {
     private User user;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(name = "data_envio")
-    private Date dataEnvio;
+    @Column(name = "date_created")
+    private Date dateCreated;
     
     @Column(name = "liked")
     private boolean liked;
@@ -77,15 +77,16 @@ public class TipUser implements Serializable {
     public void setId(TipUserKey id) {
         this.id = id;
     }
-    
-    public Date getDataEnvio() {
-        return dataEnvio;
+
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDataEnvio(Date dataEnvio) {
-        this.dataEnvio = dataEnvio;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
     
+
 
     @Override
     public int hashCode() {

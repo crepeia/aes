@@ -5,10 +5,13 @@
  */
 package service;
 
+import aes.model.User;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+
 /**
  *
  * @author bruno
@@ -16,11 +19,9 @@ import org.apache.commons.codec.binary.Hex;
 public abstract class AbstractFacade<T> {
 
     private Class<T> entityClass;
-   //private GenericDAO<T> genDAO;
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
-        //this.genDAO = new GenericDAO<>(entityClass);
     }
 
     protected abstract EntityManager getEntityManager();
@@ -64,8 +65,13 @@ public abstract class AbstractFacade<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
     
-    public T login(String e, String p) throws DecoderException{
+    public User login(String token) {
+        User at = (User) getEntityManager().createQuery("SELECT u FROM AuthenticationToken a INNER JOIN a.user AS u WHERE a.token=:t").setParameter("t", token).getSingleResult();
+        return at;
+    }
+    
+    public User login(String e, String p) throws DecoderException{
         byte[] b =  Hex.decodeHex(p.toCharArray());
-        return (T) getEntityManager().createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
+        return (User) getEntityManager().createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
     }
 }

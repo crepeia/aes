@@ -49,7 +49,7 @@ public class ChallengeUser implements Serializable {
     private Date dateCompleted;
     
     @Column(name = "score")
-    private Integer score;
+    private Long score;
     
     public Long getId() {
         return id;
@@ -111,11 +111,11 @@ public class ChallengeUser implements Serializable {
         this.dateCompleted = dateCompleted;
     }
 
-    public Integer getScore() {
+    public Long getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(Long score) {
         this.score = score;
     }
 

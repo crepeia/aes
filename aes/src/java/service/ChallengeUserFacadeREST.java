@@ -6,10 +6,16 @@
 package service;
 
 import aes.model.ChallengeUser;
+import aes.model.Challenge;
+import aes.model.TipUser;
+import aes.model.User;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,49 +24,68 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
  * @author bruno
  */
 @Stateless
-@Path("aes.model.challengeuser")
+@Path("secured/challengeuser")
 public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
 
+    @Context 
+    private HttpServletRequest httpRequest;
+    
     public ChallengeUserFacadeREST() {
         super(ChallengeUser.class);
     }
 
     @POST
-    @Override
+    @Path("createChallenge/{challengeId}/{userId}/{date}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(ChallengeUser entity) {
-        super.create(entity);
+    public void createChallenge(@PathParam("challengeId") Long challengeId, @PathParam("userId") Long userId, @PathParam("date") String dateCreated) {
+        try{
+            Challenge c = em.find(Challenge.class, challengeId);
+            User u = em.find(User.class, userId);
+            ChallengeUser chUs = new ChallengeUser();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dc = sdf.parse(dateCreated);
+
+            chUs.setUser(u);
+            chUs.setChallenge(c);
+            chUs.setDateCreated(dc);
+            super.create(chUs);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
+    
 
     @PUT
-    @Path("{id}")
+    @Path("completeChallenge/{id}/{date}/{score}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, ChallengeUser entity) {
-        super.edit(entity);
+    public void completeChallenge(@PathParam("id") Long id, @PathParam("date") String compDate, @PathParam("score") Long score) {
+        try{
+            ChallengeUser ch = em.find(ChallengeUser.class, id);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date cd = sdf.parse(compDate);
+
+            ch.setDateCompleted(cd);
+            ch.setScore(score);
+            super.edit(ch);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
-
-    @GET
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public ChallengeUser find(@PathParam("id") Long id) {
-        return super.find(id);
-    }
 
     @GET
     @Override
@@ -68,14 +93,62 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     public List<ChallengeUser> findAll() {
         return super.findAll();
     }
-
+    
     @GET
-    @Path("{from}/{to}")
+    @Path("points")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<ChallengeUser> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
+    public String sumUserPoints(){
+        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        return  getEntityManager().createQuery("SELECT SUM(c.score) FROM ChallengeUser c WHERE c.user.email=:email")
+                .setParameter("email", userEmail)
+                .getSingleResult().toString();
     }
+    
+    @GET
+    @Path("sent/{startDate}/{endDate}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<ChallengeUser> findBySentDate(@PathParam("startDate") String sd, @PathParam("endDate") String ed) {
+        try {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = sdf.parse(sd);   
+        Date endDate = sdf.parse(ed);
 
+        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        
+        return getEntityManager().createQuery("SELECT c FROM ChallengeUser c WHERE c.user.email=:email AND (c.dateCreated BETWEEN :start AND :end)")
+                .setParameter("email", userEmail)
+                .setParameter("start", startDate)
+                .setParameter("end", endDate)
+                .getResultList();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    @GET
+    @Path("completed/{startDate}/{endDate}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<ChallengeUser> findByCompletedDate(@PathParam("startDate") String sd, @PathParam("endDate") String ed) {
+        try {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = sdf.parse(sd);   
+        Date endDate = sdf.parse(ed);
+
+        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        
+        return getEntityManager().createQuery("SELECT c FROM ChallengeUser c WHERE c.user.email=:email AND (c.dateCompleted BETWEEN :start AND :end)")
+                .setParameter("email", userEmail)
+                .setParameter("start", startDate)
+                .setParameter("end", endDate)
+                .getResultList();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)

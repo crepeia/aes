@@ -9,32 +9,41 @@ import aes.model.Tip;
 import aes.model.TipUser;
 import aes.model.TipUserKey;
 import aes.model.User;
-import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HEAD;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
  * @author bruno
  */
 @Stateless
-@Path("aes.model.tipuser")
+@Path("tipuser")
 public class TipUserFacadeREST extends AbstractFacade<TipUser> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    
+    @Context 
+    private HttpServletRequest httpRequest;
 
     private TipUserKey getPrimaryKey(PathSegment pathSegment) {
         /*
@@ -62,54 +71,56 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     }
 
     @POST
-    @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(TipUser entity) {
+    @Path("createTip")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createTip(TipUser entity) {
         try {
             entity.setUser(em.find(User.class, entity.getId().getUserId()));
             entity.setTip(em.find(Tip.class, entity.getId().getTipId()));
+            if(entity.getDateCreated()== null){
+                entity.setDateCreated(new Date());
+            }
+            
             super.create(entity);
-        } catch (Exception erro) {
-            erro.printStackTrace();
+            return Response.status(Response.Status.OK).build();
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        }
+    }
+
+    @PUT
+    @Path("like")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void like(TipUser entity) {
+        TipUser newEntity = super.find(entity.getId());
+        newEntity.setLiked(entity.isLiked());
+        super.edit(newEntity);
+    }
+
+    @GET
+    @Path("secured/{startDate}/{endDate}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<TipUser> findByDate(@PathParam("startDate") String sd, @PathParam("endDate") String ed) {
+        try {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = sdf.parse(sd);   
+        Date endDate = sdf.parse(ed);
+
+        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        
+        return getEntityManager().createQuery("SELECT tu FROM TipUser tu WHERE tu.user.email=:email AND (tu.dateCreated BETWEEN :start AND :end)")
+                .setParameter("email", userEmail)
+                .setParameter("start", startDate)
+                .setParameter("end", endDate)
+                .getResultList();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
     
-
-    @PUT
-    @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") PathSegment id, TipUser entity) {
-        super.edit(entity);
-    }
-
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") PathSegment id) {
-        aes.model.TipUserKey key = getPrimaryKey(id);
-        super.remove(super.find(key));
-    }
-
-    @GET
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public TipUser find(@PathParam("id") PathSegment id) {
-        aes.model.TipUserKey key = getPrimaryKey(id);
-        return super.find(key);
-    }
-
-    @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TipUser> findAll() {
-        return super.findAll();
-    }
-
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<TipUser> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
 
     @GET
     @Path("count")
@@ -123,4 +134,29 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
         return em;
     }
     
+        /*
+    @POST
+    @Path("createId/{id}")
+    public Response createId(@PathParam("id") PathSegment id) {
+        try {
+            TipUserKey k = getPrimaryKey(id);
+            User usr = em.find(User.class, k.getUserId());
+            Tip tip = em.find(Tip.class, k.getTipId());
+            
+            TipUser tu = new TipUser();
+            tu.setUser(usr);
+            tu.setTip(tip);
+            tu.setDataEnvio(new Date());
+            tu.setLiked(false);
+            tu.setId(k);
+            
+            super.create(tu);
+            return Response.status(Response.Status.OK).entity(tu).build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        }
+    }
+*/
 }

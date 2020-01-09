@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  * @author bruno
  */
 @Stateless
-@Path("aes.model.challenge")
+@Path("challenge")
 public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
 
     @PersistenceContext(unitName = "aesPU")
@@ -35,26 +35,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
         super(Challenge.class);
     }
 
-    @POST
-    @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Challenge entity) {
-        super.create(entity);
-    }
-
-    @PUT
-    @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Challenge entity) {
-        super.edit(entity);
-    }
-
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
-
+    
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -63,24 +44,20 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
     }
 
     @GET
+    @Path("all")
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Challenge> findAll() {
         return super.findAll();
     }
-
+    
     @GET
-    @Path("{from}/{to}")
+    @Path("type/{type}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Challenge> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
+    public List<Challenge> findAllByType(@PathParam("type") Challenge.ChallengeType ct) {
+        return getEntityManager().createQuery("SELECT c FROM Challenge c WHERE c.type=:type")
+                .setParameter("type", ct)
+                .getResultList();
     }
 
     @Override

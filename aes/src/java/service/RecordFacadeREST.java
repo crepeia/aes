@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  * @author bruno
  */
 @Stateless
-@Path("aes.model.record")
+@Path("record")
 public class RecordFacadeREST extends AbstractFacade<Record> {
 
     @PersistenceContext(unitName = "aesPU")
