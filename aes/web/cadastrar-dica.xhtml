@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['cadastrar.nova.dica.title.1']}</title>
+            <w:head_comum />
+            <w:header logoutRequired="true"/>
+            <w:topmenu />
+        </h:head>
+
+        <h:body>    
+            <div id="corpo"> 
+                <!--mainmenu-->         	
+                <div class="main">
+                    <div class="pagecontent">
+
+
+                        <div class="signupcenter">
+                            <div id="signupright">
+                            <div id="signup">
+                                
+                                <h1>#{messages['cadastrar.nova.dica.title.1']}</h1>
+                                
+                                <h:form id="form" class="form-signup">
+                                    <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+                                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                        <p:graphicImage library="default" name="images/loading.gif" />
+                                    </p:dialog>
+                                    <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
+                                    <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
+                                    <div class="signuptext form-group row">
+                                        <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['dica.title']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="titleTxt" value="#{tipController.tip.title}" required="true" size="30" label="#{messages['dica.title']}" >
+
+                                            <f:validateLength maximum="100" />
+                                        </p:inputText>
+                                        <p:watermark for="titleTxt" value="#{messages['dica.title']}" />
+                                        <p:message for="titleTxt" />
+                                    </div>
+                                    <div class="signuptext form-group row">
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dica.description']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="descTxt" value="#{tipController.tip.description}" required="true" size="30" label="#{messages['dica.description']}"  >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="500" />
+                                        </p:inputText>
+                                        <p:watermark for="descTxt" value="#{messages['dica.description']}" />
+                                        <p:message for="descTxt" />
+                                    </div>
+                                    
+
+                                    <div id="signupbottom">
+
+                                        <div id="signupsubmit">			                                            
+                                            <div>
+                                                <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
+                                            </div>
+                                            <div id="signupbtn">
+                                                <p:commandButton styleClass="btn btn-primary" id="saveBtn" value="#{messages['register']}" update="@form"  actionListener="#{tipController.create()}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h:form>	    		
+                            </div>
+                            </div><!-- end.main left -->
+                        </div>
+
+                    </div>
+                </div>        
+            </div><!-- end.corpo --> 
+            <!--Footer -->
+            <w:footer />
+          
+        </h:body>
+    </f:view>
+</html>
+
+
