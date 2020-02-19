@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['cadastrar.novo.desafio.title.1']}</title>
+            <w:head_comum />
+            <w:header logoutRequired="true"/>
+            <w:topmenu />
+        </h:head>
+
+        <h:body>    
+            <div id="corpo"> 
+                <!--mainmenu-->         	
+                <div class="main">
+                    <div class="pagecontent">
+
+
+                        <div class="signupcenter">
+                            <div id="signupright">
+                            <div id="signup">
+                                
+                                <h1>#{messages['cadastrar.novo.desafio.title.1']}</h1>
+                                
+                                <h:form id="form" class="form-signup">
+                                    <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+                                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                        <p:graphicImage library="default" name="images/loading.gif" />
+                                    </p:dialog>
+                                    <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
+                                    <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
+                                    <p:inputText type="hidden" styleClass="col-sm-10 form-control" id="idTxt" value="#{challengeController.challenge.id}" required="true" />
+                                    <div class="signuptext form-group row">
+                                        <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['desafio.title']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="titleTxt" value="#{challengeController.challenge.title}" required="true" size="30" label="#{messages['desafio.title']}" >
+                                            <f:validateLength maximum="100" />
+                                        </p:inputText>
+                                        <p:watermark for="titleTxt" value="#{messages['desafio.title']}" />
+                                        <p:message for="titleTxt" />
+                                    </div>
+                                    <div class="signuptext form-group row">
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['desafio.description']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="descTxt" value="#{challengeController.challenge.description}" required="true" size="30" label="#{messages['desafio.description']}"  >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="500" />
+                                        </p:inputText>
+                                        <p:watermark for="descTxt" value="#{messages['desafio.description']}" />
+                                        <p:message for="descTxt" />
+                                    </div>
+                                    <div class="signuptext form-group row">
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['desafio.base.value']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="baseTxt" value="#{challengeController.challenge.base_value}" required="true" size="30" label="#{messages['desafio.base.value']}"  />
+                                        <p:watermark for="baseTxt" value="#{messages['desafio.base.value']}" />
+                                        <p:message for="baseTxt" />
+                                    </div>
+                                    
+                                    <div class="signuptext form-group row">
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['desafio.modifier']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="modTxt" value="#{challengeController.challenge.modifier}" required="true" size="30" label="#{messages['desafio.modifier']}"  />
+                                        <p:watermark for="modTxt" value="#{messages['desafio.modifier']}" />
+                                        <p:message for="modTxt" />
+                                    </div>
+                                    
+                                    <div class="signuptext form-group row">
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['desafio.type']}</label>
+                                        <p:selectOneMenu styleClass="col-sm-10 form-control" id="typeTxt" value="#{challengeController.challenge.type}" required="true" label="#{messages['desafio.type']}" >
+                                            <f:selectItems value="#{challengeController.challengeTypes}" />
+                                        </p:selectOneMenu>
+                                       <p:watermark for="typeTxt" value="#{messages['desafio.type']}" />
+                                        <p:message for="typeTxt" />
+                                    </div>
+                                    
+
+                                    <div id="signupbottom">
+
+                                        <div id="signupsubmit">			                                            
+                                            <div>
+                                                <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
+                                            </div>
+                                            <div id="signupbtn">
+                                                <p:commandButton styleClass="btn btn-primary" id="saveBtn" value="#{messages['register']}" update="@form"  actionListener="#{challengeController.edit}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h:form>	    		
+                            </div>
+                            </div><!-- end.main left -->
+                        </div>
+
+                    </div>
+                </div>        
+            </div><!-- end.corpo --> 
+            <!--Footer -->
+            <w:footer />
+          
+        </h:body>
+    </f:view>
+</html>
+
+

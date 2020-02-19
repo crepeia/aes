@@ -8,7 +8,7 @@
       xmlns:w="http://java.sun.com/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['dicas']}</title>
+        <title>#{messages['desafios']}</title>
         <w:head_comum />
         <w:topmenu />
         <w:header />
@@ -19,37 +19,49 @@
             <div class="main">
                 <div class="pagecontent">
                     
-                    <h1>#{messages['dicas']}</h1>
+                    <h1>#{messages['desafios']}</h1>
                     <div id="maintop">
                         <h:form id="listForm">
-                            <h:dataTable id="tipTable" binding="#{table}" value="#{tipController.tipList()}" var="tip" class="table table-striped table-hover table-bordered tableUpdated">
+                            <h:dataTable id="challengeTable" binding="#{table}" value="#{challengeController.challengeList()}" var="challenge" class="table table-striped table-hover table-bordered tableUpdated">
                                 <h:column>
                                     <f:facet name="header">Id</f:facet>
-                                    <h:outputText value="#{tip.id}" />
+                                    <h:outputText value="#{challenge.id}" />
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Título</f:facet>
-                                    <h:outputText value="#{tip.title}" />
+                                    <h:outputText value="#{challenge.title}" />
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Descrição</f:facet>
-                                    <h:outputText value="#{tip.description}" />
+                                    <h:outputText value="#{challenge.description}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Tipo</f:facet>
+                                    <h:outputText value="#{challenge.type}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Valor base</f:facet>
+                                    <h:outputText value="#{challenge.base_value}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Modificador</f:facet>
+                                    <h:outputText value="#{challenge.modifier}" />
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Editar</f:facet>
-                                    <h:commandButton action="#{tipController.redirectEdit}" value="Editar" class="btn btn-primary">
-                                    <f:setPropertyActionListener value="#{tip}" target="#{tipController.tip}"/>
+                                    <h:commandButton action="#{challengeController.redirectEdit}" value="Editar" class="btn btn-primary">
+                                    <f:setPropertyActionListener value="#{challenge}" target="#{challengeController.challenge}"/>
                                     </h:commandButton>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Deletar</f:facet>
-                                    <h:commandButton action="#{tipController.delete}" value="Deletar" class="btn btn-danger">
-                                    <f:setPropertyActionListener value="#{tip}" target="#{tipController.tip}"/>
+                                    <h:commandButton action="#{challengeController.delete}" value="Deletar" class="btn btn-danger">
+                                    <f:setPropertyActionListener value="#{challenge}" target="#{challengeController.challenge}"/>
                                     </h:commandButton>
                                 </h:column>
                             </h:dataTable>
                             <center>
-                                <h:commandButton action="cadastrar-dica.xhtml?faces-redirect=true" value="Cadastrar nova dica" class="btn btn-success btnSpace" />
+                                <h:commandButton action="cadastrar-desafio.xhtml?faces-redirect=true" value="Cadastrar Novo Desafio" class="btn btn-success btnSpace" />
                             </center>
                         </h:form>
                         
