@@ -67,6 +67,8 @@ public class UserController extends BaseController<User> {
     private String[] nomeMeses;
     private boolean showErrorMessage;
 
+    List<User> userList;
+    
     @PostConstruct
     public void init() {
         mes = -1;
@@ -142,7 +144,7 @@ public class UserController extends BaseController<User> {
         Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'saiu do sistema.");
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/aes/index.xhtml");
             user = null;
             loggedIn = false;
             password = null;
@@ -661,12 +663,39 @@ public class UserController extends BaseController<User> {
         this.confirmEmail = confirmEmail;
     }
     
-     private String getIpAdress() {
+    private String getIpAdress() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
         return ipAddress;
+    }
+     
+    public boolean isAdmin(){
+        return (getUser().isAdmin());
+    }
+    
+    public List<User> userList(){
+        try {
+            userList = this.getDaoBase().listNotNull("email", getEntityManager());
+        } catch (SQLException ex) {
+            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return userList;
+    }
+    
+    public void setAdmin(User u){
+        if(u.getEmail() == null ? this.getUser().getEmail() != null : !u.getEmail().equals(this.getUser().getEmail())){
+            u.setAdmin(!u.isAdmin());
+
+            try {
+               daoBase.update(u, getEntityManager());
+               //administrator = null;
+            } catch (SQLException ex) {
+               Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }

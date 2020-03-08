@@ -185,6 +185,24 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
         
+        public List<T> listNotNull(String campoStr, EntityManager entityManager) throws SQLException {
+
+		try {
+
+			campoStr = campoStr.substring(0, 1).toLowerCase() + campoStr.substring(1);
+
+			Query query;
+			
+                        query = entityManager.createQuery("select obj from " + classe.getSimpleName()
+                                        + " obj where obj." + campoStr + " is not Null");
+
+			query.setHint("toplink.refresh", "true");
+			return query.getResultList();
+		} catch (Exception erro) {
+			throw new SQLException(erro);
+		}
+	}
+        
         public List<T> listOrdered(String campoStr, EntityManager entityManager) throws SQLException {
 
 		try {

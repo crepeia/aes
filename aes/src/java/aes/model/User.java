@@ -113,6 +113,9 @@ public class User implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dt_cadastro;
     
+    @Column(name = "is_admin")
+    private boolean admin;
+    
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
@@ -421,6 +424,15 @@ public class User implements Serializable {
     public void setChallenges(List<ChallengeUser> challenges) {
         this.challenges = challenges;
     }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+    
     
     
 }

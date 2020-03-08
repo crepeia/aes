@@ -1,3 +1,4 @@
+--popula a tabela de dicas
 INSERT INTO `aes`.`tb_tip`
 (`description`,
 `title`)

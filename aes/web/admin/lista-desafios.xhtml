@@ -22,6 +22,9 @@
                     <h1>#{messages['desafios']}</h1>
                     <div id="maintop">
                         <h:form id="listForm">
+                            <center>
+                                <h:commandButton style="margin: 10px" action="cadastrar-desafio.xhtml?faces-redirect=true" value="Cadastrar Novo Desafio" class="btn btn-success btnSpace" />
+                            </center>
                             <h:dataTable id="challengeTable" binding="#{table}" value="#{challengeController.challengeList()}" var="challenge" class="table table-striped table-hover table-bordered tableUpdated">
                                 <h:column>
                                     <f:facet name="header">Id</f:facet>
@@ -60,9 +63,7 @@
                                     </h:commandButton>
                                 </h:column>
                             </h:dataTable>
-                            <center>
-                                <h:commandButton action="cadastrar-desafio.xhtml?faces-redirect=true" value="Cadastrar Novo Desafio" class="btn btn-success btnSpace" />
-                            </center>
+                            
                         </h:form>
                         
                     </div>
