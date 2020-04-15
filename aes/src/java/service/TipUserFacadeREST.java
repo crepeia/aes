@@ -93,10 +93,68 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @PUT
     @Path("like")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void like(TipUser entity) {
+    @Produces( MediaType.APPLICATION_JSON)
+    public TipUser like(TipUser entity) {
         TipUser newEntity = super.find(entity.getId());
-        newEntity.setLiked(entity.isLiked());
+        if(newEntity.isLiked() != null && newEntity.isLiked() == true){
+            newEntity.setLiked(null);
+        } else {
+            newEntity.setLiked(true);
+        }
         super.edit(newEntity);
+        return newEntity;
+    }
+    
+    @PUT
+    @Path("dislike")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces( MediaType.APPLICATION_JSON)
+    public TipUser dislike(TipUser entity) {
+        TipUser newEntity = super.find(entity.getId());
+        if(newEntity.isLiked() != null && newEntity.isLiked() == false){
+            newEntity.setLiked(null);
+        } else {
+            newEntity.setLiked(false);
+        }
+        super.edit(newEntity);
+        return newEntity;
+    }
+    
+    @PUT
+    @Path("unlike")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces( MediaType.APPLICATION_JSON)
+    public TipUser unlike(TipUser entity) {
+        TipUser newEntity = super.find(entity.getId());
+        newEntity.setLiked(null);
+        super.edit(newEntity);
+        return newEntity;
+    }
+    
+    @PUT
+    @Path("read")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces( MediaType.APPLICATION_JSON)
+    public TipUser read(TipUser entity) {
+        TipUser newEntity = super.find(entity.getId());
+        newEntity.setReadByUser(true);
+        super.edit(newEntity);
+        return newEntity;
+    }
+    
+    @GET
+    @Path("find/{userId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<TipUser> findByUser(@PathParam("userId") String uId) {
+        try {
+            
+        return getEntityManager().createQuery("SELECT tu FROM TipUser tu WHERE tu.user.id=:userId")
+                .setParameter("userId", Long.parseLong(uId))
+                .getResultList();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @GET

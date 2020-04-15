@@ -16,6 +16,7 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -37,6 +38,7 @@ public class TipUser implements Serializable {
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
     
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -44,7 +46,10 @@ public class TipUser implements Serializable {
     private Date dateCreated;
     
     @Column(name = "liked")
-    private boolean liked;
+    private Boolean liked;
+    
+    @Column(name = "readByUser")
+    private boolean readByUser;
     
     public Tip getTip() {
         return tip;
@@ -62,12 +67,20 @@ public class TipUser implements Serializable {
         this.user = user;
     }
     
-    public boolean isLiked() {
+    public Boolean isLiked() {
         return liked;
     }
 
-    public void setLiked(boolean liked) {
+    public void setLiked(Boolean liked) {
         this.liked = liked;
+    }
+
+    public boolean isReadByUser() {
+        return readByUser;
+    }
+
+    public void setReadByUser(boolean readByUser) {
+        this.readByUser = readByUser;
     }
 
     public TipUserKey getId() {

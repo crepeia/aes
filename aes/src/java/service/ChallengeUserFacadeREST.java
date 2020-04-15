@@ -26,6 +26,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 /**
@@ -71,21 +72,44 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @PUT
     @Path("completeChallenge/{id}/{date}/{score}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void completeChallenge(@PathParam("id") Long id, @PathParam("date") String compDate, @PathParam("score") Long score) {
+    public ChallengeUser completeChallenge(@PathParam("id") Long id, @PathParam("date") String compDate, @PathParam("score") Long score) {
         try{
             ChallengeUser ch = em.find(ChallengeUser.class, id);
+            
+            if(ch.getDateCompleted() == null){
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date cd = sdf.parse(compDate);
+                
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date cd = sdf.parse(compDate);
-
-            ch.setDateCompleted(cd);
-            ch.setScore(score);
+                ch.setDateCompleted(cd);
+                ch.setScore(score);
+            } else {
+                ch.setDateCompleted(null);
+                ch.setScore(new Long(0));
+            }
             super.edit(ch);
+            return ch;
         }catch(Exception e){
             e.printStackTrace();
+            return null;
+
         }
     }
-
+    
+    @GET
+    @Path("find/{userId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<ChallengeUser> findByUser(@PathParam("userId") String uId) {
+        try {
+            
+        return getEntityManager().createQuery("SELECT tu FROM ChallengeUser tu WHERE tu.user.id=:userId")
+                .setParameter("userId", Long.parseLong(uId))
+                .getResultList();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @GET
     @Override

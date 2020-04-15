@@ -39,6 +39,7 @@ public class ApplicationConfig extends Application {
         resources.add(service.AuthenticationTokenFacadeREST.class);
         resources.add(service.ChallengeFacadeREST.class);
         resources.add(service.ChallengeUserFacadeREST.class);
+        resources.add(service.DailyLogFacadeREST.class);
         resources.add(service.EvaluationFacadeREST.class);
         resources.add(service.RecordFacadeREST.class);
         resources.add(service.TipFacadeREST.class);

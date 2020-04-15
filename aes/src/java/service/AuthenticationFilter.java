@@ -32,7 +32,7 @@ import javax.ws.rs.core.SecurityContext;
  *
  * @author bruno
  */
-@WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/webresources/secured/*"}, dispatcherTypes = {DispatcherType.REQUEST})
+@WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/webresources/secured/*","/webresources/authenticate/secured/*"}, dispatcherTypes = {DispatcherType.REQUEST})
 public class AuthenticationFilter implements Filter {
     
     private static final boolean debug = true;

@@ -6,6 +6,7 @@
 package service;
 
 import aes.model.Record;
+import aes.model.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,13 +20,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author bruno
  */
 @Stateless
-@Path("record")
+@Path("secured/record")
 public class RecordFacadeREST extends AbstractFacade<Record> {
 
     @PersistenceContext(unitName = "aesPU")
@@ -36,17 +38,29 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     }
 
     @POST
-    @Override
+    @Path("create/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Record entity) {
-        super.create(entity);
+    public Record create(@PathParam("userId") Long userId) {
+        try {
+            Record entity = new Record();
+            entity.setUser(em.find(User.class, userId));
+            entity.setDailyGoal(null);
+            entity.setWeeklyGoal(null);
+            super.create(entity);
+            return entity;
+        } catch (Exception e) {
+            return null;
+        }
+        
     }
-
+    
     @PUT
-    @Path("{id}")
+    @Path("edit/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Long id, Record entity) {
-        super.edit(entity);
+        Record newEntity = entity;
+        newEntity.setUser(em.find(User.class, id));
+        super.edit(newEntity);
     }
 
     @DELETE
@@ -56,10 +70,16 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     }
 
     @GET
-    @Path("{id}")
+    @Path("find/{userId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Record find(@PathParam("id") Long id) {
-        return super.find(id);
+    public Record find(@PathParam("userId") Long userId) {
+        try {
+        return (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
+                .setParameter("userId",userId)
+                .getSingleResult();
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     @GET

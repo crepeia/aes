@@ -51,6 +51,7 @@ public class ChallengeUser implements Serializable {
     @Column(name = "score")
     private Long score;
     
+    
     public Long getId() {
         return id;
     }
