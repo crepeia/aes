@@ -10,6 +10,7 @@ import aes.model.Challenge;
 import aes.model.TipUser;
 import aes.model.User;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -101,10 +102,14 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ChallengeUser> findByUser(@PathParam("userId") String uId) {
         try {
-            
-        return getEntityManager().createQuery("SELECT tu FROM ChallengeUser tu WHERE tu.user.id=:userId")
+            List<ChallengeUser> l = getEntityManager().createQuery("SELECT tu FROM ChallengeUser tu WHERE tu.user.id=:userId")
                 .setParameter("userId", Long.parseLong(uId))
                 .getResultList();
+            if(l.isEmpty()) {
+                return Collections.emptyList();
+            } else {
+                return l;
+            }
         }catch(Exception e){
             e.printStackTrace();
             return null;
@@ -123,9 +128,13 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public String sumUserPoints(){
         String userEmail = httpRequest.getAttribute("userEmail").toString();
+        try {
         return  getEntityManager().createQuery("SELECT SUM(c.score) FROM ChallengeUser c WHERE c.user.email=:email")
                 .setParameter("email", userEmail)
                 .getSingleResult().toString();
+        } catch (Exception e) {
+            return "0";
+        }
     }
     
     @GET

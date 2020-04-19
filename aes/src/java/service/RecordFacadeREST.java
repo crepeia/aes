@@ -71,14 +71,19 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
 
     @GET
     @Path("find/{userId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public Record find(@PathParam("userId") Long userId) {
         try {
-        return (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
-                .setParameter("userId",userId)
-                .getSingleResult();
+            return (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
+                    .setParameter("userId",userId)
+                    .getSingleResult();
         } catch(Exception e) {
-            return null;
+            Record entity = new Record();
+            entity.setUser(em.find(User.class, userId));
+            entity.setDailyGoal(null);
+            entity.setWeeklyGoal(null);
+            super.create(entity);
+            return entity;
         }
     }
 

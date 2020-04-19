@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  * @author bruno
  */
 @Stateless
-@Path("challenge")
+@Path("secured/challenge")
 public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
 
     @PersistenceContext(unitName = "aesPU")

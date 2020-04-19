@@ -6,6 +6,7 @@
 package service;
 
 import aes.model.Evaluation;
+import aes.model.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -56,10 +57,21 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     }
 
     @GET
-    @Path("{id}")
+    @Path("find/{userId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Evaluation find(@PathParam("id") Long id) {
-        return super.find(id);
+    public Evaluation find(@PathParam("userId") Long userId) {
+        try{
+        Evaluation ev = (Evaluation) getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId")
+                .setParameter("userId", userId)
+                .getSingleResult();
+                return ev;
+
+        } catch (Exception e) {
+            Evaluation ev = new Evaluation();
+            ev.setUser(em.find(User.class, userId));
+             super.create(ev);
+            return ev;
+        }
     }
 
     @GET

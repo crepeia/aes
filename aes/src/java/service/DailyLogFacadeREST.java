@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -68,24 +69,38 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Override
     public void create(DailyLog entity) {
-        super.create(entity);
-    }
-    
-    
-    @PUT
-    @Path("edit")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Override
-    public void edit(DailyLog entity) {
+        try {
         DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
                 .setParameter("recordId", entity.getRecord().getId())
                 .setParameter("logDate", entity.getLogDate())
                 .getSingleResult();
-        dl.setDrinks(entity.getDrinks());
-        dl.setContext(entity.getContext());
-        dl.setConsequences(entity.getConsequences());
-        super.edit(dl);
+        } catch( NoResultException e ) {
+            super.create(entity);
+        }
     }
+    
+    
+    @PUT
+    @Path("editOrCreate")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Override
+    public void edit(DailyLog entity) {
+        try {
+        DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
+                .setParameter("recordId", entity.getRecord().getId())
+                .setParameter("logDate", entity.getLogDate())
+                .getSingleResult();
+                dl.setDrinks(entity.getDrinks());
+                dl.setContext(entity.getContext());
+                dl.setConsequences(entity.getConsequences());
+                super.edit(dl);
+        } catch( NoResultException e ) {
+            super.create(entity);
+        }
+
+            
+    }
+     
     /*
     @PUT
     @Path("createOrEdit/{recordId}")
