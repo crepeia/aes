@@ -26,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -62,7 +63,7 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
         
     }
     
-*/
+
     
     @POST
     @Path("create")
@@ -78,15 +79,14 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
             super.create(entity);
         }
     }
+    */
     
-    
-    @PUT
+    @POST
     @Path("editOrCreate")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Override
-    public void edit(DailyLog entity) {
+    public Response editOrCreate(DailyLog entity) {
         try {
-        DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
+            DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
                 .setParameter("recordId", entity.getRecord().getId())
                 .setParameter("logDate", entity.getLogDate())
                 .getSingleResult();
@@ -94,32 +94,17 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
                 dl.setContext(entity.getContext());
                 dl.setConsequences(entity.getConsequences());
                 super.edit(dl);
+            return Response.ok("edited").build();
         } catch( NoResultException e ) {
             super.create(entity);
-        }
+            return Response.ok("created").build();
 
-            
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
     }
      
-    /*
-    @PUT
-    @Path("createOrEdit/{recordId}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void createOrEdit(@PathParam("id") Long recordId, DailyLog entity) {
-
-        DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate:=logDate")
-                .setParameter("recordId", recordId)
-                .setParameter("logDate", entity.getLogDate())
-                .getSingleResult();
-        if(dl == null) {
-            
-        } else {
-    .edit(entity);
-
-        }
-    }
-    
-    */
+   
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
@@ -134,8 +119,6 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
                 .setParameter("recordId", recordId)
                 .getResultList();
     }
-
-
 
 
     @Override

@@ -10,6 +10,7 @@ import aes.model.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -77,13 +78,17 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
             return (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
                     .setParameter("userId",userId)
                     .getSingleResult();
-        } catch(Exception e) {
+            
+        } catch(NoResultException e) {
             Record entity = new Record();
             entity.setUser(em.find(User.class, userId));
             entity.setDailyGoal(null);
             entity.setWeeklyGoal(null);
             super.create(entity);
             return entity;
+            
+        } catch(Exception e) {
+            return null;
         }
     }
 

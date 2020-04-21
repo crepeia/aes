@@ -77,6 +77,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
         try {
             entity.setUser(em.find(User.class, entity.getId().getUserId()));
             entity.setTip(em.find(Tip.class, entity.getId().getTipId()));
+            
             if(entity.getDateCreated()== null){
                 entity.setDateCreated(new Date());
             }
@@ -85,7 +86,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
             return Response.status(Response.Status.OK).build();
         } catch (Exception e) {
             //e.printStackTrace();
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 
         }
     }

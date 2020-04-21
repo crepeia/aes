@@ -11,6 +11,7 @@ import java.util.Date;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -74,8 +75,10 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
         super.remove(at);
         
         return Response.ok().build();
+        } catch( NoResultException e ) {
+            return Response.ok().build(); //se o token não existe ou já foi deletado ignoro o erro
         }catch(Exception e){
-             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
     
