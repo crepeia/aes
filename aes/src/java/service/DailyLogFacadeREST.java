@@ -27,6 +27,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.primefaces.json.JSONException;
+import org.primefaces.json.JSONObject;
 
 /**
  *
@@ -83,8 +85,10 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
     
     @POST
     @Path("editOrCreate")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response editOrCreate(DailyLog entity) {
+        String action = "";
         try {
             DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
                 .setParameter("recordId", entity.getRecord().getId())
@@ -94,12 +98,20 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
                 dl.setContext(entity.getContext());
                 dl.setConsequences(entity.getConsequences());
                 super.edit(dl);
-            return Response.ok("edited").build();
+                action = "edit";
+            
         } catch( NoResultException e ) {
             super.create(entity);
-            return Response.ok("created").build();
-
+            action = "create";
+            //return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).build();
         } catch (Exception e) {
+            return Response.serverError().build();
+        }
+        
+        try {
+            return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).type(MediaType.APPLICATION_JSON).build();
+        } catch (JSONException ex) {
+            Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.serverError().build();
         }
     }

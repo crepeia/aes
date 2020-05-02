@@ -94,14 +94,17 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @PUT
     @Path("like")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces( MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public TipUser like(TipUser entity) {
         TipUser newEntity = super.find(entity.getId());
+        newEntity.setLiked(entity.isLiked());
+        /*
         if(newEntity.isLiked() != null && newEntity.isLiked() == true){
             newEntity.setLiked(null);
         } else {
             newEntity.setLiked(true);
         }
+        */
         super.edit(newEntity);
         return newEntity;
     }
@@ -109,14 +112,17 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @PUT
     @Path("dislike")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces( MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public TipUser dislike(TipUser entity) {
         TipUser newEntity = super.find(entity.getId());
+        newEntity.setLiked(entity.isLiked());
+        /*
         if(newEntity.isLiked() != null && newEntity.isLiked() == false){
             newEntity.setLiked(null);
         } else {
             newEntity.setLiked(false);
         }
+        */
         super.edit(newEntity);
         return newEntity;
     }

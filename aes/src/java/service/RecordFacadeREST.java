@@ -57,11 +57,12 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     
     @PUT
     @Path("edit/{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Record entity) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response edit(@PathParam("id") Long id, Record entity) {
         Record newEntity = entity;
         newEntity.setUser(em.find(User.class, id));
         super.edit(newEntity);
+        return Response.status(Response.Status.OK).build();
     }
 
     @DELETE
