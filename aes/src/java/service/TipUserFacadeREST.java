@@ -9,6 +9,7 @@ import aes.model.Tip;
 import aes.model.TipUser;
 import aes.model.TipUserKey;
 import aes.model.User;
+import aes.utility.Secured;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -36,14 +37,15 @@ import javax.ws.rs.core.SecurityContext;
  * @author bruno
  */
 @Stateless
+@Secured
 @Path("tipuser")
 public class TipUserFacadeREST extends AbstractFacade<TipUser> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     
-    @Context 
-    private HttpServletRequest httpRequest;
+    @Context
+    SecurityContext securityContext;
 
     private TipUserKey getPrimaryKey(PathSegment pathSegment) {
         /*
@@ -173,7 +175,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
         Date startDate = sdf.parse(sd);   
         Date endDate = sdf.parse(ed);
 
-        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
         
         return getEntityManager().createQuery("SELECT tu FROM TipUser tu WHERE tu.user.email=:email AND (tu.dateCreated BETWEEN :start AND :end)")
                 .setParameter("email", userEmail)

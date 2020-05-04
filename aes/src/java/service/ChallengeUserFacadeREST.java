@@ -9,6 +9,7 @@ import aes.model.ChallengeUser;
 import aes.model.Challenge;
 import aes.model.TipUser;
 import aes.model.User;
+import aes.utility.Secured;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -35,14 +36,17 @@ import javax.ws.rs.core.SecurityContext;
  * @author bruno
  */
 @Stateless
+@Secured
 @Path("secured/challengeuser")
 public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
 
-    @Context 
-    private HttpServletRequest httpRequest;
+    @Context
+    SecurityContext securityContext;
+    
+    
     
     public ChallengeUserFacadeREST() {
         super(ChallengeUser.class);
@@ -127,7 +131,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @Path("points")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public String sumUserPoints(){
-        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
         try {
         return  getEntityManager().createQuery("SELECT SUM(c.score) FROM ChallengeUser c WHERE c.user.email=:email")
                 .setParameter("email", userEmail)
@@ -146,7 +150,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
         Date startDate = sdf.parse(sd);   
         Date endDate = sdf.parse(ed);
 
-        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
         
         return getEntityManager().createQuery("SELECT c FROM ChallengeUser c WHERE c.user.email=:email AND (c.dateCreated BETWEEN :start AND :end)")
                 .setParameter("email", userEmail)
@@ -168,7 +172,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
         Date startDate = sdf.parse(sd);   
         Date endDate = sdf.parse(ed);
 
-        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
         
         return getEntityManager().createQuery("SELECT c FROM ChallengeUser c WHERE c.user.email=:email AND (c.dateCompleted BETWEEN :start AND :end)")
                 .setParameter("email", userEmail)

@@ -6,6 +6,7 @@
 package service;
 
 import aes.model.Tip;
+import aes.utility.Secured;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.MediaType;
  * @author bruno
  */
 @Stateless
+@Secured
 @Path("tip")
 public class TipFacadeREST extends AbstractFacade<Tip> {
 

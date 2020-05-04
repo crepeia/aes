@@ -20,9 +20,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author thiago
  */
 @RequestScoped
-@ManagedBean(name = "requestController")
+@Named("requestController")
 public class RequestController extends BaseController<User> {
 
     private final String key = "11VzuKzy5k";

@@ -5,18 +5,18 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@ManagedBean(name = "languageController")
+@Named("languageController")
 @SessionScoped
 public class LanguageController extends BaseController<User> {
 
     private Map<String, String> languages = new LinkedHashMap<String, String>();
     
-    @ManagedProperty(value = "#{userController}")
+    @Inject
     private UserController userController;
     
     private Locale locale;
@@ -25,15 +25,18 @@ public class LanguageController extends BaseController<User> {
     public void init(){
         languages.put("English", "en");
         languages.put("Español", "es");
-        languages.put("Português", "pt");       
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);        
+        languages.put("Português", "pt");   
+        locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+        //FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);        
     }
     
     
     
     public void setLanguage(String language) {
+        locale = new Locale(language);
         userController.getUser().setPreferedLanguage(language);
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
+
         if (userController.isLoggedIn()) {
             userController.save();
         }

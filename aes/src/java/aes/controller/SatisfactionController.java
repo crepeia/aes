@@ -18,18 +18,16 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import javax.naming.NamingException;
 
 /**
  *
  * @author thiago
  */
-@ManagedBean(name = "satisfactionController")
+@Named("satisfactionController")
 @ViewScoped
 public class SatisfactionController extends BaseController<Satisfaction> {
 

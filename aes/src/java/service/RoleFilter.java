@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import javax.inject.Inject;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -31,6 +32,9 @@ public class RoleFilter implements Filter {
     
     private FilterConfig filterConfig = null;
     
+    @Inject
+    private UserController uc;
+    
     public RoleFilter() {
     }    
     
@@ -44,6 +48,7 @@ public class RoleFilter implements Filter {
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
@@ -53,7 +58,7 @@ public class RoleFilter implements Filter {
         String path = req.getRequestURI().substring(req.getContextPath().length());
         
         HttpSession s = req.getSession(false);
-        UserController uc = (UserController) s.getAttribute("userController");
+        //UserController uc = (UserController) s.getAttribute("userController");
         
         if(path.startsWith("/admin/") && !uc.isAdmin()){
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED);

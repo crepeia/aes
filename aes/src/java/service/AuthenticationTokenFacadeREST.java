@@ -25,6 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -37,8 +38,8 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     
-    @Context 
-    private HttpServletRequest httpRequest;
+    @Context
+    SecurityContext securityContext;
 
     public AuthenticationTokenFacadeREST() {
         super(AuthenticationToken.class);
@@ -65,7 +66,7 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @Path("secured/logout/{token}")
     public Response logout(@PathParam("token") String token) {
         try {
-        String userEmail = httpRequest.getAttribute("userEmail").toString();
+        String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
         
             
         AuthenticationToken at = (AuthenticationToken) getEntityManager().createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")

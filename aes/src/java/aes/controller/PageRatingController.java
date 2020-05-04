@@ -14,20 +14,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-;
+
 
 /**
  *
  * @author thiago
  */
-@ManagedBean(name = "pageRatingController")
+@Named("pageRatingController")
 @ViewScoped
 public class PageRatingController extends BaseController<Rating> {
 
@@ -35,7 +35,7 @@ public class PageRatingController extends BaseController<Rating> {
     private Rating rating;
     private Item page;
     
-    @ManagedProperty(value = "#{userController}")
+    @Inject
     private UserController userController;
     
 

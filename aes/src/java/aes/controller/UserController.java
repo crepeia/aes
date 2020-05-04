@@ -23,20 +23,20 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.IllegalStateException;
 import java.util.Calendar;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 
 /**
  *
  * @author thiago
  */
-@ManagedBean(name = "userController")
+@Named("userController")
 @SessionScoped
 public class UserController extends BaseController<User> {
 
@@ -45,7 +45,7 @@ public class UserController extends BaseController<User> {
     private String password;
     private ResourceBundle bundle;
 
-    @ManagedProperty(value = "#{contactController}")
+    @Inject
     private ContactController contactController;
 
     private String email;

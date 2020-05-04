@@ -3,8 +3,8 @@ package aes.persistence;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;
 import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
-
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.boot.registry.StandardServiceRegistry;
 
 public class HibernateUtil {
 
@@ -17,7 +17,7 @@ public class HibernateUtil {
 			//sessionFactory = new Configuration().configure().buildSessionFactory();
                         Configuration configuration = new Configuration();
                         configuration.configure();
-                        ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()). buildServiceRegistry();
+                        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
                         sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Throwable ex) {
 			// Log the exception. 

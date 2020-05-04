@@ -7,6 +7,7 @@ package service;
 
 import aes.model.MobileOptions;
 import aes.model.User;
+import aes.utility.Secured;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +31,7 @@ import javax.ws.rs.core.Response;
  * @author bruno
  */
 @Stateless
+@Secured
 @Path("secured/mobileoptions")
 public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
 

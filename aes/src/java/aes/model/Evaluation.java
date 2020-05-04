@@ -1,5 +1,6 @@
 package aes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.xml.ws.binding.FeatureListUtil;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -18,8 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "tb_evaluation")

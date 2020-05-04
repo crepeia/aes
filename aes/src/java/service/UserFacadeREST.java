@@ -6,6 +6,7 @@
 package service;
 
 import aes.model.User;
+import aes.utility.Secured;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,19 +17,25 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
  * @author bruno
  */
 @Stateless
+@Secured
 @Path("secured/user")
 public class UserFacadeREST extends AbstractFacade<User> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-
+    
+    @Context
+    SecurityContext securityContext;
+    
     public UserFacadeREST() {
         super(User.class);
     }
@@ -82,6 +89,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
 
     @GET
+    @Secured
     @Path("login/{token}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Override

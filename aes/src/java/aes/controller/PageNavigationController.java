@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,14 +21,14 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author thiagorizuti
  */
-@ManagedBean(name = "pageNavigationController")
+@Named("pageNavigationController")
 @SessionScoped
 public class PageNavigationController extends BaseController<PageNavigation> {
 
     private PageNavigation pageNavigation;
     private GenericDAO<UserAgent> userAgentDAO;
 
-    @ManagedProperty(value = "#{userController}")
+    @Inject
     private UserController userController;
 
     @PostConstruct

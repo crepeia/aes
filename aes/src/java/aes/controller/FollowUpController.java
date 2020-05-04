@@ -17,16 +17,16 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import javax.naming.NamingException;
 
 /**
  *
  * @author thiago
  */
-@ManagedBean(name = "followUpController")
+@Named( "followUpController")
 @ViewScoped
 public class FollowUpController extends BaseController<FollowUp> {
 

@@ -7,6 +7,7 @@ package service;
 
 import aes.model.DailyLog;
 import aes.model.Record;
+import aes.utility.Secured;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,6 +36,7 @@ import org.primefaces.json.JSONObject;
  * @author bruno
  */
 @Stateless
+@Secured
 @Path("secured/dailylog")
 public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
 

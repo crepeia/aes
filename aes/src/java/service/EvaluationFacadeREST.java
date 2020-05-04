@@ -7,6 +7,7 @@ package service;
 
 import aes.model.Evaluation;
 import aes.model.User;
+import aes.utility.Secured;
 import java.util.List;
 import javassist.NotFoundException;
 import javax.ejb.Stateless;
@@ -28,6 +29,7 @@ import javax.ws.rs.core.MediaType;
  * @author bruno
  */
 @Stateless
+@Secured
 @Path("secured/evaluation")
 public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
 

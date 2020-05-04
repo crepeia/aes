@@ -7,6 +7,7 @@ package service;
 
 import aes.model.Record;
 import aes.model.User;
+import aes.utility.Secured;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,6 +29,7 @@ import javax.ws.rs.core.Response;
  * @author bruno
  */
 @Stateless
+@Secured
 @Path("secured/record")
 public class RecordFacadeREST extends AbstractFacade<Record> {
 

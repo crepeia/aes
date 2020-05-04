@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:w="http://java.sun.com/jsf/composite/ezcomp"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
      <f:view locale="#{languageController.locale}">
     <h:head>
         <title>#{messages['audit.7.title']}</title>
@@ -198,7 +198,7 @@
 
                                 </p:panel>
                                         <div id="btnback">
-                                            <h:button id="backBtn"  class="btngen btn btn-primary" value ="#{messages['back']}" outcome="./quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
+                                            <h:button id="backBtn"  class="btngen btn btn-primary" value ="#{messages['back']}" outcome="quanto-voce-bebe-sim-beber-uso-audit-3.xhtml"></h:button>
                                         </div>
                                     <h:panelGrid id="gridSalvar" columns="12" style="margin-top:14px;float:right;">
                                         <h:panelGrid  id="salvarGrid" rendered ="#{not empty evaluationController.evaluation.audit10}">
