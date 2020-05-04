@@ -10,7 +10,7 @@
     </property>
   </jsp-config>
   <locale-charset-info>
-      <locale-charset-map locale="pt" charset="utf-8"/>
-      <parameter-encoding default-charset="utf-8"/>
-    </locale-charset-info>
+    <locale-charset-map charset="utf-8" locale="pt"/>
+    <parameter-encoding default-charset="utf-8"/>
+  </locale-charset-info>
 </glassfish-web-app>
