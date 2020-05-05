@@ -1,7 +1,9 @@
 package aes.utility;
 
+import com.sun.mail.util.MailSSLSocketFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -27,9 +29,13 @@ public class EMailSSL {
     private Authenticator authenticator;
 
     public EMailSSL() {
-        props = new Properties();      
+        props = new Properties();
         try {
             props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/mail.properties"));
+            MailSSLSocketFactory sf = new MailSSLSocketFactory();
+            sf.setTrustAllHosts(true);
+            props.put("mail.smtp.ssl.enable", "true");
+            props.put("mail.smtp.ssl.socketFactory", sf);
             this.authenticator = new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(
@@ -39,10 +45,12 @@ public class EMailSSL {
             };
         } catch (IOException ex) {
             Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GeneralSecurityException ex) {
+            Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         session = Session.getInstance(props, this.authenticator);
-
+        session.setDebug(true);
     }
 
     public void send(String from, String to, String subject, String content, ByteArrayOutputStream pdf, String pdfName) throws MessagingException {

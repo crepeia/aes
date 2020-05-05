@@ -11,6 +11,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
+import org.hibernate.CacheMode;
 
 public class GenericDAO<T> implements Serializable {
 
@@ -156,7 +157,9 @@ public class GenericDAO<T> implements Serializable {
 		try {
 
 			Query query = entityManager.createQuery("select obj from " + classe.getSimpleName() + " obj");
-			query.setHint("toplink.refresh", "true");
+			//query.setHint("toplink.refresh", "true");
+                        query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+                        query.setHint("org.hibernate.cacheable", true);
 			return query.getResultList();
 		} catch (Exception erro) {
 			throw new SQLException(erro);
@@ -178,7 +181,9 @@ public class GenericDAO<T> implements Serializable {
 				query = entityManager.createQuery("select obj from " + classe.getSimpleName()
 						+ " obj where obj." + campoStr + " is Null");
 			}
-			query.setHint("toplink.refresh", "true");
+			//query.setHint("toplink.refresh", "true");
+                        query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+                        query.setHint("org.hibernate.cacheable", true);
 			return query.getResultList();
 		} catch (Exception erro) {
 			throw new SQLException(erro);
@@ -196,7 +201,9 @@ public class GenericDAO<T> implements Serializable {
                         query = entityManager.createQuery("select obj from " + classe.getSimpleName()
                                         + " obj where obj." + campoStr + " is not Null");
 
-			query.setHint("toplink.refresh", "true");
+			//query.setHint("toplink.refresh", "true");
+                        query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+                        query.setHint("org.hibernate.cacheable", true);
 			return query.getResultList();
 		} catch (Exception erro) {
 			throw new SQLException(erro);
@@ -213,7 +220,9 @@ public class GenericDAO<T> implements Serializable {
 				query = entityManager.createQuery("select obj from " + classe.getSimpleName()
 						+ " obj order by obj." + campoStr);
 			
-			query.setHint("toplink.refresh", "true");
+			//query.setHint("toplink.refresh", "true");
+                        query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+                        query.setHint("org.hibernate.cacheable", true);
 			return query.getResultList();
 		} catch (Exception erro) {
 			throw new SQLException(erro);
@@ -237,7 +246,9 @@ public class GenericDAO<T> implements Serializable {
 				query = entityManager.createQuery("select obj from " + classe.getSimpleName()
 						+ " obj where obj." + fieldCompare + " is Null order by obj." + fieldOrder);
 			}
-			query.setHint("toplink.refresh", "true");
+			//query.setHint("toplink.refresh", "true");
+                        query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+                        query.setHint("org.hibernate.cacheable", true);
 			return query.getResultList();
 		} catch (Exception erro) {
 			throw new SQLException(erro);
@@ -257,7 +268,9 @@ public class GenericDAO<T> implements Serializable {
 				query = entityManager.createQuery("select obj from " + classe.getSimpleName()
 						+ " obj where obj." + campoStr + " is Null");
 			}
-			query.setHint("toplink.refresh", "true");
+			//query.setHint("toplink.refresh", "true");
+                        query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+                        query.setHint("org.hibernate.cacheable", true);
 			Object obj = query.getSingleResult();
 			return obj == null ? null : (T) obj;
 		} catch (Exception erro) {
@@ -293,7 +306,9 @@ public class GenericDAO<T> implements Serializable {
 						+ "(SELECT COUNT(field) FROM obj." + campoStr + " field WHERE field=:objeto)=" + inStr);
 				query.setParameter("objeto", objeto);
 			}
-			query.setHint("toplink.refresh", "true");
+			//query.setHint("toplink.refresh", "true");
+                        query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+                        query.setHint("org.hibernate.cacheable", true);
 			return query.getResultList();
 		} catch (Exception erro) {
 			throw new SQLException(erro);
