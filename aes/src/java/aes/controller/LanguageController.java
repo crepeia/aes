@@ -14,7 +14,7 @@ import javax.inject.Named;
 @SessionScoped
 public class LanguageController extends BaseController<User> {
 
-    private Map<String, String> languages = new LinkedHashMap<String, String>();
+    private Map<String, String> languages = new LinkedHashMap<>();
     
     @Inject
     private UserController userController;

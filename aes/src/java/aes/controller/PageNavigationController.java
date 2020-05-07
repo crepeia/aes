@@ -34,8 +34,8 @@ public class PageNavigationController extends BaseController<PageNavigation> {
     @PostConstruct
     public void init() {
         try {
-            this.daoBase = new GenericDAO<PageNavigation>(PageNavigation.class);
-            this.userAgentDAO = new GenericDAO<UserAgent>(UserAgent.class);
+            this.daoBase = new GenericDAO<>(PageNavigation.class);
+            this.userAgentDAO = new GenericDAO<>(UserAgent.class);
         } catch (NamingException ex) {
             Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
         }

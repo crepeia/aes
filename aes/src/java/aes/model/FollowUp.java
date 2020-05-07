@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
 @Table(name = "tb_follow_up")
 public class FollowUp implements Serializable {
     
-     @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column(name = "audit_1")

@@ -29,10 +29,12 @@ public class EMailSSL {
     private Authenticator authenticator;
 
     public EMailSSL() {
+        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         props = new Properties();
         try {
             props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/mail.properties"));
             MailSSLSocketFactory sf = new MailSSLSocketFactory();
+            
             sf.setTrustAllHosts(true);
             props.put("mail.smtp.ssl.enable", "true");
             props.put("mail.smtp.ssl.socketFactory", sf);
@@ -43,9 +45,7 @@ public class EMailSSL {
                         (String)props.get("mail.auth.password"));
                 }
             };
-        } catch (IOException ex) {
-            Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (GeneralSecurityException ex) {
+        } catch (IOException | GeneralSecurityException ex) {
             Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -54,7 +54,8 @@ public class EMailSSL {
     }
 
     public void send(String from, String to, String subject, String content, ByteArrayOutputStream pdf, String pdfName) throws MessagingException {
-            //Message
+            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());            
+           //Message
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO,
