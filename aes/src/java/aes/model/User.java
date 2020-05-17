@@ -107,13 +107,28 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<ChallengeUser> challenges;
-
+    
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Chat> chats;
+    /*
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "from")
+    private List<Message> messagesFrom;
+    
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "to")
+    private List<Message> messagesTo;
+*/
     @Column(name = "dt_cadastro")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dt_cadastro;
     
     @Column(name = "is_admin")
     private boolean admin;
+    
+    @Column(name = "is_consultant")
+    private boolean consultant;
     
     @Override
     public String toString() {
@@ -431,7 +446,40 @@ public class User implements Serializable {
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
-    
+
+    public boolean isConsultant() {
+        return consultant;
+    }
+
+    public void setConsultant(boolean consultant) {
+        this.consultant = consultant;
+    }
+
+    public List<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(List<Chat> chats) {
+        this.chats = chats;
+    }
+/*
+    public List<Message> getMessagesFrom() {
+        return messagesFrom;
+    }
+
+    public void setMessagesFrom(List<Message> messagesFrom) {
+        this.messagesFrom = messagesFrom;
+    }
+
+    public List<Message> getMessagesTo() {
+        return messagesTo;
+    }
+
+    public void setMessagesTo(List<Message> messagesTo) {
+        this.messagesTo = messagesTo;
+    }
+
+*/
     
     
 }

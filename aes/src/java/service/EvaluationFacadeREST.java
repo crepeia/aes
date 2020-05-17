@@ -65,19 +65,23 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Evaluation find(@PathParam("userId") Long userId) {
         try {
-            Evaluation ev = (Evaluation) getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId")
+            List<Evaluation> evList = getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId")
                     .setParameter("userId", userId)
-                    .getSingleResult();
-            return ev;
+                    .getResultList();
+            
+            System.out.println("service.EvaluationFacadeREST.find() find");
+            return evList.get(evList.size()-1);
 
         } catch (NoResultException e) {
-            
+            System.out.println("service.EvaluationFacadeREST.find() create");
             Evaluation ev = new Evaluation();
             ev.setUser(em.find(User.class, userId));
             super.create(ev);
             return ev;
             
         } catch (Exception e) {
+            System.out.println("service.EvaluationFacadeREST.find() err");
+            e.printStackTrace();
             return null;
         }
     }

@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TipUser implements Serializable {
 
     @EmbeddedId
-    private TipUserKey id;
+    private TipUserKey id = new TipUserKey();
     
     @ManyToOne
     @MapsId("tipId")

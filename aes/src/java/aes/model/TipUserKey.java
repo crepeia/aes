@@ -22,6 +22,16 @@ public class TipUserKey implements Serializable {
     
     @Column(name="user_id")
     Long userId;
+    
+     public TipUserKey() {
+        super();
+    }
+    
+    public TipUserKey(Long tipId, Long userId) {
+        super();
+        this.tipId = tipId;
+        this.userId = userId;
+    }
 
     public Long getTipId() {
         return tipId;

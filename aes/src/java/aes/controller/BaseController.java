@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 public abstract class BaseController<T> implements Serializable {
 
     @PersistenceContext
-    private EntityManager entityManager = null;
+    private EntityManager entityManager;
 
     protected GenericDAO<T> daoBase;
 

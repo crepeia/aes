@@ -45,6 +45,13 @@
                                         <f:ajax event="change" execute="@this"/>
                                     </h:selectBooleanCheckbox>
                                 </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">Consultor</f:facet>
+                                    <h:selectBooleanCheckbox value="#{user.consultant}" valueChangeListener="#{userController.setConsultant(user)}">
+                                        <f:ajax event="change" execute="@this"/>
+                                    </h:selectBooleanCheckbox>
+                                </h:column>
                             </h:dataTable>
                             
                         </h:form>

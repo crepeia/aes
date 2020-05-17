@@ -4,10 +4,12 @@ import aes.model.Tip;
 import aes.persistence.GenericDAO;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 
@@ -130,6 +132,21 @@ public class TipController extends BaseController<Tip>{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public List<Tip> findPossibleTips(List<Tip> sentTips){
+        List<Tip> availableTips;
+        try {
+            availableTips = this.getDaoBase().list(getEntityManager());
+            for(Tip t: sentTips) {
+               availableTips.removeIf(tip -> tip.getId().equals(t.getId()));
+            }
+            return availableTips;
+        } catch (SQLException ex) {
+            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
+            Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, null, ex);
+            return Collections.emptyList();
+        }
     }
     
 }

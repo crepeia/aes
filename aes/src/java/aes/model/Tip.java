@@ -40,22 +40,9 @@ public class Tip implements Serializable {
     @Column(name = "description", length = 300)
     private String description;
     
-    @OneToMany(mappedBy = "tip", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tip", fetch = FetchType.LAZY)
     private List<TipUser> tips;
-    
-    @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ChallengeUser> challenges;
-    
-    @JsonIgnore
-    @XmlTransient
-    public List<ChallengeUser> getChallenges() {
-        return challenges;
-    }
 
-    public void setChallenges(List<ChallengeUser> challenges) {
-        this.challenges = challenges;
-    }
-    
     @JsonIgnore
     @XmlTransient
     public List<TipUser> getTips() {

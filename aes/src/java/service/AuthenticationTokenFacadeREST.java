@@ -7,6 +7,7 @@ package service;
 import aes.utility.SecureRandomString;
 import aes.model.AuthenticationToken;
 import aes.model.User;
+import aes.utility.Secured;
 import java.util.Date;
 
 import javax.ejb.Stateless;
@@ -64,6 +65,7 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     
     @DELETE
     @Path("secured/logout/{token}")
+    @Secured
     public Response logout(@PathParam("token") String token) {
         try {
         String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();

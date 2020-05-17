@@ -720,4 +720,17 @@ public class UserController extends BaseController<User> {
             }
         }
     }
+    
+    public void setConsultant(User u){
+        if(this.getUser().getEmail() != null){
+            u.setConsultant(!u.isConsultant());
+
+            try {
+               daoBase.update(u, getEntityManager());
+               //administrator = null;
+            } catch (SQLException ex) {
+               Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }
