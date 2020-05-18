@@ -49,12 +49,12 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
             entity.setUser(em.find(User.class, userId));
             entity.setDailyGoal(null);
             entity.setWeeklyGoal(null);
-            super.create(entity);
+        super.create(entity);
             return entity;
         } catch (Exception e) {
             return null;
-        }
-        
+    }
+
     }
     
     @PUT
@@ -92,7 +92,7 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
             
         } catch(Exception e) {
             return null;
-        }
+    }
     }
 
     @GET

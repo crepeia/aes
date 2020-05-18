@@ -32,7 +32,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-    
+
     @Context
     SecurityContext securityContext;
     

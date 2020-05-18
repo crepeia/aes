@@ -30,7 +30,7 @@ public class CustomMessageSerializer extends StdSerializer<Message> {
     public void serialize(Message t, JsonGenerator jg, SerializerProvider sp) throws IOException {
         jg.writeStartObject();
        
-        //jg.writeNumberField("id", t.getId());
+        jg.writeNumberField("id", t.getId());
         jg.writeStringField("idFrom", t.getIdFrom());
         jg.writeStringField("content", t.getContent());
         jg.writeObjectField("sentDate", t.getSentDate());

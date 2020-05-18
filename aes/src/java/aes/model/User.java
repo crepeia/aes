@@ -109,7 +109,7 @@ public class User implements Serializable {
     private List<ChallengeUser> challenges;
     
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Chat> chats;
     /*
     @JsonIgnore
@@ -455,6 +455,7 @@ public class User implements Serializable {
         this.consultant = consultant;
     }
 
+    @XmlTransient
     public List<Chat> getChats() {
         return chats;
     }

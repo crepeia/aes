@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -26,6 +28,7 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name = "tb_chat")
+@XmlRootElement
 public class Chat implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +40,8 @@ public class Chat implements Serializable {
     @Column(name = "start_date")
     private Date startDate;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
     
     @Column(name = "unauthenticated_id")
@@ -85,6 +89,7 @@ public class Chat implements Serializable {
         this.unauthenticatedId = unauthenticatedId;
     }
 
+    @XmlTransient
     public List<Message> getMessageList() {
         return messageList;
     }

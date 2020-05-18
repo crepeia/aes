@@ -53,7 +53,8 @@ public class ChatEndpoint {
     private EntityManager em;
     
     private GenericDAO<Chat> daoBase;
-    
+    private GenericDAO<Message> daoBaseMessage;
+
     private static Map<Long, Session> consultants = new ConcurrentHashMap<>();
     private static Map<Long, Session> users = new ConcurrentHashMap<>();
     private static Map<Session, Long> openChats = new ConcurrentHashMap<>();
@@ -61,6 +62,7 @@ public class ChatEndpoint {
     public ChatEndpoint() {
         try {
             this.daoBase = new GenericDAO<>(Chat.class);
+            this.daoBaseMessage = new GenericDAO<>(Message.class);
             System.out.println("service.ChatEndpoint.<init>()");
         } catch (NamingException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,22 +92,23 @@ public class ChatEndpoint {
             
             users.put(newChat.getId(), session);
             
-            openChats.put(session, newChat.getId());
-            
+            //openChats.put(session, newChat.getId());
+            openChats.put(session, Long.parseLong("1"));
             if(consultants.size() > 0){
                 sendMessageToConsultant(newChat.getId(), userId, (Long) consultants.keySet().toArray()[0]);
             }
             
         } else {//consultor
+           
             if(currentUser.isConsultant()) {
+                if(!consultants.containsKey(currentUser.getId())){
+                    consultants.put(currentUser.getId(), session);
+                }
                 
-                consultants.put(currentUser.getId(), session);
                 
             } else {//usuário comum
                 
-                newChat = currentUser.getChats().get(0);
-                
-                if( newChat == null ) {
+                if( currentUser.getChats().isEmpty() ) {
                     
                     newChat = new Chat();
                     newChat.setUnauthenticatedId("");
@@ -117,9 +120,12 @@ public class ChatEndpoint {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
+                } else {
+                    newChat = currentUser.getChats().get(0);
                 }
-                users.put(newChat.getId(), session);
-                openChats.put(session, newChat.getId());
+                
+                    users.put(newChat.getId(), session);
+                    openChats.put(session, newChat.getId());
                 
                 if(consultants.size() > 0){
                     sendMessageToConsultant(newChat.getId(), userId, (Long) consultants.keySet().toArray()[0]);
@@ -142,11 +148,10 @@ public class ChatEndpoint {
     private void sendMessageToConsultant(Long chatId, String fromUser, Long consultantId) {
         try {
             Message m = new Message();
-            m.setId(Long.parseLong("1"));
+            //m.setId(Long.parseLong("1"));
             m.setChat(em.getReference(Chat.class, chatId));
             m.setContent("New conversation is open");
             m.setIdFrom(fromUser);
-            //m.setIdTo(Long.toString(consultantId));
             m.setSentDate(new Date());
             
             openChats.put(consultants.get(consultantId), chatId);
@@ -158,7 +163,30 @@ public class ChatEndpoint {
         
     }
     
-    
+    @OnMessage
+    public void onMessage(Session session, Message message) {
+        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Message received from session: {0}, messsage: {1}", new Object[]{session.getId(), message});
+        try {
+            daoBaseMessage.insert(message, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            for(Map.Entry<Long, Session> e: users.entrySet()) {
+                if(!e.getValue().getId().equals(session.getId())){
+                    e.getValue().getBasicRemote().sendObject(message);
+                    System.out.println("service.ChatEndpoint.onMessage()");
+                }
+            }
+            
+            //openChats. .get(message.getChat().getId()).getBasicRemote().sendObject(message);
+        } catch (IOException | EncodeException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    /*
     @OnMessage
     public void onMessage(Session session, Message message) {
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Message received from session: {0}, messsage: {1}", new Object[]{session.getId(), message});
@@ -176,11 +204,11 @@ public class ChatEndpoint {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+    */
     @OnClose
     public void onClose(Session session, CloseReason reason) {
         //chatEndpoints.remove(this);
-        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session closed ID: {1}", new Object[]{ session.getId()});
+        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session closed ID: {0}", new Object[]{session.getId()});
         if(users.containsValue(session)){
             users.remove(getUserKeyForSession(session));
         }

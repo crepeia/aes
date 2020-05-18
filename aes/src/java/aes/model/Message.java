@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -27,6 +28,7 @@ import javax.persistence.Temporal;
 @Entity
 @JsonDeserialize(using = CustomMessageDeserializer.class)
 @Table(name = "tb_message")
+@XmlRootElement
 public class Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,13 +45,14 @@ public class Message implements Serializable {
     @Column(name = "content")
     private String content;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "sent_date")
     private Date sentDate;
     
     
     
     @ManyToOne
+    @JoinColumn(name="chat_id")
     private Chat chat;
 
     public Long getId() {

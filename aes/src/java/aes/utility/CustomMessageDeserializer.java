@@ -13,6 +13,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.LongNode;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,12 +36,17 @@ public class CustomMessageDeserializer extends StdDeserializer<Message> {
     public Message deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
         Message m = new Message();
         Chat c = new Chat();
-        
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JsonNode node = jp.getCodec().readTree(jp);
         
         //m.setId(node.get("id").asLong());
         m.setIdFrom(node.get("idFrom").asText());
         m.setContent(node.get("content").asText());
+        try {
+            m.setSentDate(format.parse(node.get("sentDate").asText()));
+        } catch (ParseException ex) {
+            Logger.getLogger(CustomMessageDeserializer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         c.setId(node.get("chat").asLong());
         m.setChat(c);
         
