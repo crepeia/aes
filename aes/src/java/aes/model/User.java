@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name", length = 100)
     private String name;

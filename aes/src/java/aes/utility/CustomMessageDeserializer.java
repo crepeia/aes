@@ -36,12 +36,13 @@ public class CustomMessageDeserializer extends StdDeserializer<Message> {
     public Message deserialize(JsonParser jp, DeserializationContext dc) throws IOException, JsonProcessingException {
         Message m = new Message();
         Chat c = new Chat();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
         JsonNode node = jp.getCodec().readTree(jp);
         
         //m.setId(node.get("id").asLong());
         m.setIdFrom(node.get("idFrom").asText());
         m.setContent(node.get("content").asText());
+        
         try {
             m.setSentDate(format.parse(node.get("sentDate").asText()));
         } catch (ParseException ex) {

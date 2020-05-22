@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
@@ -51,10 +52,14 @@ public class ExpoNotification {
             //System.out.println(conn.getHeaderFields());
             //System.out.println(conn.getURL());
             //System.out.println(conn.getHeaderFields());
+            String jsonScreen = Json.createObjectBuilder()
+                    .add("screen", "Dicas")
+                    .build().toString();
             String jsonString = Json.createObjectBuilder()
                     .add("to", expoToken)
                     .add("title", tipUser.getTip().getTitle())
                     .add("body", tipUser.getTip().getDescription())
+                    .add("data", jsonScreen)
                     .build().toString();
             
             try(DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {

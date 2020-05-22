@@ -26,7 +26,7 @@ import javax.persistence.TemporalType;
 public class Satisfaction implements Serializable {
    
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "question_1")
     String question1;

@@ -61,7 +61,7 @@ public class Scheduler {
 
     }
     
-    @Schedule(second = "0", minute = "0", hour = "*", dayOfWeek = "*")
+    @Schedule(second = "0", minute = "10", hour = "*", dayOfWeek = "*")
     public void appNotificationTask() {
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - App Notification task running");
         mobileOptionsController.sendScheduledNotifications();

@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Record implements Serializable{
        
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "daily_goal")
     private Integer dailyGoal;

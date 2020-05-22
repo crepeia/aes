@@ -18,7 +18,7 @@ import javax.persistence.Transient;
 public class Contact implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "date_sent")

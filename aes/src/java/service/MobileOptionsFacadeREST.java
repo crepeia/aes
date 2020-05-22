@@ -53,11 +53,14 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     @Path("edit/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(@PathParam("userId") Long userId, MobileOptions entity) {
+        System.out.println("service.MobileOptionsFacadeREST.edit()");
+
         try {
             entity.setUser(em.find(User.class, userId));
             super.edit(entity);
             return Response.status(Response.Status.OK).build();
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }

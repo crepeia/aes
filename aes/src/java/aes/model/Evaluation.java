@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Evaluation implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Temporal(TemporalType.TIMESTAMP)
