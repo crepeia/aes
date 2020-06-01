@@ -2,7 +2,6 @@ package aes.persistence;
 
 import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;
-import org.hibernate.service.ServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 

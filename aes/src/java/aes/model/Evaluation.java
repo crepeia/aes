@@ -188,15 +188,36 @@ public class Evaluation implements Serializable {
     @JsonIgnore
     public String[] getPlanContent() {
         String content[] = new String[6];
-        content[0] = new SimpleDateFormat("dd/MM/yyyy").format(dataComecarPlano);
+        if(dataComecarPlano != null){
+            content[0] = new SimpleDateFormat("dd/MM/yyyy").format(dataComecarPlano);
+        } else {
+            content[0] = "";
+        }
         if(razoesPlano != null)
-        content[1] = razoesPlano;
+            content[1] = razoesPlano;
         else
             content[1]= "";
-        content[2] = estrategiasPlano;
-        content[3] = pessoasPlano;
-        content[4] = sinaisSucessoPlano;
-        content[5] = possiveisDificuladesPlano;
+        
+        if(estrategiasPlano != null)
+            content[2] = estrategiasPlano;
+        else
+            content[2]= "";
+        
+        
+        if(pessoasPlano != null)
+            content[3] = pessoasPlano;
+        else
+            content[3]= "";
+        
+        if(sinaisSucessoPlano != null)
+            content[4] = sinaisSucessoPlano;
+        else
+            content[4]= "";
+        
+        if(possiveisDificuladesPlano != null)
+            content[5] = possiveisDificuladesPlano;
+        else
+            content[5]= "";
         return content;
     }
 

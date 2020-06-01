@@ -92,6 +92,9 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
     public Response editOrCreate(DailyLog entity) {
         String action = "";
         try {
+            //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+            //Date t = format.parse(entity.getLogDate().toString());
+            
             DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
                 .setParameter("recordId", entity.getRecord().getId())
                 .setParameter("logDate", entity.getLogDate())
@@ -107,6 +110,7 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
             action = "create";
             //return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).build();
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.serverError().build();
         }
         

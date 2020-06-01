@@ -61,7 +61,10 @@ public class TipUserController  extends BaseController<TipUser> {
     public TipUser getLatestTip(User user) {
         try {
             List<TipUser> tipUserList = this.getDaoBase().list("user", user, getEntityManager());
-            
+            if(tipUserList.isEmpty()){
+                sendNewTip(user);
+                tipUserList = this.getDaoBase().list("user", user, getEntityManager());
+            }
             return (tipUserList.get(tipUserList.size()-1));
         } catch (SQLException ex) {
             Logger.getLogger(TipUserController.class.getName()).log(Level.SEVERE, null, ex);

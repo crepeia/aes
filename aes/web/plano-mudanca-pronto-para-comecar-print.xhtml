@@ -10,7 +10,9 @@
                 <w:header loginRequired="true" evaluationRequired="true"  rendered="false"/>
         </h:head>
         <h:body>
-            <p:media value="#{evaluationController.printPlan()}" width="100%" height="100%" player="pdf"/>        
+            <div style="height: 100vh">
+            <p:media value="#{evaluationController.printPlan()}" width="100%" height="100%" player="pdf"/>
+            </div>
         </h:body>
     </f:view>
 </html>

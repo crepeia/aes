@@ -8,6 +8,7 @@ package service;
 import aes.model.Evaluation;
 import aes.model.User;
 import aes.utility.Secured;
+import java.util.Date;
 import java.util.List;
 import javassist.NotFoundException;
 import javax.ejb.Stateless;
@@ -69,18 +70,20 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
                     .setParameter("userId", userId)
                     .getResultList();
             
-            System.out.println("service.EvaluationFacadeREST.find() find");
-            return evList.get(evList.size()-1);
+            if(evList.size() > 0){
+                //System.out.println("service.EvaluationFacadeREST.find() find");
+                return evList.get(evList.size()-1);
+            } else {
+                //System.out.println("service.EvaluationFacadeREST.find() create");
+                Evaluation ev = new Evaluation();
+                ev.setDateCreated(new Date());
+                ev.setUser(em.find(User.class, userId));
+                super.create(ev);
+                return ev;
+            }
 
-        } catch (NoResultException e) {
-            System.out.println("service.EvaluationFacadeREST.find() create");
-            Evaluation ev = new Evaluation();
-            ev.setUser(em.find(User.class, userId));
-            super.create(ev);
-            return ev;
-            
         } catch (Exception e) {
-            System.out.println("service.EvaluationFacadeREST.find() err");
+            //System.out.println("service.EvaluationFacadeREST.find() err");
             e.printStackTrace();
             return null;
         }

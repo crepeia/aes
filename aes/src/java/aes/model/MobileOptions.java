@@ -6,6 +6,8 @@
 package aes.model;
 
 import java.io.Serializable;
+import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,21 +37,21 @@ public class MobileOptions implements Serializable {
     private User user;
 
     @Column(name = "allow_drink_notifications")
-    boolean allowDrinkNotifications;
+    private boolean allowDrinkNotifications;
     
     @Column(name = "allow_tip_notifications")
-    boolean allowTipNotifications;
+    private boolean allowTipNotifications;
     
-    @Temporal(javax.persistence.TemporalType.TIME)
+    //@Temporal(javax.persistence.TemporalType.TIME)
     @Column(name = "drink_notification_time")
-    Date drinkNotificationTime;
+    private OffsetTime drinkNotificationTime;
     
-    @Temporal(javax.persistence.TemporalType.TIME)
+    //@Temporal(javax.persistence.TemporalType.TIME)
     @Column(name = "tip_notification_time")
-    Date tipNotificationTime;
+    private OffsetTime tipNotificationTime;
     
     @Column(name = "notification_token")
-    String notificationToken;
+    private String notificationToken;
     
     public Long getId() {
         return id;
@@ -83,19 +85,19 @@ public class MobileOptions implements Serializable {
         this.allowTipNotifications = allowTipNotifications;
     }
 
-    public Date getDrinkNotificationTime() {
+    public OffsetTime getDrinkNotificationTime() {
         return drinkNotificationTime;
     }
 
-    public void setDrinkNotificationTime(Date drinkNotificationTime) {
+    public void setDrinkNotificationTime(OffsetTime drinkNotificationTime) {
         this.drinkNotificationTime = drinkNotificationTime;
     }
 
-    public Date getTipNotificationTime() {
+    public OffsetTime getTipNotificationTime() {
         return tipNotificationTime;
     }
 
-    public void setTipNotificationTime(Date tipNotificationTime) {
+    public void setTipNotificationTime(OffsetTime tipNotificationTime) {
         this.tipNotificationTime = tipNotificationTime;
     }
 

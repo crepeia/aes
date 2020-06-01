@@ -33,11 +33,11 @@ public class EMailSSL {
         props = new Properties();
         try {
             props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/mail.properties"));
-            MailSSLSocketFactory sf = new MailSSLSocketFactory();
+            //MailSSLSocketFactory sf = new MailSSLSocketFactory();
             
-            sf.setTrustAllHosts(true);
-            props.put("mail.smtp.ssl.enable", "true");
-            props.put("mail.smtp.ssl.socketFactory", sf);
+            //sf.setTrustAllHosts(true);
+            //props.put("mail.smtp.ssl.enable", "true");
+            //props.put("mail.smtp.ssl.socketFactory", sf);
             this.authenticator = new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(
@@ -45,7 +45,7 @@ public class EMailSSL {
                         (String)props.get("mail.auth.password"));
                 }
             };
-        } catch (IOException | GeneralSecurityException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
         }
         

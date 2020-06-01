@@ -1,5 +1,6 @@
 package aes.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -10,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-
+import java.time.LocalDate;
 @Entity
 @Table(name = "tb_daily_log")
 public class DailyLog implements Serializable {
@@ -19,8 +20,9 @@ public class DailyLog implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "logDate")
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date logDate;
+    //@Temporal(javax.persistence.TemporalType.DATE)
+    private LocalDate logDate;
+    //private Date logDate;
     @Column(name = "drinks")
     private Integer drinks;
     @Column(name = "context")
@@ -44,11 +46,12 @@ public class DailyLog implements Serializable {
         this.id = id;
     }
     
-    public Date getLogDate() {
+    
+    public LocalDate getLogDate() {
         return logDate;
     }
 
-    public void setLogDate(Date logDate) {
+    public void setLogDate(LocalDate logDate) {
         this.logDate = logDate;
     }
       

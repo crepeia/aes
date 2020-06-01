@@ -40,10 +40,11 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
 
     @GET
     @Path("{userId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces( MediaType.APPLICATION_JSON)
     public List<Message> find(@PathParam("userId") Long userId) {
         return getEntityManager().createQuery("SELECT m FROM Message m ORDER BY m.sentDate DESC")
                 .getResultList();
+        
         /*
         return getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.user.id=:userId")
                 .setParameter("userId", userId)

@@ -35,7 +35,6 @@ public class ApplicationConfig extends Application {
         Set<Class<?>> resources = new java.util.HashSet<>();
         // following code can be used to customize Jersey 1.x JSON provider:
         resources.add(JacksonFeature.class);
-        
         addRestResourceClasses(resources);
         return resources;
     }
@@ -47,6 +46,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(aes.utility.ObjectMapperContextResolver.class);
         resources.add(service.AuthenticationFilter.class);
         resources.add(service.AuthenticationTokenFacadeREST.class);
         resources.add(service.ChallengeFacadeREST.class);

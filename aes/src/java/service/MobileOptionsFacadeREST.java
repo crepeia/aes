@@ -8,6 +8,9 @@ package service;
 import aes.model.MobileOptions;
 import aes.model.User;
 import aes.utility.Secured;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -53,10 +56,11 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     @Path("edit/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response edit(@PathParam("userId") Long userId, MobileOptions entity) {
-        System.out.println("service.MobileOptionsFacadeREST.edit()");
-
         try {
             entity.setUser(em.find(User.class, userId));
+            entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+            entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+
             super.edit(entity);
             return Response.status(Response.Status.OK).build();
         } catch (Exception e) {
@@ -77,20 +81,14 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             MobileOptions entity = new MobileOptions();
             entity.setUser(em.find(User.class, userId));
             
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY,12);
-            cal.set(Calendar.MINUTE,00);
-            cal.set(Calendar.SECOND,0);
-            cal.set(Calendar.MILLISECOND,0);
-
+           
 
             entity.setAllowTipNotifications(false);
-            entity.setTipNotificationTime(cal.getTime());
+            entity.setTipNotificationTime(OffsetTime.of(12, 0, 0, 0, OffsetDateTime.now().getOffset()));
             
-            cal.set(Calendar.HOUR_OF_DAY,19);
             
             entity.setAllowDrinkNotifications(false);
-            entity.setDrinkNotificationTime(cal.getTime());
+            entity.setDrinkNotificationTime(OffsetTime.of(19, 0, 0, 0, OffsetDateTime.now().getOffset()));
 
             entity.setNotificationToken("");
 

@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +40,8 @@ public class RecordController extends BaseController<Record> {
     private Record record;
     private DailyLog dailyLog;
     private Date date;
-
+    private LocalDate localDate;
+    
     private GenericDAO logDAO;
 
     @Inject
@@ -64,6 +67,7 @@ public class RecordController extends BaseController<Record> {
             if (record == null) {
                 record = new Record();
                 record.setUser(getUser());
+                save();
             }
         }
 
@@ -122,13 +126,13 @@ public class RecordController extends BaseController<Record> {
             dailyLog = null;
             List<DailyLog> list = logDAO.list("record", getRecord(), getEntityManager());
             for (DailyLog log : list) {
-                if (log.getLogDate() != null && log.getLogDate().equals(date)) {
+                if (log.getLogDate() != null && log.getLogDate().equals(localDate)) {
                     dailyLog = log;
                 }
             }
             if (dailyLog == null) {
                 dailyLog = new DailyLog();
-                dailyLog.setLogDate(date);
+                dailyLog.setLogDate(localDate);
                 dailyLog.setRecord(getRecord());
             }
         } catch (SQLException ex) {
@@ -146,13 +150,14 @@ public class RecordController extends BaseController<Record> {
     public String getDates() {
         String dates = new String();
         String dateStr;
+        
         try {
             List<DailyLog> logs = logDAO.list("record", getRecord(), getEntityManager());
             dates = dates.concat("\"");
             if (!logs.isEmpty()) {
                 for (DailyLog log : logs) {
                     if (log.getLogDate() != null) {
-                        dateStr = new SimpleDateFormat("yyyy-MM-dd").format(log.getLogDate());
+                        dateStr = log.getLogDate().toString();
                         dates = dates.concat(dateStr + ",");
                     }
                 }
@@ -228,7 +233,8 @@ public class RecordController extends BaseController<Record> {
                         "<tr>"
                         + "<td align='left'>"
                         + "<p  style='text-align:center;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>"
-                        + new SimpleDateFormat("dd/MM/yyyy").format(log.getLogDate())
+                        //+ new SimpleDateFormat("dd/MM/yyyy").format(log.getLogDate())
+                        + log.getLogDate().toString()
                         + "</p>"
                         + "</td>"
                         + "<td align='left'>"
@@ -314,6 +320,7 @@ public class RecordController extends BaseController<Record> {
 
     public void setDate(Date date) {
         this.date = date;
+        this.localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public UserController getUserController() {

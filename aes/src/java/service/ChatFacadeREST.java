@@ -6,7 +6,9 @@
 package service;
 
 import aes.model.Chat;
+import aes.model.User;
 import aes.utility.Secured;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,9 +43,21 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     @Path("{userId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Chat find(@PathParam("userId") Long userId) {
-        return (Chat) getEntityManager().createQuery("SELECT c FROM Chat c WHERE c.user.id=:userId")
+        List<Chat> c = getEntityManager().createQuery("SELECT c FROM Chat c WHERE c.user.id=:userId")
                 .setParameter("userId", userId)
-                .getResultList().toArray()[0];
+                .getResultList();
+        
+        if(c.isEmpty()){
+            Chat newChat = new Chat();
+            newChat.setUnauthenticatedId("");
+            newChat.setUser(em.find(User.class, userId));
+            newChat.setStartDate(new Date());
+            super.create(newChat);
+            return newChat;
+        } else {
+            return (Chat) c.toArray()[0];
+        }
+
         /*
         return getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.user.id=:userId")
                 .setParameter("userId", userId)

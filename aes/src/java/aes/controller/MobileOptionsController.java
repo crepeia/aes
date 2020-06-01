@@ -66,7 +66,6 @@ public class MobileOptionsController extends BaseController<MobileOptions> {
         try {
             List<MobileOptions> mobileOptionsList = daoBase.list(getEntityManager());
             Calendar today = Calendar.getInstance();
-            Calendar scheduledDate = Calendar.getInstance();
             
             int todayHour = today.get(Calendar.HOUR_OF_DAY);
             
@@ -74,9 +73,9 @@ public class MobileOptionsController extends BaseController<MobileOptions> {
                 if (mo.getTipNotificationTime() != null && mo.isAllowTipNotifications()) {
                     TipUser tu = tipUserController.getLatestTip(mo.getUser());
                     
-                    scheduledDate.setTime(mo.getTipNotificationTime());
                     
-                    int scheduledHour = scheduledDate.get(Calendar.HOUR_OF_DAY);
+                    
+                    int scheduledHour = mo.getTipNotificationTime().getHour();
                     
                     if (todayHour == scheduledHour) {
                         expoNotification.send(mo.getNotificationToken(), tu);
