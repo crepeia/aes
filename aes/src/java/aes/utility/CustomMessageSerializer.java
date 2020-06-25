@@ -31,10 +31,13 @@ public class CustomMessageSerializer extends StdSerializer<Message> {
         jg.writeStartObject();
        
         jg.writeNumberField("id", t.getId());
+        jg.writeStringField("type", "message");
         jg.writeStringField("idFrom", t.getIdFrom());
+        jg.writeStringField("nameFrom", t.getNameFrom());
         jg.writeStringField("content", t.getContent());
         jg.writeObjectField("sentDate", t.getSentDate());
         jg.writeNumberField("chat", t.getChat().getId());
+        
         jg.writeEndObject();
     }
     

@@ -1,0 +1,35 @@
+{
+    *"name": "[nome completo]",
+    *"email": "[email@email.com]",
+    *"password": "[senha encriptada]",
+    *"receiveEmails": [true ou false],
+    (* se receiveEmails = true)
+        "tipsFrequency": [
+            0 = Nunca
+            1 = Diariamente
+            2 = A cada dois dias
+            3 = A cada três dias
+            4 = A cada quatro dias
+            5 = A cada cinco dias
+            6 = Semanalmente],
+
+    *"authorizeData": [true ou false],
+    *"signUpDate": "[2020-06-17T16:31:55.000+0000]",
+    *"dateCreated": "[2020-06-17T16:31:15.000+0000]",
+
+    *"preferedLanguage": ["pt" ou "en"],
+    *"ipCreated": "[ip do usuario, ex: 0:0:0:0:0:0:0:1]",
+    *"app_signup": true,
+    *"phone": [ "" ou o numero de telefone em string],
+
+    //essas informações não sao pedidas no cadastro mas se for
+    //o caso de vc incluir. é assim que teria que mandar
+    "birthDate": "[YYYY-MM-DD]",
+    "gender": "[M ou F]",
+    "pregnant": 
+    [se gender = F:
+        true ou false 
+     se gender = M:
+        null]
+
+}

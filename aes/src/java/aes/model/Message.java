@@ -38,17 +38,22 @@ public class Message implements Serializable {
 
     @Column(name = "id_from")
     private String idFrom;
-   /* 
+    
+    @Column(name = "name_from")
+    private String nameFrom;
+    
+    /* 
     @Column(name = "id_to")
     private String idTo;
-*/
+    */
+    
     @Column(name = "content")
     private String content;
+    
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "sent_date")
     private Date sentDate;
-    
     
     
     @ManyToOne
@@ -103,8 +108,13 @@ public class Message implements Serializable {
         this.chat = chat;
     }
 
-    
-    
+    public String getNameFrom() {
+        return nameFrom;
+    }
+
+    public void setNameFrom(String nameFrom) {
+        this.nameFrom = nameFrom;
+    }
     
     @Override
     public int hashCode() {

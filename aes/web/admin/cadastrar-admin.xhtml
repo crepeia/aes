@@ -31,14 +31,7 @@
                                     <f:facet name="header">Email</f:facet>
                                     <h:outputText value="#{user.email}" />
                                 </h:column>
-                                <!--
-                                <h:column>
-                                    <f:facet name="header">Admin</f:facet>
-                                    <h:selectBooleanCheckbox value="#{empty user.administrator ? false:true}">
-                                        <f:ajax event="change" execute="@this" listener="#{userController.setAdmin}" render="@form" />
-                                    </h:selectBooleanCheckbox>
-                                </h:column>
-                                -->
+
                                 <h:column>
                                     <f:facet name="header">Admin</f:facet>
                                     <h:selectBooleanCheckbox value="#{user.admin}" valueChangeListener="#{userController.setAdmin(user)}">
@@ -49,6 +42,13 @@
                                 <h:column>
                                     <f:facet name="header">Consultor</f:facet>
                                     <h:selectBooleanCheckbox value="#{user.consultant}" valueChangeListener="#{userController.setConsultant(user)}">
+                                        <f:ajax event="change" execute="@this"/>
+                                    </h:selectBooleanCheckbox>
+                                </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">Chatbot</f:facet>
+                                    <h:selectBooleanCheckbox value="#{user.use_chatbot}" valueChangeListener="#{userController.setUseChatbot(user)}">
                                         <f:ajax event="change" execute="@this"/>
                                     </h:selectBooleanCheckbox>
                                 </h:column>

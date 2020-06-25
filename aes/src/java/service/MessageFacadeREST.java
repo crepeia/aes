@@ -39,17 +39,17 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
     }
 
     @GET
-    @Path("{userId}")
+    @Path("{chatId}")
     @Produces( MediaType.APPLICATION_JSON)
-    public List<Message> find(@PathParam("userId") Long userId) {
-        return getEntityManager().createQuery("SELECT m FROM Message m ORDER BY m.sentDate DESC")
+    public List<Message> find(@PathParam("chatId") Long chatId) {
+        /*return getEntityManager().createQuery("SELECT m FROM Message m ORDER BY m.sentDate DESC")
                 .getResultList();
+        */
         
-        /*
-        return getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.user.id=:userId")
-                .setParameter("userId", userId)
+        return getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
+                .setParameter("chatId", chatId)
                 .getResultList();
-*/
+
     }
     
     @Override

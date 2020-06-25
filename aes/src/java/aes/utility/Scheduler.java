@@ -42,7 +42,7 @@ public class Scheduler {
 
     }
     
-    @Schedule(second = "*", minute = "*", hour = "*", dayOfWeek = "*")
+    @Schedule(second = "0", minute = "0", hour = "19", dayOfWeek = "*")
     public void eveningTask() {
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Evening task running");
         contactController.sendScheduledEmails();
@@ -57,7 +57,7 @@ public class Scheduler {
 
     }
     
-    @Schedule(second = "0", minute = "1", hour = "*", dayOfWeek = "*")
+    @Schedule(second = "0", minute = "0", hour = "*", dayOfWeek = "*")
     public void appNotificationTask() {
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - App Notification task running");
         mobileOptionsController.sendScheduledNotifications();

@@ -1,7 +1,10 @@
 package aes.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,10 +80,11 @@ public class User implements Serializable {
     @Column(name = "ip_created")
     private String ipCreated;
     
-    
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
     
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Record record;
     
@@ -89,15 +93,15 @@ public class User implements Serializable {
     private List<Contact> contacts;
     
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Rating> ratings;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Satisfaction> satisfactions;
     
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy ="user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<FollowUp> followUps;
     
     @JsonIgnore
@@ -108,18 +112,11 @@ public class User implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<ChallengeUser> challenges;
     
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private List<Chat> chats;
-    /*
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "from")
-    private List<Message> messagesFrom;
     
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "to")
-    private List<Message> messagesTo;
-*/
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private Chat chat;
+    
     @Column(name = "dt_cadastro")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dt_cadastro;
@@ -129,6 +126,12 @@ public class User implements Serializable {
     
     @Column(name = "is_consultant")
     private boolean consultant;
+    
+    @Column(name = "app_signup")
+    private boolean app_signup;
+    
+    @Column(name = "use_chatbot")
+    private boolean use_chatbot;
     
     @Override
     public String toString() {
@@ -384,16 +387,6 @@ public class User implements Serializable {
         this.knowWebsite = knowWebsite;
     }
     
-    public Date getDtCadastro() {
-        return dt_cadastro;
-    }
-
-    /**
-     */
-    public void setDtCadastro(Date dt) {
-        this.dt_cadastro = dt;
-    }
-
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -455,14 +448,30 @@ public class User implements Serializable {
         this.consultant = consultant;
     }
 
-    @XmlTransient
-    public List<Chat> getChats() {
-        return chats;
+    public Chat getChat() {
+        return chat;
     }
 
-    public void setChats(List<Chat> chats) {
-        this.chats = chats;
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
+
+    public boolean isApp_signup() {
+        return app_signup;
+    }
+
+    public void setApp_signup(boolean app_signup) {
+        this.app_signup = app_signup;
+    }
+    
+    public boolean isUse_chatbot() {
+        return use_chatbot;
+    }
+
+    public void setUse_chatbot(boolean use_chatbot) {
+        this.use_chatbot = use_chatbot;
+    }
+    
 /*
     public List<Message> getMessagesFrom() {
         return messagesFrom;
@@ -481,6 +490,5 @@ public class User implements Serializable {
     }
 
 */
-    
     
 }

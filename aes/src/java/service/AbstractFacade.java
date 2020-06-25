@@ -9,6 +9,7 @@ import aes.model.User;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.ws.rs.core.Response;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
@@ -26,8 +27,9 @@ public abstract class AbstractFacade<T> {
 
     protected abstract EntityManager getEntityManager();
 
-    public void create(T entity) {
+    public T create(T entity) {
         getEntityManager().persist(entity);
+        return entity;
     }
 
     public void edit(T entity) {

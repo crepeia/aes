@@ -22,14 +22,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author bruno
  */
 @Stateless
-@Secured
-@Path("secured/chat")
+@Path("chat")
 public class ChatFacadeREST extends AbstractFacade<Chat> {
 
     @PersistenceContext(unitName = "aesPU")
@@ -38,22 +38,36 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     public ChatFacadeREST() {
         super(Chat.class);
     }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Override
+    public Chat create(Chat entity) {
+        try {
+            return super.create(entity);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @GET
     @Path("{userId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public Chat find(@PathParam("userId") Long userId) {
         List<Chat> c = getEntityManager().createQuery("SELECT c FROM Chat c WHERE c.user.id=:userId")
                 .setParameter("userId", userId)
                 .getResultList();
         
         if(c.isEmpty()){
+            return null;
+            /*
             Chat newChat = new Chat();
             newChat.setUnauthenticatedId("");
             newChat.setUser(em.find(User.class, userId));
             newChat.setStartDate(new Date());
             super.create(newChat);
             return newChat;
+            */
         } else {
             return (Chat) c.toArray()[0];
         }

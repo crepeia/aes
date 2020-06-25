@@ -32,10 +32,8 @@ public class ExpoNotification {
     public void send(String expoToken, TipUser tipUser){
         try {
             //String certificatesTrustStorePath = "C:/Program Files/Java/jdk1.8.0_221/jre/lib/security/cacerts";
-            //System.setProperty("javax.net.ssl.trustStore", certificatesTrustStorePath);
-            String urlParameters  = "param1=a&param2=b&param3=c";
-            byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
-            int    postDataLength = postData.length;
+           // System.setProperty("javax.net.ssl.trustStore", certificatesTrustStorePath);
+            
             String request        = "https://exp.host/--/api/v2/push/send";
             URL    url = new URL( request );
 

@@ -41,6 +41,8 @@ public class CustomMessageDeserializer extends StdDeserializer<Message> {
         
         //m.setId(node.get("id").asLong());
         m.setIdFrom(node.get("idFrom").asText());
+        m.setNameFrom(node.get("nameFrom").asText());
+
         m.setContent(node.get("content").asText());
         
         try {

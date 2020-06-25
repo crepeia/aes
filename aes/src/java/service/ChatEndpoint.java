@@ -13,8 +13,11 @@ import aes.persistence.GenericDAO;
 import aes.utility.MessageDecoder;
 import aes.utility.MessageEncoder;
 import aes.utility.Secured;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +42,9 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+
+
+
 /**
  *
  * @author bruno
@@ -57,8 +63,17 @@ public class ChatEndpoint {
 
     private static Map<Long, Session> consultants = new ConcurrentHashMap<>();
     private static Map<Long, Session> users = new ConcurrentHashMap<>();
+    
+    private static Map<Session, Long> idleChats = new ConcurrentHashMap<>();
+    private static Map<Session, Long> availableChats = new ConcurrentHashMap<>();
     private static Map<Session, Long> openChats = new ConcurrentHashMap<>();
 
+    class UserStatusMessage{
+        public String type;
+        public String statusType;
+        public Collection<Long> chatsIds;
+    }
+    
     public ChatEndpoint() {
         try {
             this.daoBase = new GenericDAO<>(Chat.class);
@@ -92,11 +107,19 @@ public class ChatEndpoint {
             
             users.put(newChat.getId(), session);
             
-            //openChats.put(session, newChat.getId());
-            openChats.put(session, Long.parseLong("1"));
+            
+            availableChats.put(session, newChat.getId());
+            
+            //UPDATE CONSULTANTS LIST
+            
+            
+            //openChats.put(session, Long.parseLong("1"));
+            
+            /*
             if(consultants.size() > 0){
                 sendMessageToConsultant(newChat.getId(), userId, (Long) consultants.keySet().toArray()[0]);
             }
+            */
             
         } else {//consultor
            
@@ -104,11 +127,12 @@ public class ChatEndpoint {
                 if(!consultants.containsKey(currentUser.getId())){
                     consultants.put(currentUser.getId(), session);
                 }
-                
+                sendUserStatus(currentUser.getId());
+
                 
             } else {//usuário comum
                 
-                if( currentUser.getChats().isEmpty() ) {
+                if( currentUser.getChat() == null ) {
                     
                     newChat = new Chat();
                     newChat.setUnauthenticatedId("");
@@ -121,16 +145,19 @@ public class ChatEndpoint {
                     }
 
                 } else {
-                    newChat = currentUser.getChats().get(0);
+                    newChat = currentUser.getChat();
                 }
                 
                     users.put(newChat.getId(), session);
-                    openChats.put(session, newChat.getId());
+                    availableChats.put(session, newChat.getId());
                 
+                    
+                /*
                 if(consultants.size() > 0){
                     sendMessageToConsultant(newChat.getId(), userId, (Long) consultants.keySet().toArray()[0]);
                     
                 }
+                */
             }
         }
         
@@ -144,6 +171,30 @@ public class ChatEndpoint {
                                         .getResultList();*/
         
     }
+    
+    private void sendUserStatus(Long consultantId){
+        UserStatusMessage avb = new UserStatusMessage();
+        
+        avb.chatsIds = availableChats.values();
+        avb.statusType= "available";
+        avb.type = "statusList";
+        
+        ObjectMapper om = new ObjectMapper();
+        String json = null;
+        try {
+            json = om.writeValueAsString(avb);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+         try {
+            consultants.get(consultantId).getBasicRemote().sendObject(json);
+            //consultants.get(consultantId).getBasicRemote().sendObject(availableChats.values());
+        } catch (IOException | EncodeException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     private void sendMessageToConsultant(Long chatId, String fromUser, Long consultantId) {
         try {
@@ -186,6 +237,28 @@ public class ChatEndpoint {
         }
         
     }
+    /*
+    //quando o consultor seleciona um chat, manda msg pro servidor avisando quem que conectou e altera o status dos chats
+    @OnMessage
+    public void onMessageConnect(Session session, String message) {
+        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Message received from session: {0}, messsage: {1}", new Object[]{session.getId(), message});
+
+        
+        try {
+            for(Map.Entry<Long, Session> e: users.entrySet()) {
+                if(!e.getValue().getId().equals(session.getId())){
+                    e.getValue().getBasicRemote().sendObject(message);
+                    System.out.println("service.ChatEndpoint.onMessage()");
+                }
+            }
+            
+            //openChats. .get(message.getChat().getId()).getBasicRemote().sendObject(message);
+        } catch (IOException | EncodeException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    */
     /*
     @OnMessage
     public void onMessage(Session session, Message message) {

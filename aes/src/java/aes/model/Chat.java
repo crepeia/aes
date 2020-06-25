@@ -5,6 +5,9 @@
  */
 package aes.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,13 +44,14 @@ public class Chat implements Serializable {
     @Column(name = "start_date")
     private Date startDate;
     
-    @ManyToOne
-    @JoinColumn(name="user_id")
+    @JsonBackReference
+    @OneToOne
     private User user;
     
     @Column(name = "unauthenticated_id")
     private String unauthenticatedId;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
     private List<Message> messageList;
 

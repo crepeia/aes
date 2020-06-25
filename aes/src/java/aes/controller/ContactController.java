@@ -7,7 +7,6 @@ import aes.persistence.GenericDAO;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ManagedBean;
 import aes.utility.EMailSSL;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,6 +52,7 @@ public class ContactController extends BaseController implements Serializable {
         htmlTemplate = readHTMLTemplate("aes/utility/contact-template.html");
         tipsTemplate = readHTMLTemplate("aes/utility/tips-template.html");
         random = new Random();
+        System.out.println("PostConstruct!!");
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
             evaluationDAO = new GenericDAO<Evaluation>(Evaluation.class);

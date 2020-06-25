@@ -733,4 +733,17 @@ public class UserController extends BaseController<User> {
             }
         }
     }
+    
+    public void setUseChatbot(User u){
+        if(this.getUser().getEmail() != null){
+            u.setUse_chatbot(!u.isUse_chatbot());
+
+            try {
+               daoBase.update(u, getEntityManager());
+               //administrator = null;
+            } catch (SQLException ex) {
+               Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }

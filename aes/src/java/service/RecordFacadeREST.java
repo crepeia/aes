@@ -39,6 +39,17 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     public RecordFacadeREST() {
         super(Record.class);
     }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Override
+    public Record create(Record entity) {
+        try {
+            return super.create(entity);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @POST
     @Path("create/{userId}")
@@ -49,7 +60,7 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
             entity.setUser(em.find(User.class, userId));
             entity.setDailyGoal(null);
             entity.setWeeklyGoal(null);
-        super.create(entity);
+            super.create(entity);
             return entity;
         } catch (Exception e) {
             return null;
@@ -58,14 +69,12 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     }
     
     @PUT
-    @Path("edit/{id}")
+    @Path("edit")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response edit(@PathParam("id") Long id, Record entity) {
-        Record newEntity = entity;
-        newEntity.setUser(em.find(User.class, id));
-        super.edit(newEntity);
-        return Response.status(Response.Status.OK).build();
+    public void edit(Record entity) {
+        super.edit(entity);
     }
+    
 
     @DELETE
     @Path("{id}")
@@ -83,13 +92,15 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
                     .getSingleResult();
             
         } catch(NoResultException e) {
+            return null;
+            /*
             Record entity = new Record();
             entity.setUser(em.find(User.class, userId));
             entity.setDailyGoal(null);
             entity.setWeeklyGoal(null);
             super.create(entity);
             return entity;
-            
+            */
         } catch(Exception e) {
             return null;
     }

@@ -48,8 +48,13 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(MobileOptions entity) {
-        super.create(entity);
+    public MobileOptions create(MobileOptions entity) {
+        try {
+            super.create(entity);
+            return entity;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @PUT

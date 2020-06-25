@@ -52,6 +52,7 @@ public class ApplicationConfig extends Application {
         resources.add(service.ChallengeFacadeREST.class);
         resources.add(service.ChallengeUserFacadeREST.class);
         resources.add(service.ChatFacadeREST.class);
+        resources.add(service.ChatbotResource.class);
         resources.add(service.DailyLogFacadeREST.class);
         resources.add(service.EvaluationFacadeREST.class);
         resources.add(service.MessageFacadeREST.class);

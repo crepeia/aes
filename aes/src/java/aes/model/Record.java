@@ -1,5 +1,6 @@
 package aes.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
@@ -27,7 +28,8 @@ public class Record implements Serializable{
     private Integer dailyGoal;
     @Column(name = "weekly_goal")
     private Integer weeklyGoal;
-  
+    
+    @JsonBackReference
     @OneToOne
     private User user;
     
@@ -63,9 +65,7 @@ public class Record implements Serializable{
     public void setWeeklyGoal(Integer weeklyGoal) {
         this.weeklyGoal = weeklyGoal;
     }
-    
-    @JsonIgnore
-    @XmlTransient
+
     public User getUser() {
         return user;
     }

@@ -5,11 +5,31 @@
  */
 package service;
 
+import aes.controller.ContactController;
+import aes.controller.UserController;
 import aes.model.User;
+import aes.utility.Encrypter;
 import aes.utility.Secured;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -19,6 +39,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 /**
@@ -26,12 +47,19 @@ import javax.ws.rs.core.SecurityContext;
  * @author bruno
  */
 @Stateless
-@Secured
+@TransactionManagement(TransactionManagementType.BEAN)
 @Path("secured/user")
 public class UserFacadeREST extends AbstractFacade<User> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    
+    @Inject
+    private ContactController contactController;
+    
+    @Resource
+    private UserTransaction userTransaction;
+    
 
     @Context
     SecurityContext securityContext;
@@ -39,13 +67,47 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public UserFacadeREST() {
         super(User.class);
     }
-/*
+    
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(User entity) {
-        super.create(entity);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public User create(User entity) {
+        List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
+
+        if (!userList.isEmpty()) {
+            return null;
+        } else {
+            try {
+                
+            userTransaction.begin();
+            super.create(entity);
+            userTransaction.commit();
+            
+            contactController.sendSignUpEmail(entity);
+            if (entity.isReceiveEmails()) {
+                contactController.scheduleTipsEmail(entity);
+                contactController.scheduleDiaryReminderEmail(entity, new Date());
+                contactController.scheduleWeeklyEmail(entity, new Date());
+            }
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
+             } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return entity;
+                    
     }
+    
+
+    @GET
+    @Override
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> findAll() {
+        return super.findAll();
+    }
+    
+/*
+    
 
     @PUT
     @Path("{id}")
@@ -67,12 +129,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return super.find(id);
     }
 
-    @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> findAll() {
-        return super.findAll();
-    }
+    
 
     @GET
     @Path("{from}/{to}")
