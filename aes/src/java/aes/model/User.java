@@ -133,6 +133,9 @@ public class User implements Serializable {
     @Column(name = "use_chatbot")
     private boolean use_chatbot;
     
+    @Column(name = "registration_complete")
+    private boolean registration_complete;
+    
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
@@ -178,6 +181,10 @@ public class User implements Serializable {
 
     public boolean isMale() {
         return gender == 'M';
+    }
+    
+    public boolean isOther() {
+        return gender == 'O';
     }
     
     public String getHashedId(){
@@ -471,24 +478,13 @@ public class User implements Serializable {
     public void setUse_chatbot(boolean use_chatbot) {
         this.use_chatbot = use_chatbot;
     }
-    
-/*
-    public List<Message> getMessagesFrom() {
-        return messagesFrom;
+
+    public boolean isRegistration_complete() {
+        return registration_complete;
     }
 
-    public void setMessagesFrom(List<Message> messagesFrom) {
-        this.messagesFrom = messagesFrom;
+    public void setRegistration_complete(boolean registration_complete) {
+        this.registration_complete = registration_complete;
     }
-
-    public List<Message> getMessagesTo() {
-        return messagesTo;
-    }
-
-    public void setMessagesTo(List<Message> messagesTo) {
-        this.messagesTo = messagesTo;
-    }
-
-*/
     
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package aes.service;
 import aes.utility.SecureRandomString;
 import aes.model.AuthenticationToken;
 import aes.model.User;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package aes.service;
 
 import aes.model.Chat;
 import aes.model.User;

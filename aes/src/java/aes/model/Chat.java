@@ -7,7 +7,6 @@ package aes.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +16,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -48,8 +45,8 @@ public class Chat implements Serializable {
     @OneToOne
     private User user;
     
-    @Column(name = "unauthenticated_id")
-    private String unauthenticatedId;
+    //@Column(name = "unauthenticated_id")
+    //private String unauthenticatedId;
     
     @JsonIgnore
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
@@ -86,13 +83,13 @@ public class Chat implements Serializable {
         this.user = user;
     }
 
-    public String getUnauthenticatedId() {
-        return unauthenticatedId;
-    }
+    //public String getUnauthenticatedId() {
+    //    return unauthenticatedId;
+    //}
 
-    public void setUnauthenticatedId(String unauthenticatedId) {
-        this.unauthenticatedId = unauthenticatedId;
-    }
+   // public void setUnauthenticatedId(String unauthenticatedId) {
+    //    this.unauthenticatedId = unauthenticatedId;
+   // }
 
     @XmlTransient
     public List<Message> getMessageList() {

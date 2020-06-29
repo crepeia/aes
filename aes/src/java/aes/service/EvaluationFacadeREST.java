@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package aes.service;
 
-import aes.model.Record;
+import aes.model.Evaluation;
 import aes.model.User;
 import aes.utility.Secured;
+import java.util.Date;
 import java.util.List;
+import javassist.NotFoundException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -30,51 +32,34 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 @Secured
-@Path("secured/record")
-public class RecordFacadeREST extends AbstractFacade<Record> {
+@Path("secured/evaluation")
+public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
 
-    public RecordFacadeREST() {
-        super(Record.class);
+    public EvaluationFacadeREST() {
+        super(Evaluation.class);
     }
     
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Override
-    public Record create(Record entity) {
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Evaluation create(Evaluation entity) {
         try {
-            return super.create(entity);
+            super.create(entity);
+            return entity;
         } catch (Exception e) {
             return null;
         }
     }
 
-    @POST
-    @Path("create/{userId}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Record create(@PathParam("userId") Long userId) {
-        try {
-            Record entity = new Record();
-            entity.setUser(em.find(User.class, userId));
-            entity.setDailyGoal(null);
-            entity.setWeeklyGoal(null);
-            super.create(entity);
-            return entity;
-        } catch (Exception e) {
-            return null;
-    }
-
-    }
-    
     @PUT
-    @Path("edit")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void edit(Record entity) {
+    @Path("{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void edit(@PathParam("id") Long id, Evaluation entity) {
         super.edit(entity);
     }
-    
 
     @DELETE
     @Path("{id}")
@@ -84,42 +69,46 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
 
     @GET
     @Path("find/{userId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Record find(@PathParam("userId") Long userId) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Evaluation find(@PathParam("userId") Long userId) {
         try {
-            return (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
-                    .setParameter("userId",userId)
-                    .getSingleResult();
+            List<Evaluation> evList = getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId")
+                    .setParameter("userId", userId)
+                    .getResultList();
             
-        } catch(NoResultException e) {
+            if(evList.size() > 0){
+                //System.out.println("service.EvaluationFacadeREST.find() find");
+                return evList.get(evList.size()-1);
+            } else {
+                //System.out.println("service.EvaluationFacadeREST.find() create");
+                Evaluation ev = new Evaluation();
+                ev.setDateCreated(new Date());
+                ev.setUser(em.find(User.class, userId));
+                super.create(ev);
+                return ev;
+            }
+
+        } catch (Exception e) {
+            //System.out.println("service.EvaluationFacadeREST.find() err");
+            e.printStackTrace();
             return null;
-            /*
-            Record entity = new Record();
-            entity.setUser(em.find(User.class, userId));
-            entity.setDailyGoal(null);
-            entity.setWeeklyGoal(null);
-            super.create(entity);
-            return entity;
-            */
-        } catch(Exception e) {
-            return null;
-    }
+        }
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Record> findAll() {
+    public List<Evaluation> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Record> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Evaluation> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
-
+    
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)

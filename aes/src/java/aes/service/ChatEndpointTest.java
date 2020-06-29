@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package aes.service;
 
 import aes.controller.ChatController;
 import aes.model.Chat;
@@ -123,43 +123,8 @@ public class ChatEndpointTest {
     public void onOpen(Session session, @PathParam("userId") String userId) {
         Chat newChat;
         User currentUser = em.find(User.class, Long.parseLong(userId));
-
-        if(currentUser == null){
-            /*
-            newChat = new Chat();
-            newChat.setUnauthenticatedId(userId);
-            newChat.setUser(null);
-            newChat.setStartDate(new Date());
-            
-            try {
-                daoBase.insert(newChat, em);
-            } catch (SQLException ex) {
-                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            users.put(newChat.getId(), session);
-            openChats.put(session, newChat.getId());
-            
-            UserInfo ui = new UserInfo(currentUser.getName(),
-                                        currentUser.getEmail(), 
-                                        currentUser.getChat().getId(), 
-                                        statusType.AVAILABLE.toString());
-            onlineUsers.put(session, ui);
-            
-            setStatus(session, statusType.AVAILABLE.toString());
-           */
-            //UPDATE CONSULTANTS LIST
-            
-            
-            //openChats.put(session, Long.parseLong("1"));
-            
-            /*
-            if(consultants.size() > 0){
-                sendMessageToConsultant(newChat.getId(), userId, (Long) consultants.keySet().toArray()[0]);
-            }
-            */
-        } else {
-            if(currentUser.isConsultant()) {
+        
+        if(currentUser.isConsultant()) {
             if(consultants.containsKey(currentUser.getId())){
                 consultants.remove(currentUser.getId());
             }
@@ -171,7 +136,6 @@ public class ChatEndpointTest {
             if( currentUser.getChat() == null) { //primeira vez conectando
 
                 newChat = new Chat();
-                newChat.setUnauthenticatedId("");
                 newChat.setUser(currentUser);
                 newChat.setStartDate(new Date());
                 try {
@@ -183,24 +147,32 @@ public class ChatEndpointTest {
             } else {
                 newChat = currentUser.getChat();
             }
-
-            users.put(newChat.getId(), session);
-            openChats.put(session, newChat.getId());
+            if(users.containsKey(newChat.getId())){
+                try {
+                    users.get(newChat.getId()).close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ChatEndpointTest.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             
+            users.put(newChat.getId(), session);
+            String realStatus = statusType.AVAILABLE.toString();
+            if(openChats.containsValue(newChat.getId())){ //um consultor estava atendendo o chat
+                                                            //e o usuário desconectou/voltou
+                realStatus = statusType.BUSY.toString();
+            }
             UserInfo ui = new UserInfo(currentUser.getName(),
                                         currentUser.getEmail(), 
                                         currentUser.getChat().getId(), 
-                                        statusType.AVAILABLE.toString());
+                                        realStatus);
+            openChats.put(session, newChat.getId());
             onlineUsers.put(session, ui);
-            
-            setStatus(session, statusType.AVAILABLE.toString());
-            
+
+            setStatus(session, realStatus);
+
         }
-        }
-        
         
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session opened for user {0} session ID {1}", new Object[]{userId, session.getId()});
-        
     }
     
     private void sendUserStatusList(Long consultantId){

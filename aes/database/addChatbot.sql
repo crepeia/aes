@@ -6,6 +6,3 @@ ADD COLUMN use_chatbot BOOLEAN DEFAULT FALSE;
 UPDATE aes.tb_user SET use_chatbot=FALSE
 WHERE use_chatbot IS NULL
 
---para me colocar como consultor
---UPDATE aes.tb_user SET is_consultant=TRUE
---WHERE email="brunomarcosps@hotmail.com"

@@ -42,19 +42,12 @@ public class Message implements Serializable {
     @Column(name = "name_from")
     private String nameFrom;
     
-    /* 
-    @Column(name = "id_to")
-    private String idTo;
-    */
-    
     @Column(name = "content")
     private String content;
-    
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "sent_date")
     private Date sentDate;
-    
     
     @ManyToOne
     @JoinColumn(name="chat_id")
@@ -75,15 +68,7 @@ public class Message implements Serializable {
     public void setIdFrom(String idFrom) {
         this.idFrom = idFrom;
     }
-/*
-    public String getIdTo() {
-        return idTo;
-    }
 
-    public void setIdTo(String idTo) {
-        this.idTo = idTo;
-    }
-*/
     public String getContent() {
         return content;
     }

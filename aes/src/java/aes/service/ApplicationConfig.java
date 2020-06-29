@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package aes.service;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -46,21 +46,21 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(aes.service.AuthenticationFilter.class);
+        resources.add(aes.service.AuthenticationTokenFacadeREST.class);
+        resources.add(aes.service.ChallengeFacadeREST.class);
+        resources.add(aes.service.ChallengeUserFacadeREST.class);
+        resources.add(aes.service.ChatFacadeREST.class);
+        resources.add(aes.service.ChatbotResource.class);
+        resources.add(aes.service.DailyLogFacadeREST.class);
+        resources.add(aes.service.EvaluationFacadeREST.class);
+        resources.add(aes.service.MessageFacadeREST.class);
+        resources.add(aes.service.MobileOptionsFacadeREST.class);
+        resources.add(aes.service.RecordFacadeREST.class);
+        resources.add(aes.service.TipFacadeREST.class);
+        resources.add(aes.service.TipUserFacadeREST.class);
+        resources.add(aes.service.UserFacadeREST.class);
         resources.add(aes.utility.ObjectMapperContextResolver.class);
-        resources.add(service.AuthenticationFilter.class);
-        resources.add(service.AuthenticationTokenFacadeREST.class);
-        resources.add(service.ChallengeFacadeREST.class);
-        resources.add(service.ChallengeUserFacadeREST.class);
-        resources.add(service.ChatFacadeREST.class);
-        resources.add(service.ChatbotResource.class);
-        resources.add(service.DailyLogFacadeREST.class);
-        resources.add(service.EvaluationFacadeREST.class);
-        resources.add(service.MessageFacadeREST.class);
-        resources.add(service.MobileOptionsFacadeREST.class);
-        resources.add(service.RecordFacadeREST.class);
-        resources.add(service.TipFacadeREST.class);
-        resources.add(service.TipUserFacadeREST.class);
-        resources.add(service.UserFacadeREST.class);
     }
     
 }

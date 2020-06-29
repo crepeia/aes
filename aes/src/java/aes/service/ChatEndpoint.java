@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package aes.service;
 
 import aes.controller.ChatController;
 import aes.model.Chat;
@@ -95,7 +95,7 @@ public class ChatEndpoint {
         if(currentUser == null) { //usuário não cadastrado
             
             newChat = new Chat();
-            newChat.setUnauthenticatedId(userId);
+            //newChat.setUnauthenticatedId(userId);
             newChat.setUser(null);
             newChat.setStartDate(new Date());
             
@@ -135,7 +135,7 @@ public class ChatEndpoint {
                 if( currentUser.getChat() == null ) {
                     
                     newChat = new Chat();
-                    newChat.setUnauthenticatedId("");
+                    //newChat.setUnauthenticatedId("");
                     newChat.setUser(currentUser);
                     newChat.setStartDate(new Date());
                     try {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package aes.service;
 
 import aes.model.User;
 import java.util.Date;
@@ -32,8 +32,9 @@ public abstract class AbstractFacade<T> {
         return entity;
     }
 
-    public void edit(T entity) {
+    public T edit(T entity) {
         getEntityManager().merge(entity);
+        return entity;
     }
 
     public void remove(T entity) {

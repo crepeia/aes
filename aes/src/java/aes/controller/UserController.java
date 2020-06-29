@@ -163,10 +163,15 @@ public class UserController extends BaseController<User> {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.equals"), null));
             } else {
                 List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
-
-                if (!userList.isEmpty()) {
+                boolean regComplete = userList.stream().reduce(true, (reg, userElement) -> reg && userElement.isConsultant(), Boolean::logicalAnd);
+                
+                if (!userList.isEmpty() && regComplete) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.used"), null));
                 } else {
+                    if(!regComplete){
+                        user.setId(userList.get(0).getId());
+                    }
+                    user.setRegistration_complete(true);
                     user.setPassword(Encrypter.encrypt(password));
                     user.setSignUpDate(new Date());
                     save();

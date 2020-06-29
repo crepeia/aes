@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package aes.service;
 
 import aes.controller.ContactController;
 import aes.controller.UserController;
@@ -71,6 +71,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @POST
     @Override
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public User create(User entity) {
         List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
 
@@ -95,17 +96,59 @@ public class UserFacadeREST extends AbstractFacade<User> {
             }
         }
         return entity;
-                    
+    }
+    
+    @POST
+    @Path("createUnregistered")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createUnregistered(User entity) {
+        List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
+        try {
+            if(!userList.isEmpty()){
+
+                if(userList.get(0).isRegistration_complete()){
+                    String error = "{\"error\": \"EmailInUseLogin\"}";
+                    return Response.status(Response.Status.CONFLICT).entity(error).build();
+                } else {
+                    entity.setId(userList.get(0).getId());
+                    userTransaction.begin();
+                    super.edit(entity);
+                    userTransaction.commit();
+                }
+
+            } else {
+                userTransaction.begin();
+                super.create(entity);
+                userTransaction.commit();
+            }
+            return Response.ok().entity(entity).build();
+
+        } catch(Exception e){
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return null;
+        }
+    }
+    
+    @PUT
+    @Path("/toggleConsultant/{id}")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public User toggleConsultant(@PathParam("id") Long id) {
+        try{
+            User u = em.find(User.class, id);
+            u.setConsultant(!u.isConsultant());
+            userTransaction.begin();
+            super.edit(u);
+            userTransaction.commit();
+            return u;
+        }catch(Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return null;
+        }
     }
     
 
-    @GET
-    @Override
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<User> findAll() {
-        return super.findAll();
-    }
-    
 /*
     
 
@@ -140,6 +183,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
 */
     @GET
     @Path("count")
+    @Secured
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
