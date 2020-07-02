@@ -5,19 +5,13 @@
  */
 package aes.service;
 
-import aes.controller.ChatController;
 import aes.model.Chat;
 import aes.model.User;
 import aes.model.Message;
 import aes.persistence.GenericDAO;
 import aes.utility.MessageDecoder;
 import aes.utility.MessageEncoder;
-import aes.utility.Secured;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -25,17 +19,12 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -59,6 +48,7 @@ import javax.websocket.server.ServerEndpoint;
  */
 @ServerEndpoint(
         value="/chattest/{userId}",
+        configurator=ChatConfigurator.class,
         decoders = MessageDecoder.class, 
         encoders = MessageEncoder.class)
 public class ChatEndpointTest {
@@ -120,7 +110,7 @@ public class ChatEndpointTest {
     }
     
     @OnOpen
-    public void onOpen(Session session, @PathParam("userId") String userId) {
+    public void onOpen(Session session, EndpointConfig conf, @PathParam("userId") String userId) {
         Chat newChat;
         User currentUser = em.find(User.class, Long.parseLong(userId));
         
