@@ -42,7 +42,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     public AuthenticationFilter() {
     }    
     
-@Override
+    @Override
     public void filter(ContainerRequestContext requestContext) {
         
 
@@ -105,7 +105,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 authorizationHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ");
     }
 
-     private AuthenticationToken validateToken(String token) throws Exception {
+    private AuthenticationToken validateToken(String token) throws Exception {
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
         return (AuthenticationToken) em.createQuery("SELECT a FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();

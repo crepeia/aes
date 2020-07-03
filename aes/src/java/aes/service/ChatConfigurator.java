@@ -16,6 +16,7 @@ import javax.websocket.server.ServerEndpointConfig;
  * @author bruno
  */
 public class ChatConfigurator extends ServerEndpointConfig.Configurator {
+
     
     @Override
     public void modifyHandshake(ServerEndpointConfig sec, 
@@ -23,7 +24,14 @@ public class ChatConfigurator extends ServerEndpointConfig.Configurator {
                                 HandshakeResponse response) {
         
         Map<String,List<String>> headers = request.getHeaders();
-        
-        sec.getUserProperties().put("cookie", headers.get("cookie"));
+
+        sec.getUserProperties().put("auth", headers.get("auth"));
+        sec.getUserProperties().put("authtoken", headers.get("authtoken"));
+        sec.getUserProperties().put("unauthID", headers.get("userId"));
+
     }
+    
+
 }
+
+
