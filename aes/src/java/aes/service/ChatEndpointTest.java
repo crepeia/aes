@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,19 +24,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.PongMessage;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -59,12 +67,16 @@ public class ChatEndpointTest {
         public String email;
         public Long chat;
         public String status;
+        //public transient Timer timer;
+        //public transient ScheduledExecutorService pingExecutorService;
+        //public transient Session session;
         public UserInfo(){};
-        public UserInfo(String name, String email, Long chat, String status){
+        public UserInfo(String name, String email, Long chat, String status, Session session){
             this.name = name;
             this.email = email;
             this.chat = chat;
             this.status = status;
+            //this.session = session;
         }
     }
     
@@ -120,6 +132,37 @@ public class ChatEndpointTest {
         return (AuthenticationToken) em.createQuery("SELECT a FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
     }
     
+    /*
+    private void schedulePingMessages(UserInfo newUserConnection) {
+    newUserConnection.pingExecutorService = Executors.newScheduledThreadPool(1); 
+    newUserConnection.pingExecutorService.scheduleAtFixedRate(() -> {
+        scheduleDiconnection(newUserConnection);
+        try {
+            String data = "Ping";
+            ByteBuffer payload = ByteBuffer.wrap(data.getBytes());
+            newUserConnection.session.getBasicRemote().sendPing(payload);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }, 300, 300, TimeUnit.SECONDS);
+}
+    private void scheduleDiconnection(UserInfo user) {
+    user.timer = new Timer();
+    user.timer.schedule(new TimerTask() {
+        @Override
+        public void run() {
+            try {
+                user.session.close(new CloseReason(CloseCodes.UNEXPECTED_CONDITION, "Client does not respond"));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }, 5000);
+    
+    
+    }
+    */
     @OnOpen
     public void onOpen(Session session, EndpointConfig config, @PathParam("userId") String userId) {
         List<String> auth = (List<String>) config.getUserProperties().get("auth");
@@ -158,7 +201,7 @@ public class ChatEndpointTest {
             }
         }
         
-        
+        UserInfo ui = new UserInfo();
         
         if(currentUser == null){
             newChat = new Chat();
@@ -174,10 +217,12 @@ public class ChatEndpointTest {
             users.put(newChat.getId(), session);
             String realStatus = statusType.AVAILABLE.toString();
             
-            UserInfo ui = new UserInfo("Anônimo",
-                                        "", 
-                                        newChat.getId(), 
-                                        realStatus);
+            ui.name = "Anônimo";
+            ui.email = "";
+            ui.chat = newChat.getId();
+            ui.status = realStatus;
+            //ui.session = session;
+            
             openChats.put(session, newChat.getId());
             onlineUsers.put(session, ui);
             setStatus(session, realStatus);
@@ -186,8 +231,20 @@ public class ChatEndpointTest {
         } else {
             if(currentUser.isConsultant()) {
                 if(consultants.containsKey(currentUser.getId())){
-                    consultants.remove(currentUser.getId());
+                    try {
+                        consultants.get(currentUser.getId()).close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ChatEndpointTest.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                
+                ui.name = currentUser.getName();
+                ui.email = currentUser.getEmail();
+                ui.chat = currentUser.getChat().getId();
+                ui.status = "";
+                //ui.session = session;
+                
+                onlineUsers.put(session, ui);
                 consultants.put(currentUser.getId(), session);
                 sendUserStatusList(currentUser.getId());
 
@@ -217,17 +274,21 @@ public class ChatEndpointTest {
                 }
 
                 users.put(newChat.getId(), session);
-                String realStatus = statusType.AVAILABLE.toString();
-                //String realStatus = statusType.OFFLINE.toString();
+                //String realStatus = statusType.AVAILABLE.toString();
+                String realStatus = statusType.OFFLINE.toString();
 
                 if(openChats.containsValue(newChat.getId())){ //um consultor estava atendendo o chat
                                                                 //e o usuário desconectou/voltou
                     realStatus = statusType.BUSY.toString();
                 }
-                UserInfo ui = new UserInfo(currentUser.getName(),
-                                            currentUser.getEmail(), 
-                                            currentUser.getChat().getId(), 
-                                            realStatus);
+                
+                ui.name = currentUser.getName();
+                ui.email = currentUser.getEmail();
+                ui.chat = currentUser.getChat().getId();
+                ui.status = realStatus;
+                //ui.session = session;
+                
+
                 openChats.put(session, newChat.getId());
                 onlineUsers.put(session, ui);
 
@@ -236,9 +297,8 @@ public class ChatEndpointTest {
             }
         }
         
-        
-        
-        
+       
+        //schedulePingMessages(ui);
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session opened for user {0} session ID {1}", new Object[]{userId, session.getId()});
     }
     
@@ -264,7 +324,8 @@ public class ChatEndpointTest {
         usl.type = "statusList";
 
         for(Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
-            usl.users.add(e.getValue());
+            if(!consultants.containsValue(e.getKey()))
+                usl.users.add(e.getValue());
         }
         
         Gson g = new Gson();
@@ -298,14 +359,16 @@ public class ChatEndpointTest {
         }
     }
     
+    
     private void deleteUserStatus(Session userSession, Long userKey){
         
         UserInfo u = onlineUsers.get(userSession);
+        u.status = statusType.OFFLINE.toString();
         
         onlineUsers.remove(userSession);
         
         UserStatusChange usl = new UserStatusChange();
-        usl.type = "userOffline";
+        usl.type = "statusChange";
         usl.users.add(u);
         
         Gson g = new Gson();
@@ -319,6 +382,17 @@ public class ChatEndpointTest {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+    /*
+    @OnMessage
+    public void onPong(PongMessage pongMessage, Session session) {
+        //String sourceSessionId = session.getId();
+        UserInfo user = onlineUsers.get(session);
+        user.timer.cancel();
+        user.timer.purge();
+    }
+*/
     
     //quando o consultor seleciona um chat, manda msg pro servidor avisando quem que conectou e altera o status dos chats
     @OnMessage
@@ -343,7 +417,16 @@ public class ChatEndpointTest {
             } else if (messageType.equals("disconnect")) {
                 openChats.remove(session);
                 
-            } else if(messageType.equals("message")) {
+            } else if (messageType.equals("statusAvailable")) {
+                Long chatId = node.get("chatId").asLong();
+                
+                setStatus(users.get(chatId), statusType.AVAILABLE.toString());
+                
+            } else if (messageType.equals("statusOffline")){
+                Long chatId = node.get("chatId").asLong();
+                
+                setStatus(users.get(chatId), statusType.OFFLINE.toString());
+            }else if(messageType.equals("message")) {
                 Message m = new Message();
                 Chat c = new Chat();
                 
@@ -391,12 +474,21 @@ public class ChatEndpointTest {
         if(users.containsValue(session)){
             Long userKey = getUserKeyForSession(session);
             users.remove(userKey);
-            deleteUserStatus(session, userKey);
+            
+            setStatus(session, statusType.OFFLINE.toString());
+            
+            onlineUsers.remove(session);
+            
         }
         
         
         if(consultants.containsValue(session)) {
-            consultants.remove(getConsultantKeyForSession(session));
+            Long userKey = getConsultantKeyForSession(session);
+            consultants.remove(userKey);
+            
+            setStatus(session, statusType.OFFLINE.toString());
+            
+            onlineUsers.remove(session);
         }
         
         if(openChats.containsKey(session)){

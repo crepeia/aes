@@ -98,6 +98,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return entity;
     }
     
+    /*
     @POST
     @Path("createUnregistered")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -129,6 +130,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             return null;
         }
     }
+    */
     
     @PUT
     @Path("/toggleConsultant/{id}")
