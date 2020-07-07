@@ -184,6 +184,7 @@ public class ChatEndpointTest {
             } catch (Exception ex) {
                 try {
                     session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
+                    return;
                 } catch (IOException ex1) {
                     Logger.getLogger(ChatEndpointTest.class.getName()).log(Level.SEVERE, null, ex1);
                 }
@@ -194,6 +195,7 @@ public class ChatEndpointTest {
             if(unauthId.isEmpty() || unauthId.get(0).isEmpty()){
                 try {
                     session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
+                    return;
                 } catch (IOException ex) {
                     Logger.getLogger(ChatEndpointTest.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -426,6 +428,10 @@ public class ChatEndpointTest {
                 Long chatId = node.get("chatId").asLong();
                 
                 setStatus(users.get(chatId), statusType.OFFLINE.toString());
+            } else if (messageType.equals("statusIdle")){
+                Long chatId = node.get("chatId").asLong();
+
+                setStatus(users.get(chatId), statusType.IDLE.toString());
             }else if(messageType.equals("message")) {
                 Message m = new Message();
                 Chat c = new Chat();
