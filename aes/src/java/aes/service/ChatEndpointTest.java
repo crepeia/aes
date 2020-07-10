@@ -279,10 +279,10 @@ public class ChatEndpointTest {
                 //String realStatus = statusType.AVAILABLE.toString();
                 String realStatus = statusType.OFFLINE.toString();
 
-                if(openChats.containsValue(newChat.getId())){ //um consultor estava atendendo o chat
+                //if(openChats.containsValue(newChat.getId())){ //um consultor estava atendendo o chat
                                                                 //e o usuário desconectou/voltou
-                    realStatus = statusType.BUSY.toString();
-                }
+                //    realStatus = statusType.BUSY.toString();
+                //}
                 
                 ui.name = currentUser.getName();
                 ui.email = currentUser.getEmail();
@@ -396,6 +396,62 @@ public class ChatEndpointTest {
     }
 */
     
+    void consultantDisconnectTimeout(Long chatId){
+        
+        UserStatusChange usl = new UserStatusChange();
+        usl.type = "setTimeout";
+
+        
+        Gson g = new Gson();
+        String json = g.toJson(usl);
+            
+        try {
+            for(Map.Entry<Session, Long> e: openChats.entrySet()) {
+                if(e.getValue().equals(chatId)){
+                    e.getKey().getBasicRemote().sendObject(json);
+                    System.out.println("service.ChatEndpoint.onMessage()");
+
+                }
+            }
+
+        } catch (IOException | EncodeException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void consultantConnectTimeout(Long chatId){
+        
+        UserStatusChange usl = new UserStatusChange();
+        usl.type = "unsetTimeout";
+
+        
+        Gson g = new Gson();
+        String json = g.toJson(usl);
+            
+        try {
+            for(Map.Entry<Session, Long> e: openChats.entrySet()) {
+                if(e.getValue().equals(chatId)){
+                    e.getKey().getBasicRemote().sendObject(json);
+                    System.out.println("service.ChatEndpoint.onMessage()");
+
+                }
+            }
+
+        } catch (IOException | EncodeException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void disconnectConsultantsFromUser(Session userSession, Long chatId){
+
+        for(Map.Entry<Session, Long> e: openChats.entrySet()) {
+            if(e.getValue().equals(chatId) && !e.getKey().equals(userSession)){
+                openChats.remove(e.getKey());
+            }
+        }
+        
+    }
+    
     //quando o consultor seleciona um chat, manda msg pro servidor avisando quem que conectou e altera o status dos chats
     @OnMessage
     public void onMessage(Session session, String message) {
@@ -413,25 +469,35 @@ public class ChatEndpointTest {
             if(messageType.equals("connect")){
                 Long chatId = node.get("chatId").asLong();
                 openChats.put(session, chatId);
+                consultantConnectTimeout(openChats.get(session));
+                
                 
                 setStatus(users.get(chatId), statusType.BUSY.toString());
                 
             } else if (messageType.equals("disconnect")) {
+                consultantDisconnectTimeout(openChats.get(session));
                 openChats.remove(session);
                 
             } else if (messageType.equals("statusAvailable")) {
                 Long chatId = node.get("chatId").asLong();
-                
                 setStatus(users.get(chatId), statusType.AVAILABLE.toString());
-                
+               
+                openChats.put(session, chatId);
+
             } else if (messageType.equals("statusOffline")){
                 Long chatId = node.get("chatId").asLong();
-                
                 setStatus(users.get(chatId), statusType.OFFLINE.toString());
+                
+                openChats.remove(session);
+                
+                disconnectConsultantsFromUser(session, chatId);
+                
             } else if (messageType.equals("statusIdle")){
                 Long chatId = node.get("chatId").asLong();
-
                 setStatus(users.get(chatId), statusType.IDLE.toString());
+                
+                disconnectConsultantsFromUser(session, chatId);
+                
             }else if(messageType.equals("message")) {
                 Message m = new Message();
                 Chat c = new Chat();
