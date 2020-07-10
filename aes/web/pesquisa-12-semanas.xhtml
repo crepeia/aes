@@ -294,28 +294,51 @@
 
                                             <p><h:outputText value="#{messages['audit.3.outputtext.1']}"/></p>
 
-                                            <p:panelGrid style="margin-bottom:30px" id="weeklyaverage">                                          
-                                                <p:row>    
-                                                    <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.5']}" style="font-weight:bold" /></p:column>  
-                                                    <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.6']}" style="font-weight:bold" /></p:column>
-                                                    <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.7']}" style="font-weight:bold" /></p:column>                                                                                     
-                                                    <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.1']}" style="font-weight:bold" /></p:column>                                                                           
-                                                    <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.2']}" style="font-weight:bold" /></p:column>                                      
-                                                    <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.3']}" style="font-weight:bold" /></p:column>
-                                                    <p:column> <h:outputLabel value="#{messages['audit.3.outputlabel.4']}" style="font-weight:bold" /></p:column> 
-
-                                                </p:row>   
-                                                <p:row>                                      
-                                                    <p:column> <p:spinner id="friday" value="#{evaluationController.evaluation.friday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.8']}"></p:spinner></p:column>
-                                                    <p:column> <p:spinner id="saturday" value="#{evaluationController.evaluation.saturday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.9']}"></p:spinner></p:column>
-                                                    <p:column> <p:spinner id="sunday" value="#{evaluationController.evaluation.sunday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.10']}"></p:spinner></p:column>
-                                                    <p:column><p:spinner id="monday" value="#{evaluationController.evaluation.monday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.4']}"></p:spinner></p:column>
-                                                    <p:column> <p:spinner id="tuesday" value="#{evaluationController.evaluation.tuesday}" size="5" min="0" required="true" requiredMessage="'#{messages['audit.3.Message.5']}" ></p:spinner></p:column>
-                                                    <p:column> <p:spinner id="wednesday" value="#{evaluationController.evaluation.wednesday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.6']}"></p:spinner></p:column>
-                                                    <p:column> <p:spinner id="thursday" value="#{evaluationController.evaluation.thursday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.7']}"></p:spinner></p:column>
-                                                </p:row>
-
-                                            </p:panelGrid>
+                                            <div id="weeklyaverage">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h:outputLabel value="#{messages['audit.3.outputlabel.5']}" style="font-weight:bold" />
+                                                        <br></br>
+                                                        <p:spinner id="friday" value="#{evaluationController.evaluation.friday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.8']}"></p:spinner>
+                                                    </div>  
+                                                    <div class="col">
+                                                        <h:outputLabel value="#{messages['audit.3.outputlabel.6']}" style="font-weight:bold" />
+                                                        <br></br>
+                                                        <p:spinner id="saturday" value="#{evaluationController.evaluation.saturday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.9']}"></p:spinner>
+                                                    
+                                                    </div>
+                                                    <div class="col">
+                                                        <h:outputLabel value="#{messages['audit.3.outputlabel.7']}" style="font-weight:bold" />
+                                                        <br></br>
+                                                        <p:spinner id="sunday" value="#{evaluationController.evaluation.sunday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.10']}"></p:spinner>
+                                                    
+                                                    </div>                                                                                     
+                                                    <div class="col">
+                                                        <h:outputLabel value="#{messages['audit.3.outputlabel.1']}" style="font-weight:bold" />
+                                                        <br></br>
+                                                        <p:spinner id="monday" value="#{evaluationController.evaluation.monday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.4']}"></p:spinner>
+                                                    
+                                                    </div>                                                                           
+                                                    <div class="col">
+                                                        <h:outputLabel value="#{messages['audit.3.outputlabel.2']}" style="font-weight:bold" />
+                                                        <br></br>
+                                                        <p:spinner id="tuesday" value="#{evaluationController.evaluation.tuesday}" size="5" min="0" required="true" requiredMessage="'#{messages['audit.3.Message.5']}" ></p:spinner>
+                                                    
+                                                    </div>                                      
+                                                    <div class="col">
+                                                        <h:outputLabel value="#{messages['audit.3.outputlabel.3']}" style="font-weight:bold" />
+                                                        <br></br>
+                                                        <p:spinner id="wednesday" value="#{evaluationController.evaluation.wednesday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.6']}"></p:spinner>
+                                                    
+                                                    </div>
+                                                    <div class="col">
+                                                        <h:outputLabel value="#{messages['audit.3.outputlabel.4']}" style="font-weight:bold" />
+                                                        <br></br>
+                                                        <p:spinner id="thursday" value="#{evaluationController.evaluation.thursday}" size="5" min="0" required="true" requiredMessage="#{messages['audit.3.Message.7']}"></p:spinner>
+                                                    
+                                                    </div> 
+                                                </div>
+                                            </div>
 
                                         </p:panel>
 
