@@ -106,9 +106,10 @@ public class ChatEndpointTest {
         }
     }
     
-    class NewUserConnection{
+    class GenericMessage{
         public String type;
-        public Long chatId;
+        public String value;
+        //public Long chatId;
     }
     
     public enum statusType {
@@ -206,6 +207,10 @@ public class ChatEndpointTest {
         UserInfo ui = new UserInfo();
         
         if(currentUser == null){
+            if(consultants.isEmpty()){
+                sendNoConsultantMessage(session);
+                return;
+            }
             newChat = new Chat();
             newChat.setUser(null);
             newChat.setStartDate(new Date());
@@ -304,14 +309,31 @@ public class ChatEndpointTest {
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session opened for user {0} session ID {1}", new Object[]{userId, session.getId()});
     }
     
-    private void sendNewUserChatId(Session session, Long chatId){
+    private void sendNoConsultantMessage(Session session){
         
-        NewUserConnection nuc = new NewUserConnection();
-        nuc.type = "chatid";
-        nuc.chatId = chatId;
+        GenericMessage gm = new GenericMessage();
+        gm.type = "noConsultants";
+        gm.value = "";
         
         Gson g = new Gson();
-        String json = g.toJson(nuc);
+        String json = g.toJson(gm);
+        
+        try {
+            session.getBasicRemote().sendObject(json);
+        } catch (IOException | EncodeException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    private void sendNewUserChatId(Session session, Long chatId){
+        
+        GenericMessage gm = new GenericMessage();
+        gm.type = "chatid";
+        gm.value = String.valueOf(chatId);//chatId;
+        
+        Gson g = new Gson();
+        String json = g.toJson(gm);
         
         try {
             session.getBasicRemote().sendObject(json);
@@ -351,8 +373,8 @@ public class ChatEndpointTest {
         
         Gson g = new Gson();
         String json = g.toJson(usl);
-        
         try {
+            userSession.getBasicRemote().sendObject(json);
             for (Map.Entry<Long, Session> c : consultants.entrySet()) {
                 c.getValue().getBasicRemote().sendObject(json);
             }
