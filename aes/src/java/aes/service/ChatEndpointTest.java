@@ -509,7 +509,7 @@ public class ChatEndpointTest {
             } else if (messageType.equals("statusOffline")){
                 Long chatId = node.get("chatId").asLong();
                 setStatus(users.get(chatId), statusType.OFFLINE.toString());
-                
+                consultantConnectTimeout(chatId);
                 openChats.remove(session);
                 
                 disconnectConsultantsFromUser(session, chatId);
@@ -567,9 +567,10 @@ public class ChatEndpointTest {
         
         if(users.containsValue(session)){
             Long userKey = getUserKeyForSession(session);
-            users.remove(userKey);
+            consultantConnectTimeout(userKey);
+            deleteUserStatus(session, userKey);
             
-            setStatus(session, statusType.OFFLINE.toString());
+            users.remove(userKey);
             
             onlineUsers.remove(session);
             
@@ -578,10 +579,9 @@ public class ChatEndpointTest {
         
         if(consultants.containsValue(session)) {
             Long userKey = getConsultantKeyForSession(session);
+            deleteUserStatus(session, userKey);
+
             consultants.remove(userKey);
-            
-            setStatus(session, statusType.OFFLINE.toString());
-            
             onlineUsers.remove(session);
         }
         

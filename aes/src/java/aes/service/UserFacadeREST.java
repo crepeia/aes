@@ -69,14 +69,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
     
     @POST
-    @Override
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public User create(User entity) {
+    public Response createUser(User entity) {
         List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
 
         if (!userList.isEmpty()) {
-            return null;
+            return Response.status(Response.Status.CONFLICT).build();
         } else {
             try {
                 
@@ -95,7 +94,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return entity;
+        return Response.ok(entity).build();
     }
     
     /*
