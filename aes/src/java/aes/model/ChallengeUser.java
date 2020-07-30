@@ -6,6 +6,7 @@
 package aes.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,13 +41,13 @@ public class ChallengeUser implements Serializable {
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
+    //@Temporal(javax.persistence.TemporalType.DATE)
     @Column(name = "date_created")
-    private Date dateCreated;
+    private LocalDate dateCreated;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
+    //@Temporal(javax.persistence.TemporalType.DATE)
     @Column(name = "date_completed")
-    private Date dateCompleted;
+    private LocalDate dateCompleted;
     
     @Column(name = "score")
     private Long score;
@@ -96,19 +97,19 @@ public class ChallengeUser implements Serializable {
         this.challenge = challenge;
     }
 
-    public Date getDateCreated() {
+    public LocalDate getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Date getDateCompleted() {
+    public LocalDate getDateCompleted() {
         return dateCompleted;
     }
 
-    public void setDateCompleted(Date dateCompleted) {
+    public void setDateCompleted(LocalDate dateCompleted) {
         this.dateCompleted = dateCompleted;
     }
 

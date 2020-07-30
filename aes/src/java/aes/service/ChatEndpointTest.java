@@ -390,7 +390,7 @@ public class ChatEndpointTest {
         u.status = statusType.OFFLINE.toString();
         
         onlineUsers.remove(userSession);
-        
+    
         UserStatusChange usl = new UserStatusChange();
         usl.type = "statusChange";
         usl.users.add(u);
@@ -567,7 +567,7 @@ public class ChatEndpointTest {
         
         if(users.containsValue(session)){
             Long userKey = getUserKeyForSession(session);
-            consultantConnectTimeout(userKey);
+            //consultantConnectTimeout(userKey);
             deleteUserStatus(session, userKey);
             
             users.remove(userKey);
@@ -588,6 +588,8 @@ public class ChatEndpointTest {
         if(openChats.containsKey(session)){
             openChats.remove(session);
         }
+        
+        
         
     }
     

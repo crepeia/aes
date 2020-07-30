@@ -10,6 +10,7 @@ import aes.model.Challenge;
 import aes.model.User;
 import aes.utility.Secured;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +65,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
             chUs.setUser(u);
             chUs.setChallenge(c);
-            chUs.setDateCreated(dc);
+            chUs.setDateCreated(dc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             super.create(chUs);
         }catch(Exception e){
             e.printStackTrace();
@@ -84,7 +85,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
                 Date cd = sdf.parse(compDate);
                 
 
-                ch.setDateCompleted(cd);
+                ch.setDateCompleted(cd.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                 ch.setScore(score);
             } else {
                 ch.setDateCompleted(null);
@@ -92,6 +93,43 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             }
             super.edit(ch);
             return ch;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+
+        }
+    }
+    
+    @PUT
+    @Path("completeCreateChallenge")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response completeCreateChallenge(ChallengeUser entity) {
+        try{
+            Challenge c = em.find(Challenge.class, entity.getChallenge().getId());
+            List<ChallengeUser> chList = 
+                    em.createQuery("SELECT ch FROM ChallengeUser ch "
+                            + "WHERE ch.user.id=:userId AND ch.challenge.id=:challengeId "
+                            + "ORDER BY ch.dateCompleted DESC")
+                    .setParameter("userId", entity.getUser().getId())
+                    .setParameter("challengeId", entity.getChallenge().getId())
+                    .getResultList();
+            
+            Challenge.ChallengeType ct = c.getType();
+            
+            if(chList.isEmpty()){
+                ChallengeUser newEntity = super.create(entity);
+                return Response.ok(newEntity).build();
+            } else {
+                if(ct.equals( Challenge.ChallengeType.ONCE )){
+                    return Response.status(Response.Status.NOT_MODIFIED).build();
+                } else if(ct.equals( Challenge.ChallengeType.DAILY )) {
+                    if(!chList.get(chList.size()-1).getDateCompleted().equals(entity.getDateCompleted())){
+                        ChallengeUser newEntity = super.create(entity);
+                        return Response.ok(newEntity).build();
+                    }
+                }
+            }
+            return Response.status(Response.Status.NOT_MODIFIED).build();
         }catch(Exception e){
             e.printStackTrace();
             return null;
