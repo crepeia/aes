@@ -123,13 +123,54 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
                 if(ct.equals( Challenge.ChallengeType.ONCE )){
                     return Response.status(Response.Status.NOT_MODIFIED).build();
                 } else if(ct.equals( Challenge.ChallengeType.DAILY )) {
-                    if(!chList.get(chList.size()-1).getDateCompleted().equals(entity.getDateCompleted())){
+                    if(!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())){
                         ChallengeUser newEntity = super.create(entity);
                         return Response.ok(newEntity).build();
                     }
                 }
             }
             return Response.status(Response.Status.NOT_MODIFIED).build();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+
+        }
+    }
+    
+    @DELETE
+    @Path("deleteChallenge/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response deleteChallenge(@PathParam("id") Long id) {
+        try{
+            super.remove(super.find(id));
+            return Response.ok().build();
+            /*
+            Challenge c = em.find(Challenge.class, entity.getChallenge().getId());
+            List<ChallengeUser> chList = 
+                    em.createQuery("SELECT ch FROM ChallengeUser ch "
+                            + "WHERE ch.user.id=:userId AND ch.challenge.id=:challengeId "
+                            + "ORDER BY ch.dateCompleted DESC")
+                    .setParameter("userId", entity.getUser().getId())
+                    .setParameter("challengeId", entity.getChallenge().getId())
+                    .getResultList();
+            
+            Challenge.ChallengeType ct = c.getType();
+            
+            if(chList.isEmpty()){
+                ChallengeUser newEntity = super.create(entity);
+                return Response.ok(newEntity).build();
+            } else {
+                if(ct.equals( Challenge.ChallengeType.ONCE )){
+                    return Response.status(Response.Status.NOT_MODIFIED).build();
+                } else if(ct.equals( Challenge.ChallengeType.DAILY )) {
+                    if(!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())){
+                        ChallengeUser newEntity = super.create(entity);
+                        return Response.ok(newEntity).build();
+                    }
+                }
+            }
+            return Response.status(Response.Status.NOT_MODIFIED).build();
+            */
         }catch(Exception e){
             e.printStackTrace();
             return null;
