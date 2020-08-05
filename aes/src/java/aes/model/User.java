@@ -112,6 +112,10 @@ public class User implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<ChallengeUser> challenges;
     
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<AppSuggestion> appSuggestions;
+    
     
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
@@ -434,9 +438,19 @@ public class User implements Serializable {
     public List<ChallengeUser> getChallenges() {
         return challenges;
     }
-
+    
     public void setChallenges(List<ChallengeUser> challenges) {
         this.challenges = challenges;
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    public List<AppSuggestion> getAppSuggestions() {
+        return appSuggestions;
+    }
+
+    public void setAppSuggestions(List<AppSuggestion> appSuggestions) {
+        this.appSuggestions = appSuggestions;
     }
 
     public boolean isAdmin() {

@@ -46,6 +46,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(aes.service.AppSuggestionFacadeREST.class);
         resources.add(aes.service.AuthenticationFilter.class);
         resources.add(aes.service.AuthenticationTokenFacadeREST.class);
         resources.add(aes.service.ChallengeFacadeREST.class);
