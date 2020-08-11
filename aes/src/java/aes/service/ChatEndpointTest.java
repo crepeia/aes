@@ -568,21 +568,20 @@ public class ChatEndpointTest {
         if(users.containsValue(session)){
             Long userKey = getUserKeyForSession(session);
             //consultantConnectTimeout(userKey);
-            deleteUserStatus(session, userKey);
             
             users.remove(userKey);
-            
-            onlineUsers.remove(session);
+            deleteUserStatus(session, userKey);
+
+            //onlineUsers.remove(session);
             
         }
         
         
         if(consultants.containsValue(session)) {
             Long userKey = getConsultantKeyForSession(session);
+            consultants.remove(userKey);
             deleteUserStatus(session, userKey);
 
-            consultants.remove(userKey);
-            onlineUsers.remove(session);
         }
         
         if(openChats.containsKey(session)){

@@ -5,16 +5,22 @@
  */
 package aes.service;
 
+import aes.controller.ChallengeUserController;
 import aes.model.ChallengeUser;
 import aes.model.Challenge;
 import aes.model.User;
 import aes.utility.Secured;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import javafx.util.Pair;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -44,6 +50,9 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
     @Context
     SecurityContext securityContext;
+    
+    @Inject
+    private ChallengeUserController challengeUserController;
     
     
     
@@ -261,6 +270,33 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             return null;
         }
     }
+    
+    @GET
+    @Path("rankFromDate")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<ChallengeUserController.NicknameScore> rankFromDate(@PathParam("startDate") String sd) {
+        try {
+            List<ChallengeUserController.NicknameScore> resultList = new LinkedList<>();
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            LocalDate dateStart = sdf.parse(sd).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();   
+
+            List<User> users = this.getEntityManager()
+                                .createQuery("SELECT u FROM User u WHERE u.inRanking = 1")
+                                .getResultList();
+
+            users.forEach(u -> {
+                long points = challengeUserController.getPointsFromDate(u, dateStart);
+                resultList.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
+            });
+
+            return resultList;
+
+        } catch (ParseException ex) {
+            return null;
+        }
+    }
+    
     
     
     @GET

@@ -703,6 +703,10 @@ public class UserController extends BaseController<User> {
         return (getUser().isAdmin());
     }
     
+    public boolean isInRanking(){
+        return (getUser().isInRanking());
+    }
+    
     public List<User> userList(){
         try {
             userList = this.getDaoBase().listNotNull("email", getEntityManager());

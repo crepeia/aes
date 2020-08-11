@@ -493,6 +493,50 @@ html, body {
      
 }
 
+.ranking-style{
+    display: flex;
+    flex-direction: column;
+   
+}
+
+.ranking-select {
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.ranking-select > h3{
+    flex:1;
+    margin: 0;
+    text-align: center
+}
+
+
+
+.ranking-info {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around    
+}
+
+.ranking-info > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center    
+}
+
+.ranking-info-score{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px
+        
+}
 
 /* FAST LOGIN */
 
@@ -1418,6 +1462,7 @@ img#artigotabaco{
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    max-width: 300px;
 }
 
 .passos-txt h2 {    
@@ -1625,6 +1670,8 @@ thead{
     position:relative;
     left:12px;
 }
+  
+
 
 /* STANDARD DRINK */
 #standarddose  {
@@ -1883,7 +1930,11 @@ hr {
     
     #editprofile {
     width: 100%;
-}
+    }
+
+    .ranking-info {
+        flex-direction: column;
+    }
 }
 
 /* Tablet Styles */

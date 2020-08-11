@@ -137,6 +137,12 @@ public class User implements Serializable {
     @Column(name = "use_chatbot")
     private boolean use_chatbot;
     
+    @Column(name = "in_ranking")
+    private boolean inRanking;
+    
+    @Column(name = "nickname")
+    private String nickname;
+    
     @Column(name = "registration_complete")
     private boolean registration_complete;
     
@@ -500,5 +506,22 @@ public class User implements Serializable {
     public void setRegistration_complete(boolean registration_complete) {
         this.registration_complete = registration_complete;
     }
+
+    public boolean isInRanking() {
+        return inRanking;
+    }
+
+    public void setInRanking(boolean inRanking) {
+        this.inRanking = inRanking;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    
     
 }

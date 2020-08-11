@@ -7,11 +7,20 @@ ALTER TABLE tb_user
 ADD COLUMN use_chatbot BOOLEAN DEFAULT FALSE;
 
 
+
 ALTER TABLE aes.tb_user
 ADD COLUMN registration_complete BOOLEAN DEFAULT FALSE;
 
 UPDATE aes.tb_user SET registration_complete=TRUE
 WHERE email IS NOT NULL
+
+
+UPDATE aes.tb_user
+ADD COLUMN in_ranking BOOLEAN DEFAULT FALSE;
+
+UPDATE aes.tb_user
+ADD COLUMN nickname BOOLEAN DEFAULT "";
+
 
 
 
@@ -29,3 +38,14 @@ WHERE email IS NOT NULL
 
 UPDATE aes.tb_user SET registration_complete=FALSE
 WHERE email IS NULL
+
+
+UPDATE aes.tb_user SET registration_complete=FALSE
+WHERE email IS NULL
+
+
+UPDATE aes.tb_user SET in_ranking=FALSE
+WHERE in_ranking IS NULL
+
+UPDATE aes.tb_user SET nickname=""
+WHERE nickname IS NULL

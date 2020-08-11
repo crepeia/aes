@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            
+            <title>Ranking</title>
+
+            <w:head_comum />
+            <!-- header -->    
+            <w:header loginRequired="true" />
+            <w:topmenu />
+        </h:head>
+        
+       <h:body>
+
+        <div id="corpo">
+            <div class="main">
+                <div class="pagecontent">
+                    
+                    <h1>Ranking de desafios</h1>
+                    <div id="maintop">
+                        <h:form style="width: 100%" id="listForm" rendered="#{userController.isInRanking()}">
+
+                            <div class="ranking-info" >
+                                
+                                <div>
+                                    <h4>Sua pontuação: </h4>
+                                    <h:outputText styleClass="ranking-info-score" id="periodScore" value="#{challengeUserController.getSelectedScore()}" />
+                                </div>
+                                
+                                <div>
+                                    <h4>Início do período: </h4>
+                                    <h:outputText  id="periodStart" styleClass="ranking-info-score"  value="#{challengeUserController.getSelectedDate().toString()}" />        
+                                </div>
+                                
+                                
+
+                            </div>
+                            <div class="ranking-select">
+                                <h3>Visualizando o ranking:</h3>
+                                <h:selectOneMenu class="custom-select" value="#{challengeUserController.rankFilter}">
+                                    <f:selectItem itemValue = "1" itemLabel = "Semanal" /> 
+                                    <f:selectItem itemValue = "2" itemLabel = "Mensal" />
+                                    <f:selectItem itemValue = "3" itemLabel = "Anual" /> 
+                                    <f:selectItem itemValue = "4" itemLabel = "Total" /> 
+                                    <f:ajax listener="#{challengeUserController.listener}" render="challengeTable periodScore periodStart" />
+                                </h:selectOneMenu>
+                            </div>
+
+                            
+                            <h:dataTable width="100%" id="challengeTable" binding="#{table}" value="#{challengeUserController.getFilteredResultList()}" var="challengeUser" class="table table-striped table-hover table-bordered tableUpdated">
+
+                                <h:column>
+                                    <f:facet name="header">Apelido</f:facet>
+                                    <h:outputText value="#{challengeUser.nickname}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Pontuação</f:facet>
+                                    <h:outputText value="#{challengeUser.score}" />
+                                </h:column>
+                            </h:dataTable>
+                            
+                        </h:form>
+                        
+                        <h:form style="width: 100%" id="notInRankingForm" rendered="#{!userController.isInRanking()}">
+                            
+                            <h2 class="text-info">Você ainda não está participando do ranking de desafios.</h2>
+                            <p>Para participar e acumular pontos, baixe nosso App disponível para Android!</p>                            
+                                
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        <w:footer />
+    </h:body>
+
+
+    </f:view>
+</html>
+

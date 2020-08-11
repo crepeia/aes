@@ -136,9 +136,37 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public User toggleConsultant(@PathParam("id") Long id) {
+        String userEmail = securityContext.getUserPrincipal().getName();
         try{
-            User u = em.find(User.class, id);
+            User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
+                                .setParameter("email", userEmail)
+                                .getSingleResult();
             u.setConsultant(!u.isConsultant());
+            userTransaction.begin();
+            super.edit(u);
+            userTransaction.commit();
+            return u;
+        }catch(Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return null;
+        }
+    }
+    
+    @PUT
+    @Path("/setInRanking")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public User setInRanking(User entity) {
+        String userEmail = securityContext.getUserPrincipal().getName();
+        try{
+            
+            User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
+                                .setParameter("email", userEmail)
+                                .getSingleResult();
+            
+            u.setInRanking(entity.isInRanking());
+            u.setNickname(entity.getNickname());
+
             userTransaction.begin();
             super.edit(u);
             userTransaction.commit();
