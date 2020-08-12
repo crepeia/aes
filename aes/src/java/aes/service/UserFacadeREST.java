@@ -155,15 +155,20 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @PUT
     @Path("/setInRanking")
     @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public User setInRanking(User entity) {
         String userEmail = securityContext.getUserPrincipal().getName();
+        System.out.println("aes.service.UserFacadeREST.setInRanking()");
         try{
             
             User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
                                 .setParameter("email", userEmail)
                                 .getSingleResult();
-            
+            System.out.println(u.getEmail());
+            System.out.println(entity.isInRanking());
+            System.out.println(entity.getNickname());
+
             u.setInRanking(entity.isInRanking());
             u.setNickname(entity.getNickname());
 

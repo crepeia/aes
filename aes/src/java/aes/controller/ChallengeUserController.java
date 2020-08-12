@@ -12,9 +12,11 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
@@ -171,6 +173,7 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
         if(rankFilter == 1){
             selectedDate = dateStart.with(ChronoField.DAY_OF_WEEK, 1).toString();
             filteredResultList = getRankFromDate(dateStart.with(ChronoField.DAY_OF_WEEK, 1));
+            
             selectedScore = userScoreWeekly;
 
         } else if(rankFilter == 2){
@@ -185,12 +188,13 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
         } else if(rankFilter == 4 ){
             selectedDate = "TOTAL";
             filteredResultList = getRankAllTime();
+            
             selectedScore = userScore;
         }else {
             filteredResultList.clear();
             selectedScore = 0;
-
         }
+        Collections.sort(filteredResultList, (a, b) -> a.score > b.score? -1 : Objects.equals(a.score, b.score) ? 0 : 1);
         
     }
 

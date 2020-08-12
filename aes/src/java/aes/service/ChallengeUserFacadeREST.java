@@ -10,10 +10,12 @@ import aes.model.ChallengeUser;
 import aes.model.Challenge;
 import aes.model.User;
 import aes.utility.Secured;
+import com.google.gson.Gson;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
@@ -50,10 +52,6 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
     @Context
     SecurityContext securityContext;
-    
-    @Inject
-    private ChallengeUserController challengeUserController;
-    
     
     
     public ChallengeUserFacadeREST() {
@@ -281,12 +279,12 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             LocalDate dateStart = sdf.parse(sd).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();   
 
-            List<User> users = this.getEntityManager()
+            List<User> users = getEntityManager()
                                 .createQuery("SELECT u FROM User u WHERE u.inRanking = 1")
                                 .getResultList();
 
             users.forEach(u -> {
-                long points = challengeUserController.getPointsFromDate(u, dateStart);
+                long points = getPointsFromDate(u, dateStart);
                 resultList.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
             });
 
@@ -297,6 +295,56 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
         }
     }
     
+    public static class RankLists {
+        List<ChallengeUserController.NicknameScore> weeklyResult;
+        List<ChallengeUserController.NicknameScore> monthlyResult;
+        List<ChallengeUserController.NicknameScore> yearlyResult;
+        public RankLists(){
+            weeklyResult = new LinkedList<>();
+            monthlyResult = new LinkedList<>();
+            yearlyResult = new LinkedList<>();
+        }
+    }
+    
+    
+    @GET
+    @Path("rank/{today}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response rank(@PathParam("today") String today) {
+        
+        try {
+            RankLists rank = new RankLists();
+
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            LocalDate dateStart = sdf.parse(today).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();   
+
+            List<User> users = getEntityManager()
+                                .createQuery("SELECT u FROM User u WHERE u.inRanking = 1")
+                                .getResultList();
+
+            users.forEach(u -> {
+                long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_WEEK, 1));
+                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
+            });
+            users.forEach(u -> {
+                long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_MONTH, 1));
+                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
+            });
+            users.forEach(u -> {
+                long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_YEAR, 1));
+                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
+            });
+            
+            Gson g = new Gson();
+            String json = g.toJson(rank);
+
+            return Response.ok(json).build();
+
+        } catch (ParseException ex) {
+            return Response.serverError().build();
+        }
+    }
     
     
     @GET
@@ -304,6 +352,15 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
+    }
+    
+    protected long getPointsFromDate(User u, LocalDate date){
+        Long score = (Long) this.getEntityManager()
+                        .createQuery("SELECT SUM(c.score) FROM ChallengeUser c WHERE c.dateCompleted > :date AND c.user.id=:userId")
+                        .setParameter("date", date)
+                        .setParameter("userId", u.getId()).getSingleResult();
+        if(score == null) score = Long.valueOf(0);
+        return score;
     }
 
     @Override
