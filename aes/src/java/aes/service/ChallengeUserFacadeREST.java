@@ -57,7 +57,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     public ChallengeUserFacadeREST() {
         super(ChallengeUser.class);
     }
-
+/*
     @POST
     @Path("createChallenge/{challengeId}/{userId}/{date}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -78,8 +78,8 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             e.printStackTrace();
         }
     }
-    
-
+    */
+    /*
     @PUT
     @Path("completeChallenge/{id}/{date}/{score}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -106,6 +106,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
         }
     }
+    */
     
     @PUT
     @Path("completeCreateChallenge")
@@ -149,35 +150,16 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response deleteChallenge(@PathParam("id") Long id) {
         try{
-            super.remove(super.find(id));
-            return Response.ok().build();
-            /*
-            Challenge c = em.find(Challenge.class, entity.getChallenge().getId());
-            List<ChallengeUser> chList = 
-                    em.createQuery("SELECT ch FROM ChallengeUser ch "
-                            + "WHERE ch.user.id=:userId AND ch.challenge.id=:challengeId "
-                            + "ORDER BY ch.dateCompleted DESC")
-                    .setParameter("userId", entity.getUser().getId())
-                    .setParameter("challengeId", entity.getChallenge().getId())
-                    .getResultList();
-            
-            Challenge.ChallengeType ct = c.getType();
-            
-            if(chList.isEmpty()){
-                ChallengeUser newEntity = super.create(entity);
-                return Response.ok(newEntity).build();
+            String userEmail = securityContext.getUserPrincipal().getName();
+            ChallengeUser chUs = super.find(id);
+            if(chUs.getUser().getEmail().equals(userEmail)){
+                super.remove(super.find(id));
+                return Response.ok().build();
             } else {
-                if(ct.equals( Challenge.ChallengeType.ONCE )){
-                    return Response.status(Response.Status.NOT_MODIFIED).build();
-                } else if(ct.equals( Challenge.ChallengeType.DAILY )) {
-                    if(!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())){
-                        ChallengeUser newEntity = super.create(entity);
-                        return Response.ok(newEntity).build();
-                    }
-                }
+                return Response.notModified().build();
             }
-            return Response.status(Response.Status.NOT_MODIFIED).build();
-            */
+            
+        
         }catch(Exception e){
             e.printStackTrace();
             return null;
@@ -190,8 +172,11 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ChallengeUser> findByUser(@PathParam("userId") String uId) {
         try {
-            List<ChallengeUser> l = getEntityManager().createQuery("SELECT tu FROM ChallengeUser tu WHERE tu.user.id=:userId")
+            String userEmail = securityContext.getUserPrincipal().getName();
+            
+            List<ChallengeUser> l = getEntityManager().createQuery("SELECT tu FROM ChallengeUser tu WHERE tu.user.id=:userId AND tu.user.email=:userEmail")
                 .setParameter("userId", Long.parseLong(uId))
+                .setParameter("userEmail", userEmail)
                 .getResultList();
             if(l.isEmpty()) {
                 return Collections.emptyList();
@@ -203,14 +188,14 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             return null;
         }
     }
-
+    /*
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<ChallengeUser> findAll() {
         return super.findAll();
     }
-    
+    */
     @GET
     @Path("points")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package aes.service;
-
+import aes.model.User;
 import aes.model.Message;
 import aes.model.Chat;
 import aes.utility.Secured;
@@ -20,7 +20,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -33,6 +35,9 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    
+    @Context
+    SecurityContext securityContext;
 
     public MessageFacadeREST() {
         super(Message.class);
@@ -45,11 +50,18 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
         /*return getEntityManager().createQuery("SELECT m FROM Message m ORDER BY m.sentDate DESC")
                 .getResultList();
         */
-        
-        return getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
+        String userEmail = securityContext.getUserPrincipal().getName();
+        User u = (User) getEntityManager().createQuery("SELECT u FROM User u WHERE u.email=:userEmail")
+                .setParameter("userEmail", userEmail)
+                .getSingleResult();
+        //only answer queries from the owner of the messagens or consultant
+        if(u.getChat().getId().equals(chatId) || u.isConsultant()){
+            return getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
                 .setParameter("chatId", chatId)
                 .getResultList();
-
+        } else {
+            return null;
+        }
     }
     
     @Override

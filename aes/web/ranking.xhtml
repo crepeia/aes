@@ -55,7 +55,10 @@
 
                             
                             <h:dataTable width="100%" id="challengeTable" binding="#{table}" value="#{challengeUserController.getFilteredResultList()}" var="challengeUser" class="table table-striped table-hover table-bordered tableUpdated">
-
+                                <h:column>
+                                    <f:facet name="header">Posição</f:facet>
+                                    <h:outputText value="# #{challengeUser.position}" />
+                                </h:column>
                                 <h:column>
                                     <f:facet name="header">Apelido</f:facet>
                                     <h:outputText value="#{challengeUser.nickname}" />

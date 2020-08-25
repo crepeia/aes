@@ -23,8 +23,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -37,6 +39,9 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    
+    @Context
+    SecurityContext securityContext;
 
     public EvaluationFacadeREST() {
         super(Evaluation.class);
@@ -53,27 +58,32 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
             return null;
         }
     }
-
+/*
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Long id, Evaluation entity) {
         super.edit(entity);
     }
+    
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
-
+*/
+    
     @GET
     @Path("find/{userId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Evaluation find(@PathParam("userId") Long userId) {
         try {
-            List<Evaluation> evList = getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId")
+            String userEmail = securityContext.getUserPrincipal().getName();
+            
+            List<Evaluation> evList = getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId AND e.user.email=:userEmail")
                     .setParameter("userId", userId)
+                    .setParameter("userEmail", userEmail)
                     .getResultList();
             
             if(evList.size() > 0){
@@ -95,20 +105,6 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
         }
     }
 
-    @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Evaluation> findAll() {
-        return super.findAll();
-    }
-
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Evaluation> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-    
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)

@@ -13,10 +13,12 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
@@ -38,9 +40,11 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
     public static class NicknameScore {
         private String nickname;
         private Long score;
+        private int position;
         public NicknameScore(String nickname, Long score){
             this.nickname = nickname;
             this.score = score;
+            this.position = 0;
         }
 
         public String getNickname() {
@@ -58,6 +62,15 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
         public void setScore(Long score) {
             this.score = score;
         }
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
+        
         
     }
     
@@ -90,6 +103,19 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
             rankFilter = 1;
             selectedDate = locDate.with(ChronoField.DAY_OF_WEEK, 1).toString();
             selectedScore = userScoreWeekly;
+            
+            Collections.sort(filteredResultList, (a, b) -> a.score > b.score? -1 : Objects.equals(a.score, b.score) ? 0 : 1);
+
+            int  position = 1;
+            Long lastScore = filteredResultList.get(0).getScore();
+
+            for(NicknameScore fr: filteredResultList){
+                if(!Objects.equals(fr.score, lastScore)){
+                    position += 1;
+                    lastScore = fr.score;
+                }
+                fr.setPosition(position);
+            }
             
             daoBase = new GenericDAO<ChallengeUser>(ChallengeUser.class);
         } catch (NamingException ex) {
@@ -195,7 +221,17 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
             selectedScore = 0;
         }
         Collections.sort(filteredResultList, (a, b) -> a.score > b.score? -1 : Objects.equals(a.score, b.score) ? 0 : 1);
+
+        int  position = 1;
+        Long lastScore = filteredResultList.get(0).getScore();
         
+        for(NicknameScore fr: filteredResultList){
+            if(!Objects.equals(fr.score, lastScore)){
+                position += 1;
+                lastScore = fr.score;
+            }
+            fr.setPosition(position);
+        }
     }
 
     public List<ChallengeUser> getUserChallenges() {

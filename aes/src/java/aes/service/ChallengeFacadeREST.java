@@ -6,6 +6,7 @@
 package aes.service;
 
 import aes.model.Challenge;
+import aes.utility.Secured;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,6 +27,7 @@ import javax.ws.rs.core.MediaType;
  */
 @Stateless
 @Path("secured/challenge")
+@Secured
 public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
 
     @PersistenceContext(unitName = "aesPU")
