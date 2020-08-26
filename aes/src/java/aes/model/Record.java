@@ -25,9 +25,9 @@ public class Record implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "daily_goal")
-    private Integer dailyGoal;
+    private Float dailyGoal;
     @Column(name = "weekly_goal")
-    private Integer weeklyGoal;
+    private Float weeklyGoal;
     
     @JsonBackReference
     @OneToOne
@@ -44,25 +44,25 @@ public class Record implements Serializable{
         this.id = id;
     }
 
-    public Integer getDailyGoal() {
+    public Float getDailyGoal() {
         if(dailyGoal == null){
-            return 0;
+            return Float.valueOf(0);
         }
         return dailyGoal;
     }
 
-    public void setDailyGoal(Integer dailyGoal) {
+    public void setDailyGoal(Float dailyGoal) {
         this.dailyGoal = dailyGoal;
     }
 
-    public Integer getWeeklyGoal() {
+    public Float getWeeklyGoal() {
         if(weeklyGoal == null){
-            return 0;
+            return Float.valueOf(0);
         }
         return weeklyGoal;
     }
 
-    public void setWeeklyGoal(Integer weeklyGoal) {
+    public void setWeeklyGoal(Float weeklyGoal) {
         this.weeklyGoal = weeklyGoal;
     }
 

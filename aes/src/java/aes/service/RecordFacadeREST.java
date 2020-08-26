@@ -21,8 +21,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -36,6 +38,9 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
 
+    @Context
+    SecurityContext securityContext;
+    
     public RecordFacadeREST() {
         super(Record.class);
     }
@@ -55,11 +60,13 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     @Path("create/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Record create(@PathParam("userId") Long userId) {
+        //String userEmail = securityContext.getUserPrincipal().getName();
+        
         try {
             Record entity = new Record();
             entity.setUser(em.find(User.class, userId));
-            entity.setDailyGoal(null);
-            entity.setWeeklyGoal(null);
+            entity.setDailyGoal(Float.valueOf(0));
+            entity.setWeeklyGoal(Float.valueOf(0));
             super.create(entity);
             return entity;
         } catch (Exception e) {
@@ -76,13 +83,13 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
         return entity;
     }
     
-
+/*
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
-
+*/
     @GET
     @Path("find/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
