@@ -1,0 +1,18 @@
+# Sample site navigation bar links
+
+- title: About
+  url: /
+- title: Projects
+  url: /projects/
+# - title: Categories
+#   url: /categories/
+# - title: Tags
+#   url: /tags/
+# - title: Recipes
+#   url: /recipes/
+# - title: Search
+#   url: /search/
+- title: Website
+  url: https://alcoolesaude.com.br/
+- title: Mobile
+  url: https://play.google.com/store?hl=pt_BR
