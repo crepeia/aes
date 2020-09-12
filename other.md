@@ -9,8 +9,6 @@ image:
     credit: Bruno Pinheiro
 ---
 
-# Other Projects
-
 If you are interest in this work, you should also check out other projects we are developing.
 
 
