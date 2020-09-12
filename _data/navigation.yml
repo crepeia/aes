@@ -4,15 +4,11 @@
   url: /
 - title: Projects
   url: /projects/
-# - title: Categories
-#   url: /categories/
-# - title: Tags
-#   url: /tags/
-# - title: Recipes
-#   url: /recipes/
 - title: Website
   url: https://alcoolesaude.com.br/
+  newTab: true
 - title: Mobile
   url: https://play.google.com/store?hl=pt_BR
+  newTab: true
 - title: Related Works
   url: /other/

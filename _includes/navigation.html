@@ -9,7 +9,12 @@
           {%- else -%}
             {%- assign url = link.url | relative_url -%}
           {%- endif -%}
+          {%- if link.newTab -%}
+          <li><a target="_blank" rel="noopener noreferrer" href="{{ url }}">{{ link.title }}</a></li>
+          {%- else -%}
           <li><a href="{{ url }}">{{ link.title }}</a></li>
+          {%- endif -%}
+          
         {%- endfor -%}
       </ul>
     </nav>

@@ -2,6 +2,7 @@
 layout: page
 title: "Mobile Project"
 share: false
+tags: [e-health, aes, alcohol, install, setup, mobile]
 image: 
   show: false
   path: images/aes-bg-android2.png

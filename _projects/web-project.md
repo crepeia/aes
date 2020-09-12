@@ -2,8 +2,9 @@
 layout: page
 title: "Web Project"
 share: false
+tags: [e-health, aes, alcohol, install, setup, web]
+
 image: 
-  
   path: images/aes-bg-java.png
   thumbnail: images/aes-bg-java.png
   caption: "AeS header"

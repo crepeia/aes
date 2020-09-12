@@ -4,7 +4,6 @@ source "https://rubygems.org"
 gem "jekyll-theme-so-simple"
 
 group :jekyll_plugins do
-    gem 'jekyll-commonmark-ghpages'
     gem "jekyll-paginate"
  end
 
