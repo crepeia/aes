@@ -243,7 +243,12 @@ Now execute de project using the *Run* command.
 
 ## Translation
 
-[TO-DO]
+The translation files are located in “Source Packages” folder, inside the controller aes-utility”. They all have names starting with messages_xx_properties.
+
+```
+./aes > aes > src > java > aes > utility
+```
+
 
 ---
 
@@ -251,13 +256,22 @@ Now execute de project using the *Run* command.
 ## Graphics
 
 ### Images and Vectors
-[TO-DO]
+
+The images are in Web Pages -> resources -> default -> images. We recommend the open-source software Inkscape to work with vector graphics.
+
+``` 
+./aes > aes > web > resources > default > images
+```
 
 ### Video
 [TO-DO]
 
 ### Stylesheet
-[TO-DO]
+The CSS code is located in Web Pages -> resources -> default -> css.
+```
+./aes > aes > web > resources > default > css
+```
+
 
 ---
 
