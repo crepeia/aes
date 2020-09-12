@@ -19,8 +19,8 @@ skin: "/assets/css/skins/default.css"
 locale: en-US
 title: "Álcool e Saúde"
 description: "Open source web and mobile based alcohol intervention."
-baseurl: "/aes" #the subpath of your site, e.g. "/blog"
-url: "https://crepeia.github.io/"  # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+# baseurl: "/aes" #the subpath of your site, e.g. "/blog"
+url: "https://crepeia.github.io/aes"  # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 logo: "/images/logo.png" # path of site logo, e.g. "/images/logo.png"
 date_format: "%B %-d, %Y"
 
