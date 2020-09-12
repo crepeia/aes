@@ -7,6 +7,5 @@ entries_layout: grid
 sort_by: title
 ---
 
-# Install
-We are currently maitaining two projects related to AeS.
+We are currently maitaining two projects related to Álcool e Saúde.
 You can learn more and configure each project with the guides below.

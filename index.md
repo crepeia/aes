@@ -1,7 +1,7 @@
 ---
 layout: page
 permalink: /
-title: About Álcool e Saúde project
+title: About Álcool e Saúde
 tags: [e-health, aes, open-source, drinking]
 modified: 2020-09-11
 image:
@@ -11,14 +11,31 @@ image:
 ---
 
 
+## What is this?
+
+[TO-DO]
+
+## Álcool e Saúde is all about
+
+[TO-DO]
+
 ## Who are we?
-We are a team of researchers with different backgrounds (drug addiction, psychology, IT) from Federal University of Juiz de Fora. We love open-source and strongly believe in open-science. Of course, we also believe that healthcare access should be free for all.
+[TO-DO]
+
+## Who pays the bill?
+[TO-DO]
+
+## What’s next?
+[TO-DO]
 
 
 ## How can you contribute?
 
 ### Translation
-Our system is ready to translation and we encourage you to spread the word. If you wish to help, reach us at: henriquepgomide@gmail.com.
+[TO-DO]
 
 ### Research
-Almost every aspect of this "Life without tobacco" might be topic of research. If you are a researcher and have interest in develop a study, contact us by email: henriquepgomide@gmail.com. 
+[TO-DO]
+
+
+[Our Projects](/projects/){: .btn .btn--primary .btn--large}
