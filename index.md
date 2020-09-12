@@ -1,7 +1,7 @@
 ---
 layout: page
 permalink: /
-title: Sobre Álcool e Saúde project
+title: About Álcool e Saúde project
 tags: [e-health, aes, open-source, drinking]
 modified: 2020-09-11
 image:
