@@ -38,4 +38,4 @@ image:
 [TO-DO]
 
 
-[Our Projects](/projects/){: .btn .btn--primary .btn--large}
+[Our Projects](./projects/){: .btn .btn--primary .btn--large}
