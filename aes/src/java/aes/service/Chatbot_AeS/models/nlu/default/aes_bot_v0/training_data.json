@@ -1,0 +1,473 @@
+{
+  "rasa_nlu_data": {
+    "common_examples": [
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo de sentir falta"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio de sentir falta"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Muito obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Obrigado"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo de sentir falta"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio de sentir falta"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Muito obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Obrigado"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo de sentir falta"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio de sentir falta"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Muito obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Obrigado"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo de sentir falta"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio de sentir falta"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Muito obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Obrigado"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo de sentir falta"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio de sentir falta"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Muito obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Obrigada"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Muito obrigada"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "entendi obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "entendi"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Tudo bem?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Beleza?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Como vai voce?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Beleza?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Tudo bem?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Como vai voce?"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Boa tarde"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Boa noite"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Bom dia"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Boa tarde"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Boa noite"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Bom dia"
+      },
+      {
+        "intent": "informacao",
+        "text": "Por que devo parar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Vale a pena parar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Vale a pena deixar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Eu deveria parar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Vale a pena parar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Vale a pena deixar de fumar?,"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Tenho medo de engordar"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Tenho receio de ganhar peso"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Acho que vou ficar gorda"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Tenho receio de engordar"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Tenho medo de ganhar peso"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Acho que vou ficar gorda"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Nao estou conseguindo parar de fumar"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Preciso de ajuda para parar de fumar"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Tenho receio de fracassar"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Tenho medo de nao conseguir"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Parei de fumar,  mas esta muito dificil ficar sem fumar"
+      },
+      {
+        "intent": "motivacao",
+        "text": "nao sei se eu vou conseguir"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio das crises de abstinencia"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho medo de sentir falta"
+      },
+      {
+        "intent": "abstinencia",
+        "text": "Tenho receio de sentir falta"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Muito obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Obrigada"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "Muito obrigada"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "entendi obrigado"
+      },
+      {
+        "intent": "agradecimento",
+        "text": "entendi"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Tudo bem?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Beleza?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Como vai voce?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Beleza?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Tudo bem?"
+      },
+      {
+        "intent": "como_vai_voce",
+        "text": "Como vai voce?"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Boa tarde"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Boa noite"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Bom dia"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Boa tarde"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Boa noite"
+      },
+      {
+        "intent": "cumprimento",
+        "text": "Bom dia"
+      },
+      {
+        "intent": "informacao",
+        "text": "Por que devo parar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Vale a pena parar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Vale a pena deixar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Eu deveria parar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Vale a pena parar de fumar?"
+      },
+      {
+        "intent": "informacao",
+        "text": "Vale a pena deixar de fumar?,"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Tenho medo de engordar"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Tenho receio de ganhar peso"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Acho que vou ficar gorda"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Tenho receio de engordar"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Tenho medo de ganhar peso"
+      },
+      {
+        "intent": "medo_engordar",
+        "text": "Acho que vou ficar gorda"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Nao estou conseguindo parar de fumar"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Preciso de ajuda para parar de fumar"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Tenho receio de fracassar"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Tenho medo de nao conseguir"
+      },
+      {
+        "intent": "motivacao",
+        "text": "Parei de fumar,  mas esta muito dificil ficar sem fumar"
+      },
+      {
+        "intent": "motivacao",
+        "text": "nao sei se eu vou conseguir"
+      }
+    ],
+    "regex_features": [],
+    "lookup_tables": [],
+    "entity_synonyms": []
+  }
+}

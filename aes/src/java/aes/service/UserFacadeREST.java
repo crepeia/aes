@@ -10,6 +10,8 @@ import aes.controller.UserController;
 import aes.model.User;
 import aes.utility.Encrypter;
 import aes.utility.Secured;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,6 +43,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 
 /**
  *
@@ -71,24 +75,28 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(User entity) {
+    @Path("{password}")
+    public Response createUser(User entity, @PathParam("password") String p) throws DecoderException, UnsupportedEncodingException {
         List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
-
+        
         if (!userList.isEmpty()) {
             return Response.status(Response.Status.CONFLICT).build();
         } else {
             try {
-                
-            userTransaction.begin();
-            super.create(entity);
-            userTransaction.commit();
-            
-            contactController.sendSignUpEmail(entity);
-            if (entity.isReceiveEmails()) {
-                contactController.scheduleTipsEmail(entity);
-                contactController.scheduleDiaryReminderEmail(entity, new Date());
-                contactController.scheduleWeeklyEmail(entity, new Date());
-            }
+                //String p = Hex.encodeHexString( entity.getPassword() );
+                byte[] b =  Hex.decodeHex(p.toCharArray());
+                entity.setPassword(b);
+                //byte[] b =  Hex.decodeHex(Arrays.toString(entity.getPassword()).toCharArray());
+                userTransaction.begin();
+                super.create(entity);
+                userTransaction.commit();
+
+                contactController.sendSignUpEmail(entity);
+                if (entity.isReceiveEmails()) {
+                    contactController.scheduleTipsEmail(entity);
+                    contactController.scheduleDiaryReminderEmail(entity, new Date());
+                    contactController.scheduleWeeklyEmail(entity, new Date());
+                }
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
              } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);

@@ -225,8 +225,7 @@ public class User implements Serializable {
         this.email = email;
     }
     
-    @XmlTransient
-    @JsonIgnore
+    
     public byte[] getPassword() {
         return password;
     }

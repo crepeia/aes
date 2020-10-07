@@ -49,6 +49,11 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Override
     public Record create(Record entity) {
+        String userEmail = securityContext.getUserPrincipal().getName();
+        User u = em.find(User.class, entity.getUser().getId());
+        if(!u.getEmail().equals(userEmail)){
+            return null;
+        }
         try {
             return super.create(entity);
         } catch (Exception e) {
@@ -65,8 +70,8 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
         try {
             Record entity = new Record();
             entity.setUser(em.find(User.class, userId));
-            entity.setDailyGoal(Float.valueOf(0));
-            entity.setWeeklyGoal(Float.valueOf(0));
+            entity.setDailyGoal(0);
+            entity.setWeeklyGoal(0);
             super.create(entity);
             return entity;
         } catch (Exception e) {
@@ -79,7 +84,12 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     @Path("edit")
     @Consumes(MediaType.APPLICATION_JSON)
     public Record edit(Record entity) {
-        super.edit(entity);
+        String userEmail = securityContext.getUserPrincipal().getName();
+        User u = em.find(User.class, entity.getUser().getId());
+        if(u.getEmail().equals(userEmail)){
+            super.edit(entity);
+        } 
+       
         return entity;
     }
     
@@ -114,26 +124,7 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     }
     }
 
-    @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Record> findAll() {
-        return super.findAll();
-    }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Record> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-
-    @GET
-    @Path("count")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
-    }
 
     @Override
     protected EntityManager getEntityManager() {

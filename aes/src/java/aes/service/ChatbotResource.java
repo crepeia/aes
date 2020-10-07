@@ -16,6 +16,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,10 @@ public class ChatbotResource {
     
     public class ChatbotMessage {
         public String message;
+    }
+    
+    public class ChatbotMessages {
+        public List<String> messages = new LinkedList<>();
     }
 
     @Context
@@ -72,17 +77,24 @@ public class ChatbotResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("python")
-    public List<String> scriptPython2(String content) {
+    public ChatbotMessages scriptPython2(String content) {
         try {
              try {
             Gson g = new Gson();
-            ChatbotMessage cm = g.fromJson(content, ChatbotMessage.class);        
+            ChatbotMessage cm = g.fromJson(content, ChatbotMessage.class);  
+            ChatbotMessages cms = new ChatbotMessages();
             //URL file = Thread.currentThread().getContextClassLoader().getResource("aes/service/testePython.py");
            
-            URL resource = ChatbotResource.class.getResource("testePython.py");
+            URL resource = ChatbotResource.class.getResource("Chatbot_AeS/predict_intent.py");
             String pathToScript = Paths.get(resource.toURI()).toFile().getAbsolutePath();
             
-            String[] cmd = new String[]{"python", pathToScript, cm.message};
+            URL csvRes = ChatbotResource.class.getResource("Chatbot_AeS/answers.csv");
+            String pathToCsv = Paths.get(csvRes.toURI()).toFile().getAbsolutePath();
+            
+            URL model = ChatbotResource.class.getResource("Chatbot_AeS/models/nlu/default/aes_bot_v0");
+            String pathToModel = Paths.get(model.toURI()).toFile().getAbsolutePath();
+            
+            String[] cmd = new String[]{"python", pathToScript, pathToCsv, pathToModel, cm.message};
             ProcessBuilder pb = new ProcessBuilder(cmd);
             Process p = pb.start();
             
@@ -92,14 +104,14 @@ public class ChatbotResource {
             String returnVal;
             try{
                 while((returnVal = reader.readLine()) != null){
-                     line.add(returnVal);
+                     cms.messages.add(returnVal);
                 }
              }catch(IOException e){
                    System.out.println("Exception in reading output"+ e.toString());
              }
 
             
-            return line;
+            return cms;
             } catch (URISyntaxException ex) {
                 Logger.getLogger(ChatbotResource.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -125,7 +137,7 @@ public class ChatbotResource {
             ChatbotMessage cm = g.fromJson(content, ChatbotMessage.class);        
             //URL file = Thread.currentThread().getContextClassLoader().getResource("aes/service/testePython.py");
            
-            URL resource = ChatbotResource.class.getResource("testePython.py");
+            URL resource = ChatbotResource.class.getResource("Chatbot_AeS/predict_intent.py");
             String pathToScript = Paths.get(resource.toURI()).toFile().getAbsolutePath();
             
             String[] cmd = new String[]{"python3", pathToScript, cm.message};

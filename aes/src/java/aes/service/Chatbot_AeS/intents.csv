@@ -1,0 +1,43 @@
+sentence	intent
+Tenho medo das crises de abstinencia	abstinencia
+Tenho receio das crises de abstinencia	abstinencia
+Tenho medo das crises de abstinencia	abstinencia
+Tenho receio das crises de abstinencia	abstinencia
+Tenho medo de sentir falta	abstinencia
+Tenho receio de sentir falta	abstinencia
+Muito obrigado	agradecimento
+Obrigado	agradecimento
+Obrigada	agradecimento
+Muito obrigada	agradecimento
+entendi obrigado	agradecimento
+entendi	agradecimento
+Tudo bem?	como_vai_voce
+Beleza?	como_vai_voce
+Como vai voce?	como_vai_voce
+Beleza?	como_vai_voce
+Tudo bem?	como_vai_voce
+Como vai voce?	como_vai_voce
+Boa tarde	cumprimento
+Boa noite	cumprimento
+Bom dia	cumprimento
+Boa tarde	cumprimento
+Boa noite	cumprimento
+Bom dia	cumprimento
+Por que devo parar de fumar?	informacao
+Vale a pena parar de fumar?	informacao
+Vale a pena deixar de fumar?	informacao
+Eu deveria parar de fumar?	informacao
+Vale a pena parar de fumar?	informacao
+Vale a pena deixar de fumar?,	informacao
+Tenho medo de engordar	medo_engordar
+Tenho receio de ganhar peso	medo_engordar
+Acho que vou ficar gorda	medo_engordar
+Tenho receio de engordar	medo_engordar
+Tenho medo de ganhar peso	medo_engordar
+Acho que vou ficar gorda	medo_engordar
+Nao estou conseguindo parar de fumar	motivacao
+Preciso de ajuda para parar de fumar	motivacao
+Tenho receio de fracassar	motivacao
+Tenho medo de nao conseguir	motivacao
+Parei de fumar,  mas esta muito dificil ficar sem fumar	motivacao
+nao sei se eu vou conseguir	motivacao
