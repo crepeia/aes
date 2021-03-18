@@ -1346,6 +1346,11 @@ img#artigotabaco{
 #pmtext{
     padding:0 20px;
     width: 100%;
+    margin: auto;
+}
+
+#pmtext h4, h2{
+    width: 90%;
 }
 
 #pmtext label {

@@ -46,44 +46,6 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
     public DailyLogFacadeREST() {
         super(DailyLog.class);
     }
-/*
-    @POST
-    @Override
-    @Path("create/{recordId}/{logDate}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(@PathParam("recordId") Long recordId, @PathParam("logDate") String ld, DailyLog entity) {
-        super.create(entity);
-
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date logDate = sdf.parse(ld);
-            
-            //Record r = em.find(Record.class, recordId);
-            //entity.setRecord(r);
-            
-        } catch (ParseException ex) {
-            Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
-    
-
-    
-    @POST
-    @Path("create")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Override
-    public void create(DailyLog entity) {
-        try {
-        DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
-                .setParameter("recordId", entity.getRecord().getId())
-                .setParameter("logDate", entity.getLogDate())
-                .getSingleResult();
-        } catch( NoResultException e ) {
-            super.create(entity);
-        }
-    }
-    */
     
     @POST
     @Path("editOrCreate")
@@ -110,16 +72,18 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
             action = "create";
             //return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).build();
         } catch (Exception e) {
-            e.printStackTrace();
-            return Response.serverError().build();
+            Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
         
         try {
             return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).type(MediaType.APPLICATION_JSON).build();
         } catch (JSONException ex) {
             Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.serverError().build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
+        
+ 
     }
      
    

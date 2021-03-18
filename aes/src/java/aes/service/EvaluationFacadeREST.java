@@ -10,6 +10,8 @@ import aes.model.User;
 import aes.utility.Secured;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javassist.NotFoundException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -58,26 +60,11 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
             return null;
         }
     }
-/*
-    @PUT
-    @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Evaluation entity) {
-        super.edit(entity);
-    }
-    
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
-*/
-    
     @GET
     @Path("find/{userId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Evaluation find(@PathParam("userId") Long userId) {
+    public Response find(@PathParam("userId") Long userId) {
         try {
             String userEmail = securityContext.getUserPrincipal().getName();
             
@@ -87,21 +74,19 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
                     .getResultList();
             
             if(evList.size() > 0){
-                //System.out.println("service.EvaluationFacadeREST.find() find");
-                return evList.get(evList.size()-1);
+                return Response.ok().entity(evList.get(evList.size()-1)).build();
             } else {
                 //System.out.println("service.EvaluationFacadeREST.find() create");
                 Evaluation ev = new Evaluation();
                 ev.setDateCreated(new Date());
                 ev.setUser(em.find(User.class, userId));
                 super.create(ev);
-                return ev;
+                return Response.ok().entity(ev).build();
             }
 
         } catch (Exception e) {
-            //System.out.println("service.EvaluationFacadeREST.find() err");
-            e.printStackTrace();
-            return null;
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 

@@ -50,7 +50,7 @@ public class EMailSSL {
         }
         
         session = Session.getInstance(props, this.authenticator);
-        session.setDebug(true);
+        //session.setDebug(true);
     }
 
     public void send(String from, String to, String subject, String content, ByteArrayOutputStream pdf, String pdfName) throws MessagingException {
@@ -69,7 +69,7 @@ public class EMailSSL {
             //CONTENT
             if (content != null) {
                 MimeBodyPart htmlBodyPart = new MimeBodyPart();
-                htmlBodyPart.setContent(content, "text/html");
+                htmlBodyPart.setContent(content, "text/html;charset=UTF-8");
                 htmlAndTextMultipart.addBodyPart(htmlBodyPart);
             }
 

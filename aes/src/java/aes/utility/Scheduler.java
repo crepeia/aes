@@ -54,7 +54,6 @@ public class Scheduler {
     public void sendTips() {
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Send Mobile Tips task running");
         mobileOptionsController.sendMobileTips();
-
     }
     
     @Schedule(second = "0", minute = "0", hour = "*", dayOfWeek = "*")

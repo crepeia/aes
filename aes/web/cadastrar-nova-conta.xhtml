@@ -96,8 +96,8 @@
                                             <div class="signuptext form-group row">
                                                 <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['naccount.name']}</label>
                                                 <p:inputText styleClass="col-sm-10 form-control" id="nameTxt" value="#{userController.user.name}" required="true" size="30" label="#{messages['naccount.name']}" >
-
-                                                    <f:validateLength maximum="100" />
+                                                    <f:converter converterId="stringTrimmer" />
+                                                    <f:validateLength minimum="3" maximum="100" />
                                                 </p:inputText>
                                                 <p:watermark for="nameTxt" value="#{messages['naccount.fullname']}" />
                                                 <p:message for="nameTxt" />
@@ -148,6 +148,7 @@
                                             <div class="signuptext form-group row">
                                                 <label for="telTxt" class="col-sm-3 col-form-label">#{messages['telephone.number']}</label>
                                                 <p:inputText id="telTxt" styleClass="col-sm-9 form-control" value="#{userController.user.phone}" required="false" size="30" label="#{messages['telephone.number']}"/>
+
                                                 <p:watermark for="telTxt" value="#{messages['naccount.phone']}" />
                                             </div>
 

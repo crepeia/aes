@@ -22,6 +22,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 /**
@@ -46,21 +47,20 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
     @GET
     @Path("{chatId}")
     @Produces( MediaType.APPLICATION_JSON)
-    public List<Message> find(@PathParam("chatId") Long chatId) {
-        /*return getEntityManager().createQuery("SELECT m FROM Message m ORDER BY m.sentDate DESC")
-                .getResultList();
-        */
+    public Response find(@PathParam("chatId") Long chatId) {
+
         String userEmail = securityContext.getUserPrincipal().getName();
         User u = (User) getEntityManager().createQuery("SELECT u FROM User u WHERE u.email=:userEmail")
                 .setParameter("userEmail", userEmail)
                 .getSingleResult();
         //only answer queries from the owner of the messagens or consultant
         if(u.getChat().getId().equals(chatId) || u.isConsultant()){
-            return getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
+            List<Message> m = (List<Message>) getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
                 .setParameter("chatId", chatId)
                 .getResultList();
+            return Response.ok().entity(m).build();
         } else {
-            return null;
+            return Response.noContent().build();
         }
     }
     

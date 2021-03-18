@@ -9,6 +9,8 @@ import aes.model.Record;
 import aes.model.User;
 import aes.utility.Secured;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -40,95 +42,86 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
 
     @Context
     SecurityContext securityContext;
-    
+
     public RecordFacadeREST() {
         super(Record.class);
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Override
-    public Record create(Record entity) {
+    public Response createRecord(Record entity) {
         String userEmail = securityContext.getUserPrincipal().getName();
         User u = em.find(User.class, entity.getUser().getId());
-        if(!u.getEmail().equals(userEmail)){
-            return null;
+        if (!u.getEmail().equals(userEmail)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         try {
-            return super.create(entity);
+            Record created = super.create(entity);
+            return Response.ok().entity(created).build();
         } catch (Exception e) {
-            return null;
+            Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 
     @POST
     @Path("create/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Record create(@PathParam("userId") Long userId) {
+    public Response create(@PathParam("userId") Long userId) {
         //String userEmail = securityContext.getUserPrincipal().getName();
-        
+
         try {
             Record entity = new Record();
             entity.setUser(em.find(User.class, userId));
             entity.setDailyGoal(0);
             entity.setWeeklyGoal(0);
             super.create(entity);
-            return entity;
+            return Response.ok().entity(entity).build();
         } catch (Exception e) {
-            return null;
-    }
+            Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
 
     }
-    
+
     @PUT
     @Path("edit")
     @Consumes(MediaType.APPLICATION_JSON)
     public Record edit(Record entity) {
         String userEmail = securityContext.getUserPrincipal().getName();
         User u = em.find(User.class, entity.getUser().getId());
-        if(u.getEmail().equals(userEmail)){
+        if (u.getEmail().equals(userEmail)) {
             super.edit(entity);
-        } 
-       
+        }
+
         return entity;
     }
-    
-/*
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
-*/
+
     @GET
     @Path("find/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Record find(@PathParam("userId") Long userId) {
+    public Response find(@PathParam("userId") Long userId) {
+        String userEmail = securityContext.getUserPrincipal().getName();
+        User u = em.find(User.class, userId);
+        if(!u.getEmail().equals(userEmail)){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
         try {
-            return (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
-                    .setParameter("userId",userId)
+            Record rec = (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
+                    .setParameter("userId", userId)
                     .getSingleResult();
-            
-        } catch(NoResultException e) {
-            return null;
-            /*
-            Record entity = new Record();
-            entity.setUser(em.find(User.class, userId));
-            entity.setDailyGoal(null);
-            entity.setWeeklyGoal(null);
-            super.create(entity);
-            return entity;
-            */
-        } catch(Exception e) {
-            return null;
+            return Response.ok().entity(rec).build();
+        } catch (NoResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.ALL.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
-    }
-
-
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

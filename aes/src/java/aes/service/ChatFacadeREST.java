@@ -61,7 +61,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     @GET
     @Path("{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Chat find(@PathParam("userId") Long userId) {
+    public Response find(@PathParam("userId") Long userId) {
         String userEmail = securityContext.getUserPrincipal().getName();
         
         List<Chat> c = getEntityManager().createQuery("SELECT c FROM Chat c WHERE c.user.id=:userId AND c.user.email=:email")
@@ -70,24 +70,11 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
                 .getResultList();
         
         if(c.isEmpty()){
-            return null;
-            /*
-            Chat newChat = new Chat();
-            newChat.setUnauthenticatedId("");
-            newChat.setUser(em.find(User.class, userId));
-            newChat.setStartDate(new Date());
-            super.create(newChat);
-            return newChat;
-            */
+            return Response.status(Response.Status.NO_CONTENT).build();
         } else {
-            return (Chat) c.toArray()[0];
+            return Response.ok().entity((Chat) c.toArray()[0]).build();
         }
 
-        /*
-        return getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.user.id=:userId")
-                .setParameter("userId", userId)
-                .getResultList();
-*/
     }
     @Override
     protected EntityManager getEntityManager() {

@@ -359,6 +359,7 @@ public class ContactController extends BaseController implements Serializable {
         try {
             String content = getContent(contact, htmlTemplate);
             String subject = getSubject(contact);
+            System.out.println(content);
             eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());
             contact.setDateSent(new Date());
             save(contact);

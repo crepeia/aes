@@ -125,19 +125,19 @@ public class User implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dt_cadastro;
     
-    @Column(name = "is_admin")
+    @Column(name = "is_admin", nullable = false )
     private boolean admin;
     
-    @Column(name = "is_consultant")
+    @Column(name = "is_consultant", nullable = false )
     private boolean consultant;
     
-    @Column(name = "app_signup")
+    @Column(name = "app_signup", nullable = false )
     private boolean app_signup;
     
-    @Column(name = "use_chatbot")
+    @Column(name = "use_chatbot", nullable = false )
     private boolean use_chatbot;
     
-    @Column(name = "in_ranking")
+    @Column(name = "in_ranking", nullable = false )
     private boolean inRanking;
     
     @Column(name = "nickname")

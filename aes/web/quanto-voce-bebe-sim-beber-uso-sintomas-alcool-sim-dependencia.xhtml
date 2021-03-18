@@ -66,7 +66,7 @@
                                 <h:graphicImage library="default" id="cartoonman" title="Parar de fumar" name="images/deixar-cigarro.png" alt="Gratuito" />
                             </div> -->
 
-                            <div id="pmtext">                                               
+                           <div id="pmtext" style="display: flex; flex-direction: column;">                                               
                                 <h2>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h2.1']}</h2>
                                 <ul>
                                     <!-- Incluir feedback e diminuir tamanho da paǵina -->
@@ -81,10 +81,21 @@
                                 <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h4.1']}</h4>
                                 
                                 <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p2']}</p>
+
+                               
+                                <p>
+                                    Se preferir, você também pode conversar com a gente. 
+                                    Estamos à disposição para te ajudar e tirar suas dúvidas com psicólogos de forma rápida e online!
+                                </p>
+                                <a class="btngen btn btn-primary" style="width: 90%" href="https://docs.google.com/forms/d/e/1FAIpQLSdU_ytsrMZwWq5N7kKPQSCBoX1TNqTwVuslwvDO0rZOTysl2w/viewform" rel="noopener noreferrer" target="_blank">
+                                    Clique aqui para conhecer mais
+                                </a>
+                                
                                 <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p3']}</p>
 
+                                
                                 <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.b.1']}</b></p>
-
+                                
                                 <h:form>
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
                                             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
@@ -104,6 +115,7 @@
                                             </h:selectOneRadio> 
                                         </h:panelGrid>
                                     </p:panel>
+                                    
                                     
                                     
                                     <p:panel id="panelYes" rendered="#{!evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}" >               
@@ -127,7 +139,8 @@
 
                                         </h:form>
                                     </p:panel>
-
+                                    
+                                    
                                     <p:panel rendered="#{evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}" >
                                         <h4><b>Continue para receber mais informações sobre o seu consumo!</b></h4>
                                         <p:panel rendered="#{!userController.loggedIn}">
@@ -136,12 +149,14 @@
 
                                         </p:panel>
                                         
+                                        <div id="btnback">
+                                            <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
+                                        </div>
+
+                                        
                                     </p:panel>
 
-                                    <div id="btnback">
-                                        <h:button class="btngen btn btn-primary" value ="#{messages['back']}" outcome="quanto-voce-bebe-sim-beber-uso-audit-7.xhtml"></h:button>
-                                    </div>
-
+                                    
 
                                     <div id="btnnext">
                                         <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceContinue()}" actionListener="#{evaluationController.save()}" rendered="#{evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}"/>

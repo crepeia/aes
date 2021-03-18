@@ -9,12 +9,13 @@
         <h:head>
             <title>#{messages['naccount.titlepage']}</title>
             <w:head_comum />
+            <w:header logoutRequired="true"  />
+            <w:topmenu />
         </h:head>
 
         <h:body>
             <div id="corpo"> 
-                <w:header logoutRequired="true"  />
-                <w:topmenu />
+                
 
                 <div class="main">                    
                     <div class="pagecontent">
@@ -59,7 +60,7 @@
                                 <div id="signipbottom">
                                     <div id="signinsubmit">
                                         <div id="signinbtn" >
-                                            <p:commandButton id="nexttBtn" styleClass="btn waves-effect waves-light" value="#{messages['save']}" update="@form" action="#{userController.checkCode()}"/> 
+                                            <p:commandButton id="nexttBtn" styleClass="btngen btn btn-primary" value="#{messages['save']}" update="@form" action="#{userController.checkCode()}"/> 
                                         </div>
                                     </div>
                                 </div>
