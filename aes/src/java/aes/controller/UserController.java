@@ -3,6 +3,7 @@ package aes.controller;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.Encrypter;
+import aes.utility.GenerateCode;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -163,7 +164,7 @@ public class UserController extends BaseController<User> {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.equals"), null));
             } else {
                 List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
-                boolean regComplete = userList.stream().reduce(true, (reg, userElement) -> reg && userElement.isConsultant(), Boolean::logicalAnd);
+                boolean regComplete = userList.stream().reduce(true, (reg, userElement) -> reg && userElement.isRegistration_complete(), Boolean::logicalAnd);
                 
                 if (!userList.isEmpty() && regComplete) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.used"), null));
@@ -320,21 +321,6 @@ public class UserController extends BaseController<User> {
         }
 
     }*/
-    public int generateCode() {
-        long codigo;
-        float valor;
-
-        Random generate = new Random();
-        valor = (float) generate.nextInt(100000) / 10;
-        while (valor > 999 && valor < 10000) {
-            valor = (float) generate.nextInt(10000) / 10;
-        }
-        valor *= 10;
-
-        codigo = (int) valor;
-        return (int) codigo;
-    }
-
     public void recoverPassword() {
         try {
             List<User> userList = daoBase.list("email", user.getEmail(), this.getEntityManager());
@@ -342,7 +328,7 @@ public class UserController extends BaseController<User> {
                 FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registred"), null));
             } else {
                 User foundUser = userList.get(0);
-                foundUser.setRecoverCode(generateCode());
+                foundUser.setRecoverCode(GenerateCode.generate());
                 daoBase.insertOrUpdate(foundUser, getEntityManager());
                 contactController.sendPasswordRecoveryEmail(foundUser);
                 FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
@@ -350,7 +336,6 @@ public class UserController extends BaseController<User> {
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public void checkCode() {

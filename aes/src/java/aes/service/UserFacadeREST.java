@@ -9,6 +9,7 @@ import aes.controller.ContactController;
 import aes.controller.UserController;
 import aes.model.User;
 import aes.utility.Encrypter;
+import aes.utility.GenerateCode;
 import aes.utility.Secured;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -60,6 +61,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     
     @Inject
     private ContactController contactController;
+    
+    @Inject
+    private UserController userController;
     
     @Resource
     private UserTransaction userTransaction;
@@ -190,39 +194,35 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
-
-/*
-    
-
-    @PUT
-    @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, User entity) {
-        super.edit(entity);
-    }
-
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
-    }
-
     @GET
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public User find(@PathParam("id") Long id) {
-        return super.find(id);
-    }
+    @Path("recover-password")
+    @Secured
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response recoverPassword() {
+        String userEmail = securityContext.getUserPrincipal().getName();
+        System.out.println("aes.service.UserFacadeREST.forgetPassword()");
+        try {
 
+            User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
+                    .setParameter("email", userEmail)
+                    .getSingleResult();
+            System.out.println(u.getEmail());
+            u.setRecoverCode(GenerateCode.generate());
+
+            userTransaction.begin();
+            super.edit(u);
+            userTransaction.commit();
+            contactController.sendPasswordRecoveryEmail(u);
+            
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, null, "Recover password service");
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
     
-
-    @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }
-*/
     @GET
     @Path("count")
     @Secured
