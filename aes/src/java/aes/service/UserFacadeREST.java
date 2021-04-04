@@ -11,6 +11,9 @@ import aes.model.User;
 import aes.utility.Encrypter;
 import aes.utility.GenerateCode;
 import aes.utility.Secured;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Date;
@@ -194,15 +197,22 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
-    @GET
+    public static class EmailClass {
+        public String email;
+        public EmailClass(String email){
+            this.email = email;
+        }
+    }
+    
+    @PUT
     @Path("recover-password")
-    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response recoverPassword() {
-        String userEmail = securityContext.getUserPrincipal().getName();
-        System.out.println("aes.service.UserFacadeREST.forgetPassword()");
+    public Response recoverPassword(JsonParser jp) {
         try {
-
+            JsonNode node = jp.getCodec().readTree(jp);
+            String userEmail = node.get("email").asText();
+            System.out.println("aes.service.UserFacadeREST.forgetPassword()");
             User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
                     .setParameter("email", userEmail)
                     .getSingleResult();
