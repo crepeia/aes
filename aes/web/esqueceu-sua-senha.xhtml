@@ -60,7 +60,9 @@
                                 <div id="signipbottom">
                                     <div id="signinsubmit">
                                         <div id="signinbtn" >
-                                            <p:commandButton id="nexttBtn" styleClass="btngen btn btn-primary" value="#{messages['save']}" update="@form" action="#{userController.checkCode()}"/> 
+                                            <div id="btnnext">
+                                                <p:commandButton id="nexttBtn" styleClass="btngen btn btn-primary" value="#{messages['save']}" update="@form" action="#{userController.checkCode()}"/> 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
