@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="hibernate-support">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/jta.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/asm-attrs.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/hibernate-tools.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/javassist.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/antlr-2.7.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/cglib-2.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/asm.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/hibernate-jpa-2.0-api-1.0.1.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/jdbc2_0-stdext.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/hibernate-commons-annotations.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/ehcache-1.2.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/hibernate-annotations.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/hibernate3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/dom4j-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/hibernate-entitymanager.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/org-apache-commons-logging.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hibernate-support/commons-collections-2.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -30,7 +30,7 @@ public class Scheduler {
     public void sendEmails(){
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Morning Task Running");
         contactController.sendScheduledEmails();
-        contactController.sendTestEmail();
+        //contactController.sendTestEmail();
     }
     
     
@@ -38,7 +38,7 @@ public class Scheduler {
     public void afternoonTask() {
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Afternoon task running");
         contactController.sendScheduledEmails();
-        contactController.sendTestEmail();
+        //contactController.sendTestEmail();
 
     }
     
@@ -62,5 +62,19 @@ public class Scheduler {
         mobileOptionsController.sendScheduledNotifications();
         
     }
+    
+    /*@Schedule(second = "30", minute = "0", hour = "8", dayOfWeek = "*", persistent=false)
+    public void securityUpdate() {
+        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "TEST DBUPDATE STARTING");
+        DBSecurityUpdate.run();
+        
+    }*/
+    
+     /* @Schedule(second = "*", minute = "*", hour = "*", dayOfWeek = "*", persistent=false)
+    public void testTask() {
+        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - test task running");
+      //  mobileOptionsController.sendScheduledNotifications();
+        
+    }*/
 
 }

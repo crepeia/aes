@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="agroal">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/optional/agroal/agroal-api-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/optional/agroal/agroal-pool-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/optional/agroal/hibernate-agroal-5.4.15.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="hikaricp">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/optional/hikaricp/hibernate-hikaricp-5.4.15.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/optional/hikaricp/HikariCP-3.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/optional/hikaricp/slf4j-api-1.7.25.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

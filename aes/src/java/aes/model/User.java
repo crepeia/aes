@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "tb_user")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "User.email", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.login", query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password"),
     @NamedQuery(name = "User.password", query = "SELECT u.password FROM User u WHERE u.email = :email AND u.password IS NOT NULL")
 
@@ -44,6 +45,10 @@ public class User implements Serializable {
     private String email;
     @Column(name = "password", length = 16)
     private byte[] password;
+    
+    @Column(name="salt", length=16)
+    private byte[] salt;
+    
     @Column(name = "birth_date")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthDate;
@@ -132,19 +137,19 @@ public class User implements Serializable {
     private boolean consultant;
     
     @Column(name = "app_signup", nullable = false )
-    private boolean app_signup;
+    private Boolean app_signup;
     
     @Column(name = "use_chatbot", nullable = false )
-    private boolean use_chatbot;
+    private Boolean use_chatbot;
     
     @Column(name = "in_ranking", nullable = false )
-    private boolean inRanking;
+    private Boolean inRanking;
     
     @Column(name = "nickname")
     private String nickname;
     
     @Column(name = "registration_complete")
-    private boolean registration_complete;
+    private Boolean registration_complete;
     
     @Override
     public String toString() {
@@ -233,6 +238,14 @@ public class User implements Serializable {
     public void setPassword(byte[] password) {
         this.password = password;
     }
+    
+      public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
 
     public Date getBirthDate() {
         return birthDate;
@@ -254,7 +267,7 @@ public class User implements Serializable {
         return receiveEmails;
     }
 
-    public void setReceiveEmails(boolean receiveEmails) {
+    public void setReceiveEmails(Boolean receiveEmails) {
         this.receiveEmails = receiveEmails;
     }
 
@@ -262,7 +275,7 @@ public class User implements Serializable {
         return authorizeData;
     }
 
-    public void setAuthorizeData(boolean authorizeData) {
+    public void setAuthorizeData(Boolean authorizeData) {
         this.authorizeData = authorizeData;
     }
 
@@ -486,7 +499,7 @@ public class User implements Serializable {
         return app_signup;
     }
 
-    public void setApp_signup(boolean app_signup) {
+    public void setApp_signup(Boolean app_signup) {
         this.app_signup = app_signup;
     }
     
@@ -494,7 +507,7 @@ public class User implements Serializable {
         return use_chatbot;
     }
 
-    public void setUse_chatbot(boolean use_chatbot) {
+    public void setUse_chatbot(Boolean use_chatbot) {
         this.use_chatbot = use_chatbot;
     }
 
@@ -502,7 +515,7 @@ public class User implements Serializable {
         return registration_complete;
     }
 
-    public void setRegistration_complete(boolean registration_complete) {
+    public void setRegistration_complete(Boolean registration_complete) {
         this.registration_complete = registration_complete;
     }
 
@@ -510,7 +523,7 @@ public class User implements Serializable {
         return inRanking;
     }
 
-    public void setInRanking(boolean inRanking) {
+    public void setInRanking(Boolean inRanking) {
         this.inRanking = inRanking;
     }
 

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Expo_Server">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/Expo_Server/expo-server-sdk-0.5.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Expo_Server/expo-server-sdk-0.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Expo_Server/expo-server-sdk-0.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

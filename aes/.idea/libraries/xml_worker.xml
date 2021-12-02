@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="xml-worker">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/xml-worker/xmlworker-5.5.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xml-worker/xmlworker-5.5.6-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xml-worker/xmlworker-5.5.6-sources.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,1581 @@
+@startuml
+abstract class aes.controller.BaseController
+abstract class aes.service.AbstractFacade
+annotation aes.utility.Secured
+annotation com.fasterxml.jackson.annotation.JsonBackReference
+annotation com.fasterxml.jackson.annotation.JsonIgnore
+annotation com.fasterxml.jackson.annotation.JsonManagedReference
+annotation com.fasterxml.jackson.databind.annotation.JsonDeserialize
+annotation java.lang.Override
+annotation java.lang.SuppressWarnings
+annotation java.lang.annotation.Retention
+annotation java.lang.annotation.Target
+annotation javax.annotation.PostConstruct
+annotation javax.annotation.Priority
+annotation javax.annotation.Resource
+annotation javax.ejb.Schedule
+annotation javax.ejb.Singleton
+annotation javax.ejb.Startup
+annotation javax.ejb.Stateless
+annotation javax.ejb.TransactionManagement
+annotation javax.enterprise.context.ApplicationScoped
+annotation javax.enterprise.context.RequestScoped
+annotation javax.enterprise.context.SessionScoped
+annotation javax.faces.annotation.FacesConfig
+annotation javax.faces.convert.FacesConverter
+annotation javax.faces.view.ViewScoped
+annotation javax.inject.Inject
+annotation javax.inject.Named
+annotation javax.persistence.Column
+annotation javax.persistence.Embeddable
+annotation javax.persistence.EmbeddedId
+annotation javax.persistence.Entity
+annotation javax.persistence.Enumerated
+annotation javax.persistence.GeneratedValue
+annotation javax.persistence.Id
+annotation javax.persistence.JoinColumn
+annotation javax.persistence.ManyToOne
+annotation javax.persistence.MapsId
+annotation javax.persistence.NamedQueries
+annotation javax.persistence.NamedQuery
+annotation javax.persistence.OneToMany
+annotation javax.persistence.OneToOne
+annotation javax.persistence.PersistenceContext
+annotation javax.persistence.Table
+annotation javax.persistence.Temporal
+annotation javax.persistence.Transient
+annotation javax.servlet.annotation.WebFilter
+annotation javax.websocket.OnClose
+annotation javax.websocket.OnError
+annotation javax.websocket.OnMessage
+annotation javax.websocket.OnOpen
+annotation javax.websocket.server.PathParam
+annotation javax.websocket.server.ServerEndpoint
+annotation javax.ws.rs.ApplicationPath
+annotation javax.ws.rs.Consumes
+annotation javax.ws.rs.DELETE
+annotation javax.ws.rs.GET
+annotation javax.ws.rs.NameBinding
+annotation javax.ws.rs.POST
+annotation javax.ws.rs.PUT
+annotation javax.ws.rs.Path
+annotation javax.ws.rs.PathParam
+annotation javax.ws.rs.Produces
+annotation javax.ws.rs.core.Context
+annotation javax.ws.rs.ext.Provider
+annotation javax.xml.bind.annotation.XmlRootElement
+annotation javax.xml.bind.annotation.XmlTransient
+class ServerEndpointConfig.Configurator
+class aes.controller.ChallengeController
+class aes.controller.ChallengeUserController
+class aes.controller.ChatController
+class aes.controller.ConfigurationBean
+class aes.controller.ContactController
+class aes.controller.EvaluationController
+class aes.controller.FollowUpController
+class aes.controller.LanguageController
+class aes.controller.MobileOptionsController
+class aes.controller.Page
+class aes.controller.PageNavigationController
+class aes.controller.PageRatingController
+class aes.controller.RecordController
+class aes.controller.RequestController
+class aes.controller.SatisfactionController
+class aes.controller.TipController
+class aes.controller.TipUserController
+class aes.controller.UserController
+class aes.model.AppSuggestion
+class aes.model.AuthenticationToken
+class aes.model.Challenge
+class aes.model.ChallengeUser
+class aes.model.Chat
+class aes.model.Contact
+class aes.model.DailyLog
+class aes.model.Evaluation
+class aes.model.FollowUp
+class aes.model.Item
+class aes.model.Message
+class aes.model.MobileOptions
+class aes.model.PageNavigation
+class aes.model.Rating
+class aes.model.Record
+class aes.model.Satisfaction
+class aes.model.Tip
+class aes.model.TipUser
+class aes.model.TipUserKey
+class aes.model.User
+class aes.model.UserAgent
+class aes.persistence.GenericDAO
+class aes.persistence.HibernateUtil
+class aes.service.AppSuggestionFacadeREST
+class aes.service.ApplicationConfig
+class aes.service.AuthenticationFilter
+class aes.service.AuthenticationTokenFacadeREST
+class aes.service.ChallengeFacadeREST
+class aes.service.ChallengeUserFacadeREST
+class aes.service.ChatConfigurator
+class aes.service.ChatEndpoint
+class aes.service.ChatFacadeREST
+class aes.service.ChatbotResource
+class aes.service.DailyLogFacadeREST
+class aes.service.EvaluationFacadeREST
+class aes.service.MessageFacadeREST
+class aes.service.MobileOptionsFacadeREST
+class aes.service.RecordFacadeREST
+class aes.service.RoleFilter
+class aes.service.TipFacadeREST
+class aes.service.TipUserFacadeREST
+class aes.service.UserFacadeREST
+class aes.utility.CustomMessageDeserializer
+class aes.utility.CustomMessageSerializer
+class aes.utility.EMailSSL
+class aes.utility.Encrypter
+class aes.utility.ExpoNotification
+class aes.utility.GenerateCode
+class aes.utility.MessageDecoder
+class aes.utility.MessageEncoder
+class aes.utility.ObjectMapperContextResolver
+class aes.utility.PDFGenerator
+class aes.utility.Scheduler
+class aes.utility.SecureRandomString
+class aes.utility.StringTrimmer
+class com.fasterxml.jackson.annotation.JsonFormat
+class com.fasterxml.jackson.annotation.JsonIgnoreProperties
+class com.fasterxml.jackson.core.JsonGenerator
+class com.fasterxml.jackson.core.JsonParser
+class com.fasterxml.jackson.core.JsonProcessingException
+class com.fasterxml.jackson.databind.DeserializationContext
+class com.fasterxml.jackson.databind.JsonNode
+class com.fasterxml.jackson.databind.ObjectMapper
+class com.fasterxml.jackson.databind.SerializationFeature
+class com.fasterxml.jackson.databind.SerializerProvider
+class com.fasterxml.jackson.databind.deser.std.StdDeserializer
+class com.fasterxml.jackson.databind.module.SimpleModule
+class com.fasterxml.jackson.databind.node.LongNode
+class com.fasterxml.jackson.databind.node.ObjectNode
+class com.fasterxml.jackson.databind.ser.std.StdSerializer
+class com.fasterxml.jackson.databind.util.JSONPObject
+class com.fasterxml.jackson.datatype.jdk8.Jdk8Module
+class com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+class com.fasterxml.jackson.module.paramnames.ParameterNamesModule
+class com.google.gson.Gson
+class com.itextpdf.text.Document
+class com.itextpdf.text.DocumentException
+class com.itextpdf.text.pdf.PdfWriter
+class com.itextpdf.tool.xml.XMLWorkerHelper
+class com.sun.faces.component.visit.FullVisitContext
+class com.sun.mail.util.MailSSLSocketFactory
+class com.sun.xml.ws.binding.FeatureListUtil
+class java.io.BufferedReader
+class java.io.ByteArrayInputStream
+class java.io.ByteArrayOutputStream
+class java.io.DataOutputStream
+class java.io.IOException
+class java.io.InputStream
+class java.io.InputStreamReader
+class java.io.PrintStream
+class java.io.PrintWriter
+class java.io.StringWriter
+class java.io.UnsupportedEncodingException
+class java.lang.annotation.ElementType
+class java.lang.annotation.RetentionPolicy
+class java.math.BigDecimal
+class java.net.HttpURLConnection
+class java.net.MalformedURLException
+class java.net.URI
+class java.net.URISyntaxException
+class java.net.URL
+class java.nio.ByteBuffer
+class java.nio.charset.Charset
+class java.nio.charset.StandardCharsets
+class java.nio.file.Paths
+class java.security.GeneralSecurityException
+class java.security.InvalidKeyException
+class java.security.NoSuchAlgorithmException
+class java.security.Principal
+class java.security.SecureRandom
+class java.security.spec.InvalidKeySpecException
+class java.sql.SQLException
+class java.text.ParseException
+class java.text.SimpleDateFormat
+class java.time.LocalDate
+class java.time.LocalTime
+class java.time.OffsetDateTime
+class java.time.OffsetTime
+class java.time.ZoneId
+class java.time.temporal.ChronoField
+class java.util.ArrayList
+class java.util.Arrays
+class java.util.Calendar
+class java.util.Collections
+class java.util.Date
+class java.util.GregorianCalendar
+class java.util.Iterator
+class java.util.LinkedHashMap
+class java.util.LinkedList
+class java.util.List
+class java.util.Locale
+class java.util.Map
+class java.util.MissingResourceException
+class java.util.Objects
+class java.util.Properties
+class java.util.PropertyResourceBundle
+class java.util.Random
+class java.util.ResourceBundle
+class java.util.Set
+class java.util.Timer
+class java.util.TimerTask
+class java.util.concurrent.ConcurrentHashMap
+class java.util.concurrent.Executors
+class java.util.concurrent.ScheduledExecutorService
+class java.util.concurrent.TimeUnit
+class java.util.function.Consumer
+class java.util.logging.Level
+class java.util.logging.Logger
+class javafx.util.Pair
+class javassist.NotFoundException
+class javax.activation.DataHandler
+class javax.activation.DataSource
+class javax.crypto.BadPaddingException
+class javax.crypto.Cipher
+class javax.crypto.IllegalBlockSizeException
+class javax.crypto.NoSuchPaddingException
+class javax.crypto.SecretKey
+class javax.crypto.SecretKeyFactory
+class javax.crypto.spec.PBEKeySpec
+class javax.crypto.spec.SecretKeySpec
+class javax.ejb.TransactionManagementType
+class javax.enterprise.context.Dependent
+class javax.faces.annotation.FacesConfig.Version
+class javax.faces.application.FacesMessage
+class javax.faces.component.UIComponent
+class javax.faces.component.UIViewRoot
+class javax.faces.component.visit.VisitCallback
+class javax.faces.component.visit.VisitContext
+class javax.faces.component.visit.VisitResult
+class javax.faces.context.FacesContext
+class javax.faces.event.ActionEvent
+class javax.faces.event.AjaxBehaviorEvent
+class javax.json.Json
+class javax.json.JsonObject
+class javax.mail.Authenticator
+class javax.mail.Message
+class javax.mail.MessagingException
+class javax.mail.PasswordAuthentication
+class javax.mail.Session
+class javax.mail.Transport
+class javax.mail.internet.InternetAddress
+class javax.mail.internet.MimeBodyPart
+class javax.mail.internet.MimeMessage
+class javax.mail.internet.MimeMultipart
+class javax.mail.util.ByteArrayDataSource
+class javax.naming.InitialContext
+class javax.naming.NamingException
+class javax.persistence.CascadeType
+class javax.persistence.EntityManager
+class javax.persistence.EnumType
+class javax.persistence.FetchType
+class javax.persistence.GenerationType
+class javax.persistence.NoResultException
+class javax.persistence.Query
+class javax.persistence.TemporalType
+class javax.servlet.DispatcherType
+class javax.servlet.FilterChain
+class javax.servlet.FilterConfig
+class javax.servlet.ServletException
+class javax.servlet.ServletRequest
+class javax.servlet.ServletResponse
+class javax.servlet.http.HttpServletRequest
+class javax.servlet.http.HttpServletResponse
+class javax.servlet.http.HttpSession
+class javax.transaction.HeuristicMixedException
+class javax.transaction.HeuristicRollbackException
+class javax.transaction.NotSupportedException
+class javax.transaction.RollbackException
+class javax.transaction.SystemException
+class javax.transaction.UserTransaction
+class javax.websocket.CloseReason
+class javax.websocket.CloseReason.CloseCodes
+class javax.websocket.DecodeException
+class javax.websocket.Decoder
+class javax.websocket.EncodeException
+class javax.websocket.Encoder
+class javax.websocket.EndpointConfig
+class javax.websocket.HandshakeResponse
+class javax.websocket.PongMessage
+class javax.websocket.Session
+class javax.websocket.server.HandshakeRequest
+class javax.websocket.server.ServerEndpointConfig
+class javax.ws.rs.HEAD
+class javax.ws.rs.Priorities
+class javax.ws.rs.container.ContainerRequestContext
+class javax.ws.rs.core.Application
+class javax.ws.rs.core.HttpHeaders
+class javax.ws.rs.core.MediaType
+class javax.ws.rs.core.PathSegment
+class javax.ws.rs.core.Response
+class javax.ws.rs.core.SecurityContext
+class javax.ws.rs.core.UriInfo
+class org.apache.commons.codec.DecoderException
+class org.apache.commons.codec.binary.Base64
+class org.apache.commons.codec.binary.Hex
+class org.apache.xml.security.utils.ClassLoaderUtils
+class org.glassfish.jersey.jackson.JacksonFeature
+class org.hibernate.CacheMode
+class org.hibernate.SessionFactory
+class org.hibernate.TransientObjectException
+class org.hibernate.boot.registry.StandardServiceRegistry
+class org.hibernate.boot.registry.StandardServiceRegistryBuilder
+class org.hibernate.cfg.Configuration
+class org.primefaces.component.commandbutton.CommandButton
+class org.primefaces.component.inputtext.InputText
+class org.primefaces.json.JSONException
+class org.primefaces.json.JSONObject
+class org.primefaces.model.DefaultStreamedContent
+class org.primefaces.model.StreamedContent
+interface Decoder.Text
+interface Encoder.Text
+interface java.io.Serializable
+interface javax.faces.convert.Converter
+interface javax.servlet.Filter
+interface javax.ws.rs.container.ContainerRequestFilter
+interface javax.ws.rs.ext.ContextResolver
+aes.controller.BaseController ..> java.lang.Override
+aes.controller.BaseController ..> javax.persistence.PersistenceContext
+aes.controller.BaseController ..> aes.model.User
+aes.controller.BaseController ..> aes.persistence.GenericDAO
+aes.controller.BaseController ..> com.sun.faces.component.visit.FullVisitContext
+aes.controller.BaseController ..> java.util.Map
+aes.controller.BaseController ..> javax.faces.component.UIComponent
+aes.controller.BaseController ..> javax.faces.component.UIViewRoot
+aes.controller.BaseController ..> javax.faces.component.visit.VisitCallback
+aes.controller.BaseController ..> javax.faces.component.visit.VisitContext
+aes.controller.BaseController ..> javax.faces.component.visit.VisitResult
+aes.controller.BaseController ..> javax.faces.context.FacesContext
+aes.controller.BaseController ..> javax.persistence.EntityManager
+aes.controller.BaseController --|> java.io.Serializable
+aes.service.AbstractFacade ..> aes.model.User
+aes.service.AbstractFacade ..> java.util.Date
+aes.service.AbstractFacade ..> java.util.List
+aes.service.AbstractFacade ..> javax.persistence.EntityManager
+aes.service.AbstractFacade ..> javax.ws.rs.core.Response
+aes.service.AbstractFacade ..> org.apache.commons.codec.DecoderException
+aes.service.AbstractFacade ..> org.apache.commons.codec.binary.Hex
+aes.utility.Secured ..> java.lang.annotation.Retention
+aes.utility.Secured ..> java.lang.annotation.Target
+aes.utility.Secured ..> javax.ws.rs.NameBinding
+aes.utility.Secured ..> java.lang.annotation.ElementType
+aes.utility.Secured ..> java.lang.annotation.RetentionPolicy
+aes.controller.ChallengeController --|> aes.controller.BaseController
+aes.controller.ChallengeController ..> javax.annotation.PostConstruct
+aes.controller.ChallengeController ..> javax.enterprise.context.RequestScoped
+aes.controller.ChallengeController ..> javax.inject.Named
+aes.controller.ChallengeController ..> aes.model.Challenge
+aes.controller.ChallengeController ..> aes.persistence.GenericDAO
+aes.controller.ChallengeController ..> java.io.IOException
+aes.controller.ChallengeController ..> java.sql.SQLException
+aes.controller.ChallengeController ..> java.util.List
+aes.controller.ChallengeController ..> java.util.logging.Level
+aes.controller.ChallengeController ..> java.util.logging.Logger
+aes.controller.ChallengeController ..> javax.faces.application.FacesMessage
+aes.controller.ChallengeController ..> javax.faces.context.FacesContext
+aes.controller.ChallengeController ..> javax.naming.NamingException
+aes.controller.ChallengeUserController --|> aes.controller.BaseController
+aes.controller.ChallengeUserController ..> javax.annotation.PostConstruct
+aes.controller.ChallengeUserController ..> javax.enterprise.context.RequestScoped
+aes.controller.ChallengeUserController ..> javax.inject.Inject
+aes.controller.ChallengeUserController ..> javax.inject.Named
+aes.controller.ChallengeUserController ..> aes.model.ChallengeUser
+aes.controller.ChallengeUserController ..> aes.model.User
+aes.controller.ChallengeUserController ..> aes.persistence.GenericDAO
+aes.controller.ChallengeUserController ..> java.sql.SQLException
+aes.controller.ChallengeUserController ..> java.time.LocalDate
+aes.controller.ChallengeUserController ..> java.time.temporal.ChronoField
+aes.controller.ChallengeUserController ..> java.util.Calendar
+aes.controller.ChallengeUserController ..> java.util.Collections
+aes.controller.ChallengeUserController ..> java.util.Iterator
+aes.controller.ChallengeUserController ..> java.util.LinkedList
+aes.controller.ChallengeUserController ..> java.util.List
+aes.controller.ChallengeUserController ..> java.util.Objects
+aes.controller.ChallengeUserController ..> java.util.function.Consumer
+aes.controller.ChallengeUserController ..> java.util.logging.Level
+aes.controller.ChallengeUserController ..> java.util.logging.Logger
+aes.controller.ChallengeUserController ..> javafx.util.Pair
+aes.controller.ChallengeUserController ..> javax.faces.event.AjaxBehaviorEvent
+aes.controller.ChallengeUserController ..> javax.naming.NamingException
+aes.controller.ChallengeUserController ..> org.hibernate.TransientObjectException
+aes.controller.ChatController --|> aes.controller.BaseController
+aes.controller.ChatController ..> javax.annotation.PostConstruct
+aes.controller.ChatController ..> javax.enterprise.context.ApplicationScoped
+aes.controller.ChatController ..> javax.inject.Named
+aes.controller.ChatController ..> aes.model.Chat
+aes.controller.ChatController ..> aes.persistence.GenericDAO
+aes.controller.ChatController ..> java.io.IOException
+aes.controller.ChatController ..> java.sql.SQLException
+aes.controller.ChatController ..> java.util.logging.Level
+aes.controller.ChatController ..> java.util.logging.Logger
+aes.controller.ChatController ..> javax.enterprise.context.Dependent
+aes.controller.ChatController ..> javax.naming.NamingException
+aes.controller.ConfigurationBean ..> javax.enterprise.context.ApplicationScoped
+aes.controller.ConfigurationBean ..> javax.faces.annotation.FacesConfig
+aes.controller.ConfigurationBean ..> javax.faces.annotation.FacesConfig.Version
+aes.controller.ContactController --|> aes.controller.BaseController
+aes.controller.ContactController ..> javax.annotation.PostConstruct
+aes.controller.ContactController ..> javax.enterprise.context.ApplicationScoped
+aes.controller.ContactController ..> javax.inject.Named
+aes.controller.ContactController ..> aes.model.Contact
+aes.controller.ContactController ..> aes.model.Evaluation
+aes.controller.ContactController ..> aes.model.User
+aes.controller.ContactController ..> aes.persistence.GenericDAO
+aes.controller.ContactController ..> aes.utility.EMailSSL
+aes.controller.ContactController ..> java.io.ByteArrayOutputStream
+aes.controller.ContactController ..> java.io.IOException
+aes.controller.ContactController ..> java.io.InputStream
+aes.controller.ContactController ..> java.nio.charset.StandardCharsets
+aes.controller.ContactController ..> java.sql.SQLException
+aes.controller.ContactController ..> java.util.Calendar
+aes.controller.ContactController ..> java.util.Date
+aes.controller.ContactController ..> java.util.List
+aes.controller.ContactController ..> java.util.Locale
+aes.controller.ContactController ..> java.util.MissingResourceException
+aes.controller.ContactController ..> java.util.PropertyResourceBundle
+aes.controller.ContactController ..> java.util.Random
+aes.controller.ContactController ..> java.util.ResourceBundle
+aes.controller.ContactController ..> java.util.logging.Level
+aes.controller.ContactController ..> java.util.logging.Logger
+aes.controller.ContactController ..> javax.faces.application.FacesMessage
+aes.controller.ContactController ..> javax.faces.context.FacesContext
+aes.controller.ContactController ..> javax.faces.event.ActionEvent
+aes.controller.ContactController ..> javax.mail.MessagingException
+aes.controller.ContactController ..> javax.naming.NamingException
+aes.controller.ContactController --|> java.io.Serializable
+aes.controller.EvaluationController --|> aes.controller.BaseController
+aes.controller.EvaluationController ..> javax.annotation.PostConstruct
+aes.controller.EvaluationController ..> javax.enterprise.context.SessionScoped
+aes.controller.EvaluationController ..> javax.inject.Inject
+aes.controller.EvaluationController ..> javax.inject.Named
+aes.controller.EvaluationController ..> aes.model.Evaluation
+aes.controller.EvaluationController ..> aes.model.User
+aes.controller.EvaluationController ..> aes.persistence.GenericDAO
+aes.controller.EvaluationController ..> aes.utility.PDFGenerator
+aes.controller.EvaluationController ..> java.io.ByteArrayInputStream
+aes.controller.EvaluationController ..> java.io.ByteArrayOutputStream
+aes.controller.EvaluationController ..> java.io.IOException
+aes.controller.EvaluationController ..> java.io.InputStream
+aes.controller.EvaluationController ..> java.nio.charset.Charset
+aes.controller.EvaluationController ..> java.nio.charset.StandardCharsets
+aes.controller.EvaluationController ..> java.sql.SQLException
+aes.controller.EvaluationController ..> java.util.Calendar
+aes.controller.EvaluationController ..> java.util.Date
+aes.controller.EvaluationController ..> java.util.List
+aes.controller.EvaluationController ..> java.util.Locale
+aes.controller.EvaluationController ..> java.util.PropertyResourceBundle
+aes.controller.EvaluationController ..> java.util.ResourceBundle
+aes.controller.EvaluationController ..> java.util.logging.Level
+aes.controller.EvaluationController ..> java.util.logging.Logger
+aes.controller.EvaluationController ..> javax.faces.application.FacesMessage
+aes.controller.EvaluationController ..> javax.faces.context.FacesContext
+aes.controller.EvaluationController ..> javax.naming.NamingException
+aes.controller.EvaluationController ..> javax.servlet.http.HttpServletRequest
+aes.controller.EvaluationController ..> org.hibernate.TransientObjectException
+aes.controller.EvaluationController ..> org.primefaces.component.commandbutton.CommandButton
+aes.controller.EvaluationController ..> org.primefaces.component.inputtext.InputText
+aes.controller.EvaluationController ..> org.primefaces.model.DefaultStreamedContent
+aes.controller.EvaluationController ..> org.primefaces.model.StreamedContent
+aes.controller.FollowUpController --|> aes.controller.BaseController
+aes.controller.FollowUpController ..> javax.annotation.PostConstruct
+aes.controller.FollowUpController ..> javax.faces.view.ViewScoped
+aes.controller.FollowUpController ..> javax.inject.Named
+aes.controller.FollowUpController ..> aes.model.FollowUp
+aes.controller.FollowUpController ..> aes.model.Satisfaction
+aes.controller.FollowUpController ..> aes.model.User
+aes.controller.FollowUpController ..> aes.persistence.GenericDAO
+aes.controller.FollowUpController ..> java.io.IOException
+aes.controller.FollowUpController ..> java.sql.SQLException
+aes.controller.FollowUpController ..> java.util.Date
+aes.controller.FollowUpController ..> java.util.List
+aes.controller.FollowUpController ..> java.util.Map
+aes.controller.FollowUpController ..> java.util.logging.Level
+aes.controller.FollowUpController ..> java.util.logging.Logger
+aes.controller.FollowUpController ..> javax.faces.context.FacesContext
+aes.controller.FollowUpController ..> javax.naming.NamingException
+aes.controller.LanguageController --|> aes.controller.BaseController
+aes.controller.LanguageController ..> javax.annotation.PostConstruct
+aes.controller.LanguageController ..> javax.enterprise.context.SessionScoped
+aes.controller.LanguageController ..> javax.inject.Inject
+aes.controller.LanguageController ..> javax.inject.Named
+aes.controller.LanguageController ..> aes.model.User
+aes.controller.LanguageController ..> java.util.LinkedHashMap
+aes.controller.LanguageController ..> java.util.Locale
+aes.controller.LanguageController ..> java.util.Map
+aes.controller.LanguageController ..> javax.faces.context.FacesContext
+aes.controller.MobileOptionsController --|> aes.controller.BaseController
+aes.controller.MobileOptionsController ..> javax.annotation.PostConstruct
+aes.controller.MobileOptionsController ..> javax.enterprise.context.ApplicationScoped
+aes.controller.MobileOptionsController ..> javax.inject.Inject
+aes.controller.MobileOptionsController ..> javax.inject.Named
+aes.controller.MobileOptionsController ..> aes.model.MobileOptions
+aes.controller.MobileOptionsController ..> aes.model.TipUser
+aes.controller.MobileOptionsController ..> aes.persistence.GenericDAO
+aes.controller.MobileOptionsController ..> aes.utility.ExpoNotification
+aes.controller.MobileOptionsController ..> java.sql.SQLException
+aes.controller.MobileOptionsController ..> java.util.Calendar
+aes.controller.MobileOptionsController ..> java.util.List
+aes.controller.MobileOptionsController ..> java.util.logging.Level
+aes.controller.MobileOptionsController ..> java.util.logging.Logger
+aes.controller.MobileOptionsController ..> javax.naming.NamingException
+aes.controller.PageNavigationController --|> aes.controller.BaseController
+aes.controller.PageNavigationController ..> javax.annotation.PostConstruct
+aes.controller.PageNavigationController ..> javax.enterprise.context.SessionScoped
+aes.controller.PageNavigationController ..> javax.inject.Inject
+aes.controller.PageNavigationController ..> javax.inject.Named
+aes.controller.PageNavigationController ..> aes.model.PageNavigation
+aes.controller.PageNavigationController ..> aes.model.User
+aes.controller.PageNavigationController ..> aes.model.UserAgent
+aes.controller.PageNavigationController ..> aes.persistence.GenericDAO
+aes.controller.PageNavigationController ..> java.sql.SQLException
+aes.controller.PageNavigationController ..> java.util.Date
+aes.controller.PageNavigationController ..> java.util.List
+aes.controller.PageNavigationController ..> java.util.logging.Level
+aes.controller.PageNavigationController ..> java.util.logging.Logger
+aes.controller.PageNavigationController ..> javax.faces.context.FacesContext
+aes.controller.PageNavigationController ..> javax.naming.NamingException
+aes.controller.PageNavigationController ..> javax.servlet.http.HttpServletRequest
+aes.controller.PageRatingController --|> aes.controller.BaseController
+aes.controller.PageRatingController ..> javax.faces.view.ViewScoped
+aes.controller.PageRatingController ..> javax.inject.Inject
+aes.controller.PageRatingController ..> javax.inject.Named
+aes.controller.PageRatingController ..> aes.model.Item
+aes.controller.PageRatingController ..> aes.model.Rating
+aes.controller.PageRatingController ..> aes.model.User
+aes.controller.PageRatingController ..> aes.persistence.GenericDAO
+aes.controller.PageRatingController ..> java.sql.SQLException
+aes.controller.PageRatingController ..> java.util.Date
+aes.controller.PageRatingController ..> java.util.List
+aes.controller.PageRatingController ..> java.util.logging.Level
+aes.controller.PageRatingController ..> java.util.logging.Logger
+aes.controller.PageRatingController ..> javax.faces.context.FacesContext
+aes.controller.PageRatingController ..> javax.faces.event.ActionEvent
+aes.controller.PageRatingController ..> javax.naming.NamingException
+aes.controller.PageRatingController ..> javax.servlet.http.HttpServletRequest
+aes.controller.RecordController --|> aes.controller.BaseController
+aes.controller.RecordController ..> javax.annotation.PostConstruct
+aes.controller.RecordController ..> javax.enterprise.context.SessionScoped
+aes.controller.RecordController ..> javax.inject.Inject
+aes.controller.RecordController ..> javax.inject.Named
+aes.controller.RecordController ..> aes.model.DailyLog
+aes.controller.RecordController ..> aes.model.Evaluation
+aes.controller.RecordController ..> aes.model.Record
+aes.controller.RecordController ..> aes.model.User
+aes.controller.RecordController ..> aes.persistence.GenericDAO
+aes.controller.RecordController ..> aes.utility.PDFGenerator
+aes.controller.RecordController ..> java.io.ByteArrayInputStream
+aes.controller.RecordController ..> java.io.ByteArrayOutputStream
+aes.controller.RecordController ..> java.io.IOException
+aes.controller.RecordController ..> java.io.InputStream
+aes.controller.RecordController ..> java.nio.charset.StandardCharsets
+aes.controller.RecordController ..> java.sql.SQLException
+aes.controller.RecordController ..> java.text.SimpleDateFormat
+aes.controller.RecordController ..> java.time.LocalDate
+aes.controller.RecordController ..> java.time.ZoneId
+aes.controller.RecordController ..> java.util.Calendar
+aes.controller.RecordController ..> java.util.Date
+aes.controller.RecordController ..> java.util.List
+aes.controller.RecordController ..> java.util.Locale
+aes.controller.RecordController ..> java.util.PropertyResourceBundle
+aes.controller.RecordController ..> java.util.ResourceBundle
+aes.controller.RecordController ..> java.util.logging.Level
+aes.controller.RecordController ..> java.util.logging.Logger
+aes.controller.RecordController ..> javax.faces.application.FacesMessage
+aes.controller.RecordController ..> javax.faces.context.FacesContext
+aes.controller.RecordController ..> javax.naming.NamingException
+aes.controller.RecordController ..> org.primefaces.model.DefaultStreamedContent
+aes.controller.RecordController ..> org.primefaces.model.StreamedContent
+aes.controller.RequestController --|> aes.controller.BaseController
+aes.controller.RequestController ..> javax.annotation.PostConstruct
+aes.controller.RequestController ..> javax.enterprise.context.RequestScoped
+aes.controller.RequestController ..> javax.inject.Named
+aes.controller.RequestController ..> aes.model.Evaluation
+aes.controller.RequestController ..> aes.model.Item
+aes.controller.RequestController ..> aes.model.Rating
+aes.controller.RequestController ..> aes.model.User
+aes.controller.RequestController ..> aes.persistence.GenericDAO
+aes.controller.RequestController ..> java.io.IOException
+aes.controller.RequestController ..> java.sql.SQLException
+aes.controller.RequestController ..> java.util.Date
+aes.controller.RequestController ..> java.util.List
+aes.controller.RequestController ..> java.util.Locale
+aes.controller.RequestController ..> java.util.PropertyResourceBundle
+aes.controller.RequestController ..> java.util.ResourceBundle
+aes.controller.RequestController ..> java.util.logging.Level
+aes.controller.RequestController ..> java.util.logging.Logger
+aes.controller.RequestController ..> javax.faces.context.FacesContext
+aes.controller.RequestController ..> javax.naming.NamingException
+aes.controller.RequestController ..> javax.servlet.http.HttpServletRequest
+aes.controller.SatisfactionController --|> aes.controller.BaseController
+aes.controller.SatisfactionController ..> javax.annotation.PostConstruct
+aes.controller.SatisfactionController ..> javax.faces.view.ViewScoped
+aes.controller.SatisfactionController ..> javax.inject.Named
+aes.controller.SatisfactionController ..> aes.model.Evaluation
+aes.controller.SatisfactionController ..> aes.model.Satisfaction
+aes.controller.SatisfactionController ..> aes.model.User
+aes.controller.SatisfactionController ..> aes.persistence.GenericDAO
+aes.controller.SatisfactionController ..> java.io.IOException
+aes.controller.SatisfactionController ..> java.sql.SQLException
+aes.controller.SatisfactionController ..> java.util.Date
+aes.controller.SatisfactionController ..> java.util.Iterator
+aes.controller.SatisfactionController ..> java.util.List
+aes.controller.SatisfactionController ..> java.util.Map
+aes.controller.SatisfactionController ..> java.util.logging.Level
+aes.controller.SatisfactionController ..> java.util.logging.Logger
+aes.controller.SatisfactionController ..> javax.faces.context.FacesContext
+aes.controller.SatisfactionController ..> javax.naming.NamingException
+aes.controller.TipController --|> aes.controller.BaseController
+aes.controller.TipController ..> javax.annotation.PostConstruct
+aes.controller.TipController ..> javax.enterprise.context.ApplicationScoped
+aes.controller.TipController ..> javax.enterprise.context.RequestScoped
+aes.controller.TipController ..> javax.inject.Named
+aes.controller.TipController ..> aes.model.Tip
+aes.controller.TipController ..> aes.persistence.GenericDAO
+aes.controller.TipController ..> java.io.IOException
+aes.controller.TipController ..> java.sql.SQLException
+aes.controller.TipController ..> java.util.Collections
+aes.controller.TipController ..> java.util.List
+aes.controller.TipController ..> java.util.logging.Level
+aes.controller.TipController ..> java.util.logging.Logger
+aes.controller.TipController ..> javax.faces.application.FacesMessage
+aes.controller.TipController ..> javax.faces.context.FacesContext
+aes.controller.TipController ..> javax.naming.NamingException
+aes.controller.TipUserController --|> aes.controller.BaseController
+aes.controller.TipUserController ..> javax.annotation.PostConstruct
+aes.controller.TipUserController ..> javax.enterprise.context.RequestScoped
+aes.controller.TipUserController ..> javax.inject.Inject
+aes.controller.TipUserController ..> javax.inject.Named
+aes.controller.TipUserController ..> aes.model.Tip
+aes.controller.TipUserController ..> aes.model.TipUser
+aes.controller.TipUserController ..> aes.model.TipUserKey
+aes.controller.TipUserController ..> aes.model.User
+aes.controller.TipUserController ..> aes.persistence.GenericDAO
+aes.controller.TipUserController ..> java.sql.SQLException
+aes.controller.TipUserController ..> java.util.Calendar
+aes.controller.TipUserController ..> java.util.List
+aes.controller.TipUserController ..> java.util.Random
+aes.controller.TipUserController ..> java.util.logging.Level
+aes.controller.TipUserController ..> java.util.logging.Logger
+aes.controller.TipUserController ..> javax.faces.application.FacesMessage
+aes.controller.TipUserController ..> javax.faces.context.FacesContext
+aes.controller.TipUserController ..> javax.naming.NamingException
+aes.controller.UserController --|> aes.controller.BaseController
+aes.controller.UserController ..> java.lang.Override
+aes.controller.UserController ..> javax.annotation.PostConstruct
+aes.controller.UserController ..> javax.enterprise.context.SessionScoped
+aes.controller.UserController ..> javax.inject.Inject
+aes.controller.UserController ..> javax.inject.Named
+aes.controller.UserController ..> aes.model.User
+aes.controller.UserController ..> aes.persistence.GenericDAO
+aes.controller.UserController ..> aes.utility.Encrypter
+aes.controller.UserController ..> aes.utility.GenerateCode
+aes.controller.UserController ..> java.io.IOException
+aes.controller.UserController ..> java.io.UnsupportedEncodingException
+aes.controller.UserController ..> java.security.InvalidKeyException
+aes.controller.UserController ..> java.security.NoSuchAlgorithmException
+aes.controller.UserController ..> java.security.spec.InvalidKeySpecException
+aes.controller.UserController ..> java.sql.SQLException
+aes.controller.UserController ..> java.util.Calendar
+aes.controller.UserController ..> java.util.Date
+aes.controller.UserController ..> java.util.GregorianCalendar
+aes.controller.UserController ..> java.util.LinkedHashMap
+aes.controller.UserController ..> java.util.List
+aes.controller.UserController ..> java.util.Locale
+aes.controller.UserController ..> java.util.Map
+aes.controller.UserController ..> java.util.PropertyResourceBundle
+aes.controller.UserController ..> java.util.Random
+aes.controller.UserController ..> java.util.ResourceBundle
+aes.controller.UserController ..> java.util.logging.Level
+aes.controller.UserController ..> java.util.logging.Logger
+aes.controller.UserController ..> javax.crypto.BadPaddingException
+aes.controller.UserController ..> javax.crypto.IllegalBlockSizeException
+aes.controller.UserController ..> javax.crypto.NoSuchPaddingException
+aes.controller.UserController ..> javax.faces.application.FacesMessage
+aes.controller.UserController ..> javax.faces.context.FacesContext
+aes.controller.UserController ..> javax.naming.NamingException
+aes.controller.UserController ..> javax.servlet.http.HttpServletRequest
+aes.model.AppSuggestion ..> javax.persistence.Column
+aes.model.AppSuggestion ..> javax.persistence.Entity
+aes.model.AppSuggestion ..> javax.persistence.GeneratedValue
+aes.model.AppSuggestion ..> javax.persistence.Id
+aes.model.AppSuggestion ..> javax.persistence.ManyToOne
+aes.model.AppSuggestion ..> javax.persistence.Table
+aes.model.AppSuggestion ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.AppSuggestion ..> javax.persistence.GenerationType
+aes.model.AppSuggestion --|> java.io.Serializable
+aes.model.AuthenticationToken ..> javax.persistence.Column
+aes.model.AuthenticationToken ..> javax.persistence.Entity
+aes.model.AuthenticationToken ..> javax.persistence.GeneratedValue
+aes.model.AuthenticationToken ..> javax.persistence.Id
+aes.model.AuthenticationToken ..> javax.persistence.ManyToOne
+aes.model.AuthenticationToken ..> javax.persistence.Table
+aes.model.AuthenticationToken ..> javax.persistence.Temporal
+aes.model.AuthenticationToken ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.AuthenticationToken ..> java.util.Date
+aes.model.AuthenticationToken ..> javax.persistence.GenerationType
+aes.model.AuthenticationToken --|> java.io.Serializable
+aes.model.Challenge ..> javax.persistence.Column
+aes.model.Challenge ..> javax.persistence.Entity
+aes.model.Challenge ..> javax.persistence.Enumerated
+aes.model.Challenge ..> javax.persistence.GeneratedValue
+aes.model.Challenge ..> javax.persistence.Id
+aes.model.Challenge ..> javax.persistence.Table
+aes.model.Challenge ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.Challenge ..> javax.persistence.EnumType
+aes.model.Challenge ..> javax.persistence.GenerationType
+aes.model.Challenge --|> java.io.Serializable
+aes.model.ChallengeUser ..> java.lang.Override
+aes.model.ChallengeUser ..> javax.persistence.Column
+aes.model.ChallengeUser ..> javax.persistence.Entity
+aes.model.ChallengeUser ..> javax.persistence.GeneratedValue
+aes.model.ChallengeUser ..> javax.persistence.Id
+aes.model.ChallengeUser ..> javax.persistence.JoinColumn
+aes.model.ChallengeUser ..> javax.persistence.ManyToOne
+aes.model.ChallengeUser ..> javax.persistence.Table
+aes.model.ChallengeUser ..> javax.persistence.Temporal
+aes.model.ChallengeUser ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.ChallengeUser ..> java.time.LocalDate
+aes.model.ChallengeUser ..> java.util.Date
+aes.model.ChallengeUser ..> javax.persistence.GenerationType
+aes.model.ChallengeUser --|> java.io.Serializable
+aes.model.Chat ..> com.fasterxml.jackson.annotation.JsonBackReference
+aes.model.Chat ..> com.fasterxml.jackson.annotation.JsonIgnore
+aes.model.Chat ..> java.lang.Override
+aes.model.Chat ..> javax.persistence.Column
+aes.model.Chat ..> javax.persistence.Entity
+aes.model.Chat ..> javax.persistence.GeneratedValue
+aes.model.Chat ..> javax.persistence.Id
+aes.model.Chat ..> javax.persistence.OneToMany
+aes.model.Chat ..> javax.persistence.OneToOne
+aes.model.Chat ..> javax.persistence.Table
+aes.model.Chat ..> javax.persistence.Temporal
+aes.model.Chat ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.Chat ..> javax.xml.bind.annotation.XmlTransient
+aes.model.Chat ..> java.util.Date
+aes.model.Chat ..> java.util.List
+aes.model.Chat ..> javax.persistence.FetchType
+aes.model.Chat ..> javax.persistence.GenerationType
+aes.model.Chat --|> java.io.Serializable
+aes.model.Contact ..> javax.persistence.Column
+aes.model.Contact ..> javax.persistence.Entity
+aes.model.Contact ..> javax.persistence.GeneratedValue
+aes.model.Contact ..> javax.persistence.Id
+aes.model.Contact ..> javax.persistence.ManyToOne
+aes.model.Contact ..> javax.persistence.Table
+aes.model.Contact ..> javax.persistence.Temporal
+aes.model.Contact ..> javax.persistence.Transient
+aes.model.Contact ..> java.io.ByteArrayOutputStream
+aes.model.Contact ..> java.util.Date
+aes.model.Contact ..> javax.persistence.GenerationType
+aes.model.Contact --|> java.io.Serializable
+aes.model.DailyLog ..> java.lang.Override
+aes.model.DailyLog ..> javax.persistence.Column
+aes.model.DailyLog ..> javax.persistence.Entity
+aes.model.DailyLog ..> javax.persistence.GeneratedValue
+aes.model.DailyLog ..> javax.persistence.Id
+aes.model.DailyLog ..> javax.persistence.ManyToOne
+aes.model.DailyLog ..> javax.persistence.Table
+aes.model.DailyLog ..> javax.persistence.Temporal
+aes.model.DailyLog ..> com.fasterxml.jackson.annotation.JsonFormat
+aes.model.DailyLog ..> java.time.LocalDate
+aes.model.DailyLog ..> java.util.Date
+aes.model.DailyLog ..> javax.persistence.GenerationType
+aes.model.DailyLog --|> java.io.Serializable
+aes.model.Evaluation ..> com.fasterxml.jackson.annotation.JsonIgnore
+aes.model.Evaluation ..> java.lang.Override
+aes.model.Evaluation ..> javax.persistence.Column
+aes.model.Evaluation ..> javax.persistence.Entity
+aes.model.Evaluation ..> javax.persistence.GeneratedValue
+aes.model.Evaluation ..> javax.persistence.Id
+aes.model.Evaluation ..> javax.persistence.JoinColumn
+aes.model.Evaluation ..> javax.persistence.ManyToOne
+aes.model.Evaluation ..> javax.persistence.Table
+aes.model.Evaluation ..> javax.persistence.Temporal
+aes.model.Evaluation ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.Evaluation ..> javax.xml.bind.annotation.XmlTransient
+aes.model.Evaluation ..> com.sun.xml.ws.binding.FeatureListUtil
+aes.model.Evaluation ..> java.text.SimpleDateFormat
+aes.model.Evaluation ..> java.util.Date
+aes.model.Evaluation ..> javax.persistence.CascadeType
+aes.model.Evaluation ..> javax.persistence.FetchType
+aes.model.Evaluation ..> javax.persistence.GenerationType
+aes.model.Evaluation ..> javax.persistence.TemporalType
+aes.model.Evaluation --|> java.io.Serializable
+aes.model.FollowUp ..> javax.persistence.Column
+aes.model.FollowUp ..> javax.persistence.Entity
+aes.model.FollowUp ..> javax.persistence.GeneratedValue
+aes.model.FollowUp ..> javax.persistence.Id
+aes.model.FollowUp ..> javax.persistence.ManyToOne
+aes.model.FollowUp ..> javax.persistence.Table
+aes.model.FollowUp ..> javax.persistence.Temporal
+aes.model.FollowUp ..> java.util.Date
+aes.model.FollowUp ..> javax.persistence.GenerationType
+aes.model.FollowUp ..> javax.persistence.TemporalType
+aes.model.FollowUp --|> java.io.Serializable
+aes.model.Item ..> javax.persistence.Column
+aes.model.Item ..> javax.persistence.Entity
+aes.model.Item ..> javax.persistence.GeneratedValue
+aes.model.Item ..> javax.persistence.Id
+aes.model.Item ..> javax.persistence.OneToMany
+aes.model.Item ..> javax.persistence.Table
+aes.model.Item ..> java.util.List
+aes.model.Item ..> javax.persistence.FetchType
+aes.model.Item ..> javax.persistence.GenerationType
+aes.model.Item --|> java.io.Serializable
+aes.model.Message ..> com.fasterxml.jackson.databind.annotation.JsonDeserialize
+aes.model.Message ..> java.lang.Override
+aes.model.Message ..> javax.persistence.Column
+aes.model.Message ..> javax.persistence.Entity
+aes.model.Message ..> javax.persistence.GeneratedValue
+aes.model.Message ..> javax.persistence.Id
+aes.model.Message ..> javax.persistence.JoinColumn
+aes.model.Message ..> javax.persistence.ManyToOne
+aes.model.Message ..> javax.persistence.Table
+aes.model.Message ..> javax.persistence.Temporal
+aes.model.Message ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.Message ..> aes.utility.CustomMessageDeserializer
+aes.model.Message ..> java.util.Date
+aes.model.Message ..> javax.persistence.FetchType
+aes.model.Message ..> javax.persistence.GenerationType
+aes.model.Message --|> java.io.Serializable
+aes.model.MobileOptions ..> javax.persistence.Column
+aes.model.MobileOptions ..> javax.persistence.Entity
+aes.model.MobileOptions ..> javax.persistence.GeneratedValue
+aes.model.MobileOptions ..> javax.persistence.Id
+aes.model.MobileOptions ..> javax.persistence.OneToOne
+aes.model.MobileOptions ..> javax.persistence.Table
+aes.model.MobileOptions ..> javax.persistence.Temporal
+aes.model.MobileOptions ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.MobileOptions ..> java.time.LocalTime
+aes.model.MobileOptions ..> java.time.OffsetTime
+aes.model.MobileOptions ..> java.util.Date
+aes.model.MobileOptions ..> javax.persistence.GenerationType
+aes.model.MobileOptions --|> java.io.Serializable
+aes.model.PageNavigation ..> javax.persistence.Column
+aes.model.PageNavigation ..> javax.persistence.Entity
+aes.model.PageNavigation ..> javax.persistence.GeneratedValue
+aes.model.PageNavigation ..> javax.persistence.Id
+aes.model.PageNavigation ..> javax.persistence.ManyToOne
+aes.model.PageNavigation ..> javax.persistence.Table
+aes.model.PageNavigation ..> javax.persistence.Temporal
+aes.model.PageNavigation ..> java.util.Date
+aes.model.PageNavigation ..> javax.persistence.GenerationType
+aes.model.PageNavigation --|> java.io.Serializable
+aes.model.Rating ..> javax.persistence.Column
+aes.model.Rating ..> javax.persistence.Entity
+aes.model.Rating ..> javax.persistence.GeneratedValue
+aes.model.Rating ..> javax.persistence.Id
+aes.model.Rating ..> javax.persistence.ManyToOne
+aes.model.Rating ..> javax.persistence.Table
+aes.model.Rating ..> javax.persistence.Temporal
+aes.model.Rating ..> java.util.Date
+aes.model.Rating ..> javax.persistence.GenerationType
+aes.model.Rating ..> javax.persistence.TemporalType
+aes.model.Rating --|> java.io.Serializable
+aes.model.Record ..> com.fasterxml.jackson.annotation.JsonBackReference
+aes.model.Record ..> com.fasterxml.jackson.annotation.JsonIgnore
+aes.model.Record ..> javax.persistence.Column
+aes.model.Record ..> javax.persistence.Entity
+aes.model.Record ..> javax.persistence.GeneratedValue
+aes.model.Record ..> javax.persistence.Id
+aes.model.Record ..> javax.persistence.OneToMany
+aes.model.Record ..> javax.persistence.OneToOne
+aes.model.Record ..> javax.persistence.Table
+aes.model.Record ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.Record ..> javax.xml.bind.annotation.XmlTransient
+aes.model.Record ..> java.util.List
+aes.model.Record ..> javax.persistence.FetchType
+aes.model.Record ..> javax.persistence.GenerationType
+aes.model.Record --|> java.io.Serializable
+aes.model.Satisfaction ..> javax.persistence.Column
+aes.model.Satisfaction ..> javax.persistence.Entity
+aes.model.Satisfaction ..> javax.persistence.GeneratedValue
+aes.model.Satisfaction ..> javax.persistence.Id
+aes.model.Satisfaction ..> javax.persistence.ManyToOne
+aes.model.Satisfaction ..> javax.persistence.Table
+aes.model.Satisfaction ..> javax.persistence.Temporal
+aes.model.Satisfaction ..> java.util.Date
+aes.model.Satisfaction ..> javax.persistence.GenerationType
+aes.model.Satisfaction ..> javax.persistence.TemporalType
+aes.model.Satisfaction --|> java.io.Serializable
+aes.model.Tip ..> com.fasterxml.jackson.annotation.JsonIgnore
+aes.model.Tip ..> javax.persistence.Column
+aes.model.Tip ..> javax.persistence.Entity
+aes.model.Tip ..> javax.persistence.GeneratedValue
+aes.model.Tip ..> javax.persistence.Id
+aes.model.Tip ..> javax.persistence.OneToMany
+aes.model.Tip ..> javax.persistence.Table
+aes.model.Tip ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.Tip ..> javax.xml.bind.annotation.XmlTransient
+aes.model.Tip ..> java.util.List
+aes.model.Tip ..> javax.persistence.CascadeType
+aes.model.Tip ..> javax.persistence.FetchType
+aes.model.Tip ..> javax.persistence.GenerationType
+aes.model.Tip --|> java.io.Serializable
+aes.model.TipUser ..> com.fasterxml.jackson.annotation.JsonIgnore
+aes.model.TipUser ..> java.lang.Override
+aes.model.TipUser ..> javax.persistence.Column
+aes.model.TipUser ..> javax.persistence.EmbeddedId
+aes.model.TipUser ..> javax.persistence.Entity
+aes.model.TipUser ..> javax.persistence.JoinColumn
+aes.model.TipUser ..> javax.persistence.ManyToOne
+aes.model.TipUser ..> javax.persistence.MapsId
+aes.model.TipUser ..> javax.persistence.Table
+aes.model.TipUser ..> javax.persistence.Temporal
+aes.model.TipUser ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.TipUser ..> java.util.Date
+aes.model.TipUser --|> java.io.Serializable
+aes.model.TipUserKey ..> java.lang.Override
+aes.model.TipUserKey ..> javax.persistence.Column
+aes.model.TipUserKey ..> javax.persistence.Embeddable
+aes.model.TipUserKey ..> java.util.Objects
+aes.model.TipUserKey --|> java.io.Serializable
+aes.model.User ..> com.fasterxml.jackson.annotation.JsonBackReference
+aes.model.User ..> com.fasterxml.jackson.annotation.JsonIgnore
+aes.model.User ..> com.fasterxml.jackson.annotation.JsonManagedReference
+aes.model.User ..> java.lang.Override
+aes.model.User ..> javax.persistence.Column
+aes.model.User ..> javax.persistence.Entity
+aes.model.User ..> javax.persistence.GeneratedValue
+aes.model.User ..> javax.persistence.Id
+aes.model.User ..> javax.persistence.NamedQueries
+aes.model.User ..> javax.persistence.NamedQuery
+aes.model.User ..> javax.persistence.OneToMany
+aes.model.User ..> javax.persistence.OneToOne
+aes.model.User ..> javax.persistence.Table
+aes.model.User ..> javax.persistence.Temporal
+aes.model.User ..> javax.xml.bind.annotation.XmlRootElement
+aes.model.User ..> javax.xml.bind.annotation.XmlTransient
+aes.model.User ..> com.fasterxml.jackson.annotation.JsonIgnoreProperties
+aes.model.User ..> java.util.Calendar
+aes.model.User ..> java.util.Date
+aes.model.User ..> java.util.List
+aes.model.User ..> javax.persistence.CascadeType
+aes.model.User ..> javax.persistence.FetchType
+aes.model.User ..> javax.persistence.GenerationType
+aes.model.User --|> java.io.Serializable
+aes.model.UserAgent ..> javax.persistence.Column
+aes.model.UserAgent ..> javax.persistence.Entity
+aes.model.UserAgent ..> javax.persistence.GeneratedValue
+aes.model.UserAgent ..> javax.persistence.Id
+aes.model.UserAgent ..> javax.persistence.OneToMany
+aes.model.UserAgent ..> javax.persistence.Table
+aes.model.UserAgent ..> java.util.List
+aes.model.UserAgent ..> javax.persistence.FetchType
+aes.model.UserAgent ..> javax.persistence.GenerationType
+aes.model.UserAgent --|> java.io.Serializable
+aes.persistence.GenericDAO ..> java.lang.SuppressWarnings
+aes.persistence.GenericDAO ..> java.sql.SQLException
+aes.persistence.GenericDAO ..> java.util.Date
+aes.persistence.GenericDAO ..> java.util.List
+aes.persistence.GenericDAO ..> java.util.logging.Level
+aes.persistence.GenericDAO ..> java.util.logging.Logger
+aes.persistence.GenericDAO ..> javax.naming.InitialContext
+aes.persistence.GenericDAO ..> javax.naming.NamingException
+aes.persistence.GenericDAO ..> javax.persistence.EntityManager
+aes.persistence.GenericDAO ..> javax.persistence.Query
+aes.persistence.GenericDAO ..> javax.transaction.UserTransaction
+aes.persistence.GenericDAO ..> org.hibernate.CacheMode
+aes.persistence.GenericDAO --|> java.io.Serializable
+aes.persistence.HibernateUtil ..> org.hibernate.SessionFactory
+aes.persistence.HibernateUtil ..> org.hibernate.boot.registry.StandardServiceRegistry
+aes.persistence.HibernateUtil ..> org.hibernate.boot.registry.StandardServiceRegistryBuilder
+aes.persistence.HibernateUtil ..> org.hibernate.cfg.Configuration
+aes.service.AppSuggestionFacadeREST --|> aes.service.AbstractFacade
+aes.service.AppSuggestionFacadeREST ..> aes.utility.Secured
+aes.service.AppSuggestionFacadeREST ..> java.lang.Override
+aes.service.AppSuggestionFacadeREST ..> javax.ejb.Stateless
+aes.service.AppSuggestionFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.Consumes
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.DELETE
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.GET
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.POST
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.PUT
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.Path
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.PathParam
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.Produces
+aes.service.AppSuggestionFacadeREST ..> aes.model.AppSuggestion
+aes.service.AppSuggestionFacadeREST ..> java.util.List
+aes.service.AppSuggestionFacadeREST ..> javax.persistence.EntityManager
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.AppSuggestionFacadeREST ..> javax.ws.rs.core.Response
+aes.service.ApplicationConfig ..> java.lang.Override
+aes.service.ApplicationConfig ..> javax.ws.rs.ApplicationPath
+aes.service.ApplicationConfig ..> java.util.Set
+aes.service.ApplicationConfig --|> javax.ws.rs.core.Application
+aes.service.ApplicationConfig ..> org.glassfish.jersey.jackson.JacksonFeature
+aes.service.AuthenticationFilter ..> aes.utility.Secured
+aes.service.AuthenticationFilter ..> java.lang.Override
+aes.service.AuthenticationFilter ..> javax.annotation.Priority
+aes.service.AuthenticationFilter ..> javax.persistence.PersistenceContext
+aes.service.AuthenticationFilter ..> javax.ws.rs.ext.Provider
+aes.service.AuthenticationFilter ..> aes.model.AuthenticationToken
+aes.service.AuthenticationFilter ..> aes.model.User
+aes.service.AuthenticationFilter ..> java.security.Principal
+aes.service.AuthenticationFilter ..> javax.persistence.EntityManager
+aes.service.AuthenticationFilter ..> javax.ws.rs.Priorities
+aes.service.AuthenticationFilter ..> javax.ws.rs.container.ContainerRequestContext
+aes.service.AuthenticationFilter ..> javax.ws.rs.core.HttpHeaders
+aes.service.AuthenticationFilter ..> javax.ws.rs.core.Response
+aes.service.AuthenticationFilter ..> javax.ws.rs.core.SecurityContext
+aes.service.AuthenticationFilter --|> javax.ws.rs.container.ContainerRequestFilter
+aes.service.AuthenticationTokenFacadeREST --|> aes.service.AbstractFacade
+aes.service.AuthenticationTokenFacadeREST ..> aes.utility.Secured
+aes.service.AuthenticationTokenFacadeREST ..> java.lang.Override
+aes.service.AuthenticationTokenFacadeREST ..> javax.ejb.Stateless
+aes.service.AuthenticationTokenFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.DELETE
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.GET
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.Path
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.PathParam
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.Produces
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.core.Context
+aes.service.AuthenticationTokenFacadeREST ..> aes.controller.UserController
+aes.service.AuthenticationTokenFacadeREST ..> aes.model.AuthenticationToken
+aes.service.AuthenticationTokenFacadeREST ..> aes.model.User
+aes.service.AuthenticationTokenFacadeREST ..> aes.utility.Encrypter
+aes.service.AuthenticationTokenFacadeREST ..> aes.utility.SecureRandomString
+aes.service.AuthenticationTokenFacadeREST ..> java.security.InvalidKeyException
+aes.service.AuthenticationTokenFacadeREST ..> java.util.Date
+aes.service.AuthenticationTokenFacadeREST ..> java.util.logging.Level
+aes.service.AuthenticationTokenFacadeREST ..> java.util.logging.Logger
+aes.service.AuthenticationTokenFacadeREST ..> javax.persistence.EntityManager
+aes.service.AuthenticationTokenFacadeREST ..> javax.persistence.NoResultException
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.core.Response
+aes.service.AuthenticationTokenFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.AuthenticationTokenFacadeREST ..> org.apache.commons.codec.binary.Hex
+aes.service.ChallengeFacadeREST --|> aes.service.AbstractFacade
+aes.service.ChallengeFacadeREST ..> aes.utility.Secured
+aes.service.ChallengeFacadeREST ..> java.lang.Override
+aes.service.ChallengeFacadeREST ..> javax.ejb.Stateless
+aes.service.ChallengeFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.Consumes
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.DELETE
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.GET
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.POST
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.PUT
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.Path
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.PathParam
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.Produces
+aes.service.ChallengeFacadeREST ..> aes.model.Challenge
+aes.service.ChallengeFacadeREST ..> java.util.List
+aes.service.ChallengeFacadeREST ..> javax.persistence.EntityManager
+aes.service.ChallengeFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.ChallengeUserFacadeREST --|> aes.service.AbstractFacade
+aes.service.ChallengeUserFacadeREST ..> aes.utility.Secured
+aes.service.ChallengeUserFacadeREST ..> java.lang.Override
+aes.service.ChallengeUserFacadeREST ..> javax.ejb.Stateless
+aes.service.ChallengeUserFacadeREST ..> javax.inject.Inject
+aes.service.ChallengeUserFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.Consumes
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.DELETE
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.GET
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.POST
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.PUT
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.Path
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.PathParam
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.Produces
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.core.Context
+aes.service.ChallengeUserFacadeREST ..> aes.controller.ChallengeUserController
+aes.service.ChallengeUserFacadeREST ..> aes.model.Challenge
+aes.service.ChallengeUserFacadeREST ..> aes.model.ChallengeUser
+aes.service.ChallengeUserFacadeREST ..> aes.model.User
+aes.service.ChallengeUserFacadeREST ..> com.google.gson.Gson
+aes.service.ChallengeUserFacadeREST ..> java.text.ParseException
+aes.service.ChallengeUserFacadeREST ..> java.text.SimpleDateFormat
+aes.service.ChallengeUserFacadeREST ..> java.time.LocalDate
+aes.service.ChallengeUserFacadeREST ..> java.time.ZoneId
+aes.service.ChallengeUserFacadeREST ..> java.time.temporal.ChronoField
+aes.service.ChallengeUserFacadeREST ..> java.util.Collections
+aes.service.ChallengeUserFacadeREST ..> java.util.Date
+aes.service.ChallengeUserFacadeREST ..> java.util.LinkedList
+aes.service.ChallengeUserFacadeREST ..> java.util.List
+aes.service.ChallengeUserFacadeREST ..> java.util.logging.Level
+aes.service.ChallengeUserFacadeREST ..> java.util.logging.Logger
+aes.service.ChallengeUserFacadeREST ..> javafx.util.Pair
+aes.service.ChallengeUserFacadeREST ..> javax.persistence.EntityManager
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.core.Response
+aes.service.ChallengeUserFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.ChatConfigurator ..> java.lang.Override
+aes.service.ChatConfigurator --|> ServerEndpointConfig.Configurator
+aes.service.ChatConfigurator ..> java.util.List
+aes.service.ChatConfigurator ..> java.util.Map
+aes.service.ChatConfigurator ..> javax.websocket.HandshakeResponse
+aes.service.ChatConfigurator ..> javax.websocket.server.HandshakeRequest
+aes.service.ChatConfigurator ..> javax.websocket.server.ServerEndpointConfig
+aes.service.ChatEndpoint ..> javax.persistence.PersistenceContext
+aes.service.ChatEndpoint ..> javax.websocket.OnClose
+aes.service.ChatEndpoint ..> javax.websocket.OnError
+aes.service.ChatEndpoint ..> javax.websocket.OnMessage
+aes.service.ChatEndpoint ..> javax.websocket.OnOpen
+aes.service.ChatEndpoint ..> javax.websocket.server.PathParam
+aes.service.ChatEndpoint ..> javax.websocket.server.ServerEndpoint
+aes.service.ChatEndpoint ..> aes.model.AuthenticationToken
+aes.service.ChatEndpoint ..> aes.model.Chat
+aes.service.ChatEndpoint ..> aes.model.Message
+aes.service.ChatEndpoint ..> aes.model.User
+aes.service.ChatEndpoint ..> aes.persistence.GenericDAO
+aes.service.ChatEndpoint ..> aes.utility.MessageDecoder
+aes.service.ChatEndpoint ..> aes.utility.MessageEncoder
+aes.service.ChatEndpoint ..> com.fasterxml.jackson.databind.ObjectMapper
+aes.service.ChatEndpoint ..> com.fasterxml.jackson.databind.node.ObjectNode
+aes.service.ChatEndpoint ..> com.google.gson.Gson
+aes.service.ChatEndpoint ..> java.io.IOException
+aes.service.ChatEndpoint ..> java.nio.ByteBuffer
+aes.service.ChatEndpoint ..> java.sql.SQLException
+aes.service.ChatEndpoint ..> java.text.ParseException
+aes.service.ChatEndpoint ..> java.text.SimpleDateFormat
+aes.service.ChatEndpoint ..> java.util.ArrayList
+aes.service.ChatEndpoint ..> java.util.Date
+aes.service.ChatEndpoint ..> java.util.List
+aes.service.ChatEndpoint ..> java.util.Map
+aes.service.ChatEndpoint ..> java.util.Timer
+aes.service.ChatEndpoint ..> java.util.TimerTask
+aes.service.ChatEndpoint ..> java.util.concurrent.ConcurrentHashMap
+aes.service.ChatEndpoint ..> java.util.concurrent.Executors
+aes.service.ChatEndpoint ..> java.util.concurrent.ScheduledExecutorService
+aes.service.ChatEndpoint ..> java.util.concurrent.TimeUnit
+aes.service.ChatEndpoint ..> java.util.logging.Level
+aes.service.ChatEndpoint ..> java.util.logging.Logger
+aes.service.ChatEndpoint ..> javax.naming.NamingException
+aes.service.ChatEndpoint ..> javax.persistence.EntityManager
+aes.service.ChatEndpoint ..> javax.websocket.CloseReason
+aes.service.ChatEndpoint ..> javax.websocket.CloseReason.CloseCodes
+aes.service.ChatEndpoint ..> javax.websocket.EncodeException
+aes.service.ChatEndpoint ..> javax.websocket.EndpointConfig
+aes.service.ChatEndpoint ..> javax.websocket.PongMessage
+aes.service.ChatEndpoint ..> javax.websocket.Session
+aes.service.ChatFacadeREST --|> aes.service.AbstractFacade
+aes.service.ChatFacadeREST ..> aes.utility.Secured
+aes.service.ChatFacadeREST ..> java.lang.Override
+aes.service.ChatFacadeREST ..> javax.ejb.Stateless
+aes.service.ChatFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.ChatFacadeREST ..> javax.ws.rs.Consumes
+aes.service.ChatFacadeREST ..> javax.ws.rs.DELETE
+aes.service.ChatFacadeREST ..> javax.ws.rs.GET
+aes.service.ChatFacadeREST ..> javax.ws.rs.POST
+aes.service.ChatFacadeREST ..> javax.ws.rs.PUT
+aes.service.ChatFacadeREST ..> javax.ws.rs.Path
+aes.service.ChatFacadeREST ..> javax.ws.rs.PathParam
+aes.service.ChatFacadeREST ..> javax.ws.rs.Produces
+aes.service.ChatFacadeREST ..> javax.ws.rs.core.Context
+aes.service.ChatFacadeREST ..> aes.model.Chat
+aes.service.ChatFacadeREST ..> aes.model.User
+aes.service.ChatFacadeREST ..> java.util.Date
+aes.service.ChatFacadeREST ..> java.util.List
+aes.service.ChatFacadeREST ..> javax.persistence.EntityManager
+aes.service.ChatFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.ChatFacadeREST ..> javax.ws.rs.core.Response
+aes.service.ChatFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.ChatbotResource ..> javax.enterprise.context.RequestScoped
+aes.service.ChatbotResource ..> javax.ws.rs.Consumes
+aes.service.ChatbotResource ..> javax.ws.rs.GET
+aes.service.ChatbotResource ..> javax.ws.rs.PUT
+aes.service.ChatbotResource ..> javax.ws.rs.Path
+aes.service.ChatbotResource ..> javax.ws.rs.Produces
+aes.service.ChatbotResource ..> javax.ws.rs.core.Context
+aes.service.ChatbotResource ..> com.google.gson.Gson
+aes.service.ChatbotResource ..> java.io.BufferedReader
+aes.service.ChatbotResource ..> java.io.IOException
+aes.service.ChatbotResource ..> java.io.InputStream
+aes.service.ChatbotResource ..> java.io.InputStreamReader
+aes.service.ChatbotResource ..> java.net.URI
+aes.service.ChatbotResource ..> java.net.URISyntaxException
+aes.service.ChatbotResource ..> java.net.URL
+aes.service.ChatbotResource ..> java.nio.charset.StandardCharsets
+aes.service.ChatbotResource ..> java.nio.file.Paths
+aes.service.ChatbotResource ..> java.util.ArrayList
+aes.service.ChatbotResource ..> java.util.LinkedList
+aes.service.ChatbotResource ..> java.util.List
+aes.service.ChatbotResource ..> java.util.logging.Level
+aes.service.ChatbotResource ..> java.util.logging.Logger
+aes.service.ChatbotResource ..> javax.ws.rs.core.MediaType
+aes.service.ChatbotResource ..> javax.ws.rs.core.UriInfo
+aes.service.ChatbotResource ..> org.apache.xml.security.utils.ClassLoaderUtils
+aes.service.DailyLogFacadeREST --|> aes.service.AbstractFacade
+aes.service.DailyLogFacadeREST ..> aes.utility.Secured
+aes.service.DailyLogFacadeREST ..> java.lang.Override
+aes.service.DailyLogFacadeREST ..> javax.ejb.Stateless
+aes.service.DailyLogFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.Consumes
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.DELETE
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.GET
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.POST
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.PUT
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.Path
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.PathParam
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.Produces
+aes.service.DailyLogFacadeREST ..> aes.model.DailyLog
+aes.service.DailyLogFacadeREST ..> aes.model.Record
+aes.service.DailyLogFacadeREST ..> java.text.ParseException
+aes.service.DailyLogFacadeREST ..> java.text.SimpleDateFormat
+aes.service.DailyLogFacadeREST ..> java.util.Date
+aes.service.DailyLogFacadeREST ..> java.util.List
+aes.service.DailyLogFacadeREST ..> java.util.logging.Level
+aes.service.DailyLogFacadeREST ..> java.util.logging.Logger
+aes.service.DailyLogFacadeREST ..> javax.persistence.EntityManager
+aes.service.DailyLogFacadeREST ..> javax.persistence.NoResultException
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.DailyLogFacadeREST ..> javax.ws.rs.core.Response
+aes.service.DailyLogFacadeREST ..> org.primefaces.json.JSONException
+aes.service.DailyLogFacadeREST ..> org.primefaces.json.JSONObject
+aes.service.EvaluationFacadeREST --|> aes.service.AbstractFacade
+aes.service.EvaluationFacadeREST ..> aes.utility.Secured
+aes.service.EvaluationFacadeREST ..> java.lang.Override
+aes.service.EvaluationFacadeREST ..> javax.ejb.Stateless
+aes.service.EvaluationFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.Consumes
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.DELETE
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.GET
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.POST
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.PUT
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.Path
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.PathParam
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.Produces
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.core.Context
+aes.service.EvaluationFacadeREST ..> aes.model.Evaluation
+aes.service.EvaluationFacadeREST ..> aes.model.User
+aes.service.EvaluationFacadeREST ..> java.util.Date
+aes.service.EvaluationFacadeREST ..> java.util.List
+aes.service.EvaluationFacadeREST ..> java.util.logging.Level
+aes.service.EvaluationFacadeREST ..> java.util.logging.Logger
+aes.service.EvaluationFacadeREST ..> javassist.NotFoundException
+aes.service.EvaluationFacadeREST ..> javax.persistence.EntityManager
+aes.service.EvaluationFacadeREST ..> javax.persistence.NoResultException
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.core.Response
+aes.service.EvaluationFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.MessageFacadeREST --|> aes.service.AbstractFacade
+aes.service.MessageFacadeREST ..> aes.utility.Secured
+aes.service.MessageFacadeREST ..> java.lang.Override
+aes.service.MessageFacadeREST ..> javax.ejb.Stateless
+aes.service.MessageFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.MessageFacadeREST ..> javax.ws.rs.Consumes
+aes.service.MessageFacadeREST ..> javax.ws.rs.DELETE
+aes.service.MessageFacadeREST ..> javax.ws.rs.GET
+aes.service.MessageFacadeREST ..> javax.ws.rs.POST
+aes.service.MessageFacadeREST ..> javax.ws.rs.PUT
+aes.service.MessageFacadeREST ..> javax.ws.rs.Path
+aes.service.MessageFacadeREST ..> javax.ws.rs.PathParam
+aes.service.MessageFacadeREST ..> javax.ws.rs.Produces
+aes.service.MessageFacadeREST ..> javax.ws.rs.core.Context
+aes.service.MessageFacadeREST ..> aes.model.Chat
+aes.service.MessageFacadeREST ..> aes.model.Message
+aes.service.MessageFacadeREST ..> aes.model.User
+aes.service.MessageFacadeREST ..> java.util.List
+aes.service.MessageFacadeREST ..> javax.persistence.EntityManager
+aes.service.MessageFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.MessageFacadeREST ..> javax.ws.rs.core.Response
+aes.service.MessageFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.MobileOptionsFacadeREST --|> aes.service.AbstractFacade
+aes.service.MobileOptionsFacadeREST ..> aes.utility.Secured
+aes.service.MobileOptionsFacadeREST ..> java.lang.Override
+aes.service.MobileOptionsFacadeREST ..> javax.ejb.Stateless
+aes.service.MobileOptionsFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.Consumes
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.DELETE
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.GET
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.POST
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.PUT
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.Path
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.PathParam
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.Produces
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.core.Context
+aes.service.MobileOptionsFacadeREST ..> aes.model.MobileOptions
+aes.service.MobileOptionsFacadeREST ..> aes.model.User
+aes.service.MobileOptionsFacadeREST ..> java.time.LocalTime
+aes.service.MobileOptionsFacadeREST ..> java.time.OffsetDateTime
+aes.service.MobileOptionsFacadeREST ..> java.time.OffsetTime
+aes.service.MobileOptionsFacadeREST ..> java.util.Calendar
+aes.service.MobileOptionsFacadeREST ..> java.util.Date
+aes.service.MobileOptionsFacadeREST ..> java.util.List
+aes.service.MobileOptionsFacadeREST ..> java.util.logging.Level
+aes.service.MobileOptionsFacadeREST ..> java.util.logging.Logger
+aes.service.MobileOptionsFacadeREST ..> javax.persistence.EntityManager
+aes.service.MobileOptionsFacadeREST ..> javax.persistence.NoResultException
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.core.Response
+aes.service.MobileOptionsFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.RecordFacadeREST --|> aes.service.AbstractFacade
+aes.service.RecordFacadeREST ..> aes.utility.Secured
+aes.service.RecordFacadeREST ..> java.lang.Override
+aes.service.RecordFacadeREST ..> javax.ejb.Stateless
+aes.service.RecordFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.RecordFacadeREST ..> javax.ws.rs.Consumes
+aes.service.RecordFacadeREST ..> javax.ws.rs.DELETE
+aes.service.RecordFacadeREST ..> javax.ws.rs.GET
+aes.service.RecordFacadeREST ..> javax.ws.rs.POST
+aes.service.RecordFacadeREST ..> javax.ws.rs.PUT
+aes.service.RecordFacadeREST ..> javax.ws.rs.Path
+aes.service.RecordFacadeREST ..> javax.ws.rs.PathParam
+aes.service.RecordFacadeREST ..> javax.ws.rs.Produces
+aes.service.RecordFacadeREST ..> javax.ws.rs.core.Context
+aes.service.RecordFacadeREST ..> aes.model.Record
+aes.service.RecordFacadeREST ..> aes.model.User
+aes.service.RecordFacadeREST ..> java.util.List
+aes.service.RecordFacadeREST ..> java.util.logging.Level
+aes.service.RecordFacadeREST ..> java.util.logging.Logger
+aes.service.RecordFacadeREST ..> javax.persistence.EntityManager
+aes.service.RecordFacadeREST ..> javax.persistence.NoResultException
+aes.service.RecordFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.RecordFacadeREST ..> javax.ws.rs.core.Response
+aes.service.RecordFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.RoleFilter ..> java.lang.Override
+aes.service.RoleFilter ..> javax.inject.Inject
+aes.service.RoleFilter ..> javax.servlet.annotation.WebFilter
+aes.service.RoleFilter ..> aes.controller.UserController
+aes.service.RoleFilter ..> java.io.IOException
+aes.service.RoleFilter ..> java.io.PrintStream
+aes.service.RoleFilter ..> java.io.PrintWriter
+aes.service.RoleFilter ..> java.io.StringWriter
+aes.service.RoleFilter ..> javax.servlet.DispatcherType
+aes.service.RoleFilter ..> javax.servlet.FilterChain
+aes.service.RoleFilter ..> javax.servlet.FilterConfig
+aes.service.RoleFilter ..> javax.servlet.ServletException
+aes.service.RoleFilter ..> javax.servlet.ServletRequest
+aes.service.RoleFilter ..> javax.servlet.ServletResponse
+aes.service.RoleFilter ..> javax.servlet.http.HttpServletRequest
+aes.service.RoleFilter ..> javax.servlet.http.HttpServletResponse
+aes.service.RoleFilter ..> javax.servlet.http.HttpSession
+aes.service.RoleFilter --|> javax.servlet.Filter
+aes.service.TipFacadeREST --|> aes.service.AbstractFacade
+aes.service.TipFacadeREST ..> aes.utility.Secured
+aes.service.TipFacadeREST ..> java.lang.Override
+aes.service.TipFacadeREST ..> javax.ejb.Stateless
+aes.service.TipFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.TipFacadeREST ..> javax.ws.rs.Consumes
+aes.service.TipFacadeREST ..> javax.ws.rs.DELETE
+aes.service.TipFacadeREST ..> javax.ws.rs.GET
+aes.service.TipFacadeREST ..> javax.ws.rs.POST
+aes.service.TipFacadeREST ..> javax.ws.rs.PUT
+aes.service.TipFacadeREST ..> javax.ws.rs.Path
+aes.service.TipFacadeREST ..> javax.ws.rs.PathParam
+aes.service.TipFacadeREST ..> javax.ws.rs.Produces
+aes.service.TipFacadeREST ..> aes.model.Tip
+aes.service.TipFacadeREST ..> java.util.List
+aes.service.TipFacadeREST ..> javax.persistence.EntityManager
+aes.service.TipFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.TipUserFacadeREST --|> aes.service.AbstractFacade
+aes.service.TipUserFacadeREST ..> aes.utility.Secured
+aes.service.TipUserFacadeREST ..> java.lang.Override
+aes.service.TipUserFacadeREST ..> javax.ejb.Stateless
+aes.service.TipUserFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.TipUserFacadeREST ..> javax.ws.rs.Consumes
+aes.service.TipUserFacadeREST ..> javax.ws.rs.DELETE
+aes.service.TipUserFacadeREST ..> javax.ws.rs.GET
+aes.service.TipUserFacadeREST ..> javax.ws.rs.POST
+aes.service.TipUserFacadeREST ..> javax.ws.rs.PUT
+aes.service.TipUserFacadeREST ..> javax.ws.rs.Path
+aes.service.TipUserFacadeREST ..> javax.ws.rs.PathParam
+aes.service.TipUserFacadeREST ..> javax.ws.rs.Produces
+aes.service.TipUserFacadeREST ..> javax.ws.rs.core.Context
+aes.service.TipUserFacadeREST ..> aes.model.Tip
+aes.service.TipUserFacadeREST ..> aes.model.TipUser
+aes.service.TipUserFacadeREST ..> aes.model.TipUserKey
+aes.service.TipUserFacadeREST ..> aes.model.User
+aes.service.TipUserFacadeREST ..> java.text.SimpleDateFormat
+aes.service.TipUserFacadeREST ..> java.util.Date
+aes.service.TipUserFacadeREST ..> java.util.List
+aes.service.TipUserFacadeREST ..> java.util.logging.Level
+aes.service.TipUserFacadeREST ..> java.util.logging.Logger
+aes.service.TipUserFacadeREST ..> javax.persistence.EntityManager
+aes.service.TipUserFacadeREST ..> javax.servlet.http.HttpServletRequest
+aes.service.TipUserFacadeREST ..> javax.ws.rs.HEAD
+aes.service.TipUserFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.TipUserFacadeREST ..> javax.ws.rs.core.PathSegment
+aes.service.TipUserFacadeREST ..> javax.ws.rs.core.Response
+aes.service.TipUserFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.UserFacadeREST --|> aes.service.AbstractFacade
+aes.service.UserFacadeREST ..> aes.utility.Secured
+aes.service.UserFacadeREST ..> java.lang.Override
+aes.service.UserFacadeREST ..> javax.annotation.Resource
+aes.service.UserFacadeREST ..> javax.ejb.Stateless
+aes.service.UserFacadeREST ..> javax.ejb.TransactionManagement
+aes.service.UserFacadeREST ..> javax.inject.Inject
+aes.service.UserFacadeREST ..> javax.persistence.PersistenceContext
+aes.service.UserFacadeREST ..> javax.ws.rs.Consumes
+aes.service.UserFacadeREST ..> javax.ws.rs.DELETE
+aes.service.UserFacadeREST ..> javax.ws.rs.GET
+aes.service.UserFacadeREST ..> javax.ws.rs.POST
+aes.service.UserFacadeREST ..> javax.ws.rs.PUT
+aes.service.UserFacadeREST ..> javax.ws.rs.Path
+aes.service.UserFacadeREST ..> javax.ws.rs.PathParam
+aes.service.UserFacadeREST ..> javax.ws.rs.Produces
+aes.service.UserFacadeREST ..> javax.ws.rs.core.Context
+aes.service.UserFacadeREST ..> aes.controller.ContactController
+aes.service.UserFacadeREST ..> aes.controller.UserController
+aes.service.UserFacadeREST ..> aes.model.User
+aes.service.UserFacadeREST ..> aes.utility.Encrypter
+aes.service.UserFacadeREST ..> aes.utility.GenerateCode
+aes.service.UserFacadeREST ..> com.fasterxml.jackson.core.JsonParser
+aes.service.UserFacadeREST ..> com.fasterxml.jackson.databind.JsonNode
+aes.service.UserFacadeREST ..> com.fasterxml.jackson.databind.util.JSONPObject
+aes.service.UserFacadeREST ..> java.io.UnsupportedEncodingException
+aes.service.UserFacadeREST ..> java.security.InvalidKeyException
+aes.service.UserFacadeREST ..> java.security.NoSuchAlgorithmException
+aes.service.UserFacadeREST ..> java.security.spec.InvalidKeySpecException
+aes.service.UserFacadeREST ..> java.util.Arrays
+aes.service.UserFacadeREST ..> java.util.Date
+aes.service.UserFacadeREST ..> java.util.List
+aes.service.UserFacadeREST ..> java.util.logging.Level
+aes.service.UserFacadeREST ..> java.util.logging.Logger
+aes.service.UserFacadeREST ..> javax.crypto.IllegalBlockSizeException
+aes.service.UserFacadeREST ..> javax.crypto.NoSuchPaddingException
+aes.service.UserFacadeREST ..> javax.ejb.TransactionManagementType
+aes.service.UserFacadeREST ..> javax.faces.application.FacesMessage
+aes.service.UserFacadeREST ..> javax.faces.context.FacesContext
+aes.service.UserFacadeREST ..> javax.persistence.EntityManager
+aes.service.UserFacadeREST ..> javax.transaction.HeuristicMixedException
+aes.service.UserFacadeREST ..> javax.transaction.HeuristicRollbackException
+aes.service.UserFacadeREST ..> javax.transaction.NotSupportedException
+aes.service.UserFacadeREST ..> javax.transaction.RollbackException
+aes.service.UserFacadeREST ..> javax.transaction.SystemException
+aes.service.UserFacadeREST ..> javax.transaction.UserTransaction
+aes.service.UserFacadeREST ..> javax.ws.rs.core.MediaType
+aes.service.UserFacadeREST ..> javax.ws.rs.core.Response
+aes.service.UserFacadeREST ..> javax.ws.rs.core.SecurityContext
+aes.service.UserFacadeREST ..> org.apache.commons.codec.DecoderException
+aes.service.UserFacadeREST ..> org.apache.commons.codec.binary.Hex
+aes.utility.CustomMessageDeserializer ..> java.lang.Override
+aes.utility.CustomMessageDeserializer ..> aes.model.Chat
+aes.utility.CustomMessageDeserializer ..> aes.model.Message
+aes.utility.CustomMessageDeserializer ..> com.fasterxml.jackson.core.JsonParser
+aes.utility.CustomMessageDeserializer ..> com.fasterxml.jackson.core.JsonProcessingException
+aes.utility.CustomMessageDeserializer ..> com.fasterxml.jackson.databind.DeserializationContext
+aes.utility.CustomMessageDeserializer ..> com.fasterxml.jackson.databind.JsonNode
+aes.utility.CustomMessageDeserializer --|> com.fasterxml.jackson.databind.deser.std.StdDeserializer
+aes.utility.CustomMessageDeserializer ..> com.fasterxml.jackson.databind.node.LongNode
+aes.utility.CustomMessageDeserializer ..> java.io.IOException
+aes.utility.CustomMessageDeserializer ..> java.text.ParseException
+aes.utility.CustomMessageDeserializer ..> java.text.SimpleDateFormat
+aes.utility.CustomMessageDeserializer ..> java.util.logging.Level
+aes.utility.CustomMessageDeserializer ..> java.util.logging.Logger
+aes.utility.CustomMessageSerializer ..> java.lang.Override
+aes.utility.CustomMessageSerializer ..> aes.model.Chat
+aes.utility.CustomMessageSerializer ..> aes.model.Message
+aes.utility.CustomMessageSerializer ..> com.fasterxml.jackson.core.JsonGenerator
+aes.utility.CustomMessageSerializer ..> com.fasterxml.jackson.databind.SerializerProvider
+aes.utility.CustomMessageSerializer --|> com.fasterxml.jackson.databind.ser.std.StdSerializer
+aes.utility.CustomMessageSerializer ..> java.io.IOException
+aes.utility.CustomMessageSerializer ..> java.math.BigDecimal
+aes.utility.EMailSSL ..> com.sun.mail.util.MailSSLSocketFactory
+aes.utility.EMailSSL ..> java.io.ByteArrayOutputStream
+aes.utility.EMailSSL ..> java.io.IOException
+aes.utility.EMailSSL ..> java.security.GeneralSecurityException
+aes.utility.EMailSSL ..> java.util.Date
+aes.utility.EMailSSL ..> java.util.Properties
+aes.utility.EMailSSL ..> java.util.logging.Level
+aes.utility.EMailSSL ..> java.util.logging.Logger
+aes.utility.EMailSSL ..> javax.activation.DataHandler
+aes.utility.EMailSSL ..> javax.activation.DataSource
+aes.utility.EMailSSL ..> javax.mail.Authenticator
+aes.utility.EMailSSL ..> javax.mail.Message
+aes.utility.EMailSSL ..> javax.mail.MessagingException
+aes.utility.EMailSSL ..> javax.mail.PasswordAuthentication
+aes.utility.EMailSSL ..> javax.mail.Session
+aes.utility.EMailSSL ..> javax.mail.Transport
+aes.utility.EMailSSL ..> javax.mail.internet.InternetAddress
+aes.utility.EMailSSL ..> javax.mail.internet.MimeBodyPart
+aes.utility.EMailSSL ..> javax.mail.internet.MimeMessage
+aes.utility.EMailSSL ..> javax.mail.internet.MimeMultipart
+aes.utility.EMailSSL ..> javax.mail.util.ByteArrayDataSource
+aes.utility.Encrypter ..> java.io.UnsupportedEncodingException
+aes.utility.Encrypter ..> java.nio.charset.StandardCharsets
+aes.utility.Encrypter ..> java.security.InvalidKeyException
+aes.utility.Encrypter ..> java.security.NoSuchAlgorithmException
+aes.utility.Encrypter ..> java.security.SecureRandom
+aes.utility.Encrypter ..> java.security.spec.InvalidKeySpecException
+aes.utility.Encrypter ..> javax.crypto.BadPaddingException
+aes.utility.Encrypter ..> javax.crypto.Cipher
+aes.utility.Encrypter ..> javax.crypto.IllegalBlockSizeException
+aes.utility.Encrypter ..> javax.crypto.NoSuchPaddingException
+aes.utility.Encrypter ..> javax.crypto.SecretKey
+aes.utility.Encrypter ..> javax.crypto.SecretKeyFactory
+aes.utility.Encrypter ..> javax.crypto.spec.PBEKeySpec
+aes.utility.Encrypter ..> javax.crypto.spec.SecretKeySpec
+aes.utility.Encrypter ..> javax.faces.context.FacesContext
+aes.utility.Encrypter ..> org.apache.commons.codec.DecoderException
+aes.utility.Encrypter ..> org.apache.commons.codec.binary.Base64
+aes.utility.Encrypter ..> org.apache.commons.codec.binary.Hex
+aes.utility.ExpoNotification ..> aes.model.TipUser
+aes.utility.ExpoNotification ..> java.io.BufferedReader
+aes.utility.ExpoNotification ..> java.io.DataOutputStream
+aes.utility.ExpoNotification ..> java.io.IOException
+aes.utility.ExpoNotification ..> java.io.InputStreamReader
+aes.utility.ExpoNotification ..> java.math.BigDecimal
+aes.utility.ExpoNotification ..> java.net.HttpURLConnection
+aes.utility.ExpoNotification ..> java.net.MalformedURLException
+aes.utility.ExpoNotification ..> java.net.URL
+aes.utility.ExpoNotification ..> java.nio.charset.StandardCharsets
+aes.utility.ExpoNotification ..> java.util.logging.Level
+aes.utility.ExpoNotification ..> java.util.logging.Logger
+aes.utility.ExpoNotification ..> javax.json.Json
+aes.utility.ExpoNotification ..> javax.json.JsonObject
+aes.utility.GenerateCode ..> java.util.Random
+aes.utility.MessageDecoder ..> java.lang.Override
+aes.utility.MessageDecoder ..> aes.model.Message
+aes.utility.MessageDecoder ..> com.fasterxml.jackson.databind.ObjectMapper
+aes.utility.MessageDecoder ..> com.fasterxml.jackson.databind.module.SimpleModule
+aes.utility.MessageDecoder ..> java.io.IOException
+aes.utility.MessageDecoder ..> java.util.logging.Level
+aes.utility.MessageDecoder ..> java.util.logging.Logger
+aes.utility.MessageDecoder ..> javax.websocket.DecodeException
+aes.utility.MessageDecoder ..> javax.websocket.Decoder
+aes.utility.MessageDecoder ..> javax.websocket.EndpointConfig
+aes.utility.MessageDecoder --|> Decoder.Text
+aes.utility.MessageEncoder ..> java.lang.Override
+aes.utility.MessageEncoder ..> aes.model.Message
+aes.utility.MessageEncoder ..> com.fasterxml.jackson.core.JsonProcessingException
+aes.utility.MessageEncoder ..> com.fasterxml.jackson.databind.ObjectMapper
+aes.utility.MessageEncoder ..> com.fasterxml.jackson.databind.module.SimpleModule
+aes.utility.MessageEncoder ..> java.util.logging.Level
+aes.utility.MessageEncoder ..> java.util.logging.Logger
+aes.utility.MessageEncoder ..> javax.websocket.EncodeException
+aes.utility.MessageEncoder ..> javax.websocket.Encoder
+aes.utility.MessageEncoder ..> javax.websocket.EndpointConfig
+aes.utility.MessageEncoder --|> Encoder.Text
+aes.utility.ObjectMapperContextResolver ..> java.lang.Override
+aes.utility.ObjectMapperContextResolver ..> javax.ws.rs.ext.Provider
+aes.utility.ObjectMapperContextResolver ..> com.fasterxml.jackson.databind.ObjectMapper
+aes.utility.ObjectMapperContextResolver ..> com.fasterxml.jackson.databind.SerializationFeature
+aes.utility.ObjectMapperContextResolver ..> com.fasterxml.jackson.datatype.jdk8.Jdk8Module
+aes.utility.ObjectMapperContextResolver ..> com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+aes.utility.ObjectMapperContextResolver ..> com.fasterxml.jackson.module.paramnames.ParameterNamesModule
+aes.utility.ObjectMapperContextResolver --|> javax.ws.rs.ext.ContextResolver
+aes.utility.PDFGenerator ..> com.itextpdf.text.Document
+aes.utility.PDFGenerator ..> com.itextpdf.text.DocumentException
+aes.utility.PDFGenerator ..> com.itextpdf.text.pdf.PdfWriter
+aes.utility.PDFGenerator ..> com.itextpdf.tool.xml.XMLWorkerHelper
+aes.utility.PDFGenerator ..> java.io.ByteArrayInputStream
+aes.utility.PDFGenerator ..> java.io.ByteArrayOutputStream
+aes.utility.PDFGenerator ..> java.io.IOException
+aes.utility.PDFGenerator ..> java.nio.charset.StandardCharsets
+aes.utility.PDFGenerator ..> java.util.logging.Level
+aes.utility.PDFGenerator ..> java.util.logging.Logger
+aes.utility.Scheduler ..> javax.ejb.Schedule
+aes.utility.Scheduler ..> javax.ejb.Singleton
+aes.utility.Scheduler ..> javax.ejb.Startup
+aes.utility.Scheduler ..> javax.ejb.TransactionManagement
+aes.utility.Scheduler ..> javax.inject.Inject
+aes.utility.Scheduler ..> aes.controller.ContactController
+aes.utility.Scheduler ..> aes.controller.MobileOptionsController
+aes.utility.Scheduler ..> aes.controller.TipUserController
+aes.utility.Scheduler ..> java.util.logging.Level
+aes.utility.Scheduler ..> java.util.logging.Logger
+aes.utility.Scheduler ..> javax.ejb.TransactionManagementType
+aes.utility.SecureRandomString ..> java.security.SecureRandom
+aes.utility.SecureRandomString ..> org.apache.commons.codec.binary.Base64
+aes.utility.StringTrimmer ..> java.lang.Override
+aes.utility.StringTrimmer ..> javax.faces.convert.FacesConverter
+aes.utility.StringTrimmer ..> javax.faces.component.UIComponent
+aes.utility.StringTrimmer ..> javax.faces.context.FacesContext
+aes.utility.StringTrimmer --|> javax.faces.convert.Converter
+@enduml

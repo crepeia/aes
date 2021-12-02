@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="itext">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/itext/itextpdf-5.5.7-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/itext/itext-xtra-5.5.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/itext/itextpdf-5.5.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/itext/itext-xtra-5.5.7-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/itext/itextpdf-5.5.7-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/itext/itext-pdfa-5.5.7-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/itext/itext-pdfa-5.5.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/itext/itext-pdfa-5.5.7-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/itext/itext-xtra-5.5.7-javadoc.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

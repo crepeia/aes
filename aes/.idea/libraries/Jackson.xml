@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="Jackson">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-databind-2.8.11.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-module-parameter-names-2.8.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-core-asl-1.9.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-annotations-2.10.0.pr3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-annotations-2.8.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-datatype-jdk8-2.8.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-module-jaxb-annotations-2.8.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-core-2.8.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-jaxrs-json-provider-2.8.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-datatype-jsr310-2.8.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-jaxrs-base-2.8.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jersey-media-json-jackson-2.29.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-core-2.10.0.pr3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Jackson/jackson-databind-2.10.0.pr3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

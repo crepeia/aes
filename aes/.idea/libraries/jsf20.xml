@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="jsf20">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jsf20/javaee-doc-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jsf20/javax.faces.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

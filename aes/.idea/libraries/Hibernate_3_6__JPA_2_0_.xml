@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="Hibernate_3.6__JPA_2.0_">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/jta-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/hibernate-jpa-2.0-api-1.0.1.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/hibernate-testing.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/slf4j-api-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/javassist-3.12.0.GA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/hibernate3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/slf4j-simple-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/commons-collections-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/dom4j-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/antlr-2.7.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/slf4j-nop-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/cglib-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_3.6__JPA_2.0_/hibernate-entitymanager-3.6.10.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

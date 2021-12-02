@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="spatial1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/spatial/geolatte-geom-1.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/spatial/jts-core-1.16.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/spatial/postgresql-42.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/spatial/slf4j-api-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/spatial/hibernate-spatial-5.4.15.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

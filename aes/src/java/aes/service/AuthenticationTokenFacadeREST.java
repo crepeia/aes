@@ -4,11 +4,16 @@
  * and open the template in the editor.
  */
 package aes.service;
+import aes.controller.UserController;
 import aes.utility.SecureRandomString;
 import aes.model.AuthenticationToken;
 import aes.model.User;
+import aes.utility.Encrypter;
 import aes.utility.Secured;
+import java.security.InvalidKeyException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,6 +28,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import org.apache.commons.codec.binary.Hex;
 
 /**
  *
@@ -45,16 +51,39 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @GET
     @Path("{email}/{password}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response authUser(@PathParam("email") String e, @PathParam("password") String p) {
+    public Response authUser(@PathParam("email") String e, @PathParam("password") String p) throws InvalidKeyException {
+      
         try {
-            
-            User usr = super.login(e, p);
-            String token = issueToken(usr);
-            
-            //String jsonString = new JSONObject().put("token", token).toString();
+           String clientEncriptedHexPassword = p;
+           String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
+           
+          // System.out.println("Senha recebida: " + p);
+          // System.out.println("Senha decriptada: " + Encrypter.decrypt(p));
 
-            return Response.ok(token).build();
+           byte[] b =  Hex.decodeHex(p.toCharArray());
+           User user = (User) getEntityManager().createNamedQuery("User.email").setParameter("email", e).getSingleResult();
+           
+           boolean hashMatches = Encrypter.compareHash(decriptedPassword, user.getPassword(), user.getSalt());
+           
+           
+           
+           if(hashMatches){
+               String token  = issueToken(user);
+               Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
+               return Response.ok(token).build();
+
+           }
+           else{
+                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
+                return Response.status(Response.Status.FORBIDDEN).build();
+           }
+           //User usr = super.login(e, p);
+                
+            //String jsonString = new JSONObject().put("token", token).toString();
+         
         } catch(Exception exp) {
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, exp.getMessage());
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
             return Response.status(Response.Status.FORBIDDEN).build();
         }
     }

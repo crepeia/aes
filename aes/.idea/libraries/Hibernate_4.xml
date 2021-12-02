@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="Hibernate_4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/ehcache-core-2.4.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/hibernate-ehcache-4.2.21.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/hibernate-commons-annotations-4.0.2.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/hibernate-entitymanager-4.2.21.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/hibernate-jpa-2.0-api-1.0.1.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/slf4j-api-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/antlr-2.7.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/hibernate-core-4.2.21.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/jboss-logging-3.1.0.GA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/javassist-3.18.1-GA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/hibernate-envers-4.2.21.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/jboss-transaction-api_1.1_spec-1.0.1.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_4/dom4j-1.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

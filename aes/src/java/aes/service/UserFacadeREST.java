@@ -15,12 +15,17 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -83,16 +88,20 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{password}")
-    public Response createUser(User entity, @PathParam("password") String p) throws DecoderException, UnsupportedEncodingException {
+    public Response createUser(User entity, @PathParam("password") String p) {
         List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
         
         if (!userList.isEmpty()) {
             return Response.status(Response.Status.CONFLICT).build();
         } else {
             try {
-                //String p = Hex.encodeHexString( entity.getPassword() );
-                byte[] b =  Hex.decodeHex(p.toCharArray());
-                entity.setPassword(b);
+                String clientEncriptedHexPassword = p;
+                String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
+
+
+                byte[] salt =  Encrypter.generateRandomSecureSalt(16);
+                entity.setSalt(salt);
+                entity.setPassword(Encrypter.hashPassword(decriptedPassword, salt));
                 //byte[] b =  Hex.decodeHex(Arrays.toString(entity.getPassword()).toCharArray());
                 userTransaction.begin();
                 super.create(entity);
@@ -104,12 +113,26 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     contactController.scheduleDiaryReminderEmail(entity, new Date());
                     contactController.scheduleWeeklyEmail(entity, new Date());
                 }
+            
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
+            
+            
              } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeySpecException ex) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            }catch (NoSuchPaddingException ex) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            }catch (Exception ex) {
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return Response.ok(entity).build();
+        
+         return Response.ok(entity).build();
+        // return Response.serverError().build();
+        
     }
     
     /*

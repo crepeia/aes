@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="jcache">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/optional/jcache/hibernate-jcache-5.4.15.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Hibernate_5.10.15/lib/optional/jcache/cache-api-1.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

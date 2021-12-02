@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="javaee-endorsed-api-6.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/javaee-endorsed-api-6.0/webservices-api-osgi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javaee-endorsed-api-6.0/javax.annotation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javaee-endorsed-api-6.0/javaee6-doc-api.zip!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javaee-endorsed-api-6.0/jaxb-api-osgi.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
