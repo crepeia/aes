@@ -3,6 +3,7 @@ package aes.controller;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.Encrypter;
+import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -33,7 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 
 /**
  *
@@ -71,7 +71,7 @@ public class UserController extends BaseController<User> {
     private boolean showErrorMessage;
 
     List<User> userList;
-    
+
     @PostConstruct
     public void init() {
         mes = -1;
@@ -127,24 +127,11 @@ public class UserController extends BaseController<User> {
 
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } /*catch (InvalidKeyException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
+        } catch (EncrypterException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } 
-        catch (NoSuchPaddingException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }*/ catch (IOException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
     }
 
@@ -172,14 +159,14 @@ public class UserController extends BaseController<User> {
             } else {
                 List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
                 boolean regComplete = userList.stream().reduce(true, (reg, userElement) -> reg && userElement.isRegistration_complete(), Boolean::logicalAnd);
-                
+
                 if (!userList.isEmpty() && regComplete) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.used"), null));
                 } else {
-                    if(!regComplete){
+                    if (!regComplete) {
                         user.setId(userList.get(0).getId());
                     }
-                    byte[] salt =  Encrypter.generateRandomSecureSalt(16);
+                    byte[] salt = Encrypter.generateRandomSecureSalt(16);
                     user.setRegistration_complete(true);
                     user.setSalt(salt);
                     user.setPassword(Encrypter.hashPassword(password, salt));
@@ -196,19 +183,12 @@ public class UserController extends BaseController<User> {
                 }
             }
 
-        } /*catch (InvalidKeySpecException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
+        } catch (EncrypterException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } */
-        catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (InvalidKeySpecException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
+        }
     }
 
     public void editProfile() {
@@ -231,7 +211,7 @@ public class UserController extends BaseController<User> {
             }
             if (emailAvailable = true) {
                 if (editPassword != null && !editPassword.trim().isEmpty()) {
-                    byte[] salt =  Encrypter.generateRandomSecureSalt(16);
+                    byte[] salt = Encrypter.generateRandomSecureSalt(16);
                     user.setSalt(salt);
                     user.setPassword(Encrypter.hashPassword(editPassword, salt));
                 }
@@ -249,25 +229,11 @@ public class UserController extends BaseController<User> {
                 editDia = 0;
             }
 
-        } /*catch (InvalidKeyException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }*/ catch (SQLException ex) {
+        } catch (SQLException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
 
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
+        } catch (EncrypterException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -356,11 +322,11 @@ public class UserController extends BaseController<User> {
                 User foundUser = userList.get(0);
                 if (foundUser.getRecoverCode() != null && user.getRecoverCode().equals(foundUser.getRecoverCode())) {
                     //foundUser.setPassword(Encrypter.encrypt(password));
-                    
-                    byte[] salt =  Encrypter.generateRandomSecureSalt(16);
+
+                    byte[] salt = Encrypter.generateRandomSecureSalt(16);
                     foundUser.setSalt(salt);
                     foundUser.setPassword(Encrypter.hashPassword(password, salt));
-                    
+
                     password = null;
                     foundUser.setRecoverCode(null);
                     daoBase.insertOrUpdate(foundUser, getEntityManager());
@@ -373,21 +339,9 @@ public class UserController extends BaseController<User> {
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
+        } catch (EncrypterException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }/* catch (InvalidKeyException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
     }
 
     public void setBirth() {
@@ -549,7 +503,7 @@ public class UserController extends BaseController<User> {
 
     public int getDia() {
         Calendar birth = Calendar.getInstance();
-        if(getUser().getBirthDate() != null){
+        if (getUser().getBirthDate() != null) {
             birth.setTime(getUser().getBirthDate());
             dia = birth.get(Calendar.DAY_OF_MONTH);
         } else {
@@ -565,7 +519,7 @@ public class UserController extends BaseController<User> {
 
     public int getMes() {
         Calendar birth = Calendar.getInstance();
-        if(getUser().getBirthDate() != null){
+        if (getUser().getBirthDate() != null) {
             birth.setTime(getUser().getBirthDate());
             mes = birth.get(Calendar.MONTH);
         } else {
@@ -580,11 +534,11 @@ public class UserController extends BaseController<User> {
 
     public int getAno() {
         Calendar birth = Calendar.getInstance();
-        if(getUser().getBirthDate() != null){
-           birth.setTime(getUser().getBirthDate());
-           ano = birth.get(Calendar.YEAR);
+        if (getUser().getBirthDate() != null) {
+            birth.setTime(getUser().getBirthDate());
+            ano = birth.get(Calendar.YEAR);
         } else {
-           ano = 0;
+            ano = 0;
         }
         return ano;
     }
@@ -643,7 +597,7 @@ public class UserController extends BaseController<User> {
 
     public int getEditDia() {
         Calendar birth = Calendar.getInstance();
-        if(getUser().getBirthDate() != null){
+        if (getUser().getBirthDate() != null) {
             birth.setTime(getUser().getBirthDate());
             editDia = birth.get(Calendar.DAY_OF_MONTH);
         } else {
@@ -659,7 +613,7 @@ public class UserController extends BaseController<User> {
 
     public int getEditMes() {
         Calendar birth = Calendar.getInstance();
-        if(getUser().getBirthDate() != null){
+        if (getUser().getBirthDate() != null) {
             birth.setTime(getUser().getBirthDate());
             editMes = birth.get(Calendar.MONTH);
         } else {
@@ -674,9 +628,9 @@ public class UserController extends BaseController<User> {
 
     public int getEditAno() {
         Calendar birth = Calendar.getInstance();
-        if(getUser().getBirthDate() != null){
-           birth.setTime(getUser().getBirthDate());
-           editAno = birth.get(Calendar.YEAR);
+        if (getUser().getBirthDate() != null) {
+            birth.setTime(getUser().getBirthDate());
+            editAno = birth.get(Calendar.YEAR);
         } else {
             editAno = 0;
         }
@@ -694,7 +648,7 @@ public class UserController extends BaseController<User> {
     public void setConfirmEmail(String confirmEmail) {
         this.confirmEmail = confirmEmail;
     }
-    
+
     private String getIpAdress() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
@@ -703,16 +657,16 @@ public class UserController extends BaseController<User> {
         }
         return ipAddress;
     }
-     
-    public boolean isAdmin(){
+
+    public boolean isAdmin() {
         return (getUser().isAdmin());
     }
-    
-    public boolean isInRanking(){
+
+    public boolean isInRanking() {
         return (getUser().isInRanking());
     }
-    
-    public List<User> userList(){
+
+    public List<User> userList() {
         try {
             userList = this.getDaoBase().listNotNull("email", getEntityManager());
         } catch (SQLException ex) {
@@ -721,42 +675,42 @@ public class UserController extends BaseController<User> {
         }
         return userList;
     }
-    
-    public void setAdmin(User u){
-        if(u.getEmail() == null ? this.getUser().getEmail() != null : !u.getEmail().equals(this.getUser().getEmail())){
+
+    public void setAdmin(User u) {
+        if (u.getEmail() == null ? this.getUser().getEmail() != null : !u.getEmail().equals(this.getUser().getEmail())) {
             u.setAdmin(!u.isAdmin());
 
             try {
-               daoBase.update(u, getEntityManager());
-               //administrator = null;
+                daoBase.update(u, getEntityManager());
+                //administrator = null;
             } catch (SQLException ex) {
-               Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    
-    public void setConsultant(User u){
-        if(this.getUser().getEmail() != null){
+
+    public void setConsultant(User u) {
+        if (this.getUser().getEmail() != null) {
             u.setConsultant(!u.isConsultant());
 
             try {
-               daoBase.update(u, getEntityManager());
-               //administrator = null;
+                daoBase.update(u, getEntityManager());
+                //administrator = null;
             } catch (SQLException ex) {
-               Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    
-    public void setUseChatbot(User u){
-        if(this.getUser().getEmail() != null){
+
+    public void setUseChatbot(User u) {
+        if (this.getUser().getEmail() != null) {
             u.setUse_chatbot(!u.isUse_chatbot());
 
             try {
-               daoBase.update(u, getEntityManager());
-               //administrator = null;
+                daoBase.update(u, getEntityManager());
+                //administrator = null;
             } catch (SQLException ex) {
-               Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

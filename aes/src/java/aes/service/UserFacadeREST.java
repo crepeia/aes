@@ -9,6 +9,7 @@ import aes.controller.ContactController;
 import aes.controller.UserController;
 import aes.model.User;
 import aes.utility.Encrypter;
+import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
 import aes.utility.Secured;
 import com.fasterxml.jackson.core.JsonParser;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.ejb.Stateless;
@@ -97,12 +99,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
             try {
                 String clientEncriptedHexPassword = p;
                 String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
-
-
                 byte[] salt =  Encrypter.generateRandomSecureSalt(16);
                 entity.setSalt(salt);
                 entity.setPassword(Encrypter.hashPassword(decriptedPassword, salt));
-                //byte[] b =  Hex.decodeHex(Arrays.toString(entity.getPassword()).toCharArray());
+                
                 userTransaction.begin();
                 super.create(entity);
                 userTransaction.commit();
@@ -116,21 +116,19 @@ public class UserFacadeREST extends AbstractFacade<User> {
             
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
             
+            return Response.ok(entity).build();
             
              } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchAlgorithmException ex) {
+                return Response.serverError().build();
+
+            } catch (EncrypterException ex) {
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeySpecException ex) {
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            }catch (NoSuchPaddingException ex) {
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            }catch (Exception ex) {
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                return Response.serverError().build();
+            } 
         }
         
-         return Response.ok(entity).build();
+         
         // return Response.serverError().build();
         
     }

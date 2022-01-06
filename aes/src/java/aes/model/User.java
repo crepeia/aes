@@ -137,13 +137,13 @@ public class User implements Serializable {
     private boolean consultant;
     
     @Column(name = "app_signup", nullable = false )
-    private Boolean app_signup;
+    private Boolean app_signup=false;
     
     @Column(name = "use_chatbot", nullable = false )
-    private Boolean use_chatbot;
+    private Boolean use_chatbot=false;
     
     @Column(name = "in_ranking", nullable = false )
-    private Boolean inRanking;
+    private Boolean inRanking=false;
     
     @Column(name = "nickname")
     private String nickname;
@@ -267,7 +267,7 @@ public class User implements Serializable {
         return receiveEmails;
     }
 
-    public void setReceiveEmails(Boolean receiveEmails) {
+    public void setReceiveEmails(boolean receiveEmails) {
         this.receiveEmails = receiveEmails;
     }
 
@@ -275,7 +275,7 @@ public class User implements Serializable {
         return authorizeData;
     }
 
-    public void setAuthorizeData(Boolean authorizeData) {
+    public void setAuthorizeData(boolean authorizeData) {
         this.authorizeData = authorizeData;
     }
 

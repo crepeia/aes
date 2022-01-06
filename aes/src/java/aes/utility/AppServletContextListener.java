@@ -5,15 +5,7 @@
  */
 package aes.utility;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -28,7 +20,6 @@ public class AppServletContextListener implements ServletContextListener {
     
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent){
-        String key = servletContextEvent.getServletContext().getInitParameter("key");
         servletContext = servletContextEvent.getServletContext();    
     }
     
@@ -36,9 +27,4 @@ public class AppServletContextListener implements ServletContextListener {
         return servletContext;
     }
     
- 
-
-    /*public static Properties getProperties(){
-        return properties;
-    }*/
 }
