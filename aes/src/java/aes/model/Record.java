@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "tb_record")
@@ -25,8 +26,10 @@ public class Record implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "daily_goal")
+    @ColumnDefault("0")
     private float dailyGoal;
     @Column(name = "weekly_goal")
+    @ColumnDefault("0")
     private float weeklyGoal;
     
     @JsonBackReference

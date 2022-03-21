@@ -1,0 +1,106 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package aes.persistence;
+
+import aes.controller.UserController;
+import aes.model.User;
+import aes.service.UserFacadeREST;
+import aes.utility.Encrypter;
+import aes.utility.EncrypterException;
+import aes.utility.GenerateCode;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
+
+/**
+ *
+ * @author patrick
+ */
+public class UserDAO extends GenericDAO<User>{
+    private ContactDAO contactDAO = new ContactDAO();
+    
+    
+     public UserDAO() throws NamingException {
+        super(User.class);
+    }
+     
+
+    public User checkCredentials(String email, String providedPassword, EntityManager entityManager) throws SQLException, EncrypterException{
+        List<User> userList = this.list("email", email, entityManager);
+        
+        if(!userList.isEmpty() && Encrypter.compareHash(providedPassword, userList.get(0).getPassword(), userList.get(0).getSalt())){
+            return userList.get(0);
+        }
+        return null;
+
+    }
+
+    public void createUser(User entity, String passwordString, EntityManager entityManager) throws SQLException, EncrypterException {
+       /// List<User> userList = getEntityManager().createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
+        
+        //if (!userList.isEmpty()) {
+            //todo: throw exception
+       /// } else {
+            //try {
+
+                byte[] salt =  Encrypter.generateRandomSecureSalt(16);
+                entity.setSalt(salt);
+                entity.setPassword(Encrypter.hashPassword(passwordString, salt));
+                
+                insertOrUpdate(entity, entityManager);
+
+                Logger.getLogger(UserDAO.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
+                        
+            // } catch (SQLException |SecurityException | IllegalStateException ex) {
+             //   Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+           // } catch (EncrypterException ex) {
+             //   Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+          //  } 
+            
+       // }
+        
+    }
+    
+    
+        public void createRecoveryCode(User user, EntityManager entityManager) {
+        try {
+           // List<User> userList = this.list("email", u, this.getEntityManager());
+            //if (userList.isEmpty()) {
+                //todo: throw exception: user does't exist
+               // FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registred"), null));
+           // } else {
+                //User foundUser = userList.get(0);
+                user.setRecoverCode(GenerateCode.generate());
+                this.insertOrUpdate(user, entityManager);
+                //contactController.sendPasswordRecoveryEmail(foundUser);
+                //FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
+           // }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public User login(String token, EntityManager entityManager) {
+        User at = (User) entityManager.createQuery("SELECT u FROM AuthenticationToken a INNER JOIN a.user AS u WHERE a.token=:t").setParameter("t", token).getSingleResult();
+        return at;
+    }
+    
+    public User login(String e, String p) throws DecoderException{
+        byte[] b =  Hex.decodeHex(p.toCharArray());
+        return (User) getEntityManager().createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
+    }
+   
+        
+}

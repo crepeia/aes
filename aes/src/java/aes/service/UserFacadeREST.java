@@ -8,6 +8,7 @@ package aes.service;
 import aes.controller.ContactController;
 import aes.controller.UserController;
 import aes.model.User;
+import aes.persistence.UserDAO;
 import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
@@ -19,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +36,7 @@ import javax.ejb.TransactionManagementType;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
@@ -68,6 +71,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    private UserDAO userDAO;
     
     @Inject
     private ContactController contactController;
@@ -82,8 +86,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Context
     SecurityContext securityContext;
     
-    public UserFacadeREST() {
+    public UserFacadeREST(){
         super(User.class);
+        try {
+            userDAO = new UserDAO();
+        } catch (NamingException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @POST
@@ -99,13 +108,16 @@ public class UserFacadeREST extends AbstractFacade<User> {
             try {
                 String clientEncriptedHexPassword = p;
                 String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
-                byte[] salt =  Encrypter.generateRandomSecureSalt(16);
+                
+                userDAO.createUser(entity, decriptedPassword, em);
+                
+                /*byte[] salt =  Encrypter.generateRandomSecureSalt(16);
                 entity.setSalt(salt);
                 entity.setPassword(Encrypter.hashPassword(decriptedPassword, salt));
                 
                 userTransaction.begin();
                 super.create(entity);
-                userTransaction.commit();
+                userTransaction.commit();*/
 
                 contactController.sendSignUpEmail(entity);
                 if (entity.isReceiveEmails()) {
@@ -118,13 +130,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
             
             return Response.ok(entity).build();
             
-             } catch (NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException ex) {
+             } catch (SQLException | EncrypterException ex) {
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
                 return Response.serverError().build();
 
-            } catch (EncrypterException ex) {
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-                return Response.serverError().build();
             } 
         }
         

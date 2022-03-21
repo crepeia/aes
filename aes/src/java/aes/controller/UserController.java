@@ -2,6 +2,7 @@ package aes.controller;
 
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import aes.persistence.UserDAO;
 import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
@@ -47,6 +48,7 @@ public class UserController extends BaseController<User> {
     private boolean loggedIn;
     private String password;
     private ResourceBundle bundle;
+    private UserDAO userDAO;
 
     @Inject
     private ContactController contactController;
@@ -85,6 +87,7 @@ public class UserController extends BaseController<User> {
         }
         try {
             daoBase = new GenericDAO<User>(User.class);
+            userDAO = new UserDAO();
             user = new User();
             user.setDateCreated(new Date());
             user.setIpCreated(getIpAdress());

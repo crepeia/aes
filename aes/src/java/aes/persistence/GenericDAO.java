@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 import org.hibernate.CacheMode;
@@ -18,6 +19,9 @@ public class GenericDAO<T> implements Serializable {
 	public final int E = 0, OU = 1;
 	protected Class<T> classe;
 	private UserTransaction transaction;
+        @PersistenceContext(unitName = "aesPU")
+        private EntityManager entityManager;
+
 
 	public GenericDAO(Class<T> classe) throws NamingException {
 		this.classe = classe;
@@ -25,6 +29,14 @@ public class GenericDAO<T> implements Serializable {
 		this.transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
 
 	}
+        
+     public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+      public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
 	public Class<T> getClasse() {
 		return classe;
@@ -314,4 +326,26 @@ public class GenericDAO<T> implements Serializable {
 			throw new SQLException(erro);
 		}
 	}
+        
+        
+    public List<T> findRange(int[] range, EntityManager entityManager) {
+        Query query = entityManager.createQuery("select obj from " + classe.getSimpleName() + " obj");
+        query.setMaxResults(range[1] - range[0] + 1);
+        query.setFirstResult(range[0]);
+        
+        //javax.persistence.criteria.CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
+        //cq.select(cq.from(T));
+       // javax.persistence.Query q = entityManager.createQuery(cq);
+       // q.setMaxResults(range[1] - range[0] + 1);
+        //q.setFirstResult(range[0]);
+        return query.getResultList();
+    }
+    
+        public int count(EntityManager entityManager) {
+        javax.persistence.criteria.CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
+        javax.persistence.criteria.Root<T> rt = cq.from(classe);
+        cq.select(entityManager.getCriteriaBuilder().count(rt));
+        javax.persistence.Query q = entityManager.createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+    }
 }
