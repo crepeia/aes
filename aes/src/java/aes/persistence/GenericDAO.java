@@ -143,6 +143,7 @@ public class GenericDAO<T> implements Serializable {
 	}
 
 	public void insertOrUpdate(T object, EntityManager entityManager) throws SQLException {
+        
 		try {
 
 			Class classeObj = classe;

@@ -4,18 +4,20 @@
  * and open the template in the editor.
  */
 package aes.service;
-import aes.controller.UserController;
-import aes.utility.SecureRandomString;
 import aes.model.AuthenticationToken;
 import aes.model.User;
+import aes.persistence.AuthenticationTokenDAO;
+import aes.persistence.UserDAO;
 import aes.utility.Encrypter;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -28,7 +30,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import org.apache.commons.codec.binary.Hex;
 
 /**
  *
@@ -36,16 +37,25 @@ import org.apache.commons.codec.binary.Hex;
  */
 @Stateless
 @Path("authenticate")
+@TransactionManagement(TransactionManagementType.BEAN)
 public class AuthenticationTokenFacadeREST extends AbstractFacade<AuthenticationToken> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-    
+    private UserDAO userDAO;
+    private AuthenticationTokenDAO authenticationTokenDAO;
+     
     @Context
     SecurityContext securityContext;
-
+       
     public AuthenticationTokenFacadeREST() {
         super(AuthenticationToken.class);
+        try {
+            userDAO = new UserDAO();
+            authenticationTokenDAO = new AuthenticationTokenDAO();
+        } catch (NamingException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @GET
@@ -58,35 +68,38 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
            String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
            
           // System.out.println("Senha recebida: " + p);
+          // System.out.println("Senha recebida: " + p);
+
           // System.out.println("Senha decriptada: " + Encrypter.decrypt(p));
 
-           byte[] b =  Hex.decodeHex(p.toCharArray());
-           User user = (User) getEntityManager().createNamedQuery("User.email").setParameter("email", e).getSingleResult();
+           //byte[] b =  Hex.decodeHex(p.toCharArray());
+          // User user = (User) getEntityManager().createNamedQuery("User.email").setParameter("email", e).getSingleResult();
            
-           boolean hashMatches = Encrypter.compareHash(decriptedPassword, user.getPassword(), user.getSalt());
+          // boolean hashMatches = Encrypter.compareHash(decriptedPassword, user.getPassword(), user.getSalt());
+           User user = userDAO.checkCredentials(e, decriptedPassword, em);
            
            
-           
-           if(hashMatches){
-               String token  = issueToken(user);
+           if(user != null){
+               String token  = authenticationTokenDAO.issueToken(user, em);
                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
                return Response.ok(token).build();
 
            }
            else{
+
                 Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
                 return Response.status(Response.Status.FORBIDDEN).build();
            }
-           //User usr = super.login(e, p);
-                
-            //String jsonString = new JSONObject().put("token", token).toString();
+
          
         } catch(Exception exp) {
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, exp.getMessage());
+
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO,null, exp);
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
             return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
+    
     
     @DELETE
     @Path("secured/logout/{token}")
@@ -96,21 +109,24 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
         String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
         
             
-        AuthenticationToken at = (AuthenticationToken) getEntityManager().createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
+        /*AuthenticationToken at = (AuthenticationToken) getEntityManager().createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
                 .setParameter("token", token)
                 .setParameter("uEmail", userEmail)
                 .getSingleResult();
-        super.remove(at);
+        super.remove(at);*/
+        
+        authenticationTokenDAO.revokeToken(token, userEmail, em);
         
         return Response.ok().build();
         } catch( NoResultException e ) {
             return Response.ok().build(); //se o token não existe ou já foi deletado ignoro o erro
         }catch(Exception e){
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO,null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
     
-    private String issueToken(User usr){
+    /*private String issueToken(User usr){
         String token = SecureRandomString.generate();
         
         AuthenticationToken authToken = new AuthenticationToken();
@@ -120,7 +136,7 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
         super.create(authToken);
         
         return token;
-    }
+    }*/
     
     @Override
     protected EntityManager getEntityManager() {
