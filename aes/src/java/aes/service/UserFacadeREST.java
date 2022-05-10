@@ -8,6 +8,7 @@ package aes.service;
 import aes.controller.ContactController;
 import aes.controller.UserController;
 import aes.model.User;
+import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
 import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
@@ -15,38 +16,21 @@ import aes.utility.GenerateCode;
 import aes.utility.Secured;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -57,8 +41,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 
 /**
  *
@@ -72,6 +54,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private UserDAO userDAO;
+    private ContactDAO contactDAO;
     
     @Inject
     private ContactController contactController;
@@ -90,6 +73,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         super(User.class);
         try {
             userDAO = new UserDAO();
+            contactDAO = new ContactDAO();
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -121,9 +105,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
                 contactController.sendSignUpEmail(entity);
                 if (entity.isReceiveEmails()) {
-                    contactController.scheduleTipsEmail(entity);
-                    contactController.scheduleDiaryReminderEmail(entity, new Date());
-                    contactController.scheduleWeeklyEmail(entity, new Date());
+                    contactDAO.scheduleTipsEmail(entity);
+                    contactDAO.scheduleDiaryReminderEmail(entity, new Date());
+                    contactDAO.scheduleWeeklyEmail(entity, new Date());
                 }
             
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
@@ -180,20 +164,22 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("/toggleConsultant/{id}")
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public User toggleConsultant(@PathParam("id") Long id) {
+    public Response toggleConsultant(@PathParam("id") Long id) {
         String userEmail = securityContext.getUserPrincipal().getName();
         try{
-            User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
+            
+            userDAO.toggleConsultant(userEmail, em);
+            /*User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
                                 .setParameter("email", userEmail)
                                 .getSingleResult();
             u.setConsultant(!u.isConsultant());
             userTransaction.begin();
             super.edit(u);
-            userTransaction.commit();
-            return u;
+            userTransaction.commit();*/
+            return Response.status(Response.Status.NO_CONTENT).build();
         }catch(Exception e) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return null;
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
     
@@ -202,28 +188,18 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public User setInRanking(User entity) {
+    public Response setInRanking(User entity) {
         String userEmail = securityContext.getUserPrincipal().getName();
         System.out.println("aes.service.UserFacadeREST.setInRanking()");
         try{
             
-            User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
-                                .setParameter("email", userEmail)
-                                .getSingleResult();
-            System.out.println(u.getEmail());
-            System.out.println(entity.isInRanking());
-            System.out.println(entity.getNickname());
+            userDAO.setInRanking(userEmail, em);      
+           return Response.status(Response.Status.NO_CONTENT).build();
 
-            u.setInRanking(entity.isInRanking());
-            u.setNickname(entity.getNickname());
-
-            userTransaction.begin();
-            super.edit(u);
-            userTransaction.commit();
-            return u;
         }catch(Exception e) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return null;
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+
         }
     }
     

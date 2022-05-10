@@ -102,5 +102,31 @@ public class UserDAO extends GenericDAO<User>{
         return (User) getEntityManager().createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
     }
    
+    
+    public User setInRanking(String userEmail, EntityManager entityManager) throws SQLException{
+                    
+            User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
+                                .setParameter("email", userEmail)
+                                .getSingleResult();
+            /*System.out.println(u.getEmail());
+            System.out.println(u.isInRanking());
+            System.out.println(u.getNickname());*/
+
+            u.setInRanking(u.isInRanking());
+            u.setNickname(u.getNickname());
+
+            super.insertOrUpdate(u, entityManager);
+            return u;
+    }
+    
+    public User toggleConsultant(String email, EntityManager entityManager) throws SQLException{
+        User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
+                              .setParameter("email", email)
+                              .getSingleResult();
+          u.setConsultant(!u.isConsultant());
+          super.insertOrUpdate(u, entityManager);
+
+        return u;
+    }
         
 }
