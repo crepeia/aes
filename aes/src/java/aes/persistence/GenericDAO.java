@@ -342,6 +342,10 @@ public class GenericDAO<T> implements Serializable {
         return query.getResultList();
     }
     
+       public T find(Object id, EntityManager entityManager) {
+        return entityManager.find(classe, id);
+    }
+    
         public int count(EntityManager entityManager) {
         javax.persistence.criteria.CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
         javax.persistence.criteria.Root<T> rt = cq.from(classe);

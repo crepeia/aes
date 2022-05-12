@@ -33,8 +33,10 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
+import java.util.MissingResourceException;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -175,7 +177,14 @@ public class UserController extends BaseController<User> {
                     user.setPassword(Encrypter.hashPassword(password, salt));
                     user.setSignUpDate(new Date());
                     save();
-                    contactController.sendSignUpEmail(user);
+                    
+                    try {
+                        contactController.sendSignUpEmail(user);
+                    } catch (MessagingException | MissingResourceException ex) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.INFO, user.getEmail() + ": sign-up email NOT sent.");
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                   
                     if (user.isReceiveEmails()) {
                         contactController.scheduleTipsEmail(user);
                         contactController.scheduleDiaryReminderEmail(user, new Date());
@@ -313,7 +322,7 @@ public class UserController extends BaseController<User> {
                 contactController.sendPasswordRecoveryEmail(foundUser);
                 FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | MessagingException | MissingResourceException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

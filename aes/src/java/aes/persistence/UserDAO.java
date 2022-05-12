@@ -128,5 +128,19 @@ public class UserDAO extends GenericDAO<User>{
 
         return u;
     }
+    
+    
+    public User generateRecoverCode(String email, EntityManager entityManager) throws SQLException{
+        User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
+                    .setParameter("email", email)
+                    .getSingleResult();
+            System.out.println(u.getEmail());
+            u.setRecoverCode(GenerateCode.generate());
+
+            super.insertOrUpdate(u, entityManager);
+           // contactController.sendPasswordRecoveryEmail(u);
+           
+           return u;
+    }
         
 }

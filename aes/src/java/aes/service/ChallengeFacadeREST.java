@@ -6,9 +6,15 @@
 package aes.service;
 
 import aes.model.Challenge;
+import aes.persistence.ChallengeDAO;
+import aes.persistence.ContactDAO;
+import aes.persistence.UserDAO;
 import aes.utility.Secured;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -32,9 +38,15 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    private ChallengeDAO challengeDAO;
 
     public ChallengeFacadeREST() {
         super(Challenge.class);
+         try {
+            challengeDAO = new ChallengeDAO();
+        } catch (NamingException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     

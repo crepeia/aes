@@ -77,7 +77,7 @@ public class ContactController extends BaseController implements Serializable {
 
     }
 
-    public void sendPasswordRecoveryEmail(User user) {
+    public void sendPasswordRecoveryEmail(User user) throws MessagingException {
         Contact contact = new Contact();
         contact.setUser(user);
         contact.setSender("alcoolesaude@gmail.com");
@@ -87,41 +87,59 @@ public class ContactController extends BaseController implements Serializable {
         sendHTMLEmail(contact);
     }
 
-    public void sendPlanEmail(User user, String attachment, ByteArrayOutputStream pdf) {
-        Contact contact = new Contact();
-        contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
-        contact.setRecipient(user.getEmail());
-        contact.setSubject("plan_subj");
-        contact.setContent("plan");
-        contact.setAttachment(attachment);
-        contact.setPdf(pdf);
-        sendHTMLEmail(contact);
+    public void sendPlanEmail(User user, String attachment, ByteArrayOutputStream pdf)  {
+        try {
+            Contact contact = new Contact();
+            contact.setUser(user);
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setRecipient(user.getEmail());
+            contact.setSubject("plan_subj");
+            contact.setContent("plan");
+            contact.setAttachment(attachment);
+            contact.setPdf(pdf);
+            sendHTMLEmail(contact);
+        } catch (MessagingException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MissingResourceException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void sendRecordEmail(User user, String attachment, ByteArrayOutputStream pdf) {
-        Contact contact = new Contact();
-        contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
-        contact.setRecipient(user.getEmail());
-        contact.setSubject("record_subj");
-        contact.setContent("record");
-        contact.setAttachment(attachment);
-        contact.setPdf(pdf);
-        sendHTMLEmail(contact);
+    public void sendRecordEmail(User user, String attachment, ByteArrayOutputStream pdf){
+        try {
+            Contact contact = new Contact();
+            contact.setUser(user);
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setRecipient(user.getEmail());
+            contact.setSubject("record_subj");
+            contact.setContent("record");
+            contact.setAttachment(attachment);
+            contact.setPdf(pdf);
+            sendHTMLEmail(contact);
+        } catch (MessagingException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MissingResourceException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public void sendSignInEmail(User user) {
-        Contact contact = new Contact();
-        contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
-        contact.setRecipient(user.getEmail());
-        contact.setSubject("start_subj");
-        contact.setContent("start_msg");
-        sendHTMLEmail(contact);
+    public void sendSignInEmail(User user){
+        try {
+            Contact contact = new Contact();
+            contact.setUser(user);
+            contact.setSender("alcoolesaude@gmail.com");
+            contact.setRecipient(user.getEmail());
+            contact.setSubject("start_subj");
+            contact.setContent("start_msg");
+            sendHTMLEmail(contact);
+        } catch (MessagingException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MissingResourceException ex) {
+            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public void sendSignUpEmail(User user) {
+    public void sendSignUpEmail(User user) throws MessagingException, MissingResourceException {
         Contact contact = new Contact();
         contact.setUser(user);
         contact.setSender("alcoolesaude@gmail.com");
@@ -319,7 +337,7 @@ public class ContactController extends BaseController implements Serializable {
         }
     }
 
-    public void sendScheduledEmails() {
+    public void sendScheduledEmails(){
         try {
             List<Contact> contacts = daoBase.list(getEntityManager());
             Calendar today = Calendar.getInstance();
@@ -341,7 +359,7 @@ public class ContactController extends BaseController implements Serializable {
                    
                 }
             }
-        } catch (SQLException ex) {
+        } catch (SQLException |MissingResourceException|MessagingException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -355,8 +373,8 @@ public class ContactController extends BaseController implements Serializable {
         sendPlainTextEmail(contact);
     }
 
-    private void sendHTMLEmail(Contact contact) {
-        try {
+    private void sendHTMLEmail(Contact contact) throws MessagingException, MissingResourceException{
+       // try {
             String content = getContent(contact, htmlTemplate);
             String subject = getSubject(contact);
             System.out.println(content);
@@ -365,9 +383,9 @@ public class ContactController extends BaseController implements Serializable {
             save(contact);
             Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getRecipient());
 
-        } catch (MessagingException |  MissingResourceException ex) {
-            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       // } catch (MessagingException |  MissingResourceException ex) {
+           // Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
+       // }
     }
     
     private void sendTipsEmail(Contact contact) {

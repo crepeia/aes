@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -26,6 +27,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -102,6 +104,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 userTransaction.begin();
                 super.create(entity);
                 userTransaction.commit();*/
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
 
                 contactController.sendSignUpEmail(entity);
                 if (entity.isReceiveEmails()) {
@@ -110,7 +113,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     contactDAO.scheduleWeeklyEmail(entity, new Date());
                 }
             
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
             
             return Response.ok(entity).build();
             
@@ -118,7 +120,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
                 return Response.serverError().build();
 
-            } 
+            }catch( MessagingException | MissingResourceException ex){
+                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+                 return Response.ok(entity).build();
+            }
         }
         
          
@@ -218,7 +223,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             JsonNode node = jp.getCodec().readTree(jp);
             String userEmail = node.get("email").asText();
             System.out.println("aes.service.UserFacadeREST.forgetPassword()");
-            User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
+            /*User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
                     .setParameter("email", userEmail)
                     .getSingleResult();
             System.out.println(u.getEmail());
@@ -226,7 +231,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
             userTransaction.begin();
             super.edit(u);
-            userTransaction.commit();
+            userTransaction.commit();*/
+            
+            User u = userDAO.generateRecoverCode(userEmail, em);
             contactController.sendPasswordRecoveryEmail(u);
             
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, null, "Recover password service");
