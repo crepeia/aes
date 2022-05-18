@@ -26,9 +26,6 @@ public class ChallengeDAO extends GenericDAO<Challenge> {
         super(Challenge.class);
     }
     
-    public Challenge find(Long id, EntityManager entityManager) {
-        return super.find(id, entityManager);
-    }
 
     public List<Challenge> findAll(EntityManager entityManager) throws SQLException {
         return super.list(entityManager);
