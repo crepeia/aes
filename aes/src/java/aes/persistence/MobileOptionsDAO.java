@@ -18,13 +18,12 @@ import javax.persistence.NoResultException;
  *
  * @author patri
  */
-public class MobileOptionsDAO extends GenericDAO<MobileOptions>{
-    
+public class MobileOptionsDAO extends GenericDAO<MobileOptions> {
+
     public MobileOptionsDAO() throws NamingException {
         super(MobileOptions.class);
     }
-    
-    
+
     public MobileOptions create(MobileOptions entity, EntityManager entityManager) {
         try {
             super.insertOrUpdate(entity, entityManager);
@@ -34,24 +33,18 @@ public class MobileOptionsDAO extends GenericDAO<MobileOptions>{
         }
     }
 
-   
-    public void edit(Long userId, String userEmail, MobileOptions entity, EntityManager entityManager) throws Exception {
-    
-            //String userEmail = securityContext.getUserPrincipal().getName();
-            User u = entityManager.find(User.class, userId);
-            if (u.getEmail().equals(userEmail)) {
-                entity.setUser(u);
-                entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
-                entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+    public void edit(Long userId, MobileOptions entity, EntityManager entityManager) throws SQLException{
 
-                entityManager.merge(entity);
-                
-            } else {
-               throw new Exception("Tried to edit another user's options.");
-            }
-    
+        //String userEmail = securityContext.getUserPrincipal().getName();
+        User u = entityManager.find(User.class, userId);
+
+        entity.setUser(u);
+        entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+        entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+
+        super.insertOrUpdate(entity, entityManager);
+
     }
-
 
     public MobileOptions find(Long userId, EntityManager entityManager) throws SQLException {
         try {
@@ -72,9 +65,9 @@ public class MobileOptionsDAO extends GenericDAO<MobileOptions>{
             entity.setNotificationToken("");
 
             super.insertOrUpdate(entity, entityManager);
-            return null;
+            return entity;
 
-        } 
+        }
     }
-    
+
 }

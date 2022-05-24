@@ -72,7 +72,7 @@ public class RecordDAO extends GenericDAO<Record>{
     }
 
 
-    public Record find(Long userId, EntityManager entityManager) {
+    public Record findByUserId(Long userId, EntityManager entityManager) {
 
         try {
             Record rec = (Record) entityManager.createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")

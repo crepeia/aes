@@ -7,21 +7,21 @@ package aes.service;
 
 import aes.model.MobileOptions;
 import aes.model.User;
+import aes.persistence.MobileOptionsDAO;
+import aes.persistence.UserDAO;
 import aes.utility.Secured;
-import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -40,16 +40,27 @@ import javax.ws.rs.core.SecurityContext;
 @Stateless
 @Secured
 @Path("secured/mobileoptions")
+@TransactionManagement(TransactionManagementType.BEAN)
 public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    private MobileOptionsDAO mobileOptionsDAO;
+    private UserDAO userDAO;
 
     @Context
     SecurityContext securityContext;
 
     public MobileOptionsFacadeREST() {
         super(MobileOptions.class);
+        try {
+            mobileOptionsDAO = new MobileOptionsDAO();
+            userDAO = new UserDAO();
+        } catch (NamingException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
     @POST
@@ -57,7 +68,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public MobileOptions create(MobileOptions entity) {
         try {
-            super.create(entity);
+            //super.create(entity);
+            mobileOptionsDAO.insertOrUpdate(entity, em);
             return entity;
         } catch (Exception e) {
             return null;
@@ -70,13 +82,15 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     public Response edit(@PathParam("userId") Long userId, MobileOptions entity) {
         try {
             String userEmail = securityContext.getUserPrincipal().getName();
-            User u = em.find(User.class, userId);
+            User u = userDAO.find(userId, em);
             if (u.getEmail().equals(userEmail)) {
-                entity.setUser(u);
-                entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
-                entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+//                entity.setUser(u);
+//                entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+//                entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+//
+//                super.edit(entity);
 
-                super.edit(entity);
+                  mobileOptionsDAO.edit(userId, entity, em);
                 return Response.status(Response.Status.OK).build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -92,7 +106,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     @Produces(MediaType.APPLICATION_JSON)
     public Response find(@PathParam("userId") Long userId) {
         try {
-            MobileOptions op = (MobileOptions) getEntityManager().createQuery("SELECT mo FROM MobileOptions mo WHERE mo.user.id=:userId")
+           /* MobileOptions op = (MobileOptions) getEntityManager().createQuery("SELECT mo FROM MobileOptions mo WHERE mo.user.id=:userId")
                     .setParameter("userId", userId)
                     .getSingleResult();
             return Response.ok().entity(op).build();
@@ -108,7 +122,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
 
             entity.setNotificationToken("");
 
-            super.create(entity);
+            super.create(entity);*/
+            MobileOptions entity = mobileOptionsDAO.find(userId, em);
             return Response.ok().entity(entity).build();
 
         } catch (Exception e) {

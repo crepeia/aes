@@ -7,21 +7,22 @@ package aes.service;
 
 import aes.model.Evaluation;
 import aes.model.User;
+import aes.persistence.EvaluationDAO;
 import aes.utility.Secured;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javassist.NotFoundException;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -37,16 +38,23 @@ import javax.ws.rs.core.SecurityContext;
 @Stateless
 @Secured
 @Path("secured/evaluation")
+@TransactionManagement(TransactionManagementType.BEAN)
 public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    private EvaluationDAO evaluationDAO;
     
     @Context
     SecurityContext securityContext;
 
     public EvaluationFacadeREST() {
         super(Evaluation.class);
+        try {
+            evaluationDAO = new EvaluationDAO();
+        } catch (NamingException ex) {
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @POST
@@ -54,7 +62,8 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Evaluation create(Evaluation entity) {
         try {
-            super.create(entity);
+            //super.create(entity);
+            evaluationDAO.create(entity, em);
             return entity;
         } catch (Exception e) {
             return null;
@@ -68,7 +77,7 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
         try {
             String userEmail = securityContext.getUserPrincipal().getName();
             
-            List<Evaluation> evList = getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId AND e.user.email=:userEmail")
+           /* List<Evaluation> evList = getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId AND e.user.email=:userEmail")
                     .setParameter("userId", userId)
                     .setParameter("userEmail", userEmail)
                     .getResultList();
@@ -80,11 +89,12 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
                 Evaluation ev = new Evaluation();
                 ev.setDateCreated(new Date());
                 ev.setUser(em.find(User.class, userId));
-                super.create(ev);
+                super.create(ev);}*/
+                Evaluation ev = evaluationDAO.find(userId, userEmail, em);
                 return Response.ok().entity(ev).build();
-            }
+            
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
@@ -94,7 +104,9 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
-        return String.valueOf(super.count());
+        
+        return String.valueOf(evaluationDAO.count(em));
+        //return String.valueOf(super.count());
     }
 
     @Override

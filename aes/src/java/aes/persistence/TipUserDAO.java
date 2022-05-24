@@ -9,7 +9,6 @@ import aes.model.Tip;
 import aes.model.TipUser;
 import aes.model.TipUserKey;
 import aes.model.User;
-import aes.service.TipUserFacadeREST;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,13 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -142,8 +134,6 @@ public class TipUserDAO extends GenericDAO<TipUser> {
 
     public TipUser read(TipUser entity, EntityManager entityManager) throws SQLException {
         TipUser newEntity = super.find(entity.getId(), entityManager);
-        /*System.out.println(em.find(Tip.class, entity.getId().getTipId()));
-        System.out.println("Read tip");*/
                
         if(newEntity==null){
             newEntity = new TipUser();     
