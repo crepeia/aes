@@ -18,30 +18,32 @@ import javax.persistence.NoResultException;
  */
 public class DailyLogDAO extends GenericDAO<DailyLog>{
     
-    public DailyLogDAO() throws NamingException {
+    public DailyLogDAO(EntityManager entityManager) throws NamingException {
         super(DailyLog.class);
+        this.setEntityManager(entityManager);
+
     }
     
 
-    public DailyLog editOrCreate(DailyLog entity, EntityManager entityManager) throws SQLException {
+    public DailyLog editOrCreate(DailyLog entity) throws SQLException {
         //String action = "";
         try {
             //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             //Date t = format.parse(entity.getLogDate().toString());
             
-            DailyLog dl = (DailyLog) entityManager.createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
+            DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
                 .setParameter("recordId", entity.getRecord().getId())
                 .setParameter("logDate", entity.getLogDate())
                 .getSingleResult();
                 dl.setDrinks(entity.getDrinks());
                 dl.setContext(entity.getContext());
                 dl.setConsequences(entity.getConsequences());
-                super.insertOrUpdate(dl, entityManager);
+                super.insertOrUpdate(dl);
                 //action = "edit";
                 return dl;
             
         } catch( NoResultException e ) {
-             super.insertOrUpdate(entity, entityManager);
+             super.insertOrUpdate(entity);
              return entity;
             //action = "create";
             //return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).build();
@@ -63,14 +65,14 @@ public class DailyLogDAO extends GenericDAO<DailyLog>{
     }
      
 
-    public void remove(Long id, EntityManager entityManager) throws SQLException {
-        super.delete(super.find(id, entityManager), entityManager);
+    public void remove(Long id) throws SQLException {
+        super.delete(super.find(id));
         //super.remove(super.find(id));
     }
 
 
-    public List<DailyLog> find(Long recordId, EntityManager entityManager) {
-        return entityManager.createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId")
+    public List<DailyLog> find(Long recordId) {
+        return getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId")
                 .setParameter("recordId", recordId)
                 .getResultList();
         

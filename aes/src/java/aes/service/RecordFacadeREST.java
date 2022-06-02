@@ -52,8 +52,8 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     public RecordFacadeREST() {
         super(Record.class);
          try {
-            recordDAO = new RecordDAO();
-            userDAO = new UserDAO();
+            recordDAO = new RecordDAO(em);
+            userDAO = new UserDAO(em);
         } catch (NamingException ex) {
             Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,13 +64,13 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     public Response createRecord(Record entity) {
         String userEmail = securityContext.getUserPrincipal().getName();
         //User u = em.find(User.class, entity.getUser().getId());
-        User u = userDAO.find(entity.getUser().getId(), em);
+        User u = userDAO.find(entity.getUser().getId());
         if (!u.getEmail().equals(userEmail)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         try {
             //Record created = super.create(entity);
-            Record created = recordDAO.create(u.getId(), em);
+            Record created = recordDAO.create(u.getId());
 
             return Response.ok().entity(created).build();
         } catch (SQLException e) {
@@ -88,7 +88,7 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
         
         Record entity;
         try {
-            entity = recordDAO.create(userId, em);
+            entity = recordDAO.create(userId);
             return Response.ok().entity(entity).build();
         } catch (SQLException ex) {
              Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
@@ -117,12 +117,12 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     public Record edit(Record entity) {
         String userEmail = securityContext.getUserPrincipal().getName();
         //User u = em.find(User.class, entity.getUser().getId());
-        User u = userDAO.find(entity.getUser().getId(), em);
+        User u = userDAO.find(entity.getUser().getId());
 
         if (u.getEmail().equals(userEmail)) {
             try {
                 //super.edit(entity);
-                recordDAO.insertOrUpdate(entity, em);
+                recordDAO.insertOrUpdate(entity);
             } catch (SQLException ex) {
                 Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -137,7 +137,7 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     public Response find(@PathParam("userId") Long userId) {
         String userEmail = securityContext.getUserPrincipal().getName();
         //User u = em.find(User.class, userId);
-        User u = userDAO.find(userId, em);
+        User u = userDAO.find(userId);
 
         if(!u.getEmail().equals(userEmail)){
             return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -147,7 +147,7 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
                     .setParameter("userId", userId)
                     .getSingleResult();*/
             
-        Record rec = recordDAO.findByUserId(userId, em);
+        Record rec = recordDAO.findByUserId(userId);
         if(rec==null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }else{

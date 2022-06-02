@@ -56,6 +56,10 @@ public class ContactController extends BaseController implements Serializable {
         try {
             daoBase = new GenericDAO<Contact>(Contact.class);
             evaluationDAO = new GenericDAO<Evaluation>(Evaluation.class);
+            daoBase.setEntityManager(getEntityManager());
+            evaluationDAO.setEntityManager(getEntityManager());
+
+
         } catch (NamingException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -294,11 +298,11 @@ public class ContactController extends BaseController implements Serializable {
 
     public void clearScheduledKeepingResultEmails() {
         try {
-            List<Contact> contacts = daoBase.list(getEntityManager());
+            List<Contact> contacts = daoBase.list();
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("progress_keepingresult")) {
                     if (contact.getUser().getRecord() != null) {
-                        daoBase.delete(contact, getEntityManager());
+                        daoBase.delete(contact);
                     }
                 }
             }
@@ -310,10 +314,10 @@ public class ContactController extends BaseController implements Serializable {
     
       public void clearAnnualScreeningEmails(User user) {
         try {
-            List<Contact> contacts = daoBase.list("user", user, getEntityManager());
+            List<Contact> contacts = daoBase.list("user", user);
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("annualscreening_subj")) {
-                        daoBase.delete(contact, getEntityManager());
+                        daoBase.delete(contact);
                 }
             }
         } catch (SQLException ex) {
@@ -324,10 +328,10 @@ public class ContactController extends BaseController implements Serializable {
 
     public void clearScheduledEmails(User user) {
         try {
-            List<Contact> contacts = daoBase.list("user", user, getEntityManager());
+            List<Contact> contacts = daoBase.list("user", user);
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && !contact.getSubject().contains("tips_subj")) {
-                    daoBase.delete(contact, getEntityManager());
+                    daoBase.delete(contact);
 
                 }
             }
@@ -339,7 +343,7 @@ public class ContactController extends BaseController implements Serializable {
 
     public void sendScheduledEmails(){
         try {
-            List<Contact> contacts = daoBase.list(getEntityManager());
+            List<Contact> contacts = daoBase.list();
             Calendar today = Calendar.getInstance();
             Calendar scheduledDate = Calendar.getInstance();
             for (Contact contact : contacts) {
@@ -415,7 +419,7 @@ public class ContactController extends BaseController implements Serializable {
 
     private void save(Contact contact) {
         try {
-            daoBase.insertOrUpdate(contact, getEntityManager());
+            daoBase.insertOrUpdate(contact);
 
         } catch (SQLException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
@@ -465,7 +469,7 @@ public class ContactController extends BaseController implements Serializable {
 
     private Evaluation getLatestEvaluation(User user) {
         try {
-            List evaluations = evaluationDAO.listOrdered("user", user, "date_created", getEntityManager());
+            List evaluations = evaluationDAO.listOrdered("user", user, "date_created");
             if (!evaluations.isEmpty()) {
                return  (Evaluation) evaluations.get(evaluations.size() - 1);
             }

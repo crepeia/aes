@@ -44,6 +44,9 @@ public class FollowUpController extends BaseController<FollowUp> {
         try {
             daoBase = new GenericDAO<>(FollowUp.class);
             daoUser = new GenericDAO<>(User.class);
+            daoBase.setEntityManager(getEntityManager());
+            daoUser.setEntityManager(getEntityManager());
+
         } catch (NamingException ex) {
             Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,7 +66,7 @@ public class FollowUpController extends BaseController<FollowUp> {
                 return null;
             } else {
                 id = id / 1357;
-                List users = daoUser.list("id", id, getEntityManager());
+                List users = daoUser.list("id", id);
                 if (users.isEmpty()) {
                     Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, "User answering follow up form with invalid id: " + id);
                     return null;
@@ -92,7 +95,7 @@ public class FollowUpController extends BaseController<FollowUp> {
             getFollowUp().setDateAnswered(new Date());
             getFollowUp().setUser(getUser());
             getFollowUp().setWeekCount(getWeek());
-            daoBase.insert(getFollowUp(), getEntityManager());
+            daoBase.insert(getFollowUp());
             followUp = null;
             FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
         } catch (SQLException | IOException ex) {

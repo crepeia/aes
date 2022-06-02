@@ -8,7 +8,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -54,6 +53,8 @@ public class EvaluationController extends BaseController<Evaluation> {
     public void init() {
         try {
             daoBase = new GenericDAO<Evaluation>(Evaluation.class);
+            daoBase.setEntityManager(getEntityManager());
+
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,7 +63,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     public Evaluation getEvaluation() {
         if (evaluation == null && getUser().getId() != 0) {
             try {
-                List<Evaluation> evaluations = this.getDaoBase().list("user", getUser(), this.getEntityManager());
+                List<Evaluation> evaluations = this.getDaoBase().list("user", getUser());
                 if (!evaluations.isEmpty()) {
                     Calendar limit = Calendar.getInstance();
                     limit.add(Calendar.DATE, EvaluationController.DAYS_LIMIT);
@@ -97,7 +98,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void save() {
         try {
-            daoBase.insertOrUpdate(getEvaluation(), getEntityManager());
+            daoBase.insertOrUpdate(getEvaluation());
         } catch (SQLException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -283,7 +284,7 @@ public class EvaluationController extends BaseController<Evaluation> {
     public void redirectAudit(boolean redirect) {
         if (redirect) {
             try {
-                List<Evaluation> evaluations = this.getDaoBase().listOrdered("user", getUser(), "dateCreated", getEntityManager());
+                List<Evaluation> evaluations = this.getDaoBase().listOrdered("user", getUser(), "dateCreated");
                 Evaluation evaluation = null;
                 if (evaluations.isEmpty()) {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("quanto-voce-bebe-sim-beber-uso-audit-3.xhtml");

@@ -9,7 +9,6 @@ import aes.model.AppSuggestion;
 import java.sql.SQLException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -17,13 +16,14 @@ import javax.ws.rs.core.Response;
  */
 public class AppSuggestionDAO extends GenericDAO<AppSuggestion>{
     
-    public AppSuggestionDAO() throws NamingException {
+    public AppSuggestionDAO(EntityManager entityManager) throws NamingException {
         super(AppSuggestion.class);
+        this.setEntityManager(entityManager);
     }
     
     
-    public AppSuggestion createAppSuggestion(AppSuggestion entity, EntityManager entityManager) throws SQLException {
-        super.insert(entity, entityManager);
+    public AppSuggestion createAppSuggestion(AppSuggestion entity) throws SQLException {
+        super.insert(entity);
         return entity;
     }
     

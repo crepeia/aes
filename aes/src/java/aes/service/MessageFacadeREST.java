@@ -5,7 +5,6 @@
  */
 package aes.service;
 
-import aes.model.User;
 import aes.model.Message;
 import aes.persistence.MessageDAO;
 import aes.utility.Secured;
@@ -49,7 +48,7 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
         super(Message.class);
 
         try {
-            messageDAO = new MessageDAO();
+            messageDAO = new MessageDAO(em);
         } catch (NamingException ex) {
             Logger.getLogger(MessageFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,7 +74,7 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
             return Response.noContent().build();
         }*/
 
-        List<Message> m = messageDAO.find(chatId, userEmail, em);
+        List<Message> m = messageDAO.find(chatId, userEmail);
         if (m == null) {
             return Response.noContent().build();
 

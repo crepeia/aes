@@ -41,7 +41,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
     public ChallengeFacadeREST() {
         super(Challenge.class);
          try {
-            challengeDAO = new ChallengeDAO();
+            challengeDAO = new ChallengeDAO(em);
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -53,7 +53,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Challenge find(@PathParam("id") Long id) {
         //return super.find(id);
-        return challengeDAO.find(id, em);
+        return challengeDAO.find(id);
     }
 
     @GET
@@ -63,7 +63,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
     public List<Challenge> findAll() {
         try {
             //return super.findAll();
-            return challengeDAO.findAll(em);
+            return challengeDAO.findAll();
         } catch (SQLException ex) {
             Logger.getLogger(ChallengeFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -78,7 +78,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
          //       .setParameter("type", ct)
           //      .getResultList();
           
-          return challengeDAO.findAllByType(ct, em);
+          return challengeDAO.findAllByType(ct);
     }
 
     @Override

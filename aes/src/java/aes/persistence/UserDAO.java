@@ -5,9 +5,7 @@
  */
 package aes.persistence;
 
-import aes.controller.UserController;
 import aes.model.User;
-import aes.service.UserFacadeREST;
 import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
@@ -15,8 +13,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import org.apache.commons.codec.DecoderException;
@@ -28,16 +24,17 @@ import org.apache.commons.codec.binary.Hex;
  * @author patrick
  */
 public class UserDAO extends GenericDAO<User>{
-    private ContactDAO contactDAO = new ContactDAO();
+    private ContactDAO contactDAO;
     
     
-     public UserDAO() throws NamingException {
+     public UserDAO(EntityManager entityManager) throws NamingException {
         super(User.class);
+        contactDAO = new ContactDAO(entityManager);
     }
      
 
-    public User checkCredentials(String email, String providedPassword, EntityManager entityManager) throws SQLException, EncrypterException{
-        List<User> userList = this.list("email", email, entityManager);
+    public User checkCredentials(String email, String providedPassword) throws SQLException, EncrypterException{
+        List<User> userList = this.list("email", email);
         
         if(!userList.isEmpty() && Encrypter.compareHash(providedPassword, userList.get(0).getPassword(), userList.get(0).getSalt())){
             return userList.get(0);
@@ -46,7 +43,7 @@ public class UserDAO extends GenericDAO<User>{
 
     }
 
-    public void createUser(User entity, String passwordString, EntityManager entityManager) throws SQLException, EncrypterException {
+    public void createUser(User entity, String passwordString) throws SQLException, EncrypterException {
        /// List<User> userList = getEntityManager().createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
         
         //if (!userList.isEmpty()) {
@@ -58,7 +55,7 @@ public class UserDAO extends GenericDAO<User>{
                 entity.setSalt(salt);
                 entity.setPassword(Encrypter.hashPassword(passwordString, salt));
                 
-                insertOrUpdate(entity, entityManager);
+                insertOrUpdate(entity);
 
                 Logger.getLogger(UserDAO.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
                         
@@ -74,7 +71,7 @@ public class UserDAO extends GenericDAO<User>{
     }
     
     
-        public void createRecoveryCode(User user, EntityManager entityManager) {
+        public void createRecoveryCode(User user) {
         try {
            // List<User> userList = this.list("email", u, this.getEntityManager());
             //if (userList.isEmpty()) {
@@ -83,7 +80,7 @@ public class UserDAO extends GenericDAO<User>{
            // } else {
                 //User foundUser = userList.get(0);
                 user.setRecoverCode(GenerateCode.generate());
-                this.insertOrUpdate(user, entityManager);
+                this.insertOrUpdate(user);
                 //contactController.sendPasswordRecoveryEmail(foundUser);
                 //FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
            // }
@@ -92,8 +89,8 @@ public class UserDAO extends GenericDAO<User>{
         }
     }
 
-    public User login(String token, EntityManager entityManager) {
-        User at = (User) entityManager.createQuery("SELECT u FROM AuthenticationToken a INNER JOIN a.user AS u WHERE a.token=:t").setParameter("t", token).getSingleResult();
+    public User login(String token) {
+        User at = (User) getEntityManager().createQuery("SELECT u FROM AuthenticationToken a INNER JOIN a.user AS u WHERE a.token=:t").setParameter("t", token).getSingleResult();
         return at;
     }
     
@@ -103,9 +100,9 @@ public class UserDAO extends GenericDAO<User>{
     }
    
     
-    public User setInRanking(String userEmail, EntityManager entityManager) throws SQLException{
+    public User setInRanking(String userEmail) throws SQLException{
                     
-            User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
+            User u = (User) getEntityManager().createQuery("SELECT u from User u WHERE u.email = :email")
                                 .setParameter("email", userEmail)
                                 .getSingleResult();
             /*System.out.println(u.getEmail());
@@ -115,29 +112,29 @@ public class UserDAO extends GenericDAO<User>{
             u.setInRanking(u.isInRanking());
             u.setNickname(u.getNickname());
 
-            super.insertOrUpdate(u, entityManager);
+            super.insertOrUpdate(u);
             return u;
     }
     
-    public User toggleConsultant(String email, EntityManager entityManager) throws SQLException{
-        User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
+    public User toggleConsultant(String email) throws SQLException{
+        User u = (User) getEntityManager().createQuery("SELECT u from User u WHERE u.email = :email")
                               .setParameter("email", email)
                               .getSingleResult();
           u.setConsultant(!u.isConsultant());
-          super.insertOrUpdate(u, entityManager);
+          super.insertOrUpdate(u);
 
         return u;
     }
     
     
-    public User generateRecoverCode(String email, EntityManager entityManager) throws SQLException{
-        User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
+    public User generateRecoverCode(String email) throws SQLException{
+        User u = (User) getEntityManager().createQuery("SELECT u from User u WHERE u.email = :email")
                     .setParameter("email", email)
                     .getSingleResult();
             System.out.println(u.getEmail());
             u.setRecoverCode(GenerateCode.generate());
 
-            super.insertOrUpdate(u, entityManager);
+            super.insertOrUpdate(u);
            // contactController.sendPasswordRecoveryEmail(u);
            
            return u;

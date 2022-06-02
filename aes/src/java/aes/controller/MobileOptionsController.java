@@ -45,6 +45,8 @@ public class MobileOptionsController extends BaseController<MobileOptions> {
         expoNotification = new ExpoNotification();
         try {
             daoBase = new GenericDAO<>(MobileOptions.class);
+            daoBase.setEntityManager(getEntityManager());
+
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,7 +54,7 @@ public class MobileOptionsController extends BaseController<MobileOptions> {
     
     public void sendMobileTips(){
         try {
-            List<MobileOptions> mobileOptionsList = daoBase.list(getEntityManager());
+            List<MobileOptions> mobileOptionsList = daoBase.list();
             for (MobileOptions mo : mobileOptionsList) {
                 tipUserController.sendNewTip(mo.getUser());
             }
@@ -64,7 +66,7 @@ public class MobileOptionsController extends BaseController<MobileOptions> {
     
     public void sendScheduledNotifications() {
         try {
-            List<MobileOptions> mobileOptionsList = daoBase.list(getEntityManager());
+            List<MobileOptions> mobileOptionsList = daoBase.list();
             Calendar today = Calendar.getInstance();
             
             int todayHour = today.get(Calendar.HOUR_OF_DAY);

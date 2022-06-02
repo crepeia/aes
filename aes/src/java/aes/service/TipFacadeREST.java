@@ -42,7 +42,7 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
         super(Tip.class);
      
         try {
-            tipDAO = new TipDAO();
+            tipDAO = new TipDAO(em);
         } catch (NamingException ex) {
             Logger.getLogger(TipFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -53,7 +53,7 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Tip find(@PathParam("id") Long id) {
-        return tipDAO.find(id, em);
+        return tipDAO.find(id);
     }
 
     @GET
@@ -62,7 +62,7 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Tip> findAll() {
         try {
-            return tipDAO.list(em);
+            return tipDAO.list();
         } catch (SQLException ex) {
             Logger.getLogger(TipFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return null;

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 
@@ -40,6 +39,7 @@ public class TipController extends BaseController<Tip>{
     public void init() {
         try {
             daoBase = new GenericDAO<>(Tip.class);
+            daoBase.setEntityManager(getEntityManager());
         } catch (NamingException ex) {
             Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -57,12 +57,12 @@ public class TipController extends BaseController<Tip>{
     
     public void create() {
         try {
-            List<Tip> tipList = this.getDaoBase().list("title", tip.getTitle(), getEntityManager());
+            List<Tip> tipList = this.getDaoBase().list("title", tip.getTitle());
 
             if (!tipList.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dica já cadastrada.", null));
             } else {
-                daoBase.insert(getTip(), getEntityManager());
+                daoBase.insert(getTip());
                 tip = null;
                 FacesContext.getCurrentInstance().getExternalContext().redirect("lista-dicas.xhtml");
             }
@@ -85,7 +85,7 @@ public class TipController extends BaseController<Tip>{
     public void edit(){
         Tip newtip = getTip();
         try {
-            getDaoBase().update(newtip, getEntityManager());
+            getDaoBase().update(newtip);
             FacesContext.getCurrentInstance().getExternalContext().redirect("lista-dicas.xhtml");
         } catch (SQLException ex) {
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
@@ -98,7 +98,7 @@ public class TipController extends BaseController<Tip>{
     public void delete(){
         Tip deleteTip = getTip();
         try {
-            getDaoBase().delete(deleteTip, getEntityManager());
+            getDaoBase().delete(deleteTip);
             FacesContext.getCurrentInstance().getExternalContext().redirect("lista-dicas.xhtml");
         } catch (SQLException ex) {
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
@@ -110,7 +110,7 @@ public class TipController extends BaseController<Tip>{
     
     public List<Tip> tipList(){
         try {
-            tipList = this.getDaoBase().list(getEntityManager());
+            tipList = this.getDaoBase().list();
         } catch (SQLException ex) {
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
             Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, null, ex);
@@ -137,7 +137,7 @@ public class TipController extends BaseController<Tip>{
     public List<Tip> findPossibleTips(List<Tip> sentTips){
         List<Tip> availableTips;
         try {
-            availableTips = this.getDaoBase().list(getEntityManager());
+            availableTips = this.getDaoBase().list();
             for(Tip t: sentTips) {
                availableTips.removeIf(tip -> tip.getId().equals(t.getId()));
             }

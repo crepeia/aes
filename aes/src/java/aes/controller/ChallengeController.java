@@ -41,6 +41,7 @@ public class ChallengeController extends BaseController<Challenge>{
     public void init() {
         try {
             daoBase = new GenericDAO<>(Challenge.class);
+            daoBase.setEntityManager(getEntityManager());
         } catch (NamingException ex) {
             Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,12 +61,12 @@ public class ChallengeController extends BaseController<Challenge>{
     
     public void create() {
         try {
-            challengeList = this.getDaoBase().list("title", challenge.getTitle(), getEntityManager());
+            challengeList = this.getDaoBase().list("title", challenge.getTitle());
 
             if (!challengeList.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Desafio já cadastrado.", null));
             } else {
-                daoBase.insert(getChallenge(), getEntityManager());
+                daoBase.insert(getChallenge());
                 challenge = null;
                 FacesContext.getCurrentInstance().getExternalContext().redirect("lista-desafios.xhtml");
             }
@@ -88,7 +89,7 @@ public class ChallengeController extends BaseController<Challenge>{
     public void edit(){
         Challenge newChallenge = getChallenge();
         try {
-            getDaoBase().update(newChallenge, getEntityManager());
+            getDaoBase().update(newChallenge);
             FacesContext.getCurrentInstance().getExternalContext().redirect("lista-desafios.xhtml");
         } catch (SQLException ex) {
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
@@ -101,7 +102,7 @@ public class ChallengeController extends BaseController<Challenge>{
     public void delete(){
         Challenge deleteChallenge = getChallenge();
         try {
-            getDaoBase().delete(deleteChallenge, getEntityManager());
+            getDaoBase().delete(deleteChallenge);
             FacesContext.getCurrentInstance().getExternalContext().redirect("lista-desafios.xhtml");
         } catch (SQLException ex) {
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
@@ -113,7 +114,7 @@ public class ChallengeController extends BaseController<Challenge>{
     
     public List<Challenge> challengeList(){
         try {
-            challengeList = this.getDaoBase().list(getEntityManager());
+            challengeList = this.getDaoBase().list();
         } catch (SQLException ex) {
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
             Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);

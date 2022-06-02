@@ -43,6 +43,9 @@ public class PageRatingController extends BaseController<Rating> {
         try {
             daoBase = new GenericDAO<Rating>(Rating.class);
             daoItem = new GenericDAO<Item>(Item.class);
+            daoBase.setEntityManager(getEntityManager());
+            daoItem.setEntityManager(getEntityManager());
+
         } catch (NamingException ex) {
             Logger.getLogger(PageRatingController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,7 +55,7 @@ public class PageRatingController extends BaseController<Rating> {
         if (rating == null) {
             try {
                 if (getUser() != null) {
-                    List<Rating> ratings = daoBase.list("user", getUser(), getEntityManager());
+                    List<Rating> ratings = daoBase.list("user", getUser());
                     if (!ratings.isEmpty()) {
                         for (Rating r : ratings) {
                             if (r.getItem() != null && r.getItem().getName().contains(getURL())) {
@@ -76,12 +79,12 @@ public class PageRatingController extends BaseController<Rating> {
     public Item getPage() {
         if (page == null) {
             try {
-                List<Item> pages = daoItem.list("name", getURL(), getEntityManager());
+                List<Item> pages = daoItem.list("name", getURL());
                 if (pages.isEmpty()) {
                     page = new Item();
                     page.setName(getURL());
                     page.setType("page");
-                    daoItem.insert(page, getEntityManager());
+                    daoItem.insert(page);
                 } else {
                     page = pages.get(0);
                 }
@@ -101,7 +104,7 @@ public class PageRatingController extends BaseController<Rating> {
                 getPageRating().setRelevant(false);
             }
             getPageRating().setDateRated(new Date());
-            daoBase.insertOrUpdate(getPageRating(), getEntityManager());
+            daoBase.insertOrUpdate(getPageRating());
         } catch (SQLException ex) {
             Logger.getLogger(PageRatingController.class.getName()).log(Level.SEVERE, null, ex);
         }

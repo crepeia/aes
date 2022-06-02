@@ -6,12 +6,9 @@
 package aes.service;
 
 import aes.model.Evaluation;
-import aes.model.User;
 import aes.persistence.EvaluationDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -51,7 +48,7 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     public EvaluationFacadeREST() {
         super(Evaluation.class);
         try {
-            evaluationDAO = new EvaluationDAO();
+            evaluationDAO = new EvaluationDAO(em);
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,7 +60,7 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     public Evaluation create(Evaluation entity) {
         try {
             //super.create(entity);
-            evaluationDAO.create(entity, em);
+            evaluationDAO.create(entity);
             return entity;
         } catch (Exception e) {
             return null;
@@ -90,7 +87,7 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
                 ev.setDateCreated(new Date());
                 ev.setUser(em.find(User.class, userId));
                 super.create(ev);}*/
-                Evaluation ev = evaluationDAO.find(userId, userEmail, em);
+                Evaluation ev = evaluationDAO.find(userId, userEmail);
                 return Response.ok().entity(ev).build();
             
 
@@ -105,7 +102,7 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         
-        return String.valueOf(evaluationDAO.count(em));
+        return String.valueOf(evaluationDAO.count());
         //return String.valueOf(super.count());
     }
 
