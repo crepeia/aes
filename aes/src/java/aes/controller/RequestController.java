@@ -10,6 +10,7 @@ import aes.model.Item;
 import aes.model.Rating;
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -43,13 +44,6 @@ public class RequestController extends BaseController<User> {
     public void init() {
         try {
             daoUser = new GenericDAO<User>(User.class);
-            daoItem = new GenericDAO<Item>(Item.class);
-            daoRating = new GenericDAO<Rating>(Rating.class);
-            
-            daoRating.setEntityManager(getEntityManager());
-            daoItem.setEntityManager(getEntityManager());
-            daoUser.setEntityManager(getEntityManager());
-
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,8 +52,6 @@ public class RequestController extends BaseController<User> {
     public String getAppRequest() {
         try {
             daoEvaluation = new GenericDAO<Evaluation>(Evaluation.class);
-            daoEvaluation.setEntityManager(getEntityManager());
-
         } catch (NamingException ex) {
             Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -70,7 +62,7 @@ public class RequestController extends BaseController<User> {
                 User user = null;
                 String email = request.getParameter("email");
                 if (email != null) {
-                    List<User> users = daoUser.list("email", email);
+                    List<User> users = daoUser.list("email", email, getEntityManager());
                     if (!users.isEmpty()) {
                         user = users.get(0);
                     }
@@ -82,7 +74,7 @@ public class RequestController extends BaseController<User> {
                 user.setBirth(Long.parseLong(request.getParameter("birth")));
                 user.setGender(request.getParameter("birth").charAt(0));
                 user.setDrink(Boolean.valueOf(request.getParameter("drink")));
-                daoUser.insertOrUpdate(user);
+                daoUser.insertOrUpdate(user, getEntityManager());
 
                 Evaluation evaluation = new Evaluation();
                 evaluation.setUser(user);
@@ -104,7 +96,7 @@ public class RequestController extends BaseController<User> {
                 evaluation.setFriday(Integer.valueOf(request.getParameter("friday")));
                 evaluation.setSaturday(Integer.valueOf(request.getParameter("saturday")));
                 evaluation.setSunday(Integer.valueOf(request.getParameter("sunday")));
-                daoEvaluation.insertOrUpdate(evaluation);
+                daoEvaluation.insertOrUpdate(evaluation, getEntityManager());
             } catch (SQLException ex) {
                 Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -114,8 +106,8 @@ public class RequestController extends BaseController<User> {
 
     public String getEmailRatingRequest() {
         try {
-
-
+            daoItem = new GenericDAO<Item>(Item.class);
+            daoRating = new GenericDAO<Rating>(Rating.class);
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             String itemName = request.getParameter("itemName") != null ? request.getParameter("itemName") : " ";
             String userEmail = request.getParameter("userEmail") != null ? request.getParameter("userEmail") : " ";
@@ -129,7 +121,7 @@ public class RequestController extends BaseController<User> {
                 item = new Item();
                 item.setName(itemName);
                 item.setType("message");
-                daoItem.insert(item);
+                daoItem.insert(item, getEntityManager());
             }
             Rating rating = getRating(user, item);
             if(rating == null){
@@ -137,12 +129,12 @@ public class RequestController extends BaseController<User> {
             }
             rating.setDateRated(new Date());
             rating.setRelevant(rate);
-            daoRating.insertOrUpdate(rating);
+            daoRating.insertOrUpdate(rating, getEntityManager());
             //FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
             String message = getString("ratings.email.thanks", user);
             return message;
 
-        } catch (SQLException ex) {
+        } catch (NamingException | SQLException ex) {
             Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -152,7 +144,7 @@ public class RequestController extends BaseController<User> {
     public Rating getRating(User user, Item item) { 
         try {
             Rating rating = null;
-            List<Rating> ratings = daoRating.list("user", user);
+            List<Rating> ratings = daoRating.list("user", user, getEntityManager());
             if (!ratings.isEmpty()) {
                 for (Rating r : ratings) {
                     if (r.getItem() != null && r.getItem().getId() == item.getId()) {
@@ -176,7 +168,7 @@ public class RequestController extends BaseController<User> {
 
     public User getUser(String userEmail) {
         try {
-            List users = daoUser.list("email", userEmail);
+            List users = daoUser.list("email", userEmail, getEntityManager());
             if (users.isEmpty()) {
                 return null;
             } else {
@@ -190,7 +182,7 @@ public class RequestController extends BaseController<User> {
 
    public Item getItem(String itemName){
        try {
-            List items = daoItem.list("name", itemName);
+            List items = daoItem.list("name", itemName, getEntityManager());
             if (items.isEmpty()) {
                 return null;
             } else {

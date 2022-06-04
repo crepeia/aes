@@ -19,15 +19,14 @@ import javax.persistence.EntityManager;
  */
 public class EvaluationDAO extends GenericDAO<Evaluation>{
     
-    public EvaluationDAO(EntityManager entityManager) throws NamingException {
+    public EvaluationDAO() throws NamingException {
         super(Evaluation.class);
-        this.setEntityManager(entityManager);
     }
     
 
-    public Evaluation create(Evaluation entity) {
+    public Evaluation create(Evaluation entity, EntityManager entityManager) {
         try {
-            super.insertOrUpdate(entity);
+            super.insertOrUpdate(entity, entityManager);
             return entity;
         } catch (Exception e) {
             return null;
@@ -35,9 +34,9 @@ public class EvaluationDAO extends GenericDAO<Evaluation>{
     }
 
 
-    public Evaluation find(Long userId, String userEmail) throws SQLException {
+    public Evaluation find(Long userId, String userEmail, EntityManager entityManager) throws SQLException {
   
-            List<Evaluation> evList = getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId AND e.user.email=:userEmail")
+            List<Evaluation> evList = entityManager.createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId AND e.user.email=:userEmail")
                     .setParameter("userId", userId)
                     .setParameter("userEmail", userEmail)
                     .getResultList();
@@ -48,8 +47,8 @@ public class EvaluationDAO extends GenericDAO<Evaluation>{
                 //System.out.println("service.EvaluationFacadeREST.find() create");
                 Evaluation ev = new Evaluation();
                 ev.setDateCreated(new Date());
-                ev.setUser(getEntityManager().find(User.class, userId));
-                super.insertOrUpdate(ev);
+                ev.setUser(entityManager.find(User.class, userId));
+                super.insertOrUpdate(ev, entityManager);
                 return ev;
             }
 

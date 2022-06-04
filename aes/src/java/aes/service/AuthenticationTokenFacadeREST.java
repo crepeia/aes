@@ -51,8 +51,8 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     public AuthenticationTokenFacadeREST() {
         super(AuthenticationToken.class);
         try {
-            userDAO = new UserDAO(em);
-            authenticationTokenDAO = new AuthenticationTokenDAO(em);
+            userDAO = new UserDAO();
+            authenticationTokenDAO = new AuthenticationTokenDAO();
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,11 +76,11 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
           // User user = (User) getEntityManager().createNamedQuery("User.email").setParameter("email", e).getSingleResult();
            
           // boolean hashMatches = Encrypter.compareHash(decriptedPassword, user.getPassword(), user.getSalt());
-           User user = userDAO.checkCredentials(e, decriptedPassword);
+           User user = userDAO.checkCredentials(e, decriptedPassword, em);
            
            
            if(user != null){
-               String token  = authenticationTokenDAO.issueToken(user);
+               String token  = authenticationTokenDAO.issueToken(user, em);
                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
                return Response.ok(token).build();
 
@@ -115,7 +115,7 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
                 .getSingleResult();
         super.remove(at);*/
         
-        authenticationTokenDAO.revokeToken(token, userEmail);
+        authenticationTokenDAO.revokeToken(token, userEmail, em);
         
         return Response.ok().build();
         } catch( NoResultException e ) {

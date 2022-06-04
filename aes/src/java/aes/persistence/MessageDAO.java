@@ -17,23 +17,21 @@ import javax.persistence.EntityManager;
  */
 public class MessageDAO extends GenericDAO<Message>{
     
-    public MessageDAO(EntityManager entityManager) throws NamingException {
+    public MessageDAO() throws NamingException {
         super(Message.class);
-        this.setEntityManager(entityManager);
-
     }
     
     
 
-    public List<Message> find(Long chatId, String userEmail) {
+    public List<Message> find(Long chatId, String userEmail, EntityManager entityManager) {
 
         //String userEmail = securityContext.getUserPrincipal().getName();
-        User u = (User) getEntityManager().createQuery("SELECT u FROM User u WHERE u.email=:userEmail")
+        User u = (User) entityManager.createQuery("SELECT u FROM User u WHERE u.email=:userEmail")
                 .setParameter("userEmail", userEmail)
                 .getSingleResult();
         //only answer queries from the owner of the messagens or consultant
         if(u.getChat().getId().equals(chatId) || u.isConsultant()){
-            List<Message> m = (List<Message>) getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
+            List<Message> m = (List<Message>) entityManager.createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
                 .setParameter("chatId", chatId)
                 .getResultList();
             return m;

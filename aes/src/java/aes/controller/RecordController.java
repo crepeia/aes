@@ -56,9 +56,6 @@ public class RecordController extends BaseController<Record> {
         try {
             daoBase = new GenericDAO<Record>(Record.class);
             logDAO = new GenericDAO<DailyLog>(DailyLog.class);
-            daoBase.setEntityManager(getEntityManager());
-            logDAO.setEntityManager(getEntityManager());
-
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -83,7 +80,7 @@ public class RecordController extends BaseController<Record> {
 
     public void save() {
         try {
-            daoBase.insertOrUpdate(getRecord());
+            daoBase.insertOrUpdate(getRecord(), getEntityManager());
         } catch (SQLException ex) {
             Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,7 +108,7 @@ public class RecordController extends BaseController<Record> {
 
     public void saveLog() {
         try {
-            logDAO.insertOrUpdate(dailyLog);
+            logDAO.insertOrUpdate(dailyLog, getEntityManager());
             FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("record.save"), null));
             if ((getUser().isFemale() && dailyLog.getDrinks() > 1) || (getUser().isMale() && dailyLog.getDrinks() > 2)) {
                 FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.limit"), null));
@@ -127,7 +124,7 @@ public class RecordController extends BaseController<Record> {
     public void fetchLog() {
         try {
             dailyLog = null;
-            List<DailyLog> list = logDAO.list("record", getRecord());
+            List<DailyLog> list = logDAO.list("record", getRecord(), getEntityManager());
             for (DailyLog log : list) {
                 if (log.getLogDate() != null && log.getLogDate().equals(localDate)) {
                     dailyLog = log;
@@ -155,7 +152,7 @@ public class RecordController extends BaseController<Record> {
         String dateStr;
         
         try {
-            List<DailyLog> logs = logDAO.list("record", getRecord());
+            List<DailyLog> logs = logDAO.list("record", getRecord(), getEntityManager());
             dates = dates.concat("\"");
             if (!logs.isEmpty()) {
                 for (DailyLog log : logs) {
@@ -230,7 +227,7 @@ public class RecordController extends BaseController<Record> {
             template = template.replace("#header4#", bundle.getString("estrategia.dim.registro.elet.outcomes"));
             template = template.replace("#header5#", bundle.getString("estrategia.dim.registro.elet.daily"));
 
-            List<DailyLog> logs = logDAO.listOrdered("record", getRecord(), "logDate");
+            List<DailyLog> logs = logDAO.listOrdered("record", getRecord(), "logDate", getEntityManager());
             for (DailyLog log : logs) {
                 template = template.replace("#row#",
                         "<tr>"
@@ -295,7 +292,7 @@ public class RecordController extends BaseController<Record> {
         try {
             GenericDAO daoEvaluation = new GenericDAO<Evaluation>(Evaluation.class);
             if (userController.isLoggedIn()) {
-                List<Evaluation> evaluations = daoEvaluation.listOrdered("user", getUser(), "dateCreated");
+                List<Evaluation> evaluations = daoEvaluation.listOrdered("user", getUser(), "dateCreated", getEntityManager());
                 if (!evaluations.isEmpty()) {
                     lastEvaluation = evaluations.get(evaluations.size() - 1);
                 }

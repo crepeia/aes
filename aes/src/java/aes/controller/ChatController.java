@@ -6,12 +6,14 @@
 package aes.controller;
 import aes.model.Chat;
 import aes.persistence.GenericDAO;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
+import javax.enterprise.context.Dependent;
 import javax.naming.NamingException;
 
 /**
@@ -29,8 +31,6 @@ public class ChatController extends BaseController<Chat>{
     public void init() {
         try {
             daoBase = new GenericDAO<>(Chat.class);
-            daoBase.setEntityManager(getEntityManager());
-
         } catch (NamingException ex) {
             Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -41,7 +41,7 @@ public class ChatController extends BaseController<Chat>{
     
     public void save() {
         try {
-            daoBase.insert(chat);
+            daoBase.insert(chat, getEntityManager());
             chat = null;
         } catch (SQLException ex) {
             Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);

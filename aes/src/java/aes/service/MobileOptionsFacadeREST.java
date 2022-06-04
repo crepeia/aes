@@ -10,6 +10,8 @@ import aes.model.User;
 import aes.persistence.MobileOptionsDAO;
 import aes.persistence.UserDAO;
 import aes.utility.Secured;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -17,6 +19,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -51,8 +54,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     public MobileOptionsFacadeREST() {
         super(MobileOptions.class);
         try {
-            mobileOptionsDAO = new MobileOptionsDAO(em);
-            userDAO = new UserDAO(em);
+            mobileOptionsDAO = new MobileOptionsDAO();
+            userDAO = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -66,7 +69,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     public MobileOptions create(MobileOptions entity) {
         try {
             //super.create(entity);
-            mobileOptionsDAO.insertOrUpdate(entity);
+            mobileOptionsDAO.insertOrUpdate(entity, em);
             return entity;
         } catch (Exception e) {
             return null;
@@ -79,7 +82,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     public Response edit(@PathParam("userId") Long userId, MobileOptions entity) {
         try {
             String userEmail = securityContext.getUserPrincipal().getName();
-            User u = userDAO.find(userId);
+            User u = userDAO.find(userId, em);
             if (u.getEmail().equals(userEmail)) {
 //                entity.setUser(u);
 //                entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
@@ -87,7 +90,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
 //
 //                super.edit(entity);
 
-                  mobileOptionsDAO.edit(userId, entity);
+                  mobileOptionsDAO.edit(userId, entity, em);
                 return Response.status(Response.Status.OK).build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -120,7 +123,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             entity.setNotificationToken("");
 
             super.create(entity);*/
-            MobileOptions entity = mobileOptionsDAO.find(userId);
+            MobileOptions entity = mobileOptionsDAO.find(userId, em);
             return Response.ok().entity(entity).build();
 
         } catch (Exception e) {

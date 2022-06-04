@@ -19,30 +19,29 @@ import javax.persistence.EntityManager;
  */
 public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
     
-    public AuthenticationTokenDAO(EntityManager entityManager) throws NamingException {
+    public AuthenticationTokenDAO() throws NamingException {
         super(AuthenticationToken.class);
-        this.setEntityManager(entityManager);
     }
     
     
-    public String issueToken(User usr) throws SQLException{
+    public String issueToken(User usr, EntityManager entityManager) throws SQLException{
         String token = SecureRandomString.generate();
         
         AuthenticationToken authToken = new AuthenticationToken();
         authToken.setToken(token);
         authToken.setUser(usr);
         authToken.setDateCreated(new Date());
-        super.update(authToken);
+        super.update(authToken, entityManager);
         
         return token;
     }
     
-    public void revokeToken(String token, String userEmail) throws SQLException{
-        AuthenticationToken at = (AuthenticationToken) getEntityManager().createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
+    public void revokeToken(String token, String userEmail, EntityManager entityManager) throws SQLException{
+        AuthenticationToken at = (AuthenticationToken) entityManager.createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
         .setParameter("token", token)
         .setParameter("uEmail", userEmail)
         .getSingleResult();
-        super.delete(at);
+        super.delete(at, entityManager);
     
     }
     

@@ -8,15 +8,20 @@ package aes.controller;
 import aes.model.ChallengeUser;
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -32,8 +37,6 @@ import org.hibernate.TransientObjectException;
 @RequestScoped
 public class ChallengeUserController extends BaseController<ChallengeUser> {
     
-    
-    //todo: mover essa classe para fora do controller, outras classes estão usando
     public static class NicknameScore {
         private String nickname;
         private Long score;

@@ -1,20 +1,11 @@
 package aes.utility;
 
-import aes.controller.ContactController;
-import aes.model.Contact;
-import aes.model.User;
 import com.sun.mail.util.MailSSLSocketFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Date;
-import java.util.Locale;
-import java.util.MissingResourceException;
 import java.util.Properties;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.DataHandler;
@@ -36,9 +27,6 @@ public class EMailSSL {
     private Properties props;
     private Session session;
     private Authenticator authenticator;
-    private ResourceBundle bundle;
-
-
 
     public EMailSSL() {
         Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
@@ -104,7 +92,5 @@ public class EMailSSL {
             Transport.send(message);
 
     }
-
-
        
 }

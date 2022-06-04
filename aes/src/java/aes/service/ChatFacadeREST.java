@@ -8,6 +8,7 @@ package aes.service;
 import aes.model.Chat;
 import aes.persistence.ChatDAO;
 import aes.utility.Secured;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -47,7 +48,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     public ChatFacadeREST() {
         super(Chat.class);
         try {
-            chatDAO = new ChatDAO(em);
+            chatDAO = new ChatDAO();
         } catch (NamingException ex) {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -70,7 +71,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     public Response find(@PathParam("userId") Long userId) {
         String userEmail = securityContext.getUserPrincipal().getName();
 
-        Chat c = chatDAO.find(userId, userEmail);
+        Chat c = chatDAO.find(userId, userEmail, em);
         if (c == null) {
             return Response.status(Response.Status.NO_CONTENT).build();
 

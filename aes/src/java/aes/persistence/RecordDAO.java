@@ -7,10 +7,22 @@ package aes.persistence;
 
 import aes.model.Record;
 import aes.model.User;
+import aes.service.RecordFacadeREST;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -18,9 +30,8 @@ import javax.persistence.NoResultException;
  */
 public class RecordDAO extends GenericDAO<Record>{
     
-    public RecordDAO(EntityManager entityManager) throws NamingException {
+    public RecordDAO() throws NamingException {
         super(Record.class);
-        this.setEntityManager(entityManager);
     }
     
 
@@ -37,34 +48,34 @@ public class RecordDAO extends GenericDAO<Record>{
     }
 */
  
-    public Record create(Long userId) throws SQLException {
+    public Record create(Long userId, EntityManager entityManager) throws SQLException {
 
             Record entity = new Record();
-            entity.setUser(getEntityManager().find(User.class, userId));
+            entity.setUser(entityManager.find(User.class, userId));
             entity.setDailyGoal(0);
             entity.setWeeklyGoal(0);
-            super.insert(entity);
+            super.insert(entity, entityManager);
 
             return entity;
 
     }
 
 
-    public Record edit(Record entity) throws SQLException {
+    public Record edit(Record entity, EntityManager entityManager) throws SQLException {
        // String userEmail = securityContext.getUserPrincipal().getName();
        // User u = em.find(User.class, entity.getUser().getId());
        // if (u.getEmail().equals(userEmail)) {
-            super.insertOrUpdate(entity);
+            super.insertOrUpdate(entity, entityManager);
        // }
 
         return entity;
     }
 
 
-    public Record findByUserId(Long userId) {
+    public Record findByUserId(Long userId, EntityManager entityManager) {
 
         try {
-            Record rec = (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
+            Record rec = (Record) entityManager.createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
                     .setParameter("userId", userId)
                     .getSingleResult();
             return rec;

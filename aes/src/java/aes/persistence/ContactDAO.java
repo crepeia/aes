@@ -16,7 +16,6 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -29,9 +28,8 @@ public class ContactDAO extends GenericDAO<Contact>{
     private GenericDAO evaluationDAO = new GenericDAO<Evaluation>(Evaluation.class);;
 
     
-     public ContactDAO(EntityManager entityManager) throws NamingException {
+     public ContactDAO() throws NamingException {
         super(Contact.class);
-        this.setEntityManager(entityManager);    
     }
      
     public void scheduleDiaryReminderEmail(User user, Date date) throws SQLException {
@@ -49,7 +47,7 @@ public class ContactDAO extends GenericDAO<Contact>{
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 1);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact);
+            this.insertOrUpdate(contact, getEntityManager());
         }
     }
 
@@ -68,7 +66,7 @@ public class ContactDAO extends GenericDAO<Contact>{
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact);        }
+            this.insertOrUpdate(contact, getEntityManager());        }
     }
 
     public void schedulePersistChallengesQuitEmail(User user, Date date) throws SQLException {
@@ -86,7 +84,7 @@ public class ContactDAO extends GenericDAO<Contact>{
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact);
+            this.insertOrUpdate(contact, getEntityManager());
         }
     }
 
@@ -105,7 +103,7 @@ public class ContactDAO extends GenericDAO<Contact>{
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact);        }
+            this.insertOrUpdate(contact, getEntityManager());        }
     }
 
     public void scheduleKeepingResultReduceEmail(User user, Date date) throws SQLException {
@@ -123,7 +121,7 @@ public class ContactDAO extends GenericDAO<Contact>{
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact);
+            this.insertOrUpdate(contact, getEntityManager());
         }
     }
 
@@ -138,7 +136,7 @@ public class ContactDAO extends GenericDAO<Contact>{
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, 1);
         contact.setDateScheduled(cal.getTime());
-        this.insertOrUpdate(contact);
+        this.insertOrUpdate(contact, getEntityManager());
 
     }
 
@@ -156,7 +154,7 @@ public class ContactDAO extends GenericDAO<Contact>{
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact);
+            this.insertOrUpdate(contact, getEntityManager());
         }
     }
 
@@ -173,16 +171,16 @@ public class ContactDAO extends GenericDAO<Contact>{
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, frequency);
         contact.setDateScheduled(cal.getTime());
-        this.insertOrUpdate(contact);
+        this.insertOrUpdate(contact, getEntityManager());
     }
 
     public void clearScheduledKeepingResultEmails() {
         try {
-            List<Contact> contacts = this.list();
+            List<Contact> contacts = this.list(getEntityManager());
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("progress_keepingresult")) {
                     if (contact.getUser().getRecord() != null) {
-                        this.delete(contact);
+                        this.delete(contact, getEntityManager());
                     }
                 }
             }
@@ -194,10 +192,10 @@ public class ContactDAO extends GenericDAO<Contact>{
     
       public void clearAnnualScreeningEmails(User user) {
         try {
-            List<Contact> contacts = this.list("user", user);
+            List<Contact> contacts = this.list("user", user, getEntityManager());
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("annualscreening_subj")) {
-                        this.delete(contact);
+                        this.delete(contact, getEntityManager());
                 }
             }
         } catch (SQLException ex) {
@@ -208,10 +206,10 @@ public class ContactDAO extends GenericDAO<Contact>{
 
     public void clearScheduledEmails(User user) {
         try {
-            List<Contact> contacts = this.list("user", user);
+            List<Contact> contacts = this.list("user", user, getEntityManager());
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && !contact.getSubject().contains("tips_subj")) {
-                    this.delete(contact);
+                    this.delete(contact, getEntityManager());
 
                 }
             }
@@ -234,7 +232,7 @@ public class ContactDAO extends GenericDAO<Contact>{
 
     private Evaluation getLatestEvaluation(User user) {
         try {
-            List evaluations = evaluationDAO.listOrdered("user", user, "date_created");
+            List evaluations = evaluationDAO.listOrdered("user", user, "date_created", getEntityManager());
             if (!evaluations.isEmpty()) {
                return  (Evaluation) evaluations.get(evaluations.size() - 1);
             }

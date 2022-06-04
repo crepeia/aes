@@ -5,12 +5,14 @@
  */
 package aes.controller;
 
+import aes.model.Evaluation;
 import aes.model.Satisfaction;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -41,8 +43,6 @@ public class SatisfactionController extends BaseController<Satisfaction> {
         try {
             daoBase = new GenericDAO<Satisfaction>(Satisfaction.class);
             daoUser = new GenericDAO<User>(User.class);
-            daoBase.setEntityManager(getEntityManager());
-            daoUser.setEntityManager(getEntityManager());
         } catch (NamingException ex) {
             Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,7 +62,7 @@ public class SatisfactionController extends BaseController<Satisfaction> {
                 return null;
             } else {
                 id = id / 1357;
-                List users = daoUser.list("id", id);
+                List users = daoUser.list("id", id, getEntityManager());
                 if (users.isEmpty()) {
                     Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, "User answering satisfaction form with invalid id: ");
                     return null;
@@ -80,7 +80,7 @@ public class SatisfactionController extends BaseController<Satisfaction> {
         try {
             getSatisfaction().setDateAnswered(new Date());
             getSatisfaction().setUser(getUser());
-            daoBase.insert(getSatisfaction());
+            daoBase.insert(getSatisfaction(), getEntityManager());
             satisfaction = null;
             FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
         } catch (SQLException ex) {

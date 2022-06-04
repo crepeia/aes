@@ -16,25 +16,24 @@ import javax.persistence.EntityManager;
  */
 public class ChatDAO extends GenericDAO<Chat>{
     
-    public ChatDAO(EntityManager entityManager) throws NamingException {
+    public ChatDAO() throws NamingException {
         super(Chat.class);
-        this.setEntityManager(entityManager);
     }
     
 
-    public Chat create(Chat entity) {
+    public Chat create(Chat entity, EntityManager entityManager) {
         try {
-           super.insert(entity);
+           super.insert(entity, entityManager);
            return entity;
         } catch (Exception e) {
             return null;
         }
     }
 
-    public Chat find(Long userId, String userEmail) {
+    public Chat find(Long userId, String userEmail, EntityManager entityManager) {
         //String userEmail = securityContext.getUserPrincipal().getName();
         
-        List<Chat> c = getEntityManager().createQuery("SELECT c FROM Chat c WHERE c.user.id=:userId AND c.user.email=:email")
+        List<Chat> c = entityManager.createQuery("SELECT c FROM Chat c WHERE c.user.id=:userId AND c.user.email=:email")
                 .setParameter("email", userEmail)
                 .setParameter("userId", userId)
                 .getResultList();

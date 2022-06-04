@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,19 +24,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.PongMessage;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -206,7 +214,7 @@ public class ChatEndpoint {
             newChat.setStartDate(new Date());
             newChat.setUnauthenticatedId(unauthId.get(0));
             try {
-                daoBase.insert(newChat);
+                daoBase.insert(newChat, em);
             } catch (SQLException ex) {
                 Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -254,7 +262,7 @@ public class ChatEndpoint {
                     newChat.setStartDate(new Date());
                     newChat.setUnauthenticatedId(null);
                     try {
-                        daoBase.insert(newChat);
+                        daoBase.insert(newChat, em);
                     } catch (SQLException ex) {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -523,7 +531,7 @@ public class ChatEndpoint {
                 m.setChat(c);
                 
                 try {
-                    daoBaseMessage.insert(m);
+                    daoBaseMessage.insert(m, em);
                 } catch (SQLException ex) {
                     Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                 }

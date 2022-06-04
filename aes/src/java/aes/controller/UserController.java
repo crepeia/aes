@@ -7,6 +7,10 @@ import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -15,10 +19,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.faces.application.FacesMessage;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -42,6 +50,7 @@ public class UserController extends BaseController<User> {
     private boolean loggedIn;
     private String password;
     private ResourceBundle bundle;
+    private UserDAO userDAO;
 
     @Inject
     private ContactController contactController;
@@ -80,7 +89,7 @@ public class UserController extends BaseController<User> {
         }
         try {
             daoBase = new GenericDAO<User>(User.class);
-            daoBase.setEntityManager(getEntityManager());
+            userDAO = new UserDAO();
             user = new User();
             user.setDateCreated(new Date());
             user.setIpCreated(getIpAdress());
@@ -92,7 +101,7 @@ public class UserController extends BaseController<User> {
     public void signIn(boolean redirect) {
 
         try {
-            List<User> userList = this.getDaoBase().list("email", user.getEmail());
+            List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
 
             if (!userList.isEmpty() && Encrypter.compareHash(password, userList.get(0).getPassword(), userList.get(0).getSalt())) {
                 user = userList.get(0);
@@ -153,7 +162,7 @@ public class UserController extends BaseController<User> {
             if (!confirmEmail.equals(user.getEmail())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.equals"), null));
             } else {
-                List<User> userList = this.getDaoBase().list("email", user.getEmail());
+                List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
                 boolean regComplete = userList.stream().reduce(true, (reg, userElement) -> reg && userElement.isRegistration_complete(), Boolean::logicalAnd);
 
                 if (!userList.isEmpty() && regComplete) {
@@ -201,7 +210,7 @@ public class UserController extends BaseController<User> {
         try {
             boolean emailAvailable = true;
 
-            List<User> list = this.getDaoBase().list("email", user.getEmail());
+            List<User> list = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
 
             if (list.isEmpty()) {
                 for (User usr : list) {
@@ -225,7 +234,7 @@ public class UserController extends BaseController<User> {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                getDaoBase().update(user);
+                getDaoBase().update(user, getEntityManager());
                 editPassword = null;
                 editAno = 0;
                 editMes = 0;
@@ -272,7 +281,7 @@ public class UserController extends BaseController<User> {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                dao.update(user);
+                dao.update(user, getEntityManager());
                 editPassword = null;
                 editAno = 0;
                 editMes = 0;
@@ -303,13 +312,13 @@ public class UserController extends BaseController<User> {
     }*/
     public void recoverPassword() {
         try {
-            List<User> userList = daoBase.list("email", user.getEmail());
+            List<User> userList = daoBase.list("email", user.getEmail(), this.getEntityManager());
             if (userList.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registred"), null));
             } else {
                 User foundUser = userList.get(0);
                 foundUser.setRecoverCode(GenerateCode.generate());
-                daoBase.insertOrUpdate(foundUser);
+                daoBase.insertOrUpdate(foundUser, getEntityManager());
                 contactController.sendPasswordRecoveryEmail(foundUser);
                 FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
             }
@@ -320,7 +329,7 @@ public class UserController extends BaseController<User> {
 
     public void checkCode() {
         try {
-            List<User> userList = this.getDaoBase().list("email", user.getEmail());
+            List<User> userList = this.getDaoBase().list("email", user.getEmail(), this.getEntityManager());
             if (!userList.isEmpty()) {
                 User foundUser = userList.get(0);
                 if (foundUser.getRecoverCode() != null && user.getRecoverCode().equals(foundUser.getRecoverCode())) {
@@ -332,7 +341,7 @@ public class UserController extends BaseController<User> {
 
                     password = null;
                     foundUser.setRecoverCode(null);
-                    daoBase.insertOrUpdate(foundUser);
+                    daoBase.insertOrUpdate(foundUser, getEntityManager());
                     FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("redefined.password"), null));
                 } else {
                     FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("code.invalid"), null));
@@ -357,7 +366,7 @@ public class UserController extends BaseController<User> {
 
     public void save() {
         try {
-            daoBase.insertOrUpdate(user);
+            daoBase.insertOrUpdate(user, getEntityManager());
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -671,7 +680,7 @@ public class UserController extends BaseController<User> {
 
     public List<User> userList() {
         try {
-            userList = this.getDaoBase().listNotNull("email");
+            userList = this.getDaoBase().listNotNull("email", getEntityManager());
         } catch (SQLException ex) {
             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -684,7 +693,7 @@ public class UserController extends BaseController<User> {
             u.setAdmin(!u.isAdmin());
 
             try {
-                daoBase.update(u);
+                daoBase.update(u, getEntityManager());
                 //administrator = null;
             } catch (SQLException ex) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -697,7 +706,7 @@ public class UserController extends BaseController<User> {
             u.setConsultant(!u.isConsultant());
 
             try {
-                daoBase.update(u);
+                daoBase.update(u, getEntityManager());
                 //administrator = null;
             } catch (SQLException ex) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -710,7 +719,7 @@ public class UserController extends BaseController<User> {
             u.setUse_chatbot(!u.isUse_chatbot());
 
             try {
-                daoBase.update(u);
+                daoBase.update(u, getEntityManager());
                 //administrator = null;
             } catch (SQLException ex) {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);

@@ -46,14 +46,12 @@ public class GenericDAO<T> implements Serializable {
 		this.classe = classe;
 	}
 
-	public T insert(T objeto) throws SQLException {
+	public void insert(T objeto, EntityManager entityManager) throws SQLException {
 		try {
 
 			this.transaction.begin();
 			entityManager.persist(objeto);
 			this.transaction.commit();
-                        
-                        return objeto;
 
 		} catch (Exception erro) {
 			Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, erro.getMessage(), erro);
@@ -61,7 +59,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public void delete(T objeto) throws SQLException {
+	public void delete(T objeto, EntityManager entityManager) throws SQLException {
 		try {
 
 			T objetoExcluir;
@@ -83,7 +81,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public void delete(List<T> list) throws SQLException {
+	public void delete(List<T> list, EntityManager entityManager) throws SQLException {
 		try {
 
 			T objetoExcluir;
@@ -107,7 +105,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public void update(T objeto) throws SQLException {
+	public void update(T objeto, EntityManager entityManager) throws SQLException {
 		try {
 
 			this.transaction.begin();
@@ -119,7 +117,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public void update(List<T> lista) throws SQLException {
+	public void update(List<T> lista, EntityManager entityManager) throws SQLException {
 		try {
 
 			Class classeObj = classe;
@@ -144,7 +142,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public void insertOrUpdate(T object) throws SQLException {
+	public void insertOrUpdate(T object, EntityManager entityManager) throws SQLException {
         
 		try {
 
@@ -168,7 +166,7 @@ public class GenericDAO<T> implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> list() throws SQLException {
+	public List<T> list(EntityManager entityManager) throws SQLException {
 		try {
 
 			Query query = entityManager.createQuery("select obj from " + classe.getSimpleName() + " obj");
@@ -181,7 +179,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public List<T> list(String campoStr, Object objeto) throws SQLException {
+	public List<T> list(String campoStr, Object objeto, EntityManager entityManager) throws SQLException {
 
 		try {
 
@@ -205,7 +203,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
         
-        public List<T> listNotNull(String campoStr) throws SQLException {
+        public List<T> listNotNull(String campoStr, EntityManager entityManager) throws SQLException {
 
 		try {
 
@@ -225,7 +223,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
         
-        public List<T> listOrdered(String campoStr) throws SQLException {
+        public List<T> listOrdered(String campoStr, EntityManager entityManager) throws SQLException {
 
 		try {
 
@@ -244,7 +242,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
         
-        public List<T> listOrdered(String fieldCompare, Object objectCompare, String fieldOrder) throws SQLException {
+        public List<T> listOrdered(String fieldCompare, Object objectCompare, String fieldOrder, EntityManager entityManager) throws SQLException {
 
 		try {
 
@@ -270,7 +268,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public T listOnce(String campoStr, Object objeto) throws SQLException {
+	public T listOnce(String campoStr, Object objeto, EntityManager entityManager) throws SQLException {
 		try {
 			campoStr = campoStr.substring(0, 1).toLowerCase() + campoStr.substring(1);
 
@@ -306,7 +304,7 @@ public class GenericDAO<T> implements Serializable {
 		return data;
 	}
 
-	public List<T> listContain(String campoStr, Object objeto, boolean in) throws SQLException {
+	public List<T> listContain(String campoStr, Object objeto, boolean in, EntityManager entityManager) throws SQLException {
 		try {
 
 			campoStr = campoStr.substring(0, 1).toLowerCase() + campoStr.substring(1);
@@ -331,7 +329,7 @@ public class GenericDAO<T> implements Serializable {
 	}
         
         
-    public List<T> findRange(int[] range) {
+    public List<T> findRange(int[] range, EntityManager entityManager) {
         Query query = entityManager.createQuery("select obj from " + classe.getSimpleName() + " obj");
         query.setMaxResults(range[1] - range[0] + 1);
         query.setFirstResult(range[0]);
@@ -344,11 +342,11 @@ public class GenericDAO<T> implements Serializable {
         return query.getResultList();
     }
     
-       public T find(Object id) {
+       public T find(Object id, EntityManager entityManager) {
         return entityManager.find(classe, id);
     }
     
-        public int count() {
+        public int count(EntityManager entityManager) {
         javax.persistence.criteria.CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
         javax.persistence.criteria.Root<T> rt = cq.from(classe);
         cq.select(entityManager.getCriteriaBuilder().count(rt));

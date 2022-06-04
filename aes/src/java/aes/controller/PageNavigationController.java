@@ -36,8 +36,6 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         try {
             this.daoBase = new GenericDAO<>(PageNavigation.class);
             this.userAgentDAO = new GenericDAO<>(UserAgent.class);
-            daoBase.setEntityManager(getEntityManager());
-            userAgentDAO.setEntityManager(getEntityManager());
         } catch (NamingException ex) {
             Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -68,7 +66,7 @@ public class PageNavigationController extends BaseController<PageNavigation> {
 
     public void save() {
         try {
-            daoBase.insert(pageNavigation);
+            daoBase.insert(pageNavigation, this.getEntityManager());
         } catch (SQLException ex) {
             Logger.getLogger(PageNavigationController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -104,11 +102,11 @@ public class PageNavigationController extends BaseController<PageNavigation> {
         try {
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             String description = ((HttpServletRequest) request).getHeader("user-agent");
-            List<UserAgent> uaList = this.userAgentDAO.list("description", description);
+            List<UserAgent> uaList = this.userAgentDAO.list("description", description, this.getEntityManager());
             if (uaList.isEmpty()) {
                 UserAgent ua = new UserAgent();
                 ua.setDescription(description);
-                this.userAgentDAO.insert(ua);
+                this.userAgentDAO.insert(ua, this.getEntityManager());
                 return ua;
             }
         } catch (SQLException ex) {
@@ -153,7 +151,7 @@ public class PageNavigationController extends BaseController<PageNavigation> {
 
     public boolean checkAccess(String page) {
         try {
-            List<PageNavigation> list = daoBase.list("user", userController.getUser());
+            List<PageNavigation> list = daoBase.list("user", userController.getUser(), getEntityManager());
             for (PageNavigation pg : list) {
                 if (pg.getUrl().contains(page)) {
                     return true;

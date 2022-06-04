@@ -7,7 +7,6 @@ package aes.persistence;
 
 import aes.model.Tip;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -15,9 +14,8 @@ import javax.persistence.EntityManager;
  */
 public class TipDAO extends GenericDAO<Tip>{
     
-    public TipDAO(EntityManager entityManager) throws NamingException {
+    public TipDAO() throws NamingException {
         super(Tip.class);
-        this.setEntityManager(entityManager);
     }
     
     

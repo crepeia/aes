@@ -7,6 +7,7 @@ package aes.utility;
 
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import aes.service.UserFacadeREST;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +16,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 import org.apache.commons.codec.binary.Hex;
 
@@ -55,7 +57,7 @@ public class DBSecurityUpdate {
                 u.setSalt(salt);
            
                 Logger.getLogger(DBSecurityUpdate.class.getName()).log(Level.INFO, "Committing..."); 
-                userDAO.insertOrUpdate(u);
+                userDAO.insertOrUpdate(u, em);
                 Logger.getLogger(DBSecurityUpdate.class.getName()).log(Level.INFO, "Commited"); 
 
             }

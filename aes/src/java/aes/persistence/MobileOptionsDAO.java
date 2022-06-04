@@ -20,43 +20,41 @@ import javax.persistence.NoResultException;
  */
 public class MobileOptionsDAO extends GenericDAO<MobileOptions> {
 
-    public MobileOptionsDAO(EntityManager entityManager) throws NamingException {
+    public MobileOptionsDAO() throws NamingException {
         super(MobileOptions.class);
-        this.setEntityManager(entityManager);
-
     }
 
-    public MobileOptions create(MobileOptions entity) {
+    public MobileOptions create(MobileOptions entity, EntityManager entityManager) {
         try {
-            super.insertOrUpdate(entity);
+            super.insertOrUpdate(entity, entityManager);
             return entity;
         } catch (Exception e) {
             return null;
         }
     }
 
-    public void edit(Long userId, MobileOptions entity) throws SQLException{
+    public void edit(Long userId, MobileOptions entity, EntityManager entityManager) throws SQLException{
 
         //String userEmail = securityContext.getUserPrincipal().getName();
-        User u = getEntityManager().find(User.class, userId);
+        User u = entityManager.find(User.class, userId);
 
         entity.setUser(u);
         entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
         entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
 
-        super.insertOrUpdate(entity);
+        super.insertOrUpdate(entity, entityManager);
 
     }
 
-    public MobileOptions find(Long userId) throws SQLException {
+    public MobileOptions find(Long userId, EntityManager entityManager) throws SQLException {
         try {
-            MobileOptions op = (MobileOptions) getEntityManager().createQuery("SELECT mo FROM MobileOptions mo WHERE mo.user.id=:userId")
+            MobileOptions op = (MobileOptions) entityManager.createQuery("SELECT mo FROM MobileOptions mo WHERE mo.user.id=:userId")
                     .setParameter("userId", userId)
                     .getSingleResult();
             return op;
         } catch (NoResultException e) {
             MobileOptions entity = new MobileOptions();
-            entity.setUser(getEntityManager().find(User.class, userId));
+            entity.setUser(entityManager.find(User.class, userId));
 
             entity.setAllowTipNotifications(false);
             entity.setTipNotificationTime(OffsetTime.of(12, 0, 0, 0, OffsetDateTime.now().getOffset()));
@@ -66,7 +64,7 @@ public class MobileOptionsDAO extends GenericDAO<MobileOptions> {
 
             entity.setNotificationToken("");
 
-            super.insertOrUpdate(entity);
+            super.insertOrUpdate(entity, entityManager);
             return entity;
 
         }

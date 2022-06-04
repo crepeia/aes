@@ -74,8 +74,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public UserFacadeREST(){
         super(User.class);
         try {
-            userDAO = new UserDAO(em);
-            contactDAO = new ContactDAO(em);
+            userDAO = new UserDAO();
+            contactDAO = new ContactDAO();
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -95,7 +95,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 String clientEncriptedHexPassword = p;
                 String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
                 
-                userDAO.createUser(entity, decriptedPassword);
+                userDAO.createUser(entity, decriptedPassword, em);
                 
                 /*byte[] salt =  Encrypter.generateRandomSecureSalt(16);
                 entity.setSalt(salt);
@@ -173,7 +173,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         String userEmail = securityContext.getUserPrincipal().getName();
         try{
             
-            userDAO.toggleConsultant(userEmail);
+            userDAO.toggleConsultant(userEmail, em);
             /*User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
                                 .setParameter("email", userEmail)
                                 .getSingleResult();
@@ -198,7 +198,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         System.out.println("aes.service.UserFacadeREST.setInRanking()");
         try{
             
-            userDAO.setInRanking(userEmail);      
+            userDAO.setInRanking(userEmail, em);      
            return Response.status(Response.Status.NO_CONTENT).build();
 
         }catch(Exception e) {
@@ -233,7 +233,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             super.edit(u);
             userTransaction.commit();*/
             
-            User u = userDAO.generateRecoverCode(userEmail);
+            User u = userDAO.generateRecoverCode(userEmail, em);
             contactController.sendPasswordRecoveryEmail(u);
             
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, null, "Recover password service");

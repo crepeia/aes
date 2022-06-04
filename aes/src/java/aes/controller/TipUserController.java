@@ -21,6 +21,9 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 
 /**
@@ -40,7 +43,6 @@ public class TipUserController  extends BaseController<TipUser> {
         
         try {
             daoBase = new GenericDAO<>(TipUser.class);
-            daoBase.setEntityManager(getEntityManager());
         } catch (NamingException ex) {
             Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,10 +60,10 @@ public class TipUserController  extends BaseController<TipUser> {
     
     public TipUser getLatestTip(User user) {
         try {
-            List<TipUser> tipUserList = this.getDaoBase().list("user", user);
+            List<TipUser> tipUserList = this.getDaoBase().list("user", user, getEntityManager());
             if(tipUserList.isEmpty()){
                 sendNewTip(user);
-                tipUserList = this.getDaoBase().list("user", user);
+                tipUserList = this.getDaoBase().list("user", user, getEntityManager());
             }
             return (tipUserList.get(tipUserList.size()-1));
         } catch (SQLException ex) {
@@ -96,7 +98,7 @@ public class TipUserController  extends BaseController<TipUser> {
                 
                 tipUser.setDateCreated(cal.getTime());
                 
-                daoBase.update(tipUser);
+                daoBase.update(tipUser, this.getEntityManager());
                 
                 //tipUser = null;
             }

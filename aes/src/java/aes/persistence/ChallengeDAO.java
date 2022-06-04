@@ -17,19 +17,17 @@ import javax.persistence.EntityManager;
  */
 public class ChallengeDAO extends GenericDAO<Challenge> {
         
-    public ChallengeDAO(EntityManager entityManager) throws NamingException {
+    public ChallengeDAO() throws NamingException {
         super(Challenge.class);
-        this.setEntityManager(entityManager);
-
     }
     
 
-    public List<Challenge> findAll() throws SQLException {
-        return super.list();
+    public List<Challenge> findAll(EntityManager entityManager) throws SQLException {
+        return super.list(entityManager);
     }
     
-    public List<Challenge> findAllByType(Challenge.ChallengeType ct) {
-        return getEntityManager().createQuery("SELECT c FROM Challenge c WHERE c.type=:type")
+    public List<Challenge> findAllByType(Challenge.ChallengeType ct, EntityManager entityManager) {
+        return entityManager.createQuery("SELECT c FROM Challenge c WHERE c.type=:type")
                 .setParameter("type", ct)
                 .getResultList();
     }
