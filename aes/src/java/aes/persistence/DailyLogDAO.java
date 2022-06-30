@@ -7,7 +7,10 @@ package aes.persistence;
 
 import aes.model.DailyLog;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,6 +23,36 @@ public class DailyLogDAO extends GenericDAO<DailyLog>{
     
     public DailyLogDAO() throws NamingException {
         super(DailyLog.class);
+    }
+    
+    public DailyLog find(long recordId, LocalDate logDate, EntityManager entityManager)throws NoResultException{
+            
+        DailyLog dl = (DailyLog) entityManager.createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
+            .setParameter("recordId", recordId)
+            .setParameter("logDate", logDate)
+            .getSingleResult();
+        return dl;
+            
+    }
+    
+    public boolean edit(DailyLog entity, EntityManager entityManager){
+        
+        try {
+            DailyLog dl = find(entity.getRecord().getId(), entity.getLogDate(), entityManager);
+            dl.setDrinks(entity.getDrinks());
+            dl.setContext(entity.getContext());
+            dl.setConsequences(entity.getConsequences());
+            
+            super.update(dl, entityManager);
+            //action = "edit";
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DailyLogDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }catch (NoResultException ex){
+             return false;
+        }
+    
     }
     
 

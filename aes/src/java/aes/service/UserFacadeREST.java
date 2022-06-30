@@ -10,6 +10,7 @@ import aes.controller.UserController;
 import aes.model.User;
 import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
+import aes.utility.EmailHelper;
 import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
@@ -57,6 +58,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private EntityManager em;
     private UserDAO userDAO;
     private ContactDAO contactDAO;
+    private EmailHelper emailHelper;
     
     @Inject
     private ContactController contactController;
@@ -73,6 +75,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     
     public UserFacadeREST(){
         super(User.class);
+        emailHelper = new EmailHelper();
         try {
             userDAO = new UserDAO();
             contactDAO = new ContactDAO();
@@ -106,7 +109,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 userTransaction.commit();*/
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
 
-                contactController.sendSignUpEmail(entity);
+                emailHelper.sendSignUpEmail(entity, em);
                 if (entity.isReceiveEmails()) {
                     contactDAO.scheduleTipsEmail(entity);
                     contactDAO.scheduleDiaryReminderEmail(entity, new Date());
@@ -234,7 +237,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             userTransaction.commit();*/
             
             User u = userDAO.generateRecoverCode(userEmail, em);
-            contactController.sendPasswordRecoveryEmail(u);
+            emailHelper.sendPasswordRecoveryEmail(u, em);
             
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, null, "Recover password service");
 
