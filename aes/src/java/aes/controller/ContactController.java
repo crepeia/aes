@@ -261,7 +261,7 @@ public class ContactController extends BaseController implements Serializable {
 
     public void scheduleWeeklyEmail(User user, Date date) {
         Contact contact;
-        int weeks[] = {1, 2, 3, 4, 8, 12, 36, 48};
+        int weeks[] = {1, 2, 3, 4, 8, 12, 24, 48};
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
