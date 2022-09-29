@@ -43,6 +43,7 @@ public class Scheduler {
         emailHelper = new EmailHelper();
         try {
             contactDAO = new ContactDAO();
+            contactDAO.setEntityManager(em);
         } catch (NamingException ex) {
             Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -51,14 +52,14 @@ public class Scheduler {
     @Schedule(second = "0", minute = "0", hour = "7", dayOfWeek = "*")
     public void sendEmails() {
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Morning Task Running");
-        contactController.sendScheduledEmails();
+        sendScheduledEmails();
         //contactController.sendTestEmail();
     }
 
     @Schedule(second = "0", minute = "0", hour = "15", dayOfWeek = "*")
     public void afternoonTask() {
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Afternoon task running");
-        contactController.sendScheduledEmails();
+        sendScheduledEmails();
         //contactController.sendTestEmail();
 
     }
@@ -66,7 +67,7 @@ public class Scheduler {
     @Schedule(second = "0", minute = "0", hour = "19", dayOfWeek = "*")
     public void eveningTask() {
         Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Evening task running");
-        contactController.sendScheduledEmails();
+        sendScheduledEmails();
         //contactController.sendTestEmail();
 
     }
@@ -83,6 +84,20 @@ public class Scheduler {
         mobileOptionsController.sendScheduledNotifications();
 
     }
+    
+     /*   @Schedule(second = "30", minute = "09", hour = "14", dayOfWeek = "*")
+    public void sendEmailsTest() {
+        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Test Task Running");
+        try {
+            emailHelper.sendTestEmail("patrickcarvalho448@gmail.com");
+            //sendScheduledEmails();
+            //contactController.sendTestEmail();
+        } catch (SQLException ex) {
+            Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
 
     /*@Schedule(second = "30", minute = "0", hour = "8", dayOfWeek = "*", persistent=false)
     public void securityUpdate() {
@@ -96,6 +111,14 @@ public class Scheduler {
       //  mobileOptionsController.sendScheduledNotifications();
         
     }*/
+    
+    
+      /*@Schedule(second = "30", minute = "15", hour = "14", dayOfWeek = "*", persistent=false)
+    public void testTask() {
+        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - tip correction task running");
+      contactDAO.scheduleAllTipsEmails(em);
+        
+    }*/
 
     public void sendScheduledEmails() {
 
@@ -106,11 +129,11 @@ public class Scheduler {
             try {
                 if (contact.getSubject().contains("tips_subj")) {
                     emailHelper.sendTipsEmail(contact, em);
-                   contactDAO.scheduleTipsEmail(contact.getUser());
+                   contactDAO.scheduleTipsEmail(contact.getUser(), em);
                 } else {
                     emailHelper.sendHTMLEmail(contact, em);
                     if (contact.getSubject().contains("annualscreening_subj")) {
-                      contactDAO.scheduleAnnualScreeningEmail(contact.getUser());
+                      contactDAO.scheduleAnnualScreeningEmail(contact.getUser(), em);
                     }
                 }
 

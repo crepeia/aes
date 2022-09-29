@@ -170,6 +170,14 @@ public class EmailHelper {
         Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getRecipient());
 
     }
+    
+    public void sendTestEmail(String recipient) throws SQLException, MessagingException {
+        String content = "Conteúdo - Teste";
+        String subject = "Teste";
+        eMailSSL.send("alcoolesaude@gmail.com", recipient, subject, content, null, null);
+        Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email de teste enviado para:" + recipient);
+
+    }
 
     public void sendPlainTextEmail(Contact contact, EntityManager entityManager) throws SQLException, MessagingException {
 
@@ -182,10 +190,10 @@ public class EmailHelper {
 
     }
     
-        public void sendEmail(Contact contact, EntityManager entityManager, String template) throws SQLException, MessagingException {
+    public void sendEmail(Contact contact, EntityManager entityManager, String template) throws SQLException, MessagingException {
         String content = getContent(contact, template);
         String subject = getSubject(contact);
-        
+
         eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());
         contact.setDateSent(new Date());
         //save(contact);
