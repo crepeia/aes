@@ -36,7 +36,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         super(Contact.class);
     }
 
-    public void scheduleDiaryReminderEmail(User user, Date date) throws SQLException {
+    public void scheduleDiaryReminderEmail(User user, Date date, EntityManager entityManager) throws SQLException {
         Contact contact;
         int weeks[] = {2, 3, 4};
         for (int week : weeks) {
@@ -51,7 +51,7 @@ public class ContactDAO extends GenericDAO<Contact> {
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 1);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact, getEntityManager());
+            this.insertOrUpdate(contact, entityManager);
         }
     }
 
@@ -131,7 +131,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         }
     }
 
-    public void scheduleAnnualScreeningEmail(User user) throws SQLException {
+    public void scheduleAnnualScreeningEmail(User user, EntityManager em) throws SQLException {
         Contact contact;
         contact = new Contact();
         contact.setUser(user);
@@ -142,13 +142,13 @@ public class ContactDAO extends GenericDAO<Contact> {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, 1);
         contact.setDateScheduled(cal.getTime());
-        this.insertOrUpdate(contact, getEntityManager());
+        this.insertOrUpdate(contact, em);
 
     }
 
-    public void scheduleWeeklyEmail(User user, Date date) throws SQLException {
+    public void scheduleWeeklyEmail(User user, Date date, EntityManager entityManager) throws SQLException {
         Contact contact;
-        int weeks[] = {1, 2, 3, 4, 8, 12, 36, 48};
+        int weeks[] = {1, 2, 3, 4, 8, 12, 24, 48};
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
@@ -160,11 +160,11 @@ public class ContactDAO extends GenericDAO<Contact> {
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact, getEntityManager());
+            this.insertOrUpdate(contact, entityManager);
         }
     }
 
-    public void scheduleTipsEmail(User user) throws SQLException {
+    public void scheduleTipsEmail(User user, EntityManager entityManager) throws SQLException {
         Random random = new Random();
         int randomNumber = random.nextInt((RANDOM_MAX - RANDOM_MIN) + 1) + RANDOM_MIN;
         int frequency = user.getTipsFrequency();
@@ -177,7 +177,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, frequency);
         contact.setDateScheduled(cal.getTime());
-        this.insertOrUpdate(contact, getEntityManager());
+        this.insertOrUpdate(contact, entityManager);
     }
 
     public void clearScheduledKeepingResultEmails() {
@@ -225,16 +225,38 @@ public class ContactDAO extends GenericDAO<Contact> {
         }
     }
 
+    /*public void scheduleAllTipsEmails(EntityManager entityManager) {
+        Date today = new Date();
+        Date oneWeekAgo = new Date(today.getTime() - 8 * 24 * 60 * 60 * 1000);
+
+        List<User> users = entityManager.createQuery("SELECT u from User u WHERE u.receiveEmails = TRUE and u.tipsFrequency != NULL and u.tipsFrequency != 0").getResultList();
+
+        for (User u : users) {
+            System.out.print(u.getEmail());
+
+            //if (contacts.isEmpty()) {
+                try {
+                    scheduleTipsEmail(u, entityManager);
+                    System.out.println("-- agendado");
+                } catch (SQLException ex) {
+                    Logger.getLogger(ContactDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            //} 
+           
+            
+        }
+
+    }*/
+
     public List<Contact> getScheduledEmailsToDate(EntityManager entityManager, Date date) {
 
         List<Contact> contacts = entityManager.createQuery(
-       "SELECT c from Contact c WHERE c.dateScheduled != NULL AND c.dateSent = NULL AND c.dateScheduled <= :today")
+                "SELECT c from Contact c WHERE c.dateScheduled != NULL AND c.dateSent = NULL AND c.dateScheduled <= :today")
                 .setParameter("today", date)
                 .getResultList();
 
         return contacts;
     }
-
 
     private Evaluation getLatestEvaluation(User user) {
         try {

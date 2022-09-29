@@ -111,9 +111,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
                 emailHelper.sendSignUpEmail(entity, em);
                 if (entity.isReceiveEmails()) {
-                    contactDAO.scheduleTipsEmail(entity);
-                    contactDAO.scheduleDiaryReminderEmail(entity, new Date());
-                    contactDAO.scheduleWeeklyEmail(entity, new Date());
+                    contactDAO.scheduleTipsEmail(entity, em);
+                    contactDAO.scheduleDiaryReminderEmail(entity, new Date(), em);
+                    contactDAO.scheduleWeeklyEmail(entity, new Date(), em);
                 }
             
             
