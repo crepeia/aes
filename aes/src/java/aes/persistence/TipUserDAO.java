@@ -133,7 +133,11 @@ public class TipUserDAO extends GenericDAO<TipUser> {
     
 
     public TipUser read(TipUser entity, EntityManager entityManager) throws SQLException {
-        TipUser newEntity = super.find(entity.getId(), entityManager);
+       // TipUser newEntity = super.find(entity.getId(), entityManager);
+         TipUser newEntity = (TipUser) entityManager.createQuery("SELECT tu FROM TipUser tu WHERE tu.user.id=:userId AND tu.tip.id=:tipId")
+                .setParameter("userId", entity.getId().getUserId())
+                 .setParameter("tipId",  entity.getId().getTipId())
+                .getSingleResult();
                
         if(newEntity==null){
             newEntity = new TipUser();     
@@ -145,7 +149,9 @@ public class TipUserDAO extends GenericDAO<TipUser> {
         
         newEntity.setReadByUser(true);
         
-        super.insertOrUpdate(newEntity, entityManager);
+       //entityManager.merge(newEntity);
+        
+        super.update(newEntity, entityManager);
         return newEntity;
     }
     
