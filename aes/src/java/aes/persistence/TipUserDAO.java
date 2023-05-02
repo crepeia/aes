@@ -83,15 +83,14 @@ public class TipUserDAO extends GenericDAO<TipUser> {
     }
     
 
-    public TipUser createTip(TipUser entity, EntityManager entityManager) throws SQLException {
-            entity.setUser(entityManager.find(User.class, entity.getId().getUserId()));
-            entity.setTip(entityManager.find(Tip.class, entity.getId().getTipId()));
-            
-            if(entity.getDateCreated()== null){
+    public TipUser createTip(TipUser entity, EntityManager em) throws SQLException {       
+        entity.setUser(em.find(User.class, entity.getId().getUserId()));
+        entity.setTip(em.find(Tip.class, entity.getId().getTipId()));
+            if(entity.getDateCreated()== null){     
                 entity.setDateCreated(new Date());
             }
             
-            super.insert(entity, entityManager);
+            super.insertOrUpdate(entity, em);    
             //return Response.status(Response.Status.OK).build();
             return entity;
 
@@ -136,11 +135,11 @@ public class TipUserDAO extends GenericDAO<TipUser> {
        // TipUser newEntity = super.find(entity.getId(), entityManager);
          TipUser newEntity = (TipUser) entityManager.createQuery("SELECT tu FROM TipUser tu WHERE tu.user.id=:userId AND tu.tip.id=:tipId")
                 .setParameter("userId", entity.getId().getUserId())
-                 .setParameter("tipId",  entity.getId().getTipId())
+                .setParameter("tipId",  entity.getId().getTipId())
                 .getSingleResult();
-               
+         
         if(newEntity==null){
-            newEntity = new TipUser();     
+            newEntity = new TipUser();    
             newEntity.setUser(entityManager.find(User.class, entity.getId().getUserId()));
             newEntity.setTip(entityManager.find(Tip.class, entity.getId().getTipId()));
             newEntity.setDateCreated(new Date());

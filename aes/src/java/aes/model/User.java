@@ -183,6 +183,10 @@ public class User implements Serializable {
     public void setBirth(long time){
         birthDate.setTime(time);
     }
+
+    public Boolean getInRanking() {
+        return inRanking;
+    }
     
     @JsonIgnore
     public boolean isUnderage() {
@@ -228,7 +232,7 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
+    }    
     
     
     public byte[] getPassword() {

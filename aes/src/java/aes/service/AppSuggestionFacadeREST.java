@@ -39,10 +39,18 @@ public class AppSuggestionFacadeREST extends AbstractFacade<AppSuggestion> {
     }
 
     @POST
+    @Path("create")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response createAppSuggestion(AppSuggestion entity) {
-        return Response.ok(super.create(entity)).build();
+    public boolean createAppSuggestion(AppSuggestion entity) {
+        try {
+            Response res = Response.ok(super.create(entity)).build();
+            System.out.println(res);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
+
     /*
     @PUT
     @Path("{id}")
@@ -56,7 +64,7 @@ public class AppSuggestionFacadeREST extends AbstractFacade<AppSuggestion> {
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
-    */
+     */
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
@@ -68,5 +76,5 @@ public class AppSuggestionFacadeREST extends AbstractFacade<AppSuggestion> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

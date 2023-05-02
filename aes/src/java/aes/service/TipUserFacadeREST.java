@@ -92,6 +92,8 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createTip(TipUser entity) {
         try {
+            TipUser auxTip = super.find(entity.getId());
+            
             /*entity.setUser(em.find(User.class, entity.getId().getUserId()));
             entity.setTip(em.find(Tip.class, entity.getId().getTipId()));
             
@@ -100,8 +102,9 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
             }
             
             super.create(entity);*/
-            
-            tipUserDAO.createTip(entity, em);
+            if(auxTip == null){
+                tipUserDAO.createTip(entity, em);    
+            }
             return Response.status(Response.Status.OK).build();
         } catch (SQLException e) {
             Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.ALL.SEVERE, null, e);
@@ -115,11 +118,11 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TipUser like(TipUser entity) {
-        TipUser newEntity = super.find(entity.getId());
+        TipUser newEntity = super.find(entity.getId());        
         newEntity.setLiked(entity.isLiked());
-
+        
         try {
-            tipUserDAO.insertOrUpdate(entity, em);
+            tipUserDAO.insertOrUpdate(newEntity, em);
         } catch (SQLException ex) {
             Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -144,7 +147,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
         */
         
         try {
-            tipUserDAO.insertOrUpdate(entity, em);
+            tipUserDAO.insertOrUpdate(newEntity, em);
         } catch (SQLException ex) {
             Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -162,7 +165,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
         newEntity.setLiked(null);
         
         try {
-            tipUserDAO.insertOrUpdate(entity, em);
+            tipUserDAO.insertOrUpdate(newEntity, em);
         } catch (SQLException ex) {
             Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -190,7 +193,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
         
         super.edit(newEntity);*/
        
-       
+
         try {
             TipUser newEntity = tipUserDAO.read(entity, em);
             return newEntity;

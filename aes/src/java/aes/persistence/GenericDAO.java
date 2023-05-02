@@ -1,5 +1,6 @@
 package aes.persistence;
 
+import aes.model.TipUserKey;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Date;
@@ -48,9 +49,9 @@ public class GenericDAO<T> implements Serializable {
 
 	public void insert(T objeto, EntityManager entityManager) throws SQLException {
 		try {
-
+                                          
 			this.transaction.begin();
-			entityManager.persist(objeto);
+			entityManager.persist(objeto);                
 			this.transaction.commit();
 
 		} catch (Exception erro) {
@@ -142,23 +143,34 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public void insertOrUpdate(T object, EntityManager entityManager) throws SQLException {
-        
-		try {
+	public void insertOrUpdate(T object, EntityManager em) throws SQLException {
+
+            try {
 
 			Class classeObj = classe;
 			while (!classeObj.getSuperclass().equals(Object.class)) {
 				classeObj = classeObj.getSuperclass();
 			}
 
-			this.transaction.begin();
-			long id = Long.parseLong(classe.getMethod("getId", null).invoke(object, null).toString());
-			if (id > 0) {
-				entityManager.merge(object);
-			} else {
-				entityManager.persist(object);
-			}
-			this.transaction.commit();
+                        this.transaction.begin();
+                        try {
+                        
+                            TipUserKey id = (TipUserKey) classe.getMethod("getId", null).invoke(object, null);
+                            if (id != null) {
+				em.merge(object);
+                            } else {
+				em.persist(object);
+                            }
+                            this.transaction.commit();
+                        } catch (Exception e) {
+                            long id = Long.parseLong(classe.getMethod("getId", null).invoke(object, null).toString());
+                            if (id > 0) {
+                                em.merge(object);
+                            } else {
+				em.persist(object);
+                            }
+                            this.transaction.commit();
+                        }
 
 		} catch (Exception erro) {
 			throw new SQLException(erro);

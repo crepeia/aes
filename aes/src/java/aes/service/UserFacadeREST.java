@@ -198,10 +198,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Produces(MediaType.APPLICATION_JSON)
     public Response setInRanking(User entity) {
         String userEmail = securityContext.getUserPrincipal().getName();
-        System.out.println("aes.service.UserFacadeREST.setInRanking()");
         try{
-            
-            userDAO.setInRanking(userEmail, em);      
+            userDAO.setInRanking(userEmail,entity.getInRanking(),entity.getNickname(), em);
+            System.out.println("aes.service.UserFacadeREST.setInRanking()");
            return Response.status(Response.Status.NO_CONTENT).build();
 
         }catch(Exception e) {
