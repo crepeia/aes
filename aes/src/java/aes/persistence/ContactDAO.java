@@ -7,6 +7,10 @@ package aes.persistence;
 
 import aes.model.Contact;
 import aes.model.Evaluation;
+import aes.model.Medal;
+import aes.model.MedalUser;
+import aes.model.Title;
+import aes.model.TitleUser;
 import aes.model.User;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -179,7 +183,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         contact.setDateScheduled(cal.getTime());
         this.insertOrUpdate(contact, entityManager);
     }
-
+    
     public void clearScheduledKeepingResultEmails() {
         try {
             List<Contact> contacts = this.list(getEntityManager());

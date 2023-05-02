@@ -150,7 +150,14 @@ public class User implements Serializable {
     
     @Column(name = "registration_complete")
     private Boolean registration_complete;
+       
+    @Column(name = "dt_tcle_response")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dt_tcle_response;
     
+    @Column(name = "selected_title")
+    private Long selected_title;
+   
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
@@ -539,5 +546,21 @@ public class User implements Serializable {
         this.nickname = nickname;
     }
     
+    public Date getDt_tcle_response() {
+        return dt_tcle_response;
+    }
     
+    public void setDt_tcle_response(Date dt_tcle_response) {
+        this.dt_tcle_response = dt_tcle_response;
+    }
+
+    public Long getSelected_title() {
+        return selected_title;
+    }
+
+    public void setSelected_title(Long selected_title) {
+        this.selected_title = selected_title;
+    }
+    
+ 
 }

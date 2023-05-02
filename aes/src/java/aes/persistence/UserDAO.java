@@ -22,6 +22,7 @@ import javax.persistence.EntityManager;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
+
 /**
  *
  * @author patrick
@@ -151,6 +152,26 @@ public class UserDAO extends GenericDAO<User>{
 
         u.setInRanking(inRanking);
         u.setNickname(nickname);
+
+        super.insertOrUpdate(u, em);
+    }
+    
+    public void setSendTCLE(String userEmail, User entity, EntityManager em) throws SQLException {
+        User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
+                .setParameter("email", userEmail)
+                .getSingleResult();
+
+        u.setDt_tcle_response(entity.getDt_tcle_response());
+
+        super.insertOrUpdate(u, em);
+    }
+    
+    public void setTitle(String userEmail, User entity, EntityManager em) throws SQLException {
+        User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
+                .setParameter("email", userEmail)
+                .getSingleResult();
+
+        u.setSelected_title(entity.getSelected_title());
 
         super.insertOrUpdate(u, em);
     }

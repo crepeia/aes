@@ -41,10 +41,12 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
         private String nickname;
         private Long score;
         private int position;
-        public NicknameScore(String nickname, Long score){
+        private Long title;
+        public NicknameScore(String nickname, Long score, Long title){
             this.nickname = nickname;
             this.score = score;
             this.position = 0;
+            this.title = title;
         }
 
         public String getNickname() {
@@ -70,7 +72,14 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
         public void setPosition(int position) {
             this.position = position;
         }
-        
+
+        public Long getTitle() {
+            return title;
+        }
+
+        public void setTitle(Long title) {
+            this.title = title;
+        }
         
     }
     
@@ -138,7 +147,7 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
             for (User u : users) {
                 long points = getPointsFromDate(u, dateStart);
                 //if(points == null) points = Long.valueOf(0);
-                resultList.add(new NicknameScore(u.getNickname(), points));
+                resultList.add(new NicknameScore(u.getNickname(), points, u.getSelected_title()));
             }
 
             return resultList;
@@ -161,7 +170,7 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
                 for (User u : users) {
                     long points = getPointsAllTime(u);
                     //if(points == null) points = Long.valueOf(0);
-                    resultList.add(new NicknameScore(u.getNickname(), points));
+                    resultList.add(new NicknameScore(u.getNickname(), points, u.getSelected_title()));
                 }
                 
                 return resultList;

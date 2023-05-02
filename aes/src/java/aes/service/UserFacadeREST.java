@@ -133,41 +133,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         // return Response.serverError().build();
         
     }
-    
-    /*
-    @POST
-    @Path("createUnregistered")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createUnregistered(User entity) {
-        List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
-        try {
-            if(!userList.isEmpty()){
-
-                if(userList.get(0).isRegistration_complete()){
-                    String error = "{\"error\": \"EmailInUseLogin\"}";
-                    return Response.status(Response.Status.CONFLICT).entity(error).build();
-                } else {
-                    entity.setId(userList.get(0).getId());
-                    userTransaction.begin();
-                    super.edit(entity);
-                    userTransaction.commit();
-                }
-
-            } else {
-                userTransaction.begin();
-                super.create(entity);
-                userTransaction.commit();
-            }
-            return Response.ok().entity(entity).build();
-
-        } catch(Exception e){
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return null;
-        }
-    }
-    */
-    
+        
     @PUT
     @Path("/toggleConsultant/{id}")
     @Secured
@@ -207,6 +173,24 @@ public class UserFacadeREST extends AbstractFacade<User> {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
 
+        }
+    }
+    
+    @PUT
+    @Path("/sendTCLE")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sendTCLE(User entity) {
+        String userEmail = securityContext.getUserPrincipal().getName();
+        try{
+            userDAO.setSendTCLE(userEmail, entity, em);
+            System.out.println("aes.service.UserFacadeREST.setSendTCLE()");
+            return Response.status(Response.Status.NO_CONTENT).build();
+
+        }catch(Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
     
@@ -264,6 +248,45 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return super.login(tkn);
     }
 
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("findUserByNickname/{nickname}")
+    public Response findUserByNickname(@PathParam("nickname") String nickname) {
+        try {
+            User userResult = (User) em.createQuery("SELECT u FROM User u WHERE u.nickname=:nm")
+                .setParameter("nm", nickname)
+                .getSingleResult();
+        
+            if (userResult == null) {
+                return Response.status(Response.Status.CONFLICT).build();
+            } else {           
+                return Response.ok().entity(userResult).build();
+            }    
+        } catch (Exception e) {
+            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @PUT
+    @Path("/changeTitle/")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changeTitle(User entity) {
+        String userEmail = securityContext.getUserPrincipal().getName();
+        try{
+            userDAO.setTitle(userEmail, entity, em);
+            System.out.println("aes.service.UserFacadeREST.setTitle()");
+            return Response.status(Response.Status.NO_CONTENT).build();
+
+        }catch(Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

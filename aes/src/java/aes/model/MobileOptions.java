@@ -36,11 +36,11 @@ public class MobileOptions implements Serializable {
     @OneToOne
     private User user;
 
-    @Column(name = "allow_drink_notifications")
-    private boolean allowDrinkNotifications;
+    @Column(name = "allow_drink_notifications", nullable = false)
+    private boolean allowDrinkNotifications=false;
     
-    @Column(name = "allow_tip_notifications")
-    private boolean allowTipNotifications;
+    @Column(name = "allow_tip_notifications", nullable = false)
+    private boolean allowTipNotifications=false;
     
     //@Temporal(javax.persistence.TemporalType.TIME)
     @Column(name = "drink_notification_time")
@@ -52,6 +52,17 @@ public class MobileOptions implements Serializable {
     
     @Column(name = "notification_token")
     private String notificationToken;
+    
+    @Column(name = "allow_question_notifications", nullable = false)
+    private boolean allowQuestionNotifications=false;
+    
+    //@Temporal(javax.persistence.TemporalType.TIME)
+    @Column(name = "question_notification_time")
+    private OffsetTime questionNotificationTime;
+    
+    @Column(name = "dt_tcle_response")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dt_tcle_response;
     
     public Long getId() {
         return id;
@@ -109,4 +120,27 @@ public class MobileOptions implements Serializable {
         this.notificationToken = notificationToken;
     }
     
+    public boolean isAllowQuestionNotifications() {
+        return allowQuestionNotifications;
+    }
+
+    public void setAllowQuestionNotifications(boolean allowQuestionNotifications) {
+        this.allowQuestionNotifications = allowQuestionNotifications;
+    }
+
+    public OffsetTime getQuestionNotificationTime() {
+        return questionNotificationTime;
+    }
+
+    public void setQuestionNotificationTime(OffsetTime questionNotificationTime) {
+        this.questionNotificationTime = questionNotificationTime;
+    }
+    
+    public Date getDt_tcle_response() {
+        return dt_tcle_response;
+    }
+
+    public void setDt_tcle_response(Date dt_tcle_response) {
+        this.dt_tcle_response = dt_tcle_response;
+    }
 }

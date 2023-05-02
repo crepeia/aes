@@ -41,7 +41,9 @@ public class MobileOptionsDAO extends GenericDAO<MobileOptions> {
         entity.setUser(u);
         entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
         entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
-
+        entity.setQuestionNotificationTime(entity.getQuestionNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
+        entity.setDt_tcle_response(entity.getDt_tcle_response());
+        
         super.insertOrUpdate(entity, entityManager);
 
     }
@@ -61,6 +63,11 @@ public class MobileOptionsDAO extends GenericDAO<MobileOptions> {
 
             entity.setAllowDrinkNotifications(false);
             entity.setDrinkNotificationTime(OffsetTime.of(19, 0, 0, 0, OffsetDateTime.now().getOffset()));
+            
+            entity.setAllowQuestionNotifications(false);
+            entity.setQuestionNotificationTime(OffsetTime.of(12, 0, 0, 0, OffsetDateTime.now().getOffset()));
+            entity.setDt_tcle_response(null);
+            
 
             entity.setNotificationToken("");
 

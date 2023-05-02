@@ -56,11 +56,15 @@ public class ApplicationConfig extends Application {
         resources.add(aes.service.ChatbotResource.class);
         resources.add(aes.service.DailyLogFacadeREST.class);
         resources.add(aes.service.EvaluationFacadeREST.class);
+        resources.add(aes.service.MedalUserFacadeREST.class);
         resources.add(aes.service.MessageFacadeREST.class);
         resources.add(aes.service.MobileOptionsFacadeREST.class);
+        resources.add(aes.service.QuestionFacadeREST.class);
+        resources.add(aes.service.QuestionUserFacadeREST.class);
         resources.add(aes.service.RecordFacadeREST.class);
         resources.add(aes.service.TipFacadeREST.class);
         resources.add(aes.service.TipUserFacadeREST.class);
+        resources.add(aes.service.TitleUserFacadeREST.class);
         resources.add(aes.service.UserFacadeREST.class);
         resources.add(aes.utility.ObjectMapperContextResolver.class);
     }

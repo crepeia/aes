@@ -178,7 +178,7 @@ public class ChallengeUserDAO extends GenericDAO<ChallengeUser>{
 
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart, entityManager);
-                resultList.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
+                resultList.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
             });
             return resultList;
 
@@ -210,15 +210,15 @@ public class ChallengeUserDAO extends GenericDAO<ChallengeUser>{
 
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_WEEK, 1), entityManager);
-                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
+                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
             });
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_MONTH, 1), entityManager);
-                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
+                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
             });
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_YEAR, 1), entityManager);
-                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points));
+                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
             });
 
            return rank;
