@@ -27,7 +27,7 @@ VALUES
 ('Esses elementos de jogo me motivaram a participar mais dos processos de intervenção', 'Elementos de jogos presentes no sistema', '6'),
 ('Estou familiarizado com esses elementos de jogo', 'Elementos de jogos presentes no sistema', '6'),
 ('A estrutura com elementos de jogos aumentou sua vontade de realizar o processo de intervenção', 'Elementos de jogos presentes no sistema', '6'),
-('Este aplicativo com elementos de jogos seria uma maneira útil de melhorar o processo de intervenção de uso de álcool', 'Elementos de jogos presentes no sistema', '6'),
+('Este aplicativo com elementos de jogos seria uma maneira útil de melhorar o processo de intervenção de uso de álcool', 'Elementos de jogos presentes no sistema', '6')
 
 
 
