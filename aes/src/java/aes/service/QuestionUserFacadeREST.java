@@ -8,6 +8,10 @@ package aes.service;
 import aes.model.MedalUser;
 import aes.model.Question;
 import aes.model.QuestionUser;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +71,24 @@ public class QuestionUserFacadeREST extends AbstractFacade<QuestionUser> {
                 .setParameter("userId", Long.parseLong(uId))
                 .getResultList();
             
+            return Response.ok().entity(list).build();
+        } catch (Exception e) {
+            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("findLastUserAnswer/{currentDate}/{userId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findLastUserAnswer(@PathParam("currentDate") String cD,@PathParam("userId") String userId) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date currentDate = sdf.parse(cD);
+            List<QuestionUser> list = (List<QuestionUser>) em.createQuery("SELECT qu FROM QuestionUser qu WHERE qu.user.id=:userId AND qu.dateCreated=:currentDate")
+                .setParameter("userId", Long.parseLong(userId))
+                .setParameter("currentDate", currentDate.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate())
+                .getResultList();            
             return Response.ok().entity(list).build();
         } catch (Exception e) {
             Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);

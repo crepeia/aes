@@ -77,14 +77,18 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
             if (chList.isEmpty()) {
                 ChallengeUser newEntity = super.create(entity);
-                return Response.ok(newEntity).build();
+                Gson g = new Gson();
+                String json = g.toJson(newEntity);
+                return Response.ok(json).build();
             } else {
                 if (ct.equals(Challenge.ChallengeType.ONCE)) {
                     return Response.status(Response.Status.NOT_MODIFIED).build();
                 } else if (ct.equals(Challenge.ChallengeType.DAILY)) {
                     if (!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())) {
                         ChallengeUser newEntity = super.create(entity);
-                        return Response.ok(newEntity).build();
+                        Gson g = new Gson();
+                        String json = g.toJson(newEntity);
+                        return Response.ok(json).build();
                     }
                 }
             }
