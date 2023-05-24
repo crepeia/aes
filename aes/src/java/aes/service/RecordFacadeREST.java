@@ -62,18 +62,23 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRecord(Record entity) {
-        String userEmail = securityContext.getUserPrincipal().getName();
-        //User u = em.find(User.class, entity.getUser().getId());
-        User u = userDAO.find(entity.getUser().getId(), em);
-        if (!u.getEmail().equals(userEmail)) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
         try {
-            //Record created = super.create(entity);
-            Record created = recordDAO.create(u.getId(), em);
+            String userEmail = securityContext.getUserPrincipal().getName();
+            //User u = em.find(User.class, entity.getUser().getId());
+            User u = userDAO.find(entity.getUser().getId(), em);
+            if (!u.getEmail().equals(userEmail)) {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+            try {
+                //Record created = super.create(entity);
+                Record created = recordDAO.create(u.getId(), em);
 
-            return Response.ok().entity(created).build();
-        } catch (SQLException e) {
+                return Response.ok().entity(created).build();
+            } catch (SQLException e) {
+                Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            }
+        } catch (Exception e) {
             Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }

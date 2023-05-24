@@ -11,6 +11,7 @@ import aes.persistence.UserDAO;
 import aes.utility.Encrypter;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -106,22 +107,28 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @Secured
     public Response logout(@PathParam("token") String token) {
         try {
-        String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
-        
+            String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
             
-        /*AuthenticationToken at = (AuthenticationToken) getEntityManager().createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
-                .setParameter("token", token)
-                .setParameter("uEmail", userEmail)
-                .getSingleResult();
-        super.remove(at);*/
-        
-        authenticationTokenDAO.revokeToken(token, userEmail, em);
-        
-        return Response.ok().build();
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, new StringBuffer(userEmail).append(" está deslogando do sistema.").toString());
+
+            /*AuthenticationToken at = (AuthenticationToken) getEntityManager().createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
+                    .setParameter("token", token)
+                    .setParameter("uEmail", userEmail)
+                    .getSingleResult();
+            super.remove(at);*/
+
+            authenticationTokenDAO.revokeToken(token, userEmail, em);
+
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, new StringBuffer(userEmail).append(" deslogou do sistema.").toString());
+            
+            return Response.ok().build();
         } catch( NoResultException e ) {
             return Response.ok().build(); //se o token não existe ou já foi deletado ignoro o erro
-        }catch(Exception e){
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO,null, e);
+        } catch(SQLException e){
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE,null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch(Exception e){
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE,null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }

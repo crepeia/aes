@@ -10,6 +10,9 @@ import aes.model.AuthenticationToken;
 import aes.model.User;
 
 import java.security.Principal;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.Priority;
 import javax.persistence.EntityManager;
@@ -45,47 +48,67 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) {
         
-
-        String authHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-        if(!isTokenBasedAuthentication(authHeader)){
-            abortWithUnauthorized(requestContext);
-            return;
-        }
-        
-        String token = authHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
-        
         try {
-            validateToken(token);
-        } catch(Exception e){
-            abortWithUnauthorized(requestContext);
+            
+            String authHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.INFO, new StringBuilder("Creating an authentication for: ").append(authHeader).toString());
+            if(!isTokenBasedAuthentication(authHeader)){
+                abortWithUnauthorized(requestContext);
+                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, new StringBuilder("This is not a token based authentication: ").append(authHeader).toString());
+                return;
+            }
+
+            String token = authHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
+
+            try {
+                validateToken(token);
+            } catch (SQLException e) {
+                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, new StringBuilder("Error when validating the following token: ").append(token).toString());
+                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, e);
+                abortWithUnauthorized(requestContext);
+            } catch(Exception e){
+                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, new StringBuilder("Error when validating the following token: ").append(token).toString());
+                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, e);
+                abortWithUnauthorized(requestContext);
+            }
+
+            //OVERRIDING SECURITY CONTEXT
+            final SecurityContext currentSecurityContext = requestContext.getSecurityContext();
+            requestContext.setSecurityContext(new SecurityContext() {
+
+                @Override
+                public Principal getUserPrincipal() {
+                    try{
+                        User usr = (User) em.createQuery("SELECT a.user FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
+                        return () -> usr.getEmail();
+                    }catch(Exception e) {
+                        Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+                        return null;
+                    }
+
+                }
+
+                @Override
+                public boolean isUserInRole(String role) {
+                    return true;
+                }
+
+                @Override
+                public boolean isSecure() {
+                    return currentSecurityContext.isSecure();
+                }
+
+                @Override
+                public String getAuthenticationScheme() {
+                    return AUTHENTICATION_SCHEME;
+                }
+            });
+
+            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.INFO, "AuthenticationFilter.filter executed with success.");
+        } catch (Exception e) {
+            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, "Error when executing AuthenticationFilter.filter.");
+            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, e);
         }
-        
-        //OVERRIDING SECURITY CONTEXT
-        final SecurityContext currentSecurityContext = requestContext.getSecurityContext();
-        requestContext.setSecurityContext(new SecurityContext() {
-
-            @Override
-            public Principal getUserPrincipal() {
-                User usr = (User) em.createQuery("SELECT a.user FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
-                return () -> usr.getEmail();
-            }
-
-            @Override
-            public boolean isUserInRole(String role) {
-                return true;
-            }
-
-            @Override
-            public boolean isSecure() {
-                return currentSecurityContext.isSecure();
-            }
-
-            @Override
-            public String getAuthenticationScheme() {
-                return AUTHENTICATION_SCHEME;
-            }
-        });
-        
     }
    
     private void abortWithUnauthorized(ContainerRequestContext requestContext) {
