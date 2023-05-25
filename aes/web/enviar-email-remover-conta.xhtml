@@ -7,38 +7,42 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['naccount.titlepage']}</title>
+            <title>#{messages['delete.account.titlepage']}</title>
             <w:head_comum />
             <w:header logoutRequired="true"  />
             <w:topmenu />
         </h:head>
 
         <h:body>
+            
             <div id="corpo"> 
-                
-
-                <div class="main">                    
+                <div class="main">
                     <div class="pagecontent">
-
+                        
                         <div id="signin">
-                            <h3 class="headertop orange-text text-lighten-2">#{messages['i.forgot.password']}</h3>
-
-                            <h:form class="form-signup">
+                            <h3 class="orange-text">#{messages['h1.solicitation.delete.account']}</h3>
+                            <p>#{messages['p.delete.account.message']}</p>
+                            <h:form class="form-signup">  
+                                 <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
+                                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                                        <p:graphicImage library="default" name="images/loading.gif" />
+                                    </p:dialog>
                                 <p:growl id="errorGrowl" for="info" sticky="true" redisplay="true" globalOnly="true"/>
-                                <div class="signuptext">
+                                <div class="signuptext"> 
                                     <p:inputText id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" styleClass="validate" type="email" >
                                         <f:validateLength maximum="50" />
+                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                     </p:inputText>
                                     <p:watermark for="emailTxt" value="#{messages['email']}" />
-                                    <p:message for="emailTxt" />
+                                    <p:message for="emailTxt"/>
+                                    <p:messages for="error"/>
                                 </div>
-
                                 <div class="signuptext">
-                                    <p:password id="passwordTxt" value="#{userController.password}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="#{messages['password.new']}">  
+                                    <p:password id="passwordTxt" value="#{userController.password}" required="true" match="passwordTxt" redisplay="true" size="30" label="#{messages['password']}">  
                                         <f:validateLength maximum="16" />
                                         <!--<p:ajax update="passwordMsg" event="blur" />-->
                                     </p:password>
-                                    <p:watermark for="passwordTxt" value="#{messages['password.new']}" />
+                                    <p:watermark for="passwordTxt" value="#{messages['password']}" />
                                     <p:message for="passwordTxt" />
                                 </div>
                                 
@@ -47,19 +51,17 @@
                                 <div id="signipbottom">
                                     <div id="signinsubmit">
                                         <div id="signinbtn" >
-                                            <div id="btnnext">
-                                                <p:commandButton id="nexttBtn" styleClass="btngen btn btn-primary" value="#{messages['save']}" update="@form" action="#{userController.checkCode()}"/> 
-                                            </div>
+                                            <p:commandButton styleClass="btn btn-primary" id="entrarBtn" value="#{messages['send']}" update="@form" actionListener="#{userController.sendEmailRequestingDeleteAccount()}" />
                                         </div>
                                     </div>
                                 </div>
-
-
                             </h:form>
                         </div>
-                    </div>
+                    </div > 
                 </div>
-            </div>
+
+            </div>	
+
             <w:footer />
         </h:body>
     </f:view>

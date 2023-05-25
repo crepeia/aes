@@ -727,37 +727,20 @@ public class UserController extends BaseController<User> {
         }
     }
     
-    public void sendEmailRequestingDeleteAccount() {
+    public void sendEmailRequestingDeleteAccount() throws MessagingException {
 
         try {
             List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
 
             if (!userList.isEmpty() && Encrypter.compareHash(password, userList.get(0).getPassword(), userList.get(0).getSalt())) {
-                user = userList.get(0);
-                
-                //TODO - to implement
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "This function is not available.", null));
-
-                /*if (redirect) {
-                    Object object = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("url");
-                    if (object != null) {
-                        String url = (String) object;
-                        FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                    } else {
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("escolha-uma-etapa.xhtml");
-                    }
-                } else {
-                    Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
-                    String url = ((HttpServletRequest) request).getRequestURI();
-                    url = url.substring(url.lastIndexOf('/') + 1);
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                }*/
-
+                User foundUser = userList.get(0);
+                contactController.sendDeleteAccountEmail(foundUser);
+                FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.deleteAccount"), null));
                 Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "' solicitou a remoção da conta.");
 
             } else {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Usuário '" + user.getEmail() + "' não conseguiu enviar solicitação de remoção de conta.");
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.", null));
+                FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.", null));
             }
 
         } catch (SQLException ex) {

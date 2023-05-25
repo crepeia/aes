@@ -86,6 +86,46 @@ public class ContactController extends BaseController implements Serializable {
         contact.setContent("passwordrecovery");
         sendHTMLEmail(contact);
     }
+    
+    public void sendDeleteAccountEmail(User user) throws MessagingException, SQLException {
+        String token = "";
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient("alcoolesaude@gmail.com");
+        contact.setSubject("deleteaccount_subj");
+        contact.setContent("deleteaccount");
+        sendHTMLEmailDeleteAccount(contact,token);
+            
+    }
+    
+    private void sendHTMLEmailDeleteAccount(Contact contact,String token) throws MessagingException, MissingResourceException, SQLException {
+        String content = getContentDeleteAccount(contact, htmlTemplate,token);
+        String subject = getSubject(contact);
+        System.out.println(content);
+        eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());
+        contact.setDateSent(new Date());
+        Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getRecipient());
+    }
+    
+    private String getContentDeleteAccount(Contact contact, String template,String token) throws MissingResourceException {
+        String htmlMessage = template;
+        htmlMessage = htmlMessage.replace("#title#", getString("title.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(), contact.getUser()));
+        htmlMessage = htmlMessage.replace("#footer#",
+                getString("title.1", contact.getUser()) + "<br>"
+                + getString("crepeia", contact.getUser()) + "<br>"
+                + getString("ufjf", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe.2", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
+        htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
+        htmlMessage = htmlMessage.replace("#token#",token);
+        htmlMessage = htmlMessage.replace("#id#", String.valueOf(contact.getUser().getId()));
+        htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
+        htmlMessage = htmlMessage.replace("#ratingheader#", getString("email.rating.header", contact.getUser()));
+        return htmlMessage;
+    }
 
     public void sendPlanEmail(User user, String attachment, ByteArrayOutputStream pdf)  {
         try {
