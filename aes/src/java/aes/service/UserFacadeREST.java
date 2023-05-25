@@ -201,7 +201,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
-    @PUT
+        @PUT
     @Path("recover-password")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response recoverPassword(JsonParser jp) {
@@ -223,6 +223,28 @@ public class UserFacadeREST extends AbstractFacade<User> {
             emailHelper.sendPasswordRecoveryEmail(u, em);
             
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, null, "Recover password service");
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @PUT
+    @Path("deleteAccount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteAccount(JsonParser jp) {
+        try {
+            JsonNode node = jp.getCodec().readTree(jp);
+            String userId = node.get("id").asText();
+            String token = node.get("token").asText();
+            User u = (User) em.createQuery("SELECT u FROM User u WHERE u.id=:userId")
+                .setParameter("userId", Long.parseLong(userId))
+                .getSingleResult();
+            System.out.println("aes.service.UserFacadeREST.deleteAccount()");
+            emailHelper.sendDeleteAccountEmail(u,em,token);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, null, "Delete Account service");
 
             return Response.ok().build();
         } catch (Exception e) {

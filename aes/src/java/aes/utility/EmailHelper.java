@@ -54,7 +54,7 @@ public class EmailHelper {
         }
     }
 
-    public void sendContactFormEmail(ActionEvent event, EntityManager entityManager) throws SQLException, MessagingException {
+    public void sendContactFormEmail(ActionEvent event, EntityManager entityManager) throws SQLException, MessagingException {  
         String message = (String) event.getComponent().getAttributes().get("message");
         User user = (User) event.getComponent().getAttributes().get("user");
         Contact contact = new Contact();
@@ -79,6 +79,18 @@ public class EmailHelper {
         contact.setContent("passwordrecovery");
         sendHTMLEmail(contact, entityManager);
     }
+    
+    public void sendDeleteAccountEmail(User user, EntityManager em,String token) throws MessagingException, SQLException {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setSender("alcoolesaude@gmail.com");
+        contact.setRecipient("alcoolesaude@gmail.com");
+        contact.setSubject("deleteaccount_subj");
+        contact.setContent("deleteaccount");
+        sendHTMLEmailDeleteAccount(contact, em,token);
+            
+    }
+
 
     public void sendPlanEmail(User user, String attachment, ByteArrayOutputStream pdf, EntityManager entityManager) throws SQLException {
         try {
@@ -143,8 +155,20 @@ public class EmailHelper {
         sendPlainTextEmail(contact, entityManager);
     }
 
+    public void sendHTMLEmailDeleteAccount(Contact contact, EntityManager entityManager,String token) throws MessagingException, MissingResourceException, SQLException {
+        String content = getContentDeleteAccount(contact, htmlTemplate,token);
+        String subject = getSubject(contact);
+        System.out.println(content);
+        eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());
+        contact.setDateSent(new Date());
+        //save(contact);
+        contactDAO.insertOrUpdate(contact, entityManager);
+        Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getRecipient());
+    }
+    
     public void sendHTMLEmail(Contact contact, EntityManager entityManager) throws MessagingException, MissingResourceException, SQLException {
         // try {
+        if(contact.getUser().getEmail()!= null){
         String content = getContent(contact, htmlTemplate);
         String subject = getSubject(contact);
         System.out.println(content);
@@ -158,9 +182,11 @@ public class EmailHelper {
         // } catch (MessagingException |  MissingResourceException ex) {
         // Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         // }
+        }
     }
 
     public void sendTipsEmail(Contact contact, EntityManager entityManager) throws SQLException, MessagingException {
+        if(contact.getUser().getEmail()!= null){
         String content = getContent(contact, tipsTemplate);
         String subject = getSubject(contact);
         eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());
@@ -169,6 +195,7 @@ public class EmailHelper {
         contactDAO.insertOrUpdate(contact, entityManager);
         Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email enviado para:" + contact.getRecipient());
 
+        }
     }
     
     public void sendTestEmail(String recipient) throws SQLException, MessagingException {
@@ -214,6 +241,25 @@ public class EmailHelper {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+        private String getContentDeleteAccount(Contact contact, String template,String token) throws MissingResourceException {
+        String htmlMessage = template;
+        htmlMessage = htmlMessage.replace("#title#", getString("title.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(), contact.getUser()));
+        htmlMessage = htmlMessage.replace("#footer#",
+                getString("title.1", contact.getUser()) + "<br>"
+                + getString("crepeia", contact.getUser()) + "<br>"
+                + getString("ufjf", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe.2", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
+        htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
+        htmlMessage = htmlMessage.replace("#token#",token);
+        htmlMessage = htmlMessage.replace("#id#", String.valueOf(contact.getUser().getId()));
+        htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
+        htmlMessage = htmlMessage.replace("#ratingheader#", getString("email.rating.header", contact.getUser()));
+        return htmlMessage;
     }
 
     private String getContent(Contact contact, String template) throws MissingResourceException {
