@@ -7,7 +7,10 @@ package aes.service;
 
 import aes.model.Chat;
 import aes.persistence.ChatDAO;
+import aes.utility.EmailHelper;
 import aes.utility.Secured;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -33,7 +37,6 @@ import javax.ws.rs.core.SecurityContext;
  * @author bruno
  */
 @Stateless
-@Secured
 @Path("chat")
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ChatFacadeREST extends AbstractFacade<Chat> {
@@ -41,12 +44,14 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private ChatDAO chatDAO;
+    private EmailHelper emailHelper;
 
     @Context
     SecurityContext securityContext;
 
     public ChatFacadeREST() {
         super(Chat.class);
+        emailHelper = new EmailHelper();
         try {
             chatDAO = new ChatDAO();
         } catch (NamingException ex) {
@@ -55,18 +60,21 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     }
 
     @POST
+    @Path("create/{userId}")
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
-    @Override
-    public Chat create(Chat entity) {
+    public Response create(@PathParam("userId") Long userId) {
         try {
-            return super.create(entity);
+            Chat newChat = chatDAO.create(userId, em);
+            return Response.ok().entity(newChat).build();
         } catch (Exception e) {
-            return null;
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
     }
 
     @GET
     @Path("{userId}")
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public Response find(@PathParam("userId") Long userId) {
         String userEmail = securityContext.getUserPrincipal().getName();
@@ -89,6 +97,25 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             return Response.ok().entity((Chat) c.toArray()[0]).build();
         }*/
 
+    }
+    
+    @PUT
+    @Path("sendContactRequest")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response sendContactRequest(JsonParser jp) {
+        try {
+            JsonNode node = jp.getCodec().readTree(jp);
+            String email = node.get("email").asText();
+            System.out.println("aes.service.ChatFacadeREST.sendContactRequest()");
+
+            emailHelper.sendContactRequestEmail(email, em);
+            
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, null, "Send Contact Request service");
+            return Response.ok().build();
+        } catch (Exception e) {
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
 
     @Override

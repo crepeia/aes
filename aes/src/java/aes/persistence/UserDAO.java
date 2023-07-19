@@ -6,6 +6,7 @@
 package aes.persistence;
 
 import aes.controller.UserController;
+import aes.model.Chat;
 import aes.model.User;
 import aes.service.UserFacadeREST;
 import aes.utility.Encrypter;
@@ -156,6 +157,14 @@ public class UserDAO extends GenericDAO<User>{
         super.insertOrUpdate(u, em);
     }
     
+    public User getUserByID(Long userId, EntityManager em){
+        
+        User user = (User) em.createQuery("SELECT u FROM User u WHERE u.id=:userId")
+            .setParameter("userId", userId)
+            .getSingleResult();
+        return user;
+    }
+    
     public void setSendTCLE(String userEmail, User entity, EntityManager em) throws SQLException {
         User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
                 .setParameter("email", userEmail)
@@ -174,6 +183,10 @@ public class UserDAO extends GenericDAO<User>{
         u.setSelected_title(entity.getSelected_title());
 
         super.insertOrUpdate(u, em);
+    }
+
+    public void uptadeUser(User user, EntityManager entityManager) throws SQLException {
+        super.insertOrUpdate(user, entityManager);
     }
 
 }

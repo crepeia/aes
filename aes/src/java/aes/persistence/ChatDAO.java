@@ -6,6 +6,8 @@
 package aes.persistence;
 
 import aes.model.Chat;
+import aes.model.User;
+import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -21,10 +23,18 @@ public class ChatDAO extends GenericDAO<Chat>{
     }
     
 
-    public Chat create(Chat entity, EntityManager entityManager) {
+    public Chat create(Long userId ,EntityManager entityManager) {
         try {
-           super.insert(entity, entityManager);
-           return entity;
+            Chat newChat = new Chat();
+            UserDAO userDAO = new UserDAO();
+            User user = userDAO.getUserByID(userId, entityManager);
+            newChat.setUser(user);
+            newChat.setStartDate(new Date());
+            newChat.setUnauthenticatedId(null);
+            user.setChat(newChat);
+            userDAO.uptadeUser(user,entityManager);
+            newChat = find(userId, user.getEmail(), entityManager);
+           return newChat;
         } catch (Exception e) {
             return null;
         }

@@ -204,7 +204,7 @@ public class ChatEndpoint {
         
         UserInfo ui = new UserInfo();
         
-        if(currentUser == null){
+        if(currentUser == null){           
             if(consultants.isEmpty()){
                 sendNoConsultantMessage(session);
                 return;
@@ -254,7 +254,10 @@ public class ChatEndpoint {
                 sendUserStatusList(currentUser.getId());
 
             } else {//usuário comum
-
+                if(consultants.isEmpty()){
+                    sendNoConsultantMessage(session);
+                    return;
+                }
                 if( currentUser.getChat() == null) { //primeira vez conectando
 
                     newChat = new Chat();
@@ -309,7 +312,7 @@ public class ChatEndpoint {
     
     private void sendNoConsultantMessage(Session session){
         
-        GenericMessage gm = new GenericMessage();
+        GenericMessage gm = new GenericMessage(); 
         gm.type = "noConsultants";
         gm.value = "";
         
@@ -485,6 +488,9 @@ public class ChatEndpoint {
             ObjectNode node;
             node = om.readValue(message, ObjectNode.class);
             String messageType = node.get("type").asText();
+            if(consultants.isEmpty()){
+                sendNoConsultantMessage(session);
+            }
             
             if(messageType.equals("connect")){
                 Long chatId = node.get("chatId").asLong();
