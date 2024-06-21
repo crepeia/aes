@@ -1,4 +1,4 @@
-package aes.model;
+ package aes.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -24,6 +24,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "tb_user")
@@ -121,6 +123,17 @@ public class User implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<AppSuggestion> appSuggestions;
     
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<AgendaAppointment> appointmentsUser;
+    
+    @OneToMany(mappedBy = "consultant")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<AgendaAppointment> appointmentsConsultant;
+    
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<AgendaAvailable> availablesUser;
     
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
@@ -561,6 +574,63 @@ public class User implements Serializable {
     public void setSelected_title(Long selected_title) {
         this.selected_title = selected_title;
     }
+
+    @XmlTransient
+    public List<AgendaAppointment> getAppointmentsUser() {
+        return appointmentsUser;
+    }
+
+    public void setAppointmentsUser(List<AgendaAppointment> appointmentsUser) {
+        this.appointmentsUser = appointmentsUser;
+    }
     
- 
+    public void setAppointmentUser(AgendaAppointment appointment) {
+        appointment.setUser(this);
+        this.appointmentsUser.add(appointment);
+    }
+
+    @XmlTransient
+    public List<AgendaAppointment> getAppointmentsConsultant() {
+        return appointmentsConsultant;
+    }
+
+    public void setAppointmentsConsultant(List<AgendaAppointment> appointmentsConsultant) {
+        this.appointmentsConsultant = appointmentsConsultant;
+    }
+
+    public void setAppointmentConsultant(AgendaAppointment appointment) {
+        appointment.setConsultant(this);
+        this.appointmentsConsultant.add(appointment);
+    }
+    
+    @XmlTransient
+    public List<AgendaAvailable> getAvailablesUser() {
+        return availablesUser;
+    }
+
+    public void setAvailablesUser(List<AgendaAvailable> availablesUser) {
+        this.availablesUser = availablesUser;
+    }
+    
+    public void setAvailableUser(AgendaAvailable available) {
+        available.setUser(this);
+        this.availablesUser.add(available);
+    }
+    
+    public void removeUser() {
+        List<AgendaAppointment> appointments = this.getAppointmentsUser();
+        for(AgendaAppointment appointment : appointments) {
+            appointment.setUser(null);
+        }
+        this.getAppointmentsUser().clear();
+    }
+    
+    public void removeConsultant() {
+        List<AgendaAppointment> appointments = this.getAppointmentsConsultant();
+        for(AgendaAppointment appointment : appointments) {
+            appointment.setConsultant(null);
+        }
+        this.getAppointmentsConsultant().clear();
+    }
+    
 }
