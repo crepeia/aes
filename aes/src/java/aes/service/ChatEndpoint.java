@@ -349,6 +349,7 @@ public class ChatEndpoint {
         usl.type = "statusList";
 
         for(Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
+            //Essa linha deve mudar com uma condição a mais
             if(!consultants.containsValue(e.getKey()))
                 usl.users.add(e.getValue());
         }
