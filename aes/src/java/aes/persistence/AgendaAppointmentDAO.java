@@ -37,6 +37,7 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     public void remove(long id, EntityManager em) {
         em.getTransaction().begin();
         find(id, em).removeAppointment();
+        em.getTransaction().commit();
         em.remove(find(id, em));
         em.getTransaction().commit();
     }
@@ -65,8 +66,7 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
 
         return super.list(em);
     }
-    
-    //TOVERIFY
+
     public AgendaAppointment find(long id, EntityManager em) {
         return super.find(id, em);
     }
