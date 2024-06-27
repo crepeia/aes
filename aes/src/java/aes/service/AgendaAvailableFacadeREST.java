@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,6 +32,7 @@ import javax.ws.rs.core.MediaType;
  * @author Malder
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 @Path("agendaavailable")
 public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
 
@@ -64,23 +67,26 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         availableDao.update(id, entity, em);
     }
 
+    //Testado e deu erro: javax.servlet.ServletException: javax.ejb.EJBException: Stateless SessionBean method returned without completing transaction
     @DELETE
     @Path("remove/{id}")
     public void remove(@PathParam("id") Long id) {
         availableDao.remove(id, em);
     }
 
+    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @GET
     @Path("find/{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public AgendaAvailable find(@PathParam("id") Long id) {
         return availableDao.find(id, em);
     }
 
+    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @Path("findAll")
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public List<AgendaAvailable> findAll() {
         try {
             return availableDao.findAll(em);

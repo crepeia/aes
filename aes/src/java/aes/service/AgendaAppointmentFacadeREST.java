@@ -8,12 +8,12 @@ package aes.service;
 import aes.model.AgendaAppointment;
 import aes.persistence.AgendaAppointmentDAO;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +26,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -37,6 +36,7 @@ import javax.ws.rs.core.Response;
 //TODO: Pesquisar sobre Secured e segurança do serviço REST para evitar dos serviços REST serem usados
 //por fora do aplicativo/site. Evitar de fazer as requisiçoes por meio de um software, tipo POSTMAN.
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 @Path("agendaappointment")
 public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointment> {
 
@@ -55,10 +55,13 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
 
     //Aqui os dados seriam inseridos via ativação do serviço REST, de modo que seria enviado um appointment
     //com id de usuario, id de consultor e data de appointment, sem id do appointment.
+    
+    //Dúvida: seria inserido um appointment inteiro já com o usuario e consultor setados, ou aconteceria
+    //algum tipo de serialização/desserialização?
     @Path("insert")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void insert(AgendaAppointment entity, EntityManager em) {
+    public void insert(AgendaAppointment entity) {
         try {
             appointmentDao.insert(entity, em);
         } catch (SQLException ex) {
@@ -73,23 +76,26 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         appointmentDao.update(id, entity, em);
     }
 
+    //Testado e deu erro: javax.servlet.ServletException: javax.ejb.EJBException: Stateless SessionBean method returned without completing transaction
     @DELETE
     @Path("remove/{id}")
     public void remove(@PathParam("id") Long id) {
         appointmentDao.remove(id, em);
     }
 
+    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @GET
     @Path("find/{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public AgendaAppointment find(@PathParam("id") Long id) {
         return appointmentDao.find(id, em);
     }
 
+    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @Path("findAll")
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public List<AgendaAppointment> findAll() {
         try {
             return appointmentDao.findAll(em);
