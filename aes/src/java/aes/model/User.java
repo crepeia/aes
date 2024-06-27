@@ -16,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -138,6 +139,12 @@ public class User implements Serializable {
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Chat chat;
+    
+    @ManyToOne
+    private User relatedConsultant;
+    
+    @OneToMany(mappedBy = "relatedConsultant")
+    private List<User> relatedUser;
     
     @Column(name = "dt_cadastro")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -631,6 +638,22 @@ public class User implements Serializable {
             appointment.setConsultant(null);
         }
         this.getAppointmentsConsultant().clear();
+    }
+
+    public User getRelatedConsultant() {
+        return relatedConsultant;
+    }
+
+    public void setRelatedConsultant(User relatedConsultant) {
+        this.relatedConsultant = relatedConsultant;
+    }
+
+    public List<User> getRelatedUser() {
+        return relatedUser;
+    }
+
+    public void setRelatedUser(List<User> relatedUser) {
+        this.relatedUser = relatedUser;
     }
     
 }
