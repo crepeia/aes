@@ -9,6 +9,7 @@ import aes.model.AuthenticationToken;
 import aes.model.Chat;
 import aes.model.User;
 import aes.model.Message;
+import aes.persistence.ChatDAO;
 import aes.persistence.GenericDAO;
 import aes.persistence.UserDAO;
 import aes.utility.MessageDecoder;
@@ -88,6 +89,7 @@ public class ChatEndpoint {
     private GenericDAO<Chat> daoBase;
     private GenericDAO<Message> daoBaseMessage;
     private UserDAO daoUser;
+    private ChatDAO daoChat;
     
     // <UserId, Session>
     private static Map<Long, Session> consultants = new ConcurrentHashMap<>();
@@ -127,6 +129,7 @@ public class ChatEndpoint {
             this.daoBase = new GenericDAO<>(Chat.class);
             this.daoBaseMessage = new GenericDAO<>(Message.class);
             this.daoUser = new UserDAO();
+            this.daoChat = new ChatDAO();
             System.out.println("service.ChatEndpoint.<init>()");
         } catch (NamingException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
@@ -232,7 +235,7 @@ public class ChatEndpoint {
             ui.email = "";
             ui.chat = newChat.getId();
             ui.status = realStatus;
-            //Usuário anônimo = consultor associado nulo
+            //Consultor associado ao próprio usuário (que é anônimo) = nulo
             ui.idRelatedConsultant = null;
             //ui.session = session;
             
@@ -255,8 +258,8 @@ public class ChatEndpoint {
                 ui.email = currentUser.getEmail();
                 ui.chat = currentUser.getChat().getId();
                 ui.status = "";
-                //Usuario é consultor e o idRelatedConsultant vai ser nulo.
-                ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
+                //Usuario é consultor. Não tem consultor associado a ele.
+                ui.idRelatedConsultant = null;
                 //ui.session = session;
                 
                 onlineUsers.put(session, ui);
@@ -306,7 +309,11 @@ public class ChatEndpoint {
                 ui.status = realStatus;
                 //É usuário comum e o idRelatedConsultant pode ser nulo (não tem consultor)
                 //ou não (tem consultor associado)
-                ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
+                if(currentUser.getRelatedConsultant() == null) {
+                    ui.idRelatedConsultant = null;
+                } else {
+                    ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
+                }
                 //ui.session = session;
                 
 
@@ -363,8 +370,10 @@ public class ChatEndpoint {
 
         for(Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
             //Condicional abaixo: Vai sinalizar ao consultor o usuário que não for consultor e que estiver
-            //diretamente relacionado a ele (que seja seu paciente)
-            if(!consultants.containsValue(e.getKey()) && Objects.equals(e.getValue().idRelatedConsultant, consultantId))
+            //diretamente relacionado a ele (que seja seu paciente) ou que não for paciente de ninguém
+            if(!consultants.containsValue(e.getKey()) 
+                    && (Objects.equals(e.getValue().idRelatedConsultant, consultantId) 
+                    || Objects.equals(e.getValue().idRelatedConsultant, null)))
                 usl.users.add(e.getValue());
         }
         
@@ -511,18 +520,28 @@ public class ChatEndpoint {
                 Long consultantId;
                 Long userId;
                 User user;
-                
+                Session userSession;
+
                 Long chatId = node.get("chatId").asLong();
                 openChats.put(session, chatId);
                 consultantConnectTimeout(openChats.get(session));
                 
                 //Ao estabelecer a conexão, o consultor vai ser definido como consultor associado
-                //ao paciente do chat, caso o usuário não tenha um consultor pré-associado a ele
-                consultantId = getConsultantKeyForSession(session);
-                userId = getUserKeyForSession(users.get(chatId));
-                user = daoUser.find(userId, em);
-                if(user.getRelatedConsultant() == null) {
-                    user.setRelatedConsultant(daoUser.find(consultantId, em));
+                //ao paciente do chat, caso o usuário (comum) não tenha um consultor pré-associado a ele
+                if(daoChat.find(chatId, em).getUser() != null) {
+                    userId = daoChat.find(chatId, em).getUser().getId();
+                    consultantId = getConsultantKeyForSession(session);
+                    user = daoUser.find(userId, em);
+                    if(user.getRelatedConsultant() == null) {
+                        user.setRelatedConsultant(daoUser.find(consultantId, em));
+                        try {
+                            daoUser.uptadeUser(user, em);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        userSession = users.get(chatId);
+                        onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
+                    }
                 }
                 
                 setStatus(users.get(chatId), statusType.BUSY.toString());
