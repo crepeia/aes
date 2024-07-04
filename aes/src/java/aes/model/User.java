@@ -143,6 +143,7 @@ public class User implements Serializable {
     @ManyToOne
     private User relatedConsultant;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "relatedConsultant")
     private List<User> relatedUser;
     
@@ -648,6 +649,8 @@ public class User implements Serializable {
         this.relatedConsultant = relatedConsultant;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<User> getRelatedUser() {
         return relatedUser;
     }
