@@ -125,15 +125,15 @@ public class User implements Serializable {
     private List<AppSuggestion> appSuggestions;
     
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
+    //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAppointment> appointmentsUser;
     
     @OneToMany(mappedBy = "consultant")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAppointment> appointmentsConsultant;
     
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
+    //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAvailable> availablesUser;
     
     @JsonManagedReference
@@ -144,7 +144,7 @@ public class User implements Serializable {
     private User relatedConsultant;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "relatedConsultant"/*, fetch = FetchType.EAGER*/)
+    @OneToMany(mappedBy = "relatedConsultant")
     private List<User> relatedUser;
     
     @Column(name = "dt_cadastro")
