@@ -143,7 +143,8 @@ public class User implements Serializable {
     @ManyToOne
     private User relatedConsultant;
     
-    @OneToMany(mappedBy = "relatedConsultant", fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "relatedConsultant"/*, fetch = FetchType.EAGER*/)
     private List<User> relatedUser;
     
     @Column(name = "dt_cadastro")
@@ -648,6 +649,8 @@ public class User implements Serializable {
         this.relatedConsultant = relatedConsultant;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<User> getRelatedUser() {
         return relatedUser;
     }
