@@ -79,7 +79,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public AgendaAvailable find(@PathParam("id") Long id) {
-        return availableDao.find(id, em);
+        return availableDao.search(id, em);
     }
 
     //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.

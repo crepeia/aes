@@ -93,10 +93,11 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     }
 
     //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
-    @Path("list")
+    @Path("findAll")
+    @Override
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AgendaAppointment> list() {
+    public List<AgendaAppointment> findAll() {
         try {
             return appointmentDao.findAll(em);
         } catch (SQLException ex) {

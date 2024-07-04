@@ -35,28 +35,33 @@ public class AgendaAvailableDAO extends GenericDAO<AgendaAvailable> {
     //TOVERIFY
     public void remove(long id, EntityManager em) {
         em.getTransaction().begin();
-        find(id, em).removeAvailable();
-        em.remove(find(id, em));
+        search(id, em).removeAvailable();
+        em.getTransaction().commit();
+        em.remove(search(id, em));
         em.getTransaction().commit();
     }
     
     //TOVERIFY
     public void update(long id, AgendaAvailable available, EntityManager em) {
         em.getTransaction().begin();
-        AgendaAvailable av = find(id, em);
+        AgendaAvailable av = search(id, em);
         av.setUser(available.getUser());
         av.setAvailableDate(available.getAvailableDate());
         em.getTransaction().commit();
     }
     
     //TOVERIFY
-    public AgendaAvailable find(long id, EntityManager em) {
-        return super.find(id, em);
+    public AgendaAvailable search(long id, EntityManager em) {
+        String jpql = "SELECT app FROM AgendaAvailable av JOIN FETCH av.user WHERE av.id = :id";
+        return em.createQuery(jpql, AgendaAvailable.class).setParameter("id", id).getSingleResult();
+        //return super.find(id, em);
     }
     
     //TOVERIFY
     public List<AgendaAvailable> findAll(EntityManager em) throws SQLException {
-        return super.list(em);
+        String jpql = "SELECT app FROM AgendaAvailable av JOIN FETCH av.user";
+        return em.createQuery(jpql, AgendaAvailable.class).getResultList();
+        //return super.list(em);
     }
 
 }

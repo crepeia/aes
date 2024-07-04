@@ -37,16 +37,16 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     //TOVERIFY
     public void remove(long id, EntityManager em) {
         em.getTransaction().begin();
-        find(id, em).removeAppointment();
+        search(id, em).removeAppointment();
         em.getTransaction().commit();
-        em.remove(find(id, em));
+        em.remove(search(id, em));
         em.getTransaction().commit();
     }
     
     //TOVERIFY
     public void update(long id, AgendaAppointment appointment, EntityManager em) {
         em.getTransaction().begin();
-        AgendaAppointment app = find(id, em);
+        AgendaAppointment app = search(id, em);
         app.setUser(appointment.getUser());
         app.setConsultant(appointment.getConsultant());
         app.setAppointmentDate(appointment.getAppointmentDate());
@@ -56,12 +56,16 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     public List<AgendaAppointment> findAll(EntityManager em) throws SQLException {
 //        String jpql = "SELECT new aes.model.AgendaAppointmentVo (app.id, app.appointmentDate, u.id, c.id) FROM AgendaAppointment app JOIN app.user u JOIN app.consultant c";
 //        return em.createQuery(jpql, AgendaAppointmentVo.class).getResultList();
-        return super.list(em);
+        String jpql = "SELECT app FROM AgendaAppointment app JOIN FETCH app.user JOIN FETCH app.consultant";
+        return em.createQuery(jpql, AgendaAppointment.class).getResultList();
+//        return super.list(em);
     }
 
     public AgendaAppointment search(long id, EntityManager em) {
 //        String jpql = "SELECT new aes.model.AgendaAppointmentVo (app.id, app.appointmentDate, u.id, c.id) FROM AgendaAppointment app JOIN app.user u JOIN app.consultant c WHERE app.id = :id";
 //        return em.createQuery(jpql, AgendaAppointmentVo.class).setParameter("id", id).getSingleResult();
-        return super.find(id, em);
+        String jpql = "SELECT app FROM AgendaAppointment app JOIN FETCH app.user JOIN FETCH app.consultant WHERE app.id = :id";
+        return em.createQuery(jpql, AgendaAppointment.class).setParameter("id", id).getSingleResult();
+//        return super.find(id, em);
     }
 }
