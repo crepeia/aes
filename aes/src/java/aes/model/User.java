@@ -143,7 +143,7 @@ public class User implements Serializable {
     @ManyToOne
     private User relatedConsultant;
     
-    @OneToMany(mappedBy = "relatedConsultant")
+    @OneToMany(mappedBy = "relatedConsultant", fetch = FetchType.EAGER)
     private List<User> relatedUser;
     
     @Column(name = "dt_cadastro")

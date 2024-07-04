@@ -6,6 +6,7 @@
 package aes.service;
 
 import aes.model.AgendaAppointment;
+import aes.model.AgendaAppointmentVo;
 import aes.persistence.AgendaAppointmentDAO;
 import java.sql.SQLException;
 import java.util.List;
@@ -88,15 +89,14 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public AgendaAppointment find(@PathParam("id") Long id) {
-        return appointmentDao.find(id, em);
+        return appointmentDao.search(id, em);
     }
 
     //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
-    @Path("findAll")
+    @Path("list")
     @GET
-    @Override
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AgendaAppointment> findAll() {
+    public List<AgendaAppointment> list() {
         try {
             return appointmentDao.findAll(em);
         } catch (SQLException ex) {
