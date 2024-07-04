@@ -6,6 +6,7 @@
 package aes.persistence;
 
 import aes.model.AgendaAppointment;
+import aes.model.AgendaAppointmentVo;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,21 +54,14 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     }
     
     public List<AgendaAppointment> findAll(EntityManager em) throws SQLException {
-        //as linhas abaixo são uma solução próxima do que seria ao retorno de uma consulta envolvendo apenas os 4 campos e evitando
-        //dos de User e Consultant na classe AgendaAppointment fetchType_Lazy serem comentados. Não funciona, porém, por falta de 
-        //conhecimento para criar a JPQL correta
-        
-        //Ao que tudo indica, deveria fazer uma Query para fazer essa consulta a partir apenas dos dados que eu quero do appointment
-        //sem precisar de fazer esses JOINS, puxando apenas os dados a partir do appointment, id do app, date, id do user e id do consultant
-        
-        
-//        String jpql = "SELECT app.id, app.appointmentDate, u.id, c.id FROM AgendaAppointment app JOIN app.user u JOIN app.consultant c";
-//        return em.createQuery(jpql, AgendaAppointment.class).getResultList();
-
+//        String jpql = "SELECT new aes.model.AgendaAppointmentVo (app.id, app.appointmentDate, u.id, c.id) FROM AgendaAppointment app JOIN app.user u JOIN app.consultant c";
+//        return em.createQuery(jpql, AgendaAppointmentVo.class).getResultList();
         return super.list(em);
     }
 
-    public AgendaAppointment find(long id, EntityManager em) {
+    public AgendaAppointment search(long id, EntityManager em) {
+//        String jpql = "SELECT new aes.model.AgendaAppointmentVo (app.id, app.appointmentDate, u.id, c.id) FROM AgendaAppointment app JOIN app.user u JOIN app.consultant c WHERE app.id = :id";
+//        return em.createQuery(jpql, AgendaAppointmentVo.class).setParameter("id", id).getSingleResult();
         return super.find(id, em);
     }
 }
