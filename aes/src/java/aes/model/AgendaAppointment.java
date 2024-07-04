@@ -29,9 +29,9 @@ public class AgendaAppointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User consultant;
     @Column(name = "appointment_date")
     private LocalDateTime appointmentDate;
