@@ -6,9 +6,7 @@
 package aes.persistence;
 
 import aes.model.AgendaAppointment;
-import aes.model.AgendaAppointmentVo;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -29,6 +27,7 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     //TOVERIFY
     @Override
     public void insert(AgendaAppointment appointment, EntityManager em) throws SQLException {
+        //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
         userDao.find(appointment.getUser(), em).setAppointmentUser(appointment);
         userDao.find(appointment.getConsultant(), em).setAppointmentConsultant(appointment);
         super.insert(appointment, em);
@@ -36,6 +35,7 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     
     //TOVERIFY
     public void remove(long id, EntityManager em) {
+        //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
         em.getTransaction().begin();
         search(id, em).removeAppointment();
         em.getTransaction().commit();
@@ -45,6 +45,7 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     
     //TOVERIFY
     public void update(long id, AgendaAppointment appointment, EntityManager em) {
+        //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
         em.getTransaction().begin();
         AgendaAppointment app = search(id, em);
         app.setUser(appointment.getUser());
@@ -54,18 +55,16 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     }
     
     public List<AgendaAppointment> findAll(EntityManager em) throws SQLException {
-//        String jpql = "SELECT new aes.model.AgendaAppointmentVo (app.id, app.appointmentDate, u.id, c.id) FROM AgendaAppointment app JOIN app.user u JOIN app.consultant c";
-//        return em.createQuery(jpql, AgendaAppointmentVo.class).getResultList();
-        String jpql = "SELECT app FROM AgendaAppointment app JOIN FETCH app.user JOIN FETCH app.consultant";
-        return em.createQuery(jpql, AgendaAppointment.class).getResultList();
-//        return super.list(em);
+        //TODO: Possível melhoria de performance no futuro
+//        String jpql = "SELECT app FROM AgendaAppointment app JOIN FETCH app.user JOIN FETCH app.consultant";
+//        return em.createQuery(jpql, AgendaAppointment.class).getResultList();
+        return super.list(em);
     }
 
     public AgendaAppointment search(long id, EntityManager em) {
-//        String jpql = "SELECT new aes.model.AgendaAppointmentVo (app.id, app.appointmentDate, u.id, c.id) FROM AgendaAppointment app JOIN app.user u JOIN app.consultant c WHERE app.id = :id";
-//        return em.createQuery(jpql, AgendaAppointmentVo.class).setParameter("id", id).getSingleResult();
-        String jpql = "SELECT app FROM AgendaAppointment app JOIN FETCH app.user JOIN FETCH app.consultant WHERE app.id = :id";
-        return em.createQuery(jpql, AgendaAppointment.class).setParameter("id", id).getSingleResult();
-//        return super.find(id, em);
+        //TODO: Possível melhoria de performance no futuro
+//        String jpql = "SELECT app FROM AgendaAppointment app JOIN FETCH app.user JOIN FETCH app.consultant WHERE app.id = :id";
+//        return em.createQuery(jpql, AgendaAppointment.class).setParameter("id", id).getSingleResult();
+        return super.find(id, em);
     }
 }

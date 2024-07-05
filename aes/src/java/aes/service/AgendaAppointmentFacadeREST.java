@@ -6,7 +6,6 @@
 package aes.service;
 
 import aes.model.AgendaAppointment;
-import aes.model.AgendaAppointmentVo;
 import aes.persistence.AgendaAppointmentDAO;
 import java.sql.SQLException;
 import java.util.List;

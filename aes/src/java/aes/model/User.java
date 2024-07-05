@@ -124,14 +124,17 @@ public class User implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<AppSuggestion> appSuggestions;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAppointment> appointmentsUser;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "consultant")
     //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAppointment> appointmentsConsultant;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAvailable> availablesUser;
@@ -584,6 +587,7 @@ public class User implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<AgendaAppointment> getAppointmentsUser() {
         return appointmentsUser;
     }
@@ -598,6 +602,7 @@ public class User implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<AgendaAppointment> getAppointmentsConsultant() {
         return appointmentsConsultant;
     }
@@ -612,6 +617,7 @@ public class User implements Serializable {
     }
     
     @XmlTransient
+    @JsonIgnore
     public List<AgendaAvailable> getAvailablesUser() {
         return availablesUser;
     }
