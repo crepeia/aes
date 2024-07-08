@@ -387,6 +387,37 @@ public class ChatEndpoint {
         }
     }
 
+    /*
+    private void sendUserStatusListForAll(){
+        
+        UserStatusChange usl = new UserStatusChange();
+        usl.type = "statusList";
+        Long consultantId;
+        
+        for(Map.Entry<Long, Session> c: consultants.entrySet()) {
+            consultantId = c.getKey();
+
+            for(Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
+                //Condicional abaixo: Vai sinalizar ao consultor o usuário que não for consultor e que estiver
+                //diretamente relacionado a ele (que seja seu paciente) ou que não for paciente de ninguém
+                if(!consultants.containsValue(e.getKey()) 
+                        && (Objects.equals(e.getValue().idRelatedConsultant, consultantId) 
+                        || Objects.equals(e.getValue().idRelatedConsultant, null)))
+                    usl.users.add(e.getValue());
+            }
+
+            Gson g = new Gson();
+            String json = g.toJson(usl);
+
+            try {
+                consultants.get(consultantId).getBasicRemote().sendObject(json);
+            } catch (IOException | EncodeException ex) {
+                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    */
+    
     private void setStatus(Session userSession, String status) {
         
         UserInfo u = onlineUsers.get(userSession);
@@ -534,13 +565,16 @@ public class ChatEndpoint {
                     user = daoUser.find(userId, em);
                     if(user.getRelatedConsultant() == null) {
                         user.setRelatedConsultant(daoUser.find(consultantId, em));
+                        //consultant.setRelatedUser(daoUser.find(userId, em));
                         try {
                             daoUser.uptadeUser(user, em);
+                            //daoUser.uptadeUser(consultant, em);
                         } catch (SQLException ex) {
                             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         userSession = users.get(chatId);
                         onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
+                        //sendUserStatusList(consultantId);
                     }
                 }
                 
