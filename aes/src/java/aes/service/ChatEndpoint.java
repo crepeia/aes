@@ -371,9 +371,13 @@ public class ChatEndpoint {
         for(Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
             //Condicional abaixo: Vai sinalizar ao consultor o usuário que não for consultor e que estiver
             //diretamente relacionado a ele (que seja seu paciente) ou que não for paciente de ninguém
+            System.out.println("INFO");
+            System.out.println(onlineUsers.get(consultants.get(consultantId)).email);
+            System.out.println(e.getValue().email);
             if(!consultants.containsValue(e.getKey()) 
                     && (Objects.equals(e.getValue().idRelatedConsultant, consultantId) 
                     || Objects.equals(e.getValue().idRelatedConsultant, null)))
+                System.out.println("ENTROU");
                 usl.users.add(e.getValue());
         }
         
@@ -574,7 +578,7 @@ public class ChatEndpoint {
                         }
                         userSession = users.get(chatId);
                         onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
-                        //sendUserStatusList(consultantId);
+                        sendUserStatusList(consultantId);
                     }
                 }
                 
