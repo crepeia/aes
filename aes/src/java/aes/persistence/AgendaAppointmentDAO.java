@@ -7,6 +7,8 @@ package aes.persistence;
 
 import aes.model.AgendaAppointment;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -28,30 +30,33 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     @Override
     public void insert(AgendaAppointment appointment, EntityManager em) throws SQLException {
         //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
-        userDao.find(appointment.getUser(), em).setAppointmentUser(appointment);
-        userDao.find(appointment.getConsultant(), em).setAppointmentConsultant(appointment);
+        //userDao.find(appointment.getUser(), em).setAppointmentUser(appointment);
+        //userDao.find(appointment.getConsultant(), em).setAppointmentConsultant(appointment);
         super.insert(appointment, em);
     }
     
     //TOVERIFY
-    public void remove(long id, EntityManager em) {
+    public void remove(AgendaAppointment appointment, EntityManager em) throws SQLException {
         //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
-        em.getTransaction().begin();
-        search(id, em).removeAppointment();
-        em.getTransaction().commit();
-        em.remove(search(id, em));
-        em.getTransaction().commit();
+//        em.getTransaction().begin();
+//        search(id, em).removeAppointment();
+//        em.getTransaction().commit();
+//        em.remove(search(id, em));
+//        em.getTransaction().commit();
+        super.delete(appointment, em);
     }
     
     //TOVERIFY
-    public void update(long id, AgendaAppointment appointment, EntityManager em) {
+    @Override
+    public void update(AgendaAppointment appointment, EntityManager em) throws SQLException {
         //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
-        em.getTransaction().begin();
-        AgendaAppointment app = search(id, em);
-        app.setUser(appointment.getUser());
-        app.setConsultant(appointment.getConsultant());
-        app.setAppointmentDate(appointment.getAppointmentDate());
-        em.getTransaction().commit();
+//        em.getTransaction().begin();
+//        AgendaAppointment app = search(id, em);
+//        app.setUser(appointment.getUser());
+//        app.setConsultant(appointment.getConsultant());
+//        app.setAppointmentDate(appointment.getAppointmentDate());
+//        em.getTransaction().commit();
+        super.update(appointment, em);
     }
     
     public List<AgendaAppointment> findAll(EntityManager em) throws SQLException {

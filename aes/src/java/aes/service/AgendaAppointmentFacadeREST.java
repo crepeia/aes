@@ -70,17 +70,25 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     }
 
     @PUT
-    @Path("update/{id}")
+    @Path("update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void update(@PathParam("id") Long id, AgendaAppointment entity) {
-        appointmentDao.update(id, entity, em);
+    public void update(AgendaAppointment appointment) {
+        try {
+            appointmentDao.update(appointment, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //Testado e deu erro: javax.servlet.ServletException: javax.ejb.EJBException: Stateless SessionBean method returned without completing transaction
     @DELETE
-    @Path("remove/{id}")
-    public void remove(@PathParam("id") Long id) {
-        appointmentDao.remove(id, em);
+    @Path("remove")
+    public void remove(AgendaAppointment appointment) {
+        try {
+            appointmentDao.remove(appointment, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
