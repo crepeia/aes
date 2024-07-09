@@ -310,8 +310,12 @@ public class ChatEndpoint {
                 //É usuário comum e o idRelatedConsultant pode ser nulo (não tem consultor)
                 //ou não (tem consultor associado)
                 if(currentUser.getRelatedConsultant() == null) {
+                    //ponto de obs
+                    //System.out.println("RelatedConsultant do usuario foi identificado como nulo");
                     ui.idRelatedConsultant = null;
                 } else {
+                    //ponto de obs
+                    //System.out.println("RelatedConsultant do usuario foi identificado como " + currentUser.getRelatedConsultant().getId());
                     ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
                 }
                 //ui.session = session;
@@ -371,10 +375,21 @@ public class ChatEndpoint {
         for(Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
             //Condicional abaixo: Vai sinalizar ao consultor o usuário que não for consultor e que estiver
             //diretamente relacionado a ele (que seja seu paciente) ou que não for paciente de ninguém
+            
+            //ponto de obs
+            //verificar cada um dos usuarios da lista onlineUsers
+            //System.out.println(e.getValue().email);
+            //System.out.println(e.getValue().idRelatedConsultant);
+            //System.out.println();
             if(!consultants.containsValue(e.getKey()) 
                     && (Objects.equals(e.getValue().idRelatedConsultant, consultantId) 
-                    || Objects.equals(e.getValue().idRelatedConsultant, null)))
+                    || Objects.equals(e.getValue().idRelatedConsultant, null))) {
+                //ponto de obs
+                //verificar cada um dos usuarios da lista onlineUsers que passarem pelas condicionais
+                //System.out.println(e.getValue().email);
+                //System.out.println(e.getValue().idRelatedConsultant);
                 usl.users.add(e.getValue());
+            }
         }
         
         Gson g = new Gson();
@@ -572,8 +587,15 @@ public class ChatEndpoint {
                         } catch (SQLException ex) {
                             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        //ponto de obs
+                        //precisa ver se o userSession é de fato o session do usuario
+                        System.out.println(onlineUsers.get(users.get(chatId)).email);
                         userSession = users.get(chatId);
                         onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
+                        //ponto de obs
+                        //precisa ver se o idRelatedConsultant vira de fato o id do consultor
+                        //System.out.println(onlineUsers.get(userSession).idRelatedConsultant);
+                        
                         //sendUserStatusList(consultantId);
                     }
                 }
