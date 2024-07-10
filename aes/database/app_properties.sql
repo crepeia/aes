@@ -7,4 +7,9 @@ CREATE TABLE `aes`.`app_properties` (
 INSERT INTO `aes`.`app_properties`
 (`id`, `latest_app_version`)
 VALUES
-(1, "1.5.1");
+(1, "1.6");
+
+// Para mudar a versão
+UPDATE app_properties
+SET latest_app_version = "1.6"
+WHERE id = 1;
