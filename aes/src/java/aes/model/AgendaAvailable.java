@@ -29,7 +29,7 @@ public class AgendaAvailable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User user;
     @Column(name = "available_date")
     private LocalDateTime availableDate;
