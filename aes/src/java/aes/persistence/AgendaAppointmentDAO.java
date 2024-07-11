@@ -19,25 +19,21 @@ import javax.persistence.EntityManager;
  */
 public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     
-    UserDAO userDao;
+    //UserDAO userDao;
     
     public AgendaAppointmentDAO() throws NamingException {
         super(AgendaAppointment.class);
-        userDao = new UserDAO();
+        //userDao = new UserDAO();
     }
     
-    //TOVERIFY
     @Override
     public void insert(AgendaAppointment appointment, EntityManager em) throws SQLException {
-        //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
         //userDao.find(appointment.getUser(), em).setAppointmentUser(appointment);
         //userDao.find(appointment.getConsultant(), em).setAppointmentConsultant(appointment);
         super.insert(appointment, em);
     }
     
-    //TOVERIFY
     public void remove(AgendaAppointment appointment, EntityManager em) throws SQLException {
-        //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
 //        em.getTransaction().begin();
 //        search(id, em).removeAppointment();
 //        em.getTransaction().commit();
@@ -46,10 +42,8 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
         super.delete(appointment, em);
     }
     
-    //TOVERIFY
     @Override
     public void update(AgendaAppointment appointment, EntityManager em) throws SQLException {
-        //TODO: talvez tirar isso tudo e deixar soh a base. Isso é de responsabilidade do serviço REST, se for necessário.
 //        em.getTransaction().begin();
 //        AgendaAppointment app = search(id, em);
 //        app.setUser(appointment.getUser());

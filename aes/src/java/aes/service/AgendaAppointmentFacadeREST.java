@@ -53,11 +53,6 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         }
     }
 
-    //Aqui os dados seriam inseridos via ativação do serviço REST, de modo que seria enviado um appointment
-    //com id de usuario, id de consultor e data de appointment, sem id do appointment.
-    
-    //Dúvida: seria inserido um appointment inteiro já com o usuario e consultor setados, ou aconteceria
-    //algum tipo de serialização/desserialização?
     @Path("insert")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -80,9 +75,9 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         }
     }
 
-    //Testado e deu erro: javax.servlet.ServletException: javax.ejb.EJBException: Stateless SessionBean method returned without completing transaction
     @DELETE
     @Path("remove")
+    @Override
     public void remove(AgendaAppointment appointment) {
         try {
             appointmentDao.remove(appointment, em);
@@ -91,19 +86,17 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         }
     }
 
-    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @GET
     @Path("find/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public AgendaAppointment find(@PathParam("id") Long id) {
         return appointmentDao.search(id, em);
     }
 
-    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @Path("findAll")
     @Override
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<AgendaAppointment> findAll() {
         try {
             return appointmentDao.findAll(em);

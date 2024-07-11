@@ -61,32 +61,38 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     }
 
     @PUT
-    @Path("update/{id}")
+    @Path("update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void update(@PathParam("id") Long id, AgendaAvailable entity) {
-        availableDao.update(id, entity, em);
+    public void update(AgendaAvailable entity) {
+        try {
+            availableDao.update(entity, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    //Testado e deu erro: javax.servlet.ServletException: javax.ejb.EJBException: Stateless SessionBean method returned without completing transaction
     @DELETE
-    @Path("remove/{id}")
-    public void remove(@PathParam("id") Long id) {
-        availableDao.remove(id, em);
+    @Path("remove")
+    @Override
+    public void remove(AgendaAvailable entity) {
+        try {
+            availableDao.remove(entity, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @GET
     @Path("find/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public AgendaAvailable find(@PathParam("id") Long id) {
         return availableDao.search(id, em);
     }
 
-    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @Path("findAll")
     @GET
     @Override
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<AgendaAvailable> findAll() {
         try {
             return availableDao.findAll(em);
