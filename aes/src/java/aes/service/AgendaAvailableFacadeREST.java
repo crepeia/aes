@@ -52,9 +52,9 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @Path("insert")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void insert(AgendaAvailable entity) {
+    public void insert(AgendaAvailable available) {
         try {
-            availableDao.insert(entity, em);
+            availableDao.insert(available, em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,20 +63,19 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @PUT
     @Path("update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void update(AgendaAvailable entity) {
+    public void update(AgendaAvailable available) {
         try {
-            availableDao.update(entity, em);
+            availableDao.update(available, em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @DELETE
-    @Path("remove")
-    @Override
-    public void remove(AgendaAvailable entity) {
+    @Path("delete/{id}")
+    public void delete(@PathParam("id") Long id) {
         try {
-            availableDao.remove(entity, em);
+            availableDao.delete(availableDao.search(id, em), em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }

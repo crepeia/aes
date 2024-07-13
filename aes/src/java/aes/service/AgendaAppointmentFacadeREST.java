@@ -56,9 +56,9 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Path("insert")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void insert(AgendaAppointment entity) {
+    public void insert(AgendaAppointment appointment) {
         try {
-            appointmentDao.insert(entity, em);
+            appointmentDao.insert(appointment, em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,11 +76,10 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     }
 
     @DELETE
-    @Path("remove")
-    @Override
-    public void remove(AgendaAppointment appointment) {
+    @Path("delete/{id}")
+    public void delete(@PathParam("id") Long id) {
         try {
-            appointmentDao.remove(appointment, em);
+            appointmentDao.delete(appointmentDao.search(id, em), em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
