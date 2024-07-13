@@ -83,7 +83,8 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
 
     @GET
     @Path("find/{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public AgendaAvailable find(@PathParam("id") Long id) {
         return availableDao.search(id, em);
     }
@@ -91,10 +92,23 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @Path("findAll")
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public List<AgendaAvailable> findAll() {
         try {
             return availableDao.findAll(em);
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+        
+    @Path("findAllUserAvailables/{userId}")
+    @GET
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AgendaAvailable> findAllUserAvailables(@PathParam("userId") Long userId) {
+        try {
+            return availableDao.list("user.id", userId, em);
         } catch (SQLException ex) {
             return null;
         }

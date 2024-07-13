@@ -87,7 +87,8 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
 
     @GET
     @Path("find/{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public AgendaAppointment find(@PathParam("id") Long id) {
         return appointmentDao.search(id, em);
     }
@@ -95,7 +96,8 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Path("findAll")
     @Override
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public List<AgendaAppointment> findAll() {
         try {
             return appointmentDao.findAll(em);
@@ -103,7 +105,31 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             return null;
         }
     }
-
+    
+    @Path("findAllUserAppointments/{userId}")
+    @GET
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AgendaAppointment> findAllUserAppointments(@PathParam("userId") Long userId) {
+        try {
+            return appointmentDao.list("user.id", userId, em);
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    @Path("findAllConsultantAppointments/{consultantId}")
+    @GET
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AgendaAppointment> findAllConsultantAppointments(@PathParam("consultantId") Long consultantId) {
+        try {
+            return appointmentDao.list("consultant.id", consultantId, em);
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
