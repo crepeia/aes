@@ -19,38 +19,8 @@ import javax.persistence.EntityManager;
  */
 public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     
-    //UserDAO userDao;
-    
     public AgendaAppointmentDAO() throws NamingException {
         super(AgendaAppointment.class);
-        //userDao = new UserDAO();
-    }
-    
-    @Override
-    public void insert(AgendaAppointment appointment, EntityManager em) throws SQLException {
-        //userDao.find(appointment.getUser(), em).setAppointmentUser(appointment);
-        //userDao.find(appointment.getConsultant(), em).setAppointmentConsultant(appointment);
-        super.insert(appointment, em);
-    }
-    
-    public void remove(AgendaAppointment appointment, EntityManager em) throws SQLException {
-//        em.getTransaction().begin();
-//        search(id, em).removeAppointment();
-//        em.getTransaction().commit();
-//        em.remove(search(id, em));
-//        em.getTransaction().commit();
-        super.delete(appointment, em);
-    }
-    
-    @Override
-    public void update(AgendaAppointment appointment, EntityManager em) throws SQLException {
-//        em.getTransaction().begin();
-//        AgendaAppointment app = search(id, em);
-//        app.setUser(appointment.getUser());
-//        app.setConsultant(appointment.getConsultant());
-//        app.setAppointmentDate(appointment.getAppointmentDate());
-//        em.getTransaction().commit();
-        super.update(appointment, em);
     }
     
     public List<AgendaAppointment> findAll(EntityManager em) throws SQLException {
