@@ -11,6 +11,7 @@ import aes.utility.EmailHelper;
 import aes.utility.Secured;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -115,6 +116,19 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
         } catch (Exception e) {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("findUserChatsByConsultant/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findUserChatsByConsultant(@PathParam("id") Long idConsultant) {
+        List<Chat> chats;
+        try {
+            chats = chatDAO.list("user.relatedConsultant.id", idConsultant, em);
+            return Response.ok().entity(chats).build();
+        } catch (SQLException ex) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
