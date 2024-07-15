@@ -73,12 +73,11 @@ public class ChatEndpoint {
         //public transient Session session;
         public Long idRelatedConsultant;
         public UserInfo(){};
-        public UserInfo(String name, String email, Long chat, String status, Long id, Session session){
+        public UserInfo(String name, String email, Long chat, String status, Session session){
             this.name = name;
             this.email = email;
             this.chat = chat;
             this.status = status;
-            this.idRelatedConsultant = id;
             //this.session = session;
         }
     }
@@ -235,7 +234,6 @@ public class ChatEndpoint {
             ui.email = "";
             ui.chat = newChat.getId();
             ui.status = realStatus;
-            //Consultor associado ao próprio usuário (que é anônimo) = nulo
             ui.idRelatedConsultant = null;
             //ui.session = session;
             
@@ -258,7 +256,6 @@ public class ChatEndpoint {
                 ui.email = currentUser.getEmail();
                 ui.chat = currentUser.getChat().getId();
                 ui.status = "";
-                //Usuario é consultor. Não tem consultor associado a ele.
                 ui.idRelatedConsultant = null;
                 //ui.session = session;
                 
@@ -371,11 +368,8 @@ public class ChatEndpoint {
         for(Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
             //Expõe ao consultor o usuário que não for consultor e que estiver
             //diretamente relacionado a ele (que seja seu paciente) ou que não for paciente de ninguém
-            if(!consultants.containsValue(e.getKey()) 
-                    && (Objects.equals(e.getValue().idRelatedConsultant, consultantId) 
-                    || Objects.equals(e.getValue().idRelatedConsultant, null))) {
+            if(!consultants.containsValue(e.getKey()) && verifyRelatedUser(e.getValue().idRelatedConsultant, consultantId))
                 usl.users.add(e.getValue());
-            }
         }
         
         Gson g = new Gson();
@@ -404,16 +398,17 @@ public class ChatEndpoint {
             for (Map.Entry<Long, Session> c : consultants.entrySet()) {
                 //Expõe ao consultor o usuário que não for consultor e que estiver
                 //diretamente relacionado a ele (que seja seu paciente) ou que não for paciente de ninguém
-                if(Objects.equals(u.idRelatedConsultant, c.getKey()) 
-                    || Objects.equals(u.idRelatedConsultant, null)) {
+                if(verifyRelatedUser(u.idRelatedConsultant, c.getKey()))
                     c.getValue().getBasicRemote().sendObject(json);
-                }
             }
         } catch (IOException | EncodeException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    private boolean verifyRelatedUser(Long consultantIdRelatedToUser, Long idConsultant) {
+        return (Objects.equals(consultantIdRelatedToUser, idConsultant) || Objects.equals(consultantIdRelatedToUser, null));
+    }
     
     private void deleteUserStatus(Session userSession, Long userKey){
         
