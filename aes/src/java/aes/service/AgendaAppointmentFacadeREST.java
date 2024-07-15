@@ -6,7 +6,7 @@
 package aes.service;
 
 import aes.model.AgendaAppointment;
-import aes.persistence.AgendaAppointmentDAO;
+import aes.persistence.GenericDAO;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,9 +29,8 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Malder
+ * @author Leonorico
  */
-
 
 //TODO: Pesquisar sobre Secured e segurança do serviço REST para evitar dos serviços REST serem usados
 //por fora do aplicativo/site. Evitar de fazer as requisiçoes por meio de um software, tipo POSTMAN.
@@ -42,12 +41,12 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-    private AgendaAppointmentDAO appointmentDao;
+    private GenericDAO<AgendaAppointment> appointmentDao;
 
     public AgendaAppointmentFacadeREST() {
         super(AgendaAppointment.class);
         try {
-            appointmentDao = new AgendaAppointmentDAO();
+            appointmentDao = new GenericDAO<>(AgendaAppointment.class);
         } catch (NamingException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -79,7 +78,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Path("delete/{id}")
     public void delete(@PathParam("id") Long id) {
         try {
-            appointmentDao.delete(appointmentDao.search(id, em), em);
+            appointmentDao.delete(appointmentDao.find(id, em), em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -87,30 +86,27 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
 
     @GET
     @Path("find/{id}")
-    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public AgendaAppointment find(@PathParam("id") Long id) {
-        return appointmentDao.search(id, em);
+        return appointmentDao.find(id, em);
     }
 
     @Path("findAll")
     @Override
     @GET
-    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<AgendaAppointment> findAll() {
         try {
-            return appointmentDao.findAll(em);
+            return appointmentDao.list(em);
         } catch (SQLException ex) {
             return null;
         }
     }
     
-    @Path("findAllUserAppointments/{userId}")
+    @Path("findAllByUser/{userId}")
     @GET
-    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<AgendaAppointment> findAllUserAppointments(@PathParam("userId") Long userId) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<AgendaAppointment> findAllByUser(@PathParam("userId") Long userId) {
         try {
             return appointmentDao.list("user.id", userId, em);
         } catch (SQLException ex) {
@@ -118,11 +114,10 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         }
     }
     
-    @Path("findAllConsultantAppointments/{consultantId}")
+    @Path("findAllByConsultant/{consultantId}")
     @GET
-    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<AgendaAppointment> findAllConsultantAppointments(@PathParam("consultantId") Long consultantId) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<AgendaAppointment> findAllByConsultant(@PathParam("consultantId") Long consultantId) {
         try {
             return appointmentDao.list("consultant.id", consultantId, em);
         } catch (SQLException ex) {

@@ -6,7 +6,7 @@
 package aes.service;
 
 import aes.model.AgendaAvailable;
-import aes.persistence.AgendaAvailableDAO;
+import aes.persistence.GenericDAO;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,8 +29,9 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Malder
+ * @author Leonorico
  */
+
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("agendaavailable")
@@ -38,12 +39,12 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-    private AgendaAvailableDAO availableDao;
+    private GenericDAO<AgendaAvailable> availableDao;
 
     public AgendaAvailableFacadeREST() {
         super(AgendaAvailable.class);
         try {
-            availableDao = new AgendaAvailableDAO();
+            availableDao = new GenericDAO<>(AgendaAvailable.class);
         } catch (NamingException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,7 +76,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @Path("delete/{id}")
     public void delete(@PathParam("id") Long id) {
         try {
-            availableDao.delete(availableDao.search(id, em), em);
+            availableDao.delete(availableDao.find(id, em), em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -83,30 +84,27 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
 
     @GET
     @Path("find/{id}")
-    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public AgendaAvailable find(@PathParam("id") Long id) {
-        return availableDao.search(id, em);
+        return availableDao.find(id, em);
     }
 
     @Path("findAll")
     @GET
     @Override
-    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<AgendaAvailable> findAll() {
         try {
-            return availableDao.findAll(em);
+            return availableDao.list(em);
         } catch (SQLException ex) {
             return null;
         }
     }
         
-    @Path("findAllUserAvailables/{userId}")
+    @Path("findAllByUser/{userId}")
     @GET
-    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<AgendaAvailable> findAllUserAvailables(@PathParam("userId") Long userId) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<AgendaAvailable> findAllByUser(@PathParam("userId") Long userId) {
         try {
             return availableDao.list("user.id", userId, em);
         } catch (SQLException ex) {
