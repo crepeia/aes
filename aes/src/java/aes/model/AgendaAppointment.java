@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,9 +28,9 @@ public class AgendaAppointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     private User user;
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     private User consultant;
     @Column(name = "appointment_date")
     private LocalDateTime appointmentDate;

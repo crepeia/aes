@@ -53,48 +53,50 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         }
     }
 
-    //Aqui os dados seriam inseridos via ativação do serviço REST, de modo que seria enviado um appointment
-    //com id de usuario, id de consultor e data de appointment, sem id do appointment.
-    
-    //Dúvida: seria inserido um appointment inteiro já com o usuario e consultor setados, ou aconteceria
-    //algum tipo de serialização/desserialização?
     @Path("insert")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void insert(AgendaAppointment entity) {
+    public void insert(AgendaAppointment appointment) {
         try {
-            appointmentDao.insert(entity, em);
+            appointmentDao.insert(appointment, em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @PUT
-    @Path("update/{id}")
+    @Path("update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void update(@PathParam("id") Long id, AgendaAppointment entity) {
-        appointmentDao.update(id, entity, em);
+    public void update(AgendaAppointment appointment) {
+        try {
+            appointmentDao.update(appointment, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    //Testado e deu erro: javax.servlet.ServletException: javax.ejb.EJBException: Stateless SessionBean method returned without completing transaction
     @DELETE
-    @Path("remove/{id}")
-    public void remove(@PathParam("id") Long id) {
-        appointmentDao.remove(id, em);
+    @Path("delete/{id}")
+    public void delete(@PathParam("id") Long id) {
+        try {
+            appointmentDao.delete(appointmentDao.search(id, em), em);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @GET
     @Path("find/{id}")
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     public AgendaAppointment find(@PathParam("id") Long id) {
-        return appointmentDao.find(id, em);
+        return appointmentDao.search(id, em);
     }
 
-    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @Path("findAll")
-    @GET
     @Override
+    @GET
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     public List<AgendaAppointment> findAll() {
         try {
@@ -103,7 +105,31 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             return null;
         }
     }
-
+    
+    @Path("findAllUserAppointments/{userId}")
+    @GET
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AgendaAppointment> findAllUserAppointments(@PathParam("userId") Long userId) {
+        try {
+            return appointmentDao.list("user.id", userId, em);
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    @Path("findAllConsultantAppointments/{consultantId}")
+    @GET
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AgendaAppointment> findAllConsultantAppointments(@PathParam("consultantId") Long consultantId) {
+        try {
+            return appointmentDao.list("consultant.id", consultantId, em);
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

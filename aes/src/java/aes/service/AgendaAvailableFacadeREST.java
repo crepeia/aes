@@ -52,44 +52,63 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @Path("insert")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void insert(AgendaAvailable entity) {
+    public void insert(AgendaAvailable available) {
         try {
-            availableDao.insert(entity, em);
+            availableDao.insert(available, em);
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @PUT
-    @Path("update/{id}")
+    @Path("update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void update(@PathParam("id") Long id, AgendaAvailable entity) {
-        availableDao.update(id, entity, em);
+    public void update(AgendaAvailable available) {
+        try {
+            availableDao.update(available, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    //Testado e deu erro: javax.servlet.ServletException: javax.ejb.EJBException: Stateless SessionBean method returned without completing transaction
     @DELETE
-    @Path("remove/{id}")
-    public void remove(@PathParam("id") Long id) {
-        availableDao.remove(id, em);
+    @Path("delete/{id}")
+    public void delete(@PathParam("id") Long id) {
+        try {
+            availableDao.delete(availableDao.search(id, em), em);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @GET
     @Path("find/{id}")
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     public AgendaAvailable find(@PathParam("id") Long id) {
-        return availableDao.find(id, em);
+        return availableDao.search(id, em);
     }
 
-    //Testado com sucesso. Obs: Tem que voltar apenas o id do usuario e id do consultor.
     @Path("findAll")
     @GET
     @Override
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
     public List<AgendaAvailable> findAll() {
         try {
             return availableDao.findAll(em);
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+        
+    @Path("findAllUserAvailables/{userId}")
+    @GET
+    //@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AgendaAvailable> findAllUserAvailables(@PathParam("userId") Long userId) {
+        try {
+            return availableDao.list("user.id", userId, em);
         } catch (SQLException ex) {
             return null;
         }

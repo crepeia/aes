@@ -18,44 +18,19 @@ import javax.persistence.EntityManager;
  */
 public class AgendaAvailableDAO extends GenericDAO<AgendaAvailable> {
     
-    UserDAO userDao;
-    
     public AgendaAvailableDAO() throws NamingException {
         super(AgendaAvailable.class);
-        userDao = new UserDAO();
     }
     
-    //TOVERIFY    
-    @Override
-    public void insert(AgendaAvailable available, EntityManager em) throws SQLException {
-        userDao.find(available.getUser(), em).setAvailableUser(available);
-        super.insert(available, em);
-    }
-    
-    //TOVERIFY
-    public void remove(long id, EntityManager em) {
-        em.getTransaction().begin();
-        find(id, em).removeAvailable();
-        em.remove(find(id, em));
-        em.getTransaction().commit();
-    }
-    
-    //TOVERIFY
-    public void update(long id, AgendaAvailable available, EntityManager em) {
-        em.getTransaction().begin();
-        AgendaAvailable av = find(id, em);
-        av.setUser(available.getUser());
-        av.setAvailableDate(available.getAvailableDate());
-        em.getTransaction().commit();
-    }
-    
-    //TOVERIFY
-    public AgendaAvailable find(long id, EntityManager em) {
+    public AgendaAvailable search(long id, EntityManager em) {
+        //String jpql = "SELECT app FROM AgendaAvailable av JOIN FETCH av.user WHERE av.id = :id";
+        //return em.createQuery(jpql, AgendaAvailable.class).setParameter("id", id).getSingleResult();
         return super.find(id, em);
     }
     
-    //TOVERIFY
     public List<AgendaAvailable> findAll(EntityManager em) throws SQLException {
+        //String jpql = "SELECT app FROM AgendaAvailable av JOIN FETCH av.user";
+        //return em.createQuery(jpql, AgendaAvailable.class).getResultList();
         return super.list(em);
     }
 
