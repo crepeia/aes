@@ -28,6 +28,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -57,73 +58,81 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Path("insert")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void insert(AgendaAppointment appointment) {
+    public Response insert(AgendaAppointment appointment) {
         try {
             appointmentDao.insert(appointment, em);
+            return Response.status(Response.Status.CREATED).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
     @PUT
     @Path("update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void update(AgendaAppointment appointment) {
+    public Response update(AgendaAppointment appointment) {
         try {
             appointmentDao.update(appointment, em);
+            return Response.status(Response.Status.OK).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
     @DELETE
     @Path("delete/{id}")
-    public void delete(@PathParam("id") Long id) {
+    public Response delete(@PathParam("id") Long id) {
         try {
             appointmentDao.delete(appointmentDao.find(id, em), em);
+            return Response.status(Response.Status.OK).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
     @GET
     @Path("find/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public AgendaAppointment find(@PathParam("id") Long id) {
-        return appointmentDao.find(id, em);
+    public Response find(@PathParam("id") Long id) {
+        return Response.ok().entity(appointmentDao.find(id, em)).build();
     }
 
     @Path("findAll")
-    @Override
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<AgendaAppointment> findAll() {
+    public Response findAllAppointments() {
         try {
-            return appointmentDao.list(em);
+            return Response.ok().entity(appointmentDao.list(em)).build();
         } catch (SQLException ex) {
-            return null;
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
     
     @Path("findAllByUser/{userId}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<AgendaAppointment> findAllByUser(@PathParam("userId") Long userId) {
+    public Response findAllByUser(@PathParam("userId") Long userId) {
         try {
-            return appointmentDao.list("user.id", userId, em);
+            return Response.ok().entity(appointmentDao.list("user.id", userId, em)).build();
         } catch (SQLException ex) {
-            return null;
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
     
     @Path("findAllByConsultant/{consultantId}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<AgendaAppointment> findAllByConsultant(@PathParam("consultantId") Long consultantId) {
+    public Response findAllByConsultant(@PathParam("consultantId") Long consultantId) {
         try {
-            return appointmentDao.list("consultant.id", consultantId, em);
+            return Response.ok().entity(appointmentDao.list("consultant.id", consultantId, em)).build();
         } catch (SQLException ex) {
-            return null;
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
     
