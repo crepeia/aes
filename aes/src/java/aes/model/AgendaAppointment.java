@@ -1,3 +1,5 @@
+//Classe que armazena os dados de um horário reservado na agenda, envolvendo usuário e consultor.
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -28,8 +30,12 @@ public class AgendaAppointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    //TODO: Melhoria de performance
+    //@ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     private User user;
+    //TODO: Melhoria de performance
+    //@ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     private User consultant;
     @Column(name = "appointment_date")
@@ -63,6 +69,7 @@ public class AgendaAppointment implements Serializable {
         this.appointmentDate = appointmentDate;
     }
     
+    //Desvincula as entidades para possibilitar a remoção do appointment do banco de dados (não usado atualmente)
     public void removeAppointment() {
         this.getUser().getAppointmentsUser().remove(this);
         this.getConsultant().getAppointmentsConsultant().remove(this);

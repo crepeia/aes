@@ -1,3 +1,5 @@
+//Classe que armazena os dados de um horário livre de um usuário na agenda.
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -28,6 +30,8 @@ public class AgendaAvailable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    //TODO: Melhoria de performance
+    //@ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     private User user;
     @Column(name = "available_date")
@@ -53,6 +57,7 @@ public class AgendaAvailable implements Serializable {
         this.availableDate = availableDate;
     }
 
+    //Desvincula as entidades para possibilitar a remoção do available do banco de dados (não usado atualmente)
     public void removeAvailable() {
         this.getUser().getAvailablesUser().remove(this);
         this.setUser(null);

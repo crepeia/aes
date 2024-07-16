@@ -126,16 +126,19 @@ public class User implements Serializable {
     
     @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true)
+    //TODO: Melhoria de performance
     //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAppointment> appointmentsUser;
     
     @JsonIgnore
     @OneToMany(mappedBy = "consultant")
+    //TODO: Melhoria de performance
     //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAppointment> appointmentsConsultant;
     
     @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true)
+    //TODO: Melhoria de performance
     //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAvailable> availablesUser;
     
@@ -143,6 +146,9 @@ public class User implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Chat chat;
     
+    //Relacionamento bidirecional de consultor com usuario. Como consultor e usuário são apenas
+    //uma classe, o relacionamento se fez na própria classe.
+    //TODO: Separar consultor de usuário
     @ManyToOne
     private User relatedConsultant;
     
@@ -596,6 +602,7 @@ public class User implements Serializable {
         this.appointmentsUser = appointmentsUser;
     }
     
+    //Vincular objeto usuario com objeto appointment (sem uso atualmente)
     public void setAppointmentUser(AgendaAppointment appointment) {
         appointment.setUser(this);
         this.appointmentsUser.add(appointment);
@@ -611,6 +618,7 @@ public class User implements Serializable {
         this.appointmentsConsultant = appointmentsConsultant;
     }
 
+    //Vincular objeto consultor com objeto appointment (sem uso atualmente)
     public void setAppointmentConsultant(AgendaAppointment appointment) {
         appointment.setConsultant(this);
         this.appointmentsConsultant.add(appointment);
@@ -626,11 +634,13 @@ public class User implements Serializable {
         this.availablesUser = availablesUser;
     }
     
+    //Vincular objeto usuario com objeto available (sem uso atualmente)
     public void setAvailableUser(AgendaAvailable available) {
         available.setUser(this);
         this.availablesUser.add(available);
     }
     
+    //Desvincular usuario de appointment para posterior remoção de usuário
     public void removeUser() {
         List<AgendaAppointment> appointments = this.getAppointmentsUser();
         for(AgendaAppointment appointment : appointments) {
@@ -639,6 +649,7 @@ public class User implements Serializable {
         this.getAppointmentsUser().clear();
     }
     
+    //Desvincular consultor de appointment para posterior remoção de consultor
     public void removeConsultant() {
         List<AgendaAppointment> appointments = this.getAppointmentsConsultant();
         for(AgendaAppointment appointment : appointments) {

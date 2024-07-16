@@ -171,6 +171,7 @@ public class ChatEndpoint {
     }
     */
     @OnOpen
+    //Dispara quando consultores e usuarios abrem a aba do chat no aplicativo
     public void onOpen(Session session, EndpointConfig config, @PathParam("userId") String userId) {
         List<String> auth = (List<String>) config.getUserProperties().get("auth");
         List<String> unauthId = null;
@@ -502,6 +503,7 @@ public class ChatEndpoint {
     
     //quando o consultor seleciona um chat, manda msg pro servidor avisando quem que conectou e altera o status dos chats
     @OnMessage
+    //Dispara quando consultores e usuarios entram no chat de fato e quando ocorre qualquer conexão/desconexão no interior do chat ou da conversa.
     public void onMessage(Session session, String message) {
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Message received from session: {0}, messsage: {1}", new Object[]{session.getId(), message});
         System.out.println(message);
