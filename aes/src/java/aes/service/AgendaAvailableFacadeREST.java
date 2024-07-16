@@ -9,6 +9,7 @@ package aes.service;
 
 import aes.model.AgendaAvailable;
 import aes.persistence.GenericDAO;
+import aes.utility.Secured;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,6 +36,7 @@ import javax.ws.rs.core.Response;
  * @author Leonorico
  */
 
+@Secured
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("agendaavailable")

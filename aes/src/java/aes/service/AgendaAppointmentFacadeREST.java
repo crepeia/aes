@@ -9,6 +9,7 @@ package aes.service;
 
 import aes.model.AgendaAppointment;
 import aes.persistence.GenericDAO;
+import aes.utility.Secured;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,8 +36,7 @@ import javax.ws.rs.core.Response;
  * @author Leonorico
  */
 
-//TODO: Pesquisar sobre Secured e segurança do serviço REST para evitar dos serviços REST serem usados
-//por fora do aplicativo/site. Evitar de fazer as requisiçoes por meio de um software, tipo POSTMAN.
+@Secured
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("agendaappointment")
