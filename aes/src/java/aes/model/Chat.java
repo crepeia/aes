@@ -48,8 +48,7 @@ public class Chat implements Serializable {
     @Column(name = "unauthenticated_id")
     private String unauthenticatedId;
     
-    @JsonIgnore
-    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chat")
     private List<Message> messageList;
 
     public Chat() {
