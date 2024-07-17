@@ -125,7 +125,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     public Response findUserChatsByConsultant(@PathParam("id") Long idConsultant) {
         List<Chat> chats;
         try {
-            chats = chatDAO.findAll(idConsultant, em);
+            chats = chatDAO.list(idConsultant, em);
             return Response.ok().entity(chats).build();
         } catch (SQLException ex) {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
