@@ -7,10 +7,13 @@ package aes.persistence;
 
 import aes.model.Chat;
 import aes.model.User;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import org.hibernate.CacheMode;
 
 /**
  *
@@ -54,6 +57,24 @@ public class ChatDAO extends GenericDAO<Chat>{
             return (Chat) c.toArray()[0];
         }
 
+    }
+    
+    public List<Chat> list(Object objeto, EntityManager entityManager) throws SQLException {
+
+        try {
+                Query query;
+                if (objeto != null) {
+                        query = entityManager.createQuery("select chat.messageList from Chat chat where chat.user.relatedConsultant.id = :objeto");
+                        query.setParameter("objeto", objeto);
+                } else {
+                        query = entityManager.createQuery("select chat.messageList from Chat chat where chat.user.relatedConsultant.id is Null");
+                }
+                query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+                query.setHint("org.hibernate.cacheable", true);
+                return query.getResultList();
+        } catch (Exception erro) {
+                throw new SQLException(erro);
+        }
     }
     
 }
