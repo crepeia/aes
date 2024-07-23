@@ -175,10 +175,13 @@ public class ChatEndpoint {
         if(!Objects.equals(consultant, null)) {
             for(Map.Entry<Long, Session> c: consultants.entrySet()) {
                 if(Objects.equals(consultant, c))
+                    //Se usuario tem consultor e ele está online
                     return true;
             }
+            //Se usuario tem consultor e ele não está online
             return false;
         }
+        //Se usuario não tem consultor
         return true;
     }
     
@@ -225,18 +228,8 @@ public class ChatEndpoint {
         
         UserInfo ui = new UserInfo();
         
-        if(currentUser == null){
-            // MODIFICAÇÃO FEITA POR LUAN
-            
-            // ANTERIORMENTE FEITO ASSIM:
-            // if(consultants.isEmpty()){;
-            //    sendNoConsultantMessage(session);
-            //    return;
-            // }
-            
-            // AGORA:
-            
-            // Enquanto não ouver consultores ou não tiver passado 4 minutos programa fica em pausa.
+        if(currentUser == null){            
+            // Enquanto não houver consultores ou não tiver passado 4 minutos programa fica em pausa.
             // 4 minutos = 0,1 segundo * 10 * 60 * 4.
             for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
                 try {
@@ -247,11 +240,8 @@ public class ChatEndpoint {
             // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
             if(consultants.isEmpty()) {
                 sendNoConsultantMessage(session);
-                //espera um pouco
                 return;
             }
-            
-            ////
   
             newChat = new Chat();
             newChat.setUser(null);
@@ -306,33 +296,19 @@ public class ChatEndpoint {
                 sendUserStatusList(currentUser.getId());
 
             } else {//usuário comum
-                //if(consultants.isEmpty() || !checkConsultants(currentUser.getRelatedConsultant())){
-                // MODIFICAÇÃO FEITA POR LUAN
-            
-                // ANTERIORMENTE FEITO ASSIM:
-                // if(consultants.isEmpty()){;
-                //    sendNoConsultantMessage(session);
-                //    return;
-                // }
-
-                // AGORA:
-
-                // Enquanto não ouver consultores ou não tiver passado 4 minutos programa fica em pausa.
+                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
                 // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-                for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
+                for(int i = 0; i < 2400 && consultants.isEmpty() || !checkConsultants(currentUser.getRelatedConsultant()); i++) {
                     try {
                         Thread.sleep(100); // 0,1 segundo
                     } catch (InterruptedException e) {}
                 }
 
                 // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
-                if(consultants.isEmpty()) {
+                if(consultants.isEmpty() || !checkConsultants(currentUser.getRelatedConsultant())){
                     sendNoConsultantMessage(session);
-                    //espera um pouco
                     return;
                 }
-
-                ////
                 
                 if( currentUser.getChat() == null) { //primeira vez conectando
 
