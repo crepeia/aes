@@ -170,6 +170,18 @@ public class ChatEndpoint {
     
     }
     */
+
+    private boolean checkConsultants(User consultant) {
+        if(!Objects.equals(consultant, null)) {
+            for(Map.Entry<Long, Session> c: consultants.entrySet()) {
+                if(Objects.equals(consultant, c))
+                    return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    
     @OnOpen
     //Dispara quando consultores e usuarios abrem a aba do chat no aplicativo
     public void onOpen(Session session, EndpointConfig config, @PathParam("userId") String userId) {
@@ -216,6 +228,7 @@ public class ChatEndpoint {
         if(currentUser == null){           
             if(consultants.isEmpty()){
                 sendNoConsultantMessage(session);
+                //espera um pouco
                 return;
             }
             newChat = new Chat();
@@ -265,8 +278,9 @@ public class ChatEndpoint {
                 sendUserStatusList(currentUser.getId());
 
             } else {//usuário comum
-                if(consultants.isEmpty()){
+                if(consultants.isEmpty() || !checkConsultants(currentUser.getRelatedConsultant())){
                     sendNoConsultantMessage(session);
+                    //espera um pouco
                     return;
                 }
                 if( currentUser.getChat() == null) { //primeira vez conectando
@@ -300,7 +314,7 @@ public class ChatEndpoint {
                                                                 //e o usuário desconectou/voltou
                 //    realStatus = statusType.BUSY.toString();
                 //}
-                
+
                 ui.name = currentUser.getName();
                 ui.email = currentUser.getEmail();
                 ui.chat = currentUser.getChat().getId();
@@ -313,13 +327,13 @@ public class ChatEndpoint {
                     ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
                 }
                 //ui.session = session;
-                
+
 
                 openChats.put(session, newChat.getId());
                 onlineUsers.put(session, ui);
 
                 setStatus(session, realStatus);
-
+                
             }
         }
         
