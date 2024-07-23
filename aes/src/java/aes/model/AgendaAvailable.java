@@ -37,6 +37,13 @@ public class AgendaAvailable implements Serializable {
     @Column(name = "available_date")
     private LocalDateTime availableDate;
 
+    public AgendaAvailable() {
+    }
+
+    public AgendaAvailable(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

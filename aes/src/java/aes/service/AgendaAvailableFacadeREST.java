@@ -85,7 +85,8 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @Path("delete/{id}")
     public Response delete(@PathParam("id") Long id) {
         try {
-            availableDao.delete(availableDao.find(id, em), em);
+            AgendaAvailable av = new AgendaAvailable(id);
+            availableDao.delete(av, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);

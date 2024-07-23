@@ -41,6 +41,13 @@ public class AgendaAppointment implements Serializable {
     @Column(name = "appointment_date")
     private LocalDateTime appointmentDate;
 
+    public AgendaAppointment() {
+    }
+
+    public AgendaAppointment(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }
