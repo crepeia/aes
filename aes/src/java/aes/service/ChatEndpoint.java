@@ -171,10 +171,10 @@ public class ChatEndpoint {
     }
     */
 
-    private boolean checkConsultants(User consultant) {
+    private boolean isRelatedConsultantOnline(User consultant) {
         if(!Objects.equals(consultant, null)) {
             for(Map.Entry<Long, Session> c: consultants.entrySet()) {
-                if(Objects.equals(consultant, c))
+                if(Objects.equals(consultant.getId(), c.getKey()))
                     //Se usuario tem consultor e ele está online
                     return true;
             }
@@ -185,8 +185,8 @@ public class ChatEndpoint {
         return true;
     }
     
+    //Esse método está responsável pela criação do chat do usuário e o preenchimento das listas.
     @OnOpen
-    //Dispara quando consultores e usuarios abrem a aba do chat no aplicativo
     public void onOpen(Session session, EndpointConfig config, @PathParam("userId") String userId) {
         List<String> auth = (List<String>) config.getUserProperties().get("auth");
         List<String> unauthId = null;
@@ -234,7 +234,9 @@ public class ChatEndpoint {
             for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
                 try {
                     Thread.sleep(100); // 0,1 segundo
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    return;
+                }
             }
             
             // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
@@ -291,21 +293,25 @@ public class ChatEndpoint {
                 // Dando tempo para a função do usuário pegar o consultor
                 try {
                     Thread.sleep(2000);
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    return;
+                }
                 
                 sendUserStatusList(currentUser.getId());
 
             } else {//usuário comum
                 // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
                 // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-                for(int i = 0; i < 2400 && consultants.isEmpty() || !checkConsultants(currentUser.getRelatedConsultant()); i++) {
+                for(int i = 0; i < 2400 && consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant()); i++) {
                     try {
                         Thread.sleep(100); // 0,1 segundo
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) {
+                        return;
+                    }
                 }
 
-                // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
-                if(consultants.isEmpty() || !checkConsultants(currentUser.getRelatedConsultant())){
+                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
+                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
                     sendNoConsultantMessage(session);
                     return;
                 }
@@ -544,7 +550,6 @@ public class ChatEndpoint {
     
     //quando o consultor seleciona um chat, manda msg pro servidor avisando quem que conectou e altera o status dos chats
     @OnMessage
-    //Dispara quando consultores e usuarios entram no chat de fato e quando ocorre qualquer conexão/desconexão no interior do chat ou da conversa.
     public void onMessage(Session session, String message) {
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Message received from session: {0}, messsage: {1}", new Object[]{session.getId(), message});
         System.out.println(message);
