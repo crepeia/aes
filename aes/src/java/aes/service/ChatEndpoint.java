@@ -173,13 +173,8 @@ public class ChatEndpoint {
 
     private boolean isRelatedConsultantOnline(User consultant) {
         if(!Objects.equals(consultant, null)) {
-            for(Map.Entry<Long, Session> c: consultants.entrySet()) {
-                if(Objects.equals(consultant.getId(), c.getKey()))
-                    //Se usuario tem consultor e ele está online
-                    return true;
-            }
-            //Se usuario tem consultor e ele não está online
-            return false;
+            //true se consultor online, false se consultor não está online
+            return consultants.containsKey(consultant.getId());
         }
         //Se usuario não tem consultor
         return true;
