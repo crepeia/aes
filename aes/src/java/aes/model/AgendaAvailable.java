@@ -8,7 +8,8 @@
 package aes.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +36,9 @@ public class AgendaAvailable implements Serializable {
     @ManyToOne
     private User user;
     @Column(name = "available_date")
-    private LocalDateTime availableDate;
+    private LocalDate availableDate;
+    @Column(name = "available_time")
+    private LocalTime availableTime;
 
     public AgendaAvailable() {
     }
@@ -56,14 +59,22 @@ public class AgendaAvailable implements Serializable {
         this.user = user;
     }
 
-    public LocalDateTime getAvailableDate() {
+    public LocalDate getAvailableDate() {
         return availableDate;
     }
 
-    public void setAvailableDate(LocalDateTime availableDate) {
+    public void setAvailableDate(LocalDate availableDate) {
         this.availableDate = availableDate;
     }
 
+    public LocalTime getAvailableTime() {
+        return availableTime;
+    }
+
+    public void setAvailableTime(LocalTime availableTime) {
+        this.availableTime = availableTime;
+    }
+    
     //Desvincula as entidades para possibilitar a remoção do available do banco de dados (não usado atualmente)
     public void removeAvailable() {
         this.getUser().getAvailablesUser().remove(this);
