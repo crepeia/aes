@@ -297,7 +297,7 @@ public class ChatEndpoint {
             } else {//usuário comum
                 // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
                 // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-                for(int i = 0; i < 2400 && consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant()); i++) {
+                for(int i = 0; i < 2400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
                     try {
                         Thread.sleep(100); // 0,1 segundo
                     } catch (InterruptedException e) {
