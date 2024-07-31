@@ -8,9 +8,11 @@
 package aes.service;
 
 import aes.model.AgendaAppointment;
+import aes.persistence.AgendaAppointmentDAO;
 import aes.persistence.GenericDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +38,7 @@ import javax.ws.rs.core.Response;
  * @author Leonorico
  */
 
-@Secured
+//@Secured
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("agendaappointment")
@@ -44,12 +46,12 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-    private GenericDAO<AgendaAppointment> appointmentDao;
+    private AgendaAppointmentDAO appointmentDao;
 
     public AgendaAppointmentFacadeREST() {
         super(AgendaAppointment.class);
         try {
-            appointmentDao = new GenericDAO<>(AgendaAppointment.class);
+            appointmentDao = new AgendaAppointmentDAO(AgendaAppointment.class);
         } catch (NamingException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -118,7 +120,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllByUser(@PathParam("userId") Long userId) {
         try {
-            return Response.ok().entity(appointmentDao.list("user.id", userId, em)).build();
+            return Response.ok().entity(appointmentDao.listByUser("user.id", userId, LocalDateTime.now(), em)).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -130,7 +132,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllByConsultant(@PathParam("consultantId") Long consultantId) {
         try {
-            return Response.ok().entity(appointmentDao.list("consultant.id", consultantId, em)).build();
+            return Response.ok().entity(appointmentDao.listByUser("consultant.id", consultantId, LocalDateTime.now(), em)).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
