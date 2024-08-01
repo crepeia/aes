@@ -38,7 +38,7 @@ import javax.ws.rs.core.Response;
  * @author Leonorico
  */
 
-//@Secured
+@Secured
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("agendaappointment")
