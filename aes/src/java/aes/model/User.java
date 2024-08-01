@@ -142,6 +142,14 @@ public class User implements Serializable {
     //@LazyCollection(LazyCollectionOption.FALSE)
     private List<AgendaAvailable> availablesUser;
     
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notificationsUser;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notificationsConsultant;
+    
     @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Chat chat;
@@ -675,5 +683,27 @@ public class User implements Serializable {
     public void setRelatedUser(List<User> relatedUser) {
         this.relatedUser = relatedUser;
     }
+
+    @JsonIgnore
+    @XmlTransient
+    public List<Notification> getNotificationsUser() {
+        return notificationsUser;
+    }
+
+    public void setNotificationsUser(List<Notification> notificationsUser) {
+        this.notificationsUser = notificationsUser;
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    public List<Notification> getNotificationsConsultant() {
+        return notificationsConsultant;
+    }
+
+    public void setNotificationsConsultant(List<Notification> notificationsConsultant) {
+        this.notificationsConsultant = notificationsConsultant;
+    }
+    
+    
     
 }
