@@ -33,6 +33,13 @@ public class Notification implements Serializable {
     private String message;
     private boolean notificated;
 
+    public Notification() {
+    }
+    
+    public Notification(Long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

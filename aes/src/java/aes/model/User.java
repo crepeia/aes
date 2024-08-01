@@ -147,7 +147,7 @@ public class User implements Serializable {
     private List<Notification> notificationsUser;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "consultant")
     private List<Notification> notificationsConsultant;
     
     @JsonManagedReference
