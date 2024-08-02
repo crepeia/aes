@@ -36,7 +36,7 @@ public class AgendaAvailable implements Serializable {
     @ManyToOne
     private User user;
     @Column(name = "available_date")
-    private LocalDate availableDate;
+    private byte availableDate;
     @Column(name = "available_time")
     private LocalTime availableTime;
 
@@ -59,11 +59,11 @@ public class AgendaAvailable implements Serializable {
         this.user = user;
     }
 
-    public LocalDate getAvailableDate() {
+    public byte getAvailableDate() {
         return availableDate;
     }
 
-    public void setAvailableDate(LocalDate availableDate) {
+    public void setAvailableDate(byte availableDate) {
         this.availableDate = availableDate;
     }
 
