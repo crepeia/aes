@@ -118,9 +118,9 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Path("findAllByUser/{userId}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findAllByUser(@PathParam("userId") Long userId) {
+    public Response findAllCurrentByUser(@PathParam("userId") Long userId) {
         try {
-            return Response.ok().entity(appointmentDao.listByUser("user.id", userId, LocalDateTime.now(), em)).build();
+            return Response.ok().entity(appointmentDao.listCurrentByUser(userId, LocalDateTime.now(), em)).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -132,7 +132,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllByConsultant(@PathParam("consultantId") Long consultantId) {
         try {
-            return Response.ok().entity(appointmentDao.listByUser("consultant.id", consultantId, LocalDateTime.now(), em)).build();
+            return Response.ok().entity(appointmentDao.list("consultant.id", consultantId, em)).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();

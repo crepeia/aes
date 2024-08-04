@@ -7,6 +7,7 @@ package aes.persistence;
 
 import aes.model.AgendaAppointment;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -23,19 +24,18 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
         super(classe);
     }
     
-    public List<AgendaAppointment> listByUser(String id, Object idValue, Object dateTimeValue, EntityManager entityManager) throws SQLException {
+    public List<AgendaAppointment> listCurrentByUser(Long idValue, LocalDateTime dateTimeValue, EntityManager entityManager) throws SQLException {
 
         try {
-            
-            id = id.substring(0, 1).toLowerCase() + id.substring(1);
+
             Query query;
             
-            if(id != null) {
-                query = entityManager.createQuery("select app from AgendaAppointment app where app." + id + " = :idValue and app.appointmentDate >= :dateTimeValue order by app.appointmentDate");
+            if(idValue != null) {
+                query = entityManager.createQuery("select app from AgendaAppointment app where app.user.id = :idValue and app.appointmentDate >= :dateTimeValue order by app.appointmentDate");
                 query.setParameter("idValue", idValue);
                 query.setParameter("dateTimeValue", dateTimeValue);
             } else {
-                query = entityManager.createQuery("select app from AgendaAppointment app where app." + id + " is Null");
+                query = entityManager.createQuery("select app from AgendaAppointment app where app.user.id is Null");
             }
             return query.getResultList();
         } catch (Exception erro) {
