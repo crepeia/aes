@@ -9,6 +9,7 @@ import aes.model.Notification;
 import aes.persistence.NotificationDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -114,7 +115,12 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllUnreadByUser(@PathParam("userId") Long userId) {
         try {
-            return Response.ok().entity(notificationDao.listUnreadByUser(userId, em)).build();
+            List<Notification> unreadNotifications = notificationDao.listUnreadByUser(userId, em);
+            for(Notification notification : unreadNotifications) {
+                notification.setNotificated(true);
+                notificationDao.update(notification, em);
+            }
+            return Response.ok().entity(unreadNotifications).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();

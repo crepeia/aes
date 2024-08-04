@@ -14,7 +14,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author Malder
+ * @author Leonorico
  */
 public class AgendaAvailableDAO extends GenericDAO<AgendaAvailable> {
     
@@ -23,14 +23,6 @@ public class AgendaAvailableDAO extends GenericDAO<AgendaAvailable> {
     }
     
     public List<AgendaAvailable> listByConsultant(Long consultantId, EntityManager em) throws SQLException {
-//        "SELECT a " +
-//        "FROM AgendaAvailable a " +
-//        "JOIN a.user u " +
-//        "WHERE u.id IN ( " +
-//            "SELECT u2.id " +
-//            "FROM User u2 " +
-//            "WHERE u2.consultantId = :consultantId " +
-//        ")"
         try {
             Query query = em.createQuery(
                     "SELECT av FROM AgendaAvailable av "
