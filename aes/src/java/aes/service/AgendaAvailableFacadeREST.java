@@ -8,6 +8,8 @@
 package aes.service;
 
 import aes.model.AgendaAvailable;
+import aes.model.User;
+import aes.persistence.AgendaAvailableDAO;
 import aes.persistence.GenericDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
@@ -44,12 +46,12 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-    private GenericDAO<AgendaAvailable> availableDao;
+    private AgendaAvailableDAO availableDao;
 
     public AgendaAvailableFacadeREST() {
         super(AgendaAvailable.class);
         try {
-            availableDao = new GenericDAO<>(AgendaAvailable.class);
+            availableDao = new AgendaAvailableDAO(AgendaAvailable.class);
         } catch (NamingException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -119,6 +121,18 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     public Response findAllByUser(@PathParam("userId") Long userId) {
         try {
             return Response.ok().entity(availableDao.list("user.id", userId, em)).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @Path("findAllByConsultant/{consultantId}")
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findAllByConsultant(@PathParam("consultantId") Long consultantId) {       
+        try {
+            return Response.ok().entity(availableDao.listByConsultant(consultantId, em)).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();

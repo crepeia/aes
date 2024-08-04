@@ -1,0 +1,48 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package aes.persistence;
+
+import aes.model.AgendaAvailable;
+import java.sql.SQLException;
+import java.util.List;
+import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+/**
+ *
+ * @author Malder
+ */
+public class AgendaAvailableDAO extends GenericDAO<AgendaAvailable> {
+    
+    public AgendaAvailableDAO(Class<AgendaAvailable> classe) throws NamingException {
+        super(classe);
+    }
+    
+    public List<AgendaAvailable> listByConsultant(Long consultantId, EntityManager em) throws SQLException {
+//        "SELECT a " +
+//        "FROM AgendaAvailable a " +
+//        "JOIN a.user u " +
+//        "WHERE u.id IN ( " +
+//            "SELECT u2.id " +
+//            "FROM User u2 " +
+//            "WHERE u2.consultantId = :consultantId " +
+//        ")"
+        try {
+            Query query = em.createQuery(
+                    "SELECT av FROM AgendaAvailable av "
+                            + "JOIN av.user u "
+                            + "WHERE u.id IN ("
+                            + "SELECT u2.id "
+                            + "FROM User u2 "
+                            + "WHERE u2.relatedConsultant.id = :consultantId)");
+            query.setParameter("consultantId", consultantId);
+            return query.getResultList();
+        } catch (Exception erro) {
+            throw new SQLException(erro);
+        }
+    }    
+}
