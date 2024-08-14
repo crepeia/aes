@@ -580,7 +580,7 @@ public class ChatEndpoint {
                     if(user.getRelatedConsultant() == null) {
                         user.setRelatedConsultant(daoUser.find(consultantId, em));
                         try {
-                            daoUser.uptadeUser(user, em);
+                            daoUser.update(user, em);
                         } catch (SQLException ex) {
                             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                         }
