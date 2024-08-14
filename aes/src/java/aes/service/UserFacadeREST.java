@@ -315,7 +315,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     
     @PUT
     @Path("changeUserConsultant/{userId}/{consultantId}/{adminId}")
-    //@Secured
+    @Secured
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response changeUserConsultant(@PathParam("userId") Long userId, @PathParam("consultantId") Long consultantId, @PathParam("adminId") Long adminId) {
         if(userDAO.find(adminId, em).isAdmin()) {
