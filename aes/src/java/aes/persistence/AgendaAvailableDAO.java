@@ -18,8 +18,8 @@ import javax.persistence.Query;
  */
 public class AgendaAvailableDAO extends GenericDAO<AgendaAvailable> {
     
-    public AgendaAvailableDAO(Class<AgendaAvailable> classe) throws NamingException {
-        super(classe);
+    public AgendaAvailableDAO() throws NamingException {
+        super(AgendaAvailable.class);
     }
     
     public List<AgendaAvailable> listByConsultant(Long consultantId, EntityManager em) throws SQLException {

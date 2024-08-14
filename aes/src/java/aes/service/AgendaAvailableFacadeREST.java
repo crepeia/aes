@@ -8,12 +8,9 @@
 package aes.service;
 
 import aes.model.AgendaAvailable;
-import aes.model.User;
 import aes.persistence.AgendaAvailableDAO;
-import aes.persistence.GenericDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -51,7 +48,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     public AgendaAvailableFacadeREST() {
         super(AgendaAvailable.class);
         try {
-            availableDao = new AgendaAvailableDAO(AgendaAvailable.class);
+            availableDao = new AgendaAvailableDAO();
         } catch (NamingException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -9,11 +9,8 @@ package aes.service;
 
 import aes.model.AgendaAppointment;
 import aes.persistence.AgendaAppointmentDAO;
-import aes.persistence.GenericDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -51,7 +48,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     public AgendaAppointmentFacadeREST() {
         super(AgendaAppointment.class);
         try {
-            appointmentDao = new AgendaAppointmentDAO(AgendaAppointment.class);
+            appointmentDao = new AgendaAppointmentDAO();
         } catch (NamingException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -115,12 +112,12 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         }
     }
     
-    @Path("findAllByUser/{userId}")
+    @Path("findAllCurrentByUser/{userId}")
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllCurrentByUser(@PathParam("userId") Long userId) {
         try {
-            return Response.ok().entity(appointmentDao.listCurrentByUser(userId, LocalDateTime.now(), em)).build();
+            return Response.ok().entity(appointmentDao.listCurrentByUser(userId, em)).build();
         } catch (SQLException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
