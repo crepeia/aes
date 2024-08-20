@@ -295,22 +295,6 @@ public class ChatEndpoint {
                 sendUserStatusList(currentUser.getId());
 
             } else {//usuário comum
-                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
-                // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-                for(int i = 0; i < 2400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
-                    try {
-                        Thread.sleep(100); // 0,1 segundo
-                    } catch (InterruptedException e) {
-                        return;
-                    }
-                }
-
-                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
-                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
-                    sendNoConsultantMessage(session);
-                    return;
-                }
-                
                 if( currentUser.getChat() == null) { //primeira vez conectando
 
                     newChat = new Chat();
@@ -361,6 +345,22 @@ public class ChatEndpoint {
                 onlineUsers.put(session, ui);
 
                 setStatus(session, realStatus);
+                
+                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
+                // 4 minutos = 0,1 segundo * 10 * 60 * 4.
+                for(int i = 0; i < 400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
+                    try {
+                        Thread.sleep(100); // 0,1 segundo
+                    } catch (InterruptedException e) {
+                        return;
+                    }
+                }
+                
+                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
+                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
+                    sendNoConsultantMessage(session);
+                    return;
+                }
                 
             }
         }
@@ -548,7 +548,7 @@ public class ChatEndpoint {
     public void onMessage(Session session, String message) {
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Message received from session: {0}, messsage: {1}", new Object[]{session.getId(), message});
         System.out.println(message);
-
+        
       
         try {
             
