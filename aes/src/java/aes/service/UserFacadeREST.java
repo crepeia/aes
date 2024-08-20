@@ -7,7 +7,9 @@ package aes.service;
 
 import aes.controller.ContactController;
 import aes.controller.UserController;
+import aes.model.AgendaAppointment;
 import aes.model.User;
+import aes.persistence.AgendaAppointmentDAO;
 import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
 import aes.utility.EmailHelper;
@@ -58,6 +60,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private EntityManager em;
     private UserDAO userDAO;
     private ContactDAO contactDAO;
+    private AgendaAppointmentDAO appointmentDao;
     private EmailHelper emailHelper;
     
     @Inject
@@ -79,6 +82,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             userDAO = new UserDAO();
             contactDAO = new ContactDAO();
+            appointmentDao = new AgendaAppointmentDAO();
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -201,7 +205,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
-        @PUT
+    @PUT
     @Path("recover-password")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response recoverPassword(JsonParser jp) {
@@ -307,6 +311,30 @@ public class UserFacadeREST extends AbstractFacade<User> {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
+    }
+    
+    @PUT
+    @Path("changeUserConsultant/{userId}/{consultantId}/{adminId}")
+    @Secured
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response changeUserConsultant(@PathParam("userId") Long userId, @PathParam("consultantId") Long consultantId, @PathParam("adminId") Long adminId) {
+        if(userDAO.find(adminId, em).isAdmin()) {
+            try {
+                User user = userDAO.find(userId, em);
+                User newConsultant = userDAO.find(consultantId, em);
+                List<AgendaAppointment> userCurrentAppointments = appointmentDao.listCurrentByUser(userId, em);
+                for(AgendaAppointment appointment : userCurrentAppointments) {
+                    appointmentDao.delete(appointment, em);
+                }
+                user.setRelatedConsultant(newConsultant);
+                userDAO.update(user, em);
+                return Response.status(Response.Status.OK).build();
+            } catch (SQLException ex) {
+                Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
     
     @Override

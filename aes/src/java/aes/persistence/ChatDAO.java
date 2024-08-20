@@ -59,21 +59,17 @@ public class ChatDAO extends GenericDAO<Chat>{
 
     }
     
-    public List<Chat> list(Object objeto, EntityManager entityManager) throws SQLException {
+    public List<Chat> listUserChats(Object objeto, EntityManager entityManager) throws SQLException {
 
         try {
-                Query query;
-                if (objeto != null) {
-                        query = entityManager.createQuery("select chat.messageList from Chat chat where chat.user.relatedConsultant.id = :objeto");
-                        query.setParameter("objeto", objeto);
-                } else {
-                        query = entityManager.createQuery("select chat.messageList from Chat chat where chat.user.relatedConsultant.id is Null");
-                }
-                query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
-                query.setHint("org.hibernate.cacheable", true);
-                return query.getResultList();
+            Query query;
+            query = entityManager.createQuery("select chat.messageList from Chat chat where chat.user.relatedConsultant.id = :objeto");
+            query.setParameter("objeto", objeto);
+            query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
+            query.setHint("org.hibernate.cacheable", true);
+            return query.getResultList();
         } catch (Exception erro) {
-                throw new SQLException(erro);
+            throw new SQLException(erro);
         }
     }
     

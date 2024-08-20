@@ -12,7 +12,6 @@ import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.hibernate.CacheMode;
 
 /**
  *
@@ -20,15 +19,16 @@ import org.hibernate.CacheMode;
  */
 public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
     
-    public AgendaAppointmentDAO(Class<AgendaAppointment> classe) throws NamingException {
-        super(classe);
+    public AgendaAppointmentDAO() throws NamingException {
+        super(AgendaAppointment.class);
     }
     
-    public List<AgendaAppointment> listCurrentByUser(Long idValue, LocalDateTime dateTimeValue, EntityManager entityManager) throws SQLException {
+    public List<AgendaAppointment> listCurrentByUser(Long idValue, EntityManager entityManager) throws SQLException {
 
         try {
 
             Query query;
+            LocalDateTime dateTimeValue = LocalDateTime.now();
             
             if(idValue != null) {
                 query = entityManager.createQuery("select app from AgendaAppointment app where app.user.id = :idValue and app.appointmentDate >= :dateTimeValue order by app.appointmentDate");
