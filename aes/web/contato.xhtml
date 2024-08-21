@@ -8,6 +8,7 @@
     <f:view locale="#{languageController.locale}">
         <h:head>
             <title>#{messages['contato.title']}</title>
+            <!--<script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>-->
             <w:head_comum />
             <!-- header -->    
             <w:header />
@@ -42,6 +43,7 @@
                                         <p:message for="message"/>
                                         <h:inputHidden id="user" binding="#{user}" value="#{userController.user}"  rendered="false"/>
                                         <h:inputHidden id="language" binding="#{language}" value="#{localeController.language}"  rendered="false"/>
+                                        <!--<div class="g-recaptcha" data-sitekey="chave_site"></div>-->
                                         <div id="signinbtn">
                                             <p:commandButton styleClass="btngen btn btn-primary" value ="#{messages['send']}" update="@form" actionListener="#{contactController.sendContactFormEmail}" >
                                                 <f:attribute name="message" value="#{message.value}" />
