@@ -61,7 +61,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         try {
             availableDao.insert(available, em);
             return Response.status(Response.Status.CREATED).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -74,7 +74,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         try {
             availableDao.update(available, em);
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -83,11 +83,15 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @DELETE
     @Path("delete/{id}")
     public Response delete(@PathParam("id") Long id) {
+        AgendaAvailable av;
         try {
-            AgendaAvailable av = new AgendaAvailable(id);
-            availableDao.delete(av, em);
-            return Response.status(Response.Status.OK).build();
-        } catch (SQLException ex) {
+            if(availableDao.find(id, em) != null) {
+                av = new AgendaAvailable(id);
+                availableDao.delete(av, em);
+                return Response.status(Response.Status.OK).build();
+            }
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -106,7 +110,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     public Response findAllAvailables() {
         try {
             return Response.ok().entity(availableDao.list(em)).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -118,7 +122,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     public Response findAllByUser(@PathParam("userId") Long userId) {
         try {
             return Response.ok().entity(availableDao.list("user.id", userId, em)).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -130,7 +134,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     public Response findAllByConsultant(@PathParam("consultantId") Long consultantId) {       
         try {
             return Response.ok().entity(availableDao.listByConsultant(consultantId, em)).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
