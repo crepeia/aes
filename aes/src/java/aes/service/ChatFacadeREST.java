@@ -7,12 +7,14 @@ package aes.service;
 
 import aes.model.Chat;
 import aes.persistence.ChatDAO;
+import aes.persistence.UserDAO;
 import aes.utility.EmailHelper;
 import aes.utility.Secured;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -45,6 +47,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private ChatDAO chatDAO;
+    private UserDAO userDao;
     private EmailHelper emailHelper;
 
     @Context
@@ -55,6 +58,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
         emailHelper = new EmailHelper();
         try {
             chatDAO = new ChatDAO();
+            userDao = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -121,15 +125,19 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     
     @GET
     @Path("findUserChatsByConsultant/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findUserChatsByConsultant(@PathParam("id") Long idConsultant) {
         List<Chat> chats;
         try {
-            chats = chatDAO.listUserChats(idConsultant, em);
-            return Response.ok().entity(chats).build();
-        } catch (SQLException ex) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            if(userDao.find(idConsultant, em).isConsultant()) {
+                chats = chatDAO.listUserChats(idConsultant, em);
+                return Response.ok().entity(chats).build();
+            }
             return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 

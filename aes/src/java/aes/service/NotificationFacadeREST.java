@@ -31,9 +31,9 @@ import javax.ws.rs.core.Response;
 
 /**
  *
- * @author Malder
+ * @author Leonorico
  */
-@Secured
+//@Secured
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("notification")
@@ -59,7 +59,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
         try {
             notificationDao.insert(notification, em);
             return Response.status(Response.Status.CREATED).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -72,7 +72,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
         try {
             notificationDao.update(notification, em);
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -85,7 +85,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             Notification notification = new Notification(id);
             notificationDao.delete(notification, em);
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
