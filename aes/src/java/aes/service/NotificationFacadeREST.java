@@ -46,7 +46,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     public NotificationFacadeREST() {
         super(Notification.class);
         try {
-            notificationDao = new NotificationDAO(Notification.class);
+            notificationDao = new NotificationDAO();
         } catch (NamingException ex) {
             Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
         }
@@ -83,7 +83,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     public Response delete(@PathParam("id") Long id) {
         Notification notification;
         try {
-            if(notificationDao.find(id,em) != null) {
+            if(notificationDao.find(id,em).get(0) != null) {
                 notification = new Notification(id);
                 notificationDao.delete(notification, em);
                 return Response.status(Response.Status.OK).build();
@@ -99,7 +99,12 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     @Path("find/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response find(@PathParam("id") Long id) {
-        return Response.ok().entity(notificationDao.find(id, em)).build();
+        try {
+            return Response.ok().entity(notificationDao.find(id, em)).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 
     @GET

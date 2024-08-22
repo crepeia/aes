@@ -83,7 +83,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     public Response delete(@PathParam("id") Long id) {
         AgendaAvailable av;
         try {
-            if(availableDao.find(id, em) != null) {
+            if(availableDao.find(id, em).get(0) != null) {
                 av = new AgendaAvailable(id);
                 availableDao.delete(av, em);
                 return Response.status(Response.Status.OK).build();
@@ -99,7 +99,12 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
     @Path("find/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response find(@PathParam("id") Long id) {
-        return Response.ok().entity(availableDao.find(id, em)).build();
+        try {
+            return Response.ok().entity(availableDao.find(id, em)).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 
     @Path("findAll")

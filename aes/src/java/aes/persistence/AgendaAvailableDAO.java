@@ -22,6 +22,17 @@ public class AgendaAvailableDAO extends GenericDAO<AgendaAvailable> {
         super(AgendaAvailable.class);
     }
     
+    public List<AgendaAvailable> find(Long id, EntityManager entityManager) throws SQLException {
+        Query query;
+        try {
+            query = entityManager.createQuery("select av from AgendaAvailable av where av.id = :id");
+            query.setParameter("id", id);
+            return query.getResultList();
+        } catch (Exception erro) {
+            throw new SQLException(erro);
+        }
+    }
+    
     public List<AgendaAvailable> listByConsultant(Long consultantId, EntityManager em) throws SQLException {
         try {
             Query query = em.createQuery(
