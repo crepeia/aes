@@ -60,7 +60,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             chatDAO = new ChatDAO();
             userDao = new UserDAO();
         } catch (NamingException ex) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
         }
     }
 
@@ -118,7 +118,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, null, "Send Contact Request service");
             return Response.ok().build();
         } catch (Exception e) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
@@ -133,7 +133,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             chats = chatDAO.listUserChats(idConsultant, em);
             return Response.ok().entity(chats).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

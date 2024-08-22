@@ -48,7 +48,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
         try {
             notificationDao = new NotificationDAO(Notification.class);
         } catch (NamingException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
         }
     }
 
@@ -60,7 +60,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             notificationDao.insert(notification, em);
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -73,7 +73,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             notificationDao.update(notification, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -90,7 +90,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             }
             return Response.status(Response.Status.NOT_FOUND).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -109,7 +109,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
         try {
             return Response.ok().entity(notificationDao.list(em)).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -126,7 +126,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             }
             return Response.ok().entity(unreadNotifications).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

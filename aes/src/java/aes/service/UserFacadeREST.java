@@ -338,7 +338,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             }
             return Response.status(Response.Status.FORBIDDEN).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
