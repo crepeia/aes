@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response;
  *
  * @author Leonorico
  */
-//@Secured
+@Secured
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("notification")
@@ -81,10 +81,14 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     @DELETE
     @Path("delete/{id}")
     public Response delete(@PathParam("id") Long id) {
+        Notification notification;
         try {
-            Notification notification = new Notification(id);
-            notificationDao.delete(notification, em);
-            return Response.status(Response.Status.OK).build();
+            if(notificationDao.find(id,em) != null) {
+                notification = new Notification(id);
+                notificationDao.delete(notification, em);
+                return Response.status(Response.Status.OK).build();
+            }
+            return Response.status(Response.Status.NOT_FOUND).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -104,7 +108,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     public Response findAllNotifications() {
         try {
             return Response.ok().entity(notificationDao.list(em)).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -121,7 +125,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
                 notificationDao.update(notification, em);
             }
             return Response.ok().entity(unreadNotifications).build();
-        } catch (SQLException ex) {
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
