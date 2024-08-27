@@ -21,18 +21,7 @@ public class NotificationDAO extends GenericDAO<Notification> {
     public NotificationDAO() throws NamingException {
         super(Notification.class);
     }
-    
-    public List<Notification> find(Long id, EntityManager entityManager) throws SQLException {
-        Query query;
-        try {
-            query = entityManager.createQuery("select notif from Notification notif where notif.id = :id");
-            query.setParameter("id", id);
-            return query.getResultList();
-        } catch (Exception erro) {
-            throw new SQLException(erro);
-        }
-    }
-    
+
     public List<Notification> listUnreadByUser(Long id, EntityManager entityManager) throws SQLException {
 
         try {         

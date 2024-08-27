@@ -23,17 +23,6 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
         super(AgendaAppointment.class);
     }
     
-    public List<AgendaAppointment> find(Long id, EntityManager entityManager) throws SQLException {
-        Query query;
-        try {
-            query = entityManager.createQuery("select app from AgendaAppointment app where app.id = :id");
-            query.setParameter("id", id);
-            return query.getResultList();
-        } catch (Exception erro) {
-            throw new SQLException(erro);
-        }
-    }
-    
     public List<AgendaAppointment> listCurrentByUser(Long idValue, EntityManager entityManager) throws SQLException {
 
         try {
