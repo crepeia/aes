@@ -33,4 +33,8 @@
         <param-name>primefaces.THEME</param-name>
         <param-value>none</param-value>
     </context-param>
+    <context-param>
+        <param-name>recaptchaKey</param-name>
+        <param-value></param-value>
+    </context-param>
 </web-app>
