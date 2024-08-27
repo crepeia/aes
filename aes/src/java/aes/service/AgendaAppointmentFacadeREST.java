@@ -9,6 +9,8 @@ import aes.model.AgendaAppointment;
 import aes.persistence.AgendaAppointmentDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -83,7 +85,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     public Response delete(@PathParam("id") Long id) {
         AgendaAppointment app;
         try {
-            if(appointmentDao.find(id, em).get(0) != null) {
+            if(appointmentDao.find(id, em) != null) {
                 app = new AgendaAppointment(id);
                 appointmentDao.delete(app, em);
                 return Response.status(Response.Status.OK).build();
@@ -100,9 +102,9 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response find(@PathParam("id") Long id) {
         try {
-            return Response.ok().entity(appointmentDao.find(id, em)).build();
+            return Response.ok().entity(appointmentDao.listOnce("id", id, em)).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

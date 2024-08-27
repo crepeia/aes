@@ -9,6 +9,7 @@ import aes.model.Notification;
 import aes.persistence.NotificationDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,7 +84,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     public Response delete(@PathParam("id") Long id) {
         Notification notification;
         try {
-            if(notificationDao.find(id,em).get(0) != null) {
+            if(notificationDao.find(id,em) != null) {
                 notification = new Notification(id);
                 notificationDao.delete(notification, em);
                 return Response.status(Response.Status.OK).build();
@@ -100,8 +101,8 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response find(@PathParam("id") Long id) {
         try {
-            return Response.ok().entity(notificationDao.find(id, em)).build();
-        } catch (SQLException ex) {
+            return Response.ok().entity(notificationDao.listOnce("id", id, em)).build();
+        } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
