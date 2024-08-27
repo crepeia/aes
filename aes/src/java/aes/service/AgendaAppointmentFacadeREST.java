@@ -1,5 +1,3 @@
-//Serviço REST que possibilita a manipulação de objetos do tipo AgendaAppointment e sua persistência no banco de dados
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,6 +9,8 @@ import aes.model.AgendaAppointment;
 import aes.persistence.AgendaAppointmentDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -50,7 +50,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         try {
             appointmentDao = new AgendaAppointmentDAO();
         } catch (NamingException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
         }
     }
 
@@ -61,8 +61,8 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         try {
             appointmentDao.insert(appointment, em);
             return Response.status(Response.Status.CREATED).build();
-        } catch (SQLException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -74,8 +74,8 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         try {
             appointmentDao.update(appointment, em);
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -83,12 +83,16 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @DELETE
     @Path("delete/{id}")
     public Response delete(@PathParam("id") Long id) {
+        AgendaAppointment app;
         try {
-            AgendaAppointment app = new AgendaAppointment(id);
-            appointmentDao.delete(app, em);
-            return Response.status(Response.Status.OK).build();
-        } catch (SQLException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            if(appointmentDao.find(id, em) != null) {
+                app = new AgendaAppointment(id);
+                appointmentDao.delete(app, em);
+                return Response.status(Response.Status.OK).build();
+            }
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -97,7 +101,12 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Path("find/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response find(@PathParam("id") Long id) {
-        return Response.ok().entity(appointmentDao.find(id, em)).build();
+        try {
+            return Response.ok().entity(appointmentDao.listOnce("id", id, em)).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 
     @Path("findAll")
@@ -106,8 +115,8 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     public Response findAllAppointments() {
         try {
             return Response.ok().entity(appointmentDao.list(em)).build();
-        } catch (SQLException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -118,8 +127,8 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     public Response findAllCurrentByUser(@PathParam("userId") Long userId) {
         try {
             return Response.ok().entity(appointmentDao.listCurrentByUser(userId, em)).build();
-        } catch (SQLException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -130,8 +139,8 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     public Response findAllByConsultant(@PathParam("consultantId") Long consultantId) {
         try {
             return Response.ok().entity(appointmentDao.list("consultant.id", consultantId, em)).build();
-        } catch (SQLException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

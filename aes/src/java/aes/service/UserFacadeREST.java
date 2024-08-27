@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -318,23 +319,28 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response changeUserConsultant(@PathParam("userId") Long userId, @PathParam("consultantId") Long consultantId, @PathParam("adminId") Long adminId) {
-        if(userDAO.find(adminId, em).isAdmin()) {
-            try {
-                User user = userDAO.find(userId, em);
-                User newConsultant = userDAO.find(consultantId, em);
-                List<AgendaAppointment> userCurrentAppointments = appointmentDao.listCurrentByUser(userId, em);
-                for(AgendaAppointment appointment : userCurrentAppointments) {
-                    appointmentDao.delete(appointment, em);
+        User user;
+        User newConsultant;
+        try {
+            if(userDAO.find(adminId, em).isAdmin()) {
+                if(!userDAO.find(userId, em).isConsultant() && userDAO.find(consultantId, em).isConsultant()) {
+                    user = userDAO.find(userId, em);
+                    newConsultant = userDAO.find(consultantId, em);
+                    List<AgendaAppointment> userCurrentAppointments = appointmentDao.listCurrentByUser(userId, em);
+                    for(AgendaAppointment appointment : userCurrentAppointments) {
+                        appointmentDao.delete(appointment, em);
+                    }
+                    user.setRelatedConsultant(newConsultant);
+                    userDAO.update(user, em);
+                    return Response.status(Response.Status.OK).build();
                 }
-                user.setRelatedConsultant(newConsultant);
-                userDAO.update(user, em);
-                return Response.status(Response.Status.OK).build();
-            } catch (SQLException ex) {
-                Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        return Response.status(Response.Status.FORBIDDEN).build();
     }
     
     @Override

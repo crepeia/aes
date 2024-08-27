@@ -280,7 +280,7 @@ public class GenericDAO<T> implements Serializable {
 		}
 	}
 
-	public T listOnce(String campoStr, Object objeto, EntityManager entityManager) throws SQLException {
+	public List<T> listOnce(String campoStr, Object objeto, EntityManager entityManager) throws SQLException {
 		try {
 			campoStr = campoStr.substring(0, 1).toLowerCase() + campoStr.substring(1);
 
@@ -296,8 +296,7 @@ public class GenericDAO<T> implements Serializable {
 			//query.setHint("toplink.refresh", "true");
                         query.setHint("org.hibernate.cacheMode", CacheMode.REFRESH);
                         query.setHint("org.hibernate.cacheable", true);
-			Object obj = query.getSingleResult();
-			return obj == null ? null : (T) obj;
+                        return query.getResultList();
 		} catch (Exception erro) {
 			throw new SQLException(erro);
 		}

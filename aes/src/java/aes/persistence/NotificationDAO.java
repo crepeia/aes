@@ -14,25 +14,20 @@ import javax.persistence.Query;
 
 /**
  *
- * @author Malder
+ * @author Leonorico
  */
 public class NotificationDAO extends GenericDAO<Notification> {
     
-    public NotificationDAO(Class<Notification> classe) throws NamingException {
-        super(classe);
+    public NotificationDAO() throws NamingException {
+        super(Notification.class);
     }
-    
-    public List<Notification> listUnreadByUser(Object idValue, EntityManager entityManager) throws SQLException {
+
+    public List<Notification> listUnreadByUser(Long id, EntityManager entityManager) throws SQLException {
 
         try {         
             Query query;
-            
-            if(idValue != null) {
-                query = entityManager.createQuery("select notif from Notification notif where notif.user.id = :idValue and notif.notificated = false order by notif.user.id");
-                query.setParameter("idValue", idValue);
-            } else {
-                query = entityManager.createQuery("select notif from Notification notif where notif.user.id is Null");
-            }
+            query = entityManager.createQuery("select notif from Notification notif where notif.user.id = :id and notif.notificated = false order by notif.user.id");
+            query.setParameter("id", id);
             return query.getResultList();
         } catch (Exception erro) {
             throw new SQLException(erro);
