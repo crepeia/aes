@@ -63,7 +63,7 @@ public class ChatDAO extends GenericDAO<Chat>{
 
         try {
             Query query;
-            query = entityManager.createQuery("select chat.messageList from Chat chat where chat.user.relatedConsultant.id = :id");
+            query = entityManager.createQuery("select chat.messageList from Chat chat where (chat.user.relatedConsultant.id = :id or chat.user.relatedConsultant.id is null)");
             query.setParameter("id", id);
             return query.getResultList();
         } catch (Exception erro) {

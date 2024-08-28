@@ -124,10 +124,10 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     }
     
     @GET
-    @Path("findUserChatsByConsultant/{id}")
+    @Path("findUserChats/{id}")
     @Secured
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findUserChatsByConsultant(@PathParam("id") Long idConsultant) {
+    public Response findUserChats(@PathParam("id") Long idConsultant) {
         List<Chat> chats;
         try {
             chats = chatDAO.listUserChats(idConsultant, em);

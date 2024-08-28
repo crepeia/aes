@@ -315,29 +315,42 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
     
     @PUT
-    @Path("changeUserConsultant/{userId}/{consultantId}/{adminId}")
+    @Path("changeUserConsultant/{userId}/{consultantId}/{adminEmail}/{adminPassword}")
     @Secured
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response changeUserConsultant(@PathParam("userId") Long userId, @PathParam("consultantId") Long consultantId, @PathParam("adminId") Long adminId) {
+    public Response changeUserConsultant(
+            @PathParam("userId") Long userId, 
+            @PathParam("consultantId") Long consultantId, 
+            @PathParam("adminEmail") String adminEmail, 
+            @PathParam("adminPassword") String adminPassword
+    ) {
         User user;
         User newConsultant;
+        List<User> admins;
+        boolean condition1;
+        boolean condition2;
         try {
-            if(userDAO.find(adminId, em).isAdmin()) {
-                if(!userDAO.find(userId, em).isConsultant() && userDAO.find(consultantId, em).isConsultant()) {
-                    user = userDAO.find(userId, em);
-                    newConsultant = userDAO.find(consultantId, em);
-                    List<AgendaAppointment> userCurrentAppointments = appointmentDao.listCurrentByUser(userId, em);
-                    for(AgendaAppointment appointment : userCurrentAppointments) {
-                        appointmentDao.delete(appointment, em);
+            admins = userDAO.list("admin", true, em);
+            for(User admin : admins) {
+                condition1 = Objects.equals(adminEmail, admin.getEmail());
+                condition2 = Encrypter.compareHash(adminPassword, admin.getPassword(), admin.getSalt());
+                if(condition1 && condition2) {
+                    if(!userDAO.find(userId, em).isConsultant() && userDAO.find(consultantId, em).isConsultant()) {
+                        user = userDAO.find(userId, em);
+                        newConsultant = userDAO.find(consultantId, em);
+                        List<AgendaAppointment> userCurrentAppointments = appointmentDao.listCurrentByUser(userId, em);
+                        for(AgendaAppointment appointment : userCurrentAppointments) {
+                            appointmentDao.delete(appointment, em);
+                        }
+                        user.setRelatedConsultant(newConsultant);
+                        userDAO.update(user, em);
+                        return Response.status(Response.Status.OK).build();
                     }
-                    user.setRelatedConsultant(newConsultant);
-                    userDAO.update(user, em);
-                    return Response.status(Response.Status.OK).build();
+                    return Response.status(Response.Status.BAD_REQUEST).build();
                 }
-                return Response.status(Response.Status.BAD_REQUEST).build();
             }
             return Response.status(Response.Status.FORBIDDEN).build();
-        } catch (SQLException | RuntimeException ex) {
+        } catch (SQLException | RuntimeException | EncrypterException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
