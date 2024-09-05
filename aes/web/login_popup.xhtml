@@ -7,7 +7,6 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <!--<script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>-->
     </h:head>
     <h:body>
         <h:form id="form" class="form-signup">
@@ -30,7 +29,6 @@
             <div id="signipbottom">	
 
                 <div id="signinsubmit">
-                    <!--<div class="g-recaptcha" data-sitekey="chave_site"></div>-->
                     <div id="signinbtn">
                         <p:commandButton id="saveEntrar" value="Entrar" update="@form" actionListener="#{userController.save}">
                             <f:attribute name="object" value="#{userController.user}" />
