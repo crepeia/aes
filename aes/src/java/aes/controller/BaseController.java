@@ -2,6 +2,7 @@ package aes.controller;
 
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import aes.utility.AppServletContextListener;
 import com.sun.faces.component.visit.FullVisitContext;
 import java.io.Serializable;
 import java.util.Map;
@@ -67,6 +68,10 @@ public abstract class BaseController<T> implements Serializable {
 
     public User getLoggedUser() {
         return (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
+    }
+
+    public String getRecaptchaKey() {
+        return AppServletContextListener.getServletContext().getInitParameter("recaptchaKey");
     }
 
 }
