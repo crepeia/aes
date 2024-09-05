@@ -10,6 +10,7 @@ import aes.model.User;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -63,8 +64,12 @@ public class ChatDAO extends GenericDAO<Chat>{
 
         try {
             Query query;
-            query = entityManager.createQuery("select chat.messageList from Chat chat where (chat.user.relatedConsultant.id = :id or chat.user.relatedConsultant.id is null)");
-            query.setParameter("id", id);
+            if(!Objects.equals(id, null)) {
+                query = entityManager.createQuery("select chat.messageList from Chat chat where (chat.user.relatedConsultant.id = :id or chat.user.relatedConsultant.id is null)");
+                query.setParameter("id", id);
+            } else {
+                query = entityManager.createQuery("select chat.messageList from Chat chat where chat.user is null");
+            }
             return query.getResultList();
         } catch (Exception erro) {
             throw new SQLException(erro);

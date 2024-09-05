@@ -145,7 +145,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     public Response findAnonymousChats() {
         List<Chat> chats;
         try {
-            chats = chatDAO.list("user", null, em);
+            chats = chatDAO.listUserChats(null, em);
             return Response.ok().entity(chats).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
