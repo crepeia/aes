@@ -68,11 +68,13 @@
                                     <p:password styleClass="form-control" id="passwordTxt" value="#{userController.password}" required="true" size="30" label="Senha">  
                                         <f:validateLength maximum="16" />
                                     </p:password>
-                                    <p:watermark for="passwordTxt" value="#{messages['password']}" />                                   
-                                    <h:outputLink value="enviar-email-senha.xhtml" style="float:left ">#{messages['forgot.password']}</h:outputLink>
-                                    <h:outputLink value="enviar-email-remover-conta.xhtml" style="float:left;padding-top: 5px ;padding-bottom: 5px">#{messages['delete.account']}</h:outputLink>
-                                    <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btn btn-primary btn-sm" update="@form" actionListener="#{userController.signIn(true)}" />
-
+                                    <p:watermark for="passwordTxt" value="#{messages['password']}" />
+                                    <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: flex-start;">
+                                        <h:outputLink value="enviar-email-senha.xhtml" style="padding-top: 5px">#{messages['forgot.password']}</h:outputLink>
+                                        <h:outputLink value="enviar-email-remover-conta.xhtml" style="padding-top: 5px">#{messages['delete.account']}</h:outputLink>
+                                        <div class="g-recaptcha" style="padding: 10px 0 10px 0" data-sitekey="#{userController.getRecaptchaKey()}"></div>
+                                        <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btn btn-primary btn-sm" update="@form" actionListener="#{userController.signIn(true)}" />
+                                    </div>
                                 </p:panel>
                             </p:overlayPanel>
                         </div>    

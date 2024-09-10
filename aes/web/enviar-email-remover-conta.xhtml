@@ -8,6 +8,7 @@
     <f:view locale="#{languageController.locale}">
         <h:head>
             <title>#{messages['delete.account.titlepage']}</title>
+            <script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>
             <w:head_comum />
             <w:header logoutRequired="true"  />
             <w:topmenu />
@@ -48,6 +49,7 @@
                                 
                                 <p:messages for="error" autoUpdate="true"  redisplay="false"/>
           
+                                <div class="g-recaptcha" data-sitekey="#{userController.getRecaptchaKey()}"></div>
                                 <div id="signipbottom">
                                     <div id="signinsubmit">
                                         <div id="signinbtn" >

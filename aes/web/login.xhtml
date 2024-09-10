@@ -8,6 +8,7 @@
     <f:view locale="#{languageController.locale}">
         <h:head>
             <title>#{messages['login']}</title>
+            <script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>
             <w:head_comum />
                                              <!-- Facebook Pixel Code to track our adverts -->
              <h:outputScript>
@@ -69,7 +70,8 @@
                                     </p:password>
                                     <p:watermark for="passwordTxt" value="#{messages['psw']}" />
                                     <p:message for="passwordTxt"/>
-                                </div>							
+                                </div>
+                                <div class="g-recaptcha" data-sitekey="#{userController.getRecaptchaKey()}"></div>
                                 <div id="signipbottom">	
 
                                     <div id="signinsubmit">
