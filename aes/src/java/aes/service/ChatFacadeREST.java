@@ -137,6 +137,21 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+    
+    @GET
+    @Path("findAnonymousChats")
+    @Secured
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findAnonymousChats() {
+        List<Chat> chats;
+        try {
+            chats = chatDAO.listUserChats(null, em);
+            return Response.ok().entity(chats).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
 
     @Override
     protected EntityManager getEntityManager() {
