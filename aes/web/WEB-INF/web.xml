@@ -35,6 +35,6 @@
     </context-param>
     <context-param>
         <param-name>recaptchaKey</param-name>
-        <param-value><!--inserir chave recaptcha aqui--></param-value>
+        <param-value></param-value>
     </context-param>
 </web-app>
