@@ -104,7 +104,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     
     @PUT
     @Path("edit/allowQuestionNotifications/{userId}")
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateAllowQuestionNotifications(@PathParam("userId") Long userId, Boolean allowQuestionNotifications) {
         try {
             String userEmail = securityContext.getUserPrincipal().getName();
@@ -120,9 +120,9 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED).build();
             }
-        } catch(SQLException e) {
-            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch(SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
