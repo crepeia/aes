@@ -10,6 +10,7 @@ import aes.model.User;
 import aes.persistence.MobileOptionsDAO;
 import aes.persistence.UserDAO;
 import aes.utility.Secured;
+import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.logging.Level;
@@ -96,6 +97,30 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
                 return Response.status(Response.Status.UNAUTHORIZED).build();
             }
         } catch (Exception e) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @PUT
+    @Path("edit/allowQuestionNotifications/{userId}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response updateAllowQuestionNotifications(@PathParam("userId") Long userId, Boolean allowQuestionNotifications) {
+        try {
+            String userEmail = securityContext.getUserPrincipal().getName();
+            User u = userDAO.find(userId, em);
+            if(u.getEmail().equals(userEmail)) {
+                MobileOptions options = mobileOptionsDAO.find(userId, em);
+                
+                options.setAllowQuestionNotifications(allowQuestionNotifications);
+                
+                mobileOptionsDAO.edit(userId, options, em);
+                
+                return Response.status(Response.Status.OK).build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+        } catch(SQLException e) {
             Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }

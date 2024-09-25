@@ -118,12 +118,12 @@ public class Scheduler {
         mobileOptionsController.sendMobileTips();
     }
 
-    @Schedule(second = "0", minute = "0", hour = "*", dayOfWeek = "*", persistent = false)
-    public void appNotificationTask() {
-        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - App Notification task running");
-        mobileOptionsController.sendScheduledNotifications();
+    //@Schedule(second = "0", minute = "0", hour = "*", dayOfWeek = "*", persistent = false)
+    //public void appNotificationTask() {
+    //    Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - App Notification task running");
+    //    mobileOptionsController.sendScheduledNotifications();
 
-    }
+    //}
     
    public void sendScheduledEmails() {
 
