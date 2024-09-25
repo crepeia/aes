@@ -111,11 +111,29 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             User u = userDAO.find(userId, em);
             if(u.getEmail().equals(userEmail)) {
                 MobileOptions options = mobileOptionsDAO.find(userId, em);
-                
                 options.setAllowQuestionNotifications(allowQuestionNotifications);
-                
                 mobileOptionsDAO.edit(userId, options, em);
-                
+                return Response.status(Response.Status.OK).build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+        } catch(SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("edit/changeNotificationToken/{userId}/{token}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response changeNotificationToken(@PathParam("userId") Long userId, @PathParam("token") String notificationToken) {
+        try {
+            String userEmail = securityContext.getUserPrincipal().getName();
+            User u = userDAO.find(userId, em);
+            if(u.getEmail().equals(userEmail)) {
+                MobileOptions options = mobileOptionsDAO.find(userId, em);
+                options.setNotificationToken(notificationToken);
+                mobileOptionsDAO.edit(userId, options, em);
                 return Response.status(Response.Status.OK).build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED).build();
