@@ -9,6 +9,7 @@ import aes.model.MobileOptions;
 import aes.model.User;
 import aes.persistence.MobileOptionsDAO;
 import aes.persistence.UserDAO;
+import aes.utility.ExpoNotification;
 import aes.utility.Secured;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
@@ -140,6 +141,36 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             }
         } catch(SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @POST
+    @Path("sendNotification/{userId}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response sendNotification(@PathParam("userId") Long userId) {
+        try {
+            String userEmail = securityContext.getUserPrincipal().getName();
+            User u = userDAO.find(userId, em);
+            
+            if(u.getEmail().equals(userEmail)) {
+                MobileOptions options = mobileOptionsDAO.find(userId, em);
+                String expoPushToken = options.getNotificationToken();
+                System.out.println("Expo push token: " + expoPushToken);
+                if(expoPushToken != null && !expoPushToken.isEmpty()) {
+                    ExpoNotification expoNotification = new ExpoNotification();
+                    expoNotification.sendPushNotification(expoPushToken);
+                    
+                    return Response.status(Response.Status.OK).build();
+                } else {
+                    return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Expo Push Token não encontrado para este usuário.").build();
+                }
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.INFO, "Error: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
