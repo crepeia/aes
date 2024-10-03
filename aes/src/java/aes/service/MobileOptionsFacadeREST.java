@@ -14,6 +14,8 @@ import aes.utility.Secured;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -144,36 +146,6 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-    
-    @POST
-    @Path("sendNotification/{userId}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response sendNotification(@PathParam("userId") Long userId) {
-        try {
-            String userEmail = securityContext.getUserPrincipal().getName();
-            User u = userDAO.find(userId, em);
-            
-            if(u.getEmail().equals(userEmail)) {
-                MobileOptions options = mobileOptionsDAO.find(userId, em);
-                String expoPushToken = options.getNotificationToken();
-                System.out.println("Expo push token: " + expoPushToken);
-                if(expoPushToken != null && !expoPushToken.isEmpty()) {
-                    ExpoNotification expoNotification = new ExpoNotification();
-                    expoNotification.sendPushNotification(expoPushToken);
-                    
-                    return Response.status(Response.Status.OK).build();
-                } else {
-                    return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Expo Push Token não encontrado para este usuário.").build();
-                }
-            } else {
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            }
-        } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.INFO, "Error: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
 
     @GET
     @Path("find/{userId}")
@@ -203,6 +175,46 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         } catch (Exception e) {
             Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("findNotificationToken/{userId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getNotificationToken(@PathParam("userId") Long userId) {
+        try {
+            MobileOptions options = mobileOptionsDAO.find(userId, em);
+            if(options != null) {
+                String notificationToken = options.getNotificationToken();
+                return Response.ok().entity(notificationToken).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).entity("Mobile options not found for user.").build();
+            }
+        } catch(SQLException | RuntimeException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @GET
+    @Path("findConsultantNotificationTokens")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getConsultantNotificationTokens() {
+        try {
+            List<User> consultants = userDAO.list("consultant", true, em);
+            List<String> tokens = new ArrayList<>();
+            
+            for (User consultant : consultants) {
+                MobileOptions options = mobileOptionsDAO.find(consultant.getId(), em);
+                if (options != null && options.getNotificationToken() != null) {
+                    tokens.add(options.getNotificationToken());
+                }
+            }
+            
+            return Response.ok().entity(tokens).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 

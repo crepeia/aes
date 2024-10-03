@@ -20,14 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
-
 /**
  *
  * @author bruno
@@ -91,77 +83,5 @@ public class ExpoNotification {
             Logger.getLogger(ExpoNotification.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-    
-    public void sendPushNotification(String expoPushToken) {
-        HttpURLConnection conn = null;
-        try {
-            
-            // Ignorar validação SSL
-            TrustManager[] trustAllCerts;
-            trustAllCerts = new TrustManager[]{
-                new X509TrustManager() {
-                    @Override
-                    public X509Certificate[] getAcceptedIssuers() { return null; }
-                    @Override
-                    public void checkClientTrusted(X509Certificate[] certs, String authType) { }
-                    @Override
-                    public void checkServerTrusted(X509Certificate[] certs, String authType) { }
-                }
-            };
-            
-            SSLContext sc = null;
-            try {
-                sc = SSLContext.getInstance("TLS");
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(ExpoNotification.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                sc.init(null, trustAllCerts, new SecureRandom());
-            } catch (KeyManagementException ex) {
-                Logger.getLogger(ExpoNotification.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            
-            HostnameVerifier allHostsValid = (hostname, session) -> true;
-            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-            
-            URL url = new URL("https://exp.host/--/api/v2/push/send");
-            
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setRequestProperty("Accept-encoding", "gzip, deflate");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-            
-            String message = Json.createObjectBuilder()
-                .add("to", expoPushToken)
-                .add("sound", "default")
-                .add("title", "Original Title")
-                .add("body", "And here is the body!")
-                .add("data", Json.createObjectBuilder().add("someData", "goes here").build())
-                .build()
-                .toString();
-            
-            try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
-                byte[] input = message.getBytes(StandardCharsets.UTF_8);
-                wr.write(input, 0, input.length);
-            }
-            
-            int responseCode = conn.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
-            if(responseCode >= 200 && responseCode < 300) {
-                System.out.println("Notificação enviada com sucesso!");
-            } else {
-                System.err.println("Erro ao enviar notificação. Código: " + responseCode);
-            }
-        } catch (IOException e) {
-            System.out.println("ERRO: " + e);
-        } finally {
-            if(conn != null) {
-                conn.disconnect();
-            }
-        }
     }
 }
