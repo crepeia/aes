@@ -42,7 +42,6 @@ import javax.ws.rs.core.SecurityContext;
  * @author bruno
  */
 @Stateless
-@Secured
 @Path("secured/mobileoptions")
 @TransactionManagement(TransactionManagementType.BEAN)
 public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
@@ -66,7 +65,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         
         
     }
-
+    
+    @Secured
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -79,7 +79,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             return null;
         }
     }
-
+    
+    @Secured
     @PUT
     @Path("edit/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -105,6 +106,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
+    @Secured
     @PUT
     @Path("edit/allowQuestionNotifications/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -126,6 +128,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
+    @Secured
     @PUT
     @Path("edit/changeNotificationToken/{userId}/{token}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -146,7 +149,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-
+    
+    @Secured
     @GET
     @Path("find/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -178,6 +182,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
+    @Secured
     @GET
     @Path("findNotificationToken/{userId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -222,5 +227,4 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     protected EntityManager getEntityManager() {
         return em;
     }
-
 }
