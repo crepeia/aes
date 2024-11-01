@@ -9,10 +9,13 @@ import aes.model.MobileOptions;
 import aes.model.User;
 import aes.persistence.MobileOptionsDAO;
 import aes.persistence.UserDAO;
+import aes.utility.ExpoNotification;
 import aes.utility.Secured;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -39,7 +42,6 @@ import javax.ws.rs.core.SecurityContext;
  * @author bruno
  */
 @Stateless
-@Secured
 @Path("secured/mobileoptions")
 @TransactionManagement(TransactionManagementType.BEAN)
 public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
@@ -63,7 +65,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         
         
     }
-
+    
+    @Secured
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -76,7 +79,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             return null;
         }
     }
-
+    
+    @Secured
     @PUT
     @Path("edit/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -102,6 +106,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
+    @Secured
     @PUT
     @Path("edit/allowQuestionNotifications/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -123,6 +128,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
+    @Secured
     @PUT
     @Path("edit/changeNotificationToken/{userId}/{token}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -143,7 +149,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-
+    
+    @Secured
     @GET
     @Path("find/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -174,10 +181,50 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+    
+    @Secured
+    @GET
+    @Path("findNotificationToken/{userId}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getNotificationToken(@PathParam("userId") Long userId) {
+        try {
+            MobileOptions options = mobileOptionsDAO.find(userId, em);
+            if(options != null) {
+                String notificationToken = options.getNotificationToken();
+                return Response.ok().entity(notificationToken).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).entity("Mobile options not found for user.").build();
+            }
+        } catch(SQLException | RuntimeException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @GET
+    @Path("findConsultantNotificationTokens")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getConsultantNotificationTokens() {
+        try {
+            List<User> consultants = userDAO.list("consultant", true, em);
+            List<String> tokens = new ArrayList<>();
+            
+            for (User consultant : consultants) {
+                MobileOptions options = mobileOptionsDAO.find(consultant.getId(), em);
+                if (options != null && options.getNotificationToken() != null) {
+                    tokens.add(options.getNotificationToken());
+                }
+            }
+            
+            return Response.ok().entity(tokens).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-
 }
