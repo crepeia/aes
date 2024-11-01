@@ -20,7 +20,7 @@
                 <div class="main">
                     <div class="pagecontent">
                         
-                        <div id="signin">
+                        <div id="signin" style="height: auto">
                             <h3 class="orange-text">#{messages['h1.solicitation.delete.account']}</h3>
                             <p>#{messages['p.delete.account.message']}</p>
                             <h:form class="form-signup">  
@@ -49,11 +49,12 @@
                                 
                                 <p:messages for="error" autoUpdate="true"  redisplay="false"/>
           
-                                <div class="g-recaptcha" data-sitekey="#{userController.getRecaptchaKey()}"></div>
+                                <div class="g-recaptcha" style="margin-top: 20px" data-sitekey="#{userController.getRecaptchaKey()}" data-callback="onRecaptchaSuccess"></div>
+                                <div id="recaptcha-error-container-3"></div>
                                 <div id="signipbottom">
                                     <div id="signinsubmit">
                                         <div id="signinbtn" >
-                                            <p:commandButton styleClass="btn btn-primary" id="entrarBtn" value="#{messages['send']}" update="@form" actionListener="#{userController.sendEmailRequestingDeleteAccount()}" />
+                                            <p:commandButton styleClass="btn btn-primary" id="entrarBtn" value="#{messages['send']}" update="@form" actionListener="#{userController.sendEmailRequestingDeleteAccount()}" onclick="return validateRecaptcha(3);"/>
                                         </div>
                                     </div>
                                 </div>
@@ -65,6 +66,7 @@
             </div>	
 
             <w:footer />
+            <script src="resources/default/js/recaptcha.js"></script>
         </h:body>
     </f:view>
 </html>

@@ -72,8 +72,9 @@
                                     <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: flex-start;">
                                         <h:outputLink value="enviar-email-senha.xhtml" style="padding-top: 5px">#{messages['forgot.password']}</h:outputLink>
                                         <h:outputLink value="enviar-email-remover-conta.xhtml" style="padding-top: 5px">#{messages['delete.account']}</h:outputLink>
-                                        <div class="g-recaptcha" style="padding: 10px 0 10px 0" data-sitekey="#{userController.getRecaptchaKey()}"></div>
-                                        <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btn btn-primary btn-sm" update="@form" actionListener="#{userController.signIn(true)}" />
+                                        <div class="g-recaptcha" style="margin-top: 20px" data-sitekey="#{userController.getRecaptchaKey()}" data-callback="onRecaptchaSuccess"></div>
+                                        <div id="recaptcha-error-container-4" style="margin-bottom: 20px"></div>
+                                        <p:commandButton id="entrarBtn" value="#{messages['signin']}" styleClass="btn btn-primary btn-sm" update="@form" actionListener="#{userController.signIn(true)}" onclick="return validateRecaptcha(4);"/>
                                     </div>
                                 </p:panel>
                             </p:overlayPanel>

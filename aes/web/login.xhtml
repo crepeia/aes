@@ -71,14 +71,15 @@
                                     <p:watermark for="passwordTxt" value="#{messages['psw']}" />
                                     <p:message for="passwordTxt"/>
                                 </div>
-                                <div class="g-recaptcha" data-sitekey="#{userController.getRecaptchaKey()}"></div>
+                                <div class="g-recaptcha" style="margin-top: 20px" data-sitekey="#{userController.getRecaptchaKey()}" data-callback="onRecaptchaSuccess"></div>
+                                <div id="recaptcha-error-container-5"></div>
                                 <div id="signipbottom">	
 
                                     <div id="signinsubmit">
                                         <div id="signinbtn" >
                                             <p:messages globalOnly="true" redisplay="true" />
 
-                                            <p:commandButton styleClass="btn btn-primary btn-sm" id="entrarBtn" value="Entrar" update="@form" actionListener="#{userController.signIn(true)}" />
+                                            <p:commandButton styleClass="btn btn-primary btn-sm" id="entrarBtn" value="Entrar" update="@form" actionListener="#{userController.signIn(true)}" onclick="return validateRecaptcha(5);"/>
                                         </div>
                                         <div style="clear:both; position:relative; top: 12px;">
                                         <h:outputLink value="enviar-email-senha.xhtml">#{messages['forgot.password']}</h:outputLink>
@@ -95,6 +96,7 @@
 
             <!--Footer -->
             <w:footer />
+            <script src="resources/default/js/recaptcha.js"></script>
         </h:body>
     </f:view>
 </html>

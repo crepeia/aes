@@ -9,7 +9,7 @@
     <f:view locale="#{languageController.locale}">
         <h:head>
             <title>#{messages['cadastrar.nova.conta.title.1']}</title>
-            <script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>            
+            <script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>
             <w:head_comum />
             <!-- Facebook Pixel Code to track our adverts -->
             <h:outputScript>
@@ -191,13 +191,14 @@
                                                 <div id="signup-terms">
                                                     <p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink></p>                                            
                                                 </div>
-                                                <div class="g-recaptcha" data-sitekey="#{userController.getRecaptchaKey()}"></div>
+                                                <div class="g-recaptcha" style="margin-top: 20px" data-sitekey="#{userController.getRecaptchaKey()}" data-callback="onRecaptchaSuccess"></div>
+                                                <div id="recaptcha-error-container-2"></div>
                                                 <div id="signupsubmit">			                                            
                                                     <div>
                                                         <p:messages id="errorMessage" redisplay="true" globalOnly="true" />
                                                     </div>
                                                     <div id="signupbtn">
-                                                        <p:commandButton styleClass="btn btn-info" id="saveBtn" value="#{messages['register']}" update="@form"  actionListener="#{userController.signUp()}"/>
+                                                        <p:commandButton styleClass="btn btn-info" id="saveBtn" value="#{messages['register']}" update="@form"  actionListener="#{userController.signUp()}" onclick="return validateRecaptcha(2);"/>
 
                                                     </div>
                                                 </div>
@@ -265,7 +266,8 @@
                     day: 'Día',
                     allDayText: 'Todo el día'
                 };
-            </script>  
+            </script>
+            <script src="resources/default/js/recaptcha.js"></script>
         </h:body>
     </f:view>
 </html>
