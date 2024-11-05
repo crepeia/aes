@@ -156,13 +156,16 @@
                                         
                                     </p:panel>
 
-                                    
 
                                     <div id="btnnext">
                                         <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value="#{messages['next']}" update="@form" action="#{evaluationController.dependenceContinue()}" actionListener="#{evaluationController.save()}" rendered="#{evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}"/>
                                     </div>
 
                                 </h:form> 
+                                <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h4.2']}</h4>                        
+                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.p.1']}
+                                    <h:outputLink value="https://play.google.com/store/apps/details?id=br.com.alcoolesaude">#{messages['link']}</h:outputLink>.
+                                </p>
                             </div><!-- end pmtext -->  
                         </div><!-- end page middle -->      
                         <div class="referencias">

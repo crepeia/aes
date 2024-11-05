@@ -124,7 +124,7 @@ public class EvaluationController extends BaseController<Evaluation> {
            } else if (getUser().isMale() && getUser().getAge() <= 65) {
                 return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
            }else if (getUser().isMale() && getUser().getAge() > 65 || getUser().isFemale()){
-               return "quanto-voce-bebe-recomendar-limites-homem-ate-65-anos.xhtml?faces-redirect=true";
+               return "quanto-voce-bebe-recomendar-limites-mulheres-e-homens-com-mais-65-anos.xhtml?faces-redirect=true";
            }
         } else if (getEvaluation().getAuditFullSum() >= 17 && getEvaluation().getAuditFullSum() <= 25) {
             return "quanto-voce-bebe-sim-beber-uso-sintomas-alcool-sim-uso-risco.xhtml?faces-redirect=true";
