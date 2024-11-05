@@ -350,6 +350,19 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+    @GET
+    @Path("findUserByChatId/{chatId}")
+    @Secured
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findUserByChatId(@PathParam("chatId") Long chatId) {
+        try {
+            return Response.ok().entity(userDAO.listOnce("chat", "chatId", em)).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
