@@ -9,7 +9,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>Instruções para acessar o aplicativo</title>
+            <title>#{messages['instrucoes.para.acessar.aplicativo.title']}</title>
             <w:head_comum />
                          <!-- Facebook Pixel Code to track our adverts -->
              <h:outputScript>
@@ -61,11 +61,21 @@
                     padding: 4px;
                     border: 1px solid #C3C3C3;
                     border-radius: 5px;
+                    width: 40vw;
                 }
                 
-                .instructions-text, .instructions-img {
-                    margin: 20px;
+                @media screen and (min-width: 300px) and (max-width: 600px) {
+                    .instructions-img {
+                        width: 90vw;
+                    }
                 }
+                
+                @media screen and (min-width: 600px) and (max-width: 900px) {
+                    .instructions-img {
+                        width: 60vw;
+                    }
+                }
+                
             </style>
         </h:head>
         <h:body>
@@ -74,47 +84,48 @@
                     <div class="pagecontent">
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1 id="instructions-title">Instruções</h1> 
+                                <h1 id="instructions-title">#{messages['instrucoes.para.acessar.aplicativo.h1']}</h1> 
                             </div>
                         </div>
                         <div id="pagemiddle">
-                            <h2>Orientações Gerais</h2>
+                            <h2>#{messages['instrucoes.para.acessar.aplicativo.h2']}</h2>
 
                             <p class="instructions-text">
-                                Os indivíduos que desejarem participar da intervenção via chat deverão enviar a seguinte mensagem no chat: 
-                                #{messages['instrucoes.para.acessar.aplicativo.p.1']} e serão orientados pelos consultores.
+                                #{messages['instrucoes.para.acessar.aplicativo.p.1.1']} 
+                                #{messages['instrucoes.para.acessar.aplicativo.message']} 
+                                #{messages['instrucoes.para.acessar.aplicativo.p.1.2']}
                             </p>
-                            <h3>Gostaria de uma ajuda para fazer a instalação do aplicativo, o seu cadastro e entrar no chat?</h3>
-                            <p class="instructions-text">Caso não precise de ajuda, basta acessar o
-                                <a href="https://play.google.com/store/apps/details?id=br.com.alcoolesaude">link</a>
+                            <h3>#{messages['instrucoes.para.acessar.aplicativo.h3']} </h3>
+                            <p class="instructions-text">#{messages['instrucoes.para.acessar.aplicativo.p.2']} 
+                                <a href="https://play.google.com/store/apps/details?id=br.com.alcoolesaude">#{messages['instrucoes.para.acessar.aplicativo.link']}.</a>
                             </p>
-                            <p class="instructions-text">Caso precise de ajuda, siga o passo a passo abaixo:</p>
+                            <p class="instructions-text">#{messages['instrucoes.para.acessar.aplicativo.p.3']}</p>
                             <ol>
-                                <li class="instructions-number">Entre no 
-                                    <a href="https://play.google.com/store/apps/details?id=br.com.alcoolesaude">link</a>
+                                <li class="instructions-number">#{messages['instrucoes.para.acessar.aplicativo.li.1']} 
+                                    <a href="https://play.google.com/store/apps/details?id=br.com.alcoolesaude">#{messages['instrucoes.para.acessar.aplicativo.link']}.</a>
                                 </li>
-                                <img class="instructions-img" src="./resources/default/images/instrucao-1.png" width="95%"></img>
+                                <img id="instructions-img-1" class="instructions-img" src="./resources/default/images/instrucao-1.png"></img>
                                 <hr/>
-                                <li class="instructions-number">Instale o aplicativo no seu aparelho</li>
-                                <img class="instructions-img" src="./resources/default/images/instrucao-2.jpeg" width="40%"></img>
+                                <li class="instructions-number">#{messages['instrucoes.para.acessar.aplicativo.li.2']}.</li>
+                                <img class="instructions-img" src="./resources/default/images/instrucao-2.jpeg"></img>
                                 <hr/>
-                                <li class="instructions-number">Abra o aplicativo e será direcionado para a página de login</li>
-                                <img class="instructions-img" src="./resources/default/images/instrucao-3.jpeg" width="30%"></img>
+                                <li class="instructions-number">#{messages['instrucoes.para.acessar.aplicativo.li.3']}.</li>
+                                <img class="instructions-img" src="./resources/default/images/instrucao-3.jpeg"></img>
                                 <hr/>
-                                <li class="instructions-number">Faça seu cadastro</li>
-                                <img class="instructions-img" src="./resources/default/images/instrucao-4.jpg" width="30%"></img>
+                                <li class="instructions-number">#{messages['instrucoes.para.acessar.aplicativo.li.4']}.</li>
+                                <img class="instructions-img" src="./resources/default/images/instrucao-4.jpg"></img>
                                 <hr/>
-                                <li class="instructions-number">Abra a lista de abas para acessar a aba do chat</li>
-                                <img class="instructions-img" src="./resources/default/images/instrucao-5.jpeg" width="30%"></img>
+                                <li class="instructions-number">#{messages['instrucoes.para.acessar.aplicativo.li.5']}.</li>
+                                <img class="instructions-img" src="./resources/default/images/instrucao-5.jpeg"></img>
                                 <hr/>
-                                <li class="instructions-number">Acesse a aba de chat</li>
-                                <img class="instructions-img" src="./resources/default/images/instrucao-6.jpeg" width="30%"></img>
+                                <li class="instructions-number">#{messages['instrucoes.para.acessar.aplicativo.li.6']}.</li>
+                                <img class="instructions-img" src="./resources/default/images/instrucao-6.jpeg"></img>
                                 <hr/>
-                                <li class="instructions-number">Conecte-se ao chat</li>
-                                <img class="instructions-img" src="./resources/default/images/instrucao-7.jpeg" width="30%"></img>
+                                <li class="instructions-number">#{messages['instrucoes.para.acessar.aplicativo.li.7']}.</li>
+                                <img class="instructions-img" src="./resources/default/images/instrucao-7.jpeg"></img>
                                 <hr/>
-                                <li class="instructions-number">Envie para o chat a mensagem #{messages['instrucoes.para.acessar.aplicativo.p.1']}</li>
-                                <img class="instructions-img" src="./resources/default/images/instrucao-8.jpg" width="30%"></img>
+                                <li class="instructions-number">#{messages['instrucoes.para.acessar.aplicativo.li.8']} #{messages['instrucoes.para.acessar.aplicativo.message']}.</li>
+                                <img class="instructions-img" src="./resources/default/images/instrucao-8.jpg"></img>
                             </ol>
                         </div>
                         <div class="referencias">
