@@ -182,7 +182,6 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
-    @Secured
     @GET
     @Path("findNotificationToken/{userId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

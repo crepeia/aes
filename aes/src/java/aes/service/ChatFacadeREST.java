@@ -140,7 +140,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     
     @GET
     @Path("findAnonymousChats")
-    @Secured
+    // @Secured
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAnonymousChats() {
         List<Chat> chats;
