@@ -553,7 +553,11 @@ public class User implements Serializable {
     }
     
     public boolean isUse_chatbot() {
-        return use_chatbot;
+        if (use_chatbot==null) {
+            return false;
+        } else {
+            return use_chatbot;
+        }
     }
 
     public void setUse_chatbot(Boolean use_chatbot) {

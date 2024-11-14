@@ -3,7 +3,7 @@
 <glassfish-web-app error-url="">
   <parameter-encoding default-charset="UTF-8"/>
   <context-root>/aes</context-root>
-  <class-loader delegate="true"/>
+  <class-loader delegate="false"/>
   <jsp-config>
     <property name="keepgenerated" value="true">
       <description>Keep a copy of the generated servlet class' java code.</description>
