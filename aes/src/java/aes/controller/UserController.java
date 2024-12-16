@@ -34,9 +34,12 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -687,7 +690,7 @@ public class UserController extends BaseController<User> {
         }
         return userList;
     }
-
+    
     public void setAdmin(User u) {
         if (u.getEmail() == null ? this.getUser().getEmail() != null : !u.getEmail().equals(this.getUser().getEmail())) {
             u.setAdmin(!u.isAdmin());
@@ -749,5 +752,59 @@ public class UserController extends BaseController<User> {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } 
 
+    }
+    
+    public void acceptCookies() {
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        Cookie cookie = new Cookie("cookiesPolicy", "false");
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+        try {
+            Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String url = ((HttpServletRequest) request).getRequestURI();
+            url = url.substring(url.lastIndexOf('/') + 1);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+        } catch (IOException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public void exitCookies() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("https://google.com");
+        } catch (IOException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public boolean showCookiesAlert() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        Cookie[] cookies = request.getCookies();
+        try {
+            for(Cookie cookie : cookies) {
+                System.out.println(cookie.getName() + " + " + cookie.getValue());
+                if(Objects.equals(cookie.getName(), "cookiesPolicy")) {
+                    return Boolean.getBoolean(cookie.getValue());
+                }
+            }
+            return true;
+        } catch(NullPointerException ex) {
+            return true;
+        }
+    }
+    
+    public void knowMoreCookies() {
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        Cookie cookie = new Cookie("cookiesPolicy", "false");
+        cookie.setMaxAge(3);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("politica-do-site.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
