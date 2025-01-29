@@ -83,20 +83,18 @@
                 </div>
             </div>
         </div>
-        <div id="dialogs">
-            <h:form id="dialogForm">
-                <p:dialog style="background-color: #C3C3C3" visible="#{userController.showCookiesAlert()}" header="Alerta sobre cookies" width="50%" closable="false" modal="true" draggable="false" resizable="false">
+        <div class="privacy-dialogs">
+            <h:form>
+                <p:dialog width="50%" height="8vh" visible="#{userController.showCookiesAlert()}" header="Alerta sobre cookies" closable="false" modal="true" draggable="false" resizable="false">
                     <h:outputText value="
                         Para proporcionar a melhor experiência de uso, nossos sites usam cookies.
                         Ao clicar em 'Aceitar', você concorda com o uso de cookies. 
                         Para saber mais sobre nossa política de cookies, clique em 'Saiba mais'
                         ">
                     </h:outputText>
-                    <h:panelGrid columns="5">
+                    <h:panelGrid columns="3">
                         <p:commandButton value="Aceitar" actionListener="#{userController.acceptCookies()}"></p:commandButton>
-                        <p:spacer width="10"/>
                         <p:commandButton value="Sair" actionListener="#{userController.exitCookies()}"></p:commandButton>
-                        <p:spacer width="10"/>
                         <p:commandButton value="Saiba mais" actionListener="#{userController.knowMoreCookies()}"></p:commandButton>
                     </h:panelGrid>
                 </p:dialog>

@@ -138,6 +138,65 @@ ul {
     box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
 }
 
+/* Privacy start */
+
+.ui-dialog {
+    background-color: #3498db;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.ui-dialog-titlebar {
+    text-align: center;
+}
+
+.ui-dialog-title {
+    font-size: 1.8em;
+    font-family: 'PT Sans', sans-serif;
+    color: #efefef;
+}
+
+.ui-dialog-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: #e0e0e0;
+}
+
+.ui-overlay-visible table {
+    width: 100%;
+}
+
+.ui-overlay-visible tr {
+    display: flex;
+    justify-content: space-around;
+}
+
+.ui-overlay-visible .ui-button {
+    color: #3498db;
+    border: 1px solid #424242;
+    background-color: #e0e0e0;
+    padding: .375rem .75rem;
+    border-radius: .25rem;
+}
+
+.ui-overlay-visible .ui-button:hover {
+    /*color: #424242;*/
+    /*background-color: #d5d5d5;*/
+    background-color: #d0d0d0;
+}
+
+.ui-overlay-visible .ui-button:focus {
+    /*color: #3498db;*/
+    /*background-color: #c9c9c9;*/
+    background-color: #c0c0c0;
+    outline: none;
+}
+
+/* Privacy end */
 
 /*
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
