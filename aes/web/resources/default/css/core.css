@@ -808,7 +808,7 @@ html, body {
 .pagecontent h1{
     font-size:1.8em;
     padding: 0 10px 0 0;
-    text-align: left;
+    text-align: center;
     width: 90%
 
 }
@@ -820,6 +820,10 @@ html, body {
 
 .pagecontent ul {
     width: 80%;
+}
+
+.pagecontent h1, .pagecontent h2, .pagecontent h3, .pagecontent h4 {
+    margin: 20px 0 30px 0;
 }
 
 /*FOOTER */
