@@ -23,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -108,7 +109,20 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
         return String.valueOf(evaluationDAO.count(em));
         //return String.valueOf(super.count());
     }
-
+    
+    @POST
+    @Path("create/{userId}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createEvaluation(@PathParam("userId") Long userId, Evaluation newEvaluation) {
+        try {
+            evaluationDAO.createEvaluation(userId, newEvaluation, em);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (SQLException e) {
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error creating Evaluation", e);
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
