@@ -6,7 +6,10 @@ import aes.model.UserAgent;
 import aes.persistence.GenericDAO;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -90,6 +93,19 @@ public class PageNavigationController extends BaseController<PageNavigation> {
 
     public String getReferer() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        
+        //Teste
+//        Map<String, String> map = new HashMap<>();;;
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        if (headerNames != null) {
+//            while (headerNames.hasMoreElements()) {
+//                String key = (String) headerNames.nextElement();
+//                String value = request.getHeader(key);
+//                map.put(key,value);
+//            }
+//        }
+//        System.out.println(map);
+        
         return request.getHeader("referer");
     }
 
