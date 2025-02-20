@@ -141,12 +141,14 @@ ul {
 /* Privacy start */
 
 .ui-dialog {
-    background-color: #3498db;
+    /*background-color: #3498db;*/
+    background-color: #EFEFEF;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     border-radius: 5px;
+    z-index: 99999;
 }
 
 .ui-dialog-titlebar {
@@ -156,14 +158,14 @@ ul {
 .ui-dialog-title {
     font-size: 1.8em;
     font-family: 'PT Sans', sans-serif;
-    color: #efefef;
+    color: #404040;
 }
 
 .ui-dialog-content {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    color: #e0e0e0;
+    color: #444444;
 }
 
 .ui-overlay-visible table {
@@ -177,8 +179,8 @@ ul {
 
 .ui-overlay-visible .ui-button {
     color: #3498db;
-    border: 1px solid #424242;
-    background-color: #e0e0e0;
+    border: 1px solid #3498db;
+    background: none;
     padding: .375rem .75rem;
     border-radius: .25rem;
 }
@@ -186,13 +188,16 @@ ul {
 .ui-overlay-visible .ui-button:hover {
     /*color: #424242;*/
     /*background-color: #d5d5d5;*/
-    background-color: #d0d0d0;
+    color: #FFFFFF;
+    background-color: #3498db;
+    border-color: #3498db;
 }
 
 .ui-overlay-visible .ui-button:focus {
     /*color: #3498db;*/
     /*background-color: #c9c9c9;*/
-    background-color: #c0c0c0;
+    color: #FFFFFF;
+    background-color: #007bff;
     outline: none;
 }
 
@@ -1879,7 +1884,25 @@ hr {
     border-color: #347ddb;
 }
 
+/* Instruções para acessar aplicativo */
 
+.instructions hr {
+    width: 99%;
+    border: 2px dashed #C3C3C3;
+    box-sizing: border-box;
+}
+
+.instructions-number {
+    margin-left: 20px;
+}
+
+.instructions-img {
+    box-sizing: border-box;
+    padding: 4px;
+    border: 1px solid #C3C3C3;
+    border-radius: 5px;
+    width: 40vw;
+}
 
 /* Mobile Styles */
 @media only screen and (max-width: 780px) {
@@ -2006,6 +2029,10 @@ hr {
     .ranking-info {
         flex-direction: column;
     }
+    
+    .instructions-img {
+        width: 90vw;
+    }
 }
 
 /* Tablet Styles */
@@ -2013,6 +2040,10 @@ hr {
   body {
    /* background-color: #F5CF8E; Yellow */
   }
+  
+    .instructions-img {
+        width: 60vw;
+    }
 }
 
 /* Desktop Styles */
