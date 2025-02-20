@@ -51,9 +51,25 @@ public class EvaluationDAO extends GenericDAO<Evaluation>{
                 super.insertOrUpdate(ev, entityManager);
                 return ev;
             }
-
-        
     }
+    
+   public void createEvaluation(Long userId, Evaluation newEvaluation, EntityManager entityManager) throws SQLException {
+       if(newEvaluation == null) {
+           throw new SQLException("Evaluation object cannot be null");
+       }
+       
+       if(userId == null) {
+           throw new SQLException("User ID must be provided");
+       }
+       
+       newEvaluation.setUser(entityManager.find(User.class, userId));
+       
+       try {
+           super.insertOrUpdate(newEvaluation, entityManager);
+       } catch (SQLException e) {
+           throw new SQLException("Error inserting Evaluation", e);
+       }
+   }
     
     
 }

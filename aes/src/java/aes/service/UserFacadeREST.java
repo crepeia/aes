@@ -350,6 +350,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+    @PUT
+    @Path("/updateEvaluationProfile/")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateEvaluationProfile(User entity) {
+        String userEmail = securityContext.getUserPrincipal().getName();
+        try {
+            userDAO.updateEvaluationProfile(userEmail, entity, em);
+            System.out.println("aes.service.UserFacadeREST.updateEvaluationProfile()");
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
     @GET
     @Path("findUserByChatId/{chatId}")
     @Secured

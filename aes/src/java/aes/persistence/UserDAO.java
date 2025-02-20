@@ -184,6 +184,24 @@ public class UserDAO extends GenericDAO<User>{
 
         super.insertOrUpdate(u, em);
     }
+    
+    public void updateEvaluationProfile(String userEmail, User entity, EntityManager em) throws SQLException {
+        User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
+                .setParameter("email", userEmail)
+                .getSingleResult();
+        
+        if (entity.getEducation() != null) {
+            u.setEducation(entity.getEducation());
+        }
+        if (entity.getEmployed() != null) {
+            u.setEmployed(entity.getEmployed());
+        }
+        if (entity.getKnowWebsite() != null) {
+            u.setKnowWebsite(entity.getKnowWebsite());
+        }
+        
+        super.insertOrUpdate(u, em);
+    }
 
     public void uptadeUser(User user, EntityManager entityManager) throws SQLException {
         super.insertOrUpdate(user, entityManager);
