@@ -84,8 +84,10 @@
             </div>
         </div>
         <div class="privacy-dialogs">
+            <!--Janela para fazer o fundo ficar escuro (necessita posterior revisão)-->
+            <p:dialog style="background:rgba(0,0,0,0.7)" width="100%" height="100vh" visible="#{userController.showCookiesAlert()}" closable="false" modal="true" draggable="false" resizable="false"></p:dialog>
             <h:form>
-                <p:dialog width="50%" height="8vh" visible="#{userController.showCookiesAlert()}" header="Alerta sobre cookies" closable="false" modal="true" draggable="false" resizable="false">
+                <p:dialog width="50%" height="8vh" visible="#{userController.showCookiesAlert()}" header="Alerta sobre cookies" closable="true" draggable="false" resizable="false">
                     <h:outputText value="
                         Para proporcionar a melhor experiência de uso, nossos sites usam cookies.
                         Ao clicar em 'Aceitar', você concorda com o uso de cookies. 
