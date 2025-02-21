@@ -48,6 +48,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(aes.service.AgendaAppointmentFacadeREST.class);
         resources.add(aes.service.AgendaAvailableFacadeREST.class);
+        resources.add(aes.service.AppNavigationFacadeREST.class);
         resources.add(aes.service.AppPropertiesFacadeREST.class);
         resources.add(aes.service.AppSuggestionFacadeREST.class);
         resources.add(aes.service.AuthenticationFilter.class);
