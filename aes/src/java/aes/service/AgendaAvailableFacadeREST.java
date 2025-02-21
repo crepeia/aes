@@ -50,7 +50,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         try {
             availableDao = new AgendaAvailableDAO();
         } catch (NamingException ex) {
-            Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
 
@@ -62,7 +62,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             availableDao.insert(available, em);
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -75,7 +75,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             availableDao.update(available, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -92,7 +92,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             }
             return Response.status(Response.Status.NOT_FOUND).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -104,7 +104,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         try {
             return Response.ok().entity(availableDao.listOnce("id", id, em)).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -116,7 +116,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         try {
             return Response.ok().entity(availableDao.list(em)).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -128,7 +128,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         try {
             return Response.ok().entity(availableDao.list("user.id", userId, em)).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -140,7 +140,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         try {
             return Response.ok().entity(availableDao.listByConsultant(consultantId, em)).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

@@ -112,7 +112,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 userTransaction.begin();
                 super.create(entity);
                 userTransaction.commit();*/
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
 
                 emailHelper.sendSignUpEmail(entity, em);
                 if (entity.isReceiveEmails()) {
@@ -227,7 +227,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             User u = userDAO.generateRecoverCode(userEmail, em);
             emailHelper.sendPasswordRecoveryEmail(u, em);
             
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, null, "Recover password service");
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, "Recover password service");
 
             return Response.ok().build();
         } catch (Exception e) {
@@ -249,7 +249,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 .getSingleResult();
             System.out.println("aes.service.UserFacadeREST.deleteAccount()");
             emailHelper.sendDeleteAccountEmail(u,em,token);
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.INFO, null, "Delete Account service");
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, "Delete Account service");
 
             return Response.ok().build();
         } catch (Exception e) {
@@ -345,7 +345,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             }
             return Response.status(Response.Status.FORBIDDEN).build();
         } catch (SQLException | RuntimeException | EncrypterException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -360,10 +360,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             userDAO.updateEvaluationProfile(userEmail, entity, em);
             System.out.println("aes.service.UserFacadeREST.updateEvaluationProfile()");
-            return Response.status(Response.Status.NO_CONTENT).build();
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
     
@@ -375,7 +375,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             return Response.ok().entity(userDAO.listOnce("chat.id", chatId, em)).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

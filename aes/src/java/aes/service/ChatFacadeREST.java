@@ -60,7 +60,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             chatDAO = new ChatDAO();
             userDao = new UserDAO();
         } catch (NamingException ex) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
 
@@ -115,10 +115,10 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
 
             emailHelper.sendContactRequestEmail(email, em);
             
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, null, "Send Contact Request service");
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, "Send Contact Request service");
             return Response.ok().build();
         } catch (Exception e) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", e);
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
@@ -133,7 +133,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             chats = chatDAO.listUserChats(idConsultant, em);
             return Response.ok().entity(chats).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -148,7 +148,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             chats = chatDAO.listUserChats(null, em);
             return Response.ok().entity(chats).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

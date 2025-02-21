@@ -117,8 +117,8 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
         try {
             evaluationDAO.createEvaluation(userId, newEvaluation, em);
             return Response.status(Response.Status.CREATED).build();
-        } catch (SQLException e) {
-            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error creating Evaluation", e);
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
