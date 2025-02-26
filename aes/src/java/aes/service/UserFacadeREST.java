@@ -358,7 +358,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public Response updateEvaluationProfile(User entity) {
         String userEmail = securityContext.getUserPrincipal().getName();
         try {
-            userDAO.updateEvaluationProfile(userEmail, entity, em);
+            //Teste
+//            User user = new User();
+//            user.setEducation(1);
+//            user.setEmployed(true);
+//            user.setKnowWebsite(1);
+//            userDAO.updateEvaluationProfile(userEmail, user, em);
+            userDAO.updateEvaluationProfile(userEmail, entity, em);;
             System.out.println("aes.service.UserFacadeREST.updateEvaluationProfile()");
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException e) {

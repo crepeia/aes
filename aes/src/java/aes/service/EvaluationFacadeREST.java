@@ -114,7 +114,10 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     @Path("create/{userId}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createEvaluation(@PathParam("userId") Long userId, Evaluation newEvaluation) {
+//    public Response createEvaluation(@PathParam("userId") Long userId) {
         try {
+            //Teste
+//            Evaluation newEvaluation = new Evaluation();
             evaluationDAO.createEvaluation(userId, newEvaluation, em);
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException e) {
