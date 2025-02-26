@@ -8,6 +8,7 @@ package aes.service;
 import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.EvaluationDAO;
+import aes.persistence.UserDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
 import java.util.Date;
@@ -45,6 +46,7 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private EvaluationDAO evaluationDAO;
+    private UserDAO userDAO;
     
     @Context
     SecurityContext securityContext;
@@ -53,6 +55,7 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
         super(Evaluation.class);
         try {
             evaluationDAO = new EvaluationDAO();
+            userDAO = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,18 +114,34 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     }
     
     @POST
-    @Path("create/{userId}")
+    @Path("createEvaluation/{userId}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createEvaluation(@PathParam("userId") Long userId, Evaluation newEvaluation) {
+        //Teste
 //    public Response createEvaluation(@PathParam("userId") Long userId) {
-        try {
-            //Teste
 //            Evaluation newEvaluation = new Evaluation();
-            evaluationDAO.createEvaluation(userId, newEvaluation, em);
+        if(newEvaluation == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Evaluation object cannot be null").build();
+        }
+        
+        if(userId == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("User ID must be provided").build();
+        }
+        
+        // Tratando o caso do usuário com ID passado não existir na tabela.
+        User user = userDAO.find(userId, em);
+        if(user == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist").build();
+        }
+        
+        newEvaluation.setUser(user);
+        
+        try {
+            evaluationDAO.createEvaluation(newEvaluation, em);
             return Response.status(Response.Status.CREATED).build();
-        } catch (SQLException | RuntimeException e) {
-            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (SQLException e) {
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error creating Evaluation", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error inserting Evaluation: " + e.getMessage()).build();
         }
     }
     

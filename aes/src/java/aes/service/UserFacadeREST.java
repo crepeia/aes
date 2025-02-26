@@ -356,6 +356,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateEvaluationProfile(User entity) {
+        if(entity == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("User entity cannot be null").build();
+        }
+        
         String userEmail = securityContext.getUserPrincipal().getName();
         try {
             //Teste
@@ -364,12 +368,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
 //            user.setEmployed(true);
 //            user.setKnowWebsite(1);
 //            userDAO.updateEvaluationProfile(userEmail, user, em);
-            userDAO.updateEvaluationProfile(userEmail, entity, em);;
-            System.out.println("aes.service.UserFacadeREST.updateEvaluationProfile()");
-            return Response.status(Response.Status.OK).build();
-        } catch (SQLException | RuntimeException e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            userDAO.updateEvaluationProfile(userEmail, entity, em);
+            return Response.status(Response.Status.OK).entity("User profile updated successfully").build();
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
     

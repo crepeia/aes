@@ -190,17 +190,31 @@ public class UserDAO extends GenericDAO<User>{
                 .setParameter("email", userEmail)
                 .getSingleResult();
         
+        boolean updated = false;
+        
         if (entity.getEducation() != null) {
             u.setEducation(entity.getEducation());
+            updated = true;
         }
         if (entity.getEmployed() != null) {
             u.setEmployed(entity.getEmployed());
+            updated = true;
         }
         if (entity.getKnowWebsite() != null) {
             u.setKnowWebsite(entity.getKnowWebsite());
+            updated = true;
         }
         
-        super.insertOrUpdate(u, em);
+        if(updated) {
+            try {
+                super.insertOrUpdate(u, em);
+            } catch (SQLException e) {
+                throw new SQLException("Error updating user profile", e);
+            }
+        } else {
+            throw new SQLException("No changes detected. User profile not updated.");
+        }
+        
     }
 
     public void uptadeUser(User user, EntityManager entityManager) throws SQLException {
