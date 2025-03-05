@@ -158,4 +158,8 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
         return em;
     }
 
+    List<Chat> findUsersChats(Long consultantId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
