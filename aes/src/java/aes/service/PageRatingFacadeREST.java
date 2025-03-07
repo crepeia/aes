@@ -9,6 +9,7 @@ import aes.model.Rating;
 import aes.persistence.GenericDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -18,8 +19,11 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -58,7 +62,34 @@ public class PageRatingFacadeREST extends AbstractFacade<Rating> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+    
+    @Path("find/{id}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response find(@PathParam("id") Long id) {
+        try {
+            List<Rating> result = pageRatingDao.listOnce("id", id, em);
+            if(!result.isEmpty())
+                return Response.ok().entity(result).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(PageRatingFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
 
+    @Path("findAll")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response findAllPageRating() {
+        try {
+            return Response.ok().entity(pageRatingDao.list(em)).build();
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(PageRatingFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

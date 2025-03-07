@@ -6,7 +6,9 @@
 package aes.service;
 
 import aes.model.Contact;
+import aes.model.User;
 import aes.persistence.ContactDAO;
+import aes.persistence.UserDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -52,11 +54,12 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
     @Path("sendAnnualScreeningEmail")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response sendAnnualScreeningEmail(Contact contact) {
+    public Response sendAnnualScreeningEmail(User user) {
         try {
-//            contact.setUser(user);
+            Contact contact = new Contact();
+            contact.setUser(user);
             contact.setSender("alcoolesaude@gmail.com");
-//            contact.setRecipient(user.getEmail());
+            contact.setRecipient(user.getEmail());
             contact.setSubject("annualscreening_subj");
             contact.setContent("annualscreening");
             Calendar cal = Calendar.getInstance();
