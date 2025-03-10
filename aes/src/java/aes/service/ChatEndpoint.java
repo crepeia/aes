@@ -628,9 +628,6 @@ public class ChatEndpoint {
                     }
                 }
                 
-                System.out.println("AQUIIII");
-                System.out.println(chatId);
-                
                 if(users.get(chatId) != null) {
                     setStatus(users.get(chatId), statusType.BUSY.toString());
                 } else {
