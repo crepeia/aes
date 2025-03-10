@@ -628,7 +628,15 @@ public class ChatEndpoint {
                     }
                 }
                 
-                setStatus(users.get(chatId), statusType.BUSY.toString());
+                System.out.println("AQUIIII");
+                System.out.println(chatId);
+                
+                if(users.get(chatId) != null) {
+                    setStatus(users.get(chatId), statusType.BUSY.toString());
+                } else {
+                    System.out.println("Deve ser um consultor acessando um usuário offline no chat: " + chatId);
+                }
+                
                 
             } else if (messageType.equals("disconnect")) {
                 consultantDisconnectTimeout(openChats.get(session));
