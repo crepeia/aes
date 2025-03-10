@@ -7,7 +7,6 @@ package aes.persistence;
 
 import aes.model.Message;
 import aes.model.User;
-import java.sql.SQLException;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -38,14 +37,6 @@ public class MessageDAO extends GenericDAO<Message>{
             return m;
         } else {
             return null;
-        }
-    }
-    
-    public void createMessage(Message message, EntityManager entityManager) throws SQLException {
-        try {
-            super.insertOrUpdate(message, entityManager);
-        } catch (SQLException e) {
-            throw new SQLException("Error inserting message", e);
         }
     }
 }
