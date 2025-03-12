@@ -122,7 +122,7 @@ public class ChatEndpoint {
         BUSY,
         IDLE,
         OFFLINE,
-        OFFLINE_AVAILABLE,
+        // OFFLINE_AVAILABLE,
       }
     
     public ChatEndpoint() {
@@ -434,7 +434,7 @@ public class ChatEndpoint {
             boolean isOnline = onlineUsers.values().stream().anyMatch(u -> u.chat.equals(chat.getId()));
             
             if (!isOnline) {
-                String realStatus = statusType.OFFLINE_AVAILABLE.toString();
+                String realStatus = statusType.OFFLINE.toString();
                 UserInfo offlineUser = new UserInfo(
                     chat.getUser().getName(), chat.getUser().getEmail(), chat.getId(), realStatus, null
                 );
@@ -495,7 +495,7 @@ public class ChatEndpoint {
     private void deleteUserStatus(Session userSession, Long userKey){
         
         UserInfo u = onlineUsers.get(userSession);
-        u.status = statusType.OFFLINE.toString();
+        u.status = statusType.OFFLINE.toString(); // Offline_Availlable
         
         onlineUsers.remove(userSession);
     
