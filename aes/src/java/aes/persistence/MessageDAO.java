@@ -39,5 +39,4 @@ public class MessageDAO extends GenericDAO<Message>{
             return null;
         }
     }
-    
 }
