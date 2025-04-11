@@ -90,6 +90,21 @@ public class PageRatingFacadeREST extends AbstractFacade<Rating> {
         }
     }
     
+    @Path("findAllUserRatings/{id}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response findAllPageRating(@PathParam("id") Long id) {
+        try {
+            List<Rating> result = pageRatingDao.listOnce("user.id", id, em);
+            if(!result.isEmpty())
+                return Response.ok().entity(result).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(PageRatingFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
