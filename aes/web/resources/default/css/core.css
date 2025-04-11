@@ -1149,7 +1149,6 @@ INDEX***********************/
 
 #signin {
     margin: 10px auto;
-    height: 350px;
     width: 50%;
     padding: 15px 20px;
     border-radius: 3px;
@@ -1166,6 +1165,12 @@ INDEX***********************/
 }
 #signipbottom {
     padding-top: 10px;
+}
+
+#signinsubmit {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 #signinsubmit button{
