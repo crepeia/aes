@@ -784,7 +784,6 @@ public class UserController extends BaseController<User> {
         Cookie[] cookies = request.getCookies();
         try {
             for(Cookie cookie : cookies) {
-                System.out.println(cookie.getName() + " + " + cookie.getValue());
                 if(Objects.equals(cookie.getName(), "cookiesPolicy")) {
                     return Boolean.getBoolean(cookie.getValue());
                 }

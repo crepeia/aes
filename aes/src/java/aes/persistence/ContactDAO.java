@@ -12,6 +12,7 @@ import aes.model.MedalUser;
 import aes.model.Title;
 import aes.model.TitleUser;
 import aes.model.User;
+import aes.utility.EMailSSL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -32,12 +33,11 @@ public class ContactDAO extends GenericDAO<Contact> {
     private static final int RANDOM_MAX = 67; //amount of tips
     private static final int RANDOM_MIN = 1;
     private GenericDAO evaluationDAO = new GenericDAO<Evaluation>(Evaluation.class);
-
-    ;
-
+    private EMailSSL eMailSSL;
     
-     public ContactDAO() throws NamingException {
+    public ContactDAO() throws NamingException {
         super(Contact.class);
+        eMailSSL = new EMailSSL();
     }
 
     public void scheduleDiaryReminderEmail(User user, Date date, EntityManager entityManager) throws SQLException {
@@ -46,7 +46,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("email.msg.subject.diary_started_subj");
             contact.setContent("email.msg.subject.diary_started");
@@ -65,7 +65,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("progress_persistchallenges_reduce_subj");
             contact.setContent("progress_persistchallenges_reduce");
@@ -84,7 +84,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("progress_persistchallenges_quit_subj");
             contact.setContent("progress_persistchallenges_quit");
@@ -103,7 +103,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("progress_keepingresult_quit_subj");
             contact.setContent("progress_keepingresult_quit");
@@ -122,7 +122,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("progress_keepingresult_reduce_subj");
             contact.setContent("progress_keepingresult_reduce");
@@ -139,7 +139,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         Contact contact;
         contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("annualscreening_subj");
         contact.setContent("annualscreening");
@@ -156,7 +156,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("week_" + week + "_subj");
             contact.setContent("week_" + week);
@@ -174,7 +174,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         int frequency = user.getTipsFrequency();
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("tips_subj");
         contact.setContent("tips" + String.valueOf(randomNumber));

@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ public class EMailSSL {
     private Properties props;
     private Session session;
     private Authenticator authenticator;
+    private Object senderOrRecipient;
 
     public EMailSSL() {
         Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
@@ -45,6 +47,7 @@ public class EMailSSL {
                         (String)props.get("mail.auth.password"));
                 }
             };
+            this.senderOrRecipient = props.getProperty("mail.smtp.mailer");
         } catch (IOException ex) {
             Logger.getLogger(EMailSSL.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -92,5 +95,11 @@ public class EMailSSL {
             Transport.send(message);
 
     }
-       
+
+    public String replaceEmail(String senderOrRecipient) {
+        if(Objects.equals(this.senderOrRecipient, "")) {
+            return senderOrRecipient;
+        }
+        return (String)this.senderOrRecipient;
+    }  
 }

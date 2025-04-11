@@ -62,7 +62,7 @@ public class EmailHelper {
             contact.setUser(user);
         }
         contact.setSender(user.getEmail());
-        contact.setRecipient("alcoolesaude@gmail.com");
+        contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setSubject("Contato via formulario - " + user.getEmail());
         contact.setContent(message);
         sendPlainTextEmail(contact, entityManager);
@@ -73,7 +73,7 @@ public class EmailHelper {
     public void sendPasswordRecoveryEmail(User user, EntityManager entityManager) throws MessagingException, SQLException {
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("passwordrecovery_subj");
         contact.setContent("passwordrecovery");
@@ -83,8 +83,8 @@ public class EmailHelper {
     public void sendDeleteAccountEmail(User user, EntityManager em,String token) throws MessagingException, SQLException {
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
-        contact.setRecipient("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setSubject("deleteaccount_subj");
         contact.setContent("deleteaccount");
         sendHTMLEmailDeleteAccount(contact, em,token);
@@ -97,8 +97,8 @@ public class EmailHelper {
         u.setEmail(email);
         u.setPreferedLanguage("pt");
         contact.setUser(u);
-        contact.setSender("alcoolesaude@gmail.com");
-        contact.setRecipient("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setSubject("sendContactRequest_subj");
         contact.setContent("contactRequest");
         sendHTMLEmailContactRequest(contact, em, email);
@@ -110,7 +110,7 @@ public class EmailHelper {
         try {
             Contact contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("plan_subj");
             contact.setContent("plan");
@@ -128,7 +128,7 @@ public class EmailHelper {
 
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("record_subj");
         contact.setContent("record");
@@ -142,7 +142,7 @@ public class EmailHelper {
 
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("start_subj");
         contact.setContent("start_msg");
@@ -153,7 +153,7 @@ public class EmailHelper {
     public void sendSignUpEmail(User user, EntityManager entityManager) throws MessagingException, MissingResourceException, SQLException {
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("welcome_subj");
         contact.setContent("welcome");
@@ -162,7 +162,7 @@ public class EmailHelper {
 
     public void sendTestEmail(EntityManager entityManager) throws SQLException, MessagingException {
         Contact contact = new Contact();
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient("leomartinsjf@gmail.com");
         contact.setSubject("teste de envio");
         contact.setContent("teste de envio");

@@ -69,7 +69,7 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
         }
         contact.setSender(user.getEmail());
-        contact.setRecipient("alcoolesaude@gmail.com");
+        contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setSubject("Contato via formulario - " + user.getEmail());
         contact.setContent(message);
         sendPlainTextEmail(contact);
@@ -80,7 +80,7 @@ public class ContactController extends BaseController implements Serializable {
     public void sendPasswordRecoveryEmail(User user) throws MessagingException {
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("passwordrecovery_subj");
         contact.setContent("passwordrecovery");
@@ -91,8 +91,8 @@ public class ContactController extends BaseController implements Serializable {
         String token = "";
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
-        contact.setRecipient("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setSubject("deleteaccount_subj");
         contact.setContent("deleteaccount");
         sendHTMLEmailDeleteAccount(contact,token);
@@ -131,7 +131,7 @@ public class ContactController extends BaseController implements Serializable {
         try {
             Contact contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("plan_subj");
             contact.setContent("plan");
@@ -149,7 +149,7 @@ public class ContactController extends BaseController implements Serializable {
         try {
             Contact contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("record_subj");
             contact.setContent("record");
@@ -167,7 +167,7 @@ public class ContactController extends BaseController implements Serializable {
         try {
             Contact contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("start_subj");
             contact.setContent("start_msg");
@@ -182,7 +182,7 @@ public class ContactController extends BaseController implements Serializable {
     public void sendSignUpEmail(User user) throws MessagingException, MissingResourceException {
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("welcome_subj");
         contact.setContent("welcome");
@@ -195,7 +195,7 @@ public class ContactController extends BaseController implements Serializable {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("email.msg.subject.diary_started_subj");
             contact.setContent("email.msg.subject.diary_started");
@@ -214,7 +214,7 @@ public class ContactController extends BaseController implements Serializable {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("progress_persistchallenges_reduce_subj");
             contact.setContent("progress_persistchallenges_reduce");
@@ -233,7 +233,7 @@ public class ContactController extends BaseController implements Serializable {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("progress_persistchallenges_quit_subj");
             contact.setContent("progress_persistchallenges_quit");
@@ -252,7 +252,7 @@ public class ContactController extends BaseController implements Serializable {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("progress_keepingresult_quit_subj");
             contact.setContent("progress_keepingresult_quit");
@@ -271,7 +271,7 @@ public class ContactController extends BaseController implements Serializable {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("progress_keepingresult_reduce_subj");
             contact.setContent("progress_keepingresult_reduce");
@@ -288,7 +288,7 @@ public class ContactController extends BaseController implements Serializable {
         Contact contact;
         contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("annualscreening_subj");
         contact.setContent("annualscreening");
@@ -305,7 +305,7 @@ public class ContactController extends BaseController implements Serializable {
         for (int week : weeks) {
             contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("week_" + week + "_subj");
             contact.setContent("week_" + week);
@@ -322,7 +322,7 @@ public class ContactController extends BaseController implements Serializable {
         int frequency = user.getTipsFrequency();        
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("tips_subj");
         contact.setContent("tips" + String.valueOf(randomNumber));
@@ -406,7 +406,7 @@ public class ContactController extends BaseController implements Serializable {
     
     public void sendTestEmail(){
         Contact contact = new Contact();
-        contact.setSender("alcoolesaude@gmail.com");
+        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient("leomartinsjf@gmail.com");
         contact.setSubject("teste de envio");
         contact.setContent("teste de envio");
