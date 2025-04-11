@@ -89,6 +89,7 @@ public class ChatEndpoint {
     private GenericDAO<Message> daoBaseMessage;
     private UserDAO daoUser;
     private ChatDAO daoChat;
+    private ChatFacadeREST chatFacade;
     
     // <UserId, Session>
     private static Map<Long, Session> consultants = new ConcurrentHashMap<>();
@@ -120,7 +121,8 @@ public class ChatEndpoint {
         AVAILABLE,
         BUSY,
         IDLE,
-        OFFLINE
+        OFFLINE,
+        // OFFLINE_AVAILABLE,
       }
     
     public ChatEndpoint() {
@@ -405,6 +407,7 @@ public class ChatEndpoint {
     }
     
     private void sendUserStatusList(Long consultantId){
+        System.out.println("Enviando lista de status para o consultor: " + consultantId);
         
         UserStatusChange usl = new UserStatusChange();
         usl.type = "statusList";
@@ -415,9 +418,34 @@ public class ChatEndpoint {
             if(!consultants.containsValue(e.getKey()) && verifyRelatedUser(e.getValue().idRelatedConsultant, consultantId))
                 usl.users.add(e.getValue());
         }
+        System.out.println("Usuários online adicionados: " + usl.users.size());
+        
+        // Buscar chats do banco de dados para identificar usuários offline
+        List<Chat> chats = findAllRelatedUserChats(consultantId);
+        
+        // Para cada chat cria um novo UserInfo se o usuário não estiver online
+        for (Chat chat : chats) {
+            if (chat.getUser() == null) {
+                System.out.println("Chat " + chat.getId() + " ignorado (sem usuário associado)");
+                continue;
+            }
+            
+            Long userId = chat.getUser().getId();
+            boolean isOnline = onlineUsers.values().stream().anyMatch(u -> u.chat.equals(chat.getId()));
+            
+            if (!isOnline) {
+                String realStatus = statusType.OFFLINE.toString();
+                UserInfo offlineUser = new UserInfo(
+                    chat.getUser().getName(), chat.getUser().getEmail(), chat.getId(), realStatus, null
+                );
+                usl.users.add(offlineUser);
+                System.out.println("Usuário OFFLINE adicionado: " + offlineUser.name);
+            }
+        }
         
         Gson g = new Gson();
         String json = g.toJson(usl);
+        System.out.println("JSON final enviado: " + json);
         
         try {
             consultants.get(consultantId).getBasicRemote().sendObject(json);
@@ -454,10 +482,20 @@ public class ChatEndpoint {
         return (Objects.equals(consultantIdRelatedToUser, idConsultant) || Objects.equals(consultantIdRelatedToUser, null));
     }
     
+    private List<Chat> findAllRelatedUserChats(Long consultantId) {
+        List<Chat> chats = null;
+        try {
+            chats = daoChat.listAllRelatedUserChats(consultantId, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return chats;
+    }
+    
     private void deleteUserStatus(Session userSession, Long userKey){
         
         UserInfo u = onlineUsers.get(userSession);
-        u.status = statusType.OFFLINE.toString();
+        u.status = statusType.OFFLINE.toString(); // Offline_Availlable
         
         onlineUsers.remove(userSession);
     
@@ -590,7 +628,12 @@ public class ChatEndpoint {
                     }
                 }
                 
-                setStatus(users.get(chatId), statusType.BUSY.toString());
+                if(users.get(chatId) != null) {
+                    setStatus(users.get(chatId), statusType.BUSY.toString());
+                } else {
+                    System.out.println("Deve ser um consultor acessando um usuário offline no chat: " + chatId);
+                }
+                
                 
             } else if (messageType.equals("disconnect")) {
                 consultantDisconnectTimeout(openChats.get(session));

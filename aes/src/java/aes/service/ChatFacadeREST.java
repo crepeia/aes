@@ -157,5 +157,4 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     protected EntityManager getEntityManager() {
         return em;
     }
-
 }
