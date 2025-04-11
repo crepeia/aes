@@ -9,6 +9,7 @@ import aes.model.Contact;
 import aes.model.User;
 import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
+import aes.utility.EMailSSL;
 import aes.utility.Secured;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -41,11 +42,13 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private ContactDAO contactDao;
+    private EMailSSL eMailSSL;
 
     public ContactFacadeREST() {
         super(Contact.class);
         try {
             contactDao = new ContactDAO();
+            eMailSSL = new EMailSSL();
         } catch (NamingException ex) {
             Logger.getLogger(ContactFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
@@ -58,7 +61,7 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
         try {
             Contact contact = new Contact();
             contact.setUser(user);
-            contact.setSender("alcoolesaude@gmail.com");
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("annualscreening_subj");
             contact.setContent("annualscreening");
