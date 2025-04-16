@@ -694,8 +694,6 @@ public class ChatEndpoint {
                     Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-            } else if (messageType.equals("ping")) {
-                System.out.println("ping");
             }
             
         } catch (IOException | ParseException ex) {
