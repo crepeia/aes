@@ -24,6 +24,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -43,23 +44,26 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
     private EntityManager em;
     private ContactDAO contactDao;
     private EMailSSL eMailSSL;
+    private UserDAO userDAO;
 
     public ContactFacadeREST() {
         super(Contact.class);
         try {
             contactDao = new ContactDAO();
             eMailSSL = new EMailSSL();
+            userDAO = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(ContactFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
     
-    @Path("sendAnnualScreeningEmail")
+    @Path("sendAnnualScreeningEmail/{userId}")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response sendAnnualScreeningEmail(User user) {
+    public Response sendAnnualScreeningEmail(@PathParam("userId") Long userId) {
         try {
             Contact contact = new Contact();
+            User user = userDAO.find(userId, em);
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
