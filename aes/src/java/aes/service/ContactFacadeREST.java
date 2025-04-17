@@ -34,7 +34,6 @@ import javax.ws.rs.core.Response;
  *
  * @author Leonorico
  */
-@Secured
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("contact")
@@ -57,6 +56,7 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
         }
     }
     
+    @Secured
     @Path("sendAnnualScreeningEmail/{userId}")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -79,10 +79,30 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+    
+    @Path("sendAnnualScreeningEmailWithoutRegister")
+    @POST
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response sendAnnualScreeningEmailWithoutRegister(String email) {
+        try {
+            Contact contact = new Contact();
+            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+            contact.setRecipient(email);
+            contact.setSubject("annualscreening_subj");
+            contact.setContent("annualscreening");
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.YEAR, 1);
+            contact.setDateScheduled(cal.getTime());
+            contactDao.insertOrUpdate(contact, em);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(ContactFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
 }
