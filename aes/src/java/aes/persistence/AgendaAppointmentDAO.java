@@ -42,4 +42,16 @@ public class AgendaAppointmentDAO extends GenericDAO<AgendaAppointment> {
             throw new SQLException(erro);
         }
     }
+    
+    public List<AgendaAppointment> findByDate(String date, EntityManager entityManager) throws SQLException {
+        try {
+            Query query = entityManager.createQuery(
+                "SELECT app FROM AgendaAppointment app WHERE DATE(app.appointmentDate) = :dateValue ORDER BY app.appointmentDate"
+            );
+            query.setParameter("dateValue", java.sql.Date.valueOf(date));
+            return query.getResultList();
+        } catch (Exception erro) {
+            throw new SQLException(erro);
+        }
+    }
 }

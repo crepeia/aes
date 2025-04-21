@@ -88,6 +88,12 @@ public class User implements Serializable {
     @Column(name = "ip_created")
     private String ipCreated;
     
+    @Column(name = "my_referral_code")  
+    private String myReferralCode;
+    
+    @Column(name = "friend_referral_code") // Para o campo friend_referral_code
+    private String friendReferralCode;
+    
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
@@ -195,7 +201,7 @@ public class User implements Serializable {
     
     @Column(name = "selected_title")
     private Long selected_title;
-   
+    
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
@@ -708,6 +714,20 @@ public class User implements Serializable {
         this.notificationsConsultant = notificationsConsultant;
     }
     
+    public String getMyReferralCode() {
+    return myReferralCode;
+}
+
+    public void setMyReferralCode(String myReferralCode) {
+        this.myReferralCode = myReferralCode;
+    }
     
+    public String getFriendReferralCode() {
+        return friendReferralCode;
+    }
+
+    public void setFriendReferralCode(String friendReferralCode) {
+        this.friendReferralCode = friendReferralCode;
+    }
     
 }

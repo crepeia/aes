@@ -58,6 +58,105 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
         super(ChallengeUser.class);
     }
 
+//    @PUT
+//    @Path("completeCreateChallenge")
+//    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response completeCreateChallenge(ChallengeUser entity) {
+//        try {
+//            Challenge c = em.find(Challenge.class, entity.getChallenge().getId());
+//            List<ChallengeUser> chList
+//                    = em.createQuery("SELECT ch FROM ChallengeUser ch "
+//                            + "WHERE ch.user.id=:userId AND ch.challenge.id=:challengeId "
+//                            + "ORDER BY ch.dateCompleted DESC")
+//                            .setParameter("userId", entity.getUser().getId())
+//                            .setParameter("challengeId", entity.getChallenge().getId())
+//                            .getResultList();
+//
+//            Challenge.ChallengeType ct = c.getType();
+//
+//            if (chList.isEmpty()) {
+//                ChallengeUser newEntity = super.create(entity);
+//                Gson g = new Gson();
+//                String json = g.toJson(newEntity);
+//                return Response.ok(json).build();
+//            } else {
+//                if (ct.equals(Challenge.ChallengeType.ONCE)) {
+//                    return Response.status(Response.Status.NOT_MODIFIED).build();
+//                } else if (ct.equals(Challenge.ChallengeType.DAILY)) {
+//                    if (!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())) {
+//                        ChallengeUser newEntity = super.create(entity);
+//                        Gson g = new Gson();
+//                        String json = g.toJson(newEntity);
+//                        return Response.ok(json).build();
+//                    }
+//                }
+//            }
+//            return Response.status(Response.Status.NOT_MODIFIED).build();
+//        } catch (Exception e) {
+//            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+//
+//        }
+//    }
+    
+//    @PUT
+//    @Path("completeCreateChallenge")
+//    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response completeCreateChallenge(ChallengeUser entity) {
+//        try {
+//            Challenge c = em.find(Challenge.class, entity.getChallenge().getId());
+//            List<ChallengeUser> chList = em.createQuery("SELECT ch FROM ChallengeUser ch "
+//                    + "WHERE ch.user.id=:userId AND ch.challenge.id=:challengeId "
+//                    + "ORDER BY ch.dateCompleted DESC")
+//                    .setParameter("userId", entity.getUser().getId())
+//                    .setParameter("challengeId", entity.getChallenge().getId())
+//                    .getResultList();
+//
+//            Challenge.ChallengeType ct = c.getType();
+//
+//            if (chList.isEmpty()) {
+//                ChallengeUser newEntity = super.create(entity);
+//                return Response.ok(newEntity).build();
+//            } else {
+//                switch (ct) {
+//                    case ONCE:
+//                        return Response.status(Response.Status.NOT_MODIFIED).build();
+//
+//                    case DAILY:
+//                        if (!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())) {
+//                            ChallengeUser newEntity = super.create(entity);
+//                            return Response.ok(newEntity).build();
+//                        }
+//                        return Response.status(Response.Status.NOT_MODIFIED).build();
+//
+//                    case ACCUMULATIVE:
+//                        // Busca registro do mesmo dia
+//                        ChallengeUser existing = chList.stream()
+//                            .filter(ch -> ch.getDateCompleted().equals(entity.getDateCompleted()))
+//                            .findFirst()
+//                            .orElse(null);
+//
+//                        if (existing != null) {
+//                            // ATUALIZA o registro existente
+//                            existing.setScore(existing.getScore() + entity.getScore());
+//                            em.merge(existing);
+//                            return Response.ok(existing).build();
+//                        } else {
+//                            // Cria novo registro se não encontrou
+//                            ChallengeUser newEntity = super.create(entity);
+//                            return Response.ok(newEntity).build();
+//                        }
+//
+//                    default:
+//                        return Response.status(Response.Status.BAD_REQUEST).build();
+//                }
+//            }
+//        } catch (Exception e) {
+//            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+//        }
+//    }
+    
     @PUT
     @Path("completeCreateChallenge")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -80,22 +179,34 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
                 String json = g.toJson(newEntity);
                 return Response.ok(json).build();
             } else {
-                if (ct.equals(Challenge.ChallengeType.ONCE)) {
-                    return Response.status(Response.Status.NOT_MODIFIED).build();
-                } else if (ct.equals(Challenge.ChallengeType.DAILY)) {
-                    if (!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())) {
+                switch (ct) {
+                    case ONCE:
+                        return Response.status(Response.Status.NOT_MODIFIED).build();
+
+                    case DAILY:
+                        if (!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())) {
+                            ChallengeUser newEntity = super.create(entity);
+                            Gson g = new Gson();
+                            String json = g.toJson(newEntity);
+                            return Response.ok(json).build();
+                        }
+                        break;
+
+                    case ACCUMULATIVE:
+                        // Sempre cria um novo registro, independente da data
                         ChallengeUser newEntity = super.create(entity);
                         Gson g = new Gson();
                         String json = g.toJson(newEntity);
                         return Response.ok(json).build();
-                    }
+
+                    default:
+                        return Response.status(Response.Status.BAD_REQUEST).build();
                 }
             }
             return Response.status(Response.Status.NOT_MODIFIED).build();
         } catch (Exception e) {
             Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-
         }
     }
 
@@ -300,6 +411,34 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    @GET
+    @Path("countByUserAndChallenge/{userId}/{challengeId}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response countByUserAndChallenge(
+            @PathParam("userId") Long userId,
+            @PathParam("challengeId") Long challengeId) {
+        try {
+            String userEmail = securityContext.getUserPrincipal().getName();
+
+            // Verifica se o userId corresponde ao usuário logado;
+            User user = em.find(User.class, userId);
+            if (user == null || !user.getEmail().equals(userEmail)) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+
+            long count = (long) em.createQuery("SELECT COUNT(cu) FROM ChallengeUser cu " +
+                    "WHERE cu.user.id = :userId AND cu.challenge.id = :challengeId")
+                    .setParameter("userId", userId)
+                    .setParameter("challengeId", challengeId)
+                    .getSingleResult();
+
+            return Response.ok(String.valueOf(count)).build();
+        } catch (Exception e) {
+            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
 
 }
