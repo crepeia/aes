@@ -122,7 +122,6 @@ public class ChatEndpoint {
         BUSY,
         IDLE,
         OFFLINE,
-        // OFFLINE_AVAILABLE,
       }
     
     public ChatEndpoint() {
@@ -222,6 +221,8 @@ public class ChatEndpoint {
 
             }
         }
+        
+        session.setMaxIdleTimeout(5 * 60 * 1000); // Define timeout de 5 minutos para fechar.
         
         UserInfo ui = new UserInfo();
         
@@ -495,7 +496,7 @@ public class ChatEndpoint {
     private void deleteUserStatus(Session userSession, Long userKey){
         
         UserInfo u = onlineUsers.get(userSession);
-        u.status = statusType.OFFLINE.toString(); // Offline_Availlable
+        u.status = statusType.OFFLINE.toString();
         
         onlineUsers.remove(userSession);
     
@@ -703,6 +704,7 @@ public class ChatEndpoint {
     @OnClose
     public void onClose(Session session, CloseReason reason) {
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session closed ID: {0}", new Object[]{session.getId()});
+        System.out.println(reason);
         
         if(users.containsValue(session)){
             Long userKey = getUserKeyForSession(session);
