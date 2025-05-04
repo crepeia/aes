@@ -163,4 +163,17 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         }
     }
     
+    @GET
+    @Path("findAppointmentsByUserAndDate")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findAppointmentsByUserAndDate(@QueryParam("userId") Long userId, @QueryParam("date") String date) throws SQLException {
+        try {
+            return Response.ok().entity(appointmentDao.findAppointmentsByUserAndDate(userId, date, em)).build();
+        } catch (RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+    
 }
