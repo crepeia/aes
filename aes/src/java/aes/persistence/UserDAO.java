@@ -20,6 +20,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
@@ -220,5 +221,46 @@ public class UserDAO extends GenericDAO<User>{
     public void uptadeUser(User user, EntityManager entityManager) throws SQLException {
         super.insertOrUpdate(user, entityManager);
     }
+    
+    public User findByReferralCode(String referralCode, EntityManager em) {
+        try {
+            Query query = em.createNativeQuery(
+                "SELECT * FROM tb_user WHERE `my_referral_code` = ?", 
+                User.class);
+            query.setParameter(1, referralCode);
 
+            List<User> result = query.getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        } catch (Exception e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Erro ao buscar por código de referência", e);
+            throw new RuntimeException("Erro ao buscar por código de referência", e);
+        }
+    }
+
+    public long countReferralCodeUsage(String referralCode, EntityManager em) {
+        try {
+            Query query = em.createNativeQuery(
+                "SELECT COUNT(*) FROM tb_user WHERE friend_referral_code = ?");
+            query.setParameter(1, referralCode);
+
+            return ((Number)query.getSingleResult()).longValue();
+        } catch (Exception e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Erro ao contar uso de código de referência", e);
+            throw new RuntimeException("Erro ao contar uso de código de referência", e);
+        }
+    }
+
+    public void updateReferralCode(Long userId, String referralCode, EntityManager em) throws Exception {
+        User user = em.find(User.class, userId);
+        if (user == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+
+        if (user.getMyReferralCode() != null && !user.getMyReferralCode().isEmpty()) {
+            throw new IllegalStateException("Usuário já possui um código de referência");
+        }
+
+        user.setMyReferralCode(referralCode);
+        em.merge(user);
+    }
 }
