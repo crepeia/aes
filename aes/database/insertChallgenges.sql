@@ -10,4 +10,4 @@ VALUES
 ('7', '10', 'Enviar uma sugestão pela primeira vez', '0', 'Enviar Sugestão', 'ONCE'),
 ('8', '10', 'Entre no Ranking pela primeira vez', '0', 'Entrar no Ranking', 'ONCE'),
 ('9', '10', 'Convide amigos para o aplicativo', '0', 'Convidar amigos', 'ACCUMULATIVE'),
-('10', '10', 'Teste', '0', 'Teste', 'ACCUMULATIVE'),
+('10', '10', 'Teste', '0', 'Teste', 'ACCUMULATIVE');
