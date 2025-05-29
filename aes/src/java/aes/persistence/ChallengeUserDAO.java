@@ -238,5 +238,17 @@ public class ChallengeUserDAO extends GenericDAO<ChallengeUser>{
         }
         return score;
     }
-
+    
+    public long countByUserAndChallenge(Long userId, Long challengeId, EntityManager entityManager) {
+        try {
+            return (long) entityManager.createQuery("SELECT COUNT(cu) FROM ChallengeUser cu " +
+                    "WHERE cu.user.id = :userId AND cu.challenge.id = :challengeId")
+                    .setParameter("userId", userId)
+                    .setParameter("challengeId", challengeId)
+                    .getSingleResult();
+        } catch (Exception e) {
+            Logger.getLogger(ChallengeUserDAO.class.getName()).log(Level.SEVERE, null, e);
+            return 0L;
+        }
+    }
 }

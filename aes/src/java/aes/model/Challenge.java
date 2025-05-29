@@ -28,7 +28,8 @@ public class Challenge implements Serializable {
         ONCE,
         DAILY,
         WEEKLY,
-        MONTHLY
+        MONTHLY,
+        ACCUMULATIVE
       }
 
     private static final long serialVersionUID = 1L;
