@@ -5,6 +5,7 @@
  */
 package aes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -33,6 +34,7 @@ public class Item implements Serializable {
     private String type;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
+    @JsonIgnore
     private List<Rating> ratings;
 
     public long getId() {

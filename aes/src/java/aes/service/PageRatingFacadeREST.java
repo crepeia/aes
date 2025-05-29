@@ -5,8 +5,10 @@
  */
 package aes.service;
 
+import aes.model.Item;
 import aes.model.Rating;
 import aes.persistence.GenericDAO;
+import aes.persistence.RatingDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
 import java.util.List;
@@ -39,12 +41,12 @@ public class PageRatingFacadeREST extends AbstractFacade<Rating> {
     
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-    private GenericDAO<Rating> pageRatingDao;
+    private RatingDAO pageRatingDao;
 
     public PageRatingFacadeREST() {
         super(Rating.class);
         try {
-            pageRatingDao = new GenericDAO(Rating.class);
+            pageRatingDao = new RatingDAO();
         } catch (NamingException ex) {
             Logger.getLogger(PageRatingFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
@@ -81,7 +83,7 @@ public class PageRatingFacadeREST extends AbstractFacade<Rating> {
     @Path("findAll")
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response findAllPageRating() {
+    public Response findAllPageRatings() {
         try {
             return Response.ok().entity(pageRatingDao.list(em)).build();
         } catch (SQLException | RuntimeException e) {
@@ -93,11 +95,26 @@ public class PageRatingFacadeREST extends AbstractFacade<Rating> {
     @Path("findAllUserRatings/{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response findAllPageRating(@PathParam("id") Long id) {
+    public Response findAllUserRatings(@PathParam("id") Long id) {
         try {
-            List<Rating> result = pageRatingDao.listOnce("user.id", id, em);
+            List<Rating> result = pageRatingDao.list("user.id", id, em);
             if(!result.isEmpty())
                 return Response.ok().entity(result).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(PageRatingFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @Path("findLastUserRatingByItem/{userId}/{itemId}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response findLastUserRatingByItem(@PathParam("userId") Long userId, @PathParam("itemId") Long itemId) {
+        try {
+            List<Rating> result = pageRatingDao.listRatingByUserIdAndItemId(userId, itemId, em);
+            if(!result.isEmpty())
+                return Response.ok().entity(result.get(0)).build();
             return Response.status(Response.Status.NOT_FOUND).build();
         } catch (SQLException | RuntimeException e) {
             Logger.getLogger(PageRatingFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
