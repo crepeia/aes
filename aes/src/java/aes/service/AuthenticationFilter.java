@@ -11,11 +11,15 @@ import aes.model.User;
 
 import java.security.Principal;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Priority;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -131,8 +135,17 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private AuthenticationToken validateToken(String token) throws Exception {
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
-        return (AuthenticationToken) em.createQuery("SELECT a FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
-    }
-    
-   
+        try {
+            LocalDateTime validDateTime = LocalDateTime.now().minusYears(1);
+            Date validDate = Date.from(validDateTime.atZone(ZoneId.systemDefault()).toInstant());
+            return (AuthenticationToken) em.createQuery(
+                "SELECT a FROM AuthenticationToken a WHERE a.token=:t AND a.dateCreated >= :validDate"
+            )
+            .setParameter("t", token)
+            .setParameter("validDate", validDate)        
+            .getSingleResult();  
+        } catch (NoResultException e) {
+            throw new Exception("Token inválido ou expirado.");
+        }
+    }   
 }
