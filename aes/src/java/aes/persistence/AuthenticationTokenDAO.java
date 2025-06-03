@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -54,6 +55,17 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
 
         for (AuthenticationToken token : expiredTokens) {
             super.delete(token, entityManager);
+        }
+    }
+    
+    public AuthenticationToken findByToken(String token, EntityManager entityManager) {
+        try {
+            return entityManager.createQuery(
+                "SELECT t FROM AuthenticationToken t WHERE t.token = :token", AuthenticationToken.class
+            ).setParameter("token", token)
+            .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         }
     }
 }

@@ -24,6 +24,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -130,6 +132,44 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
         } catch(Exception e){
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE,null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    @POST
+    @Path("secured/refreshtoken")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response refreshToken(@HeaderParam("Authorization") String tokenHeader) throws SQLException{
+        try {
+            // Extrai o token (remove "Bearer " se vier no header)
+            String tokenString = tokenHeader.replace("Bearer ", "").trim();
+            
+            // Busca o token no banco
+            AuthenticationToken existingToken = authenticationTokenDAO.findByToken(tokenString, em);
+            if (existingToken == null) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Invalid token").build();
+            }
+            
+            User user = existingToken.getUser();
+            if (user == null) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("User not found").build();
+            }
+            
+            // Revoga o token antigo
+            authenticationTokenDAO.revokeToken(tokenString, user.getEmail(), em);
+            
+            // Gera um novo token
+            String newToken = authenticationTokenDAO.issueToken(user, em);
+            
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                .log(Level.INFO, "Usuário '" + user.getEmail() + "' renovou token.");
+            
+            return Response.ok(newToken).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("Erro ao renovar token").build();
         }
     }
     
