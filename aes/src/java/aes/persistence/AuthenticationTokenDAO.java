@@ -10,6 +10,7 @@ import aes.model.User;
 import aes.utility.SecureRandomString;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 
@@ -36,7 +37,7 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         return token;
     }
     
-    public void revokeToken(String token, String userEmail, EntityManager entityManager) throws SQLException{
+    public void revokeToken(String token, String userEmail, EntityManager entityManager) throws SQLException {
         AuthenticationToken at = (AuthenticationToken) entityManager.createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
         .setParameter("token", token)
         .setParameter("uEmail", userEmail)
@@ -45,5 +46,14 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
     
     }
     
-    
+    public void deleteExpiredTokens(Date limitDate, EntityManager entityManager) throws SQLException {
+        List<AuthenticationToken> expiredTokens = entityManager
+        .createQuery("SELECT t FROM AuthenticationToken t WHERE t.dateCreated < :limit", AuthenticationToken.class)
+        .setParameter("limit", limitDate)
+        .getResultList();
+
+        for (AuthenticationToken token : expiredTokens) {
+            super.delete(token, entityManager);
+        }
+    }
 }

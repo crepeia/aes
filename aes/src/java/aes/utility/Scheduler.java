@@ -9,6 +9,7 @@ import aes.model.MedalUser;
 import aes.model.Title;
 import aes.model.TitleUser;
 import aes.model.User;
+import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.ContactDAO;
 import aes.persistence.MedalUserDAO;
 import aes.persistence.TitleUserDAO;
@@ -34,6 +35,8 @@ import java.util.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
@@ -56,6 +59,7 @@ public class Scheduler {
     private ContactDAO contactDAO;
     private MedalUserDAO medalUserDAO;
     private TitleUserDAO titleUserDAO;
+    private AuthenticationTokenDAO authenticationTokenDAO;
     private EmailHelper emailHelper;
 
     public Scheduler() {
@@ -65,6 +69,7 @@ public class Scheduler {
             contactDAO.setEntityManager(em);
             medalUserDAO = new MedalUserDAO();
             titleUserDAO = new TitleUserDAO();
+            authenticationTokenDAO = new AuthenticationTokenDAO();
         } catch (NamingException ex) {
             Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -124,6 +129,24 @@ public class Scheduler {
     //    mobileOptionsController.sendScheduledNotifications();
 
     //}
+    
+    // Executa todos os dias às 04:00 da manhã.
+    @Schedule(second = "0", minute = "0", hour = "4", dayOfMonth = "*", month = "*", year = "*", persistent = false)
+    public void deleteExpiredTokens() {
+        Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Performing expired token cleanup");
+        
+        // Calcula a data limite (tokens mais antigos que 1 ano)
+        LocalDateTime limit = LocalDateTime.now().minusYears(1);
+        Date limitDate = Date.from(limit.atZone(ZoneId.systemDefault()).toInstant());
+        
+        // Chama DAO para executar a query de remoçao
+        try {
+            authenticationTokenDAO.deleteExpiredTokens(limitDate, em);
+        } catch (SQLException e) {
+            Logger.getLogger(Scheduler.class.getName()).log(Level.INFO, "AES - Performing expired token cleanup failed!");
+        }
+        
+    }
     
    public void sendScheduledEmails() {
 
