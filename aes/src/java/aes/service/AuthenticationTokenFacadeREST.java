@@ -141,7 +141,7 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @Produces(MediaType.APPLICATION_JSON)
     public Response refreshToken(@HeaderParam("Authorization") String tokenHeader) throws SQLException{
         try {
-            // Extrai o token (remove "Bearer " se vier no header)
+            // Extrai o token (remove "Bearer " se vier no header);
             String tokenString = tokenHeader.replace("Bearer ", "").trim();
             
             // Busca o token no banco
