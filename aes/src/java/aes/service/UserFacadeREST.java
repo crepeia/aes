@@ -24,7 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -719,4 +721,31 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 .build();
         }
     }
+    
+    @GET
+    @Path("/info/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserInfo(@PathParam("id") Long id) {
+        try {
+            User user = em.find(User.class, id);
+
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("Usuário não encontrado.").build();
+            }
+
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("name", user.getNickname());
+            userInfo.put("birthDate", user.getBirthDate());
+            userInfo.put("gender", user.getGender());
+
+            return Response.ok(userInfo).build();
+
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Erro ao buscar informações do usuário.").build();
+        }
+    }
+
 }
