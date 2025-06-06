@@ -37,15 +37,25 @@ import org.hibernate.TransientObjectException;
 public class ChallengeUserController extends BaseController<ChallengeUser> {
     
     public static class NicknameScore {
+        private Long id;
         private String nickname;
         private Long score;
         private int position;
         private Long title;
-        public NicknameScore(String nickname, Long score, Long title){
+        public NicknameScore(Long id, String nickname, Long score, Long title){
+            this.id = id;
             this.nickname = nickname;
             this.score = score;
             this.position = 0;
             this.title = title;
+        }
+        
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
         }
 
         public String getNickname() {
@@ -145,8 +155,11 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
 
             for (User u : users) {
                 long points = getPointsFromDate(u, dateStart);
+                    if (u.getSelected_title() != null) {
+                        resultList.add(new NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
+                    }
                 //if(points == null) points = Long.valueOf(0);
-                resultList.add(new NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                //resultList.add(new NicknameScore(u.getNickname(), points, u.getSelected_title()));
             }
 
             return resultList;
@@ -168,8 +181,11 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
                         
                 for (User u : users) {
                     long points = getPointsAllTime(u);
+                        if (u.getSelected_title() != null) {
+                            resultList.add(new NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
+                        }
                     //if(points == null) points = Long.valueOf(0);
-                    resultList.add(new NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                    //resultList.add(new NicknameScore(u.getNickname(), points, u.getSelected_title()));
                 }
                 
                 return resultList;
