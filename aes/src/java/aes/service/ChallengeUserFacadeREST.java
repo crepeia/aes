@@ -440,5 +440,22 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+    
+    @GET
+    @Path("points/{userId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getUserTotalPoints(@PathParam("userId") Long userId) {
+        try {
+            Long totalPoints = (Long) em.createQuery("SELECT COALESCE(SUM(c.score), 0) FROM ChallengeUser c WHERE c.user.id = :userId")
+                    .setParameter("userId", userId)
+                    .getSingleResult();
 
+            return Response.ok().entity("{\"totalPoints\":" + totalPoints + "}").build();
+        } catch (Exception e) {
+            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("{\"error\":\"" + e.getMessage() + "\"}")
+                           .build();
+        }
+    }
 }
