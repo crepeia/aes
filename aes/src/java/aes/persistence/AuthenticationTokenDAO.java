@@ -26,7 +26,7 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
     }
     
     
-    public String issueToken(User usr, EntityManager entityManager) throws SQLException{
+    public AuthenticationToken issueToken(User usr, EntityManager entityManager) throws SQLException{
         String token = SecureRandomString.generate();
         
         AuthenticationToken authToken = new AuthenticationToken();
@@ -35,7 +35,7 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         authToken.setDateCreated(new Date());
         super.update(authToken, entityManager);
         
-        return token;
+        return authToken;
     }
     
     public void revokeToken(String token, String userEmail, EntityManager entityManager) throws SQLException {

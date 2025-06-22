@@ -12,6 +12,8 @@ import aes.utility.Encrypter;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -83,9 +85,14 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
            
            
            if(user != null){
-               String token  = authenticationTokenDAO.issueToken(user, em);
+               AuthenticationToken authToken = authenticationTokenDAO.issueToken(user, em);
+               
+               Map<String, Object> responseToken = new HashMap<>();
+               responseToken.put("token", authToken.getToken());
+               responseToken.put("dateCreated", authToken.getDateCreated());
+               
                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
-               return Response.ok(token).build();
+               return Response.ok(responseToken).build();
 
            }
            else{
