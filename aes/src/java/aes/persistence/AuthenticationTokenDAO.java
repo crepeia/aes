@@ -10,6 +10,7 @@ import aes.model.User;
 import aes.utility.SecureRandomString;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -44,6 +45,34 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         .getSingleResult();
         super.delete(at, entityManager);
     
+    }
+    
+    public void deleteExpiredTokens(Date limitDate, EntityManager entityManager) throws SQLException {
+        List<AuthenticationToken> expiredTokens = entityManager
+            .createQuery("SELECT t FROM AuthenticationToken t WHERE t.dateCreated < :limit", AuthenticationToken.class)
+            .setParameter("limit", limitDate)
+            .getResultList();    
+        
+        for (AuthenticationToken token : expiredTokens) {
+            super.delete(token, entityManager);
+        }
+    }
+    
+    public String updateToken(String oldToken, String userEmail, EntityManager entityManager) throws SQLException {
+        AuthenticationToken existingToken = entityManager.createQuery(
+            "SELECT at FROM AuthenticationToken at WHERE at.token = :token AND at.user.email = :email", AuthenticationToken.class
+        ).setParameter("token", oldToken)
+        .setParameter("email", userEmail)
+        .getSingleResult();
+        
+        // Gera novo token
+        String newToken = SecureRandomString.generate();
+        existingToken.setToken(newToken);
+        existingToken.setDateCreated(new Date());
+
+        super.update(existingToken, entityManager);
+
+        return newToken;
     }
     
     public AuthenticationToken findByToken(String token, EntityManager entityManager) {

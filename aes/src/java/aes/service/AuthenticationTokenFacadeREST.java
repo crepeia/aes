@@ -141,7 +141,7 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @Produces(MediaType.APPLICATION_JSON)
     public Response refreshToken(@HeaderParam("Authorization") String tokenHeader) throws SQLException{
         try {
-            // Extrai o token (remove "Bearer " se vier no header);
+            // Extrai o token (remove "Bearer " se vier no header)
             String tokenString = tokenHeader.replace("Bearer ", "").trim();
             
             // Busca o token no banco
@@ -157,11 +157,8 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
                     .entity("User not found").build();
             }
             
-            // Revoga o token antigo
-            authenticationTokenDAO.revokeToken(tokenString, user.getEmail(), em);
-            
-            // Gera um novo token
-            String newToken = authenticationTokenDAO.issueToken(user, em);
+            // Atualiza o token existente
+            String newToken = authenticationTokenDAO.updateToken(tokenString, user.getEmail(), em);
             
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
                 .log(Level.INFO, "Usuário '" + user.getEmail() + "' renovou token.");

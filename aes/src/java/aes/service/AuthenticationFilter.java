@@ -136,7 +136,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
         try {
-            LocalDateTime validDateTime = LocalDateTime.now().minusYears(1);
+            LocalDateTime validDateTime = LocalDateTime.now().minusMonths(1);
             Date validDate = Date.from(validDateTime.atZone(ZoneId.systemDefault()).toInstant());
             return (AuthenticationToken) em.createQuery(
                 "SELECT a FROM AuthenticationToken a WHERE a.token=:t AND a.dateCreated >= :validDate"
