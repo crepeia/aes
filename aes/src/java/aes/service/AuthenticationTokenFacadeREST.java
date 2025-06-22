@@ -165,12 +165,15 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
             }
             
             // Atualiza o token existente
-            String newToken = authenticationTokenDAO.updateToken(tokenString, user.getEmail(), em);
+            AuthenticationToken newToken = authenticationTokenDAO.updateToken(tokenString, user.getEmail(), em);
+            Map<String, Object> responseToken = new HashMap<>();
+            responseToken.put("token", newToken.getToken());
+            responseToken.put("dateCreated", newToken.getDateCreated());
             
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
                 .log(Level.INFO, "Usuário '" + user.getEmail() + "' renovou token.");
             
-            return Response.ok(newToken).build();
+            return Response.ok(responseToken).build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("Erro ao renovar token").build();

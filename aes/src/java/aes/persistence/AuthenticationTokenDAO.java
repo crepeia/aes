@@ -58,7 +58,7 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         }
     }
     
-    public String updateToken(String oldToken, String userEmail, EntityManager entityManager) throws SQLException {
+    public AuthenticationToken updateToken(String oldToken, String userEmail, EntityManager entityManager) throws SQLException {
         AuthenticationToken existingToken = entityManager.createQuery(
             "SELECT at FROM AuthenticationToken at WHERE at.token = :token AND at.user.email = :email", AuthenticationToken.class
         ).setParameter("token", oldToken)
@@ -72,7 +72,7 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
 
         super.update(existingToken, entityManager);
 
-        return newToken;
+        return existingToken;
     }
     
     public AuthenticationToken findByToken(String token, EntityManager entityManager) {
