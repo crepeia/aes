@@ -184,12 +184,12 @@
                                                 <p:message for="frequency" />
 
                                                 <p:panelGrid columns="3" id="consent" >
-                                                    <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="./termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
+                                                    <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
                                                     <h:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
                                                 </p:panelGrid>
 
                                                 <div id="signup-terms">
-                                                    <p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink></p>                                            
+                                                    <p>#{messages['naccount.p.botton']}<h:outputLink value="termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink></p>                                            
                                                 </div>
                                                 <div class="g-recaptcha" style="margin-top: 20px" data-sitekey="#{userController.getRecaptchaKey()}" data-callback="onRecaptchaSuccess"></div>
                                                 <div id="recaptcha-error-container-2"></div>
