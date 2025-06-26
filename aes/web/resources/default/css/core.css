@@ -1912,6 +1912,18 @@ hr {
     width: 40vw;
 }
 
+/* Honeypot */
+
+.simplehoney {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 0;
+    z-index: -1;
+}
+
 /* Mobile Styles */
 @media only screen and (max-width: 780px) {
   body {

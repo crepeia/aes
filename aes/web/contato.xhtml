@@ -29,18 +29,28 @@
                             <h:form id="form" class="form-signup">
                                 <p:growl id="errorGrowl" for="info" sticky="true" redisplay="true" globalOnly="true"/>
 
-                                <p:panelGrid columns="1">
+                                <p:panelGrid columns="2">
                                     <p:panel>
                                         <h4>#{messages['contato.h4.4']}</h4>
-                                        <p:inputText styleClass="form-control" id="email" required="true" value="#{userController.user.email}"  size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                        <p:inputText styleClass="form-control" id="email31d6cfe0d16" required="true" value="#{userController.user.email}"  size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
                                             <f:validateLength maximum="50" />
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
+                                        <p:watermark for="email31d6cfe0d16" value="E-mail" />
+                                        <p:message for="email31d6cfe0d16"/>
+                                        <h4>#{messages['h4.message']}</h4>
+                                        <p:inputTextarea styleClass="form-control" id="messaged41d8cd98az" binding="#{messaged41d8cd98az}" rows="4" cols="60" autoResize="false" required="true" label="#{messages['h4.message']}" />
+                                        <p:message for="messaged41d8cd98az"/>
+                                        
+                                        <h4 class="simplehoney">#{messages['contato.h4.4']}</h4>
+                                        <p:inputText styleClass="form-control simplehoney" id="email" required="false" size="30" label="#{messages['email']}"></p:inputText>
                                         <p:watermark for="email" value="E-mail" />
                                         <p:message for="email"/>
-                                        <h4>#{messages['h4.message']}</h4>
-                                        <p:inputTextarea styleClass="form-control" id="message" binding="#{message}" rows="4" cols="60" autoResize="false" required="true" label="#{messages['h4.message']}" />
+                                        <h4 class="simplehoney">#{messages['h4.message']}</h4>
+                                        <p:inputTextarea styleClass="form-control simplehoney" id="message" binding="#{message}" rows="4" cols="60" autoResize="false" label="#{messages['h4.message']}" />
+                                        <p:watermark for="message" value="Insira sua mensagem" />
                                         <p:message for="message"/>
+                                        
                                         <h:inputHidden id="user" binding="#{user}" value="#{userController.user}"  rendered="false"/>
                                         <h:inputHidden id="language" binding="#{language}" value="#{localeController.language}"  rendered="false"/>
                                         <div class="g-recaptcha" style="margin-top: 20px" data-sitekey="#{contactController.getRecaptchaKey()}" data-callback="onRecaptchaSuccess"></div>
@@ -48,13 +58,10 @@
 
                                         <div id="signinbtn">
                                             <p:commandButton styleClass="btngen btn btn-primary" value ="#{messages['send']}" update="@form" actionListener="#{contactController.sendContactFormEmail}" onclick="return validateRecaptcha(1);" >
-                                                <f:attribute name="message" value="#{message.value}" />
+                                                <f:attribute name="message" value="#{messaged41d8cd98az.value}" />
                                                 <f:attribute name="user" value="#{user.value}" />
                                             </p:commandButton>
                                         </div>
-                                    </p:panel>
-                                    <p:panel>
-
                                     </p:panel>
                                 </p:panelGrid>
                             </h:form>
