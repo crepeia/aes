@@ -75,6 +75,22 @@ public class ItemFacadeREST extends AbstractFacade<Item> {
         }
     }
     
+    @Path("findByName/{name}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response findByName(@PathParam("name") String name) {
+        try {
+            List<Item> result = itemDao.listOnce("name", name, em);
+            if (!result.isEmpty()) {
+                return Response.ok().entity(result).build();
+            }
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(ItemFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
