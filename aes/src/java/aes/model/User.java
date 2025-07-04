@@ -94,6 +94,9 @@ public class User implements Serializable {
     @Column(name = "friend_referral_code") // Para o campo friend_referral_code
     private String friendReferralCode;
     
+    @Column(name = "profile_pick")
+    private Integer profilePick;
+    
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
@@ -730,4 +733,11 @@ public class User implements Serializable {
         this.friendReferralCode = friendReferralCode;
     }
     
+    public Integer getProfilePick() {
+    return profilePick;
+    }
+
+    public void setProfilePick(Integer profilePick) {
+        this.profilePick = profilePick;
+    }
 }

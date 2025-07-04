@@ -641,4 +641,69 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 .build();
         }
     }
+    
+    @PUT
+    @Path("/updateProfilePick/{id}/{profilePick}")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProfilePick(@PathParam("id") Long id, @PathParam("profilePick") Integer profilePick) {
+        try {
+            User user = em.find(User.class, id);
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
+            }
+
+            user.setProfilePick(profilePick);
+
+            userTransaction.begin();
+            em.merge(user);
+            userTransaction.commit();
+
+            return Response.ok(user).build();
+
+        } catch (Exception e) {
+            try {
+                userTransaction.rollback();
+            } catch (Exception ex) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("/getProfilePick/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProfilePick(@PathParam("id") Long id) {
+        try {
+            // Busca o usuário no banco de dados
+            User user = em.find(User.class, id);
+
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                             .entity("User not found")
+                             .build();
+            }
+
+            // Obtém o número da imagem de perfil
+            Integer profilePick = user.getProfilePick();
+
+            // Se não tiver imagem definida, retorna um valor padrão (por exemplo, 0)
+            if (profilePick == null) {
+                profilePick = 0; // Valor padrão
+            }
+
+            // Retorna apenas o número da imagem
+            return Response.ok(profilePick).build();
+
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName())
+                 .log(Level.SEVERE, "Error getting profile picture number", e);
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                         .entity("Error getting profile picture number: " + e.getMessage())
+                         .build();
+        }
+    }
 }
