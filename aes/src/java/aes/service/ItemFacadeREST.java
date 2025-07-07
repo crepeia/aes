@@ -6,6 +6,7 @@
 package aes.service;
 
 import aes.model.Item;
+import aes.model.Rating;
 import aes.persistence.GenericDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
@@ -18,7 +19,9 @@ import javax.ejb.TransactionManagementType;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -45,6 +48,19 @@ public class ItemFacadeREST extends AbstractFacade<Item> {
             itemDao = new GenericDAO(Item.class);
         } catch (NamingException ex) {
             Logger.getLogger(ItemFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+        }
+    }
+    
+    @Path("addItem")
+    @POST
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response addItem(Item item) {
+        try {
+            itemDao.insertOrUpdate(item, em);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (SQLException | RuntimeException e) {
+            Logger.getLogger(PageRatingFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
     
