@@ -94,10 +94,13 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
                 ev.setDateCreated(new Date());
                 ev.setUser(em.find(User.class, userId));
                 super.create(ev);}*/
-                Evaluation ev = evaluationDAO.find(userId, userEmail, em);
-                return Response.ok().entity(ev).build();
+            Evaluation ev = evaluationDAO.find(userId, userEmail, em);
             
-
+            if (ev == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            
+            return Response.ok().entity(ev).build();
         } catch (SQLException e) {
             Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
