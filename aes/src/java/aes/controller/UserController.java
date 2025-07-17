@@ -125,6 +125,9 @@ public class UserController extends BaseController<User> {
                     url = url.substring(url.lastIndexOf('/') + 1);
                     FacesContext.getCurrentInstance().getExternalContext().redirect(url);
                 }
+                
+                user.setSignInDate(new Date());
+                userDAO.update(user, getEntityManager());
 
                 Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "' logou no sistema.");
 
