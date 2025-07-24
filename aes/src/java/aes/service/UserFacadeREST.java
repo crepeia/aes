@@ -24,11 +24,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
@@ -790,6 +793,34 @@ public class UserFacadeREST extends AbstractFacade<User> {
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @GET
+    @Path("listForAdmin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listAllUsers() {
+        try {
+            List<User> users = userDAO.listNotNull("email", em);
+            
+            List<Map<String, Object>> usersDTO = users.stream()
+                .map(u -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", u.getId());
+                    map.put("email", u.getEmail());
+                    map.put("isAdmin", u.isAdmin());
+                    map.put("isConsultant", u.isConsultant());
+                    map.put("useChatbot", u.isUse_chatbot());
+                    return map;
+                })
+                .collect(Collectors.toList());
+            
+            return Response.ok(usersDTO).build();
+        } catch (SQLException e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao listar usuários", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+            .entity("{\"error\":\"Erro ao buscar usuários\"}")
+            .build();
         }
     }
 }
