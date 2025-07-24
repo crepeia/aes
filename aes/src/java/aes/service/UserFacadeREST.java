@@ -642,7 +642,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
 //        }
 //    }
     
-   @POST
+    @POST
     @Path("/count-referral-usage")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -717,6 +717,79 @@ public class UserFacadeREST extends AbstractFacade<User> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("{\"error\":\"Erro ao buscar código de referência\"}")
                 .build();
+        }
+    }
+    
+    @PUT
+    @Path("updateAppSignInDate/{date}/{userId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAppSignInDate(@PathParam("date") Date date, @PathParam("userId") Long userId) {
+        try {
+            User user = userDAO.find(userId, em);
+            user.setAppSignInDate(date);
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("updateAdmin/{isAdmin}/{userId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAdmin(@PathParam("isAdmin") boolean isAdmin, @PathParam("userId") Long userId) {
+        try {
+            User user = userDAO.find(userId, em);
+            user.setAdmin(isAdmin);
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("updateConsultant/{isConsultant}/{userId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateConsultant(@PathParam("isConsultant") boolean isConsultant, @PathParam("userId") Long userId) {
+        try {
+            User user = userDAO.find(userId, em);
+            user.setConsultant(isConsultant);
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("updateUseChatbot/{useChatbot}/{userId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUseChatbot(@PathParam("useChatbot") boolean useChatbot, @PathParam("userId") Long userId) {
+        try {
+            User user = userDAO.find(userId, em);
+            user.setUse_chatbot(useChatbot);
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(User user) {
+        try {
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 }

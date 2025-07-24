@@ -149,7 +149,7 @@
                                                 </div>
 
                                                 <div id="signupsubmit">			                                            
-                                                    <div id="signupp"><p>#{messages['naccount.p.botton']}<h:outputLink value="./termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink>. #{messages['naccount.already.registered']} <h:outputLink value="login.xhtml">#{messages['signin']}</h:outputLink></p></div>                                            
+                                                    <div id="signupp"><p>#{messages['naccount.p.botton']}<h:outputLink value="termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink>. #{messages['naccount.already.registered']} <h:outputLink value="login.xhtml">#{messages['signin']}</h:outputLink></p></div>                                            
                                                     <div id="signupbtn">
                                                         <p:commandButton id="saveBtn" value="#{messages['register']}" update="@form" actionListener="#{userController.save}">
                                                             <f:attribute name="object" value="#{userController.user}" />

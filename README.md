@@ -1,13 +1,11 @@
-aes
+# aes
 =====
 
 Oficial repository of Web based alcohol intervention developed by CREPEIA | UFJF
 
-
 **Current development branch**
 
-gf5-migrating
-
+homologation
 
 **Dependencies**
 
@@ -19,3 +17,9 @@ You will need the following materials to study and deploy the project:
 - [MySQL 5.7](https://dev.mysql.com/downloads/windows/installer/8.0.html)
 
 *It’s very important to use the versions stated above, since otherwise the system may not work.*
+
+**Notes**
+
+- Branch *master*: Production branch. Used on website's project live version.
+- Branch *homologation*: Work branch. Used to development.
+- Branch *gh-pages*: Currently unused.
