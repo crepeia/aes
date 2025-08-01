@@ -23,6 +23,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -726,13 +729,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @PUT
     @Path("updateAppSignInDate/{date}/{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateAppSignInDate(@PathParam("date") Date date, @PathParam("userId") Long userId) {
+    public Response updateAppSignInDate(@PathParam("date") String dateStr, @PathParam("userId") Long userId) throws ParseException {
         try {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            Date date = df.parse(dateStr);
             User user = userDAO.find(userId, em);
             user.setAppSignInDate(date);
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException | RuntimeException ex) {
+        } catch (SQLException | ParseException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
