@@ -740,6 +740,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     
     @PUT
     @Path("updateAdmin/{isAdmin}/{userId}")
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAdmin(@PathParam("isAdmin") boolean isAdmin, @PathParam("userId") Long userId) {
         try {
@@ -755,6 +756,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     
     @PUT
     @Path("updateConsultant/{isConsultant}/{userId}")
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateConsultant(@PathParam("isConsultant") boolean isConsultant, @PathParam("userId") Long userId) {
         try {
@@ -770,6 +772,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     
     @PUT
     @Path("updateUseChatbot/{useChatbot}/{userId}")
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUseChatbot(@PathParam("useChatbot") boolean useChatbot, @PathParam("userId") Long userId) {
         try {
@@ -796,11 +799,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+
+    
     @GET
-    @Path("listForAdmin")
+    @Path("listForAdmin/{userId}")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listAllUsers() {
+    public Response listAllUsers(@PathParam("userId") Long userId) {
         try {
+            User user = userDAO.find(userId, em);
+            
+            // Verifica se usuario eh administrador para retornar a lista de usuarios
+            if (!user.isAdmin()) {
+                // Se nao for administrador retorna UNAUTHORIZED
+                return Response.status(Response.Status.UNAUTHORIZED).entity("Usuario nao autorizado").build();
+            }
+            
             List<User> users = userDAO.listNotNull("email", em);
             
             List<Map<String, Object>> usersDTO = users.stream()
