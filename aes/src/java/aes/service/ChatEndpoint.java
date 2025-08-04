@@ -440,10 +440,18 @@ public class ChatEndpoint {
         // Buscar chats do banco de dados para identificar usuários offline
         List<Chat> chats = findAllRelatedUserChats(consultantId);
         
-        // Para cada chat cria um novo UserInfo se o usuário não estiver online
+        // Para cada chat cria um novo UserInfo se o usuário não estiver online e houver mensagens no chat
         for (Chat chat : chats) {
             if (chat.getUser() == null) {
                 System.out.println("Chat " + chat.getId() + " ignorado (sem usuário associado)");
+                continue;
+            }
+            
+            // Verifica se existe mensagem para esse chat
+            boolean hasMessages = false;
+            hasMessages = messageDAO.existsMessageInChat(chat.getId(), em);
+            if (!hasMessages) {
+                // Chat ignorado - sem mensagens
                 continue;
             }
             

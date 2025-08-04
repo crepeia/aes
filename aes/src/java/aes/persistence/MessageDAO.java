@@ -54,4 +54,18 @@ public class MessageDAO extends GenericDAO<Message>{
             throw new RuntimeException("Erro ao buscar última sentDate", e);
         }
     }
+    
+    public boolean existsMessageInChat(Long chatId, EntityManager em) {
+        try {
+            Long count = em.createQuery(
+                    "SELECT COUNT(m.id) FROM Message m WHERE m.chat.id = :chatId", Long.class)
+                    .setParameter("chatId", chatId)
+                    .setMaxResults(1)
+                    .getSingleResult();
+            
+            return count > 0;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao verificar se existe mensagem no chat", e);
+        }
+    }
 }
