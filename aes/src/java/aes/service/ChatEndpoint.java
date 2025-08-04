@@ -11,6 +11,7 @@ import aes.model.User;
 import aes.model.Message;
 import aes.persistence.ChatDAO;
 import aes.persistence.GenericDAO;
+import aes.persistence.MessageDAO;
 import aes.persistence.UserDAO;
 import aes.utility.MessageDecoder;
 import aes.utility.MessageEncoder;
@@ -72,13 +73,19 @@ public class ChatEndpoint {
         //public transient ScheduledExecutorService pingExecutorService;
         //public transient Session session;
         public Long idRelatedConsultant;
+        public String lastSentDate;
         public UserInfo(){};
         public UserInfo(String name, String email, Long chat, String status, Session session){
             this.name = name;
             this.email = email;
             this.chat = chat;
             this.status = status;
+            this.lastSentDate = null;
             //this.session = session;
+        }
+        
+        public void setLastSentDate(String date) {
+            this.lastSentDate = date;
         }
     }
     
@@ -89,6 +96,7 @@ public class ChatEndpoint {
     private GenericDAO<Message> daoBaseMessage;
     private UserDAO daoUser;
     private ChatDAO daoChat;
+    private MessageDAO messageDAO;
     private ChatFacadeREST chatFacade;
     
     // <UserId, Session>
@@ -130,6 +138,7 @@ public class ChatEndpoint {
             this.daoBaseMessage = new GenericDAO<>(Message.class);
             this.daoUser = new UserDAO();
             this.daoChat = new ChatDAO();
+            this.messageDAO = new MessageDAO();
             System.out.println("service.ChatEndpoint.<init>()");
         } catch (NamingException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
@@ -353,6 +362,13 @@ public class ChatEndpoint {
                     ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
                 }
                 //ui.session = session;
+                
+                // Adicionando no userInfo a data da ultima mensagem enviada pelo usuario se houver
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+                Date lastSentDate = messageDAO.findLastSentDateByChatId(newChat.getId(), em);
+                if (lastSentDate != null) {
+                    ui.setLastSentDate(format.format(lastSentDate));
+                }
 
 
                 openChats.put(session, newChat.getId());
@@ -439,6 +455,14 @@ public class ChatEndpoint {
                 UserInfo offlineUser = new UserInfo(
                     chat.getUser().getName(), chat.getUser().getEmail(), chat.getId(), realStatus, null
                 );
+                
+                // Adicionando no offlineUser a data da ultima mensagem enviada pelo usuario se houver
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+                Date lastSentDate = messageDAO.findLastSentDateByChatId(chat.getId(), em);
+                if (lastSentDate != null) {
+                    offlineUser.setLastSentDate(format.format(lastSentDate));
+                }
+                
                 usl.users.add(offlineUser);
                 System.out.println("Usuário OFFLINE adicionado: " + offlineUser.name);
             }
