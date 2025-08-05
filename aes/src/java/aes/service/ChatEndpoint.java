@@ -93,7 +93,6 @@ public class ChatEndpoint {
     private EntityManager em;
     
     private GenericDAO<Chat> daoBase;
-    private GenericDAO<Message> daoBaseMessage;
     private UserDAO daoUser;
     private ChatDAO daoChat;
     private MessageDAO messageDAO;
@@ -135,7 +134,6 @@ public class ChatEndpoint {
     public ChatEndpoint() {
         try {
             this.daoBase = new GenericDAO<>(Chat.class);
-            this.daoBaseMessage = new GenericDAO<>(Message.class);
             this.daoUser = new UserDAO();
             this.daoChat = new ChatDAO();
             this.messageDAO = new MessageDAO();
@@ -705,7 +703,7 @@ public class ChatEndpoint {
                 m.setChat(c);
                 
                 try {
-                    daoBaseMessage.insert(m, em);
+                    messageDAO.insert(m, em);
                 } catch (SQLException ex) {
                     Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                 }
