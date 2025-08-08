@@ -86,27 +86,6 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
 
         }
     }
-    
-    @GET
-    @Path("getLastDate/{chatId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response findLastSentDate(@PathParam("chatId") Long chatId) {
-        try {
-            Date lastSentDate = messageDAO.findLastSentDateByChatId(chatId, em);
-            
-            if (lastSentDate == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("Nenhuma mensagem encontrada para chat_id " + chatId).build();
-            }
-            
-            // Retorna a data como JSON
-            return Response.ok().entity(Collections.singletonMap("lastSentDate", lastSentDate)).build();
-        } catch (Exception e) {
-            Logger.getLogger(MessageFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro interno ao buscar a última data.").build();
-        }
-    }
-    
 
     @Override
     protected EntityManager getEntityManager() {

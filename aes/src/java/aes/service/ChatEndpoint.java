@@ -73,7 +73,7 @@ public class ChatEndpoint {
         //public transient ScheduledExecutorService pingExecutorService;
         //public transient Session session;
         public Long idRelatedConsultant;
-        public String lastSentDate;
+        public Long lastSentDate;
         public UserInfo(){};
         public UserInfo(String name, String email, Long chat, String status, Session session){
             this.name = name;
@@ -84,8 +84,12 @@ public class ChatEndpoint {
             //this.session = session;
         }
         
-        public void setLastSentDate(String date) {
-            this.lastSentDate = date;
+        public void setLastSentDate(Date date) {
+            if(date != null) {
+                this.lastSentDate = date.getTime();
+            } else {
+                this.lastSentDate = null;
+            }
         }
     }
     
@@ -362,10 +366,9 @@ public class ChatEndpoint {
                 //ui.session = session;
                 
                 // Adicionando no userInfo a data da ultima mensagem enviada pelo usuario se houver
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
                 Date lastSentDate = messageDAO.findLastSentDateByChatId(newChat.getId(), em);
                 if (lastSentDate != null) {
-                    ui.setLastSentDate(format.format(lastSentDate));
+                    ui.setLastSentDate(lastSentDate);
                 }
 
 
@@ -463,10 +466,9 @@ public class ChatEndpoint {
                 );
                 
                 // Adicionando no offlineUser a data da ultima mensagem enviada pelo usuario se houver
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
                 Date lastSentDate = messageDAO.findLastSentDateByChatId(chat.getId(), em);
                 if (lastSentDate != null) {
-                    offlineUser.setLastSentDate(format.format(lastSentDate));
+                    offlineUser.setLastSentDate(lastSentDate);
                 }
                 
                 usl.users.add(offlineUser);
