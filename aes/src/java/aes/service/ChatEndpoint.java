@@ -102,6 +102,8 @@ public class ChatEndpoint {
     private MessageDAO messageDAO;
     private ChatFacadeREST chatFacade;
     
+    private Boolean isWaiting;
+    
     // <UserId, Session>
     private static Map<Long, Session> consultants = new ConcurrentHashMap<>();
     // <ChatId, Session>
@@ -141,6 +143,7 @@ public class ChatEndpoint {
             this.daoUser = new UserDAO();
             this.daoChat = new ChatDAO();
             this.messageDAO = new MessageDAO();
+            this.isWaiting = true;
             System.out.println("service.ChatEndpoint.<init>()");
         } catch (NamingException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
@@ -238,21 +241,38 @@ public class ChatEndpoint {
         UserInfo ui = new UserInfo();
         
         if(currentUser == null){            
-            // Enquanto não houver consultores ou não tiver passado 4 minutos programa fica em pausa.
-            // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-            for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
-                try {
-                    Thread.sleep(100); // 0,1 segundo
-                } catch (InterruptedException e) {
-                    return;
-                }
-            }
-            
-            // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
-            if(consultants.isEmpty()) {
-                sendNoConsultantMessage(session);
-                return;
-            }
+//            // Enquanto não houver consultores ou não tiver passado 4 minutos programa fica em pausa.
+//            // 4 minutos = 0,1 segundo * 10 * 60 * 4.
+//            for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
+//                if(!session.isOpen()) {
+//                    return; // cliente fechou
+//                }
+//                try {
+//                    Thread.sleep(100); // 0,1 segundo
+//                } catch (InterruptedException e) {
+//                    return;
+//                }
+//            }
+//            
+//            // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
+//            if(consultants.isEmpty()) {
+//                sendNoConsultantMessage(session);
+//                return;
+//            }
+
+            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.schedule(() -> {
+               if (consultants.isEmpty() && session.isOpen()) {
+                   try {
+                       System.out.println("ENTROU!");
+                       this.isWaiting = false;
+                       sendNoConsultantMessage(session);
+                       session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+               } 
+            }, 4, TimeUnit.MINUTES);
   
             newChat = new Chat();
             newChat.setUser(null);
@@ -310,15 +330,15 @@ public class ChatEndpoint {
 
             } else {//usuário comum
                 
-                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
-                // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-                try {
-                    for(int i = 0; i < 2400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
-                        Thread.sleep(100); // 0,1 segundo.
-                    }
-                } catch (InterruptedException e) {
-                    return;
-                }
+//                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
+//                // 4 minutos = 0,1 segundo * 10 * 60 * 4.
+//                try {
+//                    for(int i = 0; i < 2400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
+//                        Thread.sleep(100); // 0,1 segundo.
+//                    }
+//                } catch (InterruptedException e) {
+//                    return;
+//                }
                 
                 if( currentUser.getChat() == null) { //primeira vez conectando
 
@@ -342,6 +362,22 @@ public class ChatEndpoint {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                
+                final User usuarioAtual = currentUser;
+                
+                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                scheduler.schedule(() -> {
+                    if ((consultants.isEmpty() || !isRelatedConsultantOnline(usuarioAtual.getRelatedConsultant())) && session.isOpen()) {
+                        try {
+                            System.out.println("ENTROU!");
+                            this.isWaiting = false;
+                            sendNoConsultantMessage(session);
+                            session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } 
+                }, 4, TimeUnit.MINUTES);
 
                 users.put(newChat.getId(), session);
                 //String realStatus = statusType.AVAILABLE.toString();
@@ -377,11 +413,11 @@ public class ChatEndpoint {
 
                 setStatus(session, realStatus);
                 
-                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
-                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
-                    sendNoConsultantMessage(session);
-                    return;
-                }
+//                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
+//                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
+//                    sendNoConsultantMessage(session);
+//                    return;
+//                }
                 
             }
         }
@@ -628,7 +664,8 @@ public class ChatEndpoint {
             ObjectNode node;
             node = om.readValue(message, ObjectNode.class);
             String messageType = node.get("type").asText();
-            if(consultants.isEmpty()){
+            
+            if(!this.isWaiting && consultants.isEmpty()) {
                 sendNoConsultantMessage(session);
             }
             
