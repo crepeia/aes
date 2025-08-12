@@ -22,6 +22,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,6 +44,9 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -704,6 +713,44 @@ public class UserFacadeREST extends AbstractFacade<User> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                          .entity("Error getting profile picture number: " + e.getMessage())
                          .build();
+        }
+    }
+    
+       @POST
+    @Path("verify-recaptcha")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verifyRecaptchaToken(String jsonRequest) {
+        try (JsonReader reader = Json.createReader(new StringReader(jsonRequest))) {
+            JsonObject jsonObject = reader.readObject();
+            String recaptchaToken = jsonObject.getString("token");
+
+            String secretKey = "6LfDt5wrAAAAAG8pAV8-XtL4mn1J4h1EBwNkZlBl"; // substitua pela sua chave secreta do reCAPTCHA
+
+            URL url = new URL("https://www.google.com/recaptcha/api/siteverify");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            String postData = "secret=" + secretKey + "&response=" + recaptchaToken;
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(postData.getBytes(StandardCharsets.UTF_8));
+            }
+
+            InputStream is = conn.getInputStream();
+            JsonReader jsonReader = Json.createReader(is);
+            JsonObject jsonResponse = jsonReader.readObject();
+            boolean success = jsonResponse.getBoolean("success");
+
+            if (success) {
+                return Response.ok().entity(jsonResponse).build();
+            } else {
+                return Response.status(Response.Status.FORBIDDEN).entity(jsonResponse).build();
+            }
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
