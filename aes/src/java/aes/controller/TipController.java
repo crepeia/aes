@@ -31,7 +31,9 @@ public class TipController extends BaseController<Tip>{
 
   
     private String title;
-    private String description;
+    private String descriptionPT;
+    private String descriptionEN;
+    private String descriptionES;
 
     
     List<Tip> tipList;
@@ -126,13 +128,30 @@ public class TipController extends BaseController<Tip>{
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionPT() {
+        return descriptionPT;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionPT(String descriptionPT) {
+        this.descriptionPT = descriptionPT;
     }
+
+    public String getDescriptionEN() {
+        return descriptionEN;
+    }
+
+    public void setDescriptionEN(String descriptionEN) {
+        this.descriptionEN = descriptionEN;
+    }
+
+    public String getDescriptionES() {
+        return descriptionES;
+    }
+
+    public void setDescriptionES(String descriptionES) {
+        this.descriptionES = descriptionES;
+    }
+
     
     public List<Tip> findPossibleTips(List<Tip> sentTips){
         List<Tip> availableTips;

@@ -23,6 +23,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
+import javax.ws.rs.core.Response;
 /**
  *
  * @author bruno
@@ -68,7 +71,21 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
             return null;
         }
     }
- 
+    
+    @PUT
+    @Path("update")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response update(Tip tip) {
+        try {
+            tipDAO.update(tip, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;

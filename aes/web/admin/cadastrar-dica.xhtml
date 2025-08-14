@@ -44,13 +44,31 @@
                                         <p:message for="titleTxt" />
                                     </div>
                                     <div class="signuptext form-group row">
-                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dica.description']}</label>
-                                        <p:inputText styleClass="col-sm-10 form-control" id="descTxt" value="#{tipController.tip.description}" required="true" size="30" label="#{messages['dica.description']}"  >
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dica.descriptionPT']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="descPTTxt" value="#{tipController.tip.descriptionPT}" required="true" size="30" label="#{messages['dica.descriptionPT']}"  >
                                             <!--<p:ajax update="loginMsg" event="blur" />-->
                                             <f:validateLength maximum="500" />
                                         </p:inputText>
-                                        <p:watermark for="descTxt" value="#{messages['dica.description']}" />
-                                        <p:message for="descTxt" />
+                                        <p:watermark for="descPTTxt" value="#{messages['dica.descriptionPT']}" />
+                                        <p:message for="descPTTxt" />
+                                    </div>
+                                    <div class="signuptext form-group row">
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dica.descriptionEN']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="descENTxt" value="#{tipController.tip.descriptionEN}" required="true" size="30" label="#{messages['dica.descriptionEN']}"  >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="500" />
+                                        </p:inputText>
+                                        <p:watermark for="descENTxt" value="#{messages['dica.descriptionEN']}" />
+                                        <p:message for="descENTxt" />
+                                    </div>
+                                    <div class="signuptext form-group row">
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dica.descriptionES']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="descESTxt" value="#{tipController.tip.descriptionES}" required="true" size="30" label="#{messages['dica.descriptionES']}"  >
+                                            <!--<p:ajax update="loginMsg" event="blur" />-->
+                                            <f:validateLength maximum="500" />
+                                        </p:inputText>
+                                        <p:watermark for="descESTxt" value="#{messages['dica.descriptionES']}" />
+                                        <p:message for="descESTxt" />
                                     </div>
                                     
 

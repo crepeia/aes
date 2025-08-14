@@ -56,7 +56,7 @@ public class ExpoNotification {
             String jsonString = Json.createObjectBuilder()
                     .add("to", expoToken)
                     .add("title", tipUser.getTip().getTitle())
-                    .add("body", tipUser.getTip().getDescription())
+                    .add("body", tipUser.getTip().getDescriptionPT())
                     .add("data", jsonScreen)
                     .build().toString();
             

@@ -37,8 +37,14 @@ public class Tip implements Serializable {
     @Column(name = "title")
     private String title;
     
-    @Column(name = "description", length = 300)
-    private String description;
+    @Column(name = "description_pt", length = 300)
+    private String descriptionPT;
+    
+    @Column(name = "description_en", length = 300)
+    private String descriptionEN;
+    
+    @Column(name = "description_es", length = 300)
+    private String descriptionES;
     
     @OneToMany(mappedBy = "tip", fetch = FetchType.LAZY)
     private List<TipUser> tips;
@@ -61,14 +67,29 @@ public class Tip implements Serializable {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionPT() {
+        return descriptionPT;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionPT(String descriptionPT) {
+        this.descriptionPT = descriptionPT;
     }
-    
+
+    public String getDescriptionEN() {
+        return descriptionEN;
+    }
+
+    public void setDescriptionEN(String descriptionEN) {
+        this.descriptionEN = descriptionEN;
+    }
+
+    public String getDescriptionES() {
+        return descriptionES;
+    }
+
+    public void setDescriptionES(String descriptionES) {
+        this.descriptionES = descriptionES;
+    }
 
     public Long getId() {
         return id;
