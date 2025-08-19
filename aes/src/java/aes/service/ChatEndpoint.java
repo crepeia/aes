@@ -195,6 +195,15 @@ public class ChatEndpoint {
         return true;
     }
     
+    private void addOnlineUser(Session session, UserInfo ui) {
+        // remove duplicatas
+        // qualquer entrada com mesmo chatId eh removida antes de adicionar um novo usuario
+        onlineUsers.entrySet().removeIf(entry -> entry.getValue().chat.equals(ui.chat));
+        
+        // apos a remocao adiciona normalmente
+        onlineUsers.put(session, ui);
+    }
+    
     //Esse método está responsável pela criação do chat do usuário e o preenchimento das listas.
     @OnOpen
     public void onOpen(Session session, EndpointConfig config, @PathParam("userId") String userId) {
@@ -264,7 +273,6 @@ public class ChatEndpoint {
             scheduler.schedule(() -> {
                if (consultants.isEmpty() && session.isOpen()) {
                    try {
-                       System.out.println("ENTROU!");
                        this.isWaiting = false;
                        sendNoConsultantMessage(session);
                        session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
@@ -295,7 +303,7 @@ public class ChatEndpoint {
             //ui.session = session;
             
             openChats.put(session, newChat.getId());
-            onlineUsers.put(session, ui);
+            addOnlineUser(session, ui);
             setStatus(session, realStatus);
             sendNewUserChatId(session, newChat.getId());
             
@@ -316,7 +324,7 @@ public class ChatEndpoint {
                 ui.idRelatedConsultant = null;
                 //ui.session = session;
                 
-                onlineUsers.put(session, ui);
+                addOnlineUser(session, ui);
                 consultants.put(currentUser.getId(), session);
                 
                 // Dando tempo para a função do usuário pegar o consultor
@@ -369,7 +377,6 @@ public class ChatEndpoint {
                 scheduler.schedule(() -> {
                     if ((consultants.isEmpty() || !isRelatedConsultantOnline(usuarioAtual.getRelatedConsultant())) && session.isOpen()) {
                         try {
-                            System.out.println("ENTROU!");
                             this.isWaiting = false;
                             sendNoConsultantMessage(session);
                             session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
@@ -409,7 +416,7 @@ public class ChatEndpoint {
 
 
                 openChats.put(session, newChat.getId());
-                onlineUsers.put(session, ui);
+                addOnlineUser(session, ui);
 
                 setStatus(session, realStatus);
                 
@@ -777,13 +784,8 @@ public class ChatEndpoint {
         
         if(users.containsValue(session)){
             Long userKey = getUserKeyForSession(session);
-            //consultantConnectTimeout(userKey);
-            
             users.remove(userKey);
             deleteUserStatus(session, userKey);
-
-            //onlineUsers.remove(session);
-            
         }
         
         
