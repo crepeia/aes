@@ -245,7 +245,7 @@ public class ChatEndpoint {
             }
         }
         
-        session.setMaxIdleTimeout(5 * 60 * 1000); // Define timeout de 5 minutos para fechar.
+        session.setMaxIdleTimeout(10 * 60 * 1000); // Define timeout de 10 minutos para fechar.
         
         UserInfo ui = new UserInfo();
         
