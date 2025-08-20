@@ -280,7 +280,7 @@ public class ChatEndpoint {
                        e.printStackTrace();
                    }
                } 
-            }, 4, TimeUnit.MINUTES);
+            }, 6, TimeUnit.MINUTES);
   
             newChat = new Chat();
             newChat.setUser(null);
@@ -384,7 +384,7 @@ public class ChatEndpoint {
                             e.printStackTrace();
                         }
                     } 
-                }, 4, TimeUnit.MINUTES);
+                }, 6, TimeUnit.MINUTES);
 
                 users.put(newChat.getId(), session);
                 //String realStatus = statusType.AVAILABLE.toString();
