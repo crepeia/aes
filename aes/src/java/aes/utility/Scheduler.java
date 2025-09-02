@@ -189,7 +189,7 @@ public class Scheduler {
 
             users.forEach(u -> {
                 long points = getPointsFromDate(u, oneWeekBefore.toLocalDate(), lastDayOfWeekBefore.toLocalDate());
-                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
             });
            
 
@@ -271,7 +271,7 @@ public class Scheduler {
 
             users.forEach(u -> {
                 long points = getPointsFromDate(u, monthBefore.toLocalDate(), lastDayOfMonthBefore.toLocalDate());
-                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
             });
 
             Comparator<ChallengeUserController.NicknameScore> comparador = new Comparator<ChallengeUserController.NicknameScore>(){
@@ -350,7 +350,7 @@ public class Scheduler {
 
             users.forEach(u -> {
                 long points = getPointsFromDate(u, yearBefore.toLocalDate(), lastDayInYearBefore.toLocalDate());
-                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
             });
 
             Comparator<ChallengeUserController.NicknameScore> comparador = new Comparator<ChallengeUserController.NicknameScore>(){

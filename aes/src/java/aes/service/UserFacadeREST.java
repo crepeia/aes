@@ -22,6 +22,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
@@ -39,6 +45,9 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -405,43 +414,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return em;
     }
     
-//    @POST
-//    @Path("/validate-referral-code")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response validateReferralCode(String jsonInput) {
-//        try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            JsonNode node = mapper.readTree(jsonInput);
-//            String referralCode = node.get("referral_code").asText();
-//
-//            // SOLUÇÃO DEFINITIVA - Native Query com o nome exato da coluna
-//            Query query = em.createNativeQuery(
-//                "SELECT * FROM tb_user WHERE `my_referral_code` = ?", 
-//                User.class);
-//            query.setParameter(1, referralCode);
-//
-//            List<User> referrers = query.getResultList();
-//
-//            if (referrers.isEmpty()) {
-//                return Response.status(Response.Status.BAD_REQUEST)
-//                    .entity("{\"valid\":false, \"message\":\"Código inválido ou não encontrado\"}")
-//                    .build();
-//            }
-//
-//            return Response.ok()
-//                .entity("{\"valid\":true, \"message\":\"Código válido\", \"referrerId\":" + 
-//                       referrers.get(0).getId() + "}")
-//                .build();
-//
-//        } catch (Exception e) {
-//            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "ERRO DETALHADO: ", e);
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-//                .entity("{\"valid\":false, \"message\":\"Erro: " + e.getMessage() + "\"}")
-//                .build();
-//        }
-//    }
-    
     @POST
     @Path("/validate-referral-code")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -472,77 +444,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 .build();
         }
     }
-    
-//    @POST
-//    @Path("/set-friend-referral-code")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response setFriendReferralCode(String jsonInput) {
-//        try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            JsonNode node = mapper.readTree(jsonInput);
-//
-//            // Verificação dos campos obrigatórios
-//            if (!node.has("id") || !node.has("code")) {
-//                return Response.status(Response.Status.BAD_REQUEST)
-//                    .entity("{\"success\":false, \"message\":\"Campos 'id' e 'code' são obrigatórios\"}")
-//                    .build();
-//            }
-//
-//            Long userId = node.get("id").asLong();
-//            String referralCode = node.get("code").asText();
-//
-//            // Validação dos dados
-//            if (userId == null || referralCode == null || referralCode.trim().isEmpty()) {
-//                return Response.status(Response.Status.BAD_REQUEST)
-//                    .entity("{\"success\":false, \"message\":\"ID inválido ou código vazio\"}")
-//                    .build();
-//            }
-//
-//            User user = em.find(User.class, userId);
-//
-//            if (user == null) {
-//                return Response.status(Response.Status.NOT_FOUND)
-//                    .entity("{\"success\":false, \"message\":\"Usuário não encontrado\"}")
-//                    .build();
-//            }
-//
-//            // Verifica se o usuário já possui um código
-//            if (user.getMyReferralCode() != null && !user.getMyReferralCode().isEmpty()) {
-//                return Response.status(Response.Status.BAD_REQUEST)
-//                    .entity("{\"success\":false, \"message\":\"Usuário já possui um código de referência\"}")
-//                    .build();
-//            }
-//
-//            // Transação explícita
-//            userTransaction.begin();
-//            user.setMyReferralCode(referralCode);
-//            em.merge(user);
-//            userTransaction.commit();
-//
-//            return Response.ok()
-//                .entity("{\"success\":true, \"message\":\"Código de referência atualizado com sucesso\"}")
-//                .build();
-//
-//        } catch (JsonProcessingException e) {
-//            return Response.status(Response.Status.BAD_REQUEST)
-//                .entity("{\"success\":false, \"message\":\"JSON inválido\"}")
-//                .build();
-//        } catch (Exception e) {
-//            try {
-//                if (userTransaction != null) userTransaction.rollback();
-//            } catch (Exception ex) {
-//                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao fazer rollback", ex);
-//            }
-//
-//            String errorMsg = e.getMessage() != null ? e.getMessage() : "Erro desconhecido - verifique logs";
-//            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "ERRO DETALHADO: ", e);
-//
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-//                .entity("{\"success\":false, \"message\":\"" + errorMsg + "\"}")
-//                .build();
-//        }
-//    }
     
     @POST
     @Path("/set-friend-referral-code")
@@ -603,48 +504,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 .build();
         }
     }
-    
-//    @POST
-//    @Path("/count-referral-usage")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response countReferralCodeUsage(String jsonInput) {
-//        try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            JsonNode node = mapper.readTree(jsonInput);
-//
-//            // Verifica se o campo referral_code está presente
-//            if (!node.has("referral_code")) {
-//                return Response.status(Response.Status.BAD_REQUEST)
-//                    .entity("{\"error\":\"O campo 'referral_code' é obrigatório\"}")
-//                    .build();
-//            }
-//
-//            String referralCode = node.get("referral_code").asText();
-//
-//            // Consulta para contar quantas vezes o código aparece
-//            Query query = em.createNativeQuery(
-//                "SELECT COUNT(*) FROM tb_user WHERE friend_referral_code = ?");
-//            query.setParameter(1, referralCode);
-//
-//            // O resultado é um BigInteger que convertemos para long
-//            long count = ((Number)query.getSingleResult()).longValue();
-//
-//            return Response.ok()
-//                .entity("{\"count\":" + count + ", \"referral_code\":\"" + referralCode + "\"}")
-//                .build();
-//
-//        } catch (JsonProcessingException e) {
-//            return Response.status(Response.Status.BAD_REQUEST)
-//                .entity("{\"error\":\"JSON inválido\"}")
-//                .build();
-//        } catch (Exception e) {
-//            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "ERRO DETALHADO: ", e);
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-//                .entity("{\"error\":\"Erro ao processar a requisição\"}")
-//                .build();
-//        }
-//    }
     
     @POST
     @Path("/count-referral-usage")
@@ -839,6 +698,178 @@ public class UserFacadeREST extends AbstractFacade<User> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
             .entity("{\"error\":\"Erro ao buscar usuários\"}")
             .build();
+        }
+    }
+
+    @GET
+    @Path("/info/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserInfo(@PathParam("id") Long id) {
+        try {
+            User user = em.find(User.class, id);
+
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("Usuário não encontrado.").build();
+            }
+
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("name", user.getNickname());
+            userInfo.put("birthDate", user.getBirthDate());
+            userInfo.put("gender", user.getGender());
+
+            return Response.ok(userInfo).build();
+
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Erro ao buscar informações do usuário.").build();
+        }
+    }
+    
+    @GET
+    @Path("/findUsersByConsultor/{consultantId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUsersByConsultor(@PathParam("consultantId") Long consultantId) {
+        try {
+            // Verifica se o consultor existe e é realmente um consultor
+            User consultant = em.find(User.class, consultantId);
+            if (consultant == null || !consultant.isConsultant()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\":\"Consultor não encontrado ou ID não pertence a um consultor\"}")
+                    .build();
+            }
+
+            // Busca os usuários associados a este consultor usando o relacionamento mapeado
+            List<User> clients = em.createQuery(
+                "SELECT u FROM User u WHERE u.relatedConsultant.id = :consultantId", User.class)
+                .setParameter("consultantId", consultantId)
+                .getResultList();
+
+            // Cria a lista de resposta com os campos relevantes
+            List<Map<String, Object>> response = clients.stream()
+                .map(client -> {
+                    Map<String, Object> clientInfo = new HashMap<>();
+                    clientInfo.put("_id", client.getId());
+                    clientInfo.put("name", client.getName());
+                    clientInfo.put("email", client.getEmail());
+                    clientInfo.put("nickname", client.getNickname());
+                    clientInfo.put("registration_complete", client.isRegistration_complete());
+                    // Adiciona mais campos conforme necessário pelo frontend
+                    return clientInfo;
+                })
+                .collect(Collectors.toList());
+
+            return Response.ok(response).build();
+
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao buscar usuários do consultor", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("{\"error\":\"Erro ao processar a requisição\"}")
+                .build();
+        }
+    }
+    
+    @PUT
+    @Path("/updateProfilePick/{id}/{profilePick}")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateProfilePick(@PathParam("id") Long id, @PathParam("profilePick") Integer profilePick) {
+        try {
+            User user = em.find(User.class, id);
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
+            }
+
+            user.setProfilePick(profilePick);
+
+            userTransaction.begin();
+            em.merge(user);
+            userTransaction.commit();
+
+            return Response.ok(user).build();
+
+        } catch (Exception e) {
+            try {
+                userTransaction.rollback();
+            } catch (Exception ex) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("/getProfilePick/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProfilePick(@PathParam("id") Long id) {
+        try {
+            // Busca o usuário no banco de dados
+            User user = em.find(User.class, id);
+
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                             .entity("User not found")
+                             .build();
+            }
+
+            // Obtém o número da imagem de perfil
+            Integer profilePick = user.getProfilePick();
+
+            // Se não tiver imagem definida, retorna um valor padrão (por exemplo, 0)
+            if (profilePick == null) {
+                profilePick = 0; // Valor padrão
+            }
+
+            // Retorna apenas o número da imagem
+            return Response.ok(profilePick).build();
+
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName())
+                 .log(Level.SEVERE, "Error getting profile picture number", e);
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                         .entity("Error getting profile picture number: " + e.getMessage())
+                         .build();
+        }
+    }
+    
+    @POST
+    @Path("verify-recaptcha")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verifyRecaptchaToken(String jsonRequest) {
+        try (JsonReader reader = Json.createReader(new StringReader(jsonRequest))) {
+            JsonObject jsonObject = reader.readObject();
+            String recaptchaToken = jsonObject.getString("token");
+
+            String secretKey = "6LfDt5wrAAAAAG8pAV8-XtL4mn1J4h1EBwNkZlBl"; // substitua pela sua chave secreta do reCAPTCHA
+
+            URL url = new URL("https://www.google.com/recaptcha/api/siteverify");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            String postData = "secret=" + secretKey + "&response=" + recaptchaToken;
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(postData.getBytes(StandardCharsets.UTF_8));
+            }
+
+            InputStream is = conn.getInputStream();
+            JsonReader jsonReader = Json.createReader(is);
+            JsonObject jsonResponse = jsonReader.readObject();
+            boolean success = jsonResponse.getBoolean("success");
+
+            if (success) {
+                return Response.ok().entity(jsonResponse).build();
+            } else {
+                return Response.status(Response.Status.FORBIDDEN).entity(jsonResponse).build();
+            }
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
