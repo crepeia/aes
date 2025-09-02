@@ -144,6 +144,7 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
         }
         
         newEvaluation.setUser(user);
+        newEvaluation.setDateCreated(new Date());
         
         try {
             evaluationDAO.createEvaluation(newEvaluation, em);
