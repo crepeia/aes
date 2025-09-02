@@ -245,7 +245,7 @@ public class ChatEndpoint {
             }
         }
         
-        session.setMaxIdleTimeout(10 * 60 * 1000); // Define timeout de 10 minutos para fechar.
+        session.setMaxIdleTimeout(60 * 60 * 1000); // Define timeout de 60 minutos para fechar.
         
         UserInfo ui = new UserInfo();
         
@@ -272,15 +272,11 @@ public class ChatEndpoint {
             ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
             scheduler.schedule(() -> {
                if (consultants.isEmpty() && session.isOpen()) {
-                   try {
-                       this.isWaiting = false;
-                       sendNoConsultantMessage(session);
-                       session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }
+                   this.isWaiting = false;
+                   sendNoConsultantMessage(session);
+//                       session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
                } 
-            }, 6, TimeUnit.MINUTES);
+            }, 4, TimeUnit.MINUTES);
   
             newChat = new Chat();
             newChat.setUser(null);
@@ -376,15 +372,11 @@ public class ChatEndpoint {
                 ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
                 scheduler.schedule(() -> {
                     if ((consultants.isEmpty() || !isRelatedConsultantOnline(usuarioAtual.getRelatedConsultant())) && session.isOpen()) {
-                        try {
-                            this.isWaiting = false;
-                            sendNoConsultantMessage(session);
-                            session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        this.isWaiting = false;
+                        sendNoConsultantMessage(session);
+//                            session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
                     } 
-                }, 6, TimeUnit.MINUTES);
+                }, 4, TimeUnit.MINUTES);
 
                 users.put(newChat.getId(), session);
                 //String realStatus = statusType.AVAILABLE.toString();
