@@ -10,8 +10,10 @@ import aes.model.User;
 import aes.utility.SecureRandomString;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -24,7 +26,7 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
     }
     
     
-    public String issueToken(User usr, EntityManager entityManager) throws SQLException{
+    public AuthenticationToken issueToken(User usr, EntityManager entityManager) throws SQLException{
         String token = SecureRandomString.generate();
         
         AuthenticationToken authToken = new AuthenticationToken();
@@ -33,10 +35,10 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         authToken.setDateCreated(new Date());
         super.update(authToken, entityManager);
         
-        return token;
+        return authToken;
     }
     
-    public void revokeToken(String token, String userEmail, EntityManager entityManager) throws SQLException{
+    public void revokeToken(String token, String userEmail, EntityManager entityManager) throws SQLException {
         AuthenticationToken at = (AuthenticationToken) entityManager.createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
         .setParameter("token", token)
         .setParameter("uEmail", userEmail)
@@ -45,5 +47,42 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
     
     }
     
+    public void deleteExpiredTokens(Date limitDate, EntityManager entityManager) throws SQLException {
+        List<AuthenticationToken> expiredTokens = entityManager
+            .createQuery("SELECT t FROM AuthenticationToken t WHERE t.dateCreated < :limit", AuthenticationToken.class)
+            .setParameter("limit", limitDate)
+            .getResultList();    
+        
+        for (AuthenticationToken token : expiredTokens) {
+            super.delete(token, entityManager);
+        }
+    }
     
+    public AuthenticationToken updateToken(String oldToken, String userEmail, EntityManager entityManager) throws SQLException {
+        AuthenticationToken existingToken = entityManager.createQuery(
+            "SELECT at FROM AuthenticationToken at WHERE at.token = :token AND at.user.email = :email", AuthenticationToken.class
+        ).setParameter("token", oldToken)
+        .setParameter("email", userEmail)
+        .getSingleResult();
+        
+        // Gera novo token
+        String newToken = SecureRandomString.generate();
+        existingToken.setToken(newToken);
+        existingToken.setDateCreated(new Date());
+
+        super.update(existingToken, entityManager);
+
+        return existingToken;
+    }
+    
+    public AuthenticationToken findByToken(String token, EntityManager entityManager) {
+        try {
+            return entityManager.createQuery(
+                "SELECT t FROM AuthenticationToken t WHERE t.token = :token", AuthenticationToken.class
+            ).setParameter("token", token)
+            .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

@@ -12,6 +12,8 @@ import aes.utility.Encrypter;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +26,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -92,22 +96,23 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
         try {
             String clientEncriptedHexPassword = p;
             String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
-
+            
             User user = userDAO.checkCredentials(e, decriptedPassword, em);
-
-            if (user != null) {
-                String token = authenticationTokenDAO.issueToken(user, em);
-                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
-                return Response.ok(token).build();
-
+           
+            if(user != null){
+               AuthenticationToken authToken = authenticationTokenDAO.issueToken(user, em);
+               
+               Map<String, Object> responseToken = new HashMap<>();
+               responseToken.put("token", authToken.getToken());
+               responseToken.put("dateCreated", authToken.getDateCreated());
+               
+               Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
+               return Response.ok(responseToken).build();
             } else {
-
                 Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
-
         } catch (Exception exp) {
-
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, null, exp);
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
             return Response.status(Response.Status.FORBIDDEN).build();
@@ -138,7 +143,57 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+    
+    @POST
+    @Path("secured/refreshtoken")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response refreshToken(@HeaderParam("Authorization") String tokenHeader) throws SQLException{
+        try {
+            // Extrai o token (remove "Bearer " se vier no header)
+            String tokenString = tokenHeader.replace("Bearer ", "").trim();
+            
+            // Busca o token no banco
+            AuthenticationToken existingToken = authenticationTokenDAO.findByToken(tokenString, em);
+            if (existingToken == null) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Invalid token").build();
+            }
+            
+            User user = existingToken.getUser();
+            if (user == null) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("User not found").build();
+            }
+            
+            // Atualiza o token existente
+            AuthenticationToken newToken = authenticationTokenDAO.updateToken(tokenString, user.getEmail(), em);
+            Map<String, Object> responseToken = new HashMap<>();
+            responseToken.put("token", newToken.getToken());
+            responseToken.put("dateCreated", newToken.getDateCreated());
+            
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                .log(Level.INFO, "Usuário '" + user.getEmail() + "' renovou token.");
+            
+            return Response.ok(responseToken).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("Erro ao renovar token").build();
+        }
+    }
+    
+    /*private String issueToken(User usr){
+        String token = SecureRandomString.generate();
+        
+        AuthenticationToken authToken = new AuthenticationToken();
+        authToken.setToken(token);
+        authToken.setUser(usr);
+        authToken.setDateCreated(new Date());
+        super.create(authToken);
+        
+        return token;
+    }*/
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
