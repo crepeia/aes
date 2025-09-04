@@ -834,42 +834,4 @@ public class UserFacadeREST extends AbstractFacade<User> {
                          .build();
         }
     }
-    
-    @POST
-    @Path("verify-recaptcha")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response verifyRecaptchaToken(String jsonRequest) {
-        try (JsonReader reader = Json.createReader(new StringReader(jsonRequest))) {
-            JsonObject jsonObject = reader.readObject();
-            String recaptchaToken = jsonObject.getString("token");
-
-            String secretKey = "6LfDt5wrAAAAAG8pAV8-XtL4mn1J4h1EBwNkZlBl"; // substitua pela sua chave secreta do reCAPTCHA
-
-            URL url = new URL("https://www.google.com/recaptcha/api/siteverify");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-
-            String postData = "secret=" + secretKey + "&response=" + recaptchaToken;
-
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(postData.getBytes(StandardCharsets.UTF_8));
-            }
-
-            InputStream is = conn.getInputStream();
-            JsonReader jsonReader = Json.createReader(is);
-            JsonObject jsonResponse = jsonReader.readObject();
-            boolean success = jsonResponse.getBoolean("success");
-
-            if (success) {
-                return Response.ok().entity(jsonResponse).build();
-            } else {
-                return Response.status(Response.Status.FORBIDDEN).entity(jsonResponse).build();
-            }
-
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 }
