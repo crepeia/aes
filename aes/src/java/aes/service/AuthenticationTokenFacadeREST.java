@@ -8,6 +8,7 @@ import aes.model.AuthenticationToken;
 import aes.model.User;
 import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.UserDAO;
+import aes.utility.CryptoUtils;
 import aes.utility.Encrypter;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;
@@ -179,6 +180,39 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("Erro ao renovar token").build();
+        }
+    }
+    
+    @GET
+    @Path("anonymous/{clientKey}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response validateClientKey(@PathParam("clientKey") String clientKey) {
+        try {
+            // Dividir o clientKey em duas partes: rawKey e signature.
+            String[] parts = clientKey.split("-");
+            if(!(parts.length == 3)) {
+                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "ClientKey invalido.");
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid clientKey").build();
+            }
+            
+            // Reconstroi os elementos.
+            String rawKey = parts[0] + "-" + parts[1];
+            String signature = parts[2];
+            
+            // Validar a assinatura usando a mesma SECRET_KEY do aplicativo.
+            String expectedSignature = CryptoUtils.hmacSHA256(rawKey, "(uf0&p85F^nAY&MlRW:4;Ld(Q");
+            if (!signature.equals(expectedSignature)) {
+                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Assinatura invÃ¡lida para o clientKey.");
+                return Response.status(Response.Status.FORBIDDEN).entity("Invalid signature").build();
+            }
+            
+            // Gerar token anonimo temporario.
+            String anonymousToken = authenticationTokenDAO.issueAnonymousToken(rawKey, em);
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "ClientKey validado com sucesso.");
+            return Response.ok("{\"token\":\"" + anonymousToken + "\"}").build();
+        } catch (Exception e) {
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao validar clientKey.", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error").build();
         }
     }
     
