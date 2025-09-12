@@ -37,11 +37,8 @@ public class Challenge implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "title")
-    private String title;
-    
-    @Column(name = "description", length = 300)
-    private String description;
+    @Column(name = "c_prefix")
+    private String prefix;
     
     @Column(name = "base_value")
     private Integer base_value;
@@ -52,10 +49,6 @@ public class Challenge implements Serializable {
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private ChallengeType type;
-
-    public String getTitle() {
-        return title;
-    }
 
     public Integer getBase_value() {
         return base_value;
@@ -73,18 +66,6 @@ public class Challenge implements Serializable {
         this.modifier = modifier;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public ChallengeType getType() {
         return type;
     }
@@ -99,6 +80,14 @@ public class Challenge implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
     
 }

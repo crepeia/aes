@@ -26,8 +26,7 @@ public class ChallengeController extends BaseController<Challenge>{
     private Challenge challenge = new Challenge();
     
     private Long id;
-    private String title;
-    private String description;
+    private String prefix;
     private Integer base_value;
     private Float modifier;
 
@@ -60,13 +59,15 @@ public class ChallengeController extends BaseController<Challenge>{
     
     public void create() {
         try {
-            challengeList = this.getDaoBase().list("title", challenge.getTitle(), getEntityManager());
+            challengeList = this.getDaoBase().list("prefix", challenge.getPrefix(), getEntityManager());
 
             if (!challengeList.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Desafio já cadastrado.", null));
             } else {
                 daoBase.insert(getChallenge(), getEntityManager());
                 challenge = null;
+                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                FacesContext.getCurrentInstance().addMessage("itemCreated", new FacesMessage(FacesMessage.SEVERITY_INFO, "Item criado com sucesso!", "Lembrete: cadastrar título e descrição do corrente desafio na folha de tradução."));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("lista-desafios.xhtml");
             }
             
@@ -121,22 +122,6 @@ public class ChallengeController extends BaseController<Challenge>{
         return challengeList;
     }
     
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
     public Challenge.ChallengeType[] getChallengeTypes(){
         return Challenge.ChallengeType.values();
       }
@@ -164,4 +149,14 @@ public class ChallengeController extends BaseController<Challenge>{
     public void setType(Challenge.ChallengeType type) {
         this.type = type;
     }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+    
+    
 }
