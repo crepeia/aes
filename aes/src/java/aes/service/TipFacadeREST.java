@@ -7,9 +7,11 @@ package aes.service;
 
 import aes.model.Tip;
 import aes.persistence.TipDAO;
+import aes.utility.RESTApiResponse;
 import aes.utility.Secured;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -53,22 +55,26 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
     }
 
     @GET
-    @Path("{id}")
+    @Path("find/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Tip find(@PathParam("id") Long id) {
-        return tipDAO.find(id, em);
+    public Response find(@PathParam("id") Long id) {
+        try {
+            return Response.ok().entity(tipDAO.listOnce("id", id, em)).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 
     @GET
-    @Path("all")
-    @Override
+    @Path("findAll")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Tip> findAll() {
+    public Response findAllTips() {
         try {
-            return tipDAO.list(em);
-        } catch (SQLException ex) {
-            Logger.getLogger(TipFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            return Response.ok().entity(tipDAO.list(em)).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
     
@@ -78,10 +84,15 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response update(Tip tip) {
         try {
+            boolean isDescriptionsNull = Objects.isNull(tip.getDescriptionPT()) || Objects.isNull(tip.getDescriptionEN()) || Objects.isNull(tip.getDescriptionES());
+            boolean isDescriptionsEmpty = Objects.equals(tip.getDescriptionPT(), "") || Objects.equals(tip.getDescriptionEN(), "") || Objects.equals(tip.getDescriptionES(), "");
+            if(isDescriptionsNull || isDescriptionsEmpty) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
             tipDAO.update(tip, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }

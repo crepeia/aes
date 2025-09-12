@@ -20,7 +20,7 @@
                 <div class="pagecontent">
                     
                     <h1>#{messages['dicas']}</h1>
-                    <div id="maintop">
+                    <div class="maintop">
                         <h:form id="listForm">
                             <center>
                                 <h:commandButton style="margin: 10px" action="cadastrar-dica.xhtml?faces-redirect=true" value="Cadastrar nova dica" class="btn btn-success btnSpace" rendered="#{userController.isAdmin()}"/>
@@ -35,15 +35,15 @@
                                     <h:outputText value="#{tip.title}" />
                                 </h:column>
                                 <h:column>
-                                    <f:facet name="header">Descrição</f:facet>
+                                    <f:facet name="header">Descrição em português</f:facet>
                                     <h:outputText value="#{tip.descriptionPT}" />
                                 </h:column>
                                 <h:column>
-                                    <f:facet name="header">Descrição</f:facet>
+                                    <f:facet name="header">Descrição em inglês</f:facet>
                                     <h:outputText value="#{tip.descriptionEN}" />
                                 </h:column>
                                 <h:column>
-                                    <f:facet name="header">Descrição</f:facet>
+                                    <f:facet name="header">Descrição em espanhol</f:facet>
                                     <h:outputText value="#{tip.descriptionES}" />
                                 </h:column>
                                 <h:column>
@@ -61,6 +61,10 @@
                             </h:dataTable>
                             
                         </h:form>
+                        
+                        <div>
+                            <p:messages id="allMessages" for="itemCreated" autoUpdate="true" redisplay="true" showDetail="true" />
+                        </div>
                         
                     </div>
                 </div>

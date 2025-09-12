@@ -66,6 +66,8 @@ public class TipController extends BaseController<Tip>{
             } else {
                 daoBase.insert(getTip(), getEntityManager());
                 tip = null;
+                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                FacesContext.getCurrentInstance().addMessage("itemCreated", new FacesMessage(FacesMessage.SEVERITY_INFO, "Item criado com sucesso!", "Lembrete: cadastrar as descrições da corrente dica na folha de tradução."));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("lista-dicas.xhtml");
             }
             
