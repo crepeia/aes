@@ -67,7 +67,7 @@ public class ChallengeController extends BaseController<Challenge>{
                 daoBase.insert(getChallenge(), getEntityManager());
                 challenge = null;
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                FacesContext.getCurrentInstance().addMessage("itemCreated", new FacesMessage(FacesMessage.SEVERITY_INFO, "Item criado com sucesso!", "Lembrete: cadastrar título e descrição do corrente desafio na folha de tradução."));
+                FacesContext.getCurrentInstance().addMessage("itemCreated", new FacesMessage(FacesMessage.SEVERITY_INFO, "Item criado com sucesso!", "Lembrete: cadastrar, com o prefixo, título e descrição do corrente desafio na folha de tradução."));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("lista-desafios.xhtml");
             }
             
