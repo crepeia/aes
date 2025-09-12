@@ -85,7 +85,7 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
     public Response update(Tip tip) {
         try {
             boolean isDescriptionsNull = Objects.isNull(tip.getDescriptionPT()) || Objects.isNull(tip.getDescriptionEN()) || Objects.isNull(tip.getDescriptionES());
-            boolean isDescriptionsEmpty = Objects.equals(tip.getDescriptionPT(), "") || Objects.equals(tip.getDescriptionEN(), "") || Objects.equals(tip.getDescriptionES(), "");
+            boolean isDescriptionsEmpty = Objects.equals(tip.getDescriptionPT().trim(), "") || Objects.equals(tip.getDescriptionEN().trim(), "") || Objects.equals(tip.getDescriptionES().trim(), "");
             if(isDescriptionsNull || isDescriptionsEmpty) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
