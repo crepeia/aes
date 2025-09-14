@@ -97,6 +97,9 @@ public class User implements Serializable {
     @Column(name = "profile_pick")
     private Integer profilePick;
     
+    @Column(name = "advanced_data_consent", nullable = false)
+    private Boolean advancedDataConsent = false;
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
@@ -739,5 +742,13 @@ public class User implements Serializable {
 
     public void setProfilePick(Integer profilePick) {
         this.profilePick = profilePick;
+    }
+    
+    public Boolean getAdvancedDataConsent() {
+    return advancedDataConsent;
+    }
+
+    public void setAdvancedDataConsent(Boolean advancedDataConsent) {
+        this.advancedDataConsent = advancedDataConsent;
     }
 }

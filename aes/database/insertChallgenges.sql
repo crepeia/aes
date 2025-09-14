@@ -11,3 +11,4 @@ VALUES
 ('8', '10', 'Entre no Ranking pela primeira vez', '0', 'Entrar no Ranking', 'ONCE'),
 ('9', '10', 'Convide amigos para o aplicativo', '0', 'Convidar amigos', 'ACCUMULATIVE'),
 ('10', '10', 'Comparecer à reunião', '0', 'Entre no chat no momento de um agendamento', 'ACCUMULATIVE');
+('11', '5', 'Preencher Questionário', '0', 'Preencha os questionários avançados', 'ACCUMULATIVE');

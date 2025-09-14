@@ -683,6 +683,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     
     @GET
     @Path("/getProfilePick/{id}")
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProfilePick(@PathParam("id") Long id) {
         try {
@@ -716,41 +717,84 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
-       @POST
-    @Path("verify-recaptcha")
+    @PUT
+    @Path("/updateAdvancedDataConsent/{id}")
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response verifyRecaptchaToken(String jsonRequest) {
-        try (JsonReader reader = Json.createReader(new StringReader(jsonRequest))) {
-            JsonObject jsonObject = reader.readObject();
-            String recaptchaToken = jsonObject.getString("token");
-
-            String secretKey = "6LfDt5wrAAAAAG8pAV8-XtL4mn1J4h1EBwNkZlBl"; // substitua pela sua chave secreta do reCAPTCHA
-
-            URL url = new URL("https://www.google.com/recaptcha/api/siteverify");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-
-            String postData = "secret=" + secretKey + "&response=" + recaptchaToken;
-
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(postData.getBytes(StandardCharsets.UTF_8));
+    public Response updateAdvancedDataConsent(@PathParam("id") Long id, String jsonInput) {
+        try {
+            // Busca o usuário no banco
+            User user = em.find(User.class, id);
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("{\"error\":\"Usuário não encontrado\"}")
+                               .build();
             }
 
-            InputStream is = conn.getInputStream();
-            JsonReader jsonReader = Json.createReader(is);
-            JsonObject jsonResponse = jsonReader.readObject();
-            boolean success = jsonResponse.getBoolean("success");
+            // Lê o JSON recebido (esperando {"consent": true/false})
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode node = mapper.readTree(jsonInput);
 
-            if (success) {
-                return Response.ok().entity(jsonResponse).build();
-            } else {
-                return Response.status(Response.Status.FORBIDDEN).entity(jsonResponse).build();
+            if (!node.has("consent")) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                               .entity("{\"error\":\"Campo 'consent' é obrigatório\"}")
+                               .build();
             }
+
+            boolean consent = node.get("consent").asBoolean();
+            user.setAdvancedDataConsent(consent);
+
+            // Atualiza no banco
+            userTransaction.begin();
+            em.merge(user);
+            userTransaction.commit();
+
+            return Response.ok(user).build();
 
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            try {
+                userTransaction.rollback();
+            } catch (Exception ex) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro no rollback", ex);
+            }
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("{\"error\":\"Erro ao atualizar consentimento\"}")
+                           .build();
+        }
+    }
+    
+    @GET
+    @Path("/getAdvancedDataConsent/{id}")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAdvancedDataConsent(@PathParam("id") Long id) {
+        try {
+            // Busca o usuário no banco
+            User user = em.find(User.class, id);
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("{\"error\":\"Usuário não encontrado\"}")
+                               .build();
+            }
+
+            // Garante que nunca volte null (se usar Boolean na entidade)
+            boolean consent = (user.getAdvancedDataConsent() != null) 
+                              ? user.getAdvancedDataConsent() 
+                              : false;
+
+            // Cria resposta em JSON (mais seguro que String.format)
+            Map<String, Object> response = new HashMap<>();
+            response.put("consent", consent);
+
+            return Response.ok(response).build();
+
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("{\"error\":\"Erro ao consultar consentimento\"}")
+                           .build();
         }
     }
 }
