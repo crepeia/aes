@@ -61,6 +61,11 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
     
     }
     
+    public void revokeAnonymousToken(String token, EntityManager entityManager) throws SQLException {
+        AuthenticationToken at = findByToken(token, entityManager);
+        super.delete(at, entityManager);
+    }
+    
     public void deleteExpiredTokens(Date limitDate, EntityManager entityManager) throws SQLException {
         List<AuthenticationToken> expiredTokens = entityManager
             .createQuery("SELECT t FROM AuthenticationToken t WHERE t.dateCreated < :limit", AuthenticationToken.class)
