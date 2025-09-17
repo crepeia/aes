@@ -10,6 +10,8 @@ import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.UserDAO;
 import aes.utility.CryptoUtils;
 import aes.utility.Encrypter;
+import aes.utility.NonceStore;
+import aes.utility.PemUtils;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;
 import java.sql.SQLException;
@@ -49,6 +51,12 @@ import java.io.OutputStreamWriter;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReaderFactory;
 import java.util.Collections;
@@ -60,6 +68,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.SSLSession;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
+import java.util.UUID;
 
 
 /**
@@ -182,6 +192,56 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
                 .entity("Erro ao renovar token").build();
         }
     }
+    
+    @GET
+    @Path("anonymous/nonce")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response generateNonce() {
+        String nonce = NonceStore.generateNonce();
+        return Response.ok("{\"nonce\":\"" + nonce + "\"}").build();
+    }
+    
+    @POST
+    @Path("anonymous")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response authenticateAnonymous(Map<String, String> payload) throws SignatureException, InvalidKeyException {
+        try {
+            String nonce = payload.get("nonce");
+            String signatureBase64 = payload.get("signature");
+            
+            // Validar se o nonce existe e não foi usado
+            if (!NonceStore.exists(nonce)) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid nonce").build();
+            }
+            
+            // Carregar chave pública
+            String publicKeyPem = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlVE81//D5jqcEvZ6bXDa\n917HOiKPmD3pRHkyL9sFIzQLaciHxoywKhcAi5y3g8PSbxfuhtwzcdFUkJgCf+l+\nYD3H6lBucO+YWza++BiRuPVWhZQ5UrIiViL+R5T6LFM8OIeuGEy1sgBu3mN7aWXp\nflKPAU1R8twAm1WTR2nU9R33coiJgDnFpXgOHN1UMRn04ua1TN/lWeAITRDhFBzE\n5s7Trwf1o+gZvaVJVtlsWOjJzDc4ltFv2WozCWjvnoRGM/i6boVqHRNko+fhfvWg\noqFkQjF0pi8b/qJmAf4m8VsdBjbDAA15T9Px37Nqyxnom1gmwsu3gdTBuu3BdZKT\nGQIDAQAB\n-----END PUBLIC KEY-----";
+            System.out.println(publicKeyPem);
+            PublicKey publicKey = PemUtils.readPublicKeyFromPem(publicKeyPem);
+            
+            // Validar assinatura
+            byte[] signature = Base64.getDecoder().decode(signatureBase64);
+            Signature sig = Signature.getInstance("SHA256withRSA");
+            sig.initVerify(publicKey);
+            sig.update(nonce.getBytes(StandardCharsets.UTF_8));
+            
+            if (!sig.verify(signature)) {
+                return Response.status(Response.Status.FORBIDDEN).entity("Invalid signature").build();
+            }
+            
+            // Marcar nonce como usado
+            NonceStore.consume(nonce);
+            
+            String token = authenticationTokenDAO.issueAnonymousToken("anon", em);
+            return Response.ok("{\"token\":\"" + token + "\"}").build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error").build();
+        }
+    }
+    
+    
     
     @GET
     @Path("anonymous/{clientKey}")
