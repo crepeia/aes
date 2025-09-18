@@ -880,7 +880,7 @@ html, body {
 /****************************
 INDEX***********************/
 
-#maintop{
+.maintop{
     display: flex;
     justify-content: space-between;
     flex-direction: row;
@@ -900,7 +900,7 @@ INDEX***********************/
     width: 90%;
 }
 
-#maintop h1 {
+.maintop h1 {
     padding: 0 10px 0 0;
     width: 90%;
     text-align: left;
@@ -1000,15 +1000,25 @@ INDEX***********************/
     padding-top: 25px;
 }
 
-.ui-messages-info-summary, .ui-messages-warn-summary, .ui-messages-error-summary, .ui-messages-fatal-summary, .ui-message-info-summary, .ui-message-warn-summary, .ui-message-error-summary, .ui-message-fatal-summary {
+.ui-messages-info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+.ui-messages-info-summary, .ui-messages-warn-summary, .ui-messages-error-summary, .ui-messages-fatal-summary, .ui-message-info-summary, .ui-message-warn-summary, .ui-message-error-summary, .ui-message-fatal-summary, ui-messages-info-detail {
     font-size: .7em;
     line-height: 0;
 }    
 
 .ui-messages ul li{
-    display:inline;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
 .ui-messages-error ul li{
     display: inline-block;
 }
@@ -1922,6 +1932,12 @@ hr {
     height: 0;
     width: 0;
     z-index: -1;
+}
+
+/* ADMIN PAGES */
+
+.adminList {
+    flex-direction: column;
 }
 
 /* Mobile Styles */
