@@ -328,7 +328,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart);
-                resultList.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                resultList.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
             });
             return Response.ok().entity(resultList).build();
 
@@ -368,15 +368,15 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_WEEK, 1));
-                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
             });
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_MONTH, 1));
-                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
             });
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_YEAR, 1));
-                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getNickname(), points, u.getSelected_title()));
+                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
             });
 
             Gson g = new Gson();
@@ -440,5 +440,22 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+    
+    @GET
+    @Path("points/{userId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getUserTotalPoints(@PathParam("userId") Long userId) {
+        try {
+            Long totalPoints = (Long) em.createQuery("SELECT COALESCE(SUM(c.score), 0) FROM ChallengeUser c WHERE c.user.id = :userId")
+                    .setParameter("userId", userId)
+                    .getSingleResult();
 
+            return Response.ok().entity("{\"totalPoints\":" + totalPoints + "}").build();
+        } catch (Exception e) {
+            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("{\"error\":\"" + e.getMessage() + "\"}")
+                           .build();
+        }
+    }
 }

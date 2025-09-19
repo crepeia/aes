@@ -11,6 +11,7 @@ import aes.model.User;
 import aes.model.Message;
 import aes.persistence.ChatDAO;
 import aes.persistence.GenericDAO;
+import aes.persistence.MessageDAO;
 import aes.persistence.UserDAO;
 import aes.utility.MessageDecoder;
 import aes.utility.MessageEncoder;
@@ -72,13 +73,23 @@ public class ChatEndpoint {
         //public transient ScheduledExecutorService pingExecutorService;
         //public transient Session session;
         public Long idRelatedConsultant;
+        public Long lastSentDate;
         public UserInfo(){};
         public UserInfo(String name, String email, Long chat, String status, Session session){
             this.name = name;
             this.email = email;
             this.chat = chat;
             this.status = status;
+            this.lastSentDate = null;
             //this.session = session;
+        }
+        
+        public void setLastSentDate(Date date) {
+            if(date != null) {
+                this.lastSentDate = date.getTime();
+            } else {
+                this.lastSentDate = null;
+            }
         }
     }
     
@@ -86,10 +97,12 @@ public class ChatEndpoint {
     private EntityManager em;
     
     private GenericDAO<Chat> daoBase;
-    private GenericDAO<Message> daoBaseMessage;
     private UserDAO daoUser;
     private ChatDAO daoChat;
+    private MessageDAO messageDAO;
     private ChatFacadeREST chatFacade;
+    
+    private Boolean isWaiting;
     
     // <UserId, Session>
     private static Map<Long, Session> consultants = new ConcurrentHashMap<>();
@@ -127,9 +140,10 @@ public class ChatEndpoint {
     public ChatEndpoint() {
         try {
             this.daoBase = new GenericDAO<>(Chat.class);
-            this.daoBaseMessage = new GenericDAO<>(Message.class);
             this.daoUser = new UserDAO();
             this.daoChat = new ChatDAO();
+            this.messageDAO = new MessageDAO();
+            this.isWaiting = true;
             System.out.println("service.ChatEndpoint.<init>()");
         } catch (NamingException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
@@ -181,6 +195,15 @@ public class ChatEndpoint {
         return true;
     }
     
+    private void addOnlineUser(Session session, UserInfo ui) {
+        // remove duplicatas
+        // qualquer entrada com mesmo chatId eh removida antes de adicionar um novo usuario
+        onlineUsers.entrySet().removeIf(entry -> entry.getValue().chat.equals(ui.chat));
+        
+        // apos a remocao adiciona normalmente
+        onlineUsers.put(session, ui);
+    }
+    
     //Esse método está responsável pela criação do chat do usuário e o preenchimento das listas.
     @OnOpen
     public void onOpen(Session session, EndpointConfig config, @PathParam("userId") String userId) {
@@ -222,26 +245,38 @@ public class ChatEndpoint {
             }
         }
         
-        session.setMaxIdleTimeout(5 * 60 * 1000); // Define timeout de 5 minutos para fechar.
+        session.setMaxIdleTimeout(60 * 60 * 1000); // Define timeout de 60 minutos para fechar.
         
         UserInfo ui = new UserInfo();
         
         if(currentUser == null){            
-            // Enquanto não houver consultores ou não tiver passado 4 minutos programa fica em pausa.
-            // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-            for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
-                try {
-                    Thread.sleep(100); // 0,1 segundo
-                } catch (InterruptedException e) {
-                    return;
-                }
-            }
-            
-            // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
-            if(consultants.isEmpty()) {
-                sendNoConsultantMessage(session);
-                return;
-            }
+//            // Enquanto não houver consultores ou não tiver passado 4 minutos programa fica em pausa.
+//            // 4 minutos = 0,1 segundo * 10 * 60 * 4.
+//            for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
+//                if(!session.isOpen()) {
+//                    return; // cliente fechou
+//                }
+//                try {
+//                    Thread.sleep(100); // 0,1 segundo
+//                } catch (InterruptedException e) {
+//                    return;
+//                }
+//            }
+//            
+//            // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
+//            if(consultants.isEmpty()) {
+//                sendNoConsultantMessage(session);
+//                return;
+//            }
+
+            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.schedule(() -> {
+               if (consultants.isEmpty() && session.isOpen()) {
+                   this.isWaiting = false;
+                   sendNoConsultantMessage(session);
+//                       session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
+               } 
+            }, 4, TimeUnit.MINUTES);
   
             newChat = new Chat();
             newChat.setUser(null);
@@ -264,7 +299,7 @@ public class ChatEndpoint {
             //ui.session = session;
             
             openChats.put(session, newChat.getId());
-            onlineUsers.put(session, ui);
+            addOnlineUser(session, ui);
             setStatus(session, realStatus);
             sendNewUserChatId(session, newChat.getId());
             
@@ -285,7 +320,7 @@ public class ChatEndpoint {
                 ui.idRelatedConsultant = null;
                 //ui.session = session;
                 
-                onlineUsers.put(session, ui);
+                addOnlineUser(session, ui);
                 consultants.put(currentUser.getId(), session);
                 
                 // Dando tempo para a função do usuário pegar o consultor
@@ -299,15 +334,15 @@ public class ChatEndpoint {
 
             } else {//usuário comum
                 
-                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
-                // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-                try {
-                    for(int i = 0; i < 2400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
-                        Thread.sleep(100); // 0,1 segundo.
-                    }
-                } catch (InterruptedException e) {
-                    return;
-                }
+//                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
+//                // 4 minutos = 0,1 segundo * 10 * 60 * 4.
+//                try {
+//                    for(int i = 0; i < 2400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
+//                        Thread.sleep(100); // 0,1 segundo.
+//                    }
+//                } catch (InterruptedException e) {
+//                    return;
+//                }
                 
                 if( currentUser.getChat() == null) { //primeira vez conectando
 
@@ -331,6 +366,17 @@ public class ChatEndpoint {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                
+                final User usuarioAtual = currentUser;
+                
+                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                scheduler.schedule(() -> {
+                    if ((consultants.isEmpty() || !isRelatedConsultantOnline(usuarioAtual.getRelatedConsultant())) && session.isOpen()) {
+                        this.isWaiting = false;
+                        sendNoConsultantMessage(session);
+//                            session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
+                    } 
+                }, 4, TimeUnit.MINUTES);
 
                 users.put(newChat.getId(), session);
                 //String realStatus = statusType.AVAILABLE.toString();
@@ -353,18 +399,24 @@ public class ChatEndpoint {
                     ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
                 }
                 //ui.session = session;
+                
+                // Adicionando no userInfo a data da ultima mensagem enviada pelo usuario se houver
+                Date lastSentDate = messageDAO.findLastSentDateByChatId(newChat.getId(), em);
+                if (lastSentDate != null) {
+                    ui.setLastSentDate(lastSentDate);
+                }
 
 
                 openChats.put(session, newChat.getId());
-                onlineUsers.put(session, ui);
+                addOnlineUser(session, ui);
 
                 setStatus(session, realStatus);
                 
-                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
-                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
-                    sendNoConsultantMessage(session);
-                    return;
-                }
+//                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
+//                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
+//                    sendNoConsultantMessage(session);
+//                    return;
+//                }
                 
             }
         }
@@ -424,10 +476,18 @@ public class ChatEndpoint {
         // Buscar chats do banco de dados para identificar usuários offline
         List<Chat> chats = findAllRelatedUserChats(consultantId);
         
-        // Para cada chat cria um novo UserInfo se o usuário não estiver online
+        // Para cada chat cria um novo UserInfo se o usuário não estiver online e houver mensagens no chat
         for (Chat chat : chats) {
             if (chat.getUser() == null) {
                 System.out.println("Chat " + chat.getId() + " ignorado (sem usuário associado)");
+                continue;
+            }
+            
+            // Verifica se existe mensagem para esse chat
+            boolean hasMessages = false;
+            hasMessages = messageDAO.existsMessageInChat(chat.getId(), em);
+            if (!hasMessages) {
+                // Chat ignorado - sem mensagens
                 continue;
             }
             
@@ -439,6 +499,13 @@ public class ChatEndpoint {
                 UserInfo offlineUser = new UserInfo(
                     chat.getUser().getName(), chat.getUser().getEmail(), chat.getId(), realStatus, null
                 );
+                
+                // Adicionando no offlineUser a data da ultima mensagem enviada pelo usuario se houver
+                Date lastSentDate = messageDAO.findLastSentDateByChatId(chat.getId(), em);
+                if (lastSentDate != null) {
+                    offlineUser.setLastSentDate(lastSentDate);
+                }
+                
                 usl.users.add(offlineUser);
                 System.out.println("Usuário OFFLINE adicionado: " + offlineUser.name);
             }
@@ -596,7 +663,8 @@ public class ChatEndpoint {
             ObjectNode node;
             node = om.readValue(message, ObjectNode.class);
             String messageType = node.get("type").asText();
-            if(consultants.isEmpty()){
+            
+            if(!this.isWaiting && consultants.isEmpty()) {
                 sendNoConsultantMessage(session);
             }
             
@@ -673,7 +741,7 @@ public class ChatEndpoint {
                 m.setChat(c);
                 
                 try {
-                    daoBaseMessage.insert(m, em);
+                    messageDAO.insert(m, em);
                 } catch (SQLException ex) {
                     Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -708,13 +776,8 @@ public class ChatEndpoint {
         
         if(users.containsValue(session)){
             Long userKey = getUserKeyForSession(session);
-            //consultantConnectTimeout(userKey);
-            
             users.remove(userKey);
             deleteUserStatus(session, userKey);
-
-            //onlineUsers.remove(session);
-            
         }
         
         

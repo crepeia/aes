@@ -12,6 +12,8 @@ import aes.utility.Encrypter;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +26,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -31,6 +35,31 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonBuilderFactory;
+import javax.ws.rs.core.Request;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReaderFactory;
+import java.util.Collections;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLSession;
+import java.security.cert.X509Certificate;
+
 
 /**
  *
@@ -45,10 +74,10 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     private EntityManager em;
     private UserDAO userDAO;
     private AuthenticationTokenDAO authenticationTokenDAO;
-     
+
     @Context
     SecurityContext securityContext;
-       
+
     public AuthenticationTokenFacadeREST() {
         super(AuthenticationToken.class);
         try {
@@ -63,73 +92,93 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @Path("{email}/{password}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response authUser(@PathParam("email") String e, @PathParam("password") String p) throws InvalidKeyException {
-      
+
         try {
-           String clientEncriptedHexPassword = p;
-           String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
+            String clientEncriptedHexPassword = p;
+            String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
+            
+            User user = userDAO.checkCredentials(e, decriptedPassword, em);
            
-          // System.out.println("Senha recebida: " + p);
-          // System.out.println("Senha recebida: " + p);
-
-          // System.out.println("Senha decriptada: " + Encrypter.decrypt(p));
-
-           //byte[] b =  Hex.decodeHex(p.toCharArray());
-          // User user = (User) getEntityManager().createNamedQuery("User.email").setParameter("email", e).getSingleResult();
-           
-          // boolean hashMatches = Encrypter.compareHash(decriptedPassword, user.getPassword(), user.getSalt());
-           User user = userDAO.checkCredentials(e, decriptedPassword, em);
-           
-           
-           if(user != null){
-               String token  = authenticationTokenDAO.issueToken(user, em);
+            if(user != null){
+               AuthenticationToken authToken = authenticationTokenDAO.issueToken(user, em);
+               
+               Map<String, Object> responseToken = new HashMap<>();
+               responseToken.put("token", authToken.getToken());
+               responseToken.put("dateCreated", authToken.getDateCreated());
+               
                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
-               return Response.ok(token).build();
-
-           }
-           else{
-
+               return Response.ok(responseToken).build();
+            } else {
                 Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
                 return Response.status(Response.Status.FORBIDDEN).build();
-           }
-
-         
-        } catch(Exception exp) {
-
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO,null, exp);
+            }
+        } catch (Exception exp) {
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, null, exp);
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
             return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
-    
-    
+
     @DELETE
     @Path("secured/logout/{token}")
     @Secured
     public Response logout(@PathParam("token") String token) {
         try {
-            String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
-            
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, new StringBuffer(userEmail).append(" está deslogando do sistema.").toString());
+            String userEmail = securityContext.getUserPrincipal().getName();
 
-            /*AuthenticationToken at = (AuthenticationToken) getEntityManager().createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
-                    .setParameter("token", token)
-                    .setParameter("uEmail", userEmail)
-                    .getSingleResult();
-            super.remove(at);*/
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, new StringBuffer(userEmail).append(" está deslogando do sistema.").toString());
 
             authenticationTokenDAO.revokeToken(token, userEmail, em);
 
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, new StringBuffer(userEmail).append(" deslogou do sistema.").toString());
-            
+
             return Response.ok().build();
-        } catch( NoResultException e ) {
+        } catch (NoResultException e) {
             return Response.ok().build(); //se o token não existe ou já foi deletado ignoro o erro
-        } catch(SQLException e){
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE,null, e);
+        } catch (SQLException e) {
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        } catch(Exception e){
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE,null, e);
+        } catch (Exception e) {
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    @POST
+    @Path("secured/refreshtoken")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response refreshToken(@HeaderParam("Authorization") String tokenHeader) throws SQLException{
+        try {
+            // Extrai o token (remove "Bearer " se vier no header)
+            String tokenString = tokenHeader.replace("Bearer ", "").trim();
+            
+            // Busca o token no banco
+            AuthenticationToken existingToken = authenticationTokenDAO.findByToken(tokenString, em);
+            if (existingToken == null) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Invalid token").build();
+            }
+            
+            User user = existingToken.getUser();
+            if (user == null) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("User not found").build();
+            }
+            
+            // Atualiza o token existente
+            AuthenticationToken newToken = authenticationTokenDAO.updateToken(tokenString, user.getEmail(), em);
+            Map<String, Object> responseToken = new HashMap<>();
+            responseToken.put("token", newToken.getToken());
+            responseToken.put("dateCreated", newToken.getDateCreated());
+            
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                .log(Level.INFO, "Usuário '" + user.getEmail() + "' renovou token.");
+            
+            return Response.ok(responseToken).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("Erro ao renovar token").build();
         }
     }
     
@@ -149,5 +198,4 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     protected EntityManager getEntityManager() {
         return em;
     }
-    
 }

@@ -44,12 +44,7 @@ public class EvaluationDAO extends GenericDAO<Evaluation>{
             if(evList.size() > 0){
                 return evList.get(evList.size()-1);
             } else {
-                //System.out.println("service.EvaluationFacadeREST.find() create");
-                Evaluation ev = new Evaluation();
-                ev.setDateCreated(new Date());
-                ev.setUser(entityManager.find(User.class, userId));
-                super.insertOrUpdate(ev, entityManager);
-                return ev;
+                return null;
             }
     }
     
