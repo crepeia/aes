@@ -16,6 +16,7 @@ import aes.utility.EmailHelper;
 import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
+import aes.utility.RESTApiResponse;
 import aes.utility.Secured;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -114,10 +115,12 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{password}")
     public Response createUser(User entity, @PathParam("password") String p) {
+        RESTApiResponse response;
         List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
         
         if (!userList.isEmpty()) {
-            return Response.status(Response.Status.CONFLICT).build();
+            response = new RESTApiResponse("O usuário já existe.");
+            return Response.status(Response.Status.CONFLICT).entity(response.getMessage()).build();
         } else {
             try {
                 String clientEncriptedHexPassword = p;
@@ -141,16 +144,17 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     contactDAO.scheduleWeeklyEmail(entity, new Date(), em);
                 }
             
+            response = new RESTApiResponse(entity);
+            return Response.status(Response.Status.OK).entity(response.getEntityData()).build();
             
-            return Response.ok(entity).build();
-            
-             } catch (SQLException | EncrypterException ex) {
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-                return Response.serverError().build();
-
-            }catch( MessagingException | MissingResourceException ex){
-                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-                 return Response.ok(entity).build();
+            } catch (SQLException | EncrypterException ex) {
+                response = new RESTApiResponse("Ocorreu um erro: " + ex);
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            } catch( MessagingException | MissingResourceException ex){
+                response = new RESTApiResponse("Ocorreu um erro: " + ex, entity);
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
             }
         }
         
@@ -164,6 +168,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
     public Response toggleConsultant(@PathParam("id") Long id) {
+        RESTApiResponse response;
         String userEmail = securityContext.getUserPrincipal().getName();
         try{
             
@@ -176,9 +181,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
             super.edit(u);
             userTransaction.commit();*/
             return Response.status(Response.Status.NO_CONTENT).build();
-        }catch(Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch(Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -188,16 +194,16 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response setInRanking(User entity) {
+        RESTApiResponse response;
         String userEmail = securityContext.getUserPrincipal().getName();
         try{
             userDAO.setInRanking(userEmail,entity.getInRanking(),entity.getNickname(), em);
-            System.out.println("aes.service.UserFacadeREST.setInRanking()");
-           return Response.status(Response.Status.NO_CONTENT).build();
-
-        }catch(Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-
+//            System.out.println("aes.service.UserFacadeREST.setInRanking()");
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } catch(Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -207,15 +213,17 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response sendTCLE(User entity) {
+        RESTApiResponse response;
         String userEmail = securityContext.getUserPrincipal().getName();
         try{
             userDAO.setSendTCLE(userEmail, entity, em);
-            System.out.println("aes.service.UserFacadeREST.setSendTCLE()");
+//            System.out.println("aes.service.UserFacadeREST.setSendTCLE()");
             return Response.status(Response.Status.NO_CONTENT).build();
 
-        }catch(Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch(Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -230,6 +238,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("recover-password")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response recoverPassword(JsonParser jp) {
+        RESTApiResponse response;
         try {
             JsonNode node = jp.getCodec().readTree(jp);
             String userEmail = node.get("email").asText();
@@ -249,10 +258,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
             
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, "Recover password service");
 
-            return Response.ok().build();
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return Response.status(Response.Status.OK).build();
+        } catch (Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -260,6 +270,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("deleteAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteAccount(JsonParser jp) {
+        RESTApiResponse response;
         try {
             JsonNode node = jp.getCodec().readTree(jp);
             String userId = node.get("id").asText();
@@ -267,14 +278,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
             User u = (User) em.createQuery("SELECT u FROM User u WHERE u.id=:userId")
                 .setParameter("userId", Long.parseLong(userId))
                 .getSingleResult();
-            System.out.println("aes.service.UserFacadeREST.deleteAccount()");
+//            System.out.println("aes.service.UserFacadeREST.deleteAccount()");
             emailHelper.sendDeleteAccountEmail(u,em,token);
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, "Delete Account service");
 
-            return Response.ok().build();
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return Response.status(Response.Status.OK).build();
+        } catch (Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -300,19 +312,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("findUserByNickname/{nickname}")
     public Response findUserByNickname(@PathParam("nickname") String nickname) {
+        RESTApiResponse response;
         try {
             User userResult = (User) em.createQuery("SELECT u FROM User u WHERE u.nickname=:nm")
                 .setParameter("nm", nickname)
                 .getSingleResult();
         
             if (userResult == null) {
-                return Response.status(Response.Status.CONFLICT).build();
-            } else {           
-                return Response.ok().entity(userResult).build();
+                response = new RESTApiResponse("Usuário não encontrado");
+                return Response.status(Response.Status.CONFLICT).entity(response.getMessage()).build();
+            } else {
+                response = new RESTApiResponse(userResult);
+                return Response.status(Response.Status.OK).entity(response.getEntityData()).build();
             }    
-        } catch (Exception e) {
-            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -322,15 +338,17 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response changeTitle(User entity) {
+        RESTApiResponse response;
         String userEmail = securityContext.getUserPrincipal().getName();
         try{
             userDAO.setTitle(userEmail, entity, em);
-            System.out.println("aes.service.UserFacadeREST.setTitle()");
+//            System.out.println("aes.service.UserFacadeREST.setTitle()");
             return Response.status(Response.Status.NO_CONTENT).build();
 
-        }catch(Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }catch(Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -344,6 +362,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             @PathParam("adminEmail") String adminEmail,
             @PathParam("adminPassword") String adminPassword
     ) {
+        RESTApiResponse response;
         User user;
         User newConsultant;
         User admin;
@@ -361,12 +380,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     userDAO.update(user, em);
                     return Response.status(Response.Status.OK).build();
                 }
-                return Response.status(Response.Status.BAD_REQUEST).build();
+                response = new RESTApiResponse("O usuário já é consultor ou o consultor indicado não é consultor.");
+                return Response.status(Response.Status.BAD_REQUEST).entity(response.getMessage()).build();
             }
-            return Response.status(Response.Status.FORBIDDEN).build();
+            response = new RESTApiResponse("E-mail e/ou senha incorretos ou sem permissão de administrador.");
+            return Response.status(Response.Status.FORBIDDEN).entity(response.getMessage()).build();
         } catch (SQLException | RuntimeException | EncrypterException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -376,8 +398,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateEvaluationProfile(User entity) {
+        RESTApiResponse response;
         if(entity == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("User entity cannot be null").build();
+            response = new RESTApiResponse("Usuário não pode ser nulo.");
+            return Response.status(Response.Status.BAD_REQUEST).entity(response.getMessage()).build();
         }
         
         String userEmail = securityContext.getUserPrincipal().getName();
@@ -389,10 +413,12 @@ public class UserFacadeREST extends AbstractFacade<User> {
 //            user.setKnowWebsite(1);
 //            userDAO.updateEvaluationProfile(userEmail, user, em);
             userDAO.updateEvaluationProfile(userEmail, entity, em);
-            return Response.status(Response.Status.OK).entity("User profile updated successfully").build();
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            response = new RESTApiResponse("Perfil do usuário atualizado com sucesso.");
+            return Response.status(Response.Status.OK).entity(response.getMessage()).build();
+        } catch (Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -401,11 +427,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findUserByChatId(@PathParam("chatId") Long chatId) {
+        RESTApiResponse response;
         try {
-            return Response.ok().entity(userDAO.listOnce("chat.id", chatId, em)).build();
+            response = new RESTApiResponse(userDAO.listOnce("chat.id", chatId, em));
+            return Response.status(Response.Status.OK).entity(response.getEntityData()).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -419,6 +448,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response validateReferralCode(String jsonInput) {
+        RESTApiResponse response;
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(jsonInput);
@@ -427,21 +457,21 @@ public class UserFacadeREST extends AbstractFacade<User> {
             User referrer = userDAO.findByReferralCode(referralCode, em);
 
             if (referrer == null) {
+                response = new RESTApiResponse("Código inválido ou não encontrado");
                 return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"valid\":false, \"message\":\"Código inválido ou não encontrado\"}")
+                    .entity(response.getMessage())
                     .build();
             }
 
-            return Response.ok()
-                .entity("{\"valid\":true, \"message\":\"Código válido\", \"referrerId\":" + 
-                       referrer.getId() + "}")
+            response = new RESTApiResponse(referrer);
+            return Response.status(Response.Status.OK)
+                .entity(response.getEntityData())
                 .build();
 
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "ERRO DETALHADO: ", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("{\"valid\":false, \"message\":\"Erro: " + e.getMessage() + "\"}")
-                .build();
+        } catch (Exception ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -450,13 +480,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response setFriendReferralCode(String jsonInput) {
+        RESTApiResponse response;
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(jsonInput);
 
             if (!node.has("id") || !node.has("code")) {
+                response = new RESTApiResponse("Campos \"id\" e \"code\" são obrigatórios.");
                 return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"success\":false, \"message\":\"Campos 'id' e 'code' são obrigatórios\"}")
+                    .entity(response.getMessage())
                     .build();
             }
 
@@ -464,8 +496,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
             String referralCode = node.get("code").asText();
 
             if (userId == null || referralCode == null || referralCode.trim().isEmpty()) {
+                response = new RESTApiResponse("ID inválido ou código vazio.");
                 return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"success\":false, \"message\":\"ID inválido ou código vazio\"}")
+                    .entity(response.getMessage())
                     .build();
             }
 
@@ -473,35 +506,35 @@ public class UserFacadeREST extends AbstractFacade<User> {
             userDAO.updateReferralCode(userId, referralCode, em);
             userTransaction.commit();
 
-            return Response.ok()
-                .entity("{\"success\":true, \"message\":\"Código de referência atualizado com sucesso\"}")
+            response = new RESTApiResponse("Código de referência atualizado com sucesso.");
+            return Response.status(Response.Status.OK)
+                .entity(response.getMessage())
                 .build();
 
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException ex) {
+            response = new RESTApiResponse("JSON inválido.");
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST)
-                .entity("{\"success\":false, \"message\":\"JSON inválido\"}")
+                .entity(response.getMessage())
                 .build();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.NOT_FOUND)
-                .entity("{\"success\":false, \"message\":\"" + e.getMessage() + "\"}")
-                .build();
-        } catch (IllegalStateException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                .entity("{\"success\":false, \"message\":\"" + e.getMessage() + "\"}")
+                .entity(response.getMessage())
                 .build();
         } catch (Exception e) {
             try {
                 if (userTransaction != null) userTransaction.rollback();
             } catch (Exception ex) {
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao fazer rollback", ex);
+                response = new RESTApiResponse("Erro ao fazer o rollback.");
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
             }
 
-            String errorMsg = e.getMessage() != null ? e.getMessage() : "Erro desconhecido - verifique logs";
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "ERRO DETALHADO: ", e);
-
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("{\"success\":false, \"message\":\"" + errorMsg + "\"}")
-                .build();
+            response = new RESTApiResponse("Ocorreu um erro: " + e);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -510,32 +543,34 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response countReferralCodeUsage(String jsonInput) {
+        RESTApiResponse response;
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(jsonInput);
 
             if (!node.has("referral_code")) {
+                response = new RESTApiResponse("O campo \"referral_code\" é obrigatório.");
                 return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\":\"O campo 'referral_code' é obrigatório\"}")
+                    .entity(response.getMessage())
                     .build();
             }
 
             String referralCode = node.get("referral_code").asText();
             long count = userDAO.countReferralCodeUsage(referralCode, em);
 
-            return Response.ok()
-                .entity("{\"count\":" + count + ", \"referral_code\":\"" + referralCode + "\"}")
+            response = new RESTApiResponse(referralCode);
+            return Response.status(Response.Status.OK)
+                .entity(response.getEntityData())
                 .build();
 
-        } catch (JsonProcessingException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                .entity("{\"error\":\"JSON inválido\"}")
-                .build();
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "ERRO DETALHADO: ", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("{\"error\":\"Erro ao processar a requisição\"}")
-                .build();
+        } catch (JsonProcessingException ex) {
+            response = new RESTApiResponse("JSON inválido.");
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+        } catch (Exception ex) {
+            response = new RESTApiResponse("Erro ao processar a requisição.");
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -543,11 +578,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("/get-referral-code/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserReferralCode(@PathParam("userId") Long userId) {
+        RESTApiResponse response;
         try {
             // Validação básica do ID
             if (userId == null || userId <= 0) {
+                response = new RESTApiResponse("ID de usuário inválido.");
                 return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\":\"ID de usuário inválido\"}")
+                    .entity(response.getMessage())
                     .build();
             }
 
@@ -555,8 +592,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
             User user = em.find(User.class, userId);
 
             if (user == null) {
+                response = new RESTApiResponse("Usuário não encontrado.");
                 return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Usuário não encontrado\"}")
+                    .entity(response.getMessage())
                     .build();
             }
 
@@ -565,21 +603,22 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
             // Se o usuário não tiver código cadastrado
             if (referralCode == null || referralCode.trim().isEmpty()) {
+                response = new RESTApiResponse("Usuário não possui código de referência.");
                 return Response.ok()
-                    .entity("{\"exists\":false, \"message\":\"Usuário não possui código de referência\"}")
+                    .entity(response.getMessage())
                     .build();
             }
 
+            response = new RESTApiResponse(referralCode);
             // Retorna o código encontrado
-            return Response.ok()
-                .entity("{\"exists\":true, \"referral_code\":\"" + referralCode + "\"}")
+            return Response.status(Response.Status.OK)
+                .entity(response.getEntityData())
                 .build();
 
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "ERRO DETALHADO: ", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("{\"error\":\"Erro ao buscar código de referência\"}")
-                .build();
+        } catch (Exception ex) {
+            response = new RESTApiResponse("Erro ao buscar o código de referência.");
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -588,6 +627,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAppSignInDate(@PathParam("timestamp") Long timestamp, @PathParam("userId") Long userId) throws ParseException {
+        RESTApiResponse response;
         try {
             Date date = new Date(timestamp);
             User user = userDAO.find(userId, em);
@@ -595,8 +635,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -605,14 +646,16 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAdmin(@PathParam("isAdmin") boolean isAdmin, @PathParam("userId") Long userId) {
+        RESTApiResponse response;
         try {
             User user = userDAO.find(userId, em);
             user.setAdmin(isAdmin);
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -621,14 +664,16 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateConsultant(@PathParam("isConsultant") boolean isConsultant, @PathParam("userId") Long userId) {
+        RESTApiResponse response;
         try {
             User user = userDAO.find(userId, em);
             user.setConsultant(isConsultant);
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -637,14 +682,16 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUseChatbot(@PathParam("useChatbot") boolean useChatbot, @PathParam("userId") Long userId) {
+        RESTApiResponse response;
         try {
             User user = userDAO.find(userId, em);
             user.setUse_chatbot(useChatbot);
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -652,12 +699,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(User user) {
+        RESTApiResponse response;
         try {
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     

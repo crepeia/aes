@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.Response;
 /**
@@ -58,11 +59,14 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
     @Path("find/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response find(@PathParam("id") Long id) {
+        RESTApiResponse response;
         try {
-            return Response.ok().entity(tipDAO.listOnce("id", id, em)).build();
+            response = new RESTApiResponse(tipDAO.listOnce("id", id, em));
+            return Response.status(Response.Status.OK).entity(response.getEntityData()).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorre um erro: " + ex);
+            Logger.getLogger(TipFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
 
@@ -70,11 +74,14 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
     @Path("findAll")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllTips() {
+        RESTApiResponse response;
         try {
-            return Response.ok().entity(tipDAO.list(em)).build();
+            response = new RESTApiResponse(this.tipDAO.list(em));
+            return Response.status(Response.Status.OK).entity(response.getEntityData()).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorre um erro: " + ex);
+            Logger.getLogger(TipFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
@@ -83,17 +90,25 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response update(Tip tip) {
+        RESTApiResponse response;
         try {
-            boolean isDescriptionsNull = Objects.isNull(tip.getDescriptionPT()) || Objects.isNull(tip.getDescriptionEN()) || Objects.isNull(tip.getDescriptionES());
-            boolean isDescriptionsEmpty = Objects.equals(tip.getDescriptionPT().trim(), "") || Objects.equals(tip.getDescriptionEN().trim(), "") || Objects.equals(tip.getDescriptionES().trim(), "");
-            if(isDescriptionsNull || isDescriptionsEmpty) {
-                return Response.status(Response.Status.BAD_REQUEST).build();
+            boolean isAnyDescriptionNull = Objects.isNull(tip.getDescriptionPT()) || Objects.isNull(tip.getDescriptionEN()) || Objects.isNull(tip.getDescriptionES());
+            if(isAnyDescriptionNull) {
+                response = new RESTApiResponse("Informe valores para todos tipos de descrição.", tip);
+                return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
+            }
+            boolean isAnyDescriptionEmpty = tip.getDescriptionPT().trim().isEmpty() || tip.getDescriptionEN().trim().isEmpty() || tip.getDescriptionES().trim().isEmpty();
+            if(isAnyDescriptionEmpty) {
+                response = new RESTApiResponse("Informe valores para todos tipos de descrição.", tip);
+                return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
             }
             tipDAO.update(tip, em);
-            return Response.status(Response.Status.OK).build();
+            response = new RESTApiResponse("Lembre-se de cadastrar as descrições nas folhas de tradução");
+            return Response.status(Response.Status.OK).entity(response.getMessage()).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Logger.getLogger(TipFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
     
