@@ -266,6 +266,29 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
         }
     }
 
+//    @GET
+//    @Path("sent/{startDate}/{endDate}")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response findBySentDate(@PathParam("startDate") String sd, @PathParam("endDate") String ed) {
+//        try {
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//            Date startDate = sdf.parse(sd);
+//            Date endDate = sdf.parse(ed);
+//
+//            String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
+//
+//            List<ChallengeUser> list = getEntityManager().createQuery("SELECT c FROM ChallengeUser c WHERE c.user.email=:email AND (c.dateCreated BETWEEN :start AND :end)")
+//                    .setParameter("email", userEmail)
+//                    .setParameter("start", startDate)
+//                    .setParameter("end", endDate)
+//                    .getResultList();
+//            return Response.ok().entity(list).build();
+//        } catch (Exception e) {
+//            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+//        }
+//    }
+
     @GET
     @Path("sent/{startDate}/{endDate}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -275,9 +298,10 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             Date startDate = sdf.parse(sd);
             Date endDate = sdf.parse(ed);
 
-            String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
+            String userEmail = securityContext.getUserPrincipal().getName();
 
-            List<ChallengeUser> list = getEntityManager().createQuery("SELECT c FROM ChallengeUser c WHERE c.user.email=:email AND (c.dateCreated BETWEEN :start AND :end)")
+            List<ChallengeUser> list = getEntityManager().createQuery(
+                    "SELECT c FROM ChallengeUser c WHERE c.user.email=:email AND (c.dateCompleted BETWEEN :start AND :end)")
                     .setParameter("email", userEmail)
                     .setParameter("start", startDate)
                     .setParameter("end", endDate)
@@ -289,6 +313,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
         }
     }
 
+    
     @GET
     @Path("completed/{startDate}/{endDate}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

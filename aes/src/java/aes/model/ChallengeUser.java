@@ -42,8 +42,8 @@ public class ChallengeUser implements Serializable {
     private Challenge challenge;
     
     //@Temporal(javax.persistence.TemporalType.DATE)
-    @Column(name = "date_created")
-    private LocalDate dateCreated;
+//    @Column(name = "date_created")
+//    private LocalDate dateCreated;
 
     //@Temporal(javax.persistence.TemporalType.DATE)
     @Column(name = "date_completed")
@@ -97,13 +97,13 @@ public class ChallengeUser implements Serializable {
         this.challenge = challenge;
     }
 
-    public LocalDate getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(LocalDate dateCreated) {
-        this.dateCreated = dateCreated;
-    }
+//    public LocalDate getDateCreated() {
+//        return dateCreated;
+//    }
+//
+//    public void setDateCreated(LocalDate dateCreated) {
+//        this.dateCreated = dateCreated;
+//    }
 
     public LocalDate getDateCompleted() {
         return dateCompleted;
