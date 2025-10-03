@@ -64,6 +64,7 @@ public class ApplicationConfig extends Application {
         resources.add(aes.service.MedalUserFacadeREST.class);
         resources.add(aes.service.MessageFacadeREST.class);
         resources.add(aes.service.MobileOptionsFacadeREST.class);
+        resources.add(aes.service.NonceServiceFacadeREST.class);
         resources.add(aes.service.NotificationFacadeREST.class);
         resources.add(aes.service.PageRatingFacadeREST.class);
         resources.add(aes.service.QuestionFacadeREST.class);
