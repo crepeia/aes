@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_anonymous_key")
+@XmlRootElement
 public class AnonymousKey {
     
     @Id
@@ -35,6 +37,12 @@ public class AnonymousKey {
     
     @Column(name = "revoked", nullable = false)
     private boolean revoked = false;
+    
+    public AnonymousKey() {}
+    
+    public AnonymousKey(long id) {
+        this.id = id;
+    }
     
     public long getId() {
         return id;
@@ -68,11 +76,15 @@ public class AnonymousKey {
         return dateCreated;
     }
     
+    public void setDateCreated(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+    
     public boolean getRevoked() {
         return revoked;
     }
     
-    public void setRovoked(boolean revoked) {
+    public void setRevoked(boolean revoked) {
         this.revoked = revoked;
     }
 }
