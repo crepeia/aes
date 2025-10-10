@@ -2,6 +2,7 @@ package aes.service;
 
 import aes.model.AnonymousKey;
 import aes.persistence.AnonymousKeyDAO;
+import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.NonceDAO;
 import aes.utility.NaClUtil;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,9 @@ import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.ws.rs.GET;
 
 /**
  *
@@ -39,11 +43,13 @@ public class AnonymousKeyServiceFacadeREST {
     private EntityManager em;
     private AnonymousKeyDAO anonymousKeyDao;
     private NonceDAO nonceDao;
+    private AuthenticationTokenDAO authenticationTokenDao;
     
     public AnonymousKeyServiceFacadeREST() throws NamingException {
         try {
             anonymousKeyDao = new AnonymousKeyDAO();
             nonceDao = new NonceDAO();
+            authenticationTokenDao = new AuthenticationTokenDAO();
         } catch (NamingException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
@@ -57,7 +63,6 @@ public class AnonymousKeyServiceFacadeREST {
     }
     
     public static class ChallengeRequest {
-        public String publicKey;
         public String signature;
         public String nonce;
         public String instanceId;
@@ -113,13 +118,21 @@ public class AnonymousKeyServiceFacadeREST {
             }
 
             // 2. Monta dados e decodifica
-            byte[] pubKeyBytes = Base64.getDecoder().decode(request.publicKey);
+            
+            // Buscar publicKey
+            AnonymousKey existing = anonymousKeyDao.findByInstanceId(request.instanceId, em);
+            if (existing == null || existing.getPublicKey() == null) {
+                System.out.println("Chave pública não encontrada para o instanceId: " + request.instanceId);
+                return Response.status(Response.Status.UNAUTHORIZED).entity("Public key not registered").build();
+            }
+            
+            byte[] pubKeyBytes = Base64.getDecoder().decode(existing.getPublicKey());
             byte[] sigBytes = Base64.getDecoder().decode(request.signature);
 
             String challengeData = request.nonce + "|" + request.instanceId + "|" + request.timestamp;
             byte[] challengeBytes = challengeData.getBytes(StandardCharsets.UTF_8);
             
-            System.out.println("PUBLIC KEY (len=" + pubKeyBytes.length + "): " + request.publicKey);
+            System.out.println("PUBLIC KEY (len=" + pubKeyBytes.length + "): " + existing.getPublicKey());
             System.out.println("SIGNATURE (len=" + sigBytes.length + "): " + request.signature);
             System.out.println("CHALLENGE: " + challengeData);
             
@@ -137,21 +150,15 @@ public class AnonymousKeyServiceFacadeREST {
             
             System.out.println("Assinatura válida");
 
-            // 4. grava chave
-            AnonymousKey existing = anonymousKeyDao.findByInstanceId(request.instanceId, em);
-            if (existing == null) {
-                AnonymousKey key = new AnonymousKey();
-                key.setInstanceId(request.instanceId);
-                key.setPublicKey(request.publicKey);
-                System.out.println("KEY: Chegou aqui!");
-                // dao.save(key, em);
-            }
-
-            // 5. Gerar token anônimo — por enquanto comentado
-            // String token = TokenUtil.generateAnonymousToken(request.instanceId);
+            // 4. Gerar token anônimo — por enquanto comentado
+            String token = authenticationTokenDao.issueAnonymousToken(existing, em);
             
-            // Retorna OK
-            return Response.status(Response.Status.OK).build();
+            // Retorna em JSON
+            JsonObject response = Json.createObjectBuilder()
+                .add("token", token)
+                .build();
+            
+            return Response.ok(response.toString(), MediaType.APPLICATION_JSON).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }

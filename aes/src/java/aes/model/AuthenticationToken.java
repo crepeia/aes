@@ -63,6 +63,14 @@ public class AuthenticationToken implements Serializable {
         this.user = user;
     }
     
+    public AnonymousKey getAnonymousKey() {
+        return anonymousKey;
+    }
+    
+    public void setAnonymousKey(AnonymousKey anonymousKey) {
+        this.anonymousKey = anonymousKey;
+    }
+    
     public Long getId() {
         return id;
     }

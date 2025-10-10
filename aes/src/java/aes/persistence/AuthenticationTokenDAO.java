@@ -5,6 +5,7 @@
  */
 package aes.persistence;
 
+import aes.model.AnonymousKey;
 import aes.model.AuthenticationToken;
 import aes.model.User;
 import aes.utility.SecureRandomString;
@@ -38,14 +39,15 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         return authToken;
     }
     
-    public String issueAnonymousToken(String identifier, EntityManager em) throws SQLException {
+    public String issueAnonymousToken(AnonymousKey anonymousKey, EntityManager em) throws SQLException {
         // Use o identificador para criar um token anonimo
-        String token = SecureRandomString.generate() + "-" + identifier;
+        String token = SecureRandomString.generate() + "-" + "anonymous";
         
         // Salvar o token para rastreamento
         AuthenticationToken authToken = new AuthenticationToken();
         authToken.setToken(token);
         authToken.setUser(null);
+        authToken.setAnonymousKey(anonymousKey);
         authToken.setDateCreated(new Date());
         super.update(authToken, em);
         
