@@ -8,7 +8,6 @@ import aes.model.AuthenticationToken;
 import aes.model.User;
 import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.UserDAO;
-import aes.utility.CryptoUtils;
 import aes.utility.Encrypter;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;

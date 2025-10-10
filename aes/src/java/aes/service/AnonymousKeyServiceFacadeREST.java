@@ -4,7 +4,7 @@ import aes.model.AnonymousKey;
 import aes.persistence.AnonymousKeyDAO;
 import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.NonceDAO;
-import aes.utility.NaClUtil;
+import aes.utility.AnonymousAuthenticationUtils;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Base64;
@@ -142,7 +142,7 @@ public class AnonymousKeyServiceFacadeREST {
             
             
             // 3. Verifica assinatura
-            boolean verified = NaClUtil.verifySignature(pubKeyBytes, challengeBytes, sigBytes);
+            boolean verified = AnonymousAuthenticationUtils.verifySignature(pubKeyBytes, challengeBytes, sigBytes);
             if (!verified) {
                 System.out.println("Assinatura inválida");
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid signature").build();

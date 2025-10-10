@@ -1,6 +1,6 @@
 package aes.persistence;
 
-import aes.utility.NonceUtil;
+import aes.utility.AnonymousAuthenticationUtils;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Map;
@@ -19,10 +19,12 @@ public class NonceDAO {
         // não precisa de EntityManager, mas construtor consistente
     }
      
-    /** Gera e armazena um nonce temporário */
+    /** Gera e armazena um nonce temporário
+    * @return 
+    * @throws java.sql.SQLException */
     public String createNonce() throws SQLException {
         try {
-            String nonce = NonceUtil.generateNonce(16);
+            String nonce = AnonymousAuthenticationUtils.generateNonce(16);
             nonceStore.put(nonce, Instant.now().plusSeconds(ttlSeconds));
             return nonce;
         } catch (Exception ex) {
@@ -30,7 +32,10 @@ public class NonceDAO {
         }
     }
     
-    /** Valida e consome um nonce (single-use / uso unico) */
+    /** Valida e consome um nonce (single-use / uso unico)
+    * @param nonce
+    * @return 
+    * @throws java.sql.SQLException */
     public boolean validateNonce(String nonce) throws SQLException {
         try {
             Instant expiry = nonceStore.get(nonce);
