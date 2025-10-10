@@ -1,9 +1,8 @@
 package aes.service;
 
 import aes.model.AnonymousKey;
-import aes.persistence.AnonymousKeyDAO;
 import aes.persistence.AuthenticationTokenDAO;
-import aes.persistence.NonceDAO;
+import aes.persistence.AnonymousAuthenticationDAO;
 import aes.utility.AnonymousAuthenticationUtils;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
@@ -38,14 +37,12 @@ public class AnonymousAuthenticationFacadeREST {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     
-    private NonceDAO nonceDao;
-    private AnonymousKeyDAO anonymousKeyDao;
+    private AnonymousAuthenticationDAO anonymousAuthenticationDao;
     private AuthenticationTokenDAO authenticationTokenDao;
     
     public AnonymousAuthenticationFacadeREST() {
         try {
-            anonymousKeyDao = new AnonymousKeyDAO();
-            nonceDao = new NonceDAO();
+            anonymousAuthenticationDao = new AnonymousAuthenticationDAO();
             authenticationTokenDao = new AuthenticationTokenDAO();
         } catch (NamingException ex) {
             Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
@@ -72,7 +69,7 @@ public class AnonymousAuthenticationFacadeREST {
     @Produces(MediaType.APPLICATION_JSON)
     public Response generateNonce() {
         try {
-            String nonce = nonceDao.createNonce();
+            String nonce = anonymousAuthenticationDao.createNonce();
             return Response.ok(nonce).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
@@ -90,7 +87,7 @@ public class AnonymousAuthenticationFacadeREST {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
             
-            boolean valid = nonceDao.validateNonce(nonce);
+            boolean valid = anonymousAuthenticationDao.validateNonce(nonce);
             return Response.ok("{\"valid\": " + valid + "}").build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
@@ -106,7 +103,7 @@ public class AnonymousAuthenticationFacadeREST {
     public Response insert(KeyRequest request) throws SQLException {
         try {
             // Verifica se já existe
-            AnonymousKey existing = anonymousKeyDao.findByInstanceId(request.instanceId, em);
+            AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, em);
             if (existing != null) {
                 return Response.status(Response.Status.CONFLICT).build();
             }
@@ -118,7 +115,7 @@ public class AnonymousAuthenticationFacadeREST {
             object.setDateCreated(LocalDateTime.now());
             object.setRevoked(false);
             
-            anonymousKeyDao.insert(object, em);
+            anonymousAuthenticationDao.insert(object, em);
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
@@ -133,7 +130,7 @@ public class AnonymousAuthenticationFacadeREST {
     public Response validateChallenge(ChallengeRequest request) throws SQLException {
         try {
             // 1. Verifica nonce
-            if (!nonceDao.validateNonce(request.nonce)) {
+            if (!anonymousAuthenticationDao.validateNonce(request.nonce)) {
                 System.out.println("Nonce inválido ou expirado");
                 return Response.status(Response.Status.BAD_REQUEST).entity("Invalid nonce").build();
             }
@@ -141,7 +138,7 @@ public class AnonymousAuthenticationFacadeREST {
             // 2. Monta dados e decodifica
             
             // Buscar publicKey
-            AnonymousKey existing = anonymousKeyDao.findByInstanceId(request.instanceId, em);
+            AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, em);
             if (existing == null || existing.getPublicKey() == null) {
                 System.out.println("Chave pública não encontrada para o instanceId: " + request.instanceId);
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Public key not registered").build();
