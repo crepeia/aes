@@ -7,53 +7,49 @@ import aes.persistence.NonceDAO;
 import aes.utility.AnonymousAuthenticationUtils;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Base64;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.security.MessageDigest;
-import java.time.LocalDateTime;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.ws.rs.GET;
 
 /**
  *
  * @author luansb
  */
-
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-@Path("anonymous-key")
-public class AnonymousKeyServiceFacadeREST {
-    
+@Path("anonymous-authentication")
+public class AnonymousAuthenticationFacadeREST {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
-    private AnonymousKeyDAO anonymousKeyDao;
+    
     private NonceDAO nonceDao;
+    private AnonymousKeyDAO anonymousKeyDao;
     private AuthenticationTokenDAO authenticationTokenDao;
     
-    public AnonymousKeyServiceFacadeREST() throws NamingException {
+    public AnonymousAuthenticationFacadeREST() {
         try {
             anonymousKeyDao = new AnonymousKeyDAO();
             nonceDao = new NonceDAO();
             authenticationTokenDao = new AuthenticationTokenDAO();
         } catch (NamingException ex) {
-            Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
-
     }
     
     public static class KeyRequest {
@@ -66,22 +62,49 @@ public class AnonymousKeyServiceFacadeREST {
         public String signature;
         public String nonce;
         public String instanceId;
-        public long timestamp;   // timestamp enviado pelo app
-        public Map<String, String> clientMeta;
+        public long timestamp;
     }
     
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) sb.append(String.format("%02x", b));
-        return sb.toString();
+    // ===== INICIO DOS SERVIÇOS DE NONCE =====
+    
+    @GET
+    @Path("nonce/generate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response generateNonce() {
+        try {
+            String nonce = nonceDao.createNonce();
+            return Response.ok(nonce).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
     
-    @Path("insert")
+    @POST
+    @Path("nonce/validate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response validateNonce(String nonce) {
+        try {
+            if (nonce == null) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+            
+            boolean valid = nonceDao.validateNonce(nonce);
+            return Response.ok("{\"valid\": " + valid + "}").build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    // ===== INICIO DOS SERVIÇOS DE CHAVE =====
+    
+    @Path("anonymous-key/insert")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insert(KeyRequest request) throws SQLException {
         try {
-            
             // Verifica se já existe
             AnonymousKey existing = anonymousKeyDao.findByInstanceId(request.instanceId, em);
             if (existing != null) {
@@ -98,7 +121,7 @@ public class AnonymousKeyServiceFacadeREST {
             anonymousKeyDao.insert(object, em);
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -109,8 +132,6 @@ public class AnonymousKeyServiceFacadeREST {
     @Produces(MediaType.APPLICATION_JSON)
     public Response validateChallenge(ChallengeRequest request) throws SQLException {
         try {
-            System.out.println("=== VALIDATE CHALLENGE ===");
-            
             // 1. Verifica nonce
             if (!nonceDao.validateNonce(request.nonce)) {
                 System.out.println("Nonce inválido ou expirado");
@@ -131,25 +152,14 @@ public class AnonymousKeyServiceFacadeREST {
 
             String challengeData = request.nonce + "|" + request.instanceId + "|" + request.timestamp;
             byte[] challengeBytes = challengeData.getBytes(StandardCharsets.UTF_8);
-            
-            System.out.println("PUBLIC KEY (len=" + pubKeyBytes.length + "): " + existing.getPublicKey());
-            System.out.println("SIGNATURE (len=" + sigBytes.length + "): " + request.signature);
-            System.out.println("CHALLENGE: " + challengeData);
-            
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(challengeBytes);
-            System.out.println("CHALLENGE SHA256 (hex): " + bytesToHex(hash));
-            
-            
+        
             // 3. Verifica assinatura
             boolean verified = AnonymousAuthenticationUtils.verifySignature(pubKeyBytes, challengeBytes, sigBytes);
             if (!verified) {
                 System.out.println("Assinatura inválida");
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid signature").build();
             }
-            
-            System.out.println("Assinatura válida");
-
+           
             // 4. Gerar token anônimo — por enquanto comentado
             String token = authenticationTokenDao.issueAnonymousToken(existing, em);
             
