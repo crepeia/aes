@@ -5,6 +5,7 @@
  */
 package aes.service;
 
+import aes.model.AnonymousKey;
 import aes.model.AuthenticationToken;
 import aes.model.Chat;
 import aes.model.User;
@@ -214,15 +215,78 @@ public class ChatEndpoint {
         AuthenticationToken at;
         Chat newChat;
         
-        if(Boolean.parseBoolean(auth.get(0))){
+        // Versão abaixo está descontinuada
+//        if(Boolean.parseBoolean(auth.get(0))){;
+//            List<String> token = (List<String>) config.getUserProperties().get("authtoken");
+//            try {
+//                
+//                at = validateToken(token.get(0));
+//                currentUser = at.getUser();
+//                if(currentUser.getId() != Long.parseLong(userId)) 
+//                    throw new Exception();
+//                
+//            } catch (Exception ex) {
+//                try {
+//                    session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
+//                    return;
+//                } catch (IOException ex1) {
+//                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
+//                }
+//            }
+//        } else {
+//            unauthId = (List<String>) config.getUserProperties().get("unauthID");
+//            
+//            if(unauthId.isEmpty() || unauthId.get(0).isEmpty()){
+//                try {
+//                    session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
+//                    return;
+//                } catch (IOException ex) {
+//                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//
+//            }
+//        }
+
+        // Correção para aceitar tokens anônimos
+        if (Boolean.parseBoolean(auth.get(0))) {
             List<String> token = (List<String>) config.getUserProperties().get("authtoken");
+            
             try {
-                
                 at = validateToken(token.get(0));
-                currentUser = at.getUser();
-                if(currentUser.getId() != Long.parseLong(userId)) 
-                    throw new Exception();
                 
+                if (at == null) {
+                    throw new Exception("Token inválido");
+                }
+                
+                if (at.getUser() != null) {
+                    // Token de usuário logado
+                    currentUser = at.getUser();
+                    if (currentUser.getId() != Long.parseLong(userId)) {
+                        throw new Exception("User ID mismatch");
+                    }
+                    System.out.println("Usuário autenticado: " + currentUser.getEmail());
+                } else if (at.getAnonymousKey() != null) {
+                    // Token de usuário anônimo
+                    
+                    unauthId = (List<String>) config.getUserProperties().get("unauthID");
+                    
+                    if(unauthId.isEmpty() || unauthId.get(0).isEmpty()) {
+                        try {
+                            session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
+                            return;
+                        } catch (IOException ex2) {
+                            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex2);
+                        }
+                    }
+                    
+                    AnonymousKey anon = at.getAnonymousKey();
+                    if (!anon.getInstanceId().equals(userId)) {
+                        throw new Exception("Instance ID incompatível");
+                    }
+                    System.out.println("Usuário anônimo autenticado: " + anon.getInstanceId());
+                } else {
+                    throw new Exception("Token sem usuário associado");
+                }
             } catch (Exception ex) {
                 try {
                     session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
@@ -230,18 +294,6 @@ public class ChatEndpoint {
                 } catch (IOException ex1) {
                     Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
                 }
-            }
-        } else {
-            unauthId = (List<String>) config.getUserProperties().get("unauthID");
-            
-            if(unauthId.isEmpty() || unauthId.get(0).isEmpty()){
-                try {
-                    session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
-                    return;
-                } catch (IOException ex) {
-                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
             }
         }
         

@@ -31,9 +31,10 @@ import javax.ws.rs.core.Response;
  * @author luansb
  */
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
 @Path("anonymous-authentication")
-public class AnonymousAuthenticationFacadeREST {
+@TransactionManagement(TransactionManagementType.BEAN)
+public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousKey> {
+    
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     
@@ -41,6 +42,7 @@ public class AnonymousAuthenticationFacadeREST {
     private AuthenticationTokenDAO authenticationTokenDao;
     
     public AnonymousAuthenticationFacadeREST() {
+        super(AnonymousKey.class);
         try {
             anonymousAuthenticationDao = new AnonymousAuthenticationDAO();
             authenticationTokenDao = new AuthenticationTokenDAO();
@@ -124,7 +126,7 @@ public class AnonymousAuthenticationFacadeREST {
     }
     
     @POST
-    @Path("validate")
+    @Path("anonymous-key/validate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response validateChallenge(ChallengeRequest request) throws SQLException {
@@ -169,5 +171,10 @@ public class AnonymousAuthenticationFacadeREST {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
     }
 }
