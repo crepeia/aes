@@ -63,8 +63,26 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
     
     }
     
-    public void revokeAnonymousToken(String token, EntityManager entityManager) throws SQLException {
+    public void revokeAnonymousToken(String token, String instanceId, EntityManager entityManager) throws SQLException {
         AuthenticationToken at = findByToken(token, entityManager);
+        
+        if (at == null) {
+            throw new SQLException("Token não encontrado.");
+        }
+        
+        // Obtém a AnonymousKey associada ao token
+        AnonymousKey ak = entityManager.find(AnonymousKey.class, at.getAnonymousKey().getId());
+        
+        if (ak == null) {
+            throw new SQLException("Chave anônima não encontrada.");
+        }
+        
+        // Verifica se o instance_id é o mesmo
+        if (!ak.getInstanceId().equals(instanceId)) {
+            throw new SQLException("Instance ID não corresponde ao token.");
+        }
+        
+        // Revoga o token
         super.delete(at, entityManager);
     }
     

@@ -191,12 +191,13 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     }
     
     @DELETE
-    @Path("anonymous/logout/{token}")
+    @Path("anonymous/logout/{token}/{instanceId}")
     @Secured
-    public Response anonymousLogout(@PathParam("token") String token) throws SQLException {
-        Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário anônimo está deslogando do sistema.");
+    public Response anonymousLogout(@PathParam("token") String token, @PathParam("instanceId") String instanceId) throws SQLException {
+        Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(
+                Level.INFO, "Usuário anônimo está deslogando do sistema (instanceId: " + instanceId + ").");
         
-        authenticationTokenDAO.revokeAnonymousToken(token, em);
+        authenticationTokenDAO.revokeAnonymousToken(token, instanceId, em);
         
         Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário anônimo deslogou do sistema.");
         
