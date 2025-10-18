@@ -104,12 +104,15 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insert(KeyRequest request) throws SQLException {
         try {
-            // Verifica se já existe
-            AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, em);
+            // Verifica se já existe chave para o instanceId
+            AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, true, em);
             if (existing != null) {
-                return Response.status(Response.Status.CONFLICT).build();
+                // Revoga a chave existente
+                existing.setRevoked(true);
+                anonymousAuthenticationDao.update(existing, em);
             }
             
+            // Cria chave nova
             AnonymousKey object = new AnonymousKey();
             object.setPublicKey(request.publicKey);
             object.setInstanceId(request.instanceId);
@@ -140,7 +143,7 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
             // 2. Monta dados e decodifica
             
             // Buscar publicKey
-            AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, em);
+            AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, false, em);
             if (existing == null || existing.getPublicKey() == null) {
                 System.out.println("Chave pública não encontrada para o instanceId: " + request.instanceId);
                 return Response.status(Response.Status.UNAUTHORIZED).entity("Public key not registered").build();

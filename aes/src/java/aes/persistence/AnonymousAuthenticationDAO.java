@@ -61,10 +61,19 @@ public class AnonymousAuthenticationDAO extends GenericDAO<AnonymousKey> {
     }
     
     // ===== INICIO DOS SERVIÇOS DE CHAVE =====
-    public AnonymousKey findByInstanceId(String instanceId, EntityManager em) {
+    public AnonymousKey findByInstanceId(String instanceId, boolean includeRevoked, EntityManager em) {
         try {
-            return em.createQuery("SELECT a FROM AnonymousKey a WHERE a.instanceId = :instanceId", AnonymousKey.class)
+            String jpql = "SELECT a FROM AnonymousKey a WHERE a.instanceId = :instanceId";
+            
+            if (!includeRevoked) {
+                jpql += " AND a.revoked = false";
+            }
+            
+            jpql += " ORDER BY a.dateCreated DESC";
+            
+            return em.createQuery(jpql, AnonymousKey.class)
                      .setParameter("instanceId", instanceId)
+                     .setMaxResults(1)
                      .getSingleResult();
         } catch (NoResultException e) {
             return null;
