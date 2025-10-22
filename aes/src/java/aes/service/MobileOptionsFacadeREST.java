@@ -44,6 +44,7 @@ import javax.ws.rs.core.SecurityContext;
 @Stateless
 @Path("secured/mobileoptions")
 @TransactionManagement(TransactionManagementType.BEAN)
+@Secured
 public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
 
     @PersistenceContext(unitName = "aesPU")
@@ -66,7 +67,6 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         
     }
     
-    @Secured
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -80,7 +80,6 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
-    @Secured
     @PUT
     @Path("edit/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -106,7 +105,6 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
-    @Secured
     @PUT
     @Path("edit/allowQuestionNotifications/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -128,7 +126,6 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
-    @Secured
     @PUT
     @Path("edit/changeNotificationToken/{userId}/{token}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -150,7 +147,6 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
-    @Secured
     @GET
     @Path("find/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
