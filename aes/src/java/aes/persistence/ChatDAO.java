@@ -6,6 +6,7 @@
 package aes.persistence;
 
 import aes.model.Chat;
+import aes.model.Message;
 import aes.model.User;
 import java.sql.SQLException;
 import java.util.Date;
@@ -58,6 +59,19 @@ public class ChatDAO extends GenericDAO<Chat>{
             return (Chat) c.toArray()[0];
         }
 
+    }
+    
+    public List<Message> findAnonymousChatById(Long chatId, EntityManager entityManager) throws SQLException {
+        try {
+            Query query = entityManager.createQuery(
+                "SELECT chat.messageList FROM Chat chat WHERE chat.id = :chatId AND chat.user IS NULL"
+            );
+            query.setParameter("chatId", chatId);
+        
+            return query.getResultList();
+        } catch (Exception erro) {
+            throw new SQLException(erro);
+        }
     }
     
     public List<Chat> listUserChats(Long id, EntityManager entityManager) throws SQLException {

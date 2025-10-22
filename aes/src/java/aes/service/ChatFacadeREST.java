@@ -6,6 +6,7 @@
 package aes.service;
 
 import aes.model.Chat;
+import aes.model.Message;
 import aes.persistence.ChatDAO;
 import aes.persistence.UserDAO;
 import aes.utility.EmailHelper;
@@ -147,6 +148,25 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
         try {
             chats = chatDAO.listUserChats(null, em);
             return Response.ok().entity(chats).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @GET
+    @Path("findAnonymousChat/{chatId}")
+    @Secured
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findAnonymousChat(@PathParam("chatId") Long chatId) {
+        try {
+            List<Message> messages = chatDAO.findAnonymousChatById(chatId, em);
+            if (messages == null || messages.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                           .entity("Nenhuma mensagem encontrada para o chat especificado.")
+                           .build();
+            }
+            return Response.ok().entity(messages).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
