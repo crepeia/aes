@@ -23,6 +23,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "tb_challenge")
 @XmlRootElement
+/**
+ * @Deprecated
+ * This class is no longer in use, because challenge is not in the databank anymore.
+ * Challenge is in .properties file and should be used from there, instead.
+**/
+@Deprecated
 public class Challenge implements Serializable {
     public enum ChallengeType {
         ONCE,
@@ -39,13 +45,13 @@ public class Challenge implements Serializable {
     
     @Column(name = "c_prefix")
     private String prefix;
-    
+
     @Column(name = "base_value")
     private Integer base_value;
-    
+
     @Column(name = "modifier")
     private Float modifier;
-    
+
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private ChallengeType type;
@@ -73,7 +79,7 @@ public class Challenge implements Serializable {
     public void setType(ChallengeType type) {
         this.type = type;
     }
-    
+
     public Long getId() {
         return id;
     }

@@ -1,162 +1,144 @@
 package aes.controller;
 
-import aes.model.Challenge;
-import aes.persistence.GenericDAO;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.naming.NamingException;
 
 /**
  *
  * @author bruno
  */
+
 @Named("challengeController")
 @RequestScoped
-public class ChallengeController extends BaseController<Challenge>{
+public class ChallengeController {
+    
+    public class Challenge {
+        
+        private int id;
+        private String prefix;
+        private String type;
+        private String baseValue;
+        private String modifier;
 
-    private Challenge challenge = new Challenge();
-    
-    private Long id;
-    private String prefix;
-    private Integer base_value;
-    private Float modifier;
+        public Challenge() {
+        }
 
-    
-    private Challenge.ChallengeType type;
+        public Challenge(int id, String prefix, String type, String baseValue, String modifier) {
+            this.id = id;
+            this.prefix = prefix;
+            this.type = type;
+            this.baseValue = baseValue;
+            this.modifier = modifier;
+        }
 
-    
-    List<Challenge> challengeList;
-    
-    @PostConstruct
-    public void init() {
-        try {
-            daoBase = new GenericDAO<>(Challenge.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public void setPrefix(String prefix) {
+            this.prefix = prefix;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getBaseValue() {
+            return baseValue;
+        }
+
+        public void setBaseValue(String baseValue) {
+            this.baseValue = baseValue;
+        }
+
+        public String getModifier() {
+            return modifier;
+        }
+
+        public void setModifier(String modifier) {
+            this.modifier = modifier;
         }
     }
     
-    public Long getId() {
-        return id;
-    }
+    public List<Challenge> challengeList(Locale locale){
+        List<Challenge> challenges = new ArrayList<>();
+        String language = locale.getLanguage();
+        Properties properties = new Properties();
+        String propertiesPath = "aes/utility/messages_pt.properties";
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public Challenge getChallenge() {
-        return challenge;
-    }
-    
-    public void create() {
+        if (language.equals("en")) {
+            propertiesPath = "aes/utility/messages_en.properties";
+        }
+        
+        if (language.equals("es")) {
+            propertiesPath = "aes/utility/messages_es.properties";
+        }
+        
+
         try {
-            challengeList = this.getDaoBase().list("prefix", challenge.getPrefix(), getEntityManager());
-
-            if (!challengeList.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Desafio já cadastrado.", null));
-            } else {
-                daoBase.insert(getChallenge(), getEntityManager());
-                challenge = null;
-                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                FacesContext.getCurrentInstance().addMessage("itemCreated", new FacesMessage(FacesMessage.SEVERITY_INFO, "Item criado com sucesso!", "Lembrete: cadastrar, com o prefixo, título e descrição do corrente desafio na folha de tradução."));
-                FacesContext.getCurrentInstance().getExternalContext().redirect("lista-desafios.xhtml");
+            try (InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath)) {
+                if (input == null) {
+                    System.err.println("Arquivo não encontrado no classpath: " + propertiesPath);
+                    return challenges; 
+                }
+                properties.load(input);
             }
             
-        } catch (SQLException ex) {
-                Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
+            boolean continueSearch = true;
+            int counter = 1;
+            Challenge challenge;
+            
+            while(continueSearch) {
+                challenge = new Challenge(0,"","","","");
+                String key = properties.getProperty("challenge.prefix." + counter, "");
+                if (!key.isEmpty()) {
+                    challenge.setPrefix(key);
+                    challenge.setId(counter);
+                }
+                key = properties.getProperty("challenge.base.value." + counter, "");
+                if (!key.isEmpty()) {
+                    challenge.setBaseValue(key);
+                }
+                key = properties.getProperty("challenge.modifier." + counter, "");
+                if (!key.isEmpty()) {
+                    challenge.setModifier(key);
+                }
+                key = properties.getProperty("challenge.type." + counter, "");
+                if (!key.isEmpty()) {
+                    challenge.setType(key);
+                }
+                if (challenge.getId() != 0) {
+                    challenges.add(challenge);
+                } else {
+                    continueSearch = false;
+                }
+                counter++;
+            }
+            
         } catch (IOException ex) {
-            Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, "Erro ao carregar o arquivo .properties", ex);
         }
-    }
     
-    public String redirectEdit(){
-        return "editar-desafio.xhtml";
+        return challenges;
     }
-
-    public void setChallenge(Challenge challenge) {
-        this.challenge = challenge;
-    }
-    
-    public void edit(){
-        Challenge newChallenge = getChallenge();
-        try {
-            getDaoBase().update(newChallenge, getEntityManager());
-            FacesContext.getCurrentInstance().getExternalContext().redirect("lista-desafios.xhtml");
-        } catch (SQLException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void delete(){
-        Challenge deleteChallenge = getChallenge();
-        try {
-            getDaoBase().delete(deleteChallenge, getEntityManager());
-            FacesContext.getCurrentInstance().getExternalContext().redirect("lista-desafios.xhtml");
-        } catch (SQLException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public List<Challenge> challengeList(){
-        try {
-            challengeList = this.getDaoBase().list(getEntityManager());
-        } catch (SQLException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(ChallengeController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return challengeList;
-    }
-    
-    public Challenge.ChallengeType[] getChallengeTypes(){
-        return Challenge.ChallengeType.values();
-      }
-    
-    public Integer getBase_value() {
-        return base_value;
-    }
-
-    public void setBase_value(Integer base_value) {
-        this.base_value = base_value;
-    }
-
-    public Float getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(Float modifier) {
-        this.modifier = modifier;
-    }
-
-    public Challenge.ChallengeType getType() {
-        return type;
-    }
-
-    public void setType(Challenge.ChallengeType type) {
-        this.type = type;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-    
-    
 }

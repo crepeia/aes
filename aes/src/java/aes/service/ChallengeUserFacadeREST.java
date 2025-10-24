@@ -11,6 +11,7 @@ import aes.model.Challenge;
 import aes.model.User;
 import aes.utility.Secured;
 import com.google.gson.Gson;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -162,16 +164,19 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response completeCreateChallenge(ChallengeUser entity) {
         try {
-            Challenge c = em.find(Challenge.class, entity.getChallenge().getId());
+            Properties properties = new Properties();
+            String propertiesPath = "aes/utility/messages_pt.properties";
+            InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath);
+            properties.load(input);
             List<ChallengeUser> chList
                     = em.createQuery("SELECT ch FROM ChallengeUser ch "
                             + "WHERE ch.user.id=:userId AND ch.challenge.id=:challengeId "
                             + "ORDER BY ch.dateCompleted DESC")
                             .setParameter("userId", entity.getUser().getId())
-                            .setParameter("challengeId", entity.getChallenge().getId())
+                            .setParameter("challengeId", entity.getChallengeId())
                             .getResultList();
 
-            Challenge.ChallengeType ct = c.getType();
+            String challengeType = properties.getProperty("challenge.type." + entity.getChallengeId());
 
             if (chList.isEmpty()) {
                 ChallengeUser newEntity = super.create(entity);
@@ -179,11 +184,11 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
                 String json = g.toJson(newEntity);
                 return Response.ok(json).build();
             } else {
-                switch (ct) {
-                    case ONCE:
+                switch (challengeType) {
+                    case "ONCE":
                         return Response.status(Response.Status.NOT_MODIFIED).build();
 
-                    case DAILY:
+                    case "DAILY":
                         if (!chList.get(0).getDateCompleted().equals(entity.getDateCompleted())) {
                             ChallengeUser newEntity = super.create(entity);
                             Gson g = new Gson();
@@ -192,7 +197,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
                         }
                         break;
 
-                    case ACCUMULATIVE:
+                    case "ACCUMULATIVE":
                         // Sempre cria um novo registro, independente da data
                         ChallengeUser newEntity = super.create(entity);
                         Gson g = new Gson();

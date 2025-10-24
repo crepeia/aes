@@ -37,9 +37,8 @@ public class ChallengeUser implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
     
-    @ManyToOne
-    @JoinColumn(name = "challenge_id")
-    private Challenge challenge;
+    @Column(name = "challenge_id")
+    private Long challengeId;
     
     //@Temporal(javax.persistence.TemporalType.DATE)
     @Column(name = "date_created")
@@ -89,12 +88,12 @@ public class ChallengeUser implements Serializable {
         this.user = user;
     }
 
-    public Challenge getChallenge() {
-        return challenge;
+    public Long getChallengeId() {
+        return challengeId;
     }
 
-    public void setChallenge(Challenge challenge) {
-        this.challenge = challenge;
+    public void setChallengeId(Long challengeId) {
+        this.challengeId = challengeId;
     }
 
     public LocalDate getDateCreated() {

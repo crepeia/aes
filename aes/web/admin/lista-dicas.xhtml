@@ -19,26 +19,18 @@
                 <div class="pagecontent">
                     <h1>#{messages['dicas']}</h1>
                     <div class="maintop">
-                        <h:dataTable id="tipTable" binding="#{table}" value="#{tipController.tipList()}" var="tip" class="table table-striped table-hover table-bordered tableUpdated">
+                        <h:dataTable id="tipTable" binding="#{table}" value="#{tipController.tipList(languageController.locale)}" var="tip" class="table table-striped table-hover table-bordered tableUpdated">
                             <h:column>
                                 <f:facet name="header">ID</f:facet>
                                 <h:outputText value="#{tip.id}" />
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Título</f:facet>
+                                <f:facet name="header">#{messages['tip.title.title']}</f:facet>
                                 <h:outputText value="#{tip.title}" />
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Descrição em português</f:facet>
-                                <h:outputText value="#{tip.descriptionPT}" />
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Descrição em inglês</f:facet>
-                                <h:outputText value="#{tip.descriptionEN}" />
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Descrição em espanhol</f:facet>
-                                <h:outputText value="#{tip.descriptionES}" />
+                                <f:facet name="header">#{messages['tip.description.title']}</f:facet>
+                                <h:outputText value="#{tip.description}" />
                             </h:column>
                         </h:dataTable>
                     </div>

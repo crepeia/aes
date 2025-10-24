@@ -27,6 +27,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "tb_tip")
 @XmlRootElement
+/**
+ * @Deprecated
+ * This class is no longer in use, because tip is not in the databank anymore.
+ * Tip is in .properties file and should be used from there, instead.
+**/
+@Deprecated
 public class Tip implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,7 +60,7 @@ public class Tip implements Serializable {
     public List<TipUser> getTips() {
         return tips;
     }
-
+    
     public void setTips(List<TipUser> tips) {
         this.tips = tips;
     }
@@ -98,5 +104,5 @@ public class Tip implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
 }
