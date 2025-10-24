@@ -32,10 +32,6 @@ public class TipUser implements Serializable {
 
     @EmbeddedId
     private TipUserKey id = new TipUserKey();
-    
-    @MapsId("tipId")
-    @Column(name = "tip_id")
-    private Long tipId;
 
     @ManyToOne
     @MapsId("userId")
@@ -54,11 +50,11 @@ public class TipUser implements Serializable {
     private boolean readByUser;
 
     public Long getTipId() {
-        return tipId;
+        return id.getTipId();
     }
 
     public void setTipId(Long tipId) {
-        this.tipId = tipId;
+        id.setTipId(tipId);
     }
 
     public User getUser() {

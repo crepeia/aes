@@ -18,10 +18,10 @@ import javax.persistence.Embeddable;
 public class TipUserKey implements Serializable {
     
     @Column(name="tip_id")
-    Long tipId;
+    private Long tipId;
     
     @Column(name="user_id")
-    Long userId;
+    private Long userId;
     
      public TipUserKey() {
         super();

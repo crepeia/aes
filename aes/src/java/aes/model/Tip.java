@@ -52,18 +52,18 @@ public class Tip implements Serializable {
     @Column(name = "description_es", length = 300)
     private String descriptionES;
     
-    @OneToMany(mappedBy = "tip", fetch = FetchType.LAZY)
-    private List<TipUser> tips;
+//    @OneToMany(mappedBy = "tip", fetch = FetchType.LAZY)
+//    private List<TipUser> tips;
 
-    @JsonIgnore
-    @XmlTransient
-    public List<TipUser> getTips() {
-        return tips;
-    }
-    
-    public void setTips(List<TipUser> tips) {
-        this.tips = tips;
-    }
+//    @JsonIgnore
+//    @XmlTransient
+//    public List<TipUser> getTips() {
+//        return tips;
+//    }
+//    
+//    public void setTips(List<TipUser> tips) {
+//        this.tips = tips;
+//    }
     
     public String getTitle() {
         return title;

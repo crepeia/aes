@@ -69,11 +69,11 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
         javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
         java.util.List<String> tipId = map.get("tipId");
         if (tipId != null && !tipId.isEmpty()) {
-            key.setTipId(new java.lang.Long(tipId.get(0)));
+            key.setTipId(Long.parseLong(tipId.get(0)));
         }
         java.util.List<String> userId = map.get("userId");
         if (userId != null && !userId.isEmpty()) {
-            key.setUserId(new java.lang.Long(userId.get(0)));
+            key.setUserId(Long.parseLong(userId.get(0)));
         }
         return key;
     }
