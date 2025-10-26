@@ -19,7 +19,7 @@ import javax.inject.Named;
 
 @Named("tipController")
 @RequestScoped
-public class TipController {
+public class TipController extends BaseController {
     
     public class Tip {
         private int id;
@@ -63,14 +63,14 @@ public class TipController {
         List<Tip> tips = new ArrayList<>();
         String language = locale.getLanguage();
         Properties properties = new Properties();
-        String propertiesPath = "aes/utility/messages_pt.properties";
+        String propertiesPath = this.getMessagesPath() + "_pt.properties";
 
         if (language.equals("en")) {
-            propertiesPath = "aes/utility/messages_en.properties";
+            propertiesPath = this.getMessagesPath() + "_en.properties";
         }
         
         if (language.equals("es")) {
-            propertiesPath = "aes/utility/messages_es.properties";
+            propertiesPath = this.getMessagesPath() + "_es.properties";
         }
         
 

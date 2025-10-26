@@ -9,6 +9,7 @@ import aes.model.Tip;
 import aes.model.TipUser;
 import aes.model.TipUserKey;
 import aes.model.User;
+import aes.utility.AppServletContextListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -55,7 +56,7 @@ public class TipUserDAO extends GenericDAO<TipUser> {
             List<Long> tipsIds = new ArrayList<Long>();
             
             Properties properties = new Properties();
-            String propertiesPath = "aes/utility/messages_pt.properties";
+            String propertiesPath = AppServletContextListener.getServletContext().getInitParameter("messagesPath") + "_pt.properties";
             
             InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath);
             properties.load(input);

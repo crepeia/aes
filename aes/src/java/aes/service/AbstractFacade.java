@@ -6,6 +6,7 @@
 package aes.service;
 
 import aes.model.User;
+import aes.utility.AppServletContextListener;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -76,5 +77,9 @@ public abstract class AbstractFacade<T> {
     public User login(String e, String p) throws DecoderException{
         byte[] b =  Hex.decodeHex(p.toCharArray());
         return (User) getEntityManager().createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
+    }
+    
+    public String getMessagesPath() {
+        return AppServletContextListener.getServletContext().getInitParameter("messagesPath");
     }
 }

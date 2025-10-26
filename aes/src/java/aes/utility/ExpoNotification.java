@@ -34,7 +34,7 @@ public class ExpoNotification {
     public void send(String expoToken, TipUser tipUser){
         try {
             Properties messagesPTProperties = new Properties();
-            String messagesPTPropertiesPath = "aes/utility/messages_pt.properties";
+            String messagesPTPropertiesPath = AppServletContextListener.getServletContext().getInitParameter("messagesPath") + "_pt.properties";
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(messagesPTPropertiesPath);
             messagesPTProperties.load(inputStream);
             

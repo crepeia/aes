@@ -82,7 +82,7 @@ public class TipUserController  extends BaseController<TipUser> {
             List<Long> tipsIds = new ArrayList<Long>();
             
             Properties properties = new Properties();
-            String propertiesPath = "aes/utility/messages_pt.properties";
+            String propertiesPath = this.getMessagesPath() + "_pt.properties";
             
             InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath);
             properties.load(input);
