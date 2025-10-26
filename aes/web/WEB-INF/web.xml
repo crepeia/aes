@@ -40,4 +40,12 @@
         <param-name>recaptchaKey</param-name>
         <param-value></param-value>
     </context-param>
+    <context-param>
+        <param-name>messagesPath</param-name>
+        <param-value>aes/utility/messages</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mailPath</param-name>
+        <param-value>aes/utility/messages</param-value>
+    </context-param>
 </web-app>
