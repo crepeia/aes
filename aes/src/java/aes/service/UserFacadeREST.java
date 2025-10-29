@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -504,7 +505,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
-   @POST
+    @POST
     @Path("/count-referral-usage")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -582,6 +583,124 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+    @PUT
+    @Path("updateAppSignInDate/{timestamp}/{userId}")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAppSignInDate(@PathParam("timestamp") Long timestamp, @PathParam("userId") Long userId) throws ParseException {
+        try {
+            Date date = new Date(timestamp);
+            User user = userDAO.find(userId, em);
+            user.setAppSignInDate(date);
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("updateAdmin/{isAdmin}/{userId}")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAdmin(@PathParam("isAdmin") boolean isAdmin, @PathParam("userId") Long userId) {
+        try {
+            User user = userDAO.find(userId, em);
+            user.setAdmin(isAdmin);
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("updateConsultant/{isConsultant}/{userId}")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateConsultant(@PathParam("isConsultant") boolean isConsultant, @PathParam("userId") Long userId) {
+        try {
+            User user = userDAO.find(userId, em);
+            user.setConsultant(isConsultant);
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("updateUseChatbot/{useChatbot}/{userId}")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUseChatbot(@PathParam("useChatbot") boolean useChatbot, @PathParam("userId") Long userId) {
+        try {
+            User user = userDAO.find(userId, em);
+            user.setUse_chatbot(useChatbot);
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @PUT
+    @Path("update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(User user) {
+        try {
+            userDAO.update(user, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+
+    
+    @GET
+    @Path("listForAdmin/{userId}")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listAllUsers(@PathParam("userId") Long userId) {
+        try {
+            User user = userDAO.find(userId, em);
+            
+            // Verifica se usuario eh administrador para retornar a lista de usuarios
+            if (!user.isAdmin()) {
+                // Se nao for administrador retorna UNAUTHORIZED
+                return Response.status(Response.Status.UNAUTHORIZED).entity("Usuario nao autorizado").build();
+            }
+            
+            List<User> users = userDAO.listNotNull("email", em);
+            
+            List<Map<String, Object>> usersDTO = users.stream()
+                .map(u -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", u.getId());
+                    map.put("email", u.getEmail());
+                    map.put("isAdmin", u.isAdmin());
+                    map.put("isConsultant", u.isConsultant());
+                    map.put("useChatbot", u.isUse_chatbot());
+                    return map;
+                })
+                .collect(Collectors.toList());
+            
+            return Response.ok(usersDTO).build();
+        } catch (SQLException e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao listar usuários", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+            .entity("{\"error\":\"Erro ao buscar usuários\"}")
+            .build();
+        }
+    }
+
     @GET
     @Path("/info/{id}")
     @Produces(MediaType.APPLICATION_JSON)

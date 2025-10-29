@@ -12,6 +12,8 @@ import aes.utility.Encrypter;
 import aes.utility.Secured;
 import java.security.InvalidKeyException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +26,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -92,22 +96,23 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
         try {
             String clientEncriptedHexPassword = p;
             String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
-
+            
             User user = userDAO.checkCredentials(e, decriptedPassword, em);
-
-            if (user != null) {
-                String token = authenticationTokenDAO.issueToken(user, em);
-                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
-                return Response.ok(token).build();
-
+           
+            if(user != null){
+               AuthenticationToken authToken = authenticationTokenDAO.issueToken(user, em);
+               
+               Map<String, Object> responseToken = new HashMap<>();
+               responseToken.put("token", authToken.getToken());
+               responseToken.put("dateCreated", authToken.getDateCreated());
+               
+               Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
+               return Response.ok(responseToken).build();
             } else {
-
                 Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
-
         } catch (Exception exp) {
-
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, null, exp);
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
             return Response.status(Response.Status.FORBIDDEN).build();
@@ -138,111 +143,59 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+    
+    @POST
+    @Path("secured/refreshtoken")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response refreshToken(@HeaderParam("Authorization") String tokenHeader) throws SQLException{
+        try {
+            // Extrai o token (remove "Bearer " se vier no header)
+            String tokenString = tokenHeader.replace("Bearer ", "").trim();
+            
+            // Busca o token no banco
+            AuthenticationToken existingToken = authenticationTokenDAO.findByToken(tokenString, em);
+            if (existingToken == null) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Invalid token").build();
+            }
+            
+            User user = existingToken.getUser();
+            if (user == null) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("User not found").build();
+            }
+            
+            // Atualiza o token existente
+            AuthenticationToken newToken = authenticationTokenDAO.updateToken(tokenString, user.getEmail(), em);
+            Map<String, Object> responseToken = new HashMap<>();
+            responseToken.put("token", newToken.getToken());
+            responseToken.put("dateCreated", newToken.getDateCreated());
+            
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                .log(Level.INFO, "Usuário '" + user.getEmail() + "' renovou token.");
+            
+            return Response.ok(responseToken).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("Erro ao renovar token").build();
+        }
+    }
+    
+    /*private String issueToken(User usr){
+        String token = SecureRandomString.generate();
+        
+        AuthenticationToken authToken = new AuthenticationToken();
+        authToken.setToken(token);
+        authToken.setUser(usr);
+        authToken.setDateCreated(new Date());
+        super.create(authToken);
+        
+        return token;
+    }*/
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    // Método para desabilitar verificação SSL (somente para teste local)
-    private void disableSSLVerification() throws Exception {
-        TrustManager[] trustAllCerts = new TrustManager[] {
-            new X509TrustManager() {
-                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
-                public void checkClientTrusted(X509Certificate[] certs, String authType) { }
-                public void checkServerTrusted(X509Certificate[] certs, String authType) { }
-            }
-        };
-
-        SSLContext sc = SSLContext.getInstance("TLS");
-        sc.init(null, trustAllCerts, new java.security.SecureRandom());
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-        // Desabilita verificação do hostname
-        HostnameVerifier allHostsValid = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        };
-        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-    }
-
-    @POST
-    @Path("/verify-recaptcha")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response verifyRecaptcha(JsonObject input) {
-        // Pega o token enviado pelo frontend
-        String token = input.getString("token", null);
-        if (token == null || token.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Json.createObjectBuilder()
-                            .add("success", false)
-                            .add("message", "Token não fornecido")
-                            .build())
-                    .build();
-        }
-
-        // Sua secret key do reCAPTCHA - confira se está correta e ativa
-        String secret = "6LfDt5wrAAAAAG8pAV8-XtL4mn1J4h1EBwNkZlBl";
-
-        try {
-            // DESABILITA VERIFICAÇÃO SSL - só para teste local
-            disableSSLVerification();
-
-            URL url = new URL("https://www.google.com/recaptcha/api/siteverify");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-
-            // Monta os parâmetros URL-encoded
-            String params = "secret=" + java.net.URLEncoder.encode(secret, "UTF-8") +
-                    "&response=" + java.net.URLEncoder.encode(token, "UTF-8");
-
-            // Escreve parâmetros no corpo da requisição POST
-            try (OutputStream os = conn.getOutputStream();
-                 OutputStreamWriter writer = new OutputStreamWriter(os, "UTF-8")) {
-                writer.write(params);
-                writer.flush();
-            }
-
-            // Lê a resposta do Google
-            try (InputStream is = conn.getInputStream();
-                 JsonReader jsonReader = Json.createReader(is)) {
-
-                JsonObject jsonObject = jsonReader.readObject();
-
-                boolean success = jsonObject.getBoolean("success", false);
-
-                JsonObjectBuilder responseBuilder = Json.createObjectBuilder()
-                        .add("success", success);
-
-                if (jsonObject.containsKey("score")) {
-                    responseBuilder.add("score", jsonObject.getJsonNumber("score").doubleValue());
-                }
-
-                if (jsonObject.containsKey("hostname")) {
-                    responseBuilder.add("hostname", jsonObject.getString("hostname"));
-                }
-
-                if (jsonObject.containsKey("error-codes")) {
-                    responseBuilder.add("error-codes", jsonObject.getJsonArray("error-codes"));
-                }
-
-                return Response.ok(responseBuilder.build()).build();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(Json.createObjectBuilder()
-                            .add("success", false)
-                            .add("message", "Erro ao verificar reCAPTCHA")
-                            .add("error", e.getMessage())
-                            .build())
-                    .build();
-        }
     }
 }

@@ -1149,7 +1149,6 @@ INDEX***********************/
 
 #signin {
     margin: 10px auto;
-    height: 350px;
     width: 50%;
     padding: 15px 20px;
     border-radius: 3px;
@@ -1166,6 +1165,12 @@ INDEX***********************/
 }
 #signipbottom {
     padding-top: 10px;
+}
+
+#signinsubmit {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 #signinsubmit button{
@@ -1247,6 +1252,8 @@ img#artigotabaco{
     display: flex;
     flex: 1;
     padding: 15px;
+    height: 90px;
+    box-sizing: border-box;
 }
 
 
@@ -1615,13 +1622,15 @@ img#artigotabaco{
 .referencias {
     padding-top:50px;
     clear:both;
+    width: 100%;
 }
 
 .referencias p{
     color:#999;
     font-size: .9em;
-    line-height: 1.2;
-    text-indent: 0;
+    text-align: center;
+    width: 90%;
+    margin: .2em auto;
 }
 
 /*Riscos de fumar*/
@@ -1901,6 +1910,18 @@ hr {
     border: 1px solid #C3C3C3;
     border-radius: 5px;
     width: 40vw;
+}
+
+/* Honeypot */
+
+.simplehoney {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 0;
+    z-index: -1;
 }
 
 /* Mobile Styles */

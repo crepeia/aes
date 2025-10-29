@@ -192,7 +192,6 @@ public class GenericDAO<T> implements Serializable {
 	}
 
 	public List<T> list(String campoStr, Object objeto, EntityManager entityManager) throws SQLException {
-
 		try {
 
 			campoStr = campoStr.substring(0, 1).toLowerCase() + campoStr.substring(1);

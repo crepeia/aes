@@ -208,6 +208,12 @@ public class User implements Serializable {
     @Column(name = "selected_title")
     private Long selected_title;
     
+    @Column(name = "sign_in_date")
+    private Date signInDate;
+    
+    @Column(name = "app_sign_in_date")
+    private Date appSignInDate;
+    
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
@@ -734,6 +740,22 @@ public class User implements Serializable {
 
     public void setFriendReferralCode(String friendReferralCode) {
         this.friendReferralCode = friendReferralCode;
+    }
+
+    public Date getSignInDate() {
+        return signInDate;
+    }
+
+    public void setSignInDate(Date signInDate) {
+        this.signInDate = signInDate;
+    }
+
+    public Date getAppSignInDate() {
+        return appSignInDate;
+    }
+
+    public void setAppSignInDate(Date appSignInDate) {
+        this.appSignInDate = appSignInDate;
     }
     
     public Integer getProfilePick() {
