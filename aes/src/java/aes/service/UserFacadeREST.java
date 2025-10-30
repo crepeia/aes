@@ -125,13 +125,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 
                 userDAO.createUser(entity, decriptedPassword, em);
                 
-                /*byte[] salt =  Encrypter.generateRandomSecureSalt(16);
-                entity.setSalt(salt);
-                entity.setPassword(Encrypter.hashPassword(decriptedPassword, salt));
-                
-                userTransaction.begin();
-                super.create(entity);
-                userTransaction.commit();*/
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
 
                 emailHelper.sendSignUpEmail(entity, em);
@@ -153,9 +146,30 @@ public class UserFacadeREST extends AbstractFacade<User> {
                  return Response.ok(entity).build();
             }
         }
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+//    @Secured
+    @Path("/createAnonymousUser")
+    public Response createAnonymousUser(User entity) throws SQLException {
+        List<User> userList = em.createQuery(
+                "SELECT u from User u WHERE u.unauthenticatedId=:e")
+                .setParameter("e", entity.getUnauthenticatedId())
+                .getResultList();
         
-         
-        // return Response.serverError().build();
+        if (!userList.isEmpty()) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+        
+        try {
+            userDAO.createAnonymousUser(entity, em);
+            return Response.ok(entity).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
+        }
         
     }
         

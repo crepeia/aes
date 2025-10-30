@@ -42,6 +42,10 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
+    @Column(name = "unauthenticated_id", unique = true, length = 64)
+    private String unauthenticatedId;
+    
     @Column(name = "name", length = 100)
     private String name;
     @Column(name = "email", length = 50)
@@ -276,6 +280,14 @@ public class User implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+    
+    public String getUnauthenticatedId() {
+        return this.unauthenticatedId;
+    }
+    
+    public void setUnauthenticatedId(String id) {
+        this.unauthenticatedId = id;
     }
 
     public String getName() {
