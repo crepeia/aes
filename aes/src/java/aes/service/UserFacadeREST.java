@@ -51,6 +51,7 @@ import javax.json.JsonReader;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
@@ -151,16 +152,20 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-//    @Secured
+    @Secured
     @Path("/createAnonymousUser")
     public Response createAnonymousUser(User entity) throws SQLException {
         try {
             User existingUser = null;
-            
-            existingUser = em.createQuery(
+            try {
+                existingUser = em.createQuery(
                     "SELECT u FROM User u Where u.unauthenticatedId=:id", User.class)
                     .setParameter("id", entity.getUnauthenticatedId())
                     .getSingleResult();
+            } catch (NoResultException e) {
+                // Nenhum usuário encontrado — segue para criação
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Usuário Anônimo cadastrou no sistema.");
+            }
             
             if (existingUser != null) {
                 return Response.ok(existingUser).build();
