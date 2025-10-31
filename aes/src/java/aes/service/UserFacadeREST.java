@@ -154,23 +154,24 @@ public class UserFacadeREST extends AbstractFacade<User> {
 //    @Secured
     @Path("/createAnonymousUser")
     public Response createAnonymousUser(User entity) throws SQLException {
-        List<User> userList = em.createQuery(
-                "SELECT u from User u WHERE u.unauthenticatedId=:e")
-                .setParameter("e", entity.getUnauthenticatedId())
-                .getResultList();
-        
-        if (!userList.isEmpty()) {
-            return Response.status(Response.Status.CONFLICT).build();
-        }
-        
         try {
+            User existingUser = null;
+            
+            existingUser = em.createQuery(
+                    "SELECT u FROM User u Where u.unauthenticatedId=:id", User.class)
+                    .setParameter("id", entity.getUnauthenticatedId())
+                    .getSingleResult();
+            
+            if (existingUser != null) {
+                return Response.ok(existingUser).build();
+            }
+            
             userDAO.createAnonymousUser(entity, em);
             return Response.ok(entity).build();
         } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.serverError().build();
         }
-        
     }
         
     @PUT
