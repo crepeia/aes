@@ -205,276 +205,179 @@ public class ChatEndpoint {
         onlineUsers.put(session, ui);
     }
     
-    //Esse método está responsável pela criação do chat do usuário e o preenchimento das listas.
+    // Esse metodo esta responsavel pela criacao do chat do usuario e o preenchimento das listas
     @OnOpen
-    public void onOpen(Session session, EndpointConfig config, @PathParam("userId") String userId) {
+    public void onOpen(Session session, EndpointConfig config, @PathParam("userId") Long userId) {
         List<String> auth = (List<String>) config.getUserProperties().get("auth");
-        List<String> unauthId = null;
-        
+        String unauthId = null;
+
         User currentUser = null;
         AuthenticationToken at;
         Chat newChat;
         
-        // Versão abaixo está descontinuada
-//        if(Boolean.parseBoolean(auth.get(0))){;
-//            List<String> token = (List<String>) config.getUserProperties().get("authtoken");
-//            try {
-//                
-//                at = validateToken(token.get(0));
-//                currentUser = at.getUser();
-//                if(currentUser.getId() != Long.parseLong(userId)) 
-//                    throw new Exception();
-//                
-//            } catch (Exception ex) {
-//                try {
-//                    session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
-//                    return;
-//                } catch (IOException ex1) {
-//                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
-//                }
-//            }
-//        } else {
-//            unauthId = (List<String>) config.getUserProperties().get("unauthID");
-//            
-//            if(unauthId.isEmpty() || unauthId.get(0).isEmpty()){
-//                try {
-//                    session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
-//                    return;
-//                } catch (IOException ex) {
-//                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//
-//            }
-//        }
-
-        // Correção para aceitar tokens anônimos
-        if (Boolean.parseBoolean(auth.get(0))) {
-            List<String> token = (List<String>) config.getUserProperties().get("authtoken");
-            
+        if (!Boolean.parseBoolean(auth.get(0))) {
             try {
-                at = validateToken(token.get(0));
-                
-                if (at == null) {
-                    throw new Exception("Token inválido");
-                }
-                
-                if (at.getUser() != null) {
-                    // Token de usuário logado
-                    currentUser = at.getUser();
-                    if (currentUser.getId() != Long.parseLong(userId)) {
-                        throw new Exception("User ID mismatch");
-                    }
-                    System.out.println("Usuário autenticado: " + currentUser.getEmail());
-                } else if (at.getAnonymousKey() != null) {
-                    // Token de usuário anônimo
-                    
-                    unauthId = (List<String>) config.getUserProperties().get("unauthID");
-                    
-                    if(unauthId.isEmpty() || unauthId.get(0).isEmpty()) {
-                        try {
-                            session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
-                            return;
-                        } catch (IOException ex2) {
-                            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex2);
-                        }
-                    }
-                    
-                    AnonymousKey anon = at.getAnonymousKey();
-                    if (!anon.getInstanceId().equals(userId)) {
-                        throw new Exception("Instance ID incompatível");
-                    }
-                    System.out.println("Usuário anônimo autenticado: " + anon.getInstanceId());
-                } else {
-                    throw new Exception("Token sem usuário associado");
-                }
-            } catch (Exception ex) {
-                try {
-                    session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
-                    return;
-                } catch (IOException ex1) {
-                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
-                }
+                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized access"));
+            } catch (IOException e) {
+                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, e);
             }
+            return;
         }
         
-        session.setMaxIdleTimeout(60 * 60 * 1000); // Define timeout de 60 minutos para fechar.
-        
-        UserInfo ui = new UserInfo();
-        
-        if(currentUser == null){            
-//            // Enquanto não houver consultores ou não tiver passado 4 minutos programa fica em pausa.
-//            // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-//            for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
-//                if(!session.isOpen()) {
-//                    return; // cliente fechou
-//                }
-//                try {
-//                    Thread.sleep(100); // 0,1 segundo
-//                } catch (InterruptedException e) {
-//                    return;
-//                }
-//            }
-//            
-//            // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
-//            if(consultants.isEmpty()) {
-//                sendNoConsultantMessage(session);
-//                return;
-//            }
+        List<String> token = (List<String>) config.getUserProperties().get("authtoken");
 
-            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-            scheduler.schedule(() -> {
-               if (consultants.isEmpty() && session.isOpen()) {
-                   this.isWaiting = false;
-                   sendNoConsultantMessage(session);
-//                       session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
-               } 
-            }, 4, TimeUnit.MINUTES);
-  
-            newChat = new Chat();
-            newChat.setUser(null);
-            newChat.setStartDate(new Date());
-            newChat.setUnauthenticatedId(unauthId.get(0));
-            try {
-                daoBase.insert(newChat, em);
-            } catch (SQLException ex) {
-                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            at = validateToken(token.get(0));
+
+            if (at == null) {
+                throw new Exception("Token inválido");
             }
-            
-            users.put(newChat.getId(), session);
-            String realStatus = statusType.AVAILABLE.toString();
-            
-            ui.name = "Anônimo";
-            ui.email = "";
-            ui.chat = newChat.getId();
-            ui.status = realStatus;
-            ui.idRelatedConsultant = null;
-            //ui.session = session;
-            
-            openChats.put(session, newChat.getId());
-            addOnlineUser(session, ui);
-            setStatus(session, realStatus);
-            sendNewUserChatId(session, newChat.getId());
-            
+
+            if (at.getUser() != null) {
+                // Token de usuário logado
+                currentUser = at.getUser();
+                if (currentUser.getId() != userId) {
+                    throw new Exception("User ID mismatch");
+                }
+                System.out.println("Usuário autenticado: " + currentUser.getEmail());
+            } else if (at.getAnonymousKey() != null) {
+                // Token de usuário anônimo
+
+                currentUser = daoUser.getUserByID(userId, em);
+
+                unauthId = currentUser.getUnauthenticatedId();
+
+                if(unauthId == null || unauthId.isEmpty()) {
+                    try {
+                        session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
+                        return;
+                    } catch (IOException ex2) {
+                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex2);
+                    }
+                }
+
+                AnonymousKey anon = at.getAnonymousKey();
+                if (!anon.getInstanceId().equals(unauthId)) {
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.WARNING, "Instance ID incompatível: esperado {0}, recebido {1}", 
+                            new Object[]{unauthId, anon.getInstanceId()});
+                    throw new Exception("Instance ID incompatível");
+                }
+
+                System.out.println("Usuário anônimo autenticado: " + anon.getInstanceId());
+            } else {
+                throw new Exception("Token sem usuário associado");
+            }
+        } catch (Exception ex) {
+            try {
+                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
+                return;
+            } catch (IOException ex1) {
+                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+
+        session.setMaxIdleTimeout(60 * 60 * 1000); // Define timeout de 60 minutos para fechar
+
+        UserInfo ui = new UserInfo();
+
+        if (currentUser == null) {
+            try {
+                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error: user not found."));
+                return;
+            } catch (IOException ex1) {
+                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         } else {
-            if(currentUser.isConsultant()) {
-                if(consultants.containsKey(currentUser.getId())){
+            if (currentUser.isConsultant()) {
+                if (consultants.containsKey(currentUser.getId())) {
                     try {
                         consultants.get(currentUser.getId()).close();
                     } catch (IOException ex) {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    }                        
                 }
-                
+
                 ui.name = currentUser.getName();
                 ui.email = currentUser.getEmail();
                 ui.chat = currentUser.getChat().getId();
                 ui.status = "";
                 ui.idRelatedConsultant = null;
-                //ui.session = session;
-                
+
                 addOnlineUser(session, ui);
                 consultants.put(currentUser.getId(), session);
-                
+
                 // Dando tempo para a função do usuário pegar o consultor
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     return;
                 }
-                
+
                 sendUserStatusList(currentUser.getId());
-
-            } else {//usuário comum
-                
-//                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
-//                // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-//                try {
-//                    for(int i = 0; i < 2400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
-//                        Thread.sleep(100); // 0,1 segundo.
-//                    }
-//                } catch (InterruptedException e) {
-//                    return;
-//                }
-                
-                if( currentUser.getChat() == null) { //primeira vez conectando
-
+            } else { // Usuário comum e anônimo
+                if (currentUser.getChat() == null) {
                     newChat = new Chat();
                     newChat.setUser(currentUser);
                     newChat.setStartDate(new Date());
                     newChat.setUnauthenticatedId(null);
+
                     try {
                         daoBase.insert(newChat, em);
                     } catch (SQLException ex) {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 } else {
                     newChat = currentUser.getChat();
                 }
-                if(users.containsKey(newChat.getId())){
+
+                if (users.containsKey(newChat.getId())) {
                     try {
                         users.get(newChat.getId()).close();
                     } catch (IOException ex) {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                
+
                 final User usuarioAtual = currentUser;
-                
+
                 ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
                 scheduler.schedule(() -> {
                     if ((consultants.isEmpty() || !isRelatedConsultantOnline(usuarioAtual.getRelatedConsultant())) && session.isOpen()) {
                         this.isWaiting = false;
                         sendNoConsultantMessage(session);
-//                            session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
-                    } 
+                    }
                 }, 4, TimeUnit.MINUTES);
 
                 users.put(newChat.getId(), session);
-                //String realStatus = statusType.AVAILABLE.toString();
                 String realStatus = statusType.OFFLINE.toString();
-
-                //if(openChats.containsValue(newChat.getId())){ //um consultor estava atendendo o chat
-                                                                //e o usuário desconectou/voltou
-                //    realStatus = statusType.BUSY.toString();
-                //}
 
                 ui.name = currentUser.getName();
                 ui.email = currentUser.getEmail();
                 ui.chat = currentUser.getChat().getId();
                 ui.status = realStatus;
+
                 //É usuário comum e o idRelatedConsultant pode ser nulo (não tem consultor)
                 //ou não (tem consultor associado)
-                if(currentUser.getRelatedConsultant() == null) {
+                if (currentUser.getRelatedConsultant() == null) {
                     ui.idRelatedConsultant = null;
                 } else {
                     ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
                 }
-                //ui.session = session;
-                
+
                 // Adicionando no userInfo a data da ultima mensagem enviada pelo usuario se houver
                 Date lastSentDate = messageDAO.findLastSentDateByChatId(newChat.getId(), em);
                 if (lastSentDate != null) {
                     ui.setLastSentDate(lastSentDate);
                 }
 
-
                 openChats.put(session, newChat.getId());
                 addOnlineUser(session, ui);
 
                 setStatus(session, realStatus);
-                
-//                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
-//                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
-//                    sendNoConsultantMessage(session);
-//                    return;
-//                }
-                
             }
         }
         
-       
-        //schedulePingMessages(ui);
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session opened for user {0} session ID {1}", new Object[]{userId, session.getId()});
     }
     
