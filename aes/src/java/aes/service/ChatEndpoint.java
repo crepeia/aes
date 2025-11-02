@@ -316,7 +316,10 @@ public class ChatEndpoint {
 
                 sendUserStatusList(currentUser.getId());
             } else { // Usuário comum e anônimo
-                if (currentUser.getChat() == null) {
+                if (currentUser.getChat() == null || currentUser.getChat().getId() == null) {
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.WARNING, "Usuário {0} sem chat vinculado. Criando novo.", currentUser.getId());
+                    
                     newChat = new Chat();
                     newChat.setUser(currentUser);
                     newChat.setStartDate(new Date());
@@ -354,7 +357,7 @@ public class ChatEndpoint {
 
                 ui.name = currentUser.getName();
                 ui.email = currentUser.getEmail();
-                ui.chat = currentUser.getChat().getId();
+                ui.chat = newChat.getId();
                 ui.status = realStatus;
 
                 //É usuário comum e o idRelatedConsultant pode ser nulo (não tem consultor)
@@ -518,6 +521,12 @@ public class ChatEndpoint {
     private void deleteUserStatus(Session userSession, Long userKey){
         
         UserInfo u = onlineUsers.get(userSession);
+        if (u == null) {
+            Logger.getLogger(ChatEndpoint.class.getName())
+              .log(Level.WARNING, "Tentou remover status de sessão sem UserInfo: {0}", userSession.getId());
+            return;
+        }
+        
         u.status = statusType.OFFLINE.toString();
         
         onlineUsers.remove(userSession);
@@ -729,7 +738,7 @@ public class ChatEndpoint {
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session closed ID: {0}", new Object[]{session.getId()});
         System.out.println(reason);
         
-        if(users.containsValue(session)){
+        if(users.containsValue(session) && getUserKeyForSession(session) != null) {
             Long userKey = getUserKeyForSession(session);
             users.remove(userKey);
             deleteUserStatus(session, userKey);
@@ -746,9 +755,6 @@ public class ChatEndpoint {
         if(openChats.containsKey(session)){
             openChats.remove(session);
         }
-        
-        
-        
     }
     
     private Long getUserKeyForSession(Session session) {
