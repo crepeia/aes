@@ -376,8 +376,10 @@ public class ChatEndpoint {
 
                 openChats.put(session, newChat.getId());
                 addOnlineUser(session, ui);
-
                 setStatus(session, realStatus);
+                
+                // Apenas se for anônimo
+                if (unauthId != null) sendNewUserChatId(session, newChat.getId());
             }
         }
         
