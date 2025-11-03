@@ -64,7 +64,7 @@ public class ChatDAO extends GenericDAO<Chat>{
     public List<Message> findAnonymousChatById(Long chatId, EntityManager entityManager) throws SQLException {
         try {
             Query query = entityManager.createQuery(
-                "SELECT chat.messageList FROM Chat chat WHERE chat.id = :chatId AND chat.user IS NULL"
+                "SELECT chat.messageList FROM Chat chat WHERE chat.id = :chatId"
             );
             query.setParameter("chatId", chatId);
         
