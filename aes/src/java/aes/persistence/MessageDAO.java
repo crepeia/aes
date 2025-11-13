@@ -41,6 +41,21 @@ public class MessageDAO extends GenericDAO<Message>{
             return null;
         }
     }
+    
+    public List<Message> findAnonymousMessages(Long chatId, Long userId, EntityManager em) {
+        User u = (User) em.createQuery("SELECT u FROM User u WHERE u.id=:id")
+            .setParameter("id", userId)
+            .getSingleResult();
+        
+        if (u.getChat().getId().equals(chatId)) {
+            List<Message> m = (List<Message>) em.createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
+                .setParameter("chatId", chatId)
+                .getResultList();
+            return m;
+        } else {
+            return null;
+        }
+    }
 
     public Date findLastSentDateByChatId(Long chatId, EntityManager em) {
         try {
