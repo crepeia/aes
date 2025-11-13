@@ -60,11 +60,11 @@ public class User implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthDate;
     @Column(name = "gender")
-    private char gender;
+    private Character gender;
     @Column(name = "receive_emails")
-    private boolean receiveEmails;
+    private Boolean receiveEmails;
     @Column(name = "authorize_data")
-    private boolean authorizeData;
+    private Boolean authorizeData;
     @Column(name = "sign_up_date")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date signUpDate;
