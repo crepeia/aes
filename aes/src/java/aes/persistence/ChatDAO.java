@@ -35,7 +35,7 @@ public class ChatDAO extends GenericDAO<Chat>{
             User user = userDAO.getUserByID(userId, entityManager);
             newChat.setUser(user);
             newChat.setStartDate(new Date());
-            newChat.setUnauthenticatedId(null);
+//            newChat.setUnauthenticatedId(null);
             user.setChat(newChat);
             userDAO.uptadeUser(user,entityManager);
             newChat = find(userId, user.getEmail(), entityManager);

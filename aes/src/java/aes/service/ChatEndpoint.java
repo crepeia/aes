@@ -323,7 +323,7 @@ public class ChatEndpoint {
                     newChat = new Chat();
                     newChat.setUser(currentUser);
                     newChat.setStartDate(new Date());
-                    newChat.setUnauthenticatedId(null);
+//                    newChat.setUnauthenticatedId(null);
 
                     try {
                         daoBase.insert(newChat, em);
