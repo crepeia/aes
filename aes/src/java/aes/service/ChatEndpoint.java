@@ -136,7 +136,7 @@ public class ChatEndpoint {
         BUSY,
         IDLE,
         OFFLINE,
-      }
+    }
     
     public ChatEndpoint() {
         try {
@@ -323,7 +323,6 @@ public class ChatEndpoint {
                     newChat = new Chat();
                     newChat.setUser(currentUser);
                     newChat.setStartDate(new Date());
-//                    newChat.setUnauthenticatedId(null);
 
                     try {
                         daoBase.insert(newChat, em);
@@ -456,8 +455,9 @@ public class ChatEndpoint {
             
             if (!isOnline) {
                 String realStatus = statusType.OFFLINE.toString();
+                String email = chat.getUser().getEmail();
                 UserInfo offlineUser = new UserInfo(
-                    chat.getUser().getName(), chat.getUser().getEmail(), chat.getId(), realStatus, null
+                    chat.getUser().getName(), email, chat.getId(), realStatus, null
                 );
                 
                 // Adicionando no offlineUser a data da ultima mensagem enviada pelo usuario se houver
@@ -644,22 +644,42 @@ public class ChatEndpoint {
                 openChats.put(session, chatId);
                 consultantConnectTimeout(openChats.get(session));
                 
-                //Verifica se não é um usuário anônimo
-                if(daoChat.find(chatId, em).getUser() != null) {
-                    userId = daoChat.find(chatId, em).getUser().getId();
-                    consultantId = getConsultantKeyForSession(session);
-                    user = daoUser.find(userId, em);
-                    //Ao estabelecer a conexão, o consultor vai ser definido como consultor associado
-                    //ao paciente do chat, caso o usuário não seja paciente de nenhum consultor
-                    if(user.getRelatedConsultant() == null) {
-                        user.setRelatedConsultant(daoUser.find(consultantId, em));
-                        try {
-                            daoUser.update(user, em);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+                Chat chat = daoChat.find(chatId, em);
+                
+                if (chat == null) {
+                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Chat não existe para o id: {0}", chatId);
+                    return;
+                }
+                
+                User chatUser = chat.getUser();
+                
+                if (chatUser == null) {
+                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Usuario não existe para o chat: {0}", chatId);
+                    return;
+                }
+                
+                userId = chatUser.getId();
+                consultantId = getConsultantKeyForSession(session);
+                user = daoUser.find(userId, em);
+                
+                //Ao estabelecer a conexão, o consultor vai ser definido como consultor associado
+                //ao paciente do chat, caso o usuário não seja paciente de nenhum consultor
+                if (user.getRelatedConsultant() == null) {
+                    user.setRelatedConsultant(daoUser.find(consultantId, em));
+                    
+                    try {
+                        daoUser.update(user, em);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Falha ao atualizar relatedConsultant do usuário", ex);
+                    }
+                    
+                    userSession = users.get(chatId);
+                    
+                    // Atualiza apenas quando usuário estiver online
+                    if (userSession != null) {
+                        if (onlineUsers.get(userSession) != null) {
+                            onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
                         }
-                        userSession = users.get(chatId);
-                        onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
                     }
                 }
                 
