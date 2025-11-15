@@ -110,6 +110,18 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+    public class AnonymousUserDTO {
+        public long id;
+        public String unauthenticatedId;
+        public String name;
+        public Date signUpDate;
+        public String preferedLanguage;
+        public Date dateCreated;
+        public String ipCreated;
+        public Boolean app_signup;
+        public Boolean registration_complete;
+    };
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -172,7 +184,19 @@ public class UserFacadeREST extends AbstractFacade<User> {
             }
             
             userDAO.createAnonymousUser(entity, em);
-            return Response.ok(entity).build();
+            
+            AnonymousUserDTO dto = new AnonymousUserDTO();
+            dto.id = entity.getId();
+            dto.unauthenticatedId = entity.getUnauthenticatedId();
+            dto.name = entity.getName();
+            dto.signUpDate = entity.getSignUpDate();
+            dto.preferedLanguage = entity.getPreferedLanguage();
+            dto.dateCreated = entity.getDateCreated();
+            dto.ipCreated = entity.getIpCreated();
+            dto.app_signup = entity.isApp_signup();
+            dto.registration_complete = true;
+            
+            return Response.ok(dto).build();
         } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.serverError().build();

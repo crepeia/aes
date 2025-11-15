@@ -14,14 +14,14 @@ Plano de Exeçução Para "Colapsar" Chats de Usuários Anônimos em Chats "Comu
 
 /* BACKUP E PREPRAÇÃO */
 -- Backup completo das três tabelas principais
-CREATE TABLE tb_user_backup LIKE tb_user;
-INSERT INTO tb_user_backup SELECT * FROM tb_user;
-
-CREATE TABLE tb_chat_backup LIKE tb_chat;
-INSERT INTO tb_chat_backup SELECT * FROM tb_chat;
-
-CREATE TABLE tb_message_backup LIKE tb_message;
-INSERT INTO tb_message_backup SELECT * FROM tb_message;
+-- CREATE TABLE tb_user_backup LIKE tb_user;
+-- INSERT INTO tb_user_backup SELECT * FROM tb_user;
+-- 
+-- CREATE TABLE tb_chat_backup LIKE tb_chat;
+-- INSERT INTO tb_chat_backup SELECT * FROM tb_chat;
+-- 
+-- CREATE TABLE tb_message_backup LIKE tb_message;
+-- INSERT INTO tb_message_backup SELECT * FROM tb_message;
 
 -- Cria tabela de logs para acompanhar a migração
 CREATE TABLE IF NOT EXISTS migration_log (
@@ -179,15 +179,15 @@ SELECT COUNT(*) FROM tb_chat WHERE unauthenticated_id IS NOT NULL;
 ALTER TABLE tb_chat DROP COLUMN unauthenticated_id;
 
 /* ROLLBACK (CASO ALGO DÊ ERRADO) */
-SET FOREIGN_KEY_CHECKS = 0;
-
--- Restaura tabelas originais
-TRUNCATE TABLE tb_message;
-TRUNCATE TABLE tb_chat;
-TRUNCATE TABLE tb_user;
-
-INSERT INTO tb_user SELECT * FROM tb_user_backup;
-INSERT INTO tb_chat SELECT * FROM tb_chat_backup;
-INSERT INTO tb_message SELECT * FROM tb_message_backup;
-
-SET FOREIGN_KEY_CHECKS = 1;
+-- SET FOREIGN_KEY_CHECKS = 0;
+-- 
+-- -- Restaura tabelas originais
+-- TRUNCATE TABLE tb_message;
+-- TRUNCATE TABLE tb_chat;
+-- TRUNCATE TABLE tb_user;
+-- 
+-- INSERT INTO tb_user SELECT * FROM tb_user_backup;
+-- INSERT INTO tb_chat SELECT * FROM tb_chat_backup;
+-- INSERT INTO tb_message SELECT * FROM tb_message_backup;
+-- 
+-- SET FOREIGN_KEY_CHECKS = 1;
