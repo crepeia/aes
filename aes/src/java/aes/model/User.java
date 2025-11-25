@@ -43,7 +43,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    @Column(name = "unauthenticated_id", unique = true, length = 64)
+    @Column(name = "unauthenticated_id", length = 64)
     private String unauthenticatedId;
     
     @Column(name = "name", length = 100)

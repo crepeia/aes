@@ -171,8 +171,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
             User existingUser = null;
             try {
                 existingUser = em.createQuery(
-                    "SELECT u FROM User u Where u.unauthenticatedId=:id", User.class)
+                    "SELECT u FROM User u Where u.unauthenticatedId = :id ORDER BY u.id DESC", User.class)
                     .setParameter("id", entity.getUnauthenticatedId())
+                    .setMaxResults(1)
                     .getSingleResult();
             } catch (NoResultException e) {
                 // Nenhum usuário encontrado — segue para criação
@@ -197,6 +198,35 @@ public class UserFacadeREST extends AbstractFacade<User> {
             dto.registration_complete = true;
             
             return Response.ok(dto).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
+        }
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Path("/recreateAnonymousUser")
+    public Response recreateAnonymousUser(User entity) throws SQLException {
+        try {
+            // Sempre cria um novo user anônimo
+            userDAO.createAnonymousUser(entity, em);
+
+            AnonymousUserDTO dto = new AnonymousUserDTO();
+            dto.id = entity.getId();
+            dto.unauthenticatedId = entity.getUnauthenticatedId();
+            dto.name = entity.getName();
+            dto.signUpDate = entity.getSignUpDate();
+            dto.preferedLanguage = entity.getPreferedLanguage();
+            dto.dateCreated = entity.getDateCreated();
+            dto.ipCreated = entity.getIpCreated();
+            dto.app_signup = entity.isApp_signup();
+            dto.registration_complete = true;
+
+            return Response.ok(dto).build();
+
         } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
             return Response.serverError().build();
