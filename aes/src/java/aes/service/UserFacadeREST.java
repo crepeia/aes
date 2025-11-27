@@ -844,6 +844,36 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+    @GET
+    @Path("/findRelatedConsultantByUserId/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRelatedConsultantByUser(@PathParam("userId") Long userId) {
+        try {
+            // Busca o usuário
+            User user = em.find(User.class, userId);
+            
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Usuário não encontrado.").build();
+            }
+            
+            // Monta o JSON de resposta
+            Map<String, Object> result = new HashMap<>();
+            
+            if (user.getRelatedConsultant() != null) {
+                result.put("relatedConsultantId", user.getRelatedConsultant().getId());
+            } else {
+                result.put("relatedConsultantId", null);
+            }
+            
+            return Response.ok(result).build();
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar o consultor relacionado.").build();
+        }
+    }
+    
     @PUT
     @Path("/updateProfilePick/{id}/{profilePick}")
     @Secured
