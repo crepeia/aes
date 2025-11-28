@@ -101,4 +101,11 @@ public class ChatDAO extends GenericDAO<Chat>{
         }
     }
     
+    public User findUserById(Long chatId, EntityManager em) {
+        return em.createQuery(
+            "SELECT chat.user FROM Chat chat WHERE chat.id = :chatId", User.class
+        ).setParameter("chatId", chatId)
+         .getSingleResult();
+    }
+    
 }

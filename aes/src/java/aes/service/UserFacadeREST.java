@@ -10,6 +10,7 @@ import aes.controller.UserController;
 import aes.model.AgendaAppointment;
 import aes.model.User;
 import aes.persistence.AgendaAppointmentDAO;
+import aes.persistence.ChatDAO;
 import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
 import aes.utility.EmailHelper;
@@ -83,6 +84,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private UserDAO userDAO;
     private ContactDAO contactDAO;
     private AgendaAppointmentDAO appointmentDao;
+    private ChatDAO chatDao;
     private EmailHelper emailHelper;
     
     @Inject
@@ -105,6 +107,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             userDAO = new UserDAO();
             contactDAO = new ContactDAO();
             appointmentDao = new AgendaAppointmentDAO();
+            chatDao = new ChatDAO();
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -473,11 +476,12 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("findUserByChatId/{chatId}")
     @Secured
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response findUserByChatId(@PathParam("chatId") Long chatId) {
         try {
-            return Response.ok().entity(userDAO.listOnce("chat.id", chatId, em)).build();
-        } catch (SQLException | RuntimeException ex) {
+            User user = chatDao.findUserById(chatId, em);
+            return Response.ok(user.getId()).build();
+        } catch (RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
