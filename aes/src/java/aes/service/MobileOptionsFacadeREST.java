@@ -147,6 +147,21 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         }
     }
     
+    @PUT
+    @Path("edit/changeAnonymousNotificationToken/{anonymousId}/{token}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response changeAnonymousNotificationToken(@PathParam("anonymousId") Long anonymousId, @PathParam("token") String notificationToken) {
+        try {
+            MobileOptions options = mobileOptionsDAO.find(anonymousId, em);
+            options.setNotificationToken(notificationToken);
+            mobileOptionsDAO.edit(anonymousId, options, em);
+            return Response.status(Response.Status.OK).build();
+        } catch(SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
     @GET
     @Path("find/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
