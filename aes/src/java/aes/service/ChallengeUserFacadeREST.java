@@ -170,7 +170,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             properties.load(input);
             List<ChallengeUser> chList
                     = em.createQuery("SELECT ch FROM ChallengeUser ch "
-                            + "WHERE ch.user.id=:userId AND ch.challenge.id=:challengeId "
+                            + "WHERE ch.user.id=:userId AND ch.ch.challengeId = :challengeId "
                             + "ORDER BY ch.dateCompleted DESC")
                             .setParameter("userId", entity.getUser().getId())
                             .setParameter("challengeId", entity.getChallengeId())
@@ -434,7 +434,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             }
 
             long count = (long) em.createQuery("SELECT COUNT(cu) FROM ChallengeUser cu " +
-                    "WHERE cu.user.id = :userId AND cu.challenge.id = :challengeId")
+                    "WHERE cu.user.id = :userId AND cu.challengeId = :challengeId")
                     .setParameter("userId", userId)
                     .setParameter("challengeId", challengeId)
                     .getSingleResult();
