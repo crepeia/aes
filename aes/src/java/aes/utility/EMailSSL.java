@@ -34,7 +34,7 @@ public class EMailSSL {
         Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         props = new Properties();
         try {
-            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(AppServletContextListener.getServletContext().getInitParameter("mailPath")));
+            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("aes/utility/mail.properties"));
             //MailSSLSocketFactory sf = new MailSSLSocketFactory();
             
             //sf.setTrustAllHosts(true);
