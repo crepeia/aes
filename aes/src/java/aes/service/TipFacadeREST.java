@@ -38,7 +38,7 @@ import javax.ws.rs.core.Response;
 @TransactionManagement(TransactionManagementType.BEAN)
 /**
  * @Deprecated
- * This class is no longer in use, because challenge is not in the databank anymore.
+ * This class is no longer in use, because tip is not in the databank anymore.
  * Challenge is in .properties file and should be used from there, instead.
 **/
 @Deprecated

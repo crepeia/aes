@@ -119,7 +119,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @Produces(MediaType.APPLICATION_JSON)
     public TipUser like(TipUser entity) {
         TipUser newEntity = super.find(entity.getId());        
-        newEntity.setLiked(entity.isLiked());
+        newEntity.setLiked(true);
         
         try {
             tipUserDAO.insertOrUpdate(newEntity, em);
@@ -137,7 +137,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @Produces(MediaType.APPLICATION_JSON)
     public TipUser dislike(TipUser entity) {
         TipUser newEntity = super.find(entity.getId());
-        newEntity.setLiked(entity.isLiked());
+        newEntity.setLiked(false);
         /*
         if(newEntity.isLiked() != null && newEntity.isLiked() == false){
             newEntity.setLiked(null);
