@@ -5,6 +5,7 @@
  */
 package aes.persistence;
 
+import aes.model.AnonymousKey;
 import aes.model.AuthenticationToken;
 import aes.model.User;
 import aes.utility.SecureRandomString;
@@ -38,6 +39,21 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         return authToken;
     }
     
+    public String issueAnonymousToken(AnonymousKey anonymousKey, EntityManager em) throws SQLException {
+        // Use o identificador para criar um token anonimo
+        String token = SecureRandomString.generate() + "-" + "anonymous";
+        
+        // Salvar o token para rastreamento
+        AuthenticationToken authToken = new AuthenticationToken();
+        authToken.setToken(token);
+        authToken.setUser(null);
+        authToken.setAnonymousKey(anonymousKey);
+        authToken.setDateCreated(new Date());
+        super.update(authToken, em);
+        
+        return token;
+    }
+    
     public void revokeToken(String token, String userEmail, EntityManager entityManager) throws SQLException {
         AuthenticationToken at = (AuthenticationToken) entityManager.createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
         .setParameter("token", token)
@@ -45,6 +61,29 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         .getSingleResult();
         super.delete(at, entityManager);
     
+    }
+    
+    public void revokeAnonymousToken(String token, String instanceId, EntityManager entityManager) throws SQLException {
+        AuthenticationToken at = findByToken(token, entityManager);
+        
+        if (at == null) {
+            throw new SQLException("Token não encontrado.");
+        }
+        
+        // Obtém a AnonymousKey associada ao token
+        AnonymousKey ak = entityManager.find(AnonymousKey.class, at.getAnonymousKey().getId());
+        
+        if (ak == null) {
+            throw new SQLException("Chave anônima não encontrada.");
+        }
+        
+        // Verifica se o instance_id é o mesmo
+        if (!ak.getInstanceId().equals(instanceId)) {
+            throw new SQLException("Instance ID não corresponde ao token.");
+        }
+        
+        // Revoga o token
+        super.delete(at, entityManager);
     }
     
     public void deleteExpiredTokens(Date limitDate, EntityManager entityManager) throws SQLException {

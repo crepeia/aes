@@ -10,6 +10,7 @@ import aes.controller.UserController;
 import aes.model.AgendaAppointment;
 import aes.model.User;
 import aes.persistence.AgendaAppointmentDAO;
+import aes.persistence.ChatDAO;
 import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
 import aes.utility.EmailHelper;
@@ -52,6 +53,7 @@ import javax.json.JsonReader;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
@@ -83,6 +85,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private UserDAO userDAO;
     private ContactDAO contactDAO;
     private AgendaAppointmentDAO appointmentDao;
+    private ChatDAO chatDao;
     private EmailHelper emailHelper;
     
     @Inject
@@ -105,10 +108,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
             userDAO = new UserDAO();
             contactDAO = new ContactDAO();
             appointmentDao = new AgendaAppointmentDAO();
+            chatDao = new ChatDAO();
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public class AnonymousUserDTO {
+        public long id;
+        public String unauthenticatedId;
+        public String name;
+        public Date signUpDate;
+        public String preferedLanguage;
+        public Date dateCreated;
+        public String ipCreated;
+        public Boolean app_signup;
+        public Boolean registration_complete;
+    };
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -128,13 +144,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 
                 userDAO.createUser(entity, decriptedPassword, em);
                 
-                /*byte[] salt =  Encrypter.generateRandomSecureSalt(16);
-                entity.setSalt(salt);
-                entity.setPassword(Encrypter.hashPassword(decriptedPassword, salt));
-                
-                userTransaction.begin();
-                super.create(entity);
-                userTransaction.commit();*/
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
 
                 emailHelper.sendSignUpEmail(entity, em);
@@ -157,10 +166,78 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
             }
         }
-        
-         
-        // return Response.serverError().build();
-        
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Path("/createAnonymousUser")
+    public Response createAnonymousUser(User entity) throws SQLException {
+        try {
+            User existingUser = null;
+            try {
+                existingUser = em.createQuery(
+                    "SELECT u FROM User u Where u.unauthenticatedId = :id ORDER BY u.id DESC", User.class)
+                    .setParameter("id", entity.getUnauthenticatedId())
+                    .setMaxResults(1)
+                    .getSingleResult();
+            } catch (NoResultException e) {
+                // Nenhum usuário encontrado — segue para criação
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Usuário Anônimo cadastrou no sistema.");
+            }
+            
+            if (existingUser != null) {
+                return Response.ok(existingUser).build();
+            }
+            
+            userDAO.createAnonymousUser(entity, em);
+            
+            AnonymousUserDTO dto = new AnonymousUserDTO();
+            dto.id = entity.getId();
+            dto.unauthenticatedId = entity.getUnauthenticatedId();
+            dto.name = entity.getName();
+            dto.signUpDate = entity.getSignUpDate();
+            dto.preferedLanguage = entity.getPreferedLanguage();
+            dto.dateCreated = entity.getDateCreated();
+            dto.ipCreated = entity.getIpCreated();
+            dto.app_signup = entity.isApp_signup();
+            dto.registration_complete = true;
+            
+            return Response.ok(dto).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
+        }
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Path("/recreateAnonymousUser")
+    public Response recreateAnonymousUser(User entity) throws SQLException {
+        try {
+            // Sempre cria um novo user anônimo
+            userDAO.createAnonymousUser(entity, em);
+
+            AnonymousUserDTO dto = new AnonymousUserDTO();
+            dto.id = entity.getId();
+            dto.unauthenticatedId = entity.getUnauthenticatedId();
+            dto.name = entity.getName();
+            dto.signUpDate = entity.getSignUpDate();
+            dto.preferedLanguage = entity.getPreferedLanguage();
+            dto.dateCreated = entity.getDateCreated();
+            dto.ipCreated = entity.getIpCreated();
+            dto.app_signup = entity.isApp_signup();
+            dto.registration_complete = true;
+
+            return Response.ok(dto).build();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
+        }
     }
         
     @PUT
@@ -425,13 +502,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("findUserByChatId/{chatId}")
     @Secured
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response findUserByChatId(@PathParam("chatId") Long chatId) {
         RESTApiResponse response;
         try {
-            response = new RESTApiResponse(userDAO.listOnce("chat.id", chatId, em));
+            response = new RESTApiResponse(chatDao.findUserById(chatId, em));
             return Response.status(Response.Status.OK).entity(response.getEntityData()).build();
-        } catch (SQLException | RuntimeException ex) {
+        } catch (RuntimeException ex) {
             response = new RESTApiResponse("Ocorreu um erro: " + ex);
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
@@ -816,6 +893,36 @@ public class UserFacadeREST extends AbstractFacade<User> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("{\"error\":\"Erro ao processar a requisição\"}")
                 .build();
+        }
+    }
+    
+    @GET
+    @Path("/findRelatedConsultantByUserId/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRelatedConsultantByUser(@PathParam("userId") Long userId) {
+        try {
+            // Busca o usuário
+            User user = em.find(User.class, userId);
+            
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Usuário não encontrado.").build();
+            }
+            
+            // Monta o JSON de resposta
+            Map<String, Object> result = new HashMap<>();
+            
+            if (user.getRelatedConsultant() != null) {
+                result.put("relatedConsultantId", user.getRelatedConsultant().getId());
+            } else {
+                result.put("relatedConsultantId", null);
+            }
+            
+            return Response.ok(result).build();
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar o consultor relacionado.").build();
         }
     }
     

@@ -86,6 +86,20 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
 
         }
     }
+    
+    @GET
+    @Path("Anonymous/{chatId}/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response find(@PathParam("chatId") Long chatId, @PathParam("userId") Long userId) {
+        List<Message> m = messageDAO.findAnonymousMessages(chatId, userId, em);
+        if (m == null) {
+            return Response.noContent().build();
+
+        } else {
+            return Response.ok().entity(m).build();
+
+        }
+    }
 
     @Override
     protected EntityManager getEntityManager() {

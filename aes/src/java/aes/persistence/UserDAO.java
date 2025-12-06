@@ -71,8 +71,11 @@ public class UserDAO extends GenericDAO<User>{
         //   Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         //  } 
             
-        // }
-        
+        // }   
+    }
+    
+    public void createAnonymousUser(User entity, EntityManager entityManager) throws SQLException {
+        super.insertOrUpdate(entity, entityManager);
     }
 
     

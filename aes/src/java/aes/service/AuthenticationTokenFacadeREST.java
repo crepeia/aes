@@ -48,6 +48,12 @@ import java.io.OutputStreamWriter;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReaderFactory;
 import java.util.Collections;
@@ -59,6 +65,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.SSLSession;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
+import java.util.UUID;
 
 
 /**
@@ -180,6 +188,20 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("Erro ao renovar token").build();
         }
+    }
+    
+    @DELETE
+    @Path("anonymous/logout/{token}/{instanceId}")
+    @Secured
+    public Response anonymousLogout(@PathParam("token") String token, @PathParam("instanceId") String instanceId) throws SQLException {
+        Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(
+                Level.INFO, "Usuário anônimo está deslogando do sistema (instanceId: " + instanceId + ").");
+        
+        authenticationTokenDAO.revokeAnonymousToken(token, instanceId, em);
+        
+        Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário anônimo deslogou do sistema.");
+        
+        return Response.ok().build();
     }
     
     /*private String issueToken(User usr){

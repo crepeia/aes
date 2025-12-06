@@ -5,6 +5,7 @@
  */
 package aes.service;
 
+import aes.model.AnonymousKey;
 import aes.model.AuthenticationToken;
 import aes.model.Chat;
 import aes.model.User;
@@ -135,7 +136,7 @@ public class ChatEndpoint {
         BUSY,
         IDLE,
         OFFLINE,
-      }
+    }
     
     public ChatEndpoint() {
         try {
@@ -204,225 +205,183 @@ public class ChatEndpoint {
         onlineUsers.put(session, ui);
     }
     
-    //Esse método está responsável pela criação do chat do usuário e o preenchimento das listas.
+    // Esse metodo esta responsavel pela criacao do chat do usuario e o preenchimento das listas
     @OnOpen
-    public void onOpen(Session session, EndpointConfig config, @PathParam("userId") String userId) {
+    public void onOpen(Session session, EndpointConfig config, @PathParam("userId") Long userId) {
         List<String> auth = (List<String>) config.getUserProperties().get("auth");
-        List<String> unauthId = null;
-        
+        String unauthId = null;
+
         User currentUser = null;
         AuthenticationToken at;
         Chat newChat;
         
-        if(Boolean.parseBoolean(auth.get(0))){
-            List<String> token = (List<String>) config.getUserProperties().get("authtoken");
+        if (!Boolean.parseBoolean(auth.get(0))) {
             try {
-                
-                at = validateToken(token.get(0));
-                currentUser = at.getUser();
-                if(currentUser.getId() != Long.parseLong(userId)) 
-                    throw new Exception();
-                
-            } catch (Exception ex) {
-                try {
-                    session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
-                    return;
-                } catch (IOException ex1) {
-                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
-                }
+                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized access"));
+            } catch (IOException e) {
+                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, e);
             }
-        } else {
-            unauthId = (List<String>) config.getUserProperties().get("unauthID");
-            
-            if(unauthId.isEmpty() || unauthId.get(0).isEmpty()){
-                try {
-                    session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
-                    return;
-                } catch (IOException ex) {
-                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
+            return;
         }
         
-        session.setMaxIdleTimeout(60 * 60 * 1000); // Define timeout de 60 minutos para fechar.
-        
-        UserInfo ui = new UserInfo();
-        
-        if(currentUser == null){            
-//            // Enquanto não houver consultores ou não tiver passado 4 minutos programa fica em pausa.
-//            // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-//            for(int i = 0; i < 2400 && consultants.isEmpty(); i++) {
-//                if(!session.isOpen()) {
-//                    return; // cliente fechou
-//                }
-//                try {
-//                    Thread.sleep(100); // 0,1 segundo
-//                } catch (InterruptedException e) {
-//                    return;
-//                }
-//            }
-//            
-//            // Se consultants ainda estiver vazia após 4 minutos, manda a mensagem noConsultant e retorna
-//            if(consultants.isEmpty()) {
-//                sendNoConsultantMessage(session);
-//                return;
-//            }
+        List<String> token = (List<String>) config.getUserProperties().get("authtoken");
 
-            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-            scheduler.schedule(() -> {
-               if (consultants.isEmpty() && session.isOpen()) {
-                   this.isWaiting = false;
-                   sendNoConsultantMessage(session);
-//                       session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
-               } 
-            }, 4, TimeUnit.MINUTES);
-  
-            newChat = new Chat();
-            newChat.setUser(null);
-            newChat.setStartDate(new Date());
-            newChat.setUnauthenticatedId(unauthId.get(0));
-            try {
-                daoBase.insert(newChat, em);
-            } catch (SQLException ex) {
-                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            at = validateToken(token.get(0));
+
+            if (at == null) {
+                throw new Exception("Token inválido");
             }
-            
-            users.put(newChat.getId(), session);
-            String realStatus = statusType.AVAILABLE.toString();
-            
-            ui.name = "Anônimo";
-            ui.email = "";
-            ui.chat = newChat.getId();
-            ui.status = realStatus;
-            ui.idRelatedConsultant = null;
-            //ui.session = session;
-            
-            openChats.put(session, newChat.getId());
-            addOnlineUser(session, ui);
-            setStatus(session, realStatus);
-            sendNewUserChatId(session, newChat.getId());
-            
+
+            if (at.getUser() != null) {
+                // Token de usuário logado
+                currentUser = at.getUser();
+                if (currentUser.getId() != userId) {
+                    throw new Exception("User ID mismatch");
+                }
+                System.out.println("Usuário autenticado: " + currentUser.getEmail());
+            } else if (at.getAnonymousKey() != null) {
+                // Token de usuário anônimo
+
+                currentUser = daoUser.getUserByID(userId, em);
+
+                unauthId = currentUser.getUnauthenticatedId();
+
+                if(unauthId == null || unauthId.isEmpty()) {
+                    try {
+                        session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
+                        return;
+                    } catch (IOException ex2) {
+                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex2);
+                    }
+                }
+
+                AnonymousKey anon = at.getAnonymousKey();
+                if (!anon.getInstanceId().equals(unauthId)) {
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.WARNING, "Instance ID incompatível: esperado {0}, recebido {1}", 
+                            new Object[]{unauthId, anon.getInstanceId()});
+                    throw new Exception("Instance ID incompatível");
+                }
+
+                System.out.println("Usuário anônimo autenticado: " + anon.getInstanceId());
+            } else {
+                throw new Exception("Token sem usuário associado");
+            }
+        } catch (Exception ex) {
+            try {
+                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
+                return;
+            } catch (IOException ex1) {
+                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+
+        session.setMaxIdleTimeout(60 * 60 * 1000); // Define timeout de 60 minutos para fechar
+
+        UserInfo ui = new UserInfo();
+
+        if (currentUser == null) {
+            try {
+                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error: user not found."));
+                return;
+            } catch (IOException ex1) {
+                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         } else {
-            if(currentUser.isConsultant()) {
-                if(consultants.containsKey(currentUser.getId())){
+            if (currentUser.isConsultant()) {
+                if (consultants.containsKey(currentUser.getId())) {
                     try {
                         consultants.get(currentUser.getId()).close();
                     } catch (IOException ex) {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    }                        
                 }
-                
+
                 ui.name = currentUser.getName();
                 ui.email = currentUser.getEmail();
                 ui.chat = currentUser.getChat().getId();
                 ui.status = "";
                 ui.idRelatedConsultant = null;
-                //ui.session = session;
-                
+
                 addOnlineUser(session, ui);
                 consultants.put(currentUser.getId(), session);
-                
+
                 // Dando tempo para a função do usuário pegar o consultor
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     return;
                 }
-                
+
                 sendUserStatusList(currentUser.getId());
-
-            } else {//usuário comum
-                
-//                // Enquanto não houver consultores, o consultor do usuário não estiver online ou não tiver passado 4 minutos programa fica em pausa.
-//                // 4 minutos = 0,1 segundo * 10 * 60 * 4.
-//                try {
-//                    for(int i = 0; i < 2400 && (consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())); i++) {
-//                        Thread.sleep(100); // 0,1 segundo.
-//                    }
-//                } catch (InterruptedException e) {
-//                    return;
-//                }
-                
-                if( currentUser.getChat() == null) { //primeira vez conectando
-
+            } else { // Usuário comum e anônimo
+                if (currentUser.getChat() == null || currentUser.getChat().getId() == null) {
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.WARNING, "Usuário {0} sem chat vinculado. Criando novo.", currentUser.getId());
+                    
                     newChat = new Chat();
                     newChat.setUser(currentUser);
                     newChat.setStartDate(new Date());
-                    newChat.setUnauthenticatedId(null);
+
                     try {
                         daoBase.insert(newChat, em);
                     } catch (SQLException ex) {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 } else {
                     newChat = currentUser.getChat();
                 }
-                if(users.containsKey(newChat.getId())){
+
+                if (users.containsKey(newChat.getId())) {
                     try {
                         users.get(newChat.getId()).close();
                     } catch (IOException ex) {
                         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                
+
                 final User usuarioAtual = currentUser;
-                
+
                 ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
                 scheduler.schedule(() -> {
                     if ((consultants.isEmpty() || !isRelatedConsultantOnline(usuarioAtual.getRelatedConsultant())) && session.isOpen()) {
                         this.isWaiting = false;
                         sendNoConsultantMessage(session);
-//                            session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "No consultants available"));
-                    } 
+                    }
                 }, 4, TimeUnit.MINUTES);
 
                 users.put(newChat.getId(), session);
-                //String realStatus = statusType.AVAILABLE.toString();
                 String realStatus = statusType.OFFLINE.toString();
-
-                //if(openChats.containsValue(newChat.getId())){ //um consultor estava atendendo o chat
-                                                                //e o usuário desconectou/voltou
-                //    realStatus = statusType.BUSY.toString();
-                //}
 
                 ui.name = currentUser.getName();
                 ui.email = currentUser.getEmail();
-                ui.chat = currentUser.getChat().getId();
+                ui.chat = newChat.getId();
                 ui.status = realStatus;
+
                 //É usuário comum e o idRelatedConsultant pode ser nulo (não tem consultor)
                 //ou não (tem consultor associado)
-                if(currentUser.getRelatedConsultant() == null) {
+                if (currentUser.getRelatedConsultant() == null) {
                     ui.idRelatedConsultant = null;
                 } else {
                     ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
                 }
-                //ui.session = session;
-                
+
                 // Adicionando no userInfo a data da ultima mensagem enviada pelo usuario se houver
                 Date lastSentDate = messageDAO.findLastSentDateByChatId(newChat.getId(), em);
                 if (lastSentDate != null) {
                     ui.setLastSentDate(lastSentDate);
                 }
 
-
                 openChats.put(session, newChat.getId());
                 addOnlineUser(session, ui);
-
                 setStatus(session, realStatus);
                 
-//                // Se consultants ainda estiver vazia ou o consultor do usuário não estiver online após 4 minutos, manda a mensagem noConsultant e retorna
-//                if(consultants.isEmpty() || !isRelatedConsultantOnline(currentUser.getRelatedConsultant())){
-//                    sendNoConsultantMessage(session);
-//                    return;
-//                }
-                
+                // Apenas se for anônimo
+                if (unauthId != null) sendNewUserChatId(session, newChat.getId());
             }
         }
         
-       
-        //schedulePingMessages(ui);
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session opened for user {0} session ID {1}", new Object[]{userId, session.getId()});
     }
     
@@ -496,8 +455,9 @@ public class ChatEndpoint {
             
             if (!isOnline) {
                 String realStatus = statusType.OFFLINE.toString();
+                String email = chat.getUser().getEmail();
                 UserInfo offlineUser = new UserInfo(
-                    chat.getUser().getName(), chat.getUser().getEmail(), chat.getId(), realStatus, null
+                    chat.getUser().getName(), email, chat.getId(), realStatus, null
                 );
                 
                 // Adicionando no offlineUser a data da ultima mensagem enviada pelo usuario se houver
@@ -563,6 +523,12 @@ public class ChatEndpoint {
     private void deleteUserStatus(Session userSession, Long userKey){
         
         UserInfo u = onlineUsers.get(userSession);
+        if (u == null) {
+            Logger.getLogger(ChatEndpoint.class.getName())
+              .log(Level.WARNING, "Tentou remover status de sessão sem UserInfo: {0}", userSession.getId());
+            return;
+        }
+        
         u.status = statusType.OFFLINE.toString();
         
         onlineUsers.remove(userSession);
@@ -678,22 +644,42 @@ public class ChatEndpoint {
                 openChats.put(session, chatId);
                 consultantConnectTimeout(openChats.get(session));
                 
-                //Verifica se não é um usuário anônimo
-                if(daoChat.find(chatId, em).getUser() != null) {
-                    userId = daoChat.find(chatId, em).getUser().getId();
-                    consultantId = getConsultantKeyForSession(session);
-                    user = daoUser.find(userId, em);
-                    //Ao estabelecer a conexão, o consultor vai ser definido como consultor associado
-                    //ao paciente do chat, caso o usuário não seja paciente de nenhum consultor
-                    if(user.getRelatedConsultant() == null) {
-                        user.setRelatedConsultant(daoUser.find(consultantId, em));
-                        try {
-                            daoUser.update(user, em);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+                Chat chat = daoChat.find(chatId, em);
+                
+                if (chat == null) {
+                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Chat não existe para o id: {0}", chatId);
+                    return;
+                }
+                
+                User chatUser = chat.getUser();
+                
+                if (chatUser == null) {
+                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Usuario não existe para o chat: {0}", chatId);
+                    return;
+                }
+                
+                userId = chatUser.getId();
+                consultantId = getConsultantKeyForSession(session);
+                user = daoUser.find(userId, em);
+                
+                //Ao estabelecer a conexão, o consultor vai ser definido como consultor associado
+                //ao paciente do chat, caso o usuário não seja paciente de nenhum consultor
+                if (user.getRelatedConsultant() == null) {
+                    user.setRelatedConsultant(daoUser.find(consultantId, em));
+                    
+                    try {
+                        daoUser.update(user, em);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Falha ao atualizar relatedConsultant do usuário", ex);
+                    }
+                    
+                    userSession = users.get(chatId);
+                    
+                    // Atualiza apenas quando usuário estiver online
+                    if (userSession != null) {
+                        if (onlineUsers.get(userSession) != null) {
+                            onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
                         }
-                        userSession = users.get(chatId);
-                        onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
                     }
                 }
                 
@@ -774,7 +760,7 @@ public class ChatEndpoint {
         Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session closed ID: {0}", new Object[]{session.getId()});
         System.out.println(reason);
         
-        if(users.containsValue(session)){
+        if(users.containsValue(session) && getUserKeyForSession(session) != null) {
             Long userKey = getUserKeyForSession(session);
             users.remove(userKey);
             deleteUserStatus(session, userKey);
@@ -791,9 +777,6 @@ public class ChatEndpoint {
         if(openChats.containsKey(session)){
             openChats.remove(session);
         }
-        
-        
-        
     }
     
     private Long getUserKeyForSession(Session session) {
