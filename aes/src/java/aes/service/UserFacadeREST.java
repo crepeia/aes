@@ -506,8 +506,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public Response findUserByChatId(@PathParam("chatId") Long chatId) {
         RESTApiResponse response;
         try {
-            response = new RESTApiResponse(chatDao.findUserById(chatId, em));
-            return Response.status(Response.Status.OK).entity(response.getEntityData()).build();
+            User user = chatDao.findUserById(chatId, em);
+            return Response.ok(user.getId()).build();
         } catch (RuntimeException ex) {
             response = new RESTApiResponse("Ocorreu um erro: " + ex);
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
