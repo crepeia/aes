@@ -84,7 +84,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 public Principal getUserPrincipal() {
                     try{
                         User usr = (User) em.createQuery("SELECT a.user FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
-                        return () -> usr.getEmail();
+                        return () -> String.valueOf(usr.getId());
                     }catch(Exception e) {
                         Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
                         return null;
