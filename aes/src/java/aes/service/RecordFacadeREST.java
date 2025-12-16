@@ -140,13 +140,13 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     @Path("find/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response find(@PathParam("userId") Long userId) {
-        String userEmail = securityContext.getUserPrincipal().getName();
+//        String userEmail = securityContext.getUserPrincipal().getName();
         //User u = em.find(User.class, userId);
         User u = userDAO.find(userId, em);
 
-        if(!u.getEmail().equals(userEmail)){
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
+//        if(!u.getEmail().equals(userEmail)){
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+//        }
       
             /*Record rec = (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
                     .setParameter("userId", userId)
