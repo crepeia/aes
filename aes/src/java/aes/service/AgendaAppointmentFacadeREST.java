@@ -6,11 +6,14 @@
 package aes.service;
 
 import aes.model.AgendaAppointment;
+import aes.model.User;
 import aes.persistence.AgendaAppointmentDAO;
+import aes.persistence.UserDAO;
 import aes.utility.Secured;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -28,8 +31,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -45,11 +50,16 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private AgendaAppointmentDAO appointmentDao;
+    private UserDAO userDao;
+    
+    @Context
+    SecurityContext securityContext;
 
     public AgendaAppointmentFacadeREST() {
         super(AgendaAppointment.class);
         try {
             appointmentDao = new AgendaAppointmentDAO();
+            userDao = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
@@ -60,6 +70,36 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response insert(AgendaAppointment appointment) {
         try {
+            Long loggedUserId = Long.valueOf(securityContext.getUserPrincipal().getName());
+            User loggedUser = userDao.find(loggedUserId, em);
+            
+            if (loggedUser == null) {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+            
+            if (loggedUser.isConsultant()) {
+                User user = userDao.find(appointment.getUser().getId(), em);
+                
+                if (user == null || user.getRelatedConsultant() == null || 
+                        !Objects.equals(user.getRelatedConsultant().getId(), loggedUser.getId())) {
+                    return Response.status(Response.Status.UNAUTHORIZED).build();
+                }
+                
+                appointment.setConsultant(loggedUser);
+                appointment.setUser(user);
+                
+            } else {
+                User consultant = userDao.find(appointment.getConsultant().getId(), em);
+                
+                if (consultant == null || loggedUser.getRelatedConsultant() == null || 
+                        !Objects.equals(consultant.getId(), loggedUser.getRelatedConsultant().getId())) {
+                    return Response.status(Response.Status.UNAUTHORIZED).build();
+                }
+                
+                appointment.setUser(loggedUser);
+                appointment.setConsultant(consultant);
+            }
+            
             appointmentDao.insert(appointment, em);
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException ex) {
