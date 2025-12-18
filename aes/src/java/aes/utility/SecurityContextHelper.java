@@ -13,7 +13,7 @@ import javax.ws.rs.core.SecurityContext;
 
 /**
  *
- * @author luansb
+ * @author LuanBarbs
  */
 
 @ApplicationScoped

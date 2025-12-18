@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 
 /**
  *
- * @author luansb
+ * @author LuanBarbs
  */
 @Stateless
 @Path("anonymous-authentication")
@@ -64,7 +64,7 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
         public long timestamp;
     }
     
-    // ===== INICIO DOS SERVIÇOS DE NONCE =====
+    // ===== SERVIÇOS DE NONCE =====
     
     @GET
     @Path("nonce/generate")
@@ -79,31 +79,19 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
         }
     }
     
-    @POST
-    @Path("nonce/validate")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response validateNonce(String nonce) {
-        try {
-            if (nonce == null) {
-                return Response.status(Response.Status.BAD_REQUEST).build();
-            }
-            
-            boolean valid = anonymousAuthenticationDao.validateNonce(nonce);
-            return Response.ok("{\"valid\": " + valid + "}").build();
-        } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-    
-    // ===== INICIO DOS SERVIÇOS DE CHAVE =====
+    // ===== SERVIÇOS DE CHAVE =====
     
     @Path("anonymous-key/insert")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insert(KeyRequest request) throws SQLException {
         try {
+            if (request == null ||
+                    request.instanceId == null ||
+                    request.publicKey == null) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+            
             // Verifica se já existe chave para o instanceId
             AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, true, em);
             if (existing != null) {
@@ -112,7 +100,6 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
                 anonymousAuthenticationDao.update(existing, em);
             }
             
-            // Cria chave nova
             AnonymousKey object = new AnonymousKey();
             object.setPublicKey(request.publicKey);
             object.setInstanceId(request.instanceId);
@@ -134,19 +121,15 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
     @Produces(MediaType.APPLICATION_JSON)
     public Response validateChallenge(ChallengeRequest request) throws SQLException {
         try {
-            // 1. Verifica nonce
             if (!anonymousAuthenticationDao.validateNonce(request.nonce)) {
                 System.out.println("Nonce inválido ou expirado");
-                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid nonce").build();
+                return Response.status(Response.Status.BAD_REQUEST).build();
             }
 
-            // 2. Monta dados e decodifica
-            
-            // Buscar publicKey
             AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, false, em);
             if (existing == null || existing.getPublicKey() == null) {
                 System.out.println("Chave pública não encontrada para o instanceId: " + request.instanceId);
-                return Response.status(Response.Status.UNAUTHORIZED).entity("Public key not registered").build();
+                return Response.status(Response.Status.UNAUTHORIZED).build();
             }
             
             byte[] pubKeyBytes = Base64.getDecoder().decode(existing.getPublicKey());
@@ -154,18 +137,15 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
 
             String challengeData = request.nonce + "|" + request.instanceId + "|" + request.timestamp;
             byte[] challengeBytes = challengeData.getBytes(StandardCharsets.UTF_8);
-        
-            // 3. Verifica assinatura
+            
             boolean verified = AnonymousAuthenticationUtils.verifySignature(pubKeyBytes, challengeBytes, sigBytes);
             if (!verified) {
                 System.out.println("Assinatura inválida");
-                return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid signature").build();
+                return Response.status(Response.Status.UNAUTHORIZED).build();
             }
            
-            // 4. Gerar token anônimo — por enquanto comentado
             String token = authenticationTokenDao.issueAnonymousToken(existing, em);
             
-            // Retorna em JSON
             JsonObject response = Json.createObjectBuilder()
                 .add("token", token)
                 .build();
