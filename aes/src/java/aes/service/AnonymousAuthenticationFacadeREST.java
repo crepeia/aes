@@ -151,7 +151,8 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
                 .build();
             
             return Response.ok(response.toString(), MediaType.APPLICATION_JSON).build();
-        } catch (Exception e) {
+        } catch (SQLException ex) {
+            Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
