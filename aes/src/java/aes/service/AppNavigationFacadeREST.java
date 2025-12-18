@@ -6,21 +6,27 @@
 package aes.service;
 
 import aes.model.AppNavigation;
+import aes.model.User;
 import aes.persistence.AppNavigationDAO;
 import aes.persistence.GenericDAO;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -37,6 +43,12 @@ public class AppNavigationFacadeREST extends AbstractFacade<AppNavigation> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private AppNavigationDAO appNavigationDao;
+    
+    @Inject
+    private SecurityContextHelper securityHelper;
+    
+    @Context
+    private HttpServletRequest request;
 
     public AppNavigationFacadeREST() {
         super(AppNavigation.class);
@@ -47,12 +59,41 @@ public class AppNavigationFacadeREST extends AbstractFacade<AppNavigation> {
         }
     }
     
+    private String getClientIp() {
+        String xf = request.getHeader("X-Forwarded-For");
+        if (xf != null && !xf.isEmpty()) {
+            return xf.split(",")[0];
+        }
+        return request.getRemoteAddr();
+    }
+    
     @Path("saveNavigation")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response saveNavigation(AppNavigation appNavigation) {
         try {
-            appNavigationDao.saveNavigation(appNavigation, em);
+            Response r = securityHelper.requireAnyAuthenticated();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            String serverIp = getClientIp();
+            String clientIp = appNavigation.getIp();
+            
+            if (clientIp != null && !clientIp.equals(serverIp)) {
+                Logger.getLogger(AppNavigationFacadeREST.class.getName())
+                    .log(Level.INFO,
+                         "IP mismatch | userId={0} | serverIp={1} | clientIp={2}",
+                         new Object[]{ loggedUser.getId(), serverIp, clientIp });
+            }
+            
+            AppNavigation nav = new AppNavigation();
+            nav.setUser(loggedUser);
+            nav.setTimeStamp(new Date());
+            nav.setIp(serverIp);
+            nav.setUserAgent(appNavigation.getUserAgent());
+            
+            appNavigationDao.saveNavigation(nav, em);
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException e) {
             Logger.getLogger(AppNavigationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
