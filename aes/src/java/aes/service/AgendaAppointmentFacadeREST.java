@@ -10,15 +10,18 @@ import aes.model.User;
 import aes.persistence.AgendaAppointmentDAO;
 import aes.persistence.UserDAO;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -52,8 +55,8 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     private AgendaAppointmentDAO appointmentDao;
     private UserDAO userDao;
     
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public AgendaAppointmentFacadeREST() {
         super(AgendaAppointment.class);
@@ -64,36 +67,54 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
+    
+    private boolean canAccessAppointment(User loggedUser, AgendaAppointment appointment) {
+        if (loggedUser.isConsultant()) {
+            return appointment.getConsultant() != null &&
+                   Objects.equals(
+                       appointment.getConsultant().getId(),
+                       loggedUser.getId()
+                   );
+        }
+
+        return appointment.getUser() != null &&
+               Objects.equals(
+                   appointment.getUser().getId(),
+                   loggedUser.getId()
+               );
+    }
+    
+    private Response validateAppointmentAccess(User loggedUser, AgendaAppointment appointment) {
+        if (!canAccessAppointment(loggedUser, appointment)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        return null;
+    }
 
     @Path("insert")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response insert(AgendaAppointment appointment) {
         try {
-            Long loggedUserId = Long.valueOf(securityContext.getUserPrincipal().getName());
-            User loggedUser = userDao.find(loggedUserId, em);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-            if (loggedUser == null) {
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            }
+            User loggedUser = securityHelper.getLoggedUser();
             
             if (loggedUser.isConsultant()) {
                 User user = userDao.find(appointment.getUser().getId(), em);
                 
-                if (user == null || user.getRelatedConsultant() == null || 
-                        !Objects.equals(user.getRelatedConsultant().getId(), loggedUser.getId())) {
-                    return Response.status(Response.Status.UNAUTHORIZED).build();
+                if (user == null || !securityHelper.isValidUserConsultantRelation(user, loggedUser)) {
+                    return Response.status(Response.Status.FORBIDDEN).build();
                 }
                 
                 appointment.setConsultant(loggedUser);
                 appointment.setUser(user);
-                
             } else {
                 User consultant = userDao.find(appointment.getConsultant().getId(), em);
                 
-                if (consultant == null || loggedUser.getRelatedConsultant() == null || 
-                        !Objects.equals(consultant.getId(), loggedUser.getRelatedConsultant().getId())) {
-                    return Response.status(Response.Status.UNAUTHORIZED).build();
+                if (consultant == null || !securityHelper.isValidUserConsultantRelation(loggedUser, consultant)) {
+                    return Response.status(Response.Status.FORBIDDEN).build();
                 }
                 
                 appointment.setUser(loggedUser);
@@ -108,30 +129,25 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
         }
     }
 
-    @PUT
-    @Path("update")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response update(AgendaAppointment appointment) {
-        try {
-            appointmentDao.update(appointment, em);
-            return Response.status(Response.Status.OK).build();
-        } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-
     @DELETE
     @Path("delete/{id}")
     public Response delete(@PathParam("id") Long id) {
-        AgendaAppointment app;
         try {
-            if(appointmentDao.find(id, em) != null) {
-                app = new AgendaAppointment(id);
-                appointmentDao.delete(app, em);
-                return Response.status(Response.Status.OK).build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            AgendaAppointment appointment = appointmentDao.find(id, em);
+            if (appointment == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
             }
-            return Response.status(Response.Status.NOT_FOUND).build();
+            
+            Response access = validateAppointmentAccess(loggedUser, appointment);
+            if (access != null) return access;
+            
+            appointmentDao.delete(appointment, em);
+            return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -143,9 +159,23 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response find(@PathParam("id") Long id) {
         try {
-            return Response.ok().entity(appointmentDao.listOnce("id", id, em)).build();
-        } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            AgendaAppointment appointment = appointmentDao.find(id, em);
+            if (appointment == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            
+            if (!canAccessAppointment(loggedUser, appointment)) {
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+            
+            return Response.ok(appointment).build();
+        } catch (RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
@@ -155,7 +185,18 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllAppointments() {
         try {
-            return Response.ok().entity(appointmentDao.list(em)).build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            List<AgendaAppointment> all = appointmentDao.list(em);
+            
+            List<AgendaAppointment> allowed = all.stream()
+                .filter(app -> canAccessAppointment(loggedUser, app))
+                .collect(Collectors.toList());
+            
+            return Response.ok(allowed).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -167,7 +208,12 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllCurrentByUser(@PathParam("userId") Long userId) {
         try {
-            return Response.ok().entity(appointmentDao.listCurrentByUser(userId, em)).build();
+            Response r = securityHelper.requireRegularSameUser(userId);
+            if (r != null) return r;
+            
+            return Response.ok(
+                appointmentDao.listCurrentByUser(userId, em)
+            ).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -179,8 +225,30 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllByConsultant(@PathParam("consultantId") Long consultantId) {
         try {
-            return Response.ok().entity(appointmentDao.list("consultant.id", consultantId, em)).build();
+            Response r = securityHelper.requireConsultantSameUser(consultantId);
+            if (r != null) return r;
+            
+            return Response.ok(
+                appointmentDao.list("consultant.id", consultantId, em)
+            ).build();
         } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+   
+    @GET
+    @Path("findAppointmentsByUserAndDate")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response findAppointmentsByUserAndDate(@QueryParam("userId") Long userId, @QueryParam("date") String date) throws SQLException {
+        try {
+            Response r = securityHelper.requireRegularSameUser(userId);
+            if (r != null) return r;
+            
+            return Response.ok(
+                appointmentDao.findAppointmentsByUserAndDate(userId, date, em)
+            ).build();
+        } catch (RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -189,31 +257,5 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-    
-    @GET
-    @Path("findByDate")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findByDate(@QueryParam("date") String date) {
-        try {
-            return Response.ok().entity(appointmentDao.findByDate(date, em)).build();
-        } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-    
-    @GET
-    @Path("findAppointmentsByUserAndDate")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findAppointmentsByUserAndDate(@QueryParam("userId") Long userId, @QueryParam("date") String date) throws SQLException {
-        try {
-            return Response.ok().entity(appointmentDao.findAppointmentsByUserAndDate(userId, date, em)).build();
-        } catch (RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-
-    
+    }    
 }
