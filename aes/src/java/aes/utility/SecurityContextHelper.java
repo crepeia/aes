@@ -38,7 +38,7 @@ public class SecurityContextHelper {
     }
     
     public boolean isAnonymous(User user) {
-        return user != null || user.getEmail() == null;
+        return user != null && user.getEmail() == null;
     }
     
     // Usuário autenticado não anônimo (padrão)
