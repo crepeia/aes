@@ -69,6 +69,10 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     }
     
     private boolean canAccessAppointment(User loggedUser, AgendaAppointment appointment) {
+        if (loggedUser == null || appointment == null) {
+            return false;
+        }
+        
         if (loggedUser.isConsultant()) {
             return appointment.getConsultant() != null &&
                    Objects.equals(
@@ -86,7 +90,16 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     
     private Response validateAppointmentAccess(User loggedUser, AgendaAppointment appointment) {
         if (!canAccessAppointment(loggedUser, appointment)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] DENIED_APPOINTMENT_ACCESS reason=INVALID_USER_OBJECT_RELATION "
+                   + "actorUserId={0} appointmentId={1} role={2}",
+                     new Object[]{
+                         loggedUser.getId(),
+                         appointment.getId(),
+                         loggedUser.isConsultant() ? "CONSULTANT" : "REGULAR"
+                     });
+            return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_OBJECT_RELATION").build();
         }
         return null;
     }
@@ -104,8 +117,17 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             if (loggedUser.isConsultant()) {
                 User user = userDao.find(appointment.getUser().getId(), em);
                 
-                if (user == null || !securityHelper.isValidUserConsultantRelation(user, loggedUser)) {
-                    return Response.status(Response.Status.FORBIDDEN).build();
+                if (user == null) {
+                    Logger.getLogger(AgendaAppointmentFacadeREST.class.getName())
+                        .log(Level.WARNING,
+                             "[SECURITY] DENIED_APPOINTMENT_INSERT reason=TARGET_USER_NOT_FOUND "
+                           + "actorUserId={0} role=CONSULTANT",
+                             loggedUser.getId());
+                    return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
+                }
+                
+                if (!securityHelper.isValidUserConsultantRelation(user, loggedUser)) {
+                    return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_CONSULTANT_RELATION").build();
                 }
                 
                 appointment.setConsultant(loggedUser);
@@ -113,8 +135,18 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             } else {
                 User consultant = userDao.find(appointment.getConsultant().getId(), em);
                 
-                if (consultant == null || !securityHelper.isValidUserConsultantRelation(loggedUser, consultant)) {
-                    return Response.status(Response.Status.FORBIDDEN).build();
+                if (consultant == null) {
+                    Logger.getLogger(AgendaAppointmentFacadeREST.class.getName())
+                        .log(Level.WARNING,
+                             "[SECURITY] DENIED_APPOINTMENT_INSERT reason=TARGET_USER_NOT_FOUND "
+                           + "actorUserId={0} role=REGULAR",
+                             loggedUser.getId());
+                    
+                    return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
+                }
+                
+                if (!securityHelper.isValidUserConsultantRelation(loggedUser, consultant)) {
+                    return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_CONSULTANT_RELATION").build();
                 }
                 
                 appointment.setUser(loggedUser);
@@ -125,7 +157,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
@@ -140,7 +172,12 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             
             AgendaAppointment appointment = appointmentDao.find(id, em);
             if (appointment == null) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                Logger.getLogger(AgendaAppointmentFacadeREST.class.getName())
+                        .log(Level.WARNING,
+                             "[SECURITY] DENIED_APPOINTMENT_DELETE reason=TARGET_OBJECT_NOT_FOUND "
+                           + "actorUserId={0}",
+                             loggedUser.getId());
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
             }
             
             Response access = validateAppointmentAccess(loggedUser, appointment);
@@ -150,7 +187,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
@@ -166,40 +203,21 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             
             AgendaAppointment appointment = appointmentDao.find(id, em);
             if (appointment == null) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                Logger.getLogger(AgendaAppointmentFacadeREST.class.getName())
+                        .log(Level.WARNING,
+                             "[SECURITY] DENIED_APPOINTMENT_FIND reason=TARGET_OBJECT_NOT_FOUND "
+                           + "actorUserId={0}",
+                             loggedUser.getId());
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
             }
             
-            if (!canAccessAppointment(loggedUser, appointment)) {
-                return Response.status(Response.Status.FORBIDDEN).build();
-            }
+            Response access = validateAppointmentAccess(loggedUser, appointment);
+            if (access != null) return access;
             
             return Response.ok(appointment).build();
         } catch (RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-
-    @Path("findAll")
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findAllAppointments() {
-        try {
-            Response r = securityHelper.requireAuthenticatedUser();
-            if (r != null) return r;
-
-            User loggedUser = securityHelper.getLoggedUser();
-            
-            List<AgendaAppointment> all = appointmentDao.list(em);
-            
-            List<AgendaAppointment> allowed = all.stream()
-                .filter(app -> canAccessAppointment(loggedUser, app))
-                .collect(Collectors.toList());
-            
-            return Response.ok(allowed).build();
-        } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -216,7 +234,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             ).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -233,7 +251,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             ).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
    
@@ -250,7 +268,7 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
             ).build();
         } catch (RuntimeException ex) {
             Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     

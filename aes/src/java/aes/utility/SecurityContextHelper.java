@@ -3,6 +3,8 @@ package aes.utility;
 import aes.model.User;
 import aes.persistence.UserDAO;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -36,7 +38,7 @@ public class SecurityContextHelper {
     }
     
     public boolean isAnonymous(User user) {
-        return user == null || user.getEmail() == null;
+        return user != null || user.getEmail() == null;
     }
     
     // Usuário autenticado não anônimo (padrão)
@@ -44,11 +46,18 @@ public class SecurityContextHelper {
         User user = getLoggedUser();
 
         if (user == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=NOT_AUTHENTICATED");
+            return Response.status(Response.Status.UNAUTHORIZED).entity("NOT_AUTHENTICATED").build();
         }
 
         if (isAnonymous(user)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=ANONYMOUS_USER userId={0}",
+                     user.getId());
+            return Response.status(Response.Status.FORBIDDEN).entity("ANONYMOUS_USER").build();
         }
 
         return null;
@@ -59,7 +68,10 @@ public class SecurityContextHelper {
         User user = getLoggedUser();
         
         if (user == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=NOT_AUTHENTICATED");
+            return Response.status(Response.Status.UNAUTHORIZED).entity("NOT_AUTHENTICATED").build();
         }
         
         return null;
@@ -70,11 +82,17 @@ public class SecurityContextHelper {
         User user = getLoggedUser();
 
         if (user == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=NOT_AUTHENTICATED");
+            return Response.status(Response.Status.UNAUTHORIZED).entity("NOT_AUTHENTICATED").build();
         }
 
         if (!isAnonymous(user)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=INVALID_USER_ROLE");
+            return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
         }
 
         return null;
@@ -82,35 +100,60 @@ public class SecurityContextHelper {
     
     public Response requireConsultant(User user) {
         if (!user.isConsultant()) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=INVALID_USER_ROLE loggedUserId={0}",
+                     user.getId());
+            return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
         }
         return null;
     }
     
     public Response requireRegularUser(User user) {
         if (user.isConsultant()) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=INVALID_USER_ROLE loggedUserId={0}",
+                     user.getId());
+            return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
         }
         return null;
     }
     
     public Response requireSameUser(User user, Long userId) {
         if (!Objects.equals(user.getId(), userId)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=ACCESS_DENIED_DIFFERENT_USER paramUserId={0} loggedUserId={1}",
+                     new Object[]{ userId, user.getId() });
+            return Response.status(Response.Status.FORBIDDEN).entity("ACCESS_DENIED").build();
         }
         return null;
     }
     
     public Response requireSameConsultant(User user, Long consultantId) {
         if (!Objects.equals(user.getId(), consultantId)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=ACCESS_DENIED_DIFFERENT_USER paramUserId={0} loggedUserId={1}",
+                     new Object[]{ consultantId, user.getId() });
+            return Response.status(Response.Status.FORBIDDEN).entity("ACCESS_DENIED").build();
         }
         return null;
     }
     
     public boolean isValidUserConsultantRelation(User user, User consultant) {
-        return user.getRelatedConsultant() != null &&
+        boolean valid = user.getRelatedConsultant() != null &&
                Objects.equals(user.getRelatedConsultant().getId(), consultant.getId());
+        
+        if (!valid) {
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=INVALID_USER_CONSULTANT_RELATION userId={0} consultantId={1}",
+                     new Object[]{ user.getId(), consultant.getId() });
+        }
+        
+        return valid;
     }
     
     public Response requireRegularSameUser(Long userId) {
@@ -120,11 +163,19 @@ public class SecurityContextHelper {
         if (r != null) return r;
 
         if (user.isConsultant()) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=INVALID_USER_ROLE paramUserId={0} loggedUserId={1}",
+                     new Object[]{ userId, user.getId() });
+            return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
         }
 
         if (!Objects.equals(user.getId(), userId)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=ACCESS_DENIED_DIFFERENT_USER paramUserId={0} loggedUserId={1}",
+                     new Object[]{ userId, user.getId() });
+            return Response.status(Response.Status.FORBIDDEN).entity("ACCESS_DENIED").build();
         }
 
         return null;
@@ -137,11 +188,19 @@ public class SecurityContextHelper {
         if (r != null) return r;
 
         if (!user.isConsultant()) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=INVALID_USER_ROLE paramUserId={0} loggedUserId={1}",
+                     new Object[]{ userId, user.getId() });
+            return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
         }
 
         if (!Objects.equals(user.getId(), userId)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=ACCESS_DENIED_DIFFERENT_USER paramUserId={0} loggedUserId={1}",
+                     new Object[]{ userId, user.getId() });
+            return Response.status(Response.Status.FORBIDDEN).entity("ACCESS_DENIED").build();
         }
 
         return null;
