@@ -59,12 +59,15 @@ public class AppNavigationFacadeREST extends AbstractFacade<AppNavigation> {
         }
     }
     
-    private String getClientIp() {
-        String xf = request.getHeader("X-Forwarded-For");
-        if (xf != null && !xf.isEmpty()) {
-            return xf.split(",")[0];
+    private String getFullIpChain() {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        String remoteAddr = request.getRemoteAddr();
+        
+        if (xForwardedFor == null || xForwardedFor.isEmpty()) {
+            return remoteAddr;
+        } else {
+            return xForwardedFor + ", " + remoteAddr;
         }
-        return request.getRemoteAddr();
     }
     
     @Path("saveNavigation")
@@ -77,20 +80,22 @@ public class AppNavigationFacadeREST extends AbstractFacade<AppNavigation> {
             
             User loggedUser = securityHelper.getLoggedUser();
             
-            String serverIp = getClientIp();
+            String serverIpChain = getFullIpChain();
             String clientIp = appNavigation.getIp();
             
-            if (clientIp != null && !clientIp.equals(serverIp)) {
+            boolean ipExistsInChain = serverIpChain.contains(clientIp);
+            
+            if (clientIp != null && !ipExistsInChain) {
                 Logger.getLogger(AppNavigationFacadeREST.class.getName())
                     .log(Level.INFO,
-                         "IP mismatch | userId={0} | serverIp={1} | clientIp={2}",
-                         new Object[]{ loggedUser.getId(), serverIp, clientIp });
+                         "IP Divergence | userId={0} | serverChain=[{1}] | clientIp={2}",
+                         new Object[]{ loggedUser.getId(), serverIpChain, clientIp });
             }
             
             AppNavigation nav = new AppNavigation();
             nav.setUser(loggedUser);
             nav.setTimeStamp(new Date());
-            nav.setIp(serverIp);
+            nav.setIp(serverIpChain);
             nav.setUserAgent(appNavigation.getUserAgent());
             
             appNavigationDao.saveNavigation(nav, em);
