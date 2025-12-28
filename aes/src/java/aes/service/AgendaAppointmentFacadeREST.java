@@ -243,8 +243,31 @@ public class AgendaAppointmentFacadeREST extends AbstractFacade<AgendaAppointmen
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllByConsultant(@PathParam("consultantId") Long consultantId) {
         try {
-            Response r = securityHelper.requireConsultantSameUser(consultantId);
+            Response r = securityHelper.requireAuthenticatedUser();
             if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            User consultant = userDao.find(consultantId, em);
+            
+            if (consultant == null) {
+                Logger.getLogger(AgendaAppointmentFacadeREST.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] DENIED_APPOINTMENT_FIND reason=TARGET_USER_NOT_FOUND "
+                   + "actorUserId={0} consultantId={1}",
+                     new Object[]{loggedUser.getId(), consultantId});
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
+            }
+            
+            if (loggedUser.isConsultant()) {
+                r = securityHelper.requireSameConsultant(loggedUser, consultantId);
+                if (r != null) return r;
+            } else {
+                if (!securityHelper.isValidUserConsultantRelation(loggedUser, consultant)) {
+                    return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_CONSULTANT_RELATION").build();
+                }
+            }
             
             return Response.ok(
                 appointmentDao.list("consultant.id", consultantId, em)
