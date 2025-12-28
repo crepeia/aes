@@ -83,10 +83,13 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
             cal.add(Calendar.YEAR, 1);
             contact.setDateScheduled(cal.getTime());
             contactDao.insertOrUpdate(contact, em);
+            
+            Logger.getLogger(ContactFacadeREST.class.getName()).log(Level.INFO, "ANNUAL_SCREENING_COMPLETED actorUserId={0}", loggedUser.getId());
+            
             return Response.status(Response.Status.CREATED).build();
-        } catch (SQLException | RuntimeException e) {
-            Logger.getLogger(ContactFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (SQLException | RuntimeException ex) {
+            Logger.getLogger(ContactFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
