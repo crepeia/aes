@@ -89,7 +89,11 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
             if (request == null ||
                     request.instanceId == null ||
                     request.publicKey == null) {
-                return Response.status(Response.Status.BAD_REQUEST).build();
+                
+                Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_ANONKEY_INSERT reason=INVALID_DATA");
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
             
             // Verifica se já existe chave para o instanceId
@@ -122,14 +126,20 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
     public Response validateChallenge(ChallengeRequest request) throws SQLException {
         try {
             if (!anonymousAuthenticationDao.validateNonce(request.nonce)) {
-                System.out.println("Nonce inválido ou expirado");
-                return Response.status(Response.Status.BAD_REQUEST).build();
+                Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_VALIDADE_NONCE reason=INVALID_DATA");
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
 
             AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, false, em);
             if (existing == null || existing.getPublicKey() == null) {
-                System.out.println("Chave pública não encontrada para o instanceId: " + request.instanceId);
-                return Response.status(Response.Status.UNAUTHORIZED).build();
+                Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] PUBLIC_KEY_NOT_FOUND reason=INVALID_DATA"
+                        + "requestInstanceId={0}",
+                        request.instanceId);
+                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
             }
             
             byte[] pubKeyBytes = Base64.getDecoder().decode(existing.getPublicKey());
@@ -140,8 +150,10 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
             
             boolean verified = AnonymousAuthenticationUtils.verifySignature(pubKeyBytes, challengeBytes, sigBytes);
             if (!verified) {
-                System.out.println("Assinatura inválida");
-                return Response.status(Response.Status.UNAUTHORIZED).build();
+                Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_SIGNATURE reason=INVALID_DATA");
+                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
             }
            
             String token = authenticationTokenDao.issueAnonymousToken(existing, em);
