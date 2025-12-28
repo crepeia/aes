@@ -70,16 +70,16 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
         }
     }
     
-    private Response validateAvailableDayAndTime(Byte weekDay, LocalTime time) {
-        if (weekDay == null || weekDay < 0 || weekDay > 4) {
+    private Response validateAvailableDayAndTime(User loggedUser, Byte weekDay, LocalTime time) {
+        if ((weekDay == null || weekDay < 0 || weekDay > 4) || 
+            (time == null || !ALLOWED_HOURS.contains(time))) {
+            Logger.getLogger(AgendaAvailableFacadeREST.class.getName())
+                .log(Level.WARNING,
+                    "[SECURITY] DENIED_AVAILABLE_INSERT reason=INVALID_DATA "
+                    + "actorUserId={0} role=REGULAR weekDay={1} time={2}",
+                    new Object[]{loggedUser.getId(), weekDay, time});
             return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Dia da semana inválido")
-                .build();
-        }
-        
-        if (time == null || !ALLOWED_HOURS.contains(time)) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Horário não permitido")
+                .entity("INVALID_WEEK_DAY")
                 .build();
         }
         
@@ -102,6 +102,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             available.setUser(loggedUser);
             
             Response validation = validateAvailableDayAndTime(
+                loggedUser,
                 available.getAvailableDate(),
                 available.getAvailableTime()
             );
@@ -111,7 +112,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
@@ -126,7 +127,12 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             
             AgendaAvailable available = availableDao.find(id, em);
             if (available == null) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                Logger.getLogger(AgendaAvailableFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_AVAILABLE_DELETE reason=TARGET_OBJECT_NOT_FOUND "
+                        + "actorUserId={0} availableId={1}",
+                        new Object[]{loggedUser.getId(), id});
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
             }
             
             r = securityHelper.requireSameUser(loggedUser, available.getUser().getId());
@@ -136,7 +142,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
         
@@ -151,7 +157,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             return Response.ok().entity(availableDao.list("user.id", userId, em)).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -166,7 +172,7 @@ public class AgendaAvailableFacadeREST extends AbstractFacade<AgendaAvailable> {
             return Response.ok().entity(availableDao.listByConsultant(consultantId, em)).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(AgendaAvailableFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
