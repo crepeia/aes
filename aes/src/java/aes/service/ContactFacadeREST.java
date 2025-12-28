@@ -11,6 +11,7 @@ import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
 import aes.utility.EMailSSL;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,6 +46,9 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
     private ContactDAO contactDao;
     private EMailSSL eMailSSL;
     private UserDAO userDAO;
+    
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public ContactFacadeREST() {
         super(Contact.class);
@@ -57,16 +62,21 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
     }
     
     @Secured
-    @Path("sendAnnualScreeningEmail/{userId}")
+    @Path("sendAnnualScreeningEmail")
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response sendAnnualScreeningEmail(@PathParam("userId") Long userId) {
+    public Response sendAnnualScreeningEmail() {
         try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
             Contact contact = new Contact();
-            User user = userDAO.find(userId, em);
-            contact.setUser(user);
+            
+            contact.setUser(loggedUser);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
-            contact.setRecipient(user.getEmail());
+            contact.setRecipient(loggedUser.getEmail());
             contact.setSubject("annualscreening_subj");
             contact.setContent("annualscreening");
             Calendar cal = Calendar.getInstance();
