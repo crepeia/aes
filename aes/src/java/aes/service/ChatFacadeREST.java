@@ -7,20 +7,26 @@ package aes.service;
 
 import aes.model.Chat;
 import aes.model.Message;
+import aes.model.User;
 import aes.persistence.ChatDAO;
 import aes.persistence.UserDAO;
 import aes.utility.EmailHelper;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -51,8 +57,8 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     private UserDAO userDao;
     private EmailHelper emailHelper;
 
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public ChatFacadeREST() {
         super(Chat.class);
@@ -66,82 +72,107 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     }
 
     @POST
-    @Path("create/{userId}")
-    @Secured
+    @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(@PathParam("userId") Long userId) {
+    @Secured
+    public Response create() {
         try {
-            Chat newChat = chatDAO.create(userId, em);
-            return Response.ok().entity(newChat).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.NO_CONTENT).build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Chat newChat = chatDAO.create(loggedUser.getId(), em);
+            return Response.status(Response.Status.CREATED).entity(newChat).build();
+        } catch (RuntimeException ex) {
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
     @GET
-    @Path("{userId}")
-    @Secured
+    @Path("findByUser")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response find(@PathParam("userId") Long userId) {
-        String userEmail = securityContext.getUserPrincipal().getName();
+    @Secured
+    public Response findByUser() {
+        try {    
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-        Chat c = chatDAO.find(userId, userEmail, em);
-        if (c == null) {
-            return Response.status(Response.Status.NO_CONTENT).build();
+            User loggedUser = securityHelper.getLoggedUser();
 
-        } else {
-            return Response.ok().entity(c).build();
+            Chat chat = chatDAO.find(loggedUser.getId(), loggedUser.getEmail(), em);
+            if (chat == null) {
+                Logger.getLogger(ChatFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] CHAT_NOT_FOUND reason=TARGET_OBJECT_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+                return Response.status(Response.Status.NOT_FOUND)
+                    .entity("TARGET_OBJECT_NOT_FOUND")
+                    .build();
+            }
+
+            return Response.ok(chat).build();
+        } catch (RuntimeException ex) {
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
-        /*List<Chat> c = getEntityManager().createQuery("SELECT c FROM Chat c WHERE c.user.id=:userId AND c.user.email=:email")
-                .setParameter("email", userEmail)
-                .setParameter("userId", userId)
-                .getResultList();
-        
-        if(c.isEmpty()){
-            return Response.status(Response.Status.NO_CONTENT).build();
-        } else {
-            return Response.ok().entity((Chat) c.toArray()[0]).build();
-        }*/
 
     }
     
     @PUT
     @Path("sendContactRequest")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response sendContactRequest(JsonParser jp) {
+    public Response sendContactRequest(JsonParser jp) throws MessagingException {
         try {
             JsonNode node = jp.getCodec().readTree(jp);
+            if (node == null || node.get("email") == null) {
+                Logger.getLogger(ChatFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] INVALID_OR_EMPTY_NODE reason=INVALID_DATA ");
+                
+                return Response.status(Response.Status.BAD_REQUEST)
+                .entity("INVALID_DATA")
+                .build();
+            }
+            
             String email = node.get("email").asText();
             System.out.println("aes.service.ChatFacadeREST.sendContactRequest()");
-
             emailHelper.sendContactRequestEmail(email, em);
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.INFO, null, "Send Contact Request service");
             
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, null, "Send Contact Request service");
             return Response.ok().build();
-        } catch (Exception e) {
-            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (IOException | SQLException | MissingResourceException | MessagingException ex) {
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
-    @Path("findUserChats/{id}")
+    @Path("findUserChats")
     @Secured
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findUserChats(@PathParam("id") Long idConsultant) {
-        List<Chat> chats;
+    public Response findUserChats() {
         try {
-            chats = chatDAO.listUserChats(idConsultant, em);
-            return Response.ok().entity(chats).build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            r = securityHelper.requireConsultant(loggedUser);
+            if (r != null) return r;
+            
+            return Response.ok(chatDAO.listUserChats(loggedUser.getId(), em)).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
+    /*
     @GET
     @Path("findAnonymousChats")
-    @Secured
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAnonymousChats() {
         List<Chat> chats;
@@ -156,7 +187,6 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
     
     @GET
     @Path("findAnonymousChat/{chatId}")
-    @Secured
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAnonymousChat(@PathParam("chatId") Long chatId) {
         try {
@@ -172,6 +202,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+    */
 
     @Override
     protected EntityManager getEntityManager() {

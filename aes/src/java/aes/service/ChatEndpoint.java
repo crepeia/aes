@@ -349,7 +349,7 @@ public class ChatEndpoint {
                         this.isWaiting = false;
                         sendNoConsultantMessage(session);
                     }
-                }, 4, TimeUnit.MINUTES);
+                }, 30, TimeUnit.SECONDS);
 
                 users.put(newChat.getId(), session);
                 String realStatus = statusType.OFFLINE.toString();

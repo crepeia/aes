@@ -259,15 +259,15 @@ public class User implements Serializable {
     }
 
     public boolean isFemale() {
-        return gender == 'F';
+        return gender != null && gender == 'F';
     }
 
     public boolean isMale() {
-        return gender == 'M';
+        return gender != null && gender == 'M';
     }
     
     public boolean isOther() {
-        return gender == 'O';
+        return gender != null && gender == 'O';
     }
     
     public String getHashedId(){
@@ -331,27 +331,27 @@ public class User implements Serializable {
         this.birthDate = birthDate;
     }
 
-    public char getGender() {
+    public Character getGender() {
         return gender;
     }
 
-    public void setGender(char gender) {
+    public void setGender(Character gender) {
         this.gender = gender;
     }
 
-    public boolean isReceiveEmails() {
+    public Boolean isReceiveEmails() {
         return receiveEmails;
     }
 
-    public void setReceiveEmails(boolean receiveEmails) {
+    public void setReceiveEmails(Boolean receiveEmails) {
         this.receiveEmails = receiveEmails;
     }
 
-    public boolean isAuthorizeData() {
+    public Boolean isAuthorizeData() {
         return authorizeData;
     }
 
-    public void setAuthorizeData(boolean authorizeData) {
+    public void setAuthorizeData(Boolean authorizeData) {
         this.authorizeData = authorizeData;
     }
 

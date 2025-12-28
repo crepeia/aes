@@ -63,12 +63,12 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRecord(Record entity) {
         try {
-            String userEmail = securityContext.getUserPrincipal().getName();
+//            String userEmail = securityContext.getUserPrincipal().getName();
             //User u = em.find(User.class, entity.getUser().getId());
             User u = userDAO.find(entity.getUser().getId(), em);
-            if (!u.getEmail().equals(userEmail)) {
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            }
+//            if (!u.getEmail().equals(userEmail)) {
+//                return Response.status(Response.Status.UNAUTHORIZED).build();
+//            }
             try {
                 //Record created = super.create(entity);
                 Record created = recordDAO.create(u.getId(), em);
