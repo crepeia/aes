@@ -10,6 +10,7 @@ import aes.model.User;
 import aes.persistence.EvaluationDAO;
 import aes.persistence.UserDAO;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -54,8 +56,8 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     private EvaluationDAO evaluationDAO;
     private UserDAO userDAO;
     
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public EvaluationFacadeREST() {
         super(Evaluation.class);
@@ -81,83 +83,72 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     }
 
     @GET
-    @Path("find/{userId}")
+    @Path("find")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response find(@PathParam("userId") Long userId) {
+    public Response find() {
         try {
-            String userEmail = securityContext.getUserPrincipal().getName();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-           /* List<Evaluation> evList = getEntityManager().createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId AND e.user.email=:userEmail")
-                    .setParameter("userId", userId)
-                    .setParameter("userEmail", userEmail)
-                    .getResultList();
-            
-            if(evList.size() > 0){
-                return Response.ok().entity(evList.get(evList.size()-1)).build();
-            } else {
-                //System.out.println("service.EvaluationFacadeREST.find() create");
-                Evaluation ev = new Evaluation();
-                ev.setDateCreated(new Date());
-                ev.setUser(em.find(User.class, userId));
-                super.create(ev);}*/
-            Evaluation ev = evaluationDAO.find(userId, userEmail, em);
+            User loggedUser = securityHelper.getLoggedUser();
+
+            Evaluation ev = evaluationDAO.find(loggedUser.getId(), em);
             
             if (ev == null) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                Logger.getLogger(EvaluationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] NON_EXISTENT_EVALUATION reason=TARGET_OBJECT_NOT_FOUND "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
             }
             
             return Response.ok().entity(ev).build();
-        } catch (SQLException e) {
-            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
-    @GET
+    /*@GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         
         return String.valueOf(evaluationDAO.count(em));
         //return String.valueOf(super.count());
-    }
+    }*/
     
     @POST
-    @Path("createEvaluation/{userId}")
+    @Path("createEvaluation")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createEvaluation(@PathParam("userId") Long userId, Evaluation newEvaluation) {
-        //Teste
-//    public Response createEvaluation(@PathParam("userId") Long userId) {
-//            Evaluation newEvaluation = new Evaluation();
-        if(newEvaluation == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Evaluation object cannot be null").build();
-        }
-        
-        if(userId == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("User ID must be provided").build();
-        }
-        
-        // Tratando o caso do usuário com ID passado não existir na tabela.
-        User user = userDAO.find(userId, em);
-        if(user == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist").build();
-        }
-        
-        newEvaluation.setUser(user);
-        newEvaluation.setDateCreated(new Date());
-        
+    public Response createEvaluation(Evaluation newEvaluation) {
         try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+
+            if(newEvaluation == null) {
+                Logger.getLogger(EvaluationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_EVALUATION reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+
+            newEvaluation.setUser(loggedUser);
+            newEvaluation.setDateCreated(new Date());
+        
             evaluationDAO.createEvaluation(newEvaluation, em);
             return Response.status(Response.Status.CREATED).build();
-        } catch (SQLException e) {
-            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error creating Evaluation", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error inserting Evaluation: " + e.getMessage()).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error creating Evaluation: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
-    }
-    
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
     }
     
     @GET
@@ -165,50 +156,70 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getEvaluationDatesByUser(@PathParam("userId") Long userId) {
         try {
-            // Verifica se o usuário existe
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            r = securityHelper.requireConsultant(loggedUser);
+            if (r != null) return r;
+            
             User user = em.find(User.class, userId);
             if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Usuário não encontrado\"}")
-                    .build();
+                Logger.getLogger(EvaluationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] NON_EXISTENT_USER reason=TARGET_USER_NOT_FOUND "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
             }
-
-            // Busca as datas das avaliações do usuário
-            List<Date> dates = em.createQuery(
-                "SELECT e.dateCreated FROM Evaluation e WHERE e.user.id = :userId", Date.class)
-                .setParameter("userId", userId)
-                .getResultList();
+            
+            // Just info
+            boolean valid = securityHelper.isValidUserConsultantRelation(user, loggedUser);
+            
+            List<Date> dates = evaluationDAO.listDatesByUser(user.getId(), em);
 
             return Response.ok(dates).build();
 
-        } catch (Exception e) {
-            Logger.getLogger(EvaluationFacadeREST.class.getName())
-                .log(Level.SEVERE, "Erro ao buscar datas de avaliações", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("{\"error\":\"Erro ao processar a requisição\"}")
-                .build();
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error creating Evaluation: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
     @Path("findByUserAndDate")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getEvaluationByUserAndDate(
-        @QueryParam("userId") Long userId,
-        @QueryParam("date") String dateStr) {
-
+    public Response getEvaluationByUserAndDate(@QueryParam("userId") Long userId, @QueryParam("date") String dateStr) {
         try {
-            if (userId == null || dateStr == null || dateStr.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\":\"Parâmetros obrigatórios não informados\"}")
-                    .build();
-            }
-
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            r = securityHelper.requireConsultant(loggedUser);
+            if (r != null) return r;
+            
             User user = em.find(User.class, userId);
             if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Usuário não encontrado\"}")
-                    .build();
+                Logger.getLogger(EvaluationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] NON_EXISTENT_USER reason=TARGET_USER_NOT_FOUND "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
+            }
+            
+            if (dateStr == null || dateStr.trim().isEmpty()) {
+                Logger.getLogger(EvaluationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_PARAM_OBJECT reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
 
             // Tenta parsear a data com milissegundos e timezone
@@ -217,9 +228,13 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
             try {
                 date = sdf.parse(dateStr);
             } catch (ParseException e) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\":\"Formato de data inválido\"}")
-                    .build();
+                Logger.getLogger(EvaluationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_DATE reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
 
             // Adiciona um intervalo para considerar imprecisão de milissegundos
@@ -232,35 +247,29 @@ public class EvaluationFacadeREST extends AbstractFacade<Evaluation> {
             cal.add(Calendar.SECOND, 10); // volta ao original + 5 segundos
             Date end = cal.getTime();
 
-            // Apenas para debug, pode remover depois
-            System.out.println("Data recebida: " + dateStr);
-            System.out.println("Data parseada: " + date);
-            System.out.println("Intervalo: " + start + " até " + end);
-
             // Busca a avaliação dentro do intervalo
-            TypedQuery<Evaluation> query = em.createQuery(
-                "SELECT e FROM Evaluation e WHERE e.user.id = :userId AND e.dateCreated BETWEEN :start AND :end",
-                Evaluation.class);
-            query.setParameter("userId", userId);
-            query.setParameter("start", start);
-            query.setParameter("end", end);
-
-            List<Evaluation> result = query.getResultList();
+            List<Evaluation> result = evaluationDAO.findByUserAndDate(user.getId(), start, end, em);
 
             if (result.isEmpty()) {
-                return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Avaliação não encontrada\"}")
-                    .build();
+                Logger.getLogger(EvaluationFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] NON_EXISTENT_EVALUATION reason=TARGET_OBJECT_NOT_FOUND "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
             }
 
             return Response.ok(result.get(0)).build();
 
-        } catch (Exception e) {
-            Logger.getLogger(EvaluationFacadeREST.class.getName())
-                .log(Level.SEVERE, "Erro ao buscar avaliação", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("{\"error\":\"Erro ao processar a requisição\"}")
-                .build();
+        } catch (SQLException ex) {
+            Logger.getLogger(EvaluationFacadeREST.class.getName()).log(Level.SEVERE, "Error creating Evaluation: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
+    }
+    
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
     }
 }
