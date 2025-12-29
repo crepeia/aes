@@ -6,8 +6,12 @@
 package aes.service;
 
 import aes.model.DailyLog;
+import aes.model.Record;
+import aes.model.User;
 import aes.persistence.DailyLogDAO;
+import aes.persistence.RecordDAO;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,6 +19,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -44,11 +49,16 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private DailyLogDAO dailyLogDAO;
+    private RecordDAO recordDao;
+    
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public DailyLogFacadeREST() {
         super(DailyLog.class);
         try {
             dailyLogDAO = new DailyLogDAO();
+            recordDao =  new RecordDAO();
         } catch (NamingException ex) {
             Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,7 +70,41 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
     @Produces(MediaType.APPLICATION_JSON)
     public Response editOrCreate(DailyLog entity) {
         try {
-            String action = "";
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (entity == null) {
+                Logger.getLogger(DailyLogFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_DAILY_LOG reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("INVALID_DATA")
+                    .build();
+            }
+            
+            Record record = recordDao.find(entity.getRecord().getId(), em);
+            
+            if (record == null || record.getUser() == null) {
+                Logger.getLogger(DailyLogFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_DAILY_LOG reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("INVALID_DATA")
+                    .build();
+            }
+            
+            r = securityHelper.requireSameUser(loggedUser, record.getUser().getId());
+            if (r != null) return r;
+            
+            String action;
             boolean edited = dailyLogDAO.edit(entity, em);
 
             if (edited) {
@@ -70,45 +114,14 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
                 action = "create";
             }
 
-            return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).build();
+            return Response.ok(new JSONObject().put("action", action).toString()).build();
         } catch (JSONException | SQLException ex) {
-            Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-
+            Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
-        /*try {
-            //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-            //Date t = format.parse(entity.getLogDate().toString());
-            
-            DailyLog dl = (DailyLog) getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId AND dl.logDate=:logDate")
-            .setParameter("recordId", entity.getRecord().getId())
-            .setParameter("logDate", entity.getLogDate())
-            .getSingleResult();
-            dl.setDrinks(entity.getDrinks());
-            dl.setContext(entity.getContext());
-            dl.setConsequences(entity.getConsequences());
-            super.edit(dl);
-            action = "edit";
-            
-            } catch( NoResultException e ) {
-            super.create(entity);
-            action = "create";
-            //return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).build();
-            } catch (Exception e) {
-            Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-            }
-            
-            try {
-            return Response.status(Response.Status.OK).entity(new JSONObject().put("action", action).toString()).type(MediaType.APPLICATION_JSON).build();
-            } catch (JSONException ex) {
-            Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-            }*/
-
     }
 
-    @DELETE
+    /*@DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
         try {
@@ -118,15 +131,45 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
             Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    */
 
     @GET
     @Path("find/{recordId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<DailyLog> find(@PathParam("recordId") Long recordId) {
-       /* return getEntityManager().createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:recordId")
-                .setParameter("recordId", recordId)
-                .getResultList();*/
-       return dailyLogDAO.find(recordId, em);
+    public Response find(@PathParam("recordId") Long recordId) {
+        try {     
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Record record = recordDao.find(recordId, em);
+            
+            r = securityHelper.requireSameUser(loggedUser, record.getUser().getId());
+            if (r != null) return r;
+
+            List<DailyLog> dailyLogs = dailyLogDAO.find(record.getId(), em);
+
+            if (dailyLogs.isEmpty()) {
+                Logger.getLogger(DailyLogFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_DAILYLOG_FIND reason=TARGET_OBJECT_NOT_FOUND "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("TARGET_OBJECT_NOT_FOUND")
+                        .build();
+            }
+
+            r = securityHelper.requireSameUser(loggedUser, dailyLogs.get(0).getRecord().getUser().getId());
+            if (r != null) return r;
+
+            return Response.ok(dailyLogs).build();
+        } catch (Exception ex) {
+            Logger.getLogger(DailyLogFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
+        }
     }
 
     @Override
