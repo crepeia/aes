@@ -143,7 +143,7 @@ public class ItemFacadeREST extends AbstractFacade<Item> {
                 Logger.getLogger(AgendaAppointmentFacadeREST.class.getName())
                     .log(Level.INFO,
                          "[INFO] DID_NOT_FIND_ITEM reason=TARGET_OBJECT_NOT_FOUND "
-                       + "actorUserId={0} role=REGULAR",
+                       + "actorUserId={0}",
                          loggedUser.getId());
                     
                 return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
