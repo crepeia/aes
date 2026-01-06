@@ -13,6 +13,7 @@ import aes.persistence.MedalUserDAO;
 import aes.persistence.UserDAO;
 import aes.utility.Secured;
 import aes.utility.SecurityContextHelper;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
@@ -126,11 +127,11 @@ public class MedalUserFacadeREST extends AbstractFacade<MedalUser> {
             
             if (existingList.isEmpty()) {
                 entity.setUser(loggedUser);
-                super.create(entity);
+                medalUserDao.insert(entity, em);
             }
             
             return Response.status(Response.Status.CREATED).build();
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
@@ -166,11 +167,11 @@ public class MedalUserFacadeREST extends AbstractFacade<MedalUser> {
             
             if (existingList.isEmpty()) {
                 entity.setUser(loggedUser);
-                super.create(entity);
+                medalUserDao.insert(entity, em);
             }
             
             return Response.status(Response.Status.CREATED).build();
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
@@ -213,9 +214,9 @@ public class MedalUserFacadeREST extends AbstractFacade<MedalUser> {
             }
             
             mu.setDescription(entity.getDescription());
-            MedalUser newEntity = super.edit(mu);
+            medalUserDao.update(mu, em);
             return Response.ok().build();
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
