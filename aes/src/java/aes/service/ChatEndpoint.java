@@ -233,7 +233,7 @@ public class ChatEndpoint {
                 throw new Exception("Token inválido");
             }
 
-            if (at.getUser() != null) {
+            if (at.getUser().getEmail() != null) {
                 // Token de usuário logado
                 currentUser = at.getUser();
                 if (currentUser.getId() != userId) {
@@ -349,7 +349,7 @@ public class ChatEndpoint {
                         this.isWaiting = false;
                         sendNoConsultantMessage(session);
                     }
-                }, 30, TimeUnit.SECONDS);
+                }, 4, TimeUnit.MINUTES);
 
                 users.put(newChat.getId(), session);
                 String realStatus = statusType.OFFLINE.toString();

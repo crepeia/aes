@@ -39,14 +39,23 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         return authToken;
     }
     
-    public String issueAnonymousToken(AnonymousKey anonymousKey, EntityManager em) throws SQLException {
+    public String issueAnonymousToken(AnonymousKey anonymousKey, Long userId, EntityManager em) throws SQLException {
         // Use o identificador para criar um token anonimo
         String token = SecureRandomString.generate() + "-" + "anonymous";
         
         // Salvar o token para rastreamento
         AuthenticationToken authToken = new AuthenticationToken();
         authToken.setToken(token);
+        
         authToken.setUser(null);
+        if (userId != null) {
+            User usr = (User) em.createQuery("SELECT u From User u WHERE u.id=:userId")
+                .setParameter("userId", userId)
+                .getSingleResult();
+            
+            authToken.setUser(usr);
+        }
+        
         authToken.setAnonymousKey(anonymousKey);
         authToken.setDateCreated(new Date());
         super.update(authToken, em);

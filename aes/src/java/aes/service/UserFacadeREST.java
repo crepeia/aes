@@ -8,8 +8,10 @@ package aes.service;
 import aes.controller.ContactController;
 import aes.controller.UserController;
 import aes.model.AgendaAppointment;
+import aes.model.AuthenticationToken;
 import aes.model.User;
 import aes.persistence.AgendaAppointmentDAO;
+import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.ChatDAO;
 import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
@@ -19,6 +21,7 @@ import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
 import aes.utility.RESTApiResponse;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -86,6 +89,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private ContactDAO contactDAO;
     private AgendaAppointmentDAO appointmentDao;
     private ChatDAO chatDao;
+    private AuthenticationTokenDAO authenticationDao;
     private EmailHelper emailHelper;
     
     @Inject
@@ -97,10 +101,12 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Resource
     private UserTransaction userTransaction;
     
-
     @Context
     SecurityContext securityContext;
     
+    @Inject
+    private SecurityContextHelper securityHelper;
+
     public UserFacadeREST(){
         super(User.class);
         emailHelper = new EmailHelper();
@@ -109,6 +115,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             contactDAO = new ContactDAO();
             appointmentDao = new AgendaAppointmentDAO();
             chatDao = new ChatDAO();
+            authenticationDao = new AuthenticationTokenDAO();
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -187,11 +194,25 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Usuário Anônimo cadastrou no sistema.");
             }
             
+            String token = securityHelper.getToken();
+            
+            AuthenticationToken authToken = authenticationDao.findByToken(token, em);
+            
+            if (authToken.getUser() != null) {
+                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Token já associado a um usuário");
+                return Response.status(Response.Status.CONFLICT).entity("ACCESS_DENIED").build();
+            }
+            
             if (existingUser != null) {
+                authToken.setUser(existingUser);
+                authenticationDao.update(authToken, em);
                 return Response.ok(existingUser).build();
             }
             
             userDAO.createAnonymousUser(entity, em);
+            
+            authToken.setUser(entity);
+            authenticationDao.update(authToken, em);
             
             AnonymousUserDTO dto = new AnonymousUserDTO();
             dto.id = entity.getId();

@@ -63,6 +63,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             }
 
             String token = authHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
+            requestContext.setProperty("AUTH_TOKEN", token);
 
             try {
                 validateToken(token);

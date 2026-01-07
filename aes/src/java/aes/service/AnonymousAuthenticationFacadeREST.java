@@ -62,6 +62,7 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
         public String nonce;
         public String instanceId;
         public long timestamp;
+        public Long userId;
     }
     
     // ===== SERVIÇOS DE NONCE =====
@@ -156,7 +157,7 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
                 return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
             }
            
-            String token = authenticationTokenDao.issueAnonymousToken(existing, em);
+            String token = authenticationTokenDao.issueAnonymousToken(existing, request.userId, em);
             
             JsonObject response = Json.createObjectBuilder()
                 .add("token", token)

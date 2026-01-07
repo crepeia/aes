@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -29,12 +30,27 @@ public class SecurityContextHelper {
     @PersistenceContext
     private EntityManager em;
     
+    @Context
+    ContainerRequestContext requestContext;
+    
     public User getLoggedUser() {
         if (securityContext.getUserPrincipal() == null) {
             return null;
         }
         Long userId = Long.valueOf(securityContext.getUserPrincipal().getName());
         return userDao.find(userId, em);
+    }
+    
+    public String getToken() {
+        String token = (String) requestContext.getProperty("AUTH_TOKEN");
+        
+        if (token == null) {
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                    "[SECURITY] INVALID_TOKEN reason=TOKEN_NOT_FOUND_IN_REQUEST_CONTEXT");
+        }
+        
+        return token;
     }
     
     public boolean isAnonymous(User user) {
