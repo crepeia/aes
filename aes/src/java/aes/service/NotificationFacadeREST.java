@@ -71,6 +71,13 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             
             User loggedUser = securityHelper.getLoggedUser();
             
+            if (notification == null) {
+                Logger.getLogger(NotificationFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_NOTIFICATION_INSERT reason=INVALID_DATA ");
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
             boolean allowed = false;
             
             User targetUser;
