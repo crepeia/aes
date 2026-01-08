@@ -23,7 +23,8 @@ public class MobileOptionsDAO extends GenericDAO<MobileOptions> {
     public MobileOptionsDAO() throws NamingException {
         super(MobileOptions.class);
     }
-
+    
+    /*
     public MobileOptions create(MobileOptions entity, EntityManager entityManager) {
         try {
             super.insertOrUpdate(entity, entityManager);
@@ -32,20 +33,16 @@ public class MobileOptionsDAO extends GenericDAO<MobileOptions> {
             return null;
         }
     }
+    */
 
-    public void edit(Long userId, MobileOptions entity, EntityManager entityManager) throws SQLException{
-
-        //String userEmail = securityContext.getUserPrincipal().getName();
-        User u = entityManager.find(User.class, userId);
-
-        entity.setUser(u);
+    public void edit(User user, MobileOptions entity, EntityManager entityManager) throws SQLException{
+        entity.setUser(user);
         entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
         entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
         entity.setQuestionNotificationTime(entity.getQuestionNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
         entity.setDt_tcle_response(entity.getDt_tcle_response());
         
         super.insertOrUpdate(entity, entityManager);
-
     }
 
     public MobileOptions find(Long userId, EntityManager entityManager) throws SQLException {
