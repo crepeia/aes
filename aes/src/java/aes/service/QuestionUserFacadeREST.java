@@ -5,17 +5,24 @@
  */
 package aes.service;
 
-import aes.model.MedalUser;
 import aes.model.Question;
 import aes.model.QuestionUser;
-import java.text.SimpleDateFormat;
+import aes.model.User;
+import aes.persistence.QuestionDAO;
+import aes.persistence.QuestionUserDAO;
+import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -33,13 +40,26 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 @Path("questionuser")
+@Secured
+@TransactionManagement(TransactionManagementType.BEAN)
 public class QuestionUserFacadeREST extends AbstractFacade<QuestionUser> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    private QuestionDAO questionDao;
+    private QuestionUserDAO questionUserDao;
+    
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public QuestionUserFacadeREST() {
         super(QuestionUser.class);
+        try {
+            questionDao = new QuestionDAO();
+            questionUserDao = new QuestionUserDAO();
+        } catch (NamingException ex) {
+            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+        }
     }  
 
     @Override
@@ -52,62 +72,100 @@ public class QuestionUserFacadeREST extends AbstractFacade<QuestionUser> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllQuestions() {
         try {
-            List<Question> list = (List<Question>) em.createQuery("SELECT q FROM Question q")
-            .getResultList();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            List<Question> list = questionDao.findAllQuestion(em);
          
             return Response.ok().entity(list).build();
-        } catch (Exception e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (Exception ex) {
+            Logger.getLogger(QuestionUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     } 
     
     @GET
-    @Path("find/{userId}")
+    @Path("findByUser")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findUserQuestions(@PathParam("userId") String uId) {
+    public Response findUserQuestions() {
         try {
-            List<QuestionUser> list = (List<QuestionUser>) em.createQuery("SELECT qu FROM QuestionUser qu WHERE qu.user.id=:userId")
-                .setParameter("userId", Long.parseLong(uId))
-                .getResultList();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            List<QuestionUser> list = questionDao.findUserQuestions(loggedUser.getId(), em);
             
             return Response.ok().entity(list).build();
-        } catch (Exception e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (Exception ex) {
+            Logger.getLogger(QuestionUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
-    @Path("findLastUserAnswer/{currentDate}/{userId}")
+    @Path("findLastUserAnswer/{currentDate}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findLastUserAnswer(@PathParam("currentDate") String cD,@PathParam("userId") String userId) {
+    public Response findLastUserAnswer(@PathParam("currentDate") String cD) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date currentDate = sdf.parse(cD);
-            List<QuestionUser> list = (List<QuestionUser>) em.createQuery("SELECT qu FROM QuestionUser qu WHERE qu.user.id=:userId AND qu.dateCreated=:currentDate")
-                .setParameter("userId", Long.parseLong(userId))
-                .setParameter("currentDate", currentDate.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate())
-                .getResultList();            
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            if (cD.isEmpty()) {
+                Logger.getLogger(QuestionUserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_FIND_LAST_USER_ANSWER reason=INVALID_DATA");
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            List<QuestionUser> list = questionDao.findLastUserAnswer(cD, loggedUser.getId(), em);
+                      
             return Response.ok().entity(list).build();
-        } catch (Exception e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (ParseException ex) {
+            Logger.getLogger(QuestionUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @POST
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean createQuestionUser(QuestionUser entity) {
+    public Response createQuestionUser(QuestionUser entity) {
         try {
-            QuestionUser newEntity = super.create(entity);
-            return true;
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-        } catch (Exception e) {
-            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return false;
+            if (entity == null || entity.getQuestion() == null || entity.getAnswer() == null) {
+                Logger.getLogger(QuestionUserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_QUESTION_INSERT reason=INVALID_DATA");
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            Question question = questionDao.findById(entity.getQuestion().getId(), em);
+            
+            if (question == null) {
+                Logger.getLogger(QuestionUserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_QUESTION_INSERT reason=INVALID_DATA");
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            QuestionUser newEntity = new QuestionUser();
+            newEntity.setUser(loggedUser);
+            newEntity.setQuestion(question);
+            newEntity.setAnswer(entity.getAnswer());
+            newEntity.setDateCreated(LocalDate.now());
+            
+            questionUserDao.insert(newEntity, em);
+            return Response.status(Response.Status.CREATED).build();            
+        } catch (SQLException ex) {
+            Logger.getLogger(QuestionUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
-    
 }

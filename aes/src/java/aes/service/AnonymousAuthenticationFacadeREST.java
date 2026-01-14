@@ -1,8 +1,10 @@
 package aes.service;
 
 import aes.model.AnonymousKey;
+import aes.model.User;
 import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.AnonymousAuthenticationDAO;
+import aes.persistence.UserDAO;
 import aes.utility.AnonymousAuthenticationUtils;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
@@ -40,12 +42,14 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
     
     private AnonymousAuthenticationDAO anonymousAuthenticationDao;
     private AuthenticationTokenDAO authenticationTokenDao;
+    private UserDAO userDao;
     
     public AnonymousAuthenticationFacadeREST() {
         super(AnonymousKey.class);
         try {
             anonymousAuthenticationDao = new AnonymousAuthenticationDAO();
             authenticationTokenDao = new AuthenticationTokenDAO();
+            userDao = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
@@ -156,7 +160,19 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
                         "[SECURITY] INVALID_SIGNATURE reason=INVALID_DATA");
                 return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
             }
-           
+            
+            if (request.userId != null) {
+                User user = userDao.find(request.userId, em);
+                
+                if (user == null || user.getEmail() != null) {
+                    Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName())
+                        .log(Level.WARNING,
+                             "[SECURITY] ACCESS_DENIED reason=INVALID_USER_ROLE");
+                    
+                    return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
+                }
+            }
+            
             String token = authenticationTokenDao.issueAnonymousToken(existing, request.userId, em);
             
             JsonObject response = Json.createObjectBuilder()
