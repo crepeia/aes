@@ -101,6 +101,9 @@ public class User implements Serializable {
     @Column(name = "profile_pick")
     private Integer profilePick;
     
+    @Column(name = "tutorial_seen", nullable = false)
+    private Boolean tutorialSeen = false;
+    
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
@@ -773,5 +776,13 @@ public class User implements Serializable {
 
     public void setProfilePick(Integer profilePick) {
         this.profilePick = profilePick;
+    }
+    
+    public Boolean getTutorialSeen() {
+        return tutorialSeen != null && tutorialSeen;
+    }
+
+    public void setTutorialSeen(Boolean tutorialSeen) {
+        this.tutorialSeen = tutorialSeen;
     }
 }
