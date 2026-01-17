@@ -63,35 +63,12 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         return token;
     }
     
-    public void revokeToken(String token, String userEmail, EntityManager entityManager) throws SQLException {
-        AuthenticationToken at = (AuthenticationToken) entityManager.createQuery("SELECT at FROM AuthenticationToken at WHERE at.token=:token AND at.user.email=:uEmail")
-        .setParameter("token", token)
-        .setParameter("uEmail", userEmail)
-        .getSingleResult();
-        super.delete(at, entityManager);
-    
-    }
-    
-    public void revokeAnonymousToken(String token, String instanceId, EntityManager entityManager) throws SQLException {
-        AuthenticationToken at = findByToken(token, entityManager);
-        
-        if (at == null) {
-            throw new SQLException("Token não encontrado.");
-        }
-        
-        // Obtém a AnonymousKey associada ao token
-        AnonymousKey ak = entityManager.find(AnonymousKey.class, at.getAnonymousKey().getId());
-        
-        if (ak == null) {
-            throw new SQLException("Chave anônima não encontrada.");
-        }
-        
-        // Verifica se o instance_id é o mesmo
-        if (!ak.getInstanceId().equals(instanceId)) {
-            throw new SQLException("Instance ID não corresponde ao token.");
-        }
-        
-        // Revoga o token
+    public void revokeToken(String token, Long userId, EntityManager entityManager) throws SQLException {
+        AuthenticationToken at = (AuthenticationToken) 
+                entityManager.createQuery("SELECT at FROM AuthenticationToken at WHERE at.token =: token AND at.user.id =: id")
+                    .setParameter("token", token)
+                    .setParameter("id", userId)
+                    .getSingleResult();
         super.delete(at, entityManager);
     }
     
@@ -106,14 +83,13 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
         }
     }
     
-    public AuthenticationToken updateToken(String oldToken, String userEmail, EntityManager entityManager) throws SQLException {
+    public AuthenticationToken updateToken(String oldToken, Long userId, EntityManager entityManager) throws SQLException {
         AuthenticationToken existingToken = entityManager.createQuery(
-            "SELECT at FROM AuthenticationToken at WHERE at.token = :token AND at.user.email = :email", AuthenticationToken.class
-        ).setParameter("token", oldToken)
-        .setParameter("email", userEmail)
-        .getSingleResult();
+            "SELECT at FROM AuthenticationToken at WHERE at.token =: token AND at.user.id =: id", AuthenticationToken.class)
+                .setParameter("token", oldToken)
+                .setParameter("id", userId)
+                .getSingleResult();
         
-        // Gera novo token
         String newToken = SecureRandomString.generate();
         existingToken.setToken(newToken);
         existingToken.setDateCreated(new Date());
@@ -124,13 +100,9 @@ public class AuthenticationTokenDAO extends GenericDAO<AuthenticationToken>{
     }
     
     public AuthenticationToken findByToken(String token, EntityManager entityManager) {
-        try {
-            return entityManager.createQuery(
-                "SELECT t FROM AuthenticationToken t WHERE t.token = :token", AuthenticationToken.class
-            ).setParameter("token", token)
-            .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return entityManager.createQuery(
+            "SELECT t FROM AuthenticationToken t WHERE t.token =: token", AuthenticationToken.class)
+                .setParameter("token", token)
+                .getSingleResult();
     }
 }
