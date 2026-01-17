@@ -53,6 +53,24 @@ public class SecurityContextHelper {
         return token;
     }
     
+    public Response requireAnonymousToken() {
+        String token = getToken();
+        
+        if (token == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("NOT_AUTHENTICATED").build();
+        }
+        
+        if (!token.endsWith("-anonymous")) {
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                    "[SECURITY] INVALID_TOKEN reason=TOKEN_IS_NOT_ANONYMOUS token={0}", token);
+            
+            return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
+        }
+        
+        return null;
+    }
+    
     public boolean isAnonymous(User user) {
         return user != null && user.getEmail() == null;
     }
@@ -111,6 +129,17 @@ public class SecurityContextHelper {
             return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
         }
 
+        return null;
+    }
+    
+    public Response requireAdmin(User user) {
+        if (!user.isAdmin()) {
+            Logger.getLogger(SecurityContextHelper.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] ACCESS_DENIED reason=INVALID_USER_ROLE loggedUserId={0}",
+                     user.getId());
+            return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
+        }
         return null;
     }
     
