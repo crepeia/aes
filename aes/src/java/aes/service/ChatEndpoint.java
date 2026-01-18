@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.service;
 
 import aes.model.AnonymousKey;
@@ -10,6 +5,7 @@ import aes.model.AuthenticationToken;
 import aes.model.Chat;
 import aes.model.User;
 import aes.model.Message;
+import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.ChatDAO;
 import aes.persistence.GenericDAO;
 import aes.persistence.MessageDAO;
@@ -20,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,8 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -41,16 +34,13 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.websocket.CloseReason;
-import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
-import javax.websocket.PongMessage;
 import javax.websocket.Session;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 
@@ -70,9 +60,7 @@ public class ChatEndpoint {
         public String email;
         public Long chat;
         public String status;
-        //public transient Timer timer;
-        //public transient ScheduledExecutorService pingExecutorService;
-        //public transient Session session;
+        
         public Long idRelatedConsultant;
         public Long lastSentDate;
         public UserInfo(){};
@@ -82,7 +70,6 @@ public class ChatEndpoint {
             this.chat = chat;
             this.status = status;
             this.lastSentDate = null;
-            //this.session = session;
         }
         
         public void setLastSentDate(Date date) {
@@ -101,6 +88,7 @@ public class ChatEndpoint {
     private UserDAO daoUser;
     private ChatDAO daoChat;
     private MessageDAO messageDAO;
+    private AuthenticationTokenDAO authTokenDAO;
     private ChatFacadeREST chatFacade;
     
     private Boolean isWaiting;
@@ -112,11 +100,8 @@ public class ChatEndpoint {
     // <Session, ChatId>
     private static Map<Session, Long> openChats = new ConcurrentHashMap<>();
 
-    
     private static Map<Session, UserInfo> onlineUsers = new ConcurrentHashMap<>();
-    //private static Map<Session, String> chatStatus2 = new ConcurrentHashMap<>();
 
-    
     class UserStatusChange{
         public String type;
         public List<UserInfo> users;
@@ -128,7 +113,6 @@ public class ChatEndpoint {
     class GenericMessage{
         public String type;
         public String value;
-        //public Long chatId;
     }
     
     public enum statusType {
@@ -144,6 +128,7 @@ public class ChatEndpoint {
             this.daoUser = new UserDAO();
             this.daoChat = new ChatDAO();
             this.messageDAO = new MessageDAO();
+            authTokenDAO = new AuthenticationTokenDAO();
             this.isWaiting = true;
             System.out.println("service.ChatEndpoint.<init>()");
         } catch (NamingException ex) {
@@ -151,238 +136,131 @@ public class ChatEndpoint {
         }
     }
     
-    private AuthenticationToken validateToken(String token) throws Exception {
-        return (AuthenticationToken) em.createQuery("SELECT a FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
-    }
-    
-    /*
-    private void schedulePingMessages(UserInfo newUserConnection) {
-    newUserConnection.pingExecutorService = Executors.newScheduledThreadPool(1); 
-    newUserConnection.pingExecutorService.scheduleAtFixedRate(() -> {
-        scheduleDiconnection(newUserConnection);
+    private User validateTokenAndGetLoggedUser(String token) throws Exception {
         try {
-            String data = "Ping";
-            ByteBuffer payload = ByteBuffer.wrap(data.getBytes());
-            newUserConnection.session.getBasicRemote().sendPing(payload);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }, 300, 300, TimeUnit.SECONDS);
-}
-    private void scheduleDiconnection(UserInfo user) {
-    user.timer = new Timer();
-    user.timer.schedule(new TimerTask() {
-        @Override
-        public void run() {
-            try {
-                user.session.close(new CloseReason(CloseCodes.UNEXPECTED_CONDITION, "Client does not respond"));
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            if (token == null || token.isEmpty()) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_TOKEN reason=INVALID_TOKEN_PARAM");
+                
+                return null;
             }
+            
+            return (User) daoUser.findUserByToken(token, em);
+        } catch (Exception ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return null;
         }
-    }, 5000);
-    
-    
     }
-    */
 
     private boolean isRelatedConsultantOnline(User consultant) {
-        if(!Objects.equals(consultant, null)) {
-            //true se consultor online, false se consultor não está online
+        try {
+            if (consultant == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.INFO,
+                        "[INFO] NULL_CONSULTANT reason=NULL_USER_PARAM");
+                
+                // true if the user does not have a consultant
+                return true;
+            }
+            
+            // true if consultant is online, false if consultant is not online
             return consultants.containsKey(consultant.getId());
+        } catch (Exception ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return false; // fallback
         }
-        //Se usuario não tem consultor
-        return true;
     }
     
     private void addOnlineUser(Session session, UserInfo ui) {
-        // remove duplicatas
-        // qualquer entrada com mesmo chatId eh removida antes de adicionar um novo usuario
-        onlineUsers.entrySet().removeIf(entry -> entry.getValue().chat.equals(ui.chat));
-        
-        // apos a remocao adiciona normalmente
-        onlineUsers.put(session, ui);
+        try {
+            if (session == null || ui == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_PARAM reason=NULL_SESSION_OR_USERINFO");
+                
+                return;
+            }
+            
+            // REMOVE DUPLICATES
+            // any entry with the same chatId is removed before adding a new user
+            onlineUsers.entrySet().removeIf(entry -> entry.getValue().chat.equals(ui.chat));
+            
+            onlineUsers.put(session, ui);
+        } catch (Exception ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+        }
     }
     
-    // Esse metodo esta responsavel pela criacao do chat do usuario e o preenchimento das listas
-    @OnOpen
-    public void onOpen(Session session, EndpointConfig config, @PathParam("userId") Long userId) {
-        List<String> auth = (List<String>) config.getUserProperties().get("auth");
-        String unauthId = null;
-
-        User currentUser = null;
-        AuthenticationToken at;
-        Chat newChat;
-        
-        if (!Boolean.parseBoolean(auth.get(0))) {
-            try {
-                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized access"));
-            } catch (IOException e) {
-                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, e);
-            }
-            return;
-        }
-        
-        List<String> token = (List<String>) config.getUserProperties().get("authtoken");
-
+    private boolean verifyRelatedUser(Long consultantIdRelatedToUser, Long idConsultant) {
+        return (Objects.equals(consultantIdRelatedToUser, idConsultant) || Objects.equals(consultantIdRelatedToUser, null));
+    }
+    
+    private List<Chat> findAllRelatedUserChats(Long consultantId) {
+        List<Chat> chats = null;
         try {
-            at = validateToken(token.get(0));
-
-            if (at == null) {
-                throw new Exception("Token inválido");
-            }
-
-            if (at.getUser().getEmail() != null) {
-                // Token de usuário logado
-                currentUser = at.getUser();
-                if (currentUser.getId() != userId) {
-                    throw new Exception("User ID mismatch");
-                }
-                System.out.println("Usuário autenticado: " + currentUser.getEmail());
-            } else if (at.getAnonymousKey() != null) {
-                // Token de usuário anônimo
-
-                currentUser = daoUser.getUserByID(userId, em);
-
-                unauthId = currentUser.getUnauthenticatedId();
-
-                if(unauthId == null || unauthId.isEmpty()) {
-                    try {
-                        session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Unauthorized user."));
-                        return;
-                    } catch (IOException ex2) {
-                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex2);
-                    }
-                }
-
-                AnonymousKey anon = at.getAnonymousKey();
-                if (!anon.getInstanceId().equals(unauthId)) {
-                    Logger.getLogger(ChatEndpoint.class.getName())
-                        .log(Level.WARNING, "Instance ID incompatível: esperado {0}, recebido {1}", 
-                            new Object[]{unauthId, anon.getInstanceId()});
-                    throw new Exception("Instance ID incompatível");
-                }
-
-                System.out.println("Usuário anônimo autenticado: " + anon.getInstanceId());
-            } else {
-                throw new Exception("Token sem usuário associado");
-            }
-        } catch (Exception ex) {
-            try {
-                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error validating user identity."));
-                return;
-            } catch (IOException ex1) {
-                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
-            }
+            chats = daoChat.listAllRelatedUserChats(consultantId, em);
+        } catch (SQLException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return chats;
+    }
+    
+    private void sendUserStatusList(Long consultantId){
+        Logger.getLogger(ChatEndpoint.class.getName())
+            .log(Level.INFO,
+                "[INFO] Sending status list to the consultant={0}", consultantId);
+        
+        UserStatusChange usl = new UserStatusChange();
+        usl.type = "statusList";
 
-        session.setMaxIdleTimeout(60 * 60 * 1000); // Define timeout de 60 minutos para fechar
-
-        UserInfo ui = new UserInfo();
-
-        if (currentUser == null) {
-            try {
-                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Error: user not found."));
-                return;
-            } catch (IOException ex1) {
-                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex1);
+        for (Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
+            // Exposes to the consultant the user who is directly related to him or who is not related to anyone
+            if(!consultants.containsValue(e.getKey()) && verifyRelatedUser(e.getValue().idRelatedConsultant, consultantId))
+                usl.users.add(e.getValue());
+        }
+        
+        List<Chat> chats = findAllRelatedUserChats(consultantId);
+        
+        for (Chat chat : chats) {
+            if (chat.getUser() == null) {
+                continue;
             }
-        } else {
-            if (currentUser.isConsultant()) {
-                if (consultants.containsKey(currentUser.getId())) {
-                    try {
-                        consultants.get(currentUser.getId()).close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-                    }                        
-                }
-
-                ui.name = currentUser.getName();
-                ui.email = currentUser.getEmail();
-                ui.chat = currentUser.getChat().getId();
-                ui.status = "";
-                ui.idRelatedConsultant = null;
-
-                addOnlineUser(session, ui);
-                consultants.put(currentUser.getId(), session);
-
-                // Dando tempo para a função do usuário pegar o consultor
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    return;
-                }
-
-                sendUserStatusList(currentUser.getId());
-            } else { // Usuário comum e anônimo
-                if (currentUser.getChat() == null || currentUser.getChat().getId() == null) {
-                    Logger.getLogger(ChatEndpoint.class.getName())
-                        .log(Level.WARNING, "Usuário {0} sem chat vinculado. Criando novo.", currentUser.getId());
-                    
-                    newChat = new Chat();
-                    newChat.setUser(currentUser);
-                    newChat.setStartDate(new Date());
-
-                    try {
-                        daoBase.insert(newChat, em);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    newChat = currentUser.getChat();
-                }
-
-                if (users.containsKey(newChat.getId())) {
-                    try {
-                        users.get(newChat.getId()).close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-                final User usuarioAtual = currentUser;
-
-                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-                scheduler.schedule(() -> {
-                    if ((consultants.isEmpty() || !isRelatedConsultantOnline(usuarioAtual.getRelatedConsultant())) && session.isOpen()) {
-                        this.isWaiting = false;
-                        sendNoConsultantMessage(session);
-                    }
-                }, 4, TimeUnit.MINUTES);
-
-                users.put(newChat.getId(), session);
+            
+            boolean hasMessages = false;
+            hasMessages = messageDAO.existsMessageInChat(chat.getId(), em);
+            if (!hasMessages) {
+                continue;
+            }
+            
+            Long userId = chat.getUser().getId();
+            boolean isOnline = onlineUsers.values().stream().anyMatch(u -> u.chat.equals(chat.getId()));
+            
+            if (!isOnline) {
                 String realStatus = statusType.OFFLINE.toString();
-
-                ui.name = currentUser.getName();
-                ui.email = currentUser.getEmail();
-                ui.chat = newChat.getId();
-                ui.status = realStatus;
-
-                //É usuário comum e o idRelatedConsultant pode ser nulo (não tem consultor)
-                //ou não (tem consultor associado)
-                if (currentUser.getRelatedConsultant() == null) {
-                    ui.idRelatedConsultant = null;
-                } else {
-                    ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
-                }
-
-                // Adicionando no userInfo a data da ultima mensagem enviada pelo usuario se houver
-                Date lastSentDate = messageDAO.findLastSentDateByChatId(newChat.getId(), em);
-                if (lastSentDate != null) {
-                    ui.setLastSentDate(lastSentDate);
-                }
-
-                openChats.put(session, newChat.getId());
-                addOnlineUser(session, ui);
-                setStatus(session, realStatus);
+                String email = chat.getUser().getEmail();
+                UserInfo offlineUser = new UserInfo(
+                    chat.getUser().getName(), email, chat.getId(), realStatus, null
+                );
                 
-                // Apenas se for anônimo
-                if (unauthId != null) sendNewUserChatId(session, newChat.getId());
+                Date lastSentDate = messageDAO.findLastSentDateByChatId(chat.getId(), em);
+                if (lastSentDate != null) {
+                    offlineUser.setLastSentDate(lastSentDate);
+                }
+                
+                usl.users.add(offlineUser);
             }
         }
         
-        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session opened for user {0} session ID {1}", new Object[]{userId, session.getId()});
+        Gson g = new Gson();
+        String json = g.toJson(usl);
+        System.out.println("JSON final enviado: " + json);
+        
+        try {
+            consultants.get(consultantId).getBasicRemote().sendObject(json);
+        } catch (IOException | EncodeException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void sendNoConsultantMessage(Session session){
@@ -401,89 +279,7 @@ public class ChatEndpoint {
         }
     }
     
-    
-    private void sendNewUserChatId(Session session, Long chatId){
-        
-        GenericMessage gm = new GenericMessage();
-        gm.type = "chatid";
-        gm.value = String.valueOf(chatId);//chatId;
-        
-        Gson g = new Gson();
-        String json = g.toJson(gm);
-        
-        try {
-            session.getBasicRemote().sendObject(json);
-        } catch (IOException | EncodeException ex) {
-            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void sendUserStatusList(Long consultantId){
-        System.out.println("Enviando lista de status para o consultor: " + consultantId);
-        
-        UserStatusChange usl = new UserStatusChange();
-        usl.type = "statusList";
-
-        for(Map.Entry<Session, UserInfo> e: onlineUsers.entrySet()) {
-            //Expõe ao consultor o usuário que não for consultor e que estiver
-            //diretamente relacionado a ele (que seja seu paciente) ou que não for paciente de ninguém
-            if(!consultants.containsValue(e.getKey()) && verifyRelatedUser(e.getValue().idRelatedConsultant, consultantId))
-                usl.users.add(e.getValue());
-        }
-        System.out.println("Usuários online adicionados: " + usl.users.size());
-        
-        // Buscar chats do banco de dados para identificar usuários offline
-        List<Chat> chats = findAllRelatedUserChats(consultantId);
-        
-        // Para cada chat cria um novo UserInfo se o usuário não estiver online e houver mensagens no chat
-        for (Chat chat : chats) {
-            if (chat.getUser() == null) {
-                System.out.println("Chat " + chat.getId() + " ignorado (sem usuário associado)");
-                continue;
-            }
-            
-            // Verifica se existe mensagem para esse chat
-            boolean hasMessages = false;
-            hasMessages = messageDAO.existsMessageInChat(chat.getId(), em);
-            if (!hasMessages) {
-                // Chat ignorado - sem mensagens
-                continue;
-            }
-            
-            Long userId = chat.getUser().getId();
-            boolean isOnline = onlineUsers.values().stream().anyMatch(u -> u.chat.equals(chat.getId()));
-            
-            if (!isOnline) {
-                String realStatus = statusType.OFFLINE.toString();
-                String email = chat.getUser().getEmail();
-                UserInfo offlineUser = new UserInfo(
-                    chat.getUser().getName(), email, chat.getId(), realStatus, null
-                );
-                
-                // Adicionando no offlineUser a data da ultima mensagem enviada pelo usuario se houver
-                Date lastSentDate = messageDAO.findLastSentDateByChatId(chat.getId(), em);
-                if (lastSentDate != null) {
-                    offlineUser.setLastSentDate(lastSentDate);
-                }
-                
-                usl.users.add(offlineUser);
-                System.out.println("Usuário OFFLINE adicionado: " + offlineUser.name);
-            }
-        }
-        
-        Gson g = new Gson();
-        String json = g.toJson(usl);
-        System.out.println("JSON final enviado: " + json);
-        
-        try {
-            consultants.get(consultantId).getBasicRemote().sendObject(json);
-        } catch (IOException | EncodeException ex) {
-            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     private void setStatus(Session userSession, String status) {
-        
         UserInfo u = onlineUsers.get(userSession);
         u.status = status;
         
@@ -496,8 +292,7 @@ public class ChatEndpoint {
         try {
             userSession.getBasicRemote().sendObject(json);
             for (Map.Entry<Long, Session> c : consultants.entrySet()) {
-                //Expõe ao consultor o usuário que não for consultor e que estiver
-                //diretamente relacionado a ele (que seja seu paciente) ou que não for paciente de ninguém
+                // Exposes to the consultant the user who is directly related to him or who is not related to anyone
                 if(verifyRelatedUser(u.idRelatedConsultant, c.getKey()))
                     c.getValue().getBasicRemote().sendObject(json);
             }
@@ -506,135 +301,292 @@ public class ChatEndpoint {
         }
     }
     
-    private boolean verifyRelatedUser(Long consultantIdRelatedToUser, Long idConsultant) {
-        return (Objects.equals(consultantIdRelatedToUser, idConsultant) || Objects.equals(consultantIdRelatedToUser, null));
-    }
-    
-    private List<Chat> findAllRelatedUserChats(Long consultantId) {
-        List<Chat> chats = null;
+    private void sendNewUserChatId(Session session, Long chatId){
+        GenericMessage gm = new GenericMessage();
+        gm.type = "chatid";
+        gm.value = String.valueOf(chatId);
+        
+        Gson g = new Gson();
+        String json = g.toJson(gm);
+        
         try {
-            chats = daoChat.listAllRelatedUserChats(consultantId, em);
-        } catch (SQLException ex) {
+            session.getBasicRemote().sendObject(json);
+        } catch (IOException | EncodeException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return chats;
+    }
+    
+    // This method is responsible for creating the user's chat and populating the lists
+    @OnOpen
+    public void onOpen(Session session, EndpointConfig config) {
+        try {
+            if (session == null || config == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.SEVERE,
+                        "[SECURITY] NULL_PARAM reason=NULL_SESSION_OR_CONFIG");
+                
+                return;
+            }
+            
+            List<String> auth = (List<String>) config.getUserProperties().get("auth");
+
+            if (auth == null || !Boolean.parseBoolean(auth.get(0))) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] UNAUTHORIZED_ACCESS reason=NULL_AUTH_PARAM " +
+                            "sessionId={0}", session.getId());
+                
+                onError(session, new Throwable("NULL_AUTH_PARAM"));
+                return;
+            }
+            
+            List<String> token = (List<String>) config.getUserProperties().get("authtoken");
+            
+            if (token == null || token.isEmpty()) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] UNAUTHORIZED_ACCESS reason=NULL_TOKEN " +
+                            "sessionId={0}", session.getId());
+                
+                onError(session, new Throwable("NULL_TOKEN"));
+                return;
+            }
+            
+            User currentUser = validateTokenAndGetLoggedUser(token.get(0));
+            
+            if (currentUser == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] UNAUTHORIZED_ACCESS reason=NULL_USER_OR_NOT_AUTHENTICATED " +
+                            "sessionId={0}", session.getId());
+                
+                onError(session, new Throwable("NULL_USER_OR_NOT_AUTHENTICATED"));
+                return;
+            }
+            
+            session.setMaxIdleTimeout(60 * 60 * 1000); // Set a 60-minute timeout to close
+            
+            UserInfo ui = new UserInfo();
+            Chat newChat;
+            
+            if (currentUser.isConsultant()) {
+                if (consultants.containsKey(currentUser.getId())) {
+                    consultants.get(currentUser.getId()).close();
+                }
+                
+                ui.name = currentUser.getName();
+                ui.email = currentUser.getEmail();
+                ui.chat = currentUser.getChat().getId();
+                ui.status = "";
+                ui.idRelatedConsultant = null;
+                
+                addOnlineUser(session, ui);
+                consultants.put(currentUser.getId(), session);
+                
+                // Giving time for the user function to pick up the consultant
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    return;
+                }
+                
+                sendUserStatusList(currentUser.getId());
+            } else { // Comum and Anonymous Users
+                if (currentUser.getChat() == null || currentUser.getChat().getId() == null) {
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.WARNING, "User {0} with no linked chat. Creating a new one.", currentUser.getId());
+                    
+                    newChat = new Chat();
+                    newChat.setUser(currentUser);
+                    newChat.setStartDate(new Date());
+                    
+                    daoBase.insert(newChat, em);
+                } else {
+                    newChat = currentUser.getChat();
+                }
+                
+                if (users.containsKey(newChat.getId())) {
+                    users.get(newChat.getId()).close();
+                }
+                
+                final User _currentUser = currentUser;
+                
+                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                scheduler.schedule(() -> {
+                    if ((consultants.isEmpty() || !isRelatedConsultantOnline(_currentUser.getRelatedConsultant())) && session.isOpen()) {
+                        this.isWaiting = false;
+                        sendNoConsultantMessage(session);
+                    }
+                }, 4, TimeUnit.MINUTES);
+                
+                users.put(newChat.getId(), session);
+                String realStatus = statusType.OFFLINE.toString();
+                
+                ui.name = currentUser.getName();
+                ui.email = currentUser.getEmail();
+                ui.chat = newChat.getId();
+                ui.status = realStatus;
+                
+                if (currentUser.getRelatedConsultant() == null) ui.idRelatedConsultant = null;
+                else ui.idRelatedConsultant = currentUser.getRelatedConsultant().getId();
+                
+                Date lastSentDate = messageDAO.findLastSentDateByChatId(newChat.getId(), em);
+                if (lastSentDate != null) {
+                    ui.setLastSentDate(lastSentDate);
+                }
+                
+                openChats.put(session, newChat.getId());
+                addOnlineUser(session, ui);
+                setStatus(session, realStatus);
+                
+                // just anonymous
+                if (currentUser.getEmail() == null) sendNewUserChatId(session, newChat.getId());
+            }
+            
+            Logger.getLogger(ChatEndpoint.class.getName())
+                .log(Level.INFO, "Session opened for user {0} session ID {1}", new Object[]{currentUser.getId(), session.getId()});
+        } catch (Exception ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+        }
     }
     
     private void deleteUserStatus(Session userSession, Long userKey){
-        
-        UserInfo u = onlineUsers.get(userSession);
-        if (u == null) {
-            Logger.getLogger(ChatEndpoint.class.getName())
-              .log(Level.WARNING, "Tentou remover status de sessão sem UserInfo: {0}", userSession.getId());
-            return;
-        }
-        
-        u.status = statusType.OFFLINE.toString();
-        
-        onlineUsers.remove(userSession);
-    
-        UserStatusChange usl = new UserStatusChange();
-        usl.type = "statusChange";
-        usl.users.add(u);
-        
-        Gson g = new Gson();
-        String json = g.toJson(usl);
-        
         try {
+            if (userSession == null || userKey == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_PARAM reason=NULL_SESSION_OR_USERKEY");
+                
+                return;
+            }
+            
+            UserInfo u = onlineUsers.get(userSession);
+            
+            if (u == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_USER_INFO reason=NULL_USER_INFO_FOR_SESSION userSessionId={0}", userSession.getId());
+                
+                return;
+            }
+            
+            u.status = statusType.OFFLINE.toString();
+            
+            onlineUsers.remove(userSession);
+            
+            UserStatusChange usl = new UserStatusChange();
+            usl.type = "statusChange";
+            usl.users.add(u);
+            
+            Gson g = new Gson();
+            String json = g.toJson(usl);
+            
             for (Map.Entry<Long, Session> c : consultants.entrySet()) {
                 c.getValue().getBasicRemote().sendObject(json);
             }
         } catch (IOException | EncodeException ex) {
-            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
     
-    
-    /*
-    @OnMessage
-    public void onPong(PongMessage pongMessage, Session session) {
-        //String sourceSessionId = session.getId();
-        UserInfo user = onlineUsers.get(session);
-        user.timer.cancel();
-        user.timer.purge();
-    }
-*/
-    
     void consultantDisconnectTimeout(Long chatId){
-        
-        UserStatusChange usl = new UserStatusChange();
-        usl.type = "setTimeout";
-
-        
-        Gson g = new Gson();
-        String json = g.toJson(usl);
-            
         try {
+            if (chatId == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_CHAT_ID");
+                
+                return;
+            }
+            
+            UserStatusChange usl = new UserStatusChange();
+            usl.type = "setTimeout";
+            
+            Gson g = new Gson();
+            String json = g.toJson(usl);
+            
             for(Map.Entry<Session, Long> e: openChats.entrySet()) {
                 if(e.getValue().equals(chatId)){
                     e.getKey().getBasicRemote().sendObject(json);
-                    System.out.println("service.ChatEndpoint.onMessage()");
-
                 }
             }
-
         } catch (IOException | EncodeException ex) {
-            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
     
     void consultantConnectTimeout(Long chatId){
-        
-        UserStatusChange usl = new UserStatusChange();
-        usl.type = "unsetTimeout";
-
-        
-        Gson g = new Gson();
-        String json = g.toJson(usl);
-            
         try {
+            if (chatId == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_CHAT_ID");
+                
+                return;
+            }
+            
+            UserStatusChange usl = new UserStatusChange();
+            usl.type = "unsetTimeout";
+            
+            Gson g = new Gson();
+            String json = g.toJson(usl);
+            
             for(Map.Entry<Session, Long> e: openChats.entrySet()) {
                 if(e.getValue().equals(chatId)){
                     e.getKey().getBasicRemote().sendObject(json);
-                    System.out.println("service.ChatEndpoint.onMessage()");
-
                 }
             }
-
         } catch (IOException | EncodeException ex) {
-            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
     
     void disconnectConsultantsFromUser(Session userSession, Long chatId){
-
-        for(Map.Entry<Session, Long> e: openChats.entrySet()) {
-            if(e.getValue().equals(chatId) && !e.getKey().equals(userSession)){
-                openChats.remove(e.getKey());
+        try {
+            if (userSession == null || chatId == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_PARAM reason=NULL_SESSION_OR_CHATID");
+                
+                return;
             }
+            
+            for (Map.Entry<Session, Long> e: openChats.entrySet()) {
+                if (e.getValue().equals(chatId) && !e.getKey().equals(userSession)){
+                    openChats.remove(e.getKey());
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
-        
     }
     
-    //quando o consultor seleciona um chat, manda msg pro servidor avisando quem que conectou e altera o status dos chats
+    // When the consultant selects a chat, they send a message to the server notifying them who has connected and change the chat status
     @OnMessage
-    public void onMessage(Session session, String message) {
-        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Message received from session: {0}, messsage: {1}", new Object[]{session.getId(), message});
-        System.out.println(message);
-        
-      
+    public void onMessage(Session session, String message) throws SQLException, EncodeException {
         try {
+            if (session == null || message == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_PARAM reason=NULL_SESSION_OR_MESSAGE");
+                
+                return;
+            }
+            
+            Logger.getLogger(ChatEndpoint.class.getName())
+                .log(Level.INFO, "Message received from session: {0}, message: {1}",
+                    new Object[]{session.getId(), message});
             
             ObjectMapper om = new ObjectMapper();
             ObjectNode node;
             node = om.readValue(message, ObjectNode.class);
             String messageType = node.get("type").asText();
             
-            if(!this.isWaiting && consultants.isEmpty()) {
+            if (!this.isWaiting && consultants.isEmpty()) {
                 sendNoConsultantMessage(session);
             }
             
-            if(messageType.equals("connect")){
+            if (messageType.equals("connect")){
                 Long consultantId;
                 Long userId;
                 User user;
@@ -647,14 +599,16 @@ public class ChatEndpoint {
                 Chat chat = daoChat.find(chatId, em);
                 
                 if (chat == null) {
-                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Chat não existe para o id: {0}", chatId);
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.SEVERE, "Chat does not exist for the chatId={0}", chatId);
                     return;
                 }
                 
                 User chatUser = chat.getUser();
                 
                 if (chatUser == null) {
-                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Usuario não existe para o chat: {0}", chatId);
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.SEVERE, "User does not exist for the chatId={0}", chatId);
                     return;
                 }
                 
@@ -662,20 +616,14 @@ public class ChatEndpoint {
                 consultantId = getConsultantKeyForSession(session);
                 user = daoUser.find(userId, em);
                 
-                //Ao estabelecer a conexão, o consultor vai ser definido como consultor associado
-                //ao paciente do chat, caso o usuário não seja paciente de nenhum consultor
                 if (user.getRelatedConsultant() == null) {
                     user.setRelatedConsultant(daoUser.find(consultantId, em));
-                    
-                    try {
-                        daoUser.update(user, em);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Falha ao atualizar relatedConsultant do usuário", ex);
-                    }
+
+                    daoUser.update(user, em);
                     
                     userSession = users.get(chatId);
                     
-                    // Atualiza apenas quando usuário estiver online
+                    // It only updates when the user is online
                     if (userSession != null) {
                         if (onlineUsers.get(userSession) != null) {
                             onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
@@ -683,12 +631,12 @@ public class ChatEndpoint {
                     }
                 }
                 
-                if(users.get(chatId) != null) {
+                if (users.get(chatId) != null) {
                     setStatus(users.get(chatId), statusType.BUSY.toString());
                 } else {
-                    System.out.println("Deve ser um consultor acessando um usuário offline no chat: " + chatId);
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.INFO, "It must be a consultant accessing an offline user on the chatId={0}", chatId);
                 }
-                
                 
             } else if (messageType.equals("disconnect")) {
                 consultantDisconnectTimeout(openChats.get(session));
@@ -697,7 +645,6 @@ public class ChatEndpoint {
             } else if (messageType.equals("statusAvailable")) {
                 Long chatId = node.get("chatId").asLong();
                 setStatus(users.get(chatId), statusType.AVAILABLE.toString());
-               
                 openChats.put(session, chatId);
 
             } else if (messageType.equals("statusOffline")){
@@ -705,13 +652,11 @@ public class ChatEndpoint {
                 setStatus(users.get(chatId), statusType.OFFLINE.toString());
                 consultantConnectTimeout(chatId);
                 openChats.remove(session);
-                
                 disconnectConsultantsFromUser(session, chatId);
                 
             } else if (messageType.equals("statusIdle")){
                 Long chatId = node.get("chatId").asLong();
                 setStatus(users.get(chatId), statusType.IDLE.toString());
-                
                 disconnectConsultantsFromUser(session, chatId);
                 
             }else if(messageType.equals("message")) {
@@ -725,57 +670,22 @@ public class ChatEndpoint {
                 m.setSentDate(format.parse(node.get("sentDate").asText()));
                 c.setId(node.get("chat").asLong());
                 m.setChat(c);
-                
-                try {
-                    messageDAO.insert(m, em);
-                } catch (SQLException ex) {
-                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
+                messageDAO.insert(m, em);
                 
                 node.put("id", m.getId());
                 
-                try {
-                    for(Map.Entry<Session, Long> e: openChats.entrySet()) {
-                        if(!e.getKey().getId().equals(session.getId())){
-                            if(e.getValue().equals(c.getId())) {
-                                e.getKey().getBasicRemote().sendObject(m);
-                                System.out.println("service.ChatEndpoint.onMessage()");
-                            }
+                for(Map.Entry<Session, Long> e: openChats.entrySet()) {
+                    if(!e.getKey().getId().equals(session.getId())){
+                        if(e.getValue().equals(c.getId())) {
+                            e.getKey().getBasicRemote().sendObject(m);
+                            System.out.println("service.ChatEndpoint.onMessage()");
                         }
                     }
-
-                } catch (IOException | EncodeException ex) {
-                    Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
             }
-            
         } catch (IOException | ParseException ex) {
-            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @OnClose
-    public void onClose(Session session, CloseReason reason) {
-        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.INFO, "Session closed ID: {0}", new Object[]{session.getId()});
-        System.out.println(reason);
-        
-        if(users.containsValue(session) && getUserKeyForSession(session) != null) {
-            Long userKey = getUserKeyForSession(session);
-            users.remove(userKey);
-            deleteUserStatus(session, userKey);
-        }
-        
-        
-        if(consultants.containsValue(session)) {
-            Long userKey = getConsultantKeyForSession(session);
-            consultants.remove(userKey);
-            deleteUserStatus(session, userKey);
-
-        }
-        
-        if(openChats.containsKey(session)){
-            openChats.remove(session);
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
     
@@ -793,14 +703,57 @@ public class ChatEndpoint {
         return key;
     }
     
-    @OnError
-    public void onError(Session session, Throwable throwable) {
-        Logger.getLogger(ChatEndpoint.class.getName()).log(Level.WARNING, "Session error. Removing session: " + session.getId(), throwable);
+    @OnClose
+    public void onClose(Session session, CloseReason reason) {
         try {
-            session.close();
-        } catch(IOException ex) {
-            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.WARNING, "Error closing session ID: " + session.getId(), ex);
+            if (session == null || reason == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_PARAM reason=NULL_SESSION_OR_REASON");
+                
+                return;
+            }
+            
+            Logger.getLogger(ChatEndpoint.class.getName())
+                .log(Level.INFO, "Session closed sessionId={0} reason={1}", new Object[]{session.getId(), reason});
+            
+            if(users.containsValue(session) && getUserKeyForSession(session) != null) {
+                Long userKey = getUserKeyForSession(session);
+                users.remove(userKey);
+                deleteUserStatus(session, userKey);
+            }
+            
+            if(consultants.containsValue(session)) {
+                Long userKey = getConsultantKeyForSession(session);
+                consultants.remove(userKey);
+                deleteUserStatus(session, userKey);
+            }
+            
+            if(openChats.containsKey(session)){
+                openChats.remove(session);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
         }
     }
-
+    
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+        try {
+            if (session == null || throwable == null) {
+                Logger.getLogger(ChatEndpoint.class.getName())
+                    .log(Level.WARNING,
+                        "[WARNING] NULL_PARAM reason=NULL_SESSION_OR_THROWABLE");
+                
+                return;
+            }
+            
+            Logger.getLogger(ChatEndpoint.class.getName())
+                .log(Level.WARNING, "Session error. Removing session. sessionId={0} throwable={1}", new Object[]{session.getId(), throwable});
+            
+            session.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+        }
+    }
 }

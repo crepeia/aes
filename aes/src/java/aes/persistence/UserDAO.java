@@ -6,6 +6,7 @@
 package aes.persistence;
 
 import aes.controller.UserController;
+import aes.model.AuthenticationToken;
 import aes.model.Chat;
 import aes.model.User;
 import aes.service.UserFacadeREST;
@@ -228,5 +229,10 @@ public class UserDAO extends GenericDAO<User>{
         return (List<User>) entityManager.createQuery("SELECT u FROM User u WHERE u.relatedConsultant.id =: consultantId", User.class)
                 .setParameter("consultantId", consultantId)
                 .getResultList();
+    }
+    
+    public User findUserByToken(String token, EntityManager entityManager) {
+        return (User) entityManager.createQuery(
+            "SELECT a.user FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
     }
 }
