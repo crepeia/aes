@@ -111,7 +111,7 @@ public class UserDAO extends GenericDAO<User>{
 
     
     public void setInRanking(Long userId, Boolean inRanking, String nickname, EntityManager entityManager) throws SQLException{
-        User u = (User) entityManager.createQuery("SELECT u FROM User u WHERE u.id => userId")
+        User u = (User) entityManager.createQuery("SELECT u FROM User u WHERE u.id =: userId")
             .setParameter("userId", userId)
             .getSingleResult();
         
@@ -186,31 +186,30 @@ public class UserDAO extends GenericDAO<User>{
         super.insertOrUpdate(user, entityManager);
     }
     
-    public User findByReferralCode(String referralCode, EntityManager em) {
+    public User findByReferralCode(String referralCode, EntityManager entityManager) {
         try {
-            Query query = em.createNativeQuery(
-                "SELECT * FROM tb_user WHERE `my_referral_code` = ?", 
-                User.class);
-            query.setParameter(1, referralCode);
-
-            List<User> result = query.getResultList();
+            List<User> result = entityManager.createQuery("SELECT u FROM User u WHERE u.myReferralCode =: mRC")
+                .setParameter("mRC", referralCode)
+                .setMaxResults(1)
+                .getResultList();
+            
             return result.isEmpty() ? null : result.get(0);
-        } catch (Exception e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Erro ao buscar por código de referência", e);
-            throw new RuntimeException("Erro ao buscar por código de referência", e);
+        } catch (Exception ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Erro ao buscar por código de referência", ex);
+            throw new RuntimeException("Erro ao buscar por código de referência", ex);
         }
     }
 
     public long countReferralCodeUsage(String referralCode, EntityManager entityManager) {
-        return (long) entityManager.createQuery("SELECT COUNT(*) FROM tb_user WHERE friend_referral_code =: rf")
-                .setParameter("rf", referralCode)
-                .getSingleResult();
+        return (long) entityManager.createQuery("SELECT COUNT(*) FROM User u WHERE u.friendReferralCode =: rf")
+            .setParameter("rf", referralCode)
+            .getSingleResult();
     }
 
     public void updateReferralCode(Long userId, String referralCode, EntityManager em) throws Exception {
         User user = em.find(User.class, userId);
         user.setMyReferralCode(referralCode);
-        em.merge(user);
+        super.insertOrUpdate(user, em);
     }
     
     public List<User> findByEmail(String email, EntityManager entityManager) {
@@ -219,10 +218,12 @@ public class UserDAO extends GenericDAO<User>{
     }
     
     public User findByUnauthenticatedId(String id, EntityManager entityManager) {
-        return (User) entityManager.createQuery("SELECT u FROM User u WHERE u.unauthenticatedId = :id ORDER BY u.id DESC", User.class)
+        List<User> result = entityManager.createQuery("SELECT u FROM User u WHERE u.unauthenticatedId = :id ORDER BY u.id DESC", User.class)
                 .setParameter("id", id)
                 .setMaxResults(1)
-                .getSingleResult();
+                .getResultList();
+        
+        return result.isEmpty() ? null : result.get(0);
     }
     
     public List<User> findUsersByConsultantId(Long consultantId, EntityManager entityManager) {

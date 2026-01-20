@@ -119,7 +119,7 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @Secured
     public Response logout() {
         try {
-            Response r = securityHelper.requireAuthenticatedUser();
+            Response r = securityHelper.requireAnyAuthenticated();
             if (r != null) return r;
 
             User loggedUser = securityHelper.getLoggedUser();

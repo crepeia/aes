@@ -5,7 +5,7 @@ import aes.persistence.UserDAO;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,7 +19,7 @@ import javax.ws.rs.core.SecurityContext;
  * @author LuanBarbs
  */
 
-@ApplicationScoped
+@RequestScoped
 public class SecurityContextHelper {
     @Context
     private SecurityContext securityContext;

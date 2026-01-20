@@ -570,7 +570,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 return Response.status(Response.Status.BAD_REQUEST).entity("TARGET_USER_NOT_FOUND").build();
             }
 
-            return Response.status(Response.Status.OK).entity(referrer).build();
+            return Response.status(Response.Status.OK).build();
         } catch (Exception ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
@@ -665,7 +665,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
             }
             
             return Response.status(Response.Status.OK).entity(referralCode).build();
-            
         } catch (Exception ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
@@ -891,6 +890,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("findUsersByConsultor")
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
     public Response getUsersByConsultor() {
         try {
             Response r = securityHelper.requireAuthenticatedUser();
