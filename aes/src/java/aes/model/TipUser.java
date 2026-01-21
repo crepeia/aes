@@ -97,8 +97,6 @@ public class TipUser implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-
-
     @Override
     public int hashCode() {
         int hash = 0;

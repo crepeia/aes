@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.service;
 
 import aes.model.Tip;
@@ -10,7 +5,6 @@ import aes.persistence.TipDAO;
 import aes.utility.RESTApiResponse;
 import aes.utility.Secured;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
@@ -26,9 +20,9 @@ import java.util.logging.Logger;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.Response;
+
 /**
  *
  * @author bruno
