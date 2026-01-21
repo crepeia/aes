@@ -392,9 +392,28 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Path("login/{token}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Override
-    public User login(@PathParam("token") String tkn) {
-        return super.login(tkn);
+    public Response login(@PathParam("token") String tkn) {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            String token = securityHelper.getToken();
+
+            if (!tkn.equals(token)) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.SEVERE, "[SECURITY] DENIED_LOGIN reason=PARAM_TOKEN_DIFFER_FROM_HEADER_TOKEN "
+                    + "param_token={0} header_token={1}", new Object[]{tkn, token});
+                
+                return Response.status(Response.Status.UNAUTHORIZED).entity("ACCESS_DENIED").build();
+            }
+            
+            User user = userDAO.login(tkn, em);
+            
+            return Response.status(Response.Status.OK).entity(user).build();
+        } catch (Exception ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return null;
+        }
     }
     
     /*
