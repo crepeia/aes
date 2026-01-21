@@ -42,6 +42,10 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
+    @Column(name = "unauthenticated_id", length = 64)
+    private String unauthenticatedId;
+    
     @Column(name = "name", length = 100)
     private String name;
     @Column(name = "email", length = 50)
@@ -56,11 +60,11 @@ public class User implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthDate;
     @Column(name = "gender")
-    private char gender;
+    private Character gender;
     @Column(name = "receive_emails")
-    private boolean receiveEmails;
+    private Boolean receiveEmails;
     @Column(name = "authorize_data")
-    private boolean authorizeData;
+    private Boolean authorizeData;
     @Column(name = "sign_up_date")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date signUpDate;
@@ -255,15 +259,15 @@ public class User implements Serializable {
     }
 
     public boolean isFemale() {
-        return gender == 'F';
+        return gender != null && gender == 'F';
     }
 
     public boolean isMale() {
-        return gender == 'M';
+        return gender != null && gender == 'M';
     }
     
     public boolean isOther() {
-        return gender == 'O';
+        return gender != null && gender == 'O';
     }
     
     public String getHashedId(){
@@ -276,6 +280,14 @@ public class User implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+    
+    public String getUnauthenticatedId() {
+        return this.unauthenticatedId;
+    }
+    
+    public void setUnauthenticatedId(String id) {
+        this.unauthenticatedId = id;
     }
 
     public String getName() {
@@ -319,27 +331,27 @@ public class User implements Serializable {
         this.birthDate = birthDate;
     }
 
-    public char getGender() {
+    public Character getGender() {
         return gender;
     }
 
-    public void setGender(char gender) {
+    public void setGender(Character gender) {
         this.gender = gender;
     }
 
-    public boolean isReceiveEmails() {
+    public Boolean isReceiveEmails() {
         return receiveEmails;
     }
 
-    public void setReceiveEmails(boolean receiveEmails) {
+    public void setReceiveEmails(Boolean receiveEmails) {
         this.receiveEmails = receiveEmails;
     }
 
-    public boolean isAuthorizeData() {
+    public Boolean isAuthorizeData() {
         return authorizeData;
     }
 
-    public void setAuthorizeData(boolean authorizeData) {
+    public void setAuthorizeData(Boolean authorizeData) {
         this.authorizeData = authorizeData;
     }
 

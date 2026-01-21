@@ -6,6 +6,7 @@
 package aes.persistence;
 
 import aes.controller.UserController;
+import aes.model.AuthenticationToken;
 import aes.model.Chat;
 import aes.model.User;
 import aes.service.UserFacadeREST;
@@ -13,6 +14,7 @@ import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
 import aes.utility.GenerateCode;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,8 +73,11 @@ public class UserDAO extends GenericDAO<User>{
         //   Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         //  } 
             
-        // }
-        
+        // }   
+    }
+    
+    public void createAnonymousUser(User entity, EntityManager entityManager) throws SQLException {
+        super.insertOrUpdate(entity, entityManager);
     }
 
     
@@ -105,20 +110,15 @@ public class UserDAO extends GenericDAO<User>{
     }
 
     
-    public User setInRanking(String userEmail, EntityManager entityManager) throws SQLException{
-                    
-        User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
-                .setParameter("email", userEmail)
-                .getSingleResult();
-        /*System.out.println(u.getEmail());
-            System.out.println(u.isInRanking());
-            System.out.println(u.getNickname());*/
-
-        u.setInRanking(u.isInRanking());
-        u.setNickname(u.getNickname());
+    public void setInRanking(Long userId, Boolean inRanking, String nickname, EntityManager entityManager) throws SQLException{
+        User u = (User) entityManager.createQuery("SELECT u FROM User u WHERE u.id =: userId")
+            .setParameter("userId", userId)
+            .getSingleResult();
+        
+        u.setInRanking(inRanking);
+        u.setNickname(nickname);
 
         super.insertOrUpdate(u, entityManager);
-        return u;
     }
 
     public User toggleConsultant(String email, EntityManager entityManager) throws SQLException {
@@ -135,27 +135,12 @@ public class UserDAO extends GenericDAO<User>{
         User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
                 .setParameter("email", email)
                 .getSingleResult();
-        System.out.println(u.getEmail());
+        
         u.setRecoverCode(GenerateCode.generate());
 
         super.insertOrUpdate(u, entityManager);
-        // contactController.sendPasswordRecoveryEmail(u);
-
+        
         return u;
-    }
-
-    public void setInRanking(String userEmail, Boolean inRanking, String nickname, EntityManager em) throws SQLException {
-        User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
-                .setParameter("email", userEmail)
-                .getSingleResult();
-        /*System.out.println(u.getEmail());
-            System.out.println(u.isInRanking());
-            System.out.println(u.getNickname());*/
-
-        u.setInRanking(inRanking);
-        u.setNickname(nickname);
-
-        super.insertOrUpdate(u, em);
     }
     
     public User getUserByID(Long userId, EntityManager em){
@@ -166,101 +151,89 @@ public class UserDAO extends GenericDAO<User>{
         return user;
     }
     
-    public void setSendTCLE(String userEmail, User entity, EntityManager em) throws SQLException {
-        User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
-                .setParameter("email", userEmail)
+    public void setSendTCLE(Long userId, EntityManager entityManager) throws SQLException {
+        User u = (User) entityManager.createQuery("SELECT u FROM User u WHERE u.id =: id")
+                .setParameter("id", userId)
+                .getSingleResult();
+        
+        u.setDt_tcle_response(new Date());
+        super.insertOrUpdate(u, entityManager);
+    }
+    
+    public void setTitle(Long userId, Long selected_title, EntityManager em) throws SQLException {
+        User u = (User) em.createQuery("SELECT u from User u WHERE u.id =: id")
+                .setParameter("id", userId)
                 .getSingleResult();
 
-        u.setDt_tcle_response(entity.getDt_tcle_response());
+        u.setSelected_title(selected_title);
 
         super.insertOrUpdate(u, em);
     }
     
-    public void setTitle(String userEmail, User entity, EntityManager em) throws SQLException {
-        User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
-                .setParameter("email", userEmail)
+    public void updateEvaluationProfile(Long userId, User entity, EntityManager em) throws SQLException {
+        User u = (User) em.createQuery("SELECT u from User u WHERE u.id =: id")
+                .setParameter("id", userId)
                 .getSingleResult();
 
-        u.setSelected_title(entity.getSelected_title());
+        u.setEducation(entity.getEducation());
+        u.setEmployed(entity.getEmployed());
+        u.setKnowWebsite(entity.getKnowWebsite());
 
         super.insertOrUpdate(u, em);
-    }
-    
-    public void updateEvaluationProfile(String userEmail, User entity, EntityManager em) throws SQLException {
-        User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
-                .setParameter("email", userEmail)
-                .getSingleResult();
-        
-        boolean updated = false;
-        
-        if (entity.getEducation() != null) {
-            u.setEducation(entity.getEducation());
-            updated = true;
-        }
-        if (entity.getEmployed() != null) {
-            u.setEmployed(entity.getEmployed());
-            updated = true;
-        }
-        if (entity.getKnowWebsite() != null) {
-            u.setKnowWebsite(entity.getKnowWebsite());
-            updated = true;
-        }
-        
-        if(updated) {
-            try {
-                super.insertOrUpdate(u, em);
-            } catch (SQLException e) {
-                throw new SQLException("Error updating user profile", e);
-            }
-        } else {
-            throw new SQLException("No changes detected. User profile not updated.");
-        }
-        
     }
 
     public void uptadeUser(User user, EntityManager entityManager) throws SQLException {
         super.insertOrUpdate(user, entityManager);
     }
     
-    public User findByReferralCode(String referralCode, EntityManager em) {
+    public User findByReferralCode(String referralCode, EntityManager entityManager) {
         try {
-            Query query = em.createNativeQuery(
-                "SELECT * FROM tb_user WHERE `my_referral_code` = ?", 
-                User.class);
-            query.setParameter(1, referralCode);
-
-            List<User> result = query.getResultList();
+            List<User> result = entityManager.createQuery("SELECT u FROM User u WHERE u.myReferralCode =: mRC")
+                .setParameter("mRC", referralCode)
+                .setMaxResults(1)
+                .getResultList();
+            
             return result.isEmpty() ? null : result.get(0);
-        } catch (Exception e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Erro ao buscar por código de referência", e);
-            throw new RuntimeException("Erro ao buscar por código de referência", e);
+        } catch (Exception ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Erro ao buscar por código de referência", ex);
+            throw new RuntimeException("Erro ao buscar por código de referência", ex);
         }
     }
 
-    public long countReferralCodeUsage(String referralCode, EntityManager em) {
-        try {
-            Query query = em.createNativeQuery(
-                "SELECT COUNT(*) FROM tb_user WHERE friend_referral_code = ?");
-            query.setParameter(1, referralCode);
-
-            return ((Number)query.getSingleResult()).longValue();
-        } catch (Exception e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, "Erro ao contar uso de código de referência", e);
-            throw new RuntimeException("Erro ao contar uso de código de referência", e);
-        }
+    public long countReferralCodeUsage(String referralCode, EntityManager entityManager) {
+        return (long) entityManager.createQuery("SELECT COUNT(*) FROM User u WHERE u.friendReferralCode =: rf")
+            .setParameter("rf", referralCode)
+            .getSingleResult();
     }
 
     public void updateReferralCode(Long userId, String referralCode, EntityManager em) throws Exception {
         User user = em.find(User.class, userId);
-        if (user == null) {
-            throw new IllegalArgumentException("Usuário não encontrado");
-        }
-
-        if (user.getMyReferralCode() != null && !user.getMyReferralCode().isEmpty()) {
-            throw new IllegalStateException("Usuário já possui um código de referência");
-        }
-
         user.setMyReferralCode(referralCode);
-        em.merge(user);
+        super.insertOrUpdate(user, em);
+    }
+    
+    public List<User> findByEmail(String email, EntityManager entityManager) {
+        return (List<User>) entityManager.createQuery("SELECT u From User u WHERE u.email=:e")
+                .setParameter("e", email).getResultList();
+    }
+    
+    public User findByUnauthenticatedId(String id, EntityManager entityManager) {
+        List<User> result = entityManager.createQuery("SELECT u FROM User u WHERE u.unauthenticatedId = :id ORDER BY u.id DESC", User.class)
+                .setParameter("id", id)
+                .setMaxResults(1)
+                .getResultList();
+        
+        return result.isEmpty() ? null : result.get(0);
+    }
+    
+    public List<User> findUsersByConsultantId(Long consultantId, EntityManager entityManager) {
+        return (List<User>) entityManager.createQuery("SELECT u FROM User u WHERE u.relatedConsultant.id =: consultantId", User.class)
+                .setParameter("consultantId", consultantId)
+                .getResultList();
+    }
+    
+    public User findUserByToken(String token, EntityManager entityManager) {
+        return (User) entityManager.createQuery(
+            "SELECT a.user FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
     }
 }

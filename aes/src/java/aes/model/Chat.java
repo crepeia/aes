@@ -45,8 +45,8 @@ public class Chat implements Serializable {
     @OneToOne
     private User user;
     
-    @Column(name = "unauthenticated_id")
-    private String unauthenticatedId;
+//    @Column(name = "unauthenticated_id")
+//    private String unauthenticatedId;
     
     @OneToMany(mappedBy = "chat")
     private List<Message> messageList;
@@ -82,13 +82,13 @@ public class Chat implements Serializable {
         this.user = user;
     }
 
-    public String getUnauthenticatedId() {
-        return unauthenticatedId;
-    }
-
-    public void setUnauthenticatedId(String unauthenticatedId) {
-        this.unauthenticatedId = unauthenticatedId;
-    }
+//    public String getUnauthenticatedId() {
+//        return unauthenticatedId;
+//    }
+//
+//    public void setUnauthenticatedId(String unauthenticatedId) {
+//        this.unauthenticatedId = unauthenticatedId;
+//    }
 
     @XmlTransient
     public List<Message> getMessageList() {

@@ -23,15 +23,13 @@ public class NotificationDAO extends GenericDAO<Notification> {
     }
 
     public List<Notification> listUnreadByUser(Long id, EntityManager entityManager) throws SQLException {
-
         try {         
             Query query;
-            query = entityManager.createQuery("select notif from Notification notif where notif.user.id = :id and notif.notificated = false order by notif.user.id");
+            query = entityManager.createQuery("select notif from Notification notif where notif.user.id = :id and notif.notificated = false order by notif.id");
             query.setParameter("id", id);
             return query.getResultList();
-        } catch (Exception erro) {
-            throw new SQLException(erro);
+        } catch (Exception err) {
+            throw new SQLException(err);
         }
     }
-    
 }

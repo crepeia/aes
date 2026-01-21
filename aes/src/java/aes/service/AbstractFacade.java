@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.service;
 
 import aes.model.User;
@@ -68,17 +63,7 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
-    public User login(String token) {
-        User at = (User) getEntityManager().createQuery("SELECT u FROM AuthenticationToken a INNER JOIN a.user AS u WHERE a.token=:t").setParameter("t", token).getSingleResult();
-        return at;
-    }
-    
-    public User login(String e, String p) throws DecoderException{
-        byte[] b =  Hex.decodeHex(p.toCharArray());
-        return (User) getEntityManager().createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
-    }
-    
+
     public String getMessagesPath() {
         return AppServletContextListener.getServletContext().getInitParameter("messagesPath");
     }

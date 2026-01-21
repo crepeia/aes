@@ -28,17 +28,16 @@ public class EvaluationDAO extends GenericDAO<Evaluation>{
         try {
             super.insertOrUpdate(entity, entityManager);
             return entity;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return null;
         }
     }
 
 
-    public Evaluation find(Long userId, String userEmail, EntityManager entityManager) throws SQLException {
+    public Evaluation find(Long userId, EntityManager entityManager) throws SQLException {
   
-            List<Evaluation> evList = entityManager.createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId AND e.user.email=:userEmail")
+            List<Evaluation> evList = entityManager.createQuery("SELECT e FROM Evaluation e WHERE e.user.id=:userId")
                     .setParameter("userId", userId)
-                    .setParameter("userEmail", userEmail)
                     .getResultList();
             
             if(evList.size() > 0){
@@ -48,13 +47,27 @@ public class EvaluationDAO extends GenericDAO<Evaluation>{
             }
     }
     
-   public void createEvaluation(Evaluation newEvaluation, EntityManager entityManager) throws SQLException {       
-       try {
-           super.insertOrUpdate(newEvaluation, entityManager);
-       } catch (SQLException e) {
-           throw new SQLException("Error inserting Evaluation", e);
-       }
-   }
+    public void createEvaluation(Evaluation newEvaluation, EntityManager entityManager) throws SQLException {       
+        try {
+            super.insertOrUpdate(newEvaluation, entityManager);
+        } catch (SQLException e) {
+            throw new SQLException("Error inserting Evaluation", e);
+        }
+    }
     
+    public List<Date> listDatesByUser(Long userId, EntityManager entityManager) throws SQLException {
+        return entityManager.createQuery(
+            "SELECT e.dateCreated FROM Evaluation e WHERE e.user.id = :userId", Date.class)
+            .setParameter("userId", userId)
+            .getResultList();
+    }
     
+    public List<Evaluation> findByUserAndDate(Long userId, Date start, Date end, EntityManager entityManager) throws SQLException {
+        return entityManager.createQuery(
+            "SELECT e FROM Evaluation e WHERE e.user.id = :userId AND e.dateCreated BETWEEN :start AND :end", Evaluation.class)
+            .setParameter("userId", userId)
+            .setParameter("start", start)
+            .setParameter("end", end)
+            .getResultList();
+    }
 }

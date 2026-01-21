@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
  */
 @Stateless
 @Path("question")
+@Deprecated
 public class QuestionFacadeREST extends AbstractFacade<Question> {
 
     @PersistenceContext(unitName = "aesPU")
