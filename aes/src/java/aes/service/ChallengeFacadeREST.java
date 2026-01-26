@@ -48,7 +48,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
         }
     }
 
-    
+    /*
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -56,7 +56,8 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
         //return super.find(id);
         return challengeDAO.find(id, em);
     }
-
+    
+    
     @GET
     @Path("all")
     @Override
@@ -71,6 +72,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
         }
     }
     
+    
     @GET
     @Path("type/{type}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -81,6 +83,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
           
           return challengeDAO.findAllByType(ct, em);
     }
+    */
 
     @Override
     protected EntityManager getEntityManager() {

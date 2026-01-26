@@ -234,13 +234,13 @@ public class MedalUserFacadeREST extends AbstractFacade<MedalUser> {
             
             LocalDate today = LocalDate.now();
             int month = today.getMonthValue();
-            String result = medalUserDao.getMonthlyDrinkMedalByUser(loggedUser.getId(), today, month, em);
+            Long result = medalUserDao.getMonthlyDrinkOrNotDrinkMedalByUser(loggedUser.getId(), today, 5L, em);
             
             if (result == null) {
                 return Response.ok().entity("0").build();
             }
             
-            return Response.ok().entity(result).build();
+            return Response.ok().entity(result.toString()).build();
         } catch (Exception ex) {
             Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
@@ -259,13 +259,13 @@ public class MedalUserFacadeREST extends AbstractFacade<MedalUser> {
             
             LocalDate today = LocalDate.now();
             int month = today.getMonthValue();
-            String result = medalUserDao.getMonthlyNotDrinkMedalByUser(loggedUser.getId(), today, month, em);
+            Long result = medalUserDao.getMonthlyDrinkOrNotDrinkMedalByUser(loggedUser.getId(), today, 6L, em);
             
             if (result == null) {
                 return Response.ok().entity("0").build();
             }
             
-            return Response.ok().entity(result).build();
+            return Response.ok().entity(result.toString()).build();
         } catch (Exception ex) {
             Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();

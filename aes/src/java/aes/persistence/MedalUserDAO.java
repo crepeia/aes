@@ -61,23 +61,19 @@ public class MedalUserDAO extends GenericDAO<MedalUser> {
         
         return mu;
     }
-            
-    public String getMonthlyDrinkMedalByUser(Long userId, LocalDate today, int month, EntityManager entityManager) {
-        return entityManager
-            .createQuery("SELECT COUNT(*) FROM ChallengeUser c WHERE month(c.dateCreated)=:monthNumber and c.user.id=:userId and c.challenge.id=:challengeId")
-            .setParameter("monthNumber", month)
-            .setParameter("userId", userId)   
-            .setParameter("challengeId", 5L)
-            .getSingleResult().toString();
-    }
     
-    public String getMonthlyNotDrinkMedalByUser(Long userId, LocalDate today, int month, EntityManager entityManager) {
-        return entityManager
-            .createQuery("SELECT COUNT(*) FROM ChallengeUser c WHERE month(c.dateCreated)=:monthNumber and c.user.id=:userId and c.challenge.id=:challengeId")
-            .setParameter("monthNumber", month)
-            .setParameter("userId", userId)   
-            .setParameter("challengeId", 6L)
-            .getSingleResult().toString();  
+    public Long getMonthlyDrinkOrNotDrinkMedalByUser(Long userId, LocalDate today, Long challengeId, EntityManager entityManager) {
+        LocalDate firstDay = today.withDayOfMonth(1);
+        LocalDate lastDay = today.withDayOfMonth(today.lengthOfMonth());
+        
+        return entityManager.createQuery(
+            "SELECT COUNT(c) FROM ChallengeUser c WHERE c.dateCreated >= :startDate AND c.dateCreated < :endDate AND c.user.id = :userId AND c.challengeId = :challengeId",
+            Long.class
+        ).setParameter("startDate", firstDay)
+         .setParameter("endDate", lastDay.plusDays(1))
+         .setParameter("userId", userId)
+         .setParameter("challengeId", challengeId) // challengeId = 5L for Drink and 6L for NotDrink
+         .getSingleResult();
     }
     
     public List<DailyLog> getDrinkLogByUser(Long userId, EntityManager entityManager) {
@@ -89,6 +85,4 @@ public class MedalUserDAO extends GenericDAO<MedalUser> {
     public void insertMedalAndTitle(MedalUser medalUser, EntityManager entityManager) throws SQLException {
         this.insertOrUpdate(medalUser, entityManager);    
     }
-    
-     
 }

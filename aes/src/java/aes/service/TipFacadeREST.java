@@ -53,7 +53,8 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
         }
   
     }
-
+    
+    /*
     @GET
     @Path("find/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -110,6 +111,7 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
+    */
     
     @Override
     protected EntityManager getEntityManager() {
