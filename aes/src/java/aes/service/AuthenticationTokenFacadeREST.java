@@ -62,13 +62,19 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static class LoginCredentials {
+        public String email;
+        public String password;
+    }
 
-    @GET
-    @Path("{email}/{password}")
+    @POST
+    @Path("authUser")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response authUser(@PathParam("email") String email, @PathParam("password") String encryptedPassword) {
+    public Response authUser(LoginCredentials credentials) {
         try {
-            if (email == null || email.isEmpty() || encryptedPassword == null || encryptedPassword.isEmpty()) {
+            if (credentials == null || credentials.email == null || credentials.email.isEmpty() 
+                    || credentials.password == null || credentials.password.isEmpty()) {
                 Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
                     .log(Level.WARNING,
                         "[SECURITY] DENIED_AUTHENTICATION reason=INVALID_DATA");
@@ -76,24 +82,14 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
                 return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
             
-            String decryptedPassword;
+            String decryptedPassword = Encrypter.decrypt(credentials.password);
             
-            try {
-                decryptedPassword = Encrypter.decrypt(encryptedPassword);
-            } catch (EncrypterException ex) {
-                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
-                    .log(Level.WARNING,
-                        "[SECURITY] DENIED_AUTHENTICATION reason=INVALID_DATA email={0}", email);
-
-                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
-            }
-            
-            User user = userDAO.checkCredentials(email, decryptedPassword, em);
+            User user = userDAO.checkCredentials(credentials.email, decryptedPassword, em);
             
             if (user == null) {
                 Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
                     .log(Level.WARNING,
-                        "[SECURITY] DENIED_AUTHENTICATION reason=INVALID_DATA email={0}", email);
+                        "[SECURITY] DENIED_AUTHENTICATION reason=INVALID_DATA email={0}", credentials.email);
 
                 return Response.status(Response.Status.FORBIDDEN).entity("INVALID_DATA").build();
             }
@@ -107,7 +103,7 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
                 .log(Level.INFO,"[SECURITY] AUTHENTICATION_SUCCESS userId={0}", user.getId());
                
-            return Response.ok(responseToken).build();
+            return Response.status(Response.Status.OK).entity(responseToken).build();
         } catch (EncrypterException | SQLException ex) {
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();

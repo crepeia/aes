@@ -95,6 +95,11 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+    public static class UserRegistrationDTO {
+        public User user;
+        public String password;
+    }
+    
     public class AnonymousUserDTO {
         public long id;
         public String unauthenticatedId;
@@ -110,15 +115,18 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{password}")
-    public Response createUser(User entity, @PathParam("password") String p) {
+    @Path("register")
+    public Response createUser(UserRegistrationDTO registrationData) {
         try {
-            if (entity == null || entity.getEmail() == null || p == null || p.isEmpty()) {
+            if (registrationData == null || registrationData.user == null || registrationData.password == null || registrationData.password.isEmpty()) {
                 Logger.getLogger(UserFacadeREST.class.getName())
                     .log(Level.WARNING, "[SECURITY] DENIED_USER_CREATE reason=INVALID_DATA");
 
                 return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
+            
+            User entity = registrationData.user;
+            String encryptedPassword = registrationData.password;
 
             List<User> userList = userDAO.findByEmail(entity.getEmail(), em);
 
@@ -130,8 +138,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 return Response.status(Response.Status.BAD_REQUEST).entity("EMAIL_IS_ALREADY_IN_USE").build();
             }
 
-            String clientEncriptedHexPassword = p;
-            String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
+            String decriptedPassword = Encrypter.decrypt(encryptedPassword);
 
             userDAO.createUser(entity, decriptedPassword, em);
 
