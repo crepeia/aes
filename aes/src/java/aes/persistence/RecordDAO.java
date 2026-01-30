@@ -48,16 +48,12 @@ public class RecordDAO extends GenericDAO<Record>{
     }
 */
  
-    public Record create(Long userId, EntityManager entityManager) throws SQLException {
-
+    public void create(User user, EntityManager entityManager) throws SQLException {
             Record entity = new Record();
-            entity.setUser(entityManager.find(User.class, userId));
+            entity.setUser(user);
             entity.setDailyGoal(0);
             entity.setWeeklyGoal(0);
             super.insert(entity, entityManager);
-
-            return entity;
-
     }
 
 

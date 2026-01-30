@@ -343,7 +343,7 @@ public class User implements Serializable {
         return receiveEmails;
     }
 
-    public void setReceiveEmails(boolean receiveEmails) {
+    public void setReceiveEmails(Boolean receiveEmails) {
         this.receiveEmails = receiveEmails;
     }
 
@@ -351,7 +351,7 @@ public class User implements Serializable {
         return authorizeData;
     }
 
-    public void setAuthorizeData(boolean authorizeData) {
+    public void setAuthorizeData(Boolean authorizeData) {
         this.authorizeData = authorizeData;
     }
 

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.persistence;
 
 import aes.model.Challenge;
@@ -15,12 +10,17 @@ import javax.persistence.EntityManager;
  *
  * @author patri
  */
+/**
+ * @Deprecated
+ * This class is no longer in use, because challenge is not in the databank anymore.
+ * Challenge is in .properties file and should be used from there, instead.
+**/
+@Deprecated
 public class ChallengeDAO extends GenericDAO<Challenge> {
         
     public ChallengeDAO() throws NamingException {
         super(Challenge.class);
     }
-    
 
     public List<Challenge> findAll(EntityManager entityManager) throws SQLException {
         return super.list(entityManager);

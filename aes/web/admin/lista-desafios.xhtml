@@ -14,58 +14,37 @@
         <w:header />
     </h:head>
     <h:body>
-
         <div id="corpo">
             <div class="main">
                 <div class="pagecontent">
-                    
                     <h1>#{messages['desafios']}</h1>
-                    <div class="maintop adminList">
-                        <h:form id="listForm">
-                            <center>
-                                <h:commandButton style="margin: 10px" action="cadastrar-desafio.xhtml?faces-redirect=true" value="Cadastrar Novo Desafio" class="btn btn-success btnSpace" />
-                            </center>
-                            <h:dataTable id="challengeTable" binding="#{table}" value="#{challengeController.challengeList()}" var="challenge" class="table table-striped table-hover table-bordered tableUpdated">
-                                <h:column>
-                                    <f:facet name="header">Prefixo</f:facet>
-                                    <h:outputText value="#{challenge.prefix}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Tipo</f:facet>
-                                    <h:outputText value="#{challenge.type}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Valor base</f:facet>
-                                    <h:outputText value="#{challenge.base_value}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Modificador</f:facet>
-                                    <h:outputText value="#{challenge.modifier}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Editar</f:facet>
-                                    <h:commandButton action="#{challengeController.redirectEdit}" value="Editar" class="btn btn-primary">
-                                    <f:setPropertyActionListener value="#{challenge}" target="#{challengeController.challenge}"/>
-                                    </h:commandButton>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">Deletar</f:facet>
-                                    <h:commandButton action="#{challengeController.delete}" value="Deletar" class="btn btn-danger">
-                                    <f:setPropertyActionListener value="#{challenge}" target="#{challengeController.challenge}"/>
-                                    </h:commandButton>
-                                </h:column>
-                            </h:dataTable>
-                            
-                        </h:form>
-                        <div>
-                            <p:messages id="allMessages" for="itemCreated" autoUpdate="true" redisplay="true" showDetail="true" />
-                        </div>
-                        
+                    <div class="maintop">
+                        <h:dataTable id="challengeTable" binding="#{table}" value="#{challengeController.challengeList(languageController.locale)}" var="challenge" class="table table-striped table-hover table-bordered tableUpdated">
+                            <h:column>
+                                <f:facet name="header">ID</f:facet>
+                                <h:outputText value="#{challenge.id}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{messages['challenge.prefix.title']}</f:facet>
+                                <h:outputText value="#{challenge.prefix}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{messages['challenge.type.title']}</f:facet>
+                                <h:outputText value="#{challenge.type}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{messages['challenge.base.value.title']}</f:facet>
+                                <h:outputText value="#{challenge.baseValue}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{messages['challenge.modifier.title']}</f:facet>
+                                <h:outputText value="#{challenge.modifier}" />
+                            </h:column>
+                        </h:dataTable>
                     </div>
                 </div>
             </div>
         </div>
-            
         <w:footer />
     </h:body>
     </f:view>

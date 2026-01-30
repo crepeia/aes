@@ -10,12 +10,14 @@ import aes.model.User;
 import aes.persistence.RecordDAO;
 import aes.persistence.UserDAO;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -46,8 +48,8 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
     private RecordDAO recordDAO;
     private UserDAO userDAO;
 
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public RecordFacadeREST() {
         super(Record.class);
@@ -61,36 +63,27 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createRecord(Record entity) {
+    public Response createRecord() {
         try {
-            String userEmail = securityContext.getUserPrincipal().getName();
-            //User u = em.find(User.class, entity.getUser().getId());
-            User u = userDAO.find(entity.getUser().getId(), em);
-            if (!u.getEmail().equals(userEmail)) {
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            }
-            try {
-                //Record created = super.create(entity);
-                Record created = recordDAO.create(u.getId(), em);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            recordDAO.create(loggedUser, em);
 
-                return Response.ok().entity(created).build();
-            } catch (SQLException e) {
-                Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-            }
-        } catch (Exception e) {
-            Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return Response.status(Response.Status.CREATED).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+    
+    /*
     @POST
     @Path("create/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response create(@PathParam("userId") Long userId) {
-        //String userEmail = securityContext.getUserPrincipal().getName();
-
-        
         Record entity;
         try {
             entity = recordDAO.create(userId, em);
@@ -100,63 +93,68 @@ public class RecordFacadeREST extends AbstractFacade<Record> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 
         }
-        
-        
-        /*try {
-            Record entity = new Record();
-            entity.setUser(em.find(User.class, userId));
-            entity.setDailyGoal(0);
-            entity.setWeeklyGoal(0);
-            super.create(entity);
-            return Response.ok().entity(entity).build();
-        } catch (Exception e) {
-            Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-        }*/
-
     }
-
+    */
+    
     @PUT
     @Path("edit")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Record edit(Record entity) {
-        String userEmail = securityContext.getUserPrincipal().getName();
-        //User u = em.find(User.class, entity.getUser().getId());
-        User u = userDAO.find(entity.getUser().getId(), em);
+    public Response update(Record entity) {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-        if (u.getEmail().equals(userEmail)) {
-            try {
-                //super.edit(entity);
-                recordDAO.insertOrUpdate(entity, em);
-            } catch (SQLException ex) {
-                Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            if (entity == null) {
+                Logger.getLogger(RecordFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_SIGNATURE reason=INVALID_DATA");
+                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
             }
-        }
 
-        return entity;
+            User loggedUser = securityHelper.getLoggedUser();
+
+            Record oldRecord = recordDAO.find(entity.getId(), em);
+
+            r = securityHelper.requireSameUser(oldRecord.getUser(), loggedUser.getId());
+            if (r != null) return r;
+
+            oldRecord.setDailyGoal(entity.getDailyGoal());
+            oldRecord.setWeeklyGoal(entity.getWeeklyGoal());
+
+            recordDAO.insertOrUpdate(oldRecord, em);
+            return Response.ok().entity(oldRecord).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GET
-    @Path("find/{userId}")
+    @Path("findByUser")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response find(@PathParam("userId") Long userId) {
-        String userEmail = securityContext.getUserPrincipal().getName();
-        //User u = em.find(User.class, userId);
-        User u = userDAO.find(userId, em);
+    public Response find() {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-        if(!u.getEmail().equals(userEmail)){
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-      
-            /*Record rec = (Record) getEntityManager().createQuery("SELECT r FROM Record r WHERE r.user.id=:userId")
-                    .setParameter("userId", userId)
-                    .getSingleResult();*/
+            User loggedUser = securityHelper.getLoggedUser();
+
+            Record rec = recordDAO.findByUserId(loggedUser.getId(), em);
             
-        Record rec = recordDAO.findByUserId(userId, em);
-        if(rec==null){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }else{
+            if (rec == null) {
+                Logger.getLogger(RecordFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DID_NOT_FIND_RECORD reason=TARGET_OBJECT_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
+            
             return Response.ok().entity(rec).build();
+        } catch (Exception ex) {
+            Logger.getLogger(RecordFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
        
     }

@@ -12,9 +12,14 @@ import aes.model.User;
 
 
 import aes.persistence.GenericDAO;
+import aes.persistence.TipUserDAO;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +44,6 @@ public class TipUserController  extends BaseController<TipUser> {
     @PostConstruct
     public void init() {
         tipUser = new TipUser();
-        tipUser.setTip(new Tip());
         
         try {
             daoBase = new GenericDAO<>(TipUser.class);
@@ -75,26 +79,53 @@ public class TipUserController  extends BaseController<TipUser> {
     
     public void sendNewTip(User user){
         try {
+            List<Long> tipsIds = new ArrayList<Long>();
             
-            List<Tip> possibleTipsList;
-            possibleTipsList = this.getEntityManager().createQuery("SELECT t FROM Tip t WHERE t.id NOT IN (SELECT tu.tip.id FROM TipUser tu WHERE tu.user.id=:userId)")
+            Properties properties = new Properties();
+            String propertiesPath = this.getMessagesPath() + "_pt.properties";
+            
+            InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath);
+            properties.load(input);
+            
+            boolean continueSearch = true;
+            int counter = 1;
+            
+            while(continueSearch) {
+                String key = properties.getProperty("tip.description." + counter, "");
+                if (key.isEmpty()) {
+                    continueSearch = false;
+                } else {
+                    tipsIds.add(Long.parseLong(key));
+                    counter++;
+                }
+            }
+            
+            List<Long> tipUserIds;
+            tipUserIds = this.getEntityManager().createQuery("SELECT tu.tipId FROM TipUser tu WHERE tu.user.id=:userId")
                     .setParameter("userId", user.getId())
                     .getResultList();
-
+            
+            List<Long> possibleTipsList = new ArrayList<Long>();
+            
+            for(Long tip: tipUserIds) {
+                if (!tipsIds.contains(tip)) {
+                    possibleTipsList.add(tip);
+                }
+            }
 
             if (possibleTipsList.isEmpty()) {
                // FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não há dicas a serem enviadas para o usuário " + user.getEmail() + ".", null));
                 Logger.getLogger(TipUserController.class.getName()).log(Level.WARNING, "Não há dicas a serem enviadas para o usuário " + user.getEmail() + ".");
             } else {
                 Random rand = new Random();
-                Tip newtip = possibleTipsList.get(rand.nextInt(possibleTipsList.size()));
+                Long tipId = possibleTipsList.get(rand.nextInt(possibleTipsList.size()));
                 Calendar cal = Calendar.getInstance();
                 
-                TipUserKey tipUserKey = new TipUserKey(newtip.getId(), user.getId());
+                TipUserKey tipUserKey = new TipUserKey(tipId, user.getId());
 
                 tipUser.setId(tipUserKey);
                 tipUser.setUser(this.getEntityManager().find(User.class, user.getId()));
-                tipUser.setTip(this.getEntityManager().find(Tip.class, newtip.getId()));
+                tipUser.setTipId(tipId);
                 
                 tipUser.setDateCreated(cal.getTime());
                 
@@ -103,8 +134,8 @@ public class TipUserController  extends BaseController<TipUser> {
                 //tipUser = null;
             }
             
-        } catch (SQLException ex) {
-                Logger.getLogger(TipUserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException | IOException ex) {
+                Logger.getLogger(TipUserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

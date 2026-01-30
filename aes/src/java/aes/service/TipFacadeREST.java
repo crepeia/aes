@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.service;
 
 import aes.model.Tip;
@@ -10,7 +5,6 @@ import aes.persistence.TipDAO;
 import aes.utility.RESTApiResponse;
 import aes.utility.Secured;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
@@ -26,9 +20,9 @@ import java.util.logging.Logger;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.Response;
+
 /**
  *
  * @author bruno
@@ -36,7 +30,12 @@ import javax.ws.rs.core.Response;
 @Stateless
 @Secured
 @TransactionManagement(TransactionManagementType.BEAN)
-
+/**
+ * @Deprecated
+ * This class is no longer in use, because tip is not in the databank anymore.
+ * Challenge is in .properties file and should be used from there, instead.
+**/
+@Deprecated
 @Path("tip")
 public class TipFacadeREST extends AbstractFacade<Tip> {
 
@@ -54,7 +53,8 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
         }
   
     }
-
+    
+    /*
     @GET
     @Path("find/{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -111,6 +111,7 @@ public class TipFacadeREST extends AbstractFacade<Tip> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
+    */
     
     @Override
     protected EntityManager getEntityManager() {

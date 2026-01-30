@@ -9,6 +9,7 @@ import aes.model.TipUser;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -16,6 +17,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -31,6 +33,11 @@ public class ExpoNotification {
     
     public void send(String expoToken, TipUser tipUser){
         try {
+            Properties messagesPTProperties = new Properties();
+            String messagesPTPropertiesPath = AppServletContextListener.getServletContext().getInitParameter("messagesPath") + "_pt.properties";
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(messagesPTPropertiesPath);
+            messagesPTProperties.load(inputStream);
+            
             //String certificatesTrustStorePath = "C:/Program Files/Java/jdk1.8.0_221/jre/lib/security/cacerts";
            // System.setProperty("javax.net.ssl.trustStore", certificatesTrustStorePath);
             
@@ -55,8 +62,10 @@ public class ExpoNotification {
                     .build().toString();
             String jsonString = Json.createObjectBuilder()
                     .add("to", expoToken)
-                    .add("title", tipUser.getTip().getTitle())
-                    .add("body", tipUser.getTip().getDescriptionPT())
+                    .add("title", messagesPTProperties.getProperty("tip.title." + tipUser.getTipId()))
+                    .add("descriptionPT", messagesPTProperties.getProperty("tip.description.pt." + tipUser.getTipId()))
+                    .add("descriptionEN", messagesPTProperties.getProperty("tip.description.en." + tipUser.getTipId()))
+                    .add("descriptionES", messagesPTProperties.getProperty("tip.description.es." + tipUser.getTipId()))
                     .add("data", jsonScreen)
                     .build().toString();
             

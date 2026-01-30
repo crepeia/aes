@@ -5,29 +5,27 @@
  */
 package aes.service;
 
-import aes.model.Tip;
 import aes.model.TipUser;
 import aes.model.TipUserKey;
 import aes.model.User;
 import aes.persistence.TipUserDAO;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HEAD;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -56,6 +54,9 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     SecurityContext securityContext;
     
     private TipUserDAO tipUserDAO;
+    
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     private TipUserKey getPrimaryKey(PathSegment pathSegment) {
         /*
@@ -69,11 +70,11 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
         javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
         java.util.List<String> tipId = map.get("tipId");
         if (tipId != null && !tipId.isEmpty()) {
-            key.setTipId(new java.lang.Long(tipId.get(0)));
+            key.setTipId(Long.parseLong(tipId.get(0)));
         }
         java.util.List<String> userId = map.get("userId");
         if (userId != null && !userId.isEmpty()) {
-            key.setUserId(new java.lang.Long(userId.get(0)));
+            key.setUserId(Long.parseLong(userId.get(0)));
         }
         return key;
     }
@@ -90,26 +91,37 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @POST
     @Path("createTip")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createTip(TipUser entity) {
+    public Response createTip(String body) {
         try {
-            TipUser auxTip = super.find(entity.getId());
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-            /*entity.setUser(em.find(User.class, entity.getId().getUserId()));
-            entity.setTip(em.find(Tip.class, entity.getId().getTipId()));
+            User loggedUser = securityHelper.getLoggedUser();
             
-            if(entity.getDateCreated()== null){
-                entity.setDateCreated(new Date());
-            }
+            Long tipId = Long.parseLong(body);
             
-            super.create(entity);*/
-            if(auxTip == null){
-                tipUserDAO.createTip(entity, em);    
-            }
-            return Response.status(Response.Status.OK).build();
-        } catch (SQLException e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.ALL.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            TipUser entity = tipUserDAO.findByUserAndTip(loggedUser.getId(), tipId, em);
 
+            if(entity == null){
+                TipUser newTipUser = new TipUser();
+                
+                TipUserKey key = new TipUserKey();
+                key.setTipId(tipId);
+                key.setUserId(loggedUser.getId());
+                
+                newTipUser.setId(key);
+                newTipUser.setUser(loggedUser);
+                newTipUser.setDateCreated(new Date());
+                
+                tipUserDAO.createTip(newTipUser, em);
+                
+                return Response.status(Response.Status.CREATED).build();
+            }
+            
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
@@ -117,132 +129,128 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     @Path("like")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public TipUser like(TipUser entity) {
-        TipUser newEntity = super.find(entity.getId());        
-        newEntity.setLiked(entity.isLiked());
-        
+    public Response like(String body) {
         try {
-            tipUserDAO.insertOrUpdate(newEntity, em);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Long tipId = Long.parseLong(body);
+            
+            TipUser entity = tipUserDAO.findByUserAndTip(loggedUser.getId(), tipId, em);
+            
+            if (entity == null) {
+                Logger.getLogger(TipUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_TIP_USER_LIKE reason=TARGET_OBJECT_NOT_FOUND "
+                        + "actorUserId={0} tipId={1}",
+                        new Object[]{loggedUser.getId(), tipId});
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
+            
+            tipUserDAO.like(entity, em);
+            return Response.status(Response.Status.OK).build();
         } catch (SQLException ex) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
-        //super.edit(newEntity);
-        return newEntity;
     }
     
     @PUT
     @Path("dislike")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public TipUser dislike(TipUser entity) {
-        TipUser newEntity = super.find(entity.getId());
-        newEntity.setLiked(entity.isLiked());
-        /*
-        if(newEntity.isLiked() != null && newEntity.isLiked() == false){
-            newEntity.setLiked(null);
-        } else {
-            newEntity.setLiked(false);
-        }
-        */
-        
+    public Response dislike(String body) {
         try {
-            tipUserDAO.insertOrUpdate(newEntity, em);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Long tipId = Long.parseLong(body);
+            
+            TipUser entity = tipUserDAO.findByUserAndTip(loggedUser.getId(), tipId, em);
+            
+            if (entity == null) {
+                Logger.getLogger(TipUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_TIP_USER_DESLIKE reason=TARGET_OBJECT_NOT_FOUND "
+                        + "actorUserId={0} tipId={1}",
+                        new Object[]{loggedUser.getId(), tipId});
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
+            
+            tipUserDAO.dislike(entity, em);
+            return Response.status(Response.Status.OK).build();
         } catch (SQLException ex) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
-        //super.edit(newEntity);
-        return newEntity;
-    }
-    
-    @PUT
-    @Path("unlike")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces( MediaType.APPLICATION_JSON)
-    public TipUser unlike(TipUser entity) {
-        TipUser newEntity = super.find(entity.getId());
-        newEntity.setLiked(null);
-        
-        try {
-            tipUserDAO.insertOrUpdate(newEntity, em);
-        } catch (SQLException ex) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-        //super.edit(newEntity);
-        return newEntity;
     }
     
     @PUT
     @Path("read")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces( MediaType.APPLICATION_JSON)
-    public TipUser read(TipUser entity) {
-       /* TipUser newEntity = super.find(entity.getId());
-               
-        if(newEntity==null){
-            newEntity = new TipUser();     
-            newEntity.setUser(em.find(User.class, entity.getId().getUserId()));
-            newEntity.setTip(em.find(Tip.class, entity.getId().getTipId()));
-            newEntity.setDateCreated(new Date());
-            super.create(newEntity);
-        }
-        
-        newEntity.setReadByUser(true);
-        
-        super.edit(newEntity);*/
-       
-
+    public Response read(String body) {
         try {
-            TipUser newEntity = tipUserDAO.read(entity, em);
-            return newEntity;
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Long tipId = Long.parseLong(body);
+            
+            TipUser entity = tipUserDAO.findByUserAndTip(loggedUser.getId(), tipId, em);
+            
+            if (entity == null) {
+                Logger.getLogger(TipUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_TIP_USER_READ reason=TARGET_OBJECT_NOT_FOUND "
+                        + "actorUserId={0} tipId={1}",
+                        new Object[]{loggedUser.getId(), tipId});
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
+            
+            tipUserDAO.read(entity, em);
+            return Response.status(Response.Status.OK).build();
         } catch (SQLException ex) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
-        
     }
     
     @GET
-    @Path("find/{userId}")
+    @Path("findByUser")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findByUser(@PathParam("userId") String uId) {
+    public Response findByUser() {
         try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-       /* List<TipUser> list = (List<TipUser>) getEntityManager().createQuery("SELECT tu FROM TipUser tu WHERE tu.user.id=:userId")
-                .setParameter("userId", Long.parseLong(uId))
-                .getResultList();*/
-       
-        List<TipUser> list = tipUserDAO.findByUser(uId, em);
-        return Response.ok().entity(list).build();
-        
-        } catch (Exception e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            List<TipUser> list = tipUserDAO.findByUser(loggedUser.getId(), em);
+            return Response.ok().entity(list).build();
+        } catch (Exception ex) {
+            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
-
+    
+    /*
     @GET
     @Path("secured/{startDate}/{endDate}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findByDate(@PathParam("startDate") String sd, @PathParam("endDate") String ed) {
         try {
-        /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = sdf.parse(sd);   
-        Date endDate = sdf.parse(ed);*/
-
-        String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
-        
-        /*List<TipUser> list = (List<TipUser>)  getEntityManager().createQuery("SELECT tu FROM TipUser tu WHERE tu.user.email=:email AND (tu.dateCreated BETWEEN :start AND :end)")
-                .setParameter("email", userEmail)
-                .setParameter("start", startDate)
-                .setParameter("end", endDate)
-                .getResultList();*/
-        
+            String userEmail = securityContext.getUserPrincipal().getName();//httpRequest.getAttribute("userEmail").toString();
             List<TipUser> list = tipUserDAO.findByDate(sd, ed, userEmail, em);
             return Response.ok().entity(list).build();
-            
         } catch (Exception e) {
             Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
@@ -255,6 +263,7 @@ public class TipUserFacadeREST extends AbstractFacade<TipUser> {
     public String countREST() {
         return String.valueOf(tipUserDAO.count(em));
     }
+    */
 
     @Override
     protected EntityManager getEntityManager() {

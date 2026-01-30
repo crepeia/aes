@@ -23,38 +23,10 @@ public class MessageDAO extends GenericDAO<Message>{
         super(Message.class);
     }
     
-    
-
-    public List<Message> find(Long chatId, String userEmail, EntityManager entityManager) {
-
-        //String userEmail = securityContext.getUserPrincipal().getName();
-        User u = (User) entityManager.createQuery("SELECT u FROM User u WHERE u.email=:userEmail")
-                .setParameter("userEmail", userEmail)
-                .getSingleResult();
-        //only answer queries from the owner of the messagens or consultant
-        if(u.getChat().getId().equals(chatId) || u.isConsultant()){
-            List<Message> m = (List<Message>) entityManager.createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
-                .setParameter("chatId", chatId)
-                .getResultList();
-            return m;
-        } else {
-            return null;
-        }
-    }
-    
-    public List<Message> findAnonymousMessages(Long chatId, Long userId, EntityManager em) {
-        User u = (User) em.createQuery("SELECT u FROM User u WHERE u.id=:id")
-            .setParameter("id", userId)
-            .getSingleResult();
-        
-        if (u.getChat().getId().equals(chatId)) {
-            List<Message> m = (List<Message>) em.createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
-                .setParameter("chatId", chatId)
-                .getResultList();
-            return m;
-        } else {
-            return null;
-        }
+    public List<Message> findByChat(Long chatId, EntityManager entityManager) {
+        return entityManager.createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
+            .setParameter("chatId", chatId)
+            .getResultList();
     }
 
     public Date findLastSentDateByChatId(Long chatId, EntityManager em) {

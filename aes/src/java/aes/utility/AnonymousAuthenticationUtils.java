@@ -10,7 +10,7 @@ import org.bouncycastle.crypto.signers.Ed25519Signer;
 
 /**
  *
- * @author luansb
+ * @author LuanBarbs
  */
 public class AnonymousAuthenticationUtils {
     private static final SecureRandom random = new SecureRandom(); // Para geração do nonce

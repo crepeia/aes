@@ -36,7 +36,7 @@ public class AgendaAvailable implements Serializable {
     @ManyToOne
     private User user;
     @Column(name = "available_date")
-    private byte availableDate;
+    private Byte availableDate;
     @Column(name = "available_time")
     private LocalTime availableTime;
 

@@ -80,15 +80,14 @@ public class EmailHelper {
         sendHTMLEmail(contact, entityManager);
     }
     
-    public void sendDeleteAccountEmail(User user, EntityManager em,String token) throws MessagingException, SQLException {
+    public void sendDeleteAccountEmail(User user, String token, EntityManager entityManager) throws MessagingException, SQLException {
         Contact contact = new Contact();
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setSubject("deleteaccount_subj");
         contact.setContent("deleteaccount");
-        sendHTMLEmailDeleteAccount(contact, em,token);
-            
+        sendHTMLEmailDeleteAccount(contact, token, entityManager);            
     }
     
     public void sendContactRequestEmail(String email, EntityManager em) throws MessagingException, MissingResourceException, SQLException{
@@ -169,8 +168,8 @@ public class EmailHelper {
         sendPlainTextEmail(contact, entityManager);
     }
 
-    public void sendHTMLEmailDeleteAccount(Contact contact, EntityManager entityManager,String token) throws MessagingException, MissingResourceException, SQLException {
-        String content = getContentDeleteAccount(contact, htmlTemplate,token);
+    public void sendHTMLEmailDeleteAccount(Contact contact, String token, EntityManager entityManager) throws MessagingException, MissingResourceException, SQLException {
+        String content = getContentDeleteAccount(contact, htmlTemplate, token);
         String subject = getSubject(contact);
         System.out.println(content);
         eMailSSL.send(contact.getSender(), contact.getRecipient(), subject, content, contact.getPdf(), contact.getAttachment());

@@ -5,19 +5,27 @@
  */
 package aes.service;
 
-import aes.model.MedalUser;
+import aes.model.Title;
 import aes.model.TitleUser;
+import aes.model.User;
+import aes.persistence.TitleDAO;
+import aes.persistence.TitleUserDAO;
+import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -30,50 +38,89 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 @Path("titleuser")
+@Secured
+@TransactionManagement(TransactionManagementType.BEAN)
 public class TitleUserFacadeREST extends AbstractFacade<TitleUser> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    private TitleDAO titleDao;
+    private TitleUserDAO titleUserDao;
+    
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public TitleUserFacadeREST() {
         super(TitleUser.class);
+        try {
+            titleUserDao = new TitleUserDAO();
+            titleDao = new TitleDAO();
+        } catch (NamingException ex) {
+            Logger.getLogger(TitleUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @POST
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean createTitle(TitleUser entity) {
+    public Response createTitle(TitleUser entity) {
         try {
-            List<TitleUser> teList
-                    = em.createQuery("SELECT te FROM TitleUser te WHERE te.user.id =: userId AND te.title.id =: titleId AND te.description =: titleDescription")
-                            .setParameter("userId", entity.getUser().getId())
-                            .setParameter("titleId", entity.getTitle().getId() )
-                            .setParameter("titleDescription", entity.getDescription())
-                            .getResultList();
-            if (teList.isEmpty()) {
-                TitleUser newEntity = super.create(entity);
-            }
-            return true;
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-        } catch (Exception e) {
-            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return false;
+            if (entity == null || entity.getTitle() == null || entity.getDescription() == null) {
+                Logger.getLogger(TitleUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_SIGNATURE reason=INVALID_DATA");
+                
+                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
+            }
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Title title = titleDao.find(entity.getTitle().getId(), em);
+            
+            if (title == null) {
+                Logger.getLogger(TitleUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_SIGNATURE reason=INVALID_DATA");
+                
+                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
+            }
+            
+            List<TitleUser> teList = titleUserDao.findByUserTitleDescription(loggedUser.getId(), title.getId(), entity.getDescription(), em);
+            
+            if (teList.isEmpty()) {
+                titleUserDao.insert(entity, em);
+                return Response.status(Response.Status.CREATED).build();
+            } else {
+                Logger.getLogger(TitleUserFacadeREST.class.getName())
+                    .log(Level.INFO, "title list already exists");
+                
+                return Response.ok().build();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TitleUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
      
     @GET
-    @Path("find/{userId}")
+    @Path("findByUser")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findByUser(@PathParam("userId") String uId) {
+    public Response findByUser() {
         try {
-            List<TitleUser> list = (List<TitleUser>) em.createQuery("SELECT te FROM TitleUser te WHERE te.user.id =: userId")
-                .setParameter("userId", Long.parseLong(uId))
-                .getResultList();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            List<TitleUser> list = titleUserDao.findByUser(loggedUser.getId(), em);
             
             return Response.ok().entity(list).build();
-        } catch (Exception e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (Exception ex) {
+            Logger.getLogger(TitleUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -82,15 +129,17 @@ public class TitleUserFacadeREST extends AbstractFacade<TitleUser> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findAllTitle() {
         try {
-            List<TitleUser> list = (List<TitleUser>) em.createQuery("SELECT te FROM TitleUser te").getResultList();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            List<TitleUser> list = titleUserDao.findAll(em);
+            
             return Response.ok().entity(list).build();
         } catch (Exception e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(TitleUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
-
-    
     
     @Override
     protected EntityManager getEntityManager() {

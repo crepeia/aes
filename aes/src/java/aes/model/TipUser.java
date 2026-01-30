@@ -11,6 +11,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -29,12 +32,7 @@ public class TipUser implements Serializable {
 
     @EmbeddedId
     private TipUserKey id = new TipUserKey();
-    
-    @ManyToOne
-    @MapsId("tipId")
-    @JoinColumn(name = "tip_id")
-    private Tip tip;
-    
+
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
@@ -50,13 +48,13 @@ public class TipUser implements Serializable {
     
     @Column(name = "readByUser")
     private boolean readByUser;
-    
-    public Tip getTip() {
-        return tip;
+
+    public Long getTipId() {
+        return id.getTipId();
     }
 
-    public void setTip(Tip tip) {
-        this.tip = tip;
+    public void setTipId(Long tipId) {
+        id.setTipId(tipId);
     }
 
     public User getUser() {
@@ -98,8 +96,6 @@ public class TipUser implements Serializable {
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
-    
-
 
     @Override
     public int hashCode() {

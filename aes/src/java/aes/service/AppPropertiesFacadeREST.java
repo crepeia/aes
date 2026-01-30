@@ -8,6 +8,8 @@ package aes.service;
 import aes.model.AppSuggestion;
 import aes.utility.Secured;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,7 +46,7 @@ public class AppPropertiesFacadeREST {
       Object properties = em.createNativeQuery(
             "SELECT latest_app_version FROM app_properties" ).getSingleResult();
       
-        System.out.println();
+      Logger.getLogger(AppPropertiesFacadeREST.class.getName()).log(Level.FINE, "[CONNECTION] AN APPLICATION IS USING THE SERVER");
       return (String)properties;
     }
 

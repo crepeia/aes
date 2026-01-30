@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -26,19 +27,25 @@ public class AppNavigation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
     @Column(name = "ip")
     private String ip;
-    @Column(name = "time_stamp")
+    
+    @Column(name = "time_stamp", nullable = false, updatable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date timeStamp;
+    
 //    @Column(name = "url")
 //    private String url;  
 //    @Column(name = "referer")
 //    private String referer;
 //    @Column (name = "campaign")
 //    private String campaign;
+    
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
+    
     @ManyToOne
     private UserAgent userAgent;
 

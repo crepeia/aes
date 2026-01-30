@@ -9,12 +9,17 @@ import aes.model.Tip;
 import aes.model.TipUser;
 import aes.model.TipUserKey;
 import aes.model.User;
+import aes.utility.AppServletContextListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,137 +39,114 @@ public class TipUserDAO extends GenericDAO<TipUser> {
     
  
     public TipUser getLatestTip(User user, EntityManager entityManager) throws SQLException {
-        TipUser tipUser = new TipUser();
-        tipUser.setTip(new Tip());
-            
         List<TipUser> tipUserList = this.list("user", user,entityManager);
         if(tipUserList.isEmpty()){
             sendNewTip(user, entityManager);
             tipUserList = this.list("user", user, entityManager);
         }
         return (tipUserList.get(tipUserList.size()-1));
- 
-
     }
-    
     
     public void sendNewTip(User user, EntityManager entityManager){
         TipUser tipUser = new TipUser();
-        tipUser.setTip(new Tip());
         try {
+            List<Long> tipsIds = new ArrayList<Long>();
             
-            List<Tip> possibleTipsList;
-            possibleTipsList = entityManager.createQuery("SELECT t FROM Tip t WHERE t.id NOT IN (SELECT tu.tip.id FROM TipUser tu WHERE tu.user.id=:userId)")
+            Properties properties = new Properties();
+            String propertiesPath = AppServletContextListener.getServletContext().getInitParameter("messagesPath") + "_pt.properties";
+            
+            InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath);
+            properties.load(input);
+            
+            boolean continueSearch = true;
+            int counter = 1;
+            
+            while(continueSearch) {
+                String key = properties.getProperty("tip.description." + counter, "");
+                if (key.isEmpty()) {
+                    continueSearch = false;
+                } else {
+                    tipsIds.add(Long.parseLong(key));
+                    counter++;
+                }
+            }
+            
+            List<Long> tipUserIds;
+            tipUserIds = entityManager.createQuery("SELECT tu.tipId FROM TipUser tu WHERE tu.user.id=:userId")
                     .setParameter("userId", user.getId())
                     .getResultList();
-
+            
+            List<Long> possibleTipsList = new ArrayList<Long>();
+            
+            for(Long tip: tipUserIds) {
+                if (!tipsIds.contains(tip)) {
+                    possibleTipsList.add(tip);
+                }
+            }
 
             if (possibleTipsList.isEmpty()) {
                 Logger.getLogger(TipUserDAO.class.getName()).log(Level.WARNING, "Não há dicas a serem enviadas para o usuário " + user.getEmail() + ".");
             } else {
                 Random rand = new Random();
-                Tip newtip = possibleTipsList.get(rand.nextInt(possibleTipsList.size()));
+                Long tipId = possibleTipsList.get(rand.nextInt(possibleTipsList.size()));
                 Calendar cal = Calendar.getInstance();
                 
-                TipUserKey tipUserKey = new TipUserKey(newtip.getId(), user.getId());
+                TipUserKey tipUserKey = new TipUserKey(tipId, user.getId());
 
                 tipUser.setId(tipUserKey);
                 tipUser.setUser(entityManager.find(User.class, user.getId()));
-                tipUser.setTip(entityManager.find(Tip.class, newtip.getId()));
+                tipUser.setTipId(tipId);
                 
                 tipUser.setDateCreated(cal.getTime());
                 
                 update(tipUser, entityManager);               
             }
             
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
                 Logger.getLogger(TipUserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
 
-    public TipUser createTip(TipUser entity, EntityManager em) throws SQLException {       
-        entity.setUser(em.find(User.class, entity.getId().getUserId()));
-        entity.setTip(em.find(Tip.class, entity.getId().getTipId()));
-            if(entity.getDateCreated()== null){     
-                entity.setDateCreated(new Date());
-            }
+    public void createTip(TipUser entity, EntityManager em) throws SQLException {       
+        super.insertOrUpdate(entity, em);
+    }
+
+
+    public void like(TipUser entity, EntityManager entityManager) throws SQLException {
+        entity.setLiked(true);
+        super.insertOrUpdate(entity, entityManager);
+    }
+    
+
+    public void dislike(TipUser entity, EntityManager entityManager) throws SQLException {
+        entity.setLiked(false);
+        super.insertOrUpdate(entity, entityManager);
+    }
+    
+    public void read(TipUser entity, EntityManager entityManager) throws SQLException {
+        entity.setReadByUser(true);
+        super.update(entity, entityManager);
+    }
+    
+    public TipUser findByUserAndTip(Long userId, Long tipId, EntityManager entityManager) {
+        List<TipUser> result = entityManager.createQuery("SELECT tu FROM TipUser tu WHERE tu.user.id =: userId AND tu.id.tipId =: tipId")
+            .setParameter("userId", userId)
+            .setParameter("tipId", tipId)
+            .setMaxResults(1)
+            .getResultList();
             
-            super.insertOrUpdate(entity, em);    
-            //return Response.status(Response.Status.OK).build();
-            return entity;
-
+        return result.isEmpty() ? null : result.get(0);
     }
-
-
-    public TipUser like(TipUser entity, EntityManager entityManager) throws SQLException {
-        TipUser newEntity = super.find(entity.getId(), entityManager);
- 
-        
-        newEntity.setLiked(entity.isLiked());
-
-        super.insertOrUpdate(newEntity, entityManager);
-        return newEntity;
-    }
-    
-
-    public TipUser dislike(TipUser entity, EntityManager entityManager) throws SQLException {
-        TipUser newEntity = super.find(entity.getId(), entityManager);
-        newEntity.setLiked(entity.isLiked());
-        /*
-        if(newEntity.isLiked() != null && newEntity.isLiked() == false){
-            newEntity.setLiked(null);
-        } else {
-            newEntity.setLiked(false);
-        }
-        */
-        super.insertOrUpdate(newEntity, entityManager);
-        return newEntity;
-    }
-    
-
-    public TipUser unlike(TipUser entity, EntityManager entityManager) throws SQLException {
-        TipUser newEntity = super.find(entity.getId(),entityManager);
-        newEntity.setLiked(null);
-        super.insertOrUpdate(newEntity,entityManager);
-        return newEntity;
-    }
-    
-
-    public TipUser read(TipUser entity, EntityManager entityManager) throws SQLException {
-       // TipUser newEntity = super.find(entity.getId(), entityManager);
-         TipUser newEntity = (TipUser) entityManager.createQuery("SELECT tu FROM TipUser tu WHERE tu.user.id=:userId AND tu.tip.id=:tipId")
-                .setParameter("userId", entity.getId().getUserId())
-                .setParameter("tipId",  entity.getId().getTipId())
-                .getSingleResult();
-         
-        if(newEntity==null){
-            newEntity = new TipUser();    
-            newEntity.setUser(entityManager.find(User.class, entity.getId().getUserId()));
-            newEntity.setTip(entityManager.find(Tip.class, entity.getId().getTipId()));
-            newEntity.setDateCreated(new Date());
-            super.insert(newEntity, entityManager);
-        }
-        
-        newEntity.setReadByUser(true);
-        
-       //entityManager.merge(newEntity);
-        
-        super.update(newEntity, entityManager);
-        return newEntity;
-    }
-    
   
-    public List<TipUser> findByUser(String uId, EntityManager entityManager) {
-   
-        List<TipUser> list = (List<TipUser>) entityManager.createQuery("SELECT tu FROM TipUser tu WHERE tu.user.id=:userId")
-                .setParameter("userId", Long.parseLong(uId))
-                .getResultList();
-        return list;
-                 
+    public List<TipUser> findByUser(Long userId, EntityManager entityManager) {
+        List<TipUser> list = (List<TipUser>) entityManager.createQuery("SELECT tu FROM TipUser tu WHERE tu.user.id =: userId")
+            .setParameter("userId", userId)
+            .getResultList();
+        
+        return list;  
     }
-
-
+    
     public List<TipUser> findByDate(String sd, String ed, String userEmail, EntityManager entityManager) throws ParseException {
   
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -180,8 +162,6 @@ public class TipUserDAO extends GenericDAO<TipUser> {
                 .getResultList();
         
         return list;
-        
-        
     }
 
    /* public String countREST() {

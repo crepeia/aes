@@ -12,7 +12,7 @@ import javax.persistence.NoResultException;
 
 /**
  *
- * @author luansb
+ * @author LuanBarbs
  */
 public class AnonymousAuthenticationDAO extends GenericDAO<AnonymousKey> {
     

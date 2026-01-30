@@ -1,173 +1,115 @@
 package aes.controller;
 
-import aes.model.Tip;
-import aes.persistence.GenericDAO;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Collections;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
 
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.naming.NamingException;
 
 /**
  *
  * @author bruno
  */
+
 @Named("tipController")
 @RequestScoped
-public class TipController extends BaseController<Tip>{
-
-    private Tip tip = new Tip();
+public class TipController extends BaseController {
     
-    private Long id;
+    public class Tip {
+        private int id;
+        private String title;
+        private String description;
+        
+        public Tip() {}
 
-  
-    private String title;
-    private String descriptionPT;
-    private String descriptionEN;
-    private String descriptionES;
+        public Tip(int id, String title, String description) {
+            this.id = id;
+            this.title = title;
+            this.description = description;
+        }
 
-    
-    List<Tip> tipList;
-    
-    @PostConstruct
-    public void init() {
-        try {
-            daoBase = new GenericDAO<>(Tip.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
         }
     }
-  public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Tip getTip() {
-        return tip;
-    }
     
-    public void create() {
-        try {
-            List<Tip> tipList = this.getDaoBase().list("title", tip.getTitle(), getEntityManager());
+    public List<Tip> tipList(Locale locale){
+        List<Tip> tips = new ArrayList<>();
+        String language = locale.getLanguage();
+        Properties properties = new Properties();
+        String propertiesPath = this.getMessagesPath() + "_pt.properties";
 
-            if (!tipList.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dica já cadastrada.", null));
-            } else {
-                daoBase.insert(getTip(), getEntityManager());
-                tip = null;
-                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                FacesContext.getCurrentInstance().addMessage("itemCreated", new FacesMessage(FacesMessage.SEVERITY_INFO, "Item criado com sucesso!", "Lembrete: cadastrar as descrições da corrente dica na folha de tradução."));
-                FacesContext.getCurrentInstance().getExternalContext().redirect("lista-dicas.xhtml");
+        if (language.equals("en")) {
+            propertiesPath = this.getMessagesPath() + "_en.properties";
+        }
+        
+        if (language.equals("es")) {
+            propertiesPath = this.getMessagesPath() + "_es.properties";
+        }
+        
+
+        try {
+            try (InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath)) {
+                if (input == null) {
+                    System.err.println("Arquivo não encontrado no classpath: " + propertiesPath);
+                    return tips; 
+                }
+                properties.load(input);
             }
             
-        } catch (SQLException ex) {
-                Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public String redirectEdit(){
-        return "editar-dica.xhtml";
-    }
-
-    public void setTip(Tip tip) {
-        this.tip = tip;
-    }
-    
-    public void edit(){
-        Tip newtip = getTip();
-        try {
-            getDaoBase().update(newtip, getEntityManager());
-            FacesContext.getCurrentInstance().getExternalContext().redirect("lista-dicas.xhtml");
-        } catch (SQLException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void delete(){
-        Tip deleteTip = getTip();
-        try {
-            getDaoBase().delete(deleteTip, getEntityManager());
-            FacesContext.getCurrentInstance().getExternalContext().redirect("lista-dicas.xhtml");
-        } catch (SQLException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public List<Tip> tipList(){
-        try {
-            tipList = this.getDaoBase().list(getEntityManager());
-        } catch (SQLException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return tipList;
-    }
-    
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescriptionPT() {
-        return descriptionPT;
-    }
-
-    public void setDescriptionPT(String descriptionPT) {
-        this.descriptionPT = descriptionPT;
-    }
-
-    public String getDescriptionEN() {
-        return descriptionEN;
-    }
-
-    public void setDescriptionEN(String descriptionEN) {
-        this.descriptionEN = descriptionEN;
-    }
-
-    public String getDescriptionES() {
-        return descriptionES;
-    }
-
-    public void setDescriptionES(String descriptionES) {
-        this.descriptionES = descriptionES;
-    }
-
-    
-    public List<Tip> findPossibleTips(List<Tip> sentTips){
-        List<Tip> availableTips;
-        try {
-            availableTips = this.getDaoBase().list(getEntityManager());
-            for(Tip t: sentTips) {
-               availableTips.removeIf(tip -> tip.getId().equals(t.getId()));
+            boolean continueSearch = true;
+            int counter = 1;
+            Tip tip;
+            
+            while(continueSearch) {
+                tip = new Tip(0,"","");
+                String key = properties.getProperty("tip.title." + counter, "");
+                if (!key.isEmpty()) {
+                    tip.setTitle(key);
+                }
+                key = properties.getProperty("tip.description." + counter, "");
+                if (!key.isEmpty()) {
+                    tip.setDescription(key);
+                    tip.setId(counter);
+                }
+                if (tip.getId() != 0) {
+                    tips.add(tip);
+                } else {
+                    continueSearch = false;
+                }
+                counter++;
             }
-            return availableTips;
-        } catch (SQLException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, null, ex);
-            return Collections.emptyList();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(TipController.class.getName()).log(Level.SEVERE, "Erro ao carregar o arquivo .properties", ex);
         }
-    }
     
+        return tips;
+    }
 }

@@ -9,33 +9,29 @@ import aes.model.MobileOptions;
 import aes.model.User;
 import aes.persistence.MobileOptionsDAO;
 import aes.persistence.UserDAO;
-import aes.utility.ExpoNotification;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -52,8 +48,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     private MobileOptionsDAO mobileOptionsDAO;
     private UserDAO userDAO;
 
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public MobileOptionsFacadeREST() {
         super(MobileOptions.class);
@@ -67,129 +63,157 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
         
     }
     
+    /*
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public MobileOptions create(MobileOptions entity) {
         try {
-            //super.create(entity);
             mobileOptionsDAO.insertOrUpdate(entity, em);
             return entity;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return null;
         }
     }
+    */
     
+    @Path("update")
     @PUT
-    @Path("edit/{userId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("userId") Long userId, MobileOptions entity) {
+    public Response update(MobileOptions entity) {
         try {
-            String userEmail = securityContext.getUserPrincipal().getName();
-            User u = userDAO.find(userId, em);
-            if (u.getEmail().equals(userEmail)) {
-//                entity.setUser(u);
-//                entity.setDrinkNotificationTime(entity.getDrinkNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
-//                entity.setTipNotificationTime(entity.getTipNotificationTime().withOffsetSameInstant(OffsetDateTime.now().getOffset()));
-//
-//                super.edit(entity);
-
-                  mobileOptionsDAO.edit(userId, entity, em);
-                return Response.status(Response.Status.OK).build();
-            } else {
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            }
-        } catch (Exception e) {
-            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            mobileOptionsDAO.edit(loggedUser, entity, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @PUT
-    @Path("edit/allowQuestionNotifications/{userId}")
+    @Path("edit/allowQuestionNotifications")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response updateAllowQuestionNotifications(@PathParam("userId") Long userId, Boolean allowQuestionNotifications) {
+    public Response updateAllowQuestionNotifications(Boolean allowQuestionNotifications) {
         try {
-            String userEmail = securityContext.getUserPrincipal().getName();
-            User u = userDAO.find(userId, em);
-            if(u.getEmail().equals(userEmail)) {
-                MobileOptions options = mobileOptionsDAO.find(userId, em);
-                options.setAllowQuestionNotifications(allowQuestionNotifications);
-                mobileOptionsDAO.edit(userId, options, em);
-                return Response.status(Response.Status.OK).build();
-            } else {
-                return Response.status(Response.Status.UNAUTHORIZED).build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            MobileOptions options = mobileOptionsDAO.find(loggedUser.getId(), em);
+            
+            if (options == null) {
+                Logger.getLogger(MobileOptionsFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DENIED_OPTIONS_UPDATE reason=TARGET_OBJECT_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+                    
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
             }
-        } catch(SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-    
-    @PUT
-    @Path("edit/changeNotificationToken/{userId}/{token}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response changeNotificationToken(@PathParam("userId") Long userId, @PathParam("token") String notificationToken) {
-        try {
-            String userEmail = securityContext.getUserPrincipal().getName();
-            User u = userDAO.find(userId, em);
-            if(u.getEmail().equals(userEmail)) {
-                MobileOptions options = mobileOptionsDAO.find(userId, em);
-                options.setNotificationToken(notificationToken);
-                mobileOptionsDAO.edit(userId, options, em);
-                return Response.status(Response.Status.OK).build();
-            } else {
-                return Response.status(Response.Status.UNAUTHORIZED).build();
-            }
-        } catch(SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-    
-    @PUT
-    @Path("edit/changeAnonymousNotificationToken/{anonymousId}/{token}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response changeAnonymousNotificationToken(@PathParam("anonymousId") Long anonymousId, @PathParam("token") String notificationToken) {
-        try {
-            MobileOptions options = mobileOptionsDAO.find(anonymousId, em);
-            options.setNotificationToken(notificationToken);
-            mobileOptionsDAO.edit(anonymousId, options, em);
+            
+            options.setAllowQuestionNotifications(allowQuestionNotifications);
+            mobileOptionsDAO.edit(loggedUser, options, em);
             return Response.status(Response.Status.OK).build();
         } catch(SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
+        }
+    }
+    
+    @PUT
+    @Path("edit/changeNotificationToken")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response changeNotificationToken(String notificationToken) {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            MobileOptions options = mobileOptionsDAO.find(loggedUser.getId(), em);
+            
+            if (options == null) {
+                Logger.getLogger(MobileOptionsFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DENIED_OPTIONS_UPDATE reason=TARGET_OBJECT_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+                    
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
+            
+            options.setNotificationToken(notificationToken);
+            mobileOptionsDAO.edit(loggedUser, options, em);
+            return Response.status(Response.Status.OK).build();
+        } catch(SQLException | RuntimeException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
+        }
+    }
+    
+    @PUT
+    @Path("edit/changeAnonymousNotificationToken")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response changeAnonymousNotificationToken(String notificationToken) {
+        try {
+            Response r = securityHelper.requireAuthenticatedAnonymous();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            MobileOptions options = mobileOptionsDAO.find(loggedUser.getId(), em);
+            
+            if (options == null) {
+                Logger.getLogger(MobileOptionsFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DENIED_OPTIONS_UPDATE reason=TARGET_OBJECT_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+                    
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
+            
+            options.setNotificationToken(notificationToken);
+            mobileOptionsDAO.edit(loggedUser, options, em);
+            return Response.status(Response.Status.OK).build();
+        } catch(SQLException | RuntimeException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
-    @Path("find/{userId}")
+    @Path("find")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response find(@PathParam("userId") Long userId) {
+    public Response find() {
         try {
-           /* MobileOptions op = (MobileOptions) getEntityManager().createQuery("SELECT mo FROM MobileOptions mo WHERE mo.user.id=:userId")
-                    .setParameter("userId", userId)
-                    .getSingleResult();
-            return Response.ok().entity(op).build();
-        } catch (NoResultException e) {
-            MobileOptions entity = new MobileOptions();
-            entity.setUser(em.find(User.class, userId));
-
-            entity.setAllowTipNotifications(false);
-            entity.setTipNotificationTime(OffsetTime.of(12, 0, 0, 0, OffsetDateTime.now().getOffset()));
-
-            entity.setAllowDrinkNotifications(false);
-            entity.setDrinkNotificationTime(OffsetTime.of(19, 0, 0, 0, OffsetDateTime.now().getOffset()));
-
-            entity.setNotificationToken("");
-
-            super.create(entity);*/
-            MobileOptions entity = mobileOptionsDAO.find(userId, em);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            MobileOptions entity = mobileOptionsDAO.find(loggedUser.getId(), em);
+            
+            if (entity == null) {
+                Logger.getLogger(MobileOptionsFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DID_NOT_FIND reason=TARGET_OBJECT_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+                    
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
+            
             return Response.ok().entity(entity).build();
-
-        } catch (Exception e) {
-            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -198,16 +222,63 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getNotificationToken(@PathParam("userId") Long userId) {
         try {
-            MobileOptions options = mobileOptionsDAO.find(userId, em);
-            if(options != null) {
-                String notificationToken = options.getNotificationToken();
-                return Response.ok().entity(notificationToken).build();
-            } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("Mobile options not found for user.").build();
+            Response r = securityHelper.requireAnyAuthenticated();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            User targetUser = userDAO.find(userId, em);
+            
+            if (targetUser == null) {
+                Logger.getLogger(MobileOptionsFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DENIED_GET_NOTIFICATION_TOKEN reason=TARGET_USER_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
             }
+            
+            boolean allowed = false;
+            
+            // 1) Mesmo usuário
+            if (Objects.equals(loggedUser.getId(), targetUser.getId())) {
+                allowed = true;
+            }
+            // 2) Consultor pode acessar qualquer usuário
+            else if (loggedUser.isConsultant()) {
+                allowed = true;
+            }
+            // 3) Usuário acessando consultor relacionado
+            else if (securityHelper.isValidUserConsultantRelation(loggedUser, targetUser)) {
+                allowed = true;
+            }
+            
+            if (!allowed) {
+                Logger.getLogger(MobileOptionsFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DENIED_GET_NOTIFICATION_TOKEN reason=ACCESS_DENIED "
+                       + "actorUserId={0} targetUserId={1}",
+                         new Object[]{loggedUser.getId(), targetUser.getId()});
+
+                return Response.status(Response.Status.FORBIDDEN).entity("ACCESS_DENIED").build();
+            }
+            
+            MobileOptions options = mobileOptionsDAO.find(targetUser.getId(), em);
+            if (options == null || options.getNotificationToken() == null) {
+                Logger.getLogger(MobileOptionsFacadeREST.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] DID_NOT_FIND reason=TARGET_OBJECT_NOT_FOUND "
+                   + "actorUserId={0}",
+                     loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
+            
+            return Response.ok(options.getNotificationToken()).build();
         } catch(SQLException | RuntimeException ex) {
-            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -216,6 +287,16 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getConsultantNotificationTokens() {
         try {
+            Response r = securityHelper.requireAnyAuthenticated();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName())
+            .log(Level.INFO,
+                 "[SECURITY] ACCESS_CONSULTANT_NOTIFICATION_TOKENS actorUserId={0}",
+                 loggedUser.getId());
+            
             List<User> consultants = userDAO.list("consultant", true, em);
             List<String> tokens = new ArrayList<>();
             
@@ -228,8 +309,8 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
             
             return Response.ok().entity(tokens).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 

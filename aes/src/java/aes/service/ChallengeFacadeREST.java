@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aes.service;
 
 import aes.model.Challenge;
@@ -32,6 +27,12 @@ import javax.ws.rs.core.MediaType;
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("secured/challenge")
 @Secured
+/**
+ * @Deprecated
+ * This class is no longer in use, because challenge is not in the databank anymore.
+ * Challenge is in .properties file and should be used from there, instead.
+**/
+@Deprecated
 public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
 
     @PersistenceContext(unitName = "aesPU")
@@ -47,7 +48,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
         }
     }
 
-    
+    /*
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -55,7 +56,8 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
         //return super.find(id);
         return challengeDAO.find(id, em);
     }
-
+    
+    
     @GET
     @Path("all")
     @Override
@@ -70,6 +72,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
         }
     }
     
+    
     @GET
     @Path("type/{type}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -80,6 +83,7 @@ public class ChallengeFacadeREST extends AbstractFacade<Challenge> {
           
           return challengeDAO.findAllByType(ct, em);
     }
+    */
 
     @Override
     protected EntityManager getEntityManager() {

@@ -6,16 +6,19 @@
 package aes.service;
 
 import aes.model.Notification;
+import aes.model.User;
 import aes.persistence.NotificationDAO;
+import aes.persistence.UserDAO;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -43,11 +46,16 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     private NotificationDAO notificationDao;
+    private UserDAO userDao;
+    
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public NotificationFacadeREST() {
         super(Notification.class);
         try {
             notificationDao = new NotificationDAO();
+            userDao = new UserDAO();
         } catch (NamingException ex) {
             Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
         }
@@ -58,14 +66,52 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response insert(Notification notification) {
         try {
-            notificationDao.insert(notification, em);
-            return Response.status(Response.Status.CREATED).build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (notification == null) {
+                Logger.getLogger(NotificationFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_NOTIFICATION_INSERT reason=INVALID_DATA ");
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            boolean allowed = false;
+            
+            User targetUser;
+            
+            if (loggedUser.isConsultant()) {
+                targetUser = userDao.find(notification.getUser().getId(), em);
+                
+                if (securityHelper.isValidUserConsultantRelation(targetUser, loggedUser)) {
+                    notification.setConsultant(loggedUser);
+                    notification.setUser(targetUser);
+                    allowed = true;
+                }
+            } else {
+                targetUser = userDao.find(notification.getUser().getId(), em);
+                
+                if (securityHelper.isValidUserConsultantRelation(loggedUser, targetUser)) {
+                    notification.setUser(targetUser);
+                    allowed = true;
+                }
+            }
+            
+            if (allowed) {
+                notificationDao.insert(notification, em);
+                return Response.status(Response.Status.CREATED).build();
+            } else {
+                return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_CONSULTANT_RELATION").build();
+            }
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
+    /*
     @PUT
     @Path("update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -78,6 +124,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+    
 
     @DELETE
     @Path("delete/{id}")
@@ -95,6 +142,7 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+    
 
     @GET
     @Path("find/{id}")
@@ -119,21 +167,28 @@ public class NotificationFacadeREST extends AbstractFacade<Notification> {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+    */
     
     @GET
-    @Path("findAllUnreadByUser/{userId}")
+    @Path("findAllUnreadByUser")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findAllUnreadByUser(@PathParam("userId") Long userId) {
+    public Response findAllUnreadByUser() {
         try {
-            List<Notification> unreadNotifications = notificationDao.listUnreadByUser(userId, em);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            List<Notification> unreadNotifications = notificationDao.listUnreadByUser(loggedUser.getId(), em);
+            
             for(Notification notification : unreadNotifications) {
                 notification.setNotificated(true);
                 notificationDao.update(notification, em);
             }
             return Response.ok().entity(unreadNotifications).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AgendaAppointmentFacadeREST.class.getName()).log(Level.INFO, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            Logger.getLogger(NotificationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 

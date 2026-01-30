@@ -6,8 +6,10 @@
 package aes.service;
 
 import aes.model.Message;
+import aes.model.User;
 import aes.persistence.MessageDAO;
 import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -42,8 +45,8 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
 
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     private MessageDAO messageDAO;
 
@@ -61,43 +64,63 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
     @Path("{chatId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response find(@PathParam("chatId") Long chatId) {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-        String userEmail = securityContext.getUserPrincipal().getName();
-        /* User u = (User) getEntityManager().createQuery("SELECT u FROM User u WHERE u.email=:userEmail")
-                .setParameter("userEmail", userEmail)
-                .getSingleResult();
-        //only answer queries from the owner of the messagens or consultant
-        if(u.getChat().getId().equals(chatId) || u.isConsultant()){
-            List<Message> m = (List<Message>) getEntityManager().createQuery("SELECT m FROM Message m WHERE m.chat.id=:chatId ORDER BY m.sentDate DESC")
-                .setParameter("chatId", chatId)
-                .getResultList();
-       
-            return Response.ok().entity(m).build();
-        } else {
-            return Response.noContent().build();
-        }*/
+            User loggedUser = securityHelper.getLoggedUser();
 
-        List<Message> m = messageDAO.find(chatId, userEmail, em);
-        if (m == null) {
-            return Response.noContent().build();
+            // Only answer queries from the owner of the messagens or consultant
+            if (!(loggedUser.getChat().getId().equals(chatId) || loggedUser.isConsultant())) {
+                Logger.getLogger(MessageFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] ACCESS_DENIED reason=ACCESS_DENIED_DIFFERENT_USER_OR_NON_CONSULTANT loggedUserId={1}",
+                        loggedUser.getId());
+                return Response.status(Response.Status.FORBIDDEN).entity("ACCESS_DENIED").build();
+            }
 
-        } else {
-            return Response.ok().entity(m).build();
-
+            List<Message> messages = messageDAO.findByChat(chatId, em);
+            
+            if (messages == null) {
+                return Response.noContent().build();
+            } else {
+                return Response.ok().entity(messages).build();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MessageFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
-    @Path("Anonymous/{chatId}/{userId}")
+    @Path("anonymous/{chatId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response find(@PathParam("chatId") Long chatId, @PathParam("userId") Long userId) {
-        List<Message> m = messageDAO.findAnonymousMessages(chatId, userId, em);
-        if (m == null) {
-            return Response.noContent().build();
+    public Response anonymousFind(@PathParam("chatId") Long chatId) {
+        try {
+            Response r = securityHelper.requireAuthenticatedAnonymous();
+            if (r != null) return r;
 
-        } else {
-            return Response.ok().entity(m).build();
+            User loggedUser = securityHelper.getLoggedUser();
 
+            // Only answer queries from the owner of the messagens
+            if (!(loggedUser.getChat().getId().equals(chatId))) {
+                Logger.getLogger(MessageFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] ACCESS_DENIED reason=ACCESS_DENIED_DIFFERENT_USER loggedUserId={1}",
+                        loggedUser.getId());
+                return Response.status(Response.Status.FORBIDDEN).entity("ACCESS_DENIED").build();
+            }
+
+            List<Message> messages = messageDAO.findByChat(chatId, em);
+
+            if (messages == null) {
+                return Response.noContent().build();
+            } else {
+                return Response.ok().entity(messages).build();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MessageFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 

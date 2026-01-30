@@ -1934,12 +1934,6 @@ hr {
     z-index: -1;
 }
 
-/* ADMIN PAGES */
-
-.adminList {
-    flex-direction: column;
-}
-
 /* Mobile Styles */
 @media only screen and (max-width: 780px) {
   body {

@@ -74,4 +74,7 @@ public abstract class BaseController<T> implements Serializable {
         return AppServletContextListener.getServletContext().getInitParameter("recaptchaKey");
     }
 
+    public String getMessagesPath() {
+        return AppServletContextListener.getServletContext().getInitParameter("messagesPath");
+    }
 }

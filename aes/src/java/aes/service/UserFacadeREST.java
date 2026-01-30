@@ -7,29 +7,18 @@ package aes.service;
 
 import aes.controller.ContactController;
 import aes.controller.UserController;
-import aes.model.AgendaAppointment;
+import aes.model.AuthenticationToken;
 import aes.model.User;
 import aes.persistence.AgendaAppointmentDAO;
+import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.ChatDAO;
 import aes.persistence.ContactDAO;
 import aes.persistence.UserDAO;
 import aes.utility.EmailHelper;
 import aes.utility.Encrypter;
 import aes.utility.EncrypterException;
-import aes.utility.GenerateCode;
-import aes.utility.RESTApiResponse;
 import aes.utility.Secured;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
@@ -37,26 +26,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.annotation.Resource;
-import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.transaction.UserTransaction;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -64,12 +44,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -86,6 +62,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     private ContactDAO contactDAO;
     private AgendaAppointmentDAO appointmentDao;
     private ChatDAO chatDao;
+    private AuthenticationTokenDAO authenticationDao;
     private EmailHelper emailHelper;
     
     @Inject
@@ -94,13 +71,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Inject
     private UserController userController;
     
-    @Resource
-    private UserTransaction userTransaction;
-    
+    @Inject
+    private SecurityContextHelper securityHelper;
 
-    @Context
-    SecurityContext securityContext;
-    
     public UserFacadeREST(){
         super(User.class);
         emailHelper = new EmailHelper();
@@ -109,9 +82,22 @@ public class UserFacadeREST extends AbstractFacade<User> {
             contactDAO = new ContactDAO();
             appointmentDao = new AgendaAppointmentDAO();
             chatDao = new ChatDAO();
+            authenticationDao = new AuthenticationTokenDAO();
         } catch (NamingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static class EmailClass {
+        public String email;
+        public EmailClass(String email){
+            this.email = email;
+        }
+    }
+    
+    public static class UserRegistrationDTO {
+        public User user;
+        public String password;
     }
     
     public class AnonymousUserDTO {
@@ -129,42 +115,49 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{password}")
-    public Response createUser(User entity, @PathParam("password") String p) {
-        RESTApiResponse response;
-        List<User> userList = em.createQuery("SELECT u FROM User u WHERE u.email=:e").setParameter("e", entity.getEmail()).getResultList();
-        
-        if (!userList.isEmpty()) {
-            response = new RESTApiResponse("O usuário já existe.");
-            return Response.status(Response.Status.CONFLICT).entity(response.getMessage()).build();
-        } else {
-            try {
-                String clientEncriptedHexPassword = p;
-                String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
-                
-                userDAO.createUser(entity, decriptedPassword, em);
-                
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Usuário '" + entity.getEmail() + "'cadastrou no sistema.");
+    @Path("register")
+    public Response createUser(UserRegistrationDTO registrationData) {
+        try {
+            if (registrationData == null || registrationData.user == null || registrationData.password == null || registrationData.password.isEmpty()) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_USER_CREATE reason=INVALID_DATA");
 
-                emailHelper.sendSignUpEmail(entity, em);
-                if (entity.isReceiveEmails()) {
-                    contactDAO.scheduleTipsEmail(entity, em);
-                    contactDAO.scheduleDiaryReminderEmail(entity, new Date(), em);
-                    contactDAO.scheduleWeeklyEmail(entity, new Date(), em);
-                }
-            
-            response = new RESTApiResponse(entity);
-            return Response.status(Response.Status.OK).entity(response.getEntityData()).build();
-            
-            } catch (SQLException | EncrypterException ex) {
-                response = new RESTApiResponse("Ocorreu um erro: " + ex);
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
-            } catch( MessagingException | MissingResourceException ex){
-                response = new RESTApiResponse("Ocorreu um erro: " + ex, entity);
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
+            
+            User entity = registrationData.user;
+            String encryptedPassword = registrationData.password;
+
+            List<User> userList = userDAO.findByEmail(entity.getEmail(), em);
+
+            if (!userList.isEmpty()) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_USER_CREATE reason=EMAIL_IS_ALREADY_IN_USE"
+                    + "entityEmail={0}", entity.getEmail());
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("EMAIL_IS_ALREADY_IN_USE").build();
+            }
+
+            String decriptedPassword = Encrypter.decrypt(encryptedPassword);
+
+            userDAO.createUser(entity, decriptedPassword, em);
+
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.SEVERE,
+                    "User created successfully email={0}",
+                    entity.getEmail());
+
+            emailHelper.sendSignUpEmail(entity, em);
+            if (entity.isReceiveEmails()) {
+                contactDAO.scheduleTipsEmail(entity, em);
+                contactDAO.scheduleDiaryReminderEmail(entity, new Date(), em);
+                contactDAO.scheduleWeeklyEmail(entity, new Date(), em);
+            }
+
+            return Response.status(Response.Status.CREATED).build();
+        } catch (EncrypterException | SQLException | MissingResourceException | MessagingException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -175,23 +168,60 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("/createAnonymousUser")
     public Response createAnonymousUser(User entity) throws SQLException {
         try {
-            User existingUser = null;
-            try {
-                existingUser = em.createQuery(
-                    "SELECT u FROM User u Where u.unauthenticatedId = :id ORDER BY u.id DESC", User.class)
-                    .setParameter("id", entity.getUnauthenticatedId())
-                    .setMaxResults(1)
-                    .getSingleResult();
-            } catch (NoResultException e) {
-                // Nenhum usuário encontrado — segue para criação
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Usuário Anônimo cadastrou no sistema.");
+            Response r = securityHelper.requireAnonymousToken();
+            if (r != null) return r;
+            
+            if (entity == null || entity.getUnauthenticatedId() == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_ANOYNUMOUS_USER_CREATE reason=INVALID_DATA");
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
             
+            String token = securityHelper.getToken();
+            AuthenticationToken authToken = authenticationDao.findByToken(token, em);
+            
+            if (authToken == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_ANONYMOUS_USER_CREATE reason=INVALID_DATA token={0}", token);
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            if (authToken.getUser() != null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.WARNING,
+                     "[SECURITY] DENIED_ANONYMOUS_USER_CREATE reason=INVALID_USER_OBJECT_RELATION "
+                   + "token={0} userId={1}",
+                     new Object[]{token, authToken.getUser().getId()});
+                
+                return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_OBJECT_RELATION").build();
+            }
+            
+            User existingUser = existingUser = userDAO.findByUnauthenticatedId(entity.getUnauthenticatedId(), em);
+            
             if (existingUser != null) {
+                authToken.setUser(existingUser);
+                authenticationDao.update(authToken, em);
+                
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.SEVERE,
+                        "[SECURITY] ANONYMOUS_USER_REATTACHED unauthenticatedId={0} userId={1}",
+                        new Object[]{entity.getUnauthenticatedId(), existingUser.getId()});
+                
                 return Response.ok(existingUser).build();
             }
             
             userDAO.createAnonymousUser(entity, em);
+            
+            authToken.setUser(entity);
+            authenticationDao.update(authToken, em);
+            
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.SEVERE,
+                    "[SECURITY] ANONYMOUS_USER_CREATED userId={0} unauthenticatedId={1}",
+                    new Object[]{entity.getId(), entity.getUnauthenticatedId()});
             
             AnonymousUserDTO dto = new AnonymousUserDTO();
             dto.id = entity.getId();
@@ -204,10 +234,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
             dto.app_signup = entity.isApp_signup();
             dto.registration_complete = true;
             
-            return Response.ok(dto).build();
+            return Response.status(Response.Status.CREATED).entity(dto).build();
         } catch (SQLException ex) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.serverError().build();
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -218,8 +248,37 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("/recreateAnonymousUser")
     public Response recreateAnonymousUser(User entity) throws SQLException {
         try {
-            // Sempre cria um novo user anônimo
+            Response r = securityHelper.requireAnonymousToken();
+            if (r != null) return r;
+            
+            if (entity == null || entity.getUnauthenticatedId() == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_ANONYMOUS_USER_RECREATE reason=INVALID_DATA");
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            String token = securityHelper.getToken();
+            AuthenticationToken authToken = authenticationDao.findByToken(token, em);
+            
+            if (authToken == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_ANONYMOUS_USER_RECREATE reason=INVALID_DATA token={0}", token);
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            // RECREATION OF THE ANONYMOUS USER
             userDAO.createAnonymousUser(entity, em);
+            
+            // Overwrites the token association
+            authToken.setUser(entity);
+            authenticationDao.update(authToken, em);
+            
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.SEVERE,
+                    "[SECURITY] ANONYMOUS_USER_RECREATED userId={0} unauthenticatedId={1} token={2}",
+                    new Object[]{entity.getId(), entity.getUnauthenticatedId(), token});
 
             AnonymousUserDTO dto = new AnonymousUserDTO();
             dto.id = entity.getId();
@@ -233,35 +292,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
             dto.registration_complete = true;
 
             return Response.ok(dto).build();
-
         } catch (SQLException ex) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.serverError().build();
-        }
-    }
-        
-    @PUT
-    @Path("/toggleConsultant/{id}")
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response toggleConsultant(@PathParam("id") Long id) {
-        RESTApiResponse response;
-        String userEmail = securityContext.getUserPrincipal().getName();
-        try{
-            
-            userDAO.toggleConsultant(userEmail, em);
-            /*User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
-                                .setParameter("email", userEmail)
-                                .getSingleResult();
-            u.setConsultant(!u.isConsultant());
-            userTransaction.begin();
-            super.edit(u);
-            userTransaction.commit();*/
-            return Response.status(Response.Status.NO_CONTENT).build();
-        } catch(Exception ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -271,16 +304,27 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response setInRanking(User entity) {
-        RESTApiResponse response;
-        String userEmail = securityContext.getUserPrincipal().getName();
-        try{
-            userDAO.setInRanking(userEmail,entity.getInRanking(),entity.getNickname(), em);
-//            System.out.println("aes.service.UserFacadeREST.setInRanking()");
-            return Response.status(Response.Status.NO_CONTENT).build();
-        } catch(Exception ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+
+            if (entity == null || entity.getInRanking() == null || entity.getNickname() == null || entity.getNickname().isEmpty()) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_SET_USER_IN_RANKING reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+
+            userDAO.setInRanking(loggedUser.getId(), entity.getInRanking(), entity.getNickname(), em);
+
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -289,101 +333,97 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response sendTCLE(User entity) {
-        RESTApiResponse response;
-        String userEmail = securityContext.getUserPrincipal().getName();
-        try{
-            userDAO.setSendTCLE(userEmail, entity, em);
-//            System.out.println("aes.service.UserFacadeREST.setSendTCLE()");
-            return Response.status(Response.Status.NO_CONTENT).build();
+    public Response sendTCLE() {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-        } catch(Exception ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            User loggedUser = securityHelper.getLoggedUser();
+
+            userDAO.setSendTCLE(loggedUser.getId(), em);
+            
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
-        }
-    }
-    
-    public static class EmailClass {
-        public String email;
-        public EmailClass(String email){
-            this.email = email;
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @PUT
     @Path("recover-password")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response recoverPassword(JsonParser jp) {
-        RESTApiResponse response;
+    public Response recoverPassword(String userEmail) {
         try {
-            JsonNode node = jp.getCodec().readTree(jp);
-            String userEmail = node.get("email").asText();
-            System.out.println("aes.service.UserFacadeREST.forgetPassword()");
-            /*User u = (User) em.createQuery("SELECT u from User u WHERE u.email = :email")
-                    .setParameter("email", userEmail)
-                    .getSingleResult();
-            System.out.println(u.getEmail());
-            u.setRecoverCode(GenerateCode.generate());
-
-            userTransaction.begin();
-            super.edit(u);
-            userTransaction.commit();*/
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.WARNING, "[INFO] FORGET_PASSWORD" + "actorUserEmail = {0}", userEmail);
             
             User u = userDAO.generateRecoverCode(userEmail, em);
             emailHelper.sendPasswordRecoveryEmail(u, em);
             
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, "Recover password service");
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.SEVERE, "[INFO] RECOVER_PASSWORD_SERVICE" + "actorUserId = {0}", u.getId());
 
             return Response.status(Response.Status.OK).build();
-        } catch (Exception ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+        } catch (SQLException | MessagingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @PUT
     @Path("deleteAccount")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteAccount(JsonParser jp) {
-        RESTApiResponse response;
-        try {
-            JsonNode node = jp.getCodec().readTree(jp);
-            String userId = node.get("id").asText();
-            String token = node.get("token").asText();
-            User u = (User) em.createQuery("SELECT u FROM User u WHERE u.id=:userId")
-                .setParameter("userId", Long.parseLong(userId))
-                .getSingleResult();
-//            System.out.println("aes.service.UserFacadeREST.deleteAccount()");
-            emailHelper.sendDeleteAccountEmail(u,em,token);
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, "Delete Account service");
-
-            return Response.status(Response.Status.OK).build();
-        } catch (Exception ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
-        }
-    }
-    
-    @GET
-    @Path("count")
     @Secured
-    @Produces(MediaType.TEXT_PLAIN)
-    public String countREST() {
-        return String.valueOf(super.count());
+    public Response deleteAccount() {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            String token = securityHelper.getToken();
+            
+            emailHelper.sendDeleteAccountEmail(loggedUser, token, em);
+            
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.SEVERE, "[INFO] DELETE_ACCOUNT_SERVICE" + "actorUserId = {0}", loggedUser.getId());
+            
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException | MessagingException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
+        }
     }
 
     @GET
     @Secured
     @Path("login/{token}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Override
-    public User login(@PathParam("token") String tkn) {
-        return super.login(tkn);
-    }
+    public Response login(@PathParam("token") String tkn) {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
+            String token = securityHelper.getToken();
+
+            if (!tkn.equals(token)) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.SEVERE, "[SECURITY] DENIED_LOGIN reason=PARAM_TOKEN_DIFFER_FROM_HEADER_TOKEN "
+                    + "param_token={0} header_token={1}", new Object[]{tkn, token});
+                
+                return Response.status(Response.Status.UNAUTHORIZED).entity("ACCESS_DENIED").build();
+            }
+            
+            User user = userDAO.login(tkn, em);
+            
+            return Response.status(Response.Status.OK).entity(user).build();
+        } catch (Exception ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return null;
+        }
+    }
+    
+    /*
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -408,27 +448,39 @@ public class UserFacadeREST extends AbstractFacade<User> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
+    */
     
     @PUT
-    @Path("/changeTitle/")
+    @Path("/changeTitle")
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response changeTitle(User entity) {
-        RESTApiResponse response;
-        String userEmail = securityContext.getUserPrincipal().getName();
-        try{
-            userDAO.setTitle(userEmail, entity, em);
-//            System.out.println("aes.service.UserFacadeREST.setTitle()");
-            return Response.status(Response.Status.NO_CONTENT).build();
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-        }catch(Exception ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (entity == null || entity.getSelected_title() == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_CHANGE_TITLE reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            userDAO.setTitle(loggedUser.getId(), entity.getSelected_title(), em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
+    /*
     @PUT
     @Path("changeUserConsultant/{userId}/{consultantId}/{adminEmail}/{adminPassword}")
     @Secured
@@ -468,34 +520,35 @@ public class UserFacadeREST extends AbstractFacade<User> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
+    */
     
     @PUT
-    @Path("/updateEvaluationProfile/")
+    @Path("/updateEvaluationProfile")
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateEvaluationProfile(User entity) {
-        RESTApiResponse response;
-        if(entity == null) {
-            response = new RESTApiResponse("Usuário não pode ser nulo.");
-            return Response.status(Response.Status.BAD_REQUEST).entity(response.getMessage()).build();
-        }
-        
-        String userEmail = securityContext.getUserPrincipal().getName();
         try {
-            //Teste
-//            User user = new User();
-//            user.setEducation(1);
-//            user.setEmployed(true);
-//            user.setKnowWebsite(1);
-//            userDAO.updateEvaluationProfile(userEmail, user, em);
-            userDAO.updateEvaluationProfile(userEmail, entity, em);
-            response = new RESTApiResponse("Perfil do usuário atualizado com sucesso.");
-            return Response.status(Response.Status.OK).entity(response.getMessage()).build();
-        } catch (Exception ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (entity == null || entity.getEducation() == null || entity.getEmployed() == null || entity.getKnowWebsite() == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_UPDATE_EVALUATION_PROFILE reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            userDAO.updateEvaluationProfile(loggedUser.getId(), entity, em);
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -504,217 +557,164 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response findUserByChatId(@PathParam("chatId") Long chatId) {
-        RESTApiResponse response;
         try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+
+            r = securityHelper.requireConsultant(loggedUser);
+            if (r != null) return r;
+            
             User user = chatDao.findUserById(chatId, em);
-            return Response.ok(user.getId()).build();
-        } catch (RuntimeException ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+            return Response.ok().entity(user.getId()).build();
+        } catch (Exception ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
     @POST
-    @Path("/validate-referral-code")
+    @Path("validate-referral-code")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response validateReferralCode(String jsonInput) {
-        RESTApiResponse response;
+    public Response validateReferralCode(String referralCode) {       
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode node = mapper.readTree(jsonInput);
-            String referralCode = node.get("referral_code").asText();
-
+            if (referralCode == null || referralCode.isEmpty()) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_VALIDATE_REFERRAL_CODE reason=INVALID_DATA");
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
             User referrer = userDAO.findByReferralCode(referralCode, em);
 
             if (referrer == null) {
-                response = new RESTApiResponse("Código inválido ou não encontrado");
-                return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response.getMessage())
-                    .build();
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_VALIDATE_REFERRAL_CODE reason=TARGET_USER_NOT_FOUND");
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("TARGET_USER_NOT_FOUND").build();
             }
 
-            response = new RESTApiResponse(referrer);
-            return Response.status(Response.Status.OK)
-                .entity(response.getEntityData())
-                .build();
-
+            return Response.status(Response.Status.OK).build();
         } catch (Exception ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @POST
-    @Path("/set-friend-referral-code")
+    @Path("set-friend-referral-code")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response setFriendReferralCode(String jsonInput) {
-        RESTApiResponse response;
+    @Secured
+    public Response setFriendReferralCode(String referralCode) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode node = mapper.readTree(jsonInput);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-            if (!node.has("id") || !node.has("code")) {
-                response = new RESTApiResponse("Campos \"id\" e \"code\" são obrigatórios.");
-                return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response.getMessage())
-                    .build();
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (referralCode == null || referralCode.isEmpty()) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_SET_REFERRAL_CODE reason=INVALID_DATA "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
-
-            Long userId = node.get("id").asLong();
-            String referralCode = node.get("code").asText();
-
-            if (userId == null || referralCode == null || referralCode.trim().isEmpty()) {
-                response = new RESTApiResponse("ID inválido ou código vazio.");
-                return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response.getMessage())
-                    .build();
+            
+            if (loggedUser.getMyReferralCode() != null && !loggedUser.getMyReferralCode().isEmpty()) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_SET_REFERRAL_CODE reason=INVALID_USER_OBJECT_RELATION "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_USER_OBJECT_RELATION").build();
             }
-
-            userTransaction.begin();
-            userDAO.updateReferralCode(userId, referralCode, em);
-            userTransaction.commit();
-
-            response = new RESTApiResponse("Código de referência atualizado com sucesso.");
-            return Response.status(Response.Status.OK)
-                .entity(response.getMessage())
-                .build();
-
-        } catch (JsonProcessingException ex) {
-            response = new RESTApiResponse("JSON inválido.");
+            
+            userDAO.updateReferralCode(loggedUser.getId(), referralCode, em);
+            
+            return Response.status(Response.Status.OK).build();
+        } catch (Exception ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST)
-                .entity(response.getMessage())
-                .build();
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.NOT_FOUND)
-                .entity(response.getMessage())
-                .build();
-        } catch (Exception e) {
-            try {
-                if (userTransaction != null) userTransaction.rollback();
-            } catch (Exception ex) {
-                response = new RESTApiResponse("Erro ao fazer o rollback.");
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
-            }
-
-            response = new RESTApiResponse("Ocorreu um erro: " + e);
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @POST
-    @Path("/count-referral-usage")
+    @Path("count-referral-usage")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response countReferralCodeUsage(String jsonInput) {
-        RESTApiResponse response;
+    @Secured
+    public Response countReferralCodeUsage(String referralCode) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode node = mapper.readTree(jsonInput);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-            if (!node.has("referral_code")) {
-                response = new RESTApiResponse("O campo \"referral_code\" é obrigatório.");
-                return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response.getMessage())
-                    .build();
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (referralCode == null || referralCode.isEmpty()) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_SET_REFERRAL_CODE reason=INVALID_DATA "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
-
-            String referralCode = node.get("referral_code").asText();
+            
             long count = userDAO.countReferralCodeUsage(referralCode, em);
-
-            response = new RESTApiResponse(referralCode);
-            return Response.status(Response.Status.OK)
-                .entity(response.getEntityData())
-                .build();
-
-        } catch (JsonProcessingException ex) {
-            response = new RESTApiResponse("JSON inválido.");
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            
+            return Response.status(Response.Status.OK).entity(count).build();
         } catch (Exception ex) {
-            response = new RESTApiResponse("Erro ao processar a requisição.");
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
-    @Path("/get-referral-code/{userId}")
+    @Path("get-referral-code")
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserReferralCode(@PathParam("userId") Long userId) {
-        RESTApiResponse response;
+    public Response getUserReferralCode() {
         try {
-            // Validação básica do ID
-            if (userId == null || userId <= 0) {
-                response = new RESTApiResponse("ID de usuário inválido.");
-                return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(response.getMessage())
-                    .build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            String referralCode = loggedUser.getMyReferralCode();
+            
+            if (referralCode == null || referralCode.isEmpty()) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_FOUND_REFERRAL_CODE reason=INVALID_USER_OBJECT_RELATION "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("INVALID_USER_OBJECT_RELATION").build();
             }
-
-            // Busca o usuário no banco de dados
-            User user = em.find(User.class, userId);
-
-            if (user == null) {
-                response = new RESTApiResponse("Usuário não encontrado.");
-                return Response.status(Response.Status.NOT_FOUND)
-                    .entity(response.getMessage())
-                    .build();
-            }
-
-            // Obtém o código de referência
-            String referralCode = user.getMyReferralCode();
-
-            // Se o usuário não tiver código cadastrado
-            if (referralCode == null || referralCode.trim().isEmpty()) {
-                response = new RESTApiResponse("Usuário não possui código de referência.");
-                return Response.ok()
-                    .entity(response.getMessage())
-                    .build();
-            }
-
-            response = new RESTApiResponse(referralCode);
-            // Retorna o código encontrado
-            return Response.status(Response.Status.OK)
-                .entity(response.getEntityData())
-                .build();
-
+            
+            return Response.status(Response.Status.OK).entity(referralCode).build();
         } catch (Exception ex) {
-            response = new RESTApiResponse("Erro ao buscar o código de referência.");
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @PUT
-    @Path("updateAppSignInDate/{timestamp}/{userId}")
+    @Path("updateAppSignInDate")
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateAppSignInDate(@PathParam("timestamp") Long timestamp, @PathParam("userId") Long userId) throws ParseException {
-        RESTApiResponse response;
+    public Response updateAppSignInDate() throws ParseException {
         try {
-            Date date = new Date(timestamp);
-            User user = userDAO.find(userId, em);
-            user.setAppSignInDate(date);
-            userDAO.update(user, em);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            loggedUser.setAppSignInDate(new Date());
+            userDAO.update(loggedUser, em);
+            
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException | RuntimeException ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+        } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -723,16 +723,31 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateAdmin(@PathParam("isAdmin") boolean isAdmin, @PathParam("userId") Long userId) {
-        RESTApiResponse response;
         try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            r = securityHelper.requireAdmin(loggedUser);
+            if (r != null) return r;
+            
             User user = userDAO.find(userId, em);
+            
+            if (user == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_FOUND_USER reason=INVALID_DATA "
+                    + "loggedUserId={0}, targetUserId={1}", new Object[]{loggedUser.getId(), userId});
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("INVALID_DATA").build();
+            }
+            
             user.setAdmin(isAdmin);
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException | RuntimeException ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+        } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -741,16 +756,31 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateConsultant(@PathParam("isConsultant") boolean isConsultant, @PathParam("userId") Long userId) {
-        RESTApiResponse response;
         try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            r = securityHelper.requireAdmin(loggedUser);
+            if (r != null) return r;
+            
             User user = userDAO.find(userId, em);
+            
+            if (user == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_FOUND_USER reason=INVALID_DATA "
+                    + "loggedUserId={0}, targetUserId={1}", new Object[]{loggedUser.getId(), userId});
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("INVALID_DATA").build();
+            }
+            
             user.setConsultant(isConsultant);
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException | RuntimeException ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+        } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -759,19 +789,35 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUseChatbot(@PathParam("useChatbot") boolean useChatbot, @PathParam("userId") Long userId) {
-        RESTApiResponse response;
         try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            r = securityHelper.requireAdmin(loggedUser);
+            if (r != null) return r;
+            
             User user = userDAO.find(userId, em);
+            
+            if (user == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_FOUND_USER reason=INVALID_DATA "
+                    + "loggedUserId={0}, targetUserId={1}", new Object[]{loggedUser.getId(), userId});
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("INVALID_DATA").build();
+            }
+            
             user.setUse_chatbot(useChatbot);
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException | RuntimeException ex) {
-            response = new RESTApiResponse("Ocorreu um erro: " + ex);
+        } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
+    /*
     @PUT
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -786,23 +832,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response.getMessage()).build();
         }
     }
-    
+    */
 
     
     @GET
-    @Path("listForAdmin/{userId}")
+    @Path("listForAdmin")
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listAllUsers(@PathParam("userId") Long userId) {
+    public Response listAllUsers() {
         try {
-            User user = userDAO.find(userId, em);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
             
-            // Verifica se usuario eh administrador para retornar a lista de usuarios
-            if (!user.isAdmin()) {
-                // Se nao for administrador retorna UNAUTHORIZED
-                return Response.status(Response.Status.UNAUTHORIZED).entity("Usuario nao autorizado").build();
-            }
+            r = securityHelper.requireAdmin(loggedUser);
+            if (r != null) return r;
             
             List<User> users = userDAO.listNotNull("email", em);
             
@@ -819,24 +865,39 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 .collect(Collectors.toList());
             
             return Response.ok(usersDTO).build();
-        } catch (SQLException e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao listar usuários", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-            .entity("{\"error\":\"Erro ao buscar usuários\"}")
-            .build();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
     @GET
-    @Path("/info/{id}")
+    @Path("info/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserInfo(@PathParam("id") Long id) {
+    @Secured
+    public Response getUserInfo(@PathParam("userId") Long userId) {
         try {
-            User user = em.find(User.class, id);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (userId == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_FOUND_USER_INFO reason=INVALID_DATA "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+            
+            User user = em.find(User.class, userId);
 
             if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                               .entity("Usuário não encontrado.").build();
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] USER_DOES_NOT_EXISTS reason=INVALID_DATA "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("INVALID_DATA").build();
             }
 
             Map<String, Object> userInfo = new HashMap<>();
@@ -846,33 +907,28 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
             return Response.ok(userInfo).build();
 
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("Erro ao buscar informações do usuário.").build();
+        } catch (Exception ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
-    @Path("/findUsersByConsultor/{consultantId}")
+    @Path("findUsersByConsultor")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsersByConsultor(@PathParam("consultantId") Long consultantId) {
+    @Secured
+    public Response getUsersByConsultor() {
         try {
-            // Verifica se o consultor existe e é realmente um consultor
-            User consultant = em.find(User.class, consultantId);
-            if (consultant == null || !consultant.isConsultant()) {
-                return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Consultor não encontrado ou ID não pertence a um consultor\"}")
-                    .build();
-            }
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-            // Busca os usuários associados a este consultor usando o relacionamento mapeado
-            List<User> clients = em.createQuery(
-                "SELECT u FROM User u WHERE u.relatedConsultant.id = :consultantId", User.class)
-                .setParameter("consultantId", consultantId)
-                .getResultList();
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            r = securityHelper.requireConsultant(loggedUser);
+            if (r != null) return r;
+            
+            List<User> clients = userDAO.findUsersByConsultantId(loggedUser.getId(), em);
 
-            // Cria a lista de resposta com os campos relevantes
             List<Map<String, Object>> response = clients.stream()
                 .map(client -> {
                     Map<String, Object> clientInfo = new HashMap<>();
@@ -881,113 +937,130 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     clientInfo.put("email", client.getEmail());
                     clientInfo.put("nickname", client.getNickname());
                     clientInfo.put("registration_complete", client.isRegistration_complete());
-                    // Adiciona mais campos conforme necessário pelo frontend
                     return clientInfo;
                 })
                 .collect(Collectors.toList());
 
             return Response.ok(response).build();
 
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao buscar usuários do consultor", e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("{\"error\":\"Erro ao processar a requisição\"}")
-                .build();
+        } catch (Exception ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
-    @Path("/findRelatedConsultantByUserId/{userId}")
+    @Path("findRelatedConsultantByUserId")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRelatedConsultantByUser(@PathParam("userId") Long userId) {
+    @Secured
+    public Response getRelatedConsultantByUser() {
         try {
-            // Busca o usuário
-            User user = em.find(User.class, userId);
+            Response r = securityHelper.requireAuthenticatedAnonymous();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
             
-            if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("Usuário não encontrado.").build();
+            if (loggedUser.getRelatedConsultant() == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] USER_DOES_NOT_HAVE_RELATED_CONSULTANT reason=TARGET_USER_NOT_FOUND "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
             }
             
-            // Monta o JSON de resposta
-            Map<String, Object> result = new HashMap<>();
-            
-            if (user.getRelatedConsultant() != null) {
-                result.put("relatedConsultantId", user.getRelatedConsultant().getId());
-            } else {
-                result.put("relatedConsultantId", null);
-            }
-            
-            return Response.ok(result).build();
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao buscar o consultor relacionado.").build();
+            return Response.ok(loggedUser.getRelatedConsultant().getId()).build();
+        } catch (Exception ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @PUT
-    @Path("/updateProfilePick/{id}/{profilePick}")
+    @Path("updateProfilePick/{profilePick}")
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProfilePick(@PathParam("id") Long id, @PathParam("profilePick") Integer profilePick) {
+    public Response updateProfilePick(@PathParam("profilePick") Integer profilePick) {
         try {
-            User user = em.find(User.class, id);
-            if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (profilePick == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] INVALID_PROFILE_PICK reason=INVALID_DATA "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
+            
+            loggedUser.setProfilePick(profilePick);
+            
+            userDAO.update(loggedUser, em);
 
-            user.setProfilePick(profilePick);
-
-            userTransaction.begin();
-            em.merge(user);
-            userTransaction.commit();
-
-            return Response.ok(user).build();
-
-        } catch (Exception e) {
-            try {
-                userTransaction.rollback();
-            } catch (Exception ex) {
-                Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return Response.ok().build();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @GET
-    @Path("/getProfilePick/{id}")
+    @Path("getMyProfilePick")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProfilePick(@PathParam("id") Long id) {
+    @Secured
+    public Response getProfilePick() {
         try {
-            // Busca o usuário no banco de dados
-            User user = em.find(User.class, id);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Integer profilePick = loggedUser.getProfilePick();
+
+            if (profilePick == null) profilePick = 0; // fallback
+
+            return Response.ok(profilePick).build();
+        } catch (Exception ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
+        }
+    }
+    
+    @GET
+    @Path("getProfilePick/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    public Response getProfilePick(@PathParam("id") Long userId) {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            User user = em.find(User.class, userId);
 
             if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                             .entity("User not found")
-                             .build();
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DID_NOT_FIND_USER reason=TARGET_USER_NOT_FOUND "
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
             }
 
-            // Obtém o número da imagem de perfil
             Integer profilePick = user.getProfilePick();
 
-            // Se não tiver imagem definida, retorna um valor padrão (por exemplo, 0)
-            if (profilePick == null) {
-                profilePick = 0; // Valor padrão
-            }
-
-            // Retorna apenas o número da imagem
+            if (profilePick == null) profilePick = 0; // fallback
+            
             return Response.ok(profilePick).build();
-
-        } catch (Exception e) {
-            Logger.getLogger(UserFacadeREST.class.getName())
-                 .log(Level.SEVERE, "Error getting profile picture number", e);
-
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                         .entity("Error getting profile picture number: " + e.getMessage())
-                         .build();
+        } catch (Exception ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
+    }
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
     }
 }

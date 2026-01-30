@@ -9,8 +9,9 @@ import aes.model.User;
 import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.UserDAO;
 import aes.utility.Encrypter;
+import aes.utility.EncrypterException;
 import aes.utility.Secured;
-import java.security.InvalidKeyException;
+import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -31,43 +33,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonBuilderFactory;
-import javax.ws.rs.core.Request;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.SignatureException;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReaderFactory;
-import java.util.Collections;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.net.ssl.SSLSession;
-import java.security.cert.X509Certificate;
-import java.util.Base64;
-import java.util.UUID;
-
 
 /**
  *
@@ -83,8 +50,8 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     private UserDAO userDAO;
     private AuthenticationTokenDAO authenticationTokenDAO;
 
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public AuthenticationTokenFacadeREST() {
         super(AuthenticationToken.class);
@@ -95,60 +62,78 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static class LoginCredentials {
+        public String email;
+        public String password;
+    }
 
-    @GET
-    @Path("{email}/{password}")
+    @POST
+    @Path("authUser")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response authUser(@PathParam("email") String e, @PathParam("password") String p) throws InvalidKeyException {
-
+    public Response authUser(LoginCredentials credentials) {
         try {
-            String clientEncriptedHexPassword = p;
-            String decriptedPassword = Encrypter.decrypt(clientEncriptedHexPassword);
-            
-            User user = userDAO.checkCredentials(e, decriptedPassword, em);
-           
-            if(user != null){
-               AuthenticationToken authToken = authenticationTokenDAO.issueToken(user, em);
-               
-               Map<String, Object> responseToken = new HashMap<>();
-               responseToken.put("token", authToken.getToken());
-               responseToken.put("dateCreated", authToken.getDateCreated());
-               
-               Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' logou no sistema.");
-               return Response.ok(responseToken).build();
-            } else {
-                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
-                return Response.status(Response.Status.FORBIDDEN).build();
+            if (credentials == null || credentials.email == null || credentials.email.isEmpty() 
+                    || credentials.password == null || credentials.password.isEmpty()) {
+                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_AUTHENTICATION reason=INVALID_DATA");
+
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
-        } catch (Exception exp) {
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, null, exp);
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário '" + e + "' não conseguiu logar.");
-            return Response.status(Response.Status.FORBIDDEN).build();
+            
+            String decryptedPassword = Encrypter.decrypt(credentials.password);
+            
+            User user = userDAO.checkCredentials(credentials.email, decryptedPassword, em);
+            
+            if (user == null) {
+                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DENIED_AUTHENTICATION reason=INVALID_DATA email={0}", credentials.email);
+
+                return Response.status(Response.Status.FORBIDDEN).entity("INVALID_DATA").build();
+            }
+            
+            AuthenticationToken authToken = authenticationTokenDAO.issueToken(user, em);
+               
+            Map<String, Object> responseToken = new HashMap<>();
+            responseToken.put("token", authToken.getToken());
+            responseToken.put("dateCreated", authToken.getDateCreated());
+            
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                .log(Level.INFO,"[SECURITY] AUTHENTICATION_SUCCESS userId={0}", user.getId());
+               
+            return Response.status(Response.Status.OK).entity(responseToken).build();
+        } catch (EncrypterException | SQLException ex) {
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
     @DELETE
-    @Path("secured/logout/{token}")
+    @Path("secured/logout")
     @Secured
-    public Response logout(@PathParam("token") String token) {
+    public Response logout() {
         try {
-            String userEmail = securityContext.getUserPrincipal().getName();
+            Response r = securityHelper.requireAnyAuthenticated();
+            if (r != null) return r;
 
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, new StringBuffer(userEmail).append(" está deslogando do sistema.").toString());
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            String token = securityHelper.getToken();
+            
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                .log(Level.INFO, "[INFO] USER_IS_TRYING_TO_LOGOUT " + "actorUserId={0}", loggedUser.getId());
+            
+            authenticationTokenDAO.revokeToken(token, loggedUser.getId(), em);
 
-            authenticationTokenDAO.revokeToken(token, userEmail, em);
-
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, new StringBuffer(userEmail).append(" deslogou do sistema.").toString());
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                .log(Level.INFO, "[INFO] USER_WAS_ABLE_TO_LOGOUT " + "actorUserId={0}", loggedUser.getId());
 
             return Response.ok().build();
-        } catch (NoResultException e) {
-            return Response.ok().build(); //se o token não existe ou já foi deletado ignoro o erro
-        } catch (SQLException e) {
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        } catch (Exception e) {
-            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
@@ -156,65 +141,50 @@ public class AuthenticationTokenFacadeREST extends AbstractFacade<Authentication
     @Path("secured/refreshtoken")
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public Response refreshToken(@HeaderParam("Authorization") String tokenHeader) throws SQLException{
+    public Response refreshToken() throws SQLException{
         try {
-            // Extrai o token (remove "Bearer " se vier no header)
-            String tokenString = tokenHeader.replace("Bearer ", "").trim();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
             
-            // Busca o token no banco
-            AuthenticationToken existingToken = authenticationTokenDAO.findByToken(tokenString, em);
+            String token = securityHelper.getToken();
+            
+            AuthenticationToken existingToken = authenticationTokenDAO.findByToken(token, em);
+            
             if (existingToken == null) {
-                return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("Invalid token").build();
+                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURED] TOKEN_NOT_FOUND_IN_DB reason=INVALID_TOKEN " + "actorUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_TOKEN").build();
             }
             
             User user = existingToken.getUser();
+            
             if (user == null) {
-                return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("User not found").build();
+                Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURED] USER_NOT_FOUND reason=TARGET_USER_NOT_FOUND " + "actorUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
             }
             
-            // Atualiza o token existente
-            AuthenticationToken newToken = authenticationTokenDAO.updateToken(tokenString, user.getEmail(), em);
+            r = securityHelper.requireSameUser(user, loggedUser.getId());
+            if (r != null) return r;
+            
+            AuthenticationToken newToken = authenticationTokenDAO.updateToken(token, loggedUser.getId(), em);
             Map<String, Object> responseToken = new HashMap<>();
             responseToken.put("token", newToken.getToken());
             responseToken.put("dateCreated", newToken.getDateCreated());
             
             Logger.getLogger(AuthenticationTokenFacadeREST.class.getName())
-                .log(Level.INFO, "Usuário '" + user.getEmail() + "' renovou token.");
+                .log(Level.INFO, "[INFO] USER_WAS_ABLE_TO_REFRESH_TOKEN " + "actorUserId={0}", loggedUser.getId());
             
             return Response.ok(responseToken).build();
-        } catch (SQLException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("Erro ao renovar token").build();
+        } catch (SQLException ex) {
+            Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
-    
-    @DELETE
-    @Path("anonymous/logout/{token}/{instanceId}")
-    @Secured
-    public Response anonymousLogout(@PathParam("token") String token, @PathParam("instanceId") String instanceId) throws SQLException {
-        Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(
-                Level.INFO, "Usuário anônimo está deslogando do sistema (instanceId: " + instanceId + ").");
-        
-        authenticationTokenDAO.revokeAnonymousToken(token, instanceId, em);
-        
-        Logger.getLogger(AuthenticationTokenFacadeREST.class.getName()).log(Level.INFO, "Usuário anônimo deslogou do sistema.");
-        
-        return Response.ok().build();
-    }
-    
-    /*private String issueToken(User usr){
-        String token = SecureRandomString.generate();
-        
-        AuthenticationToken authToken = new AuthenticationToken();
-        authToken.setToken(token);
-        authToken.setUser(usr);
-        authToken.setDateCreated(new Date());
-        super.create(authToken);
-        
-        return token;
-    }*/
     
     @Override
     protected EntityManager getEntityManager() {

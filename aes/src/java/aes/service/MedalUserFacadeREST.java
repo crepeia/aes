@@ -10,11 +10,18 @@ import aes.model.DailyLog;
 import aes.model.MedalUser;
 import aes.model.User;
 import aes.persistence.MedalUserDAO;
+import aes.persistence.UserDAO;
+import aes.utility.Secured;
+import aes.utility.SecurityContextHelper;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,13 +40,26 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 @Path("medaluser")
+@Secured
+@TransactionManagement(TransactionManagementType.BEAN)
 public class MedalUserFacadeREST extends AbstractFacade<MedalUser> {
 
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
+    private MedalUserDAO medalUserDao;
+    private UserDAO userDao;
+    
+    @Inject
+    private SecurityContextHelper securityHelper;
 
     public MedalUserFacadeREST() {
         super(MedalUser.class);
+        try {
+            medalUserDao = new MedalUserDAO();
+            userDao = new UserDAO();
+        } catch (NamingException ex) {
+            Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -48,152 +68,227 @@ public class MedalUserFacadeREST extends AbstractFacade<MedalUser> {
     }
     
     @GET
-    @Path("find/{userId}")
+    @Path("find")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response findByUser(@PathParam("userId") String uId) {
+    public Response findByUser() {
         try {
-            List<MedalUser> list = (List<MedalUser>) em.createQuery("SELECT mu FROM MedalUser mu WHERE mu.user.id=:userId")
-                .setParameter("userId", Long.parseLong(uId))
-                .getResultList();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            List<MedalUser> list = medalUserDao.findByUserId(loggedUser.getId(), em);
+            
+            if (list.isEmpty()) {
+                Logger.getLogger(MedalUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DID_NOT_FIND_MEDALS reason=TARGET_OBJECT_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+                    
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
+            }
             
             return Response.ok().entity(list).build();
-        } catch (Exception e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (Exception ex) {
+            Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
-    
     
     @POST
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean createMedal(MedalUser entity) {
+    public Response createMedal(MedalUser entity) {
         try {
-            List<MedalUser> meList
-                    = em.createQuery("SELECT me FROM MedalUser me WHERE me.user.id=:userId AND me.medal.id=:medalId AND me.description=:medalDescription")
-                            .setParameter("userId", entity.getUser().getId())
-                            .setParameter("medalId", entity.getMedal().getId())
-                            .setParameter("medalDescription", entity.getDescription())
-                            .getResultList();
-            if (meList.isEmpty()) {
-                MedalUser newEntity = super.create(entity);
-            }
-            return true;
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-        } catch (Exception e) {
-            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return false;
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (entity == null || entity.getMedal() == null) {
+                Logger.getLogger(MedalUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_MEDAL_USER reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("INVALID_DATA")
+                    .build();
+            }
+            
+            List<MedalUser> existingList =
+                medalUserDao.findByUserMedalAndDescription(
+                        loggedUser.getId(),
+                        entity.getMedal().getId(),
+                        entity.getDescription(),
+                        em);
+            
+            if (existingList.isEmpty()) {
+                entity.setUser(loggedUser);
+                medalUserDao.insert(entity, em);
+            }
+            
+            return Response.status(Response.Status.CREATED).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
     @POST
     @Path("createInitialMedalAA")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean createInitialMedalAA(MedalUser entity) {
+    public Response createInitialMedalAA(MedalUser entity) {
         try {
-            List<MedalUser> meList
-                    = em.createQuery("SELECT me FROM MedalUser me WHERE me.user.id=:userId AND me.medal.id=:medalId")
-                            .setParameter("userId", entity.getUser().getId())
-                            .setParameter("medalId", entity.getMedal().getId())
-                            .getResultList();
-            if (meList.isEmpty()) {
-                MedalUser newEntity = super.create(entity);
-            }
-            return true;
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-        } catch (Exception e) {
-            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return false;
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (entity == null || entity.getMedal() == null) {
+                Logger.getLogger(MedalUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_MEDAL_USER reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("INVALID_DATA")
+                    .build();
+            }
+            
+            List<MedalUser> existingList =
+                medalUserDao.findByUserAndMedal(
+                        loggedUser.getId(),
+                        entity.getMedal().getId(),
+                        em);
+            
+            if (existingList.isEmpty()) {
+                entity.setUser(loggedUser);
+                medalUserDao.insert(entity, em);
+            }
+            
+            return Response.status(Response.Status.CREATED).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
-    
     
     @POST
     @Path("updateMedal")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean updateMedal(MedalUser entity) {
+    public Response updateMedal(MedalUser entity) {
         try {
-            MedalUser mu = (MedalUser) em.createQuery("SELECT mu from MedalUser mu WHERE mu.user.id=:userId and mu.medal.id=:medalId")
-                .setParameter("userId", entity.getUser().getId())
-                .setParameter("medalId", entity.getMedal().getId())
-                .getSingleResult();
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
             
-        mu.setDescription(entity.getDescription());
-        MedalUser newEntity = super.edit(mu);
-        return true;   
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            if (entity == null || entity.getMedal() == null) {
+                Logger.getLogger(MedalUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] INVALID_MEDAL_USER reason=INVALID_DATA "
+                      + "actorUserId={0}",
+                        loggedUser.getId());
                 
-        } catch (Exception e) {
-            Logger.getLogger(ChallengeUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return false;
+                return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("INVALID_DATA")
+                    .build();
+            }
+            
+            MedalUser mu = medalUserDao.findSingleResultByUserAndMedal(loggedUser.getId(), entity.getMedal().getId(), em);
+            
+            if (mu == null) {
+                Logger.getLogger(MedalUserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                         "[SECURITY] DENIED_MEDAL_UPDATE reason=TARGET_OBJECT_NOT_FOUND "
+                       + "actorUserId={0}",
+                         loggedUser.getId());
+
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("TARGET_OBJECT_NOT_FOUND")
+                        .build();
+            }
+            
+            mu.setDescription(entity.getDescription());
+            medalUserDao.update(mu, em);
+            return Response.ok().build();
+        } catch (SQLException ex) {
+            Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
-    
     @GET
-    @Path("getMonthlyDrinkMedal/{userId}")
+    @Path("getMonthlyDrinkMedal")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getMonthlyDrinkMedal(@PathParam("userId") Long userId) {
-        LocalDate today = LocalDate.now();
-        int month = today.getMonthValue();
-        
+    public Response getMonthlyDrinkMedal() {
         try {
-            return getEntityManager()
-                    .createQuery("SELECT COUNT(*) FROM ChallengeUser c WHERE month(c.dateCreated)=:monthNumber and c.user.id=:userId and c.challenge.id=:challengeId")
-                    .setParameter("monthNumber", month)
-                    .setParameter("userId", userId)   
-                    .setParameter("challengeId", 5L)
-                    .getSingleResult().toString();  
-        } catch (Exception e) {
-            return "0";
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            LocalDate today = LocalDate.now();
+            int month = today.getMonthValue();
+            Long result = medalUserDao.getMonthlyDrinkOrNotDrinkMedalByUser(loggedUser.getId(), today, 5L, em);
+            
+            if (result == null) {
+                return Response.ok().entity("0").build();
+            }
+            
+            return Response.ok().entity(result.toString()).build();
+        } catch (Exception ex) {
+            Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
     
-    
     @GET
-    @Path("getMonthlyNotDrinkMedal/{userId}")
+    @Path("getMonthlyNotDrinkMedal")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getMonthlyNotDrinkMedal(@PathParam("userId") Long userId) {
-        LocalDate today = LocalDate.now();
-        int month = today.getMonthValue();
-        
+    public Response getMonthlyNotDrinkMedal() {
         try {
-            return getEntityManager()
-                    .createQuery("SELECT COUNT(*) FROM ChallengeUser c WHERE month(c.dateCreated)=:monthNumber and c.user.id=:userId and c.challenge.id=:challengeId")
-                    .setParameter("monthNumber", month)
-                    .setParameter("userId", userId)   
-                    .setParameter("challengeId", 6L)
-                    .getSingleResult().toString();  
-        } catch (Exception e) {
-            return "0";
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            LocalDate today = LocalDate.now();
+            int month = today.getMonthValue();
+            Long result = medalUserDao.getMonthlyDrinkOrNotDrinkMedalByUser(loggedUser.getId(), today, 6L, em);
+            
+            if (result == null) {
+                return Response.ok().entity("0").build();
+            }
+            
+            return Response.ok().entity(result.toString()).build();
+        } catch (Exception ex) {
+            Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
 
 
     @GET
-    @Path("getDrinkLog/{userId}")
+    @Path("getDrinkLog")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDrinkLog(@PathParam("userId") Long userId) {        
+    public Response getDrinkLog() {        
         try {
-            List<DailyLog> list = (List<DailyLog>) em.createQuery("SELECT dl FROM DailyLog dl WHERE dl.record.id=:userId ORDER BY dl.logDate DESC")
-            .setParameter("userId", userId)   
-            .getResultList(); 
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            List<DailyLog> list = medalUserDao.getDrinkLogByUser(loggedUser.getId(), em);
 
             return Response.ok().entity(list).build();
-        } catch (Exception e) {
-            Logger.getLogger(TipUserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (Exception ex) {
+            Logger.getLogger(MedalUserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
     }
-    
-    protected long getPointsFromDate(User u, LocalDate date) {
-        Long score = (Long) this.getEntityManager()
-                .createQuery("SELECT SUM(c.score) FROM ChallengeUser c WHERE c.dateCompleted > :date AND c.user.id=:userId")
-                .setParameter("date", date)
-                .setParameter("userId", u.getId()).getSingleResult();
-        if (score == null) {
-            score = Long.valueOf(0);
-        }
-        return score;
-    }
-
 }
