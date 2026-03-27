@@ -15,11 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RateLimitFilter implements Filter {
 
     private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
-
+  
     private Bucket criarNovoBalde() {
-        // Regra: 20 requisições por minuto
-        Bandwidth limit = Bandwidth.classic(25, Refill.greedy(25, Duration.ofMinutes(1)));
-        return Bucket.builder().addLimit(limit).build();
+        Bandwidth sustainedLimit = Bandwidth.classic(600, Refill.greedy(600, Duration.ofMinutes(1)));
+//        Bandwidth burstLimit = Bandwidth.classic(150, Refill.greedy(150, Duration.ofSeconds(5)));
+
+        return Bucket.builder()
+                .addLimit(sustainedLimit)
+                .build();
     }
 
     @Override
