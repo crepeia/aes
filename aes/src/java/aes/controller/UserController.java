@@ -520,13 +520,10 @@ public class UserController extends BaseController<User> {
     }
 
     public int getDia() {
-        Calendar birth = Calendar.getInstance();
         if (getUser().getBirthDate() != null) {
-            birth.setTime(getUser().getBirthDate());
-            dia = birth.get(Calendar.DAY_OF_MONTH);
+            dia = getUser().getBirthDate().getDayOfMonth();
         } else {
             dia = 0;
-
         }
         return dia;
     }
@@ -536,12 +533,10 @@ public class UserController extends BaseController<User> {
     }
 
     public int getMes() {
-        Calendar birth = Calendar.getInstance();
         if (getUser().getBirthDate() != null) {
-            birth.setTime(getUser().getBirthDate());
-            mes = birth.get(Calendar.MONTH);
+            mes = getUser().getBirthDate().getMonthValue() - 1;
         } else {
-            mes = 12; //Months are being counted from 0 to 11, so 12 is "none"
+            mes = 12;
         }
         return mes;
     }
@@ -551,10 +546,8 @@ public class UserController extends BaseController<User> {
     }
 
     public int getAno() {
-        Calendar birth = Calendar.getInstance();
         if (getUser().getBirthDate() != null) {
-            birth.setTime(getUser().getBirthDate());
-            ano = birth.get(Calendar.YEAR);
+            ano = getUser().getBirthDate().getYear();
         } else {
             ano = 0;
         }
@@ -614,13 +607,10 @@ public class UserController extends BaseController<User> {
     }
 
     public int getEditDia() {
-        Calendar birth = Calendar.getInstance();
         if (getUser().getBirthDate() != null) {
-            birth.setTime(getUser().getBirthDate());
-            editDia = birth.get(Calendar.DAY_OF_MONTH);
+            editDia = getUser().getBirthDate().getDayOfMonth();
         } else {
             editDia = 0;
-
         }
         return editDia;
     }
@@ -630,12 +620,10 @@ public class UserController extends BaseController<User> {
     }
 
     public int getEditMes() {
-        Calendar birth = Calendar.getInstance();
         if (getUser().getBirthDate() != null) {
-            birth.setTime(getUser().getBirthDate());
-            editMes = birth.get(Calendar.MONTH);
+            editMes = getUser().getBirthDate().getMonthValue() - 1;
         } else {
-            editMes = 12; //Months are being counted from 0 to 11, so 12 is "none"
+            editMes = 12;
         }
         return editMes;
     }
@@ -645,10 +633,8 @@ public class UserController extends BaseController<User> {
     }
 
     public int getEditAno() {
-        Calendar birth = Calendar.getInstance();
         if (getUser().getBirthDate() != null) {
-            birth.setTime(getUser().getBirthDate());
-            editAno = birth.get(Calendar.YEAR);
+            editAno = getUser().getBirthDate().getYear();
         } else {
             editAno = 0;
         }

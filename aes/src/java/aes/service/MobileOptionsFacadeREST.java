@@ -148,8 +148,7 @@ public class MobileOptionsFacadeREST extends AbstractFacade<MobileOptions> {
                 return Response.status(Response.Status.NOT_FOUND).entity("TARGET_OBJECT_NOT_FOUND").build();
             }
             
-            options.setNotificationToken(notificationToken);
-            mobileOptionsDAO.edit(loggedUser, options, em);
+            mobileOptionsDAO.updateNotificationToken(loggedUser, notificationToken, em);
             return Response.status(Response.Status.OK).build();
         } catch(SQLException | RuntimeException ex) {
             Logger.getLogger(MobileOptionsFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);

@@ -1,11 +1,14 @@
  package aes.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -57,8 +60,8 @@ public class User implements Serializable {
     private byte[] salt;
     
     @Column(name = "birth_date")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date birthDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
     @Column(name = "gender")
     private Character gender;
     @Column(name = "receive_emails")
@@ -221,31 +224,18 @@ public class User implements Serializable {
     }
     @JsonIgnore
     public int getAge() {
-        Calendar today = Calendar.getInstance();
-        Calendar birthCal = Calendar.getInstance();
-        birthCal.setTime(birthDate);
-
-        if (today.get(Calendar.MONTH) < birthCal.get(Calendar.MONTH)) {
-            return (today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR) - 1);
-
-        } else if (today.get(Calendar.MONTH) == birthCal.get(Calendar.MONTH)
-                && today.get(Calendar.DAY_OF_MONTH) < birthCal.get(Calendar.DAY_OF_MONTH)) {
-            return (today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR) - 1);
-
-        } else {
-            return today.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR);
-        }
-
+        if (birthDate == null) return 0;
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     public void setBirth(int year, int month, int day) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day);
-        birthDate = cal.getTime();
+        this.birthDate = LocalDate.of(year, month, day);
     }
     
     public void setBirth(long time){
-        birthDate.setTime(time);
+        this.birthDate = Instant.ofEpochMilli(time)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate();
     }
 
     public Boolean getInRanking() {
@@ -323,11 +313,11 @@ public class User implements Serializable {
         this.salt = salt;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
