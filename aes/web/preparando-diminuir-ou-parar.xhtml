@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['preparando.diminuir.parar.title.1']}</title>
+        <title>#{messages['preparandoDiminuirPararTitle1']}</title>
         <w:head_comum />
         <!-- header -->    
         <w:header loginRequired="true" evaluationRequired="true"/>
@@ -25,7 +25,7 @@
  
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>#{messages['preparando.diminuir.parar.h1.1']}</h1> 
+                            <h1>#{messages['preparandoDiminuirPararH11']}</h1> 
                         </div>    
  
                         <div class="progress">
@@ -38,13 +38,13 @@
                     <div id="pagemiddle">
                         
                         <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="stop" title="#{messages['title.image']}" name="images/meta_dimparar.png" alt="Diminuir ou parar" />
+                            <h:graphicImage library="default" id="stop" title="#{messages['quantoVoceBebeLimitesHomensMulheresGraphicimage1']}" name="images/meta_dimparar.png" alt="Diminuir ou parar" />
                         </div> 
       
  
                         <div id="pmtext">
  
-                            <p>#{messages['preparando.diminuir.parar.p.1']}</p>      
+                            <p>#{messages['preparandoDiminuirPararP1']}</p>      
                         <h:form>
                                 <p:panel id="questoes" >
 
@@ -54,11 +54,11 @@
 
                                         
                                         <f:facet name="header">  
-                                            #{messages['preparando.diminuir.parar.facet.1']}
+                                            #{messages['preparandoDiminuirPararFacet1']}
                                         </f:facet> 
                                         <h:selectOneRadio id="options" value="#{evaluationController.evaluation.quit}" required="true">  
-                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.parar.ilabel.1']}" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="#{messages['preparando.diminuir.parar.ilabel.2']}" itemValue="#{false}" /> 
+                                            <f:selectItem itemLabel="#{messages['preparingDecreaseOrStop02']}" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="#{messages['preparingDecreaseOrStop03']}" itemValue="#{false}" /> 
                                         </h:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>

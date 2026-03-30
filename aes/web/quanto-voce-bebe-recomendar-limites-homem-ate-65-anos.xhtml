@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.title']}</title>
+            <title>#{messages['cadastrarNovaContaTitle1']}</title>
             <w:head_comum />
                                              <!-- Facebook Pixel Code to track our adverts -->
              <h:outputScript>
@@ -53,7 +53,7 @@
                     <div class="pagecontent">
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h1']}</h1> 
+                                <h1>#{messages['evaluateDrinking47']}</h1> 
                             </div>    
 
                             <div class="progress">
@@ -69,30 +69,30 @@
                             </div> -->
 
                             <div id="pmtext">                                               
-                                <h2>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h2']}</h2>
+                                <h2>#{messages['quantoVcBebeRecomendarLimitesHomen65AnosH2']}</h2>
                                 <ul>
-                                    <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.1']}</p>
-                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.1']}</li>
-                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.2']}</li>
-                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.3']}</li>
-                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.4']}</li>
+                                    <p>#{messages['quantoVcBebeRecomendarLimitesHomen65AnosP1']}</p>
+                                    <li>#{messages['quantoVcBebeRecomendarLimitesHomen65AnosLi1']}</li>
+                                    <li>#{messages['quantoVcBebeRecomendarLimitesHomen65AnosLi2']}</li>
+                                    <li>#{messages['quantoVcBebeRecomendarLimitesHomen65AnosLi3']}</li>
+                                    <li>#{messages['manUp65Years07']}</li>
                                 </ul>
 
-                                <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.1']}</h3>
-                                <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.2']}</p>
+                                <h3>#{messages['manUp65Years08']}</h3>
+                                <p>#{messages['quantoVcBebeRecomendarLimitesHomen65AnosP2']}</p>
 
                                 <ul>
-                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.5']}</li>
-                                    <li>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.li.6']}</li>                            
+                                    <li>#{messages['quantoVcBebeRecomendarLimitesHomen65AnosLi5']}</li>
+                                    <li>#{messages['quantoVcBebeRecomendarLimitesHomen65AnosLi6']}</li>                            
                                 </ul>
 
-                                <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.2']}</h3>
-                                <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.3']}
-                                    <h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['link']}</h:outputLink>.
+                                <h3>#{messages['standardEndingTitle01']}</h3>
+                                <p>#{messages['quantoVoceBebeSimGravidezP30']}
+                                    <h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['intevencionOfferLink']}</h:outputLink>.
                                 </p>        
 
-                                <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.3']}</h3>                        
-                                <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.4']}</p>
+                                <h3>#{messages['quantoVoceBebeSimGravidezH33']}</h3>                        
+                                <p>#{messages['quantoVoceBebeLimitesHomensMulheresP3']}</p>
 
                                 <h:form id="form" class="form-signup">
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
@@ -102,21 +102,21 @@
                                     <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px; width:100%" cellpadding="10" id="questao1">                  
-                                        <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                        <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['formEmail']}" validatorMessage="#{messages['emailWrongFormat']}" disabled="#{userController.loggedIn}" >
                                             <!--<p:ajax update="loginMsg" event="blur" />-->
                                             <f:validateLength maximum="50" />
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
-                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary mx-5" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary mx-5" value ="#{messages['enviar']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
 
-                                        <p:watermark for="email" value="#{messages['email']}" />
+                                        <p:watermark for="email" value="#{messages['formEmail']}" />
                                         <p:message for="email" />
                                     </h:panelGrid>
                                 </h:form>
                                 
-                                <h3>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.h3.4']}</h3>                        
-                                <p>#{messages['quanto.vc.bebe.recomendar.limites.homen.65.anos.p.5']}
-                                    <h:outputLink value="instrucoes-para-acessar-aplicativo.xhtml">#{messages['link']}</h:outputLink>.
+                                <h3>#{messages['intevencionOfferTitle']}</h3>                        
+                                <p>#{messages['quantoVoceBebeBeberUsoSintAlcoolRiscoP4']}
+                                    <h:outputLink value="instrucoes-para-acessar-aplicativo.xhtml">#{messages['intevencionOfferLink']}</h:outputLink>.
                                 </p>
 
                             </div><!-- end pmtext -->  

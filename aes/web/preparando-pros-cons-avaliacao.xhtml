@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['preparando.pros.cons.avaliacao.title']}</title>
+        <title>#{messages['preparandoProsConsAvaliacaoTitle']}</title>
         <w:head_comum />
         <!-- header -->    
         <w:header loginRequired="true" evaluationRequired="true"/>
@@ -26,7 +26,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>#{messages['preparando.pros.cons.avaliacao.h1']}</h1> 
+                            <h1>#{messages['preparandoDiminuirPararH11']}</h1> 
                         </div>    
 
                         <div class="progress">
@@ -37,27 +37,27 @@
                     <div id="pagemiddle">
 
                         <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="pros" title="#{messages['title.image']}" name="images/proscon_avaliacao.png" alt="Prós e contras" />
+                            <h:graphicImage library="default" id="pros" title="#{messages['quantoVoceBebeLimitesHomensMulheresGraphicimage1']}" name="images/proscon_avaliacao.png" alt="Prós e contras" />
                         </div> 
 
                         <div id="pmtext">
 
-                            <p>#{messages['preparando.pros.cons.avaliacao.p1']} </p>
+                            <p>#{messages['preparingProsConsEvalution05']} </p>
 
                             <p>
 
                                 <h:panelGrid columns="1"  cellpadding="5">
                                     <f:facet name="header">  
-                                  #{messages['preparando.pros.cons.avaliacao.facet1']}                                
+                                  #{messages['preparingProsConsEvalution01']}                                
                                     </f:facet>
-                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out1']}" rendered="#{!empty evaluationController.evaluation.prosReasons1}" />
-                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out2']}" rendered="#{!empty evaluationController.evaluation.prosReasons2}" />
-                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out3']}"  rendered="#{!empty evaluationController.evaluation.prosReasons3}"  />
-                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out4']}"  rendered="#{!empty evaluationController.evaluation.prosReasons4}" />
-                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out5']}" rendered="#{!empty evaluationController.evaluation.prosReasons5}"  />
-                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out6']}"  rendered="#{!empty evaluationController.evaluation.prosReasons6}" />
-                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out7']}"  rendered="#{!empty evaluationController.evaluation.prosReasons7}" />
-                                    <h:outputText value="#{messages['preparando.pros.cons.avaliacao.out8']}"  rendered="#{!empty evaluationController.evaluation.prosReasons8}" />
+                                    <h:outputText value="#{messages['preparandoProsConsAvaliacaoOut1']}" rendered="#{!empty evaluationController.evaluation.prosReasons1}" />
+                                    <h:outputText value="#{messages['preparandoProsConsAvaliacaoOut2']}" rendered="#{!empty evaluationController.evaluation.prosReasons2}" />
+                                    <h:outputText value="#{messages['preparandoProsConsAvaliacaoOut3']}"  rendered="#{!empty evaluationController.evaluation.prosReasons3}"  />
+                                    <h:outputText value="#{messages['preparandoProsConsAvaliacaoOut4']}"  rendered="#{!empty evaluationController.evaluation.prosReasons4}" />
+                                    <h:outputText value="#{messages['preparandoProsConsAvaliacaoOut5']}" rendered="#{!empty evaluationController.evaluation.prosReasons5}"  />
+                                    <h:outputText value="#{messages['preparandoProsConsAvaliacaoOut6']}"  rendered="#{!empty evaluationController.evaluation.prosReasons6}" />
+                                    <h:outputText value="#{messages['preparandoProsConsAvaliacaoOut7']}"  rendered="#{!empty evaluationController.evaluation.prosReasons7}" />
+                                    <h:outputText value="#{messages['preparandoProsConsAvaliacaoOut8']}"  rendered="#{!empty evaluationController.evaluation.prosReasons8}" />
                                     <h:outputText value="#{evaluationController.evaluation.pros1}" rendered="#{!empty evaluationController.evaluation.pros1}"/> 
                                     <h:outputText value="#{evaluationController.evaluation.pros2}" rendered="#{!empty evaluationController.evaluation.pros2}"/> 
                                     <h:outputText value="#{evaluationController.evaluation.pros3}" rendered="#{!empty evaluationController.evaluation.pros3}"/>   
@@ -65,7 +65,7 @@
 
                                 <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                     <f:facet name="header">  
-                                        #{messages['preparando.pros.cons.avaliacao.facet2']}                                    
+                                        #{messages['preparingProsConsEvalution02']}                                    
                                     </f:facet>
                                     <h:outputText value="#{evaluationController.evaluation.cons1}" rendered="#{!empty evaluationController.evaluation.cons1}"/> 
                                     <h:outputText value="#{evaluationController.evaluation.cons2}" rendered="#{!empty evaluationController.evaluation.cons2}"/> 
@@ -78,11 +78,11 @@
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                         <f:facet name="header">  
-                                           #{messages['preparando.pros.cons.avaliacao.facet3']}
+                                           #{messages['preparandoProsConsAvaliacaoFacet3']}
                                         </f:facet> 
                                         <h:selectOneRadio id="options" value="#{evaluationController.evaluation.ready}" required="true">  
-                                            <f:selectItem itemLabel="#{messages['preparando.pros.cons.avaliacao.sim']}" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="#{messages['preparando.pros.cons.avaliacao.nao']}" itemValue="#{false}" /> 
+                                            <f:selectItem itemLabel="#{messages['yes']}" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="#{messages['formPregnantNo']}" itemValue="#{false}" /> 
                                         </h:selectOneRadio> 
                                     </h:panelGrid>
                                 </p:panel>

@@ -9,7 +9,7 @@
     <f:view locale="#{languageController.locale}">
 
         <h:head>
-            <title>#{messages['quanto.voce.bebe.abstemio.title']}</title>
+            <title>#{messages['quantoVoceBebeAbstemioTitle']}</title>
             <w:head_comum />
                                              <!-- Facebook Pixel Code to track our adverts -->
              <h:outputScript>
@@ -56,7 +56,7 @@
 
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1>#{messages['quanto.voce.bebe.abstemio.h1']}</h1> 
+                                <h1>#{messages['adultNotDrink01']}</h1> 
                             </div>    
 
                             <div class="progress">
@@ -74,31 +74,31 @@
                             <div id="pmtext">                                               
 
 
-                                <p>#{messages['quanto.voce.bebe.abstemio.p1']}</p>
+                                <p>#{messages['quantoVoceBebeAbstemioP1']}</p>
 
-                                <p>#{messages['quanto.voce.bebe.abstemio.p2']}</p>
-                                <p>#{messages['quanto.voce.bebe.abstemio.p3']}</p>
+                                <p>#{messages['quantoVoceBebeAbstemioP2']}</p>
+                                <p>#{messages['quantoVoceBebeAbstemioP3']}</p>
 
-                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.1']} </h3>
-                                <p>#{messages['quanto.voce.bebe.abstemio.p4']}</p>
+                                <h3>#{messages['adultNotDrink04']} </h3>
+                                <p>#{messages['quantoVoceBebeAbstemioP4']}</p>
 
-                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.2']} </h3>
+                                <h3>#{messages['adultNotDrink06']} </h3>
 
-                                <p>#{messages['quanto.voce.bebe.abstemio.p5']}</p>
+                                <p>#{messages['quantoVoceBebeAbstemioP5']}</p>
 
-                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.3']}</h3>
+                                <h3>#{messages['adultNotDrink08']}</h3>
 
                                 <ul>
-                                    <li>#{messages['quanto.voce.bebe.abstemio.li.1']}</li>
-                                    <li>#{messages['quanto.voce.bebe.abstemio.li.2']}</li>
-                                    <li>#{messages['quanto.voce.bebe.abstemio.li.3']}</li>
+                                    <li>#{messages['quantoVoceBebeAbstemioLi1']}</li>
+                                    <li>#{messages['adultNotDrink10']}</li>
+                                    <li>#{messages['adultNotDrink12']}</li>
                                 </ul>
 
-                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.4']}</h3>
-                                <p>#{messages['quanto.voce.bebe.abstemio.p6']}<h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['quanto.voce.bebe.abstemio.link']}</h:outputLink></p>        
+                                <h3>#{messages['standardEndingTitle01']}</h3>
+                                <p>#{messages['quantoVoceBebeSimGravidezP30']}<h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['quantoVoceBebeSimGravidezP30Link']}</h:outputLink></p>        
 
-                                <h3>#{messages['quanto.voce.bebe.abstemio.h3.5']}</h3>                        
-                                <p>#{messages['quanto.voce.bebe.abstemio.p7']}</p>
+                                <h3>#{messages['quantoVoceBebeSimGravidezH33']}</h3>                        
+                                <p>#{messages['quantoVoceBebeLimitesHomensMulheresP3']}</p>
 
 
                                 <h:form id="form" class="form-signup">
@@ -110,14 +110,14 @@
 
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px; width: 100%;" cellpadding="10" id="questao1">                  
-                                        <p:inputText styleClass="form-control" id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                        <p:inputText styleClass="form-control" id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['formEmail']}" validatorMessage="#{messages['emailWrongFormat']}" disabled="#{userController.loggedIn}" >
                                             <!--<p:ajax update="loginMsg" event="blur" />-->
                                             <f:validateLength maximum="50" />
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
-                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary mx-5" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary mx-5" value ="#{messages['enviar']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
 
-                                        <p:watermark for="email" value="#{messages['email']}" />
+                                        <p:watermark for="email" value="#{messages['formEmail']}" />
                                         <p:message for="email" />
                                     </h:panelGrid>
                                 </h:form>

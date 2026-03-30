@@ -8,7 +8,7 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['desafios']}</title>
+        <title>#{messages['desafio']}</title>
         <w:head_comum />
         <w:topmenu />
         <w:header />
@@ -17,7 +17,7 @@
         <div id="corpo">
             <div class="main">
                 <div class="pagecontent">
-                    <h1>#{messages['desafios']}</h1>
+                    <h1>#{messages['desafio']}</h1>
                     <div class="maintop">
                         <h:dataTable id="challengeTable" binding="#{table}" value="#{challengeController.challengeList(languageController.locale)}" var="challenge" class="table table-striped table-hover table-bordered tableUpdated">
                             <h:column>
@@ -25,19 +25,19 @@
                                 <h:outputText value="#{challenge.id}" />
                             </h:column>
                             <h:column>
-                                <f:facet name="header">#{messages['challenge.prefix.title']}</f:facet>
+                                <f:facet name="header">#{messages['challengePrefixTitle']}</f:facet>
                                 <h:outputText value="#{challenge.prefix}" />
                             </h:column>
                             <h:column>
-                                <f:facet name="header">#{messages['challenge.type.title']}</f:facet>
+                                <f:facet name="header">#{messages['challengeTypeTitle']}</f:facet>
                                 <h:outputText value="#{challenge.type}" />
                             </h:column>
                             <h:column>
-                                <f:facet name="header">#{messages['challenge.base.value.title']}</f:facet>
+                                <f:facet name="header">#{messages['challengeBaseValueTitle']}</f:facet>
                                 <h:outputText value="#{challenge.baseValue}" />
                             </h:column>
                             <h:column>
-                                <f:facet name="header">#{messages['challenge.modifier.title']}</f:facet>
+                                <f:facet name="header">#{messages['challengeModifierTitle']}</f:facet>
                                 <h:outputText value="#{challenge.modifier}" />
                             </h:column>
                         </h:dataTable>

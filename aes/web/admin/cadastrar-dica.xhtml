@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['cadastrar.nova.dica.title.1']}</title>
+            <title>#{messages['cadastrarNovaDicaTitle1']}</title>
             <w:head_comum />
             <w:header/>
             <w:topmenu />
@@ -25,7 +25,7 @@
                             <div id="signupright">
                             <div id="signup">
                                 
-                                <h1>#{messages['cadastrar.nova.dica.title.1']}</h1>
+                                <h1>#{messages['cadastrarNovaDicaTitle1']}</h1>
                                 
                                 <h:form id="form" class="form-signup">
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
@@ -35,39 +35,39 @@
                                     <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                     <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
                                     <div class="signuptext form-group row">
-                                        <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['dica.title']}</label>
-                                        <p:inputText styleClass="col-sm-10 form-control" id="titleTxt" value="#{tipController.tip.title}" required="true" size="30" label="#{messages['dica.title']}" >
+                                        <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['tipTitleTitle']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="titleTxt" value="#{tipController.tip.title}" required="true" size="30" label="#{messages['tipTitleTitle']}" >
 
                                             <f:validateLength maximum="100" />
                                         </p:inputText>
-                                        <p:watermark for="titleTxt" value="#{messages['dica.title']}" />
+                                        <p:watermark for="titleTxt" value="#{messages['tipTitleTitle']}" />
                                         <p:message for="titleTxt" />
                                     </div>
                                     <div class="signuptext form-group row">
-                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dica.descriptionPT']}</label>
-                                        <p:inputText styleClass="col-sm-10 form-control" id="descPTTxt" value="#{tipController.tip.descriptionPT}" required="true" size="30" label="#{messages['dica.descriptionPT']}"  >
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['tipDescriptionTitle']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="descPTTxt" value="#{tipController.tip.descriptionPT}" required="true" size="30" label="#{messages['tipDescriptionTitle']}"  >
                                             <!--<p:ajax update="loginMsg" event="blur" />-->
                                             <f:validateLength maximum="500" />
                                         </p:inputText>
-                                        <p:watermark for="descPTTxt" value="#{messages['dica.descriptionPT']}" />
+                                        <p:watermark for="descPTTxt" value="#{messages['tipDescriptionTitle']}" />
                                         <p:message for="descPTTxt" />
                                     </div>
                                     <div class="signuptext form-group row">
-                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dica.descriptionEN']}</label>
-                                        <p:inputText styleClass="col-sm-10 form-control" id="descENTxt" value="#{tipController.tip.descriptionEN}" required="true" size="30" label="#{messages['dica.descriptionEN']}"  >
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dicaDescriptionEN']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="descENTxt" value="#{tipController.tip.descriptionEN}" required="true" size="30" label="#{messages['dicaDescriptionEN']}"  >
                                             <!--<p:ajax update="loginMsg" event="blur" />-->
                                             <f:validateLength maximum="500" />
                                         </p:inputText>
-                                        <p:watermark for="descENTxt" value="#{messages['dica.descriptionEN']}" />
+                                        <p:watermark for="descENTxt" value="#{messages['dicaDescriptionEN']}" />
                                         <p:message for="descENTxt" />
                                     </div>
                                     <div class="signuptext form-group row">
-                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dica.descriptionES']}</label>
-                                        <p:inputText styleClass="col-sm-10 form-control" id="descESTxt" value="#{tipController.tip.descriptionES}" required="true" size="30" label="#{messages['dica.descriptionES']}"  >
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['dicaDescriptionES']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="descESTxt" value="#{tipController.tip.descriptionES}" required="true" size="30" label="#{messages['dicaDescriptionES']}"  >
                                             <!--<p:ajax update="loginMsg" event="blur" />-->
                                             <f:validateLength maximum="500" />
                                         </p:inputText>
-                                        <p:watermark for="descESTxt" value="#{messages['dica.descriptionES']}" />
+                                        <p:watermark for="descESTxt" value="#{messages['dicaDescriptionES']}" />
                                         <p:message for="descESTxt" />
                                     </div>
                                     

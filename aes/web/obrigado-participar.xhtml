@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['obrigado.title.1']}</title>
+        <title>#{messages['obrigadoTitle1']}</title>
         <w:head_comum />
         <!-- header --> 
         <w:header loginRequired="true" evaluationRequired="true"  />
@@ -24,7 +24,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>#{messages['obrigado.h1.1']}</h1> 
+                            <h1>#{messages['obrigadoH11']}</h1> 
                         </div>    
 
                         <div class="progress">
@@ -36,25 +36,25 @@
                     <div id="pagemiddle">
                         
                         <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="change" title="#{messages['title.image']}" name="images/plano_mudan.png" alt="Parar de beber" />
+                            <h:graphicImage library="default" id="change" title="#{messages['quantoVoceBebeLimitesHomensMulheresGraphicimage1']}" name="images/plano_mudan.png" alt="Parar de beber" />
                         </div> 
 
                         <div id="pmtext">
 
-                            <p>#{messages['obrigado.p.1']}</p>
-                            <p>#{messages['obrigado.p.2']}<b> #{messages['obrigado.p.2.1']}</b></p>
-                            <h4>#{messages['obrigado.h4.1']}</h4>
+                            <p>#{messages['obrigadoP1']}</p>
+                            <p>#{messages['obrigadoP2']}<b> #{messages['obrigadoP21']}</b></p>
+                            <h4>#{messages['changePlanThanksText02']}</h4>
                             <ul>
-                            <li>#{messages['obrigado.li.1']} </li>
-                            <li>#{messages['obrigado.li.2']}</li>
-                            <li>#{messages['obrigado.li.3']}</li>
+                            <li>#{messages['obrigadoLi1']} </li>
+                            <li>#{messages['obrigadoLi2']}</li>
+                            <li>#{messages['obrigadoLi3']}</li>
                             </ul>
-                            <h4>#{messages['obrigado.li.4']}</h4>                      
+                            <h4>#{messages['obrigadoLi4']}</h4>                      
 
                         </div><!-- end pmtext -->  
                         <h:form>
                             <div id="btnnext">
-                                <h:button class="btngen btn btn-info" value ="#{messages['pronto.intro.titlepage']}" outcome="index.xhtml"></h:button>
+                                <h:button class="btngen btn btn-info" value ="#{messages['changePlanThanksText09']}" outcome="index.xhtml"></h:button>
                             </div>
                             
                         </h:form>

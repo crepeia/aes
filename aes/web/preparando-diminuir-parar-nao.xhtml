@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title> #{messages['preparando.diminuir.parar.nao.title.1']}</title>
+            <title> #{messages['preparandoDiminuirPararNaoTitle1']}</title>
             <w:head_comum />
             <!-- header -->    
             <w:header loginRequired="true" evaluationRequired="true" />
@@ -25,7 +25,7 @@
 
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1>#{messages['preparando.diminuir.h1.1']}</h1> 
+                                <h1>#{messages['preparandoDiminuirH11']}</h1> 
                             </div>    
 
                             <div class="progress">
@@ -43,17 +43,17 @@
 
                             <div id="pmtext">
                                 <h:panelGrid columns="1"  cellpadding="5">
-                                    <p>#{messages['preparando.diminuir.p.1']}</p>
-                                    <h4>#{messages['preparando.diminuir.h4.1']}</h4>
+                                    <p>#{messages['preparandoDiminuirP1']}</p>
+                                    <h4>#{messages['preparingDecreaseStopNo01']}</h4>
                                     <ul>
-                                    <li>#{messages['preparando.diminuir.li.1']}</li>
-                                    <li>#{messages['preparando.diminuir.li.2']}</li>
-                                    <li>#{messages['preparando.diminuir.li.3']}</li>
-                                    <li>#{messages['preparando.diminuir.li.4']}</li>
-                                    <li>#{messages['preparando.diminuir.li.5']}</li>
+                                    <li>#{messages['preparandoDiminuirLi1']}</li>
+                                    <li>#{messages['preparandoDiminuirLi2']}</li>
+                                    <li>#{messages['preparandoDiminuirLi3']}</li>
+                                    <li>#{messages['preparandoDiminuirLi4']}</li>
+                                    <li>#{messages['preparandoDiminuirLi5']}</li>
                                     </ul>
-                                    <h4>#{messages['preparando.diminuir.li.6']}</h4>
-                                    <p>#{messages['preparando.diminuir.li.7']}</p>
+                                    <h4>#{messages['preparingDecreaseStopNo07']}</h4>
+                                    <p>#{messages['preparandoDiminuirLi7']}</p>
                                 </h:panelGrid>
                                 <h:form> 
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
@@ -65,11 +65,11 @@
                                     <p:panel id="questoes" >
                                         <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="10" id="questao2">
                                             <f:facet name="header">  
-                                                #{messages['preparando.diminuir.facet.1']}
+                                                #{messages['preparingDecreaseStopNo09']}
                                             </f:facet> 
-                                            <h:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}"  required="true" requiredMessage="#{messages['preparando.diminuir.validator']}">  
-                                                <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.yes']}" itemValue="#{true}" />
-                                                <f:selectItem itemLabel="#{messages['preparando.diminuir.ilabel.no']}" itemValue="#{false}" /> 
+                                            <h:selectOneRadio id="options" value="#{evaluationController.evaluation.goBack}"  required="true" requiredMessage="#{messages['preparandoDiminuirValidator']}">  
+                                                <f:selectItem itemLabel="#{messages['yes']}" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="#{messages['formPregnantNo']}" itemValue="#{false}" /> 
                                                 <f:ajax render="saveBtn" listener="#{evaluationController.enableSaveBtn()}"/>
                                             </h:selectOneRadio>
                                             <p:message for="options"/>

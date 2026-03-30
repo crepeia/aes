@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['cadastrar.novo.desafio.title.1']}</title>
+            <title>#{messages['cadastrarNovoDesafioTitle1']}</title>
             <w:head_comum />
             <w:header/>
             <w:topmenu />
@@ -25,7 +25,7 @@
                             <div id="signupright">
                             <div id="signup">
                                 
-                                <h1>#{messages['cadastrar.novo.desafio.title.1']}</h1>
+                                <h1>#{messages['cadastrarNovoDesafioTitle1']}</h1>
                                 
                                 <h:form id="form" class="form-signup">
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
@@ -36,33 +36,33 @@
                                     <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
                                     <p:inputText type="hidden" styleClass="col-sm-10 form-control" id="idTxt" value="#{challengeController.challenge.id}" required="true" />
                                     <div class="signuptext form-group row">
-                                        <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['desafio.prefix']}</label>
-                                        <p:inputText styleClass="col-sm-10 form-control" id="prefixTxt" value="#{challengeController.challenge.prefix}" required="true" size="30" label="#{messages['desafio.prefix']}" >
+                                        <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['challengePrefixTitle']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="prefixTxt" value="#{challengeController.challenge.prefix}" required="true" size="30" label="#{messages['challengePrefixTitle']}" >
                                             <f:validateLength maximum="100" />
                                         </p:inputText>
-                                        <p:watermark for="prefixTxt" value="#{messages['desafio.prefix']}" />
+                                        <p:watermark for="prefixTxt" value="#{messages['challengePrefixTitle']}" />
                                         <p:message for="prefixTxt" />
                                     </div>
                                     <div class="signuptext form-group row">
-                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['desafio.base.value']}</label>
-                                        <p:inputText styleClass="col-sm-10 form-control" id="baseTxt" value="#{challengeController.challenge.base_value}" required="true" size="30" label="#{messages['desafio.base.value']}"  />
-                                        <p:watermark for="baseTxt" value="#{messages['desafio.base.value']}" />
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['desafioBaseValue']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="baseTxt" value="#{challengeController.challenge.base_value}" required="true" size="30" label="#{messages['desafioBaseValue']}"  />
+                                        <p:watermark for="baseTxt" value="#{messages['desafioBaseValue']}" />
                                         <p:message for="baseTxt" />
                                     </div>
                                     
                                     <div class="signuptext form-group row">
-                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['desafio.modifier']}</label>
-                                        <p:inputText styleClass="col-sm-10 form-control" id="modTxt" value="#{challengeController.challenge.modifier}" required="true" size="30" label="#{messages['desafio.modifier']}"  />
-                                        <p:watermark for="modTxt" value="#{messages['desafio.modifier']}" />
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['challengeModifierTitle']}</label>
+                                        <p:inputText styleClass="col-sm-10 form-control" id="modTxt" value="#{challengeController.challenge.modifier}" required="true" size="30" label="#{messages['challengeModifierTitle']}"  />
+                                        <p:watermark for="modTxt" value="#{messages['challengeModifierTitle']}" />
                                         <p:message for="modTxt" />
                                     </div>
                                     
                                     <div class="signuptext form-group row">
-                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['desafio.type']}</label>
-                                        <p:selectOneMenu styleClass="col-sm-10 form-control" id="typeTxt" value="#{challengeController.challenge.type}" required="true" label="#{messages['desafio.type']}" >
+                                        <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['challengeTypeTitle']}</label>
+                                        <p:selectOneMenu styleClass="col-sm-10 form-control" id="typeTxt" value="#{challengeController.challenge.type}" required="true" label="#{messages['challengeTypeTitle']}" >
                                             <f:selectItems value="#{challengeController.challengeTypes}" />
                                         </p:selectOneMenu>
-                                       <p:watermark for="typeTxt" value="#{messages['desafio.type']}" />
+                                       <p:watermark for="typeTxt" value="#{messages['challengeTypeTitle']}" />
                                         <p:message for="typeTxt" />
                                     </div>
                                     

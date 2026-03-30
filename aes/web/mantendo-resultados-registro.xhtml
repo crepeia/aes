@@ -8,7 +8,7 @@
       xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['estrategia.dim.registro.elet.title.1']}</title>
+            <title>#{messages['estrategiaDimRegistroEletTitle1']}</title>
             <w:head_comum />
 
             <style>
@@ -45,28 +45,28 @@
                         <div id="pagecontentstrategy">                      
                             <div id="pmtext">
 
-                                <h4>#{messages['estrategia.dim.registro.elet.h3.1']}</h4>
-                                <p>#{messages['estrategia.dim.registro.elet.p.1']}</p>
-                                <h4>#{messages['estrategia.dim.registro.elet.h4.1']}</h4>
+                                <h4>#{messages['estrategiaDimRegistroEletH31']}</h4>
+                                <p>#{messages['estrategiaDimRegistroEletP1']}</p>
+                                <h4>#{messages['alternativeReduceEletro01']}</h4>
                                 <ul>
-                                    <li>#{messages['estrategia.dim.registro.elet.li.1']}</li>
-                                    <li>#{messages['estrategia.dim.registro.elet.li.2']}<h:outputLink value="mantendo-resultados-registro-print.xhtml?faces-redirect=true">#{messages['estrategia.dim.registro.elet.li.2.b.1']}</h:outputLink></li>
-                                    <li>#{messages['estrategia.dim.registro.elet.li.3']}</li>
+                                    <li>#{messages['estrategiaDimRegistroEletLi1']}</li>
+                                    <li>#{messages['estrategiaDimRegistroEletLi2']}<h:outputLink value="mantendo-resultados-registro-print.xhtml?faces-redirect=true">#{messages['estrategiaDimRegistroEletLi2B1']}</h:outputLink></li>
+                                    <li>#{messages['alternativeReduceEletro04']}</li>
                                 </ul>
 
                             </div>
                         </div>
                         <p:panel styleClass="callout callout-default bd-callout-warning" visible="#{!evaluationController.evaluation.quit}">
-                            <h4>#{messages['estrategia.dim.registro.elet.h3.2']}</h4>
+                            <h4>#{messages['estrategiaDimRegistroEletH32']}</h4>
 
                             <h:panelGrid columns="3" cellpadding="5" >
-                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.1']}"/>
+                                <p:outputLabel value="#{messages['alternativeReduceEletro15']}"/>
                                 <p:inputText value="#{recordController.record.dailyGoal}" readonly="true" size="2"/>
-                                <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.1']}" />
+                                <h:outputText value="#{messages['estrategiaDimRegistroEletOutputtext1']}" />
                                 
-                                <p:outputLabel value="#{messages['estrategia.dim.registro.elet.fieldteste.2']}"/>
+                                <p:outputLabel value="#{messages['alternativeReduceEletro17']}"/>
                                 <p:inputText value="#{recordController.record.weeklyGoal}" readonly="true" size="2"/>
-                                <h:outputText value="#{messages['estrategia.dim.registro.elet.outputtext.2']}" />     
+                                <h:outputText value="#{messages['estrategiaDimRegistroEletOutputtext2']}" />     
                             </h:panelGrid>
                         </p:panel>
                         <h:form style="width:95%">
@@ -76,7 +76,7 @@
                                 <p:graphicImage library="default" name="images/loading.gif" />
                             </p:dialog>
                             <div id="pagemiddle">    
-                                <h3>#{messages['estrategia.dim.registro.elet.h3.3']}</h3>
+                                <h3>#{messages['estrategiaDimRegistroEletH33']}</h3>
                                 <p:panelGrid styleClass="calendar-grid" columns ="1" >
                                     <p:calendar id="calendar" value="#{recordController.date}" pattern="dd/MM/yyyy" mode="inline" beforeShowDay="colorDates" locale="#{languageController.locale}" pagedate="#{recordController.weekFirstDay}" >
                                         <p:ajax event="dateSelect" listener="#{recordController.fetchLog()}" update="@form"  process="@form" />
@@ -127,13 +127,13 @@
                                 <div class="row">
                                     
                                     <div class="col">
-                                    <p:outputLabel for="date1" value="#{messages['estrategia.dim.registro.elet.day']}"/>
+                                    <p:outputLabel for="date1" value="#{messages['estrategiaDimRegistroEletDay']}"/>
                                     <br></br>
                                     <p:outputLabel styleClass="date-display" id="date1" value="#{recordController.formattedDate}"  />
                                 
                                     </div>
                                     <div class="col">
-                                    <p:outputLabel for="dose1" value="#{messages['estrategia.dim.registro.elet.doses']}" />
+                                    <p:outputLabel for="dose1" value="#{messages['estrategiaDimRegistroEletDoses']}" />
                                     <br></br>
                                     <p:spinner id="dose1" value="#{recordController.dailyLog.drinks}" min="0"/>
                                     </div>
@@ -141,14 +141,14 @@
                                 <div class="row ">
                                     
                                     <div class="col-11">
-                                    <p:outputLabel for="situation1" value="#{messages['estrategia.dim.registro.elet.context']}"/>
+                                    <p:outputLabel for="situation1" value="#{messages['estrategiaDimRegistroEletContext']}"/>
                                     <br></br>
                                     <p:inputText styleClass="form-control" id="situation1" value="#{recordController.dailyLog.context}"/> 
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-11">
-                                    <p:outputLabel for="consequence1" value="#{messages['estrategia.dim.registro.elet.outcomes']}"/>
+                                    <p:outputLabel for="consequence1" value="#{messages['estrategiaDimRegistroEletOutcomes']}"/>
                                     <br></br>
                                     <p:inputText styleClass="form-control" id="consequence1" value="#{recordController.dailyLog.consequences}"/>
                                     </div>
@@ -165,8 +165,8 @@
                                         <p:panelGrid columns="1">
                                             <div id ="planoimg1">
                                                 <div class="planoimg">                                                            
-                                                    <h:outputLink value="mantendo-resultados-registro-print.xhtml"  target="_blank" ><h:graphicImage  library="default" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" name="images/impressao.png" alt="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}" /></h:outputLink>                                                            
-                                                    <p><h:outputLink value="mantendo-resultados-registro-print.xhtml"  target="_blank" >#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</h:outputLink></p>
+                                                    <h:outputLink value="mantendo-resultados-registro-print.xhtml"  target="_blank" ><h:graphicImage  library="default" title="#{messages['estrategiaDimRegistroEletLi2B1']}" name="images/impressao.png" alt="#{messages['estrategiaDimRegistroEletLi2B1']}" /></h:outputLink>                                                            
+                                                    <p><h:outputLink value="mantendo-resultados-registro-print.xhtml"  target="_blank" >#{messages['estrategiaDimRegistroEletLi2B1']}</h:outputLink></p>
                                                 </div>
                                             </div>
                                         </p:panelGrid>

@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
      <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['audit.7.title']}</title>
+        <title>#{messages['audit7Title']}</title>
         <w:head_comum />
                                          <!-- Facebook Pixel Code to track our adverts -->
              <h:outputScript>
@@ -57,7 +57,7 @@
 
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>#{messages['audit.7.h1.1']}</h1> 
+                            <h1>#{messages['evaluateDrinking47']}</h1> 
                         </div>    
                         <!--
                         <div id="progressbar">
@@ -73,7 +73,7 @@
                     <div id="pagemiddle">
 
                          <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="calendar" title="#{messages['title.image']}" name="images/calendario_quantobebe.png" alt="calendario_quantobebe" />
+                            <h:graphicImage library="default" id="calendar" title="#{messages['quantoVoceBebeLimitesHomensMulheresGraphicimage1']}" name="images/calendario_quantobebe.png" alt="calendario_quantobebe" />
                         </div>
 
                         <div id="pmtext">
@@ -85,15 +85,15 @@
 
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit4">
                                         <f:facet name="header">  
-                                            #{messages['audit.7.p.1']}
+                                            #{messages['audit7P1']}
                                         </f:facet>
                                         <h:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" requiredMessage="" layout="pageDirection">  
                                             <f:ajax event="change" execute="@this" render="audit5" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.1']}" itemValue="1" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.2']}" itemValue="2" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.3']}" itemValue="3" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.4']}" itemValue="4" />
-                                            <f:selectItem itemLabel="#{messages['audit.7.select.5']}" itemValue="5" />
+                                            <f:selectItem itemLabel="#{messages['never']}" itemValue="1" />
+                                            <f:selectItem itemLabel="#{messages['individualPlan12']}" itemValue="2" />
+                                            <f:selectItem itemLabel="#{messages['monthly']}" itemValue="3" />
+                                            <f:selectItem itemLabel="#{messages['weekly']}" itemValue="4" />
+                                            <f:selectItem itemLabel="#{messages['evaluateDrinking21']}" itemValue="5" />
                                         </h:selectOneRadio> 
                                     </h:panelGrid>
 
@@ -101,15 +101,15 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit5X" rendered ="#{not empty evaluationController.evaluation.audit4}">
                                             <f:facet name="header">  
-                                                #{messages['audit.7.p.2']}
+                                                #{messages['audit7P2']}
                                             </f:facet>
                                             <h:selectOneRadio id="audit_5" value="#{evaluationController.evaluation.audit5}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit6" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.6']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.7']}" itemValue="2" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.8']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.9']}" itemValue="4" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.10']}" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['never']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['individualPlan12']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['monthly']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['weekly']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['evaluateDrinking21']}" itemValue="5" />
                                             </h:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -118,15 +118,15 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit6X" rendered ="#{not empty evaluationController.evaluation.audit5}">
                                             <f:facet name="header">  
-                                                #{messages['audit.7.p.3']}
+                                                #{messages['audit7P3']}
                                             </f:facet>
                                             <h:selectOneRadio id="audit_6" value="#{evaluationController.evaluation.audit6}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit7" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.11']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.12']}" itemValue="2" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.13']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.14']}" itemValue="4" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.15']}" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['never']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit7Select12']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['monthly']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['weekly']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['evaluateDrinking21']}" itemValue="5" />
                                             </h:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -134,15 +134,15 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit7X" rendered="#{not empty evaluationController.evaluation.audit6}">
                                             <f:facet name="header">  
-                                                #{messages['audit.7.p.4']}
+                                                #{messages['audit7P4']}
                                             </f:facet>
                                             <h:selectOneRadio id="audit_7" value="#{evaluationController.evaluation.audit7}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit8" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.16']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.17']}" itemValue="2" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.18']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.19']}" itemValue="4" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.20']}" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['never']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit7Select12']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['monthly']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['weekly']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['evaluateDrinking21']}" itemValue="5" />
                                             </h:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -150,15 +150,15 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit8X" rendered ="#{not empty evaluationController.evaluation.audit7}">
                                             <f:facet name="header">  
-                                                #{messages['audit.7.p.5']}
+                                                #{messages['audit7P5']}
                                             </f:facet>
                                             <h:selectOneRadio id="audit_8" value="#{evaluationController.evaluation.audit8}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit9" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.21']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.22']}" itemValue="2" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.23']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.24']}" itemValue="4" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.25']}" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['never']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['audit7Select12']}" itemValue="2" />
+                                                <f:selectItem itemLabel="#{messages['monthly']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['weekly']}" itemValue="4" />
+                                                <f:selectItem itemLabel="#{messages['evaluateDrinking21']}" itemValue="5" />
                                             </h:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -167,13 +167,13 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit9X" rendered ="#{not empty evaluationController.evaluation.audit8}">
                                             <f:facet name="header">  
-                                                #{messages['audit.7.p.6']}
+                                                #{messages['audit7P6']}
                                             </f:facet>
                                             <h:selectOneRadio id="audit_9" value="#{evaluationController.evaluation.audit9}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="audit10" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.26']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.27']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.28']}" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['formPregnantNo']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['individualPlan16']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['individualPlan17']}" itemValue="5" />
                                             </h:selectOneRadio>
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -183,13 +183,13 @@
                                     <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10">
                                         <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="audit10X" rendered ="#{not empty evaluationController.evaluation.audit9}">
                                             <f:facet name="header">  
-                                                #{messages['audit.7.p.7']}
+                                                #{messages['audit7P7']}
                                             </f:facet>
                                             <h:selectOneRadio id="audit_10" value="#{evaluationController.evaluation.audit10}"  required="true" layout="pageDirection">  
                                                 <f:ajax event="change" execute="@this" render="gridSalvar" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.29']}" itemValue="1" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.30']}" itemValue="3" />
-                                                <f:selectItem itemLabel="#{messages['audit.7.select.31']}" itemValue="5" />
+                                                <f:selectItem itemLabel="#{messages['formPregnantNo']}" itemValue="1" />
+                                                <f:selectItem itemLabel="#{messages['individualPlan16']}" itemValue="3" />
+                                                <f:selectItem itemLabel="#{messages['individualPlan17']}" itemValue="5" />
                                             </h:selectOneRadio> 
                                         </h:panelGrid>
                                     </h:panelGrid>
