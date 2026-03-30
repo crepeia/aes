@@ -1059,6 +1059,62 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
 
+    @PUT
+    @Path("/updateTutorialSeen/{id}/{status}")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateTutorialSeen(@PathParam("id") Long id, @PathParam("status") Boolean status) {
+        try {
+            User user = em.find(User.class, id);
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
+            }
+
+            // Define se viu (true) ou não (false)
+            user.setTutorialSeen(status);
+
+            // Usando o padrão do projeto para salvar no banco (sem precisar do userTransaction)
+            userDAO.update(user, em);
+
+            // Retorna json confirmação
+            return Response.ok("{\"tutorial_seen\": " + status + "}").build();
+
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao atualizar status do tutorial", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("/getTutorialSeen/{id}")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTutorialSeen(@PathParam("id") Long id) {
+        try {
+            User user = em.find(User.class, id);
+
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                             .entity("User not found")
+                             .build();
+            }
+
+            // Pega o status (o getter já trata nulos como false)
+            Boolean seen = user.getTutorialSeen();
+
+            // Retorna um JSON simples
+            return Response.ok("{\"tutorial_seen\": " + seen + "}").build();
+
+        } catch (Exception e) {
+            Logger.getLogger(UserFacadeREST.class.getName())
+                  .log(Level.SEVERE, "Erro ao buscar status do tutorial", e);
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                          .entity("Erro ao processar requisição: " + e.getMessage())
+                          .build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
