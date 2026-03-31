@@ -151,7 +151,7 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
                 return Response.status(Response.Status.CREATED).entity(dto).build();
             }
             
-            String challengeType = properties.getProperty("challenge.type." + entity.getChallengeId());
+            String challengeType = properties.getProperty("challengeType" + entity.getChallengeId());
             
             if (challengeType == null || challengeType.isEmpty()) {
                 Logger.getLogger(ChallengeUserFacadeREST.class.getName())
