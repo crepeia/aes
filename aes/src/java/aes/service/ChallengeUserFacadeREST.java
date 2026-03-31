@@ -151,9 +151,23 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
                 return Response.status(Response.Status.CREATED).entity(dto).build();
             }
             
-            String challengeType = properties.getProperty("challengeType" + entity.getChallengeId());
+            String challengeType = "";
+            if (entity.getChallengeId() == 1 || entity.getChallengeId() == 2 || entity.getChallengeId() == 4 || 
+                    entity.getChallengeId() == 7 || entity.getChallengeId() == 8) {
+                challengeType = "ONCE";
+            } else if (entity.getChallengeId() == 3 || entity.getChallengeId() == 5 || entity.getChallengeId() == 6) {
+                challengeType = "DAILY";
+            } else if (entity.getChallengeId() == 9 || entity.getChallengeId() == 10) {
+                challengeType = "ACCUMULATIVE";
+            } else {
+                Logger.getLogger(ChallengeUserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_COMPLETE_CREATE_CHALLENGE reason=INVALID_CHALLENGE_ID"
+                    + "loggedUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
             
-            if (challengeType == null || challengeType.isEmpty()) {
+            if (challengeType.isEmpty()) {
                 Logger.getLogger(ChallengeUserFacadeREST.class.getName())
                     .log(Level.WARNING, "[SECURITY] DENIED_COMPLETE_CREATE_CHALLENGE reason=INVALID_CHALLENGE_TYPE"
                     + "loggedUserId={0}", loggedUser.getId());
