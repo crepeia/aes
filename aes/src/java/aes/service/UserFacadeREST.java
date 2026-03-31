@@ -937,6 +937,12 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     clientInfo.put("email", client.getEmail());
                     clientInfo.put("nickname", client.getNickname());
                     clientInfo.put("registration_complete", client.isRegistration_complete());
+                    clientInfo.put("gender", client.getGender());
+                    clientInfo.put("pregnant", client.getPregnant());
+                    clientInfo.put("birthDate", client.getBirthDate());
+                    clientInfo.put("education", client.getEducation());
+                    clientInfo.put("employed", client.getEmployed());
+                    clientInfo.put("knowWebsite", client.getKnowWebsite());
                     return clientInfo;
                 })
                 .collect(Collectors.toList());
