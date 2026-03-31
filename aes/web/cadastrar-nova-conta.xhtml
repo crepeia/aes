@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['cadastrar.nova.conta.title.1']}</title>
+            <title>#{messages['cadastrarNovaContaTitle1']}</title>
             <script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>
             <w:head_comum />
             <!-- Facebook Pixel Code to track our adverts -->
@@ -60,9 +60,9 @@
                         <div class="maintop">
                             <div class="media">
                                 <div class="media-body">
-                                    <h3>#{messages['cadastrar.nova.conta.h3.1']}</h3>                                         
-                                    <p>#{messages['cadastrar.nova.conta.p.1']}</p>
-                                    <h2>#{messages['cadastrar.nova.conta.h1']}</h2>
+                                    <h3>#{messages['cadastrarNovaContaH31']}</h3>                                         
+                                    <p>#{messages['cadastrarNovaContaP1']}</p>
+                                    <h2>#{messages['cadastrarNovaContaH1']}</h2>
                                     <div id="signupsubmit">			                                            
                                         <h:button class="btn btn-info" id="loginBtn" value="#{messages['signin']}"  outcome="login.xhtml"/>
                                     </div>
@@ -78,15 +78,15 @@
                                     
                         </div>
                         <div class="callout callout-default bd-callout-warning">
-                            <h4>#{messages['cadastrar.nova.conta.h3.3']}</h4>
-                            <p>#{messages['cadastrar.nova.conta.p.2']}</p>
+                            <h4>#{messages['aboutimportantTitle']}</h4>
+                            <p>#{messages['cadastrarNovaContaP2']}</p>
                             </div>
 
                                 <div class="signupcenter">
                                     
                                     <div id="signupright">
                                     <div id="signup">
-                                        <h1>#{messages['naccount.register']}</h1>
+                                        <h1>#{messages['challenge1']}</h1>
                                         <h:form id="form" class="form-signup">
                                             <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
                                             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
@@ -95,67 +95,67 @@
                                             <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                             <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>
                                             <div class="signuptext form-group row">
-                                                <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['naccount.name']}</label>
-                                                <p:inputText styleClass="col-sm-10 form-control" id="nameTxt" value="#{userController.user.name}" required="true" size="30" label="#{messages['naccount.name']}" >
+                                                <label for="nameTxt" class="col-sm-2 col-form-label">#{messages['naccountName']}</label>
+                                                <p:inputText styleClass="col-sm-10 form-control" id="nameTxt" value="#{userController.user.name}" required="true" size="30" label="#{messages['naccountName']}" >
                                                     <f:converter converterId="stringTrimmer" />
                                                     <f:validateLength minimum="3" maximum="100" />
                                                 </p:inputText>
-                                                <p:watermark for="nameTxt" value="#{messages['naccount.fullname']}" />
+                                                <p:watermark for="nameTxt" value="#{messages['formName']}" />
                                                 <p:message for="nameTxt" />
                                             </div>
                                             <div class="signuptext form-group row">
-                                                <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['email']}</label>
-                                                <p:inputText styleClass="col-sm-10 form-control" id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['naccount.invalidemail']}"  >
+                                                <label for="emailTxt" class="col-sm-2 col-form-label">#{messages['formEmail']}</label>
+                                                <p:inputText styleClass="col-sm-10 form-control" id="emailTxt" value="#{userController.user.email}" required="true" size="30" label="#{messages['formEmail']}" validatorMessage="#{messages['naccountInvalidemail']}"  >
                                                     <!--<p:ajax update="loginMsg" event="blur" />-->
                                                     <f:validateLength maximum="50" />
                                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                                 </p:inputText>
-                                                <p:watermark for="emailTxt" value="#{messages['email']}" />
+                                                <p:watermark for="emailTxt" value="#{messages['formEmail']}" />
                                                 <p:message for="emailTxt" />
                                             </div>
                                             <div class="signuptext form-group row">
-                                                <label for="confirmEmailTxt" class="col-sm-2 col-form-label">#{messages['naccount.rpt.email']}</label>
-                                                <p:inputText styleClass="col-sm-10 form-control" id="confirmEmailTxt" value="#{userController.confirmEmail}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['naccount.invalidemail']}" >
+                                                <label for="confirmEmailTxt" class="col-sm-2 col-form-label">#{messages['naccountRptEmail']}</label>
+                                                <p:inputText styleClass="col-sm-10 form-control" id="confirmEmailTxt" value="#{userController.confirmEmail}" required="true" size="30" label="#{messages['formEmail']}" validatorMessage="#{messages['naccountInvalidemail']}" >
                                                     <!--<p:ajax update="loginMsg" event="blur" />-->
                                                     <f:validateLength maximum="50" />
                                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                                 </p:inputText>
-                                                <p:watermark for="confirmEmailTxt" value="#{messages['naccount.rpt.email']}" />
+                                                <p:watermark for="confirmEmailTxt" value="#{messages['naccountRptEmail']}" />
                                             </div>
                                             <div class="signuptext form-group row">
-                                                <label for="passwordTxt" class="col-sm-2 col-form-label">#{messages['psw']}</label>
-                                                <p:password styleClass="col-sm-10 form-control" id="passwordTxt" value="#{userController.password}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="#{messages['psw']}">  
+                                                <label for="passwordTxt" class="col-sm-2 col-form-label">#{messages['password']}</label>
+                                                <p:password styleClass="col-sm-10 form-control" id="passwordTxt" value="#{userController.password}" required="true" match="confirmPasswordTxt" redisplay="true" size="30" label="#{messages['password']}">  
                                                     <f:validateLength maximum="16" />
                                                     <!--<p:ajax update="passwordMsg" event="blur" />-->
                                                 </p:password>
-                                                <p:watermark for="passwordTxt" value="#{messages['psw']}" />
+                                                <p:watermark for="passwordTxt" value="#{messages['password']}" />
                                                 <p:message for="passwordTxt" />
                                             </div>
                                             <div class="signuptext form-group row">
-                                                <label for="confirmPasswordTxt" class="col-sm-2 col-form-label">#{messages['naccount.rpt.psw']}</label>
-                                                <p:password styleClass="col-sm-10 form-control" id="confirmPasswordTxt" value="#{userController.password}" required="true" redisplay="true" label="#{messages['naccount.rpt.psw']}">  
+                                                <label for="confirmPasswordTxt" class="col-sm-2 col-form-label">#{messages['naccountRptPsw']}</label>
+                                                <p:password styleClass="col-sm-10 form-control" id="confirmPasswordTxt" value="#{userController.password}" required="true" redisplay="true" label="#{messages['naccountRptPsw']}">  
                                                     <f:validateLength maximum="16" />
                                                     <!--<p:ajax update="passwordMsg" event="blur" />-->
                                                 </p:password>
-                                                <p:watermark for="confirmPasswordTxt" value="#{messages['naccount.rpt.psw']}" />
+                                                <p:watermark for="confirmPasswordTxt" value="#{messages['naccountRptPsw']}" />
                                             </div>
                                             <!--<div class="signuptext">
-                                                <p:inputMask id="PhoneTxt" value="#" mask="(99) 99999999?9" required="no" size="12" label="#{messages['naccount.phone']}"> 
+                                                <p:inputMask id="PhoneTxt" value="#" mask="(99) 99999999?9" required="no" size="12" label="#{messages['naccountPhone']}"> 
                                                     <f:validateLength maximum="13" />
                                                 </p:inputMask>
-                                                <p:watermark for="PhoneTxt" value="#{messages['naccount.fullphone']}" />
+                                                <p:watermark for="PhoneTxt" value="#{messages['naccountPhone']}" />
                                                 <p:message for="PhoneTxt" />
                                             </div>--> 
                                             <div class="signuptext form-group row">
-                                                <label for="telTxt" class="col-sm-3 col-form-label">#{messages['telephone.number']}</label>
-                                                <p:inputText id="telTxt" styleClass="col-sm-9 form-control" value="#{userController.user.phone}" required="false" size="30" label="#{messages['telephone.number']}"/>
+                                                <label for="telTxt" class="col-sm-3 col-form-label">#{messages['telephoneNumber']}</label>
+                                                <p:inputText id="telTxt" styleClass="col-sm-9 form-control" value="#{userController.user.phone}" required="false" size="30" label="#{messages['telephoneNumber']}"/>
 
-                                                <p:watermark for="telTxt" value="#{messages['naccount.phone']}" />
+                                                <p:watermark for="telTxt" value="#{messages['naccountPhone']}" />
                                             </div>
 
                                             <div id="signupbottom">
                                                 <p:panelGrid columns="2"  id="allowterm">
-                                                    <label for="chk1">#{messages['cadastrar.nova.conta.chk1']}</label>
+                                                    <label for="chk1">#{messages['cadastrarNovaContaChk1']}</label>
                                                     
                                                     <h:selectBooleanCheckbox value="#{userController.user.receiveEmails}">
                                                         <f:ajax event="change" execute="@this" render="questao7" />
@@ -166,17 +166,17 @@
                                                     
                                                     <h:panelGrid columns="1"  cellpadding="5" id="questao7X" rendered="#{userController.user.receiveEmails}">
                                                         <f:facet name="header">  
-                                                            #{messages['tips.frequency.choice']}                                       
+                                                            #{messages['tipsFrequencyChoice']}                                       
                                                         </f:facet>
-                                                        <h:selectOneMenu class="custom-select" id="frequency"  value="#{userController.user.tipsFrequency}" style="width:auto"  label="#{messages['tips.frequency.choice']}" required="true" >
+                                                        <h:selectOneMenu class="custom-select" id="frequency"  value="#{userController.user.tipsFrequency}" style="width:auto"  label="#{messages['tipsFrequencyChoice']}" required="true" >
                                                             <f:selectItem itemLabel="" itemValue="" />
-                                                            <f:selectItem itemLabel="#{messages['tips.frequency.choice.0']}" itemValue="0" />
-                                                            <f:selectItem itemLabel="#{messages['tips.frequency.choice.1']}" itemValue="1" />
-                                                            <f:selectItem itemLabel="#{messages['tips.frequency.choice.2']}" itemValue="2" />
-                                                            <f:selectItem itemLabel="#{messages['tips.frequency.choice.3']}" itemValue="3" />
-                                                            <f:selectItem itemLabel="#{messages['tips.frequency.choice.4']}" itemValue="4" />
-                                                            <f:selectItem itemLabel="#{messages['tips.frequency.choice.5']}" itemValue="5" />
-                                                            <f:selectItem itemLabel="#{messages['tips.frequency.choice.7']}" itemValue="6" />
+                                                            <f:selectItem itemLabel="#{messages['never']}" itemValue="0" />
+                                                            <f:selectItem itemLabel="#{messages['frequencyDaily']}" itemValue="1" />
+                                                            <f:selectItem itemLabel="#{messages['frequencyTwoDays']}" itemValue="2" />
+                                                            <f:selectItem itemLabel="#{messages['frequencyThreeDays']}" itemValue="3" />
+                                                            <f:selectItem itemLabel="#{messages['frequencyFourDays']}" itemValue="4" />
+                                                            <f:selectItem itemLabel="#{messages['frequencyFiveDays']}" itemValue="5" />
+                                                            <f:selectItem itemLabel="#{messages['weekly']}" itemValue="6" />
                                                         </h:selectOneMenu>
                                                     </h:panelGrid>
                                                 </h:panelGrid>
@@ -184,12 +184,12 @@
                                                 <p:message for="frequency" />
 
                                                 <p:panelGrid columns="3" id="consent" >
-                                                    <label for="chk2">#{messages['naccount.p.termo']}</label><h:outputLink value="termo-consentimento.xhtml">#{messages['naccount.already.consent']}</h:outputLink>
+                                                    <label for="chk2">#{messages['formTermsBody1']}</label><h:outputLink value="termo-consentimento.xhtml">#{messages['formTermsBody2']}</h:outputLink>
                                                     <h:selectBooleanCheckbox value="#{userController.user.authorizeData}"/>
                                                 </p:panelGrid>
 
                                                 <div id="signup-terms">
-                                                    <p>#{messages['naccount.p.botton']}<h:outputLink value="termos-de-uso.xhtml"> #{messages['naccount.already.userterms']}</h:outputLink></p>                                            
+                                                    <p>#{messages['naccountPBotton']}<h:outputLink value="termos-de-uso.xhtml"> #{messages['formTermsBody4']}</h:outputLink></p>                                            
                                                 </div>
                                                 <div class="g-recaptcha" style="margin-top: 20px" data-sitekey="#{userController.getRecaptchaKey()}" data-callback="onRecaptchaSuccess"></div>
                                                 <div id="recaptcha-error-container-2"></div>

@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
      <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.title']}</title>
+        <title>#{messages['cadastrarNovaContaTitle1']}</title>
         <w:head_comum />
                                          <!-- Facebook Pixel Code to track our adverts -->
              <h:outputScript>
@@ -53,7 +53,7 @@
                 <div class="pagecontent">
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.h1.1']}</h1> 
+                            <h1>#{messages['result']}</h1> 
                         </div>    
 
                         <div class="progress">
@@ -68,28 +68,28 @@
                         </div> -->
 
                         <div id="pmtext">                                               
-                            <h2><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.b.1']}</b></h2>
+                            <h2><b>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoB1']}</b></h2>
                             
                                 <!-- Incluir feedback e diminuir tamanho da paǵina -->
-                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.p.1']}</p>
+                                <p>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoP1']}</p>
                                     <ul>
-                                        <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.1']}</li>
+                                        <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoLi1']}</li>
                                     </ul>
-                                    <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.h4.1']}</h4>
+                                    <h4>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoH41']}</h4>
                                     <ul>
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.2']}</li>
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.3']} </li>
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.4']}</li>
-                                <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.li.5']}</li>
+                                <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoLi2']}</li>
+                                <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoLi3']} </li>
+                                <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoLi4']}</li>
+                                <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoLi5']}</li>
                                     </ul>                             
-                            <h3>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.h3.1']}</h3>
+                            <h3>#{messages['quantoVoceBebeBeberUsoSintAlcoolBaixoRiscoH31']}</h3>
                             
                             <h:form>
                             <p:panel id="qrecaida" >                
                                 <h:panelGrid columns="2" style="margin:1px;" cellpadding="1" id="questao1">                                                    
                                     <p:selectOneRadio id="options" value="#{evaluationController.continueEvaluation}" required="true" layout="row">  
-                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.yes']}" itemValue="true" />
-                                        <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.baixo.risco.no']}" itemValue="false" /> 
+                                        <f:selectItem itemLabel="#{messages['yes']}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{messages['formPregnantNo']}" itemValue="false" /> 
                                     </p:selectOneRadio> 
                                 </h:panelGrid>
                             </p:panel>

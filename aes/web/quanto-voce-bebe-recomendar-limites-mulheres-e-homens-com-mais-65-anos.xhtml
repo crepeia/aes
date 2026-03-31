@@ -7,7 +7,7 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['quanto.voce.bebe.limites.homens.mulheres.65.title']}</title>
+            <title>#{messages['quantoVoceBebeLimitesHomensMulheres65Title']}</title>
             <w:head_comum />
                                              <!-- Facebook Pixel Code to track our adverts -->
              <h:outputScript>
@@ -54,7 +54,7 @@
 
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1>#{messages['quanto.voce.bebe.limites.homens.mulheres.h1.1']}</h1> 
+                                <h1>#{messages['adultNotDrink01']}</h1> 
                             </div>    
 
                             <div class="progress">
@@ -66,33 +66,33 @@
                         <div id="pagemiddle">
 
                        <!--     <div class="fotoframe">                            
-                                <h:graphicImage library="default" id="cartoonman" title="#{messages['quanto.voce.bebe.limites.homens.mulheres.graphicimage.1']}" name="images/deixar-cigarro.png" alt="Gratuito" />
+                                <h:graphicImage library="default" id="cartoonman" title="#{messages['quantoVoceBebeLimitesHomensMulheresGraphicimage1']}" name="images/deixar-cigarro.png" alt="Gratuito" />
                             </div> -->
 
                             <div id="pmtext">                                               
 
 
-                                <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.1']}</h3>
+                                <h3>#{messages['womanAndMenOver65Years02']}</h3>
                                 <ul>
-                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.1']}</li>
-                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.2']}</li>
+                                    <li>#{messages['womanAndMenOver65Years03']}</li>
+                                    <li>#{messages['quantoVoceBebeLimitesHomensMulheresLi2']}</li>
                                 </ul>
 
-                                <h2>#{messages['quanto.voce.bebe.limites.homens.mulheres.h2.1']}</h2>
-                                <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.1']}</p>
+                                <h2>#{messages['manUp65Years08']}</h2>
+                                <p>#{messages['quantoVoceBebeLimitesHomensMulheresP1']}</p>
 
                                 <ul>
-                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.3']}</li>
-                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.4']}</li>                            
-                                    <li>#{messages['quanto.voce.bebe.limites.homens.mulheres.li.5']}</li>                            
+                                    <li>#{messages['quantoVoceBebeLimitesHomensMulheresLi3']}</li>
+                                    <li>#{messages['quantoVoceBebeLimitesHomensMulheresLi4']}</li>                            
+                                    <li>#{messages['quantoVoceBebeLimitesHomensMulheresLi5']}</li>                            
                                 </ul>
 
 
-                                <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.2']}</h3>
-                                <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.2']}<h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['quanto.voce.bebe.limites.homens.mulheres.p.2.link']}</h:outputLink>.</p>        
+                                <h3>#{messages['standardEndingTitle01']}</h3>
+                                <p>#{messages['quantoVoceBebeLimitesHomensMulheresP2']}<h:outputLink value="https://www.informalcool.org.br/bebermenos">#{messages['intevencionOfferLink']}</h:outputLink>.</p>        
 
-                                <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.3']}</h3>                        
-                                <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.3']}</p>
+                                <h3>#{messages['quantoVoceBebeSimGravidezH33']}</h3>                        
+                                <p>#{messages['quantoVoceBebeLimitesHomensMulheresP3']}</p>
 
                                 <h:form id="form" class="form-signup">
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
@@ -102,21 +102,21 @@
                                     <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
                                     <h:panelGrid columns="2" style="margin-bottom:10px; width:100%" cellpadding="10" id="questao1">                  
-                                        <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                        <p:inputText id="email" value="#{evaluationController.user.email}" required="true" size="30" label="#{messages['formEmail']}" validatorMessage="#{messages['emailWrongFormat']}" disabled="#{userController.loggedIn}" >
                                             <!--<p:ajax update="loginMsg" event="blur" />-->
                                             <f:validateLength maximum="50" />
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
-                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary mx-5" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                        <p:commandButton id="saveBtn" styleClass="btngen btn btn-primary mx-5" value ="#{messages['enviar']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
 
-                                        <p:watermark for="email" value="#{messages['email']}" />
+                                        <p:watermark for="email" value="#{messages['formEmail']}" />
                                         <p:message for="email" />
                                     </h:panelGrid>
                                 </h:form>
                                 
-                                <h3>#{messages['quanto.voce.bebe.limites.homens.mulheres.h3.4']}</h3>                        
-                                <p>#{messages['quanto.voce.bebe.limites.homens.mulheres.p.4']}
-                                    <h:outputLink value="instrucoes-para-acessar-aplicativo.xhtml">#{messages['link']}</h:outputLink>.
+                                <h3>#{messages['intevencionOfferTitle']}</h3>                        
+                                <p>#{messages['quantoVoceBebeBeberUsoSintAlcoolRiscoP4']}
+                                    <h:outputLink value="instrucoes-para-acessar-aplicativo.xhtml">#{messages['intevencionOfferLink']}</h:outputLink>.
                                 </p>
 
                             </div><!-- end pmtext -->  

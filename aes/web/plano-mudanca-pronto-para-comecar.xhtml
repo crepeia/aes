@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['plano.mudanca.pronto.para.comecar.title.1']}</title>
+            <title>#{messages['planoMudancaProntoParaComecarTitle1']}</title>
             <w:head_comum />
             <!-- header -->    
             <w:header loginRequired="true" evaluationRequired="true"  />
@@ -26,7 +26,7 @@
 
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1>#{messages['plano.mudanca.pronto.para.comecar.h1.1']}</h1> 
+                                <h1>#{messages['planoMudancaProntoParaComecarH11']}</h1> 
                             </div>    
 
                             <div class="progress">
@@ -38,14 +38,14 @@
                         <div id="pagemiddle">
 
                             <div class="fotoframe">                            
-                                <h:graphicImage library="default" id="start" title="#{messages['title.image']}" name="images/plan_comecar.png" alt="Para de beber" />
+                                <h:graphicImage library="default" id="start" title="#{messages['quantoVoceBebeLimitesHomensMulheresGraphicimage1']}" name="images/plan_comecar.png" alt="Para de beber" />
                             </div> 
 
                             <div id="pmtext">
 
-                                <p>#{messages['plano.mudanca.pronto.para.comecar.p.1']}</p>
-                                <h4>#{messages['plano.mudanca.pronto.para.comecar.h4.1']}</h4>
-                                <h3>#{messages['plano.mudanca.pronto.para.comecar.h3.1']}</h3>
+                                <p>#{messages['planoMudancaProntoParaComecarP1']}</p>
+                                <h4>#{messages['planoMudancaProntoParaComecarH41']}</h4>
+                                <h3>#{messages['challenge2']}</h3>
                                 <h:form>
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
                                     <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
@@ -56,7 +56,7 @@
 
                                         <h:panelGrid columns="1"  cellpadding="5">
                                             <f:facet name="header">  
-                                                #{messages['plano.mudanca.pronto.para.comecar.facet.1']}                                  
+                                                #{messages['planoMudancaProntoParaComecarFacet1']}                                  
                                             </f:facet>
                                             <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" readonlyInput="true" pattern="dd/MM/yyyy" required="true" locale="#{languageController.locale}" requiredMessage="'Data': Campo em branco" >
                                             </p:calendar>
@@ -65,35 +65,35 @@
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao2">
                                             <f:facet name="header">  
-                                                #{messages['plano.mudanca.pronto.para.comecar.facet.2']}                                      
+                                                #{messages['changePlanReadyText04']}                                      
                                             </f:facet>
                                             <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2" required="true" requiredMessage="'Razões': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                             <f:facet name="header">  
-                                                #{messages['plano.mudanca.pronto.para.comecar.facet.3']}                                      
+                                                #{messages['planoMudancaProntoParaComecarFacet3']}                                      
                                             </f:facet>
                                             <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3" required="true" requiredMessage="'Estratégias': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao4">
                                             <f:facet name="header">  
-                                                #{messages['plano.mudanca.pronto.para.comecar.facet.4']}                                      
+                                                #{messages['planoMudancaProntoParaComecarFacet4']}                                      
                                             </f:facet>
                                             <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4" required="true" requiredMessage="'Pessoas': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao5">
                                             <f:facet name="header">  
-                                                #{messages['plano.mudanca.pronto.para.comecar.facet.5']}                                       
+                                                #{messages['planoMudancaProntoParaComecarFacet5']}                                       
                                             </f:facet>
                                             <p:inputTextarea  styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5" required="true" requiredMessage="'Sinais Sucesso': Campo em branco"/> 
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao6">
                                             <f:facet name="header">  
-                                                #{messages['plano.mudanca.pronto.para.comecar.facet.6']}                                       
+                                                #{messages['planoMudancaProntoParaComecarFacet6']}                                       
                                             </f:facet>
                                             <p:inputTextarea  styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="'Possíveis Dificuldades': Campo em branco"/> 
                                         </h:panelGrid>
@@ -115,9 +115,9 @@
 
                                     <div class="email-print-icons">
                                         <p:panelGrid columns="2">
-                                            <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}"><h:graphicImage  library="default" title="E-Mail" name="images/impressao.png" alt="#{messages['pronto.plano.print']}" /></h:outputLink>
+                                            <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['estrategiaDimRegistroEletLi2B1']}"><h:graphicImage  library="default" title="E-Mail" name="images/impressao.png" alt="#{messages['estrategiaDimRegistroEletLi2B1']}" /></h:outputLink>
                                             <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form" ><h:graphicImage  library="default" title="E-Mail" name="images/email.png" alt="E-Mail" /></p:commandLink>                                                                                                                                   
-                                            <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}">#{messages['plano.mudanca.pronto.para.comecar.outputlink.1']}</h:outputLink>
+                                            <h:outputLink value="plano-mudanca-pronto-para-comecar-print.xhtml" target="_blank" title="#{messages['estrategiaDimRegistroEletLi2B1']}">#{messages['estrategiaDimRegistroEletLi2B1']}</h:outputLink>
                                             <p:commandLink actionListener="#{evaluationController.sendPlan()}" update="@form">E-Mail</p:commandLink>
                                         </p:panelGrid>
                                     </div>

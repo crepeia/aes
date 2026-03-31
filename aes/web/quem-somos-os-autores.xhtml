@@ -7,7 +7,7 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['quem.somos.os.autores.title']}</title>
+            <title>#{messages['aboutusPagetitle']}</title>
             <w:head_comum />
             <!-- header -->    
                 <w:header />
@@ -23,13 +23,13 @@
 
                     <div class="pagecontent">
                         <!-- <h:graphicImage library="default" name="images/logo-alcool-e-saude.png" alt="Álcool & Saúde" id="vstpaisagem" /> -->
-                        <h1>#{messages['quem.somos.os.autores.h1.1']}</h1>
-                        <p>#{messages['quem.somos.os.autores.p.1']} <h:outputLink value="http://www.ufjf.br/crepeia/">#{messages['crepeia']}</h:outputLink>
-                            #{messages['quem.somos.os.autores.p.1.a']}<h:outputLink value="http://www.ufjf.br">#{messages['quem.somos.os.autores.p.1.a.1']}</h:outputLink></p>
+                        <h1>#{messages['aboutusH1Project']}</h1>
+                        <p>#{messages['quemSomosOsAutoresP1']} <h:outputLink value="http://www.ufjf.br/crepeia/">#{messages['crepeia']}</h:outputLink>
+                            #{messages['quemSomosOsAutoresP1A']}<h:outputLink value="http://www.ufjf.br">#{messages['ufjf']}</h:outputLink></p>
 
-                        <h1>#{messages['quem.somos.os.autores.h1.2']}</h1>
-                        <p>#{messages['quem.somos.os.autores.p.2']} <h:outputLink value="http://www.fapemig.br/">#{messages['quem.somos.os.autores.p.2.1']}</h:outputLink> 
-                            #{messages['quem.somos.os.autores.p.2.a']} <h:outputLink value="http://www.cnpq.br/">#{messages['quem.somos.os.autores.p.2.a.1']} </h:outputLink></p>
+                        <h1>#{messages['aboutfundingTitle']}</h1>
+                        <p>#{messages['aboutusPFundingA']} <h:outputLink value="http://www.fapemig.br/">#{messages['fapemig']}</h:outputLink> 
+                            #{messages['quemSomosOsAutoresP2A']} <h:outputLink value="http://www.cnpq.br/">#{messages['quemSomosOsAutoresP2A1']} </h:outputLink></p>
 
                         <div id ="logoscenter">
                             <h:outputLink value="http://www.ufjf.br" target="_blank"><h:graphicImage library="default" name="images/ufjf.png" alt="Universidade Federal de Juiz de Fora" id="ufjf"/></h:outputLink>
@@ -38,119 +38,119 @@
                             <h:outputLink value="http://www.fapemig.br/" target="_blank"><h:graphicImage library="default" name="images/fapemig.png" alt="FAPEMIG" id="mainfapemig" /></h:outputLink>
                             <h:outputLink value="http://www.cnpq.br/" target="_blank"><h:graphicImage library="default" name="images/cnpq.png" alt="CNQq" id="cnpq" /></h:outputLink>
                             <h:outputLink value="http://www.capes.gov.br/" target="_blank"><h:graphicImage library="default" name="images/capes.png" alt="CAPES" id="capes" /></h:outputLink>
-                            <h:outputLink value="https://www.puc-rio.br/index.html" target="_blank"><h:graphicImage library="default" name="images/puc-rio.png" alt="#{messages['puc-rio']}" id="puc-rio" /></h:outputLink>
+                            <h:outputLink value="https://www.puc-rio.br/index.html" target="_blank"><h:graphicImage library="default" name="images/puc-rio.png" alt="#{messages['pucRio']}" id="puc-rio" /></h:outputLink>
                         </div>             
 
-                        <h1>#{messages['quem.somos.os.autores.h1.3']}</h1>
+                        <h1>#{messages['quemSomosOsAutoresH13']}</h1>
 
                         <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage  title="#{messages['aboutus.h3.telmo']}" library="default" class="imgpesq" name="images/crrjf.telmo.ronzani.jpg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.1']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.3']} <h:outputLink value="http://lattes.cnpq.br/9239252166751422" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink> </p>  
-                        </div>
-
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.2']}" library="default" class="imgpesq" name="images/laisa-sartes.jpeg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.2']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.4']} <h:outputLink value="http://lattes.cnpq.br/6143686606122269" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>  
+                            <div class="fotospesq"><h:graphicImage  title="#{messages['aboutusH3Telmo']}" library="default" class="imgpesq" name="images/crrjf.telmo.ronzani.jpg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['aboutusH3Telmo']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP3']} <h:outputLink value="http://lattes.cnpq.br/9239252166751422" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink> </p>  
                         </div>
 
                         <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['aboutus.h3.heder']}" library="default" class="imgpesq" name="images/heder-bernardino.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.3']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.5']} <h:outputLink value="http://lattes.cnpq.br/7733681743453751" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
+                            <div class="fotospesq"><h:graphicImage title="#{messages['aboutusH3Laisa']}" library="default" class="imgpesq" name="images/laisa-sartes.jpeg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['aboutusH3Laisa']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP4']} <h:outputLink value="http://lattes.cnpq.br/6143686606122269" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>  
                         </div>
 
                         <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['aboutus.h3.leonardo']}" library="default" class="imgpesq" name="images/leonardo-martins.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.5']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.7']} <h:outputLink value="http://lattes.cnpq.br/6867296937779440" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-                        
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.12']}" library="default" class="imgpesq" name="images/jairo.jpeg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.12']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.14']} <h:outputLink value="http://lattes.cnpq.br/4516605108233899" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-                        
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.13']}" library="default" class="imgpesq" name="images/larissa.jpeg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.13']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.15']} <h:outputLink value="http://lattes.cnpq.br/4795931579714366" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-                        
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.15']}" library="default" class="imgpesq" name="images/luan.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.15']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.17']} <h:outputLink value="http://lattes.cnpq.br/0335528536276063" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-                        
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.16']}" library="default" class="imgpesq" name="images/leonorico.jpg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.16']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.18']} <h:outputLink value="http://lattes.cnpq.br/5608031511123002" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-                        
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.17']}" library="default" class="imgpesq" name="images/jorge.jpeg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.17']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.19']} <h:outputLink value="http://lattes.cnpq.br/5966091332609285" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-                        
-                        <h1>#{messages['quem.somos.os.autores.h1.4']}</h1>
-                        
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['aboutus.h3.henrique']}" library="default" class="imgpesq" name="images/henrique-gomide.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.4']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.6']} <h:outputLink value="http://lattes.cnpq.br/6230665865154742" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
+                            <div class="fotospesq"><h:graphicImage title="#{messages['aboutusH3Heder']}" library="default" class="imgpesq" name="images/heder-bernardino.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['aboutusH3Heder']}</h3>
+                            <p>#{messages['aboutusPHeder']} <h:outputLink value="http://lattes.cnpq.br/7733681743453751" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
                         </div>
 
                         <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.6']}" library="default" class="imgpesq" name="images/andressa-bianchi.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.6']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.8']} <h:outputLink value="http://lattes.cnpq.br/3853325011983957" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.7']}" library="default" class="imgpesq" name="images/daniela.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.7']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.9']} <h:outputLink value="http://lattes.cnpq.br/1532127658874690" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.8']}" library="default" class="imgpesq" name="images/thiago.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.8']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.10']} <h:outputLink value="http://lattes.cnpq.br/8460752210499061" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
-                        </div>
-
-                        <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.9']}" library="default" class="imgpesq" name="images/nathalia.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.9']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.11']} <h:outputLink value="http://lattes.cnpq.br/4201335037258854" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
+                            <div class="fotospesq"><h:graphicImage title="#{messages['aboutusH3Leonardo']}" library="default" class="imgpesq" name="images/leonardo-martins.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH35']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP7']} <h:outputLink value="http://lattes.cnpq.br/6867296937779440" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
                         </div>
                         
                         <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.10']}" library="default" class="imgpesq" name="images/felipe.png" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.10']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.12']} <h:outputLink value="http://lattes.cnpq.br/3334208110965836" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH312']}" library="default" class="imgpesq" name="images/jairo.jpeg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH312']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP14']} <h:outputLink value="http://lattes.cnpq.br/4516605108233899" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+                        
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH313']}" library="default" class="imgpesq" name="images/larissa.jpeg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH313']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP15']} <h:outputLink value="http://lattes.cnpq.br/4795931579714366" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+                        
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH315']}" library="default" class="imgpesq" name="images/luan.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH315']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP17']} <h:outputLink value="http://lattes.cnpq.br/0335528536276063" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+                        
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH316']}" library="default" class="imgpesq" name="images/leonorico.jpg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH316']}</h3>
+                            <p>#{messages['aboutusPThiago']} <h:outputLink value="http://lattes.cnpq.br/5608031511123002" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+                        
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH317']}" library="default" class="imgpesq" name="images/jorge.jpeg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH317']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP19']} <h:outputLink value="http://lattes.cnpq.br/5966091332609285" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+                        
+                        <h1>#{messages['quemSomosOsAutoresH14']}</h1>
+                        
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['aboutusH3Henrique']}" library="default" class="imgpesq" name="images/henrique-gomide.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH34']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP6']} <h:outputLink value="http://lattes.cnpq.br/6230665865154742" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
                         </div>
 
                         <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.11']}" library="default" class="imgpesq" name="images/raiza.jpeg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.11']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.13']} <h:outputLink value="http://lattes.cnpq.br/4679888210335646" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH36']}" library="default" class="imgpesq" name="images/andressa-bianchi.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH36']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP8']} <h:outputLink value="http://lattes.cnpq.br/3853325011983957" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH37']}" library="default" class="imgpesq" name="images/daniela.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH37']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP9']} <h:outputLink value="http://lattes.cnpq.br/1532127658874690" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH38']}" library="default" class="imgpesq" name="images/thiago.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH38']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP10']} <h:outputLink value="http://lattes.cnpq.br/8460752210499061" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH39']}" library="default" class="imgpesq" name="images/nathalia.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH39']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP11']} <h:outputLink value="http://lattes.cnpq.br/4201335037258854" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
                         </div>
                         
                         <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.14']}" library="default" class="imgpesq" name="images/joao-pedro.jpg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.14']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.16']} <h:outputLink value="http://lattes.cnpq.br/3356906989901321" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH310']}" library="default" class="imgpesq" name="images/felipe.png" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH310']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP12']} <h:outputLink value="http://lattes.cnpq.br/3334208110965836" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH311']}" library="default" class="imgpesq" name="images/raiza.jpeg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH311']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP13']} <h:outputLink value="http://lattes.cnpq.br/4679888210335646" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
                         </div>
                         
                         <div class="pesquisadores">
-                            <div class="fotospesq"><h:graphicImage title="#{messages['quem.somos.os.autores.h3.18']}" library="default" class="imgpesq" name="images/rhara.jpeg" alt="Pesquisador" /></div>                                        
-                            <h3>#{messages['quem.somos.os.autores.h3.18']}</h3>
-                            <p>#{messages['quem.somos.os.autores.p.20']} <h:outputLink value="https://lattes.cnpq.br/0659015927549426" target="_blank">#{messages['quem.somos.os.autores.p.3.a']}</h:outputLink></p>
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH314']}" library="default" class="imgpesq" name="images/joao-pedro.jpg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH314']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP16']} <h:outputLink value="http://lattes.cnpq.br/3356906989901321" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
+                        </div>
+                        
+                        <div class="pesquisadores">
+                            <div class="fotospesq"><h:graphicImage title="#{messages['quemSomosOsAutoresH318']}" library="default" class="imgpesq" name="images/rhara.jpeg" alt="Pesquisador" /></div>                                        
+                            <h3>#{messages['quemSomosOsAutoresH318']}</h3>
+                            <p>#{messages['quemSomosOsAutoresP20']} <h:outputLink value="https://lattes.cnpq.br/0659015927549426" target="_blank">#{messages['aboutusLinkcv']}</h:outputLink></p>
                         </div>
                         
                         <div class="referencias">

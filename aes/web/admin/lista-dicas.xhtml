@@ -8,7 +8,7 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['dicas']}</title>
+        <title>#{messages['dica']}</title>
         <w:head_comum />
         <w:topmenu />
         <w:header />
@@ -17,7 +17,7 @@
         <div id="corpo">
             <div class="main">
                 <div class="pagecontent">
-                    <h1>#{messages['dicas']}</h1>
+                    <h1>#{messages['dica']}</h1>
                     <div class="maintop">
                         <h:dataTable id="tipTable" binding="#{table}" value="#{tipController.tipList(languageController.locale)}" var="tip" class="table table-striped table-hover table-bordered tableUpdated">
                             <h:column>
@@ -25,11 +25,11 @@
                                 <h:outputText value="#{tip.id}" />
                             </h:column>
                             <h:column>
-                                <f:facet name="header">#{messages['tip.title.title']}</f:facet>
+                                <f:facet name="header">#{messages['tipTitleTitle']}</f:facet>
                                 <h:outputText value="#{tip.title}" />
                             </h:column>
                             <h:column>
-                                <f:facet name="header">#{messages['tip.description.title']}</f:facet>
+                                <f:facet name="header">#{messages['tipDescriptionTitle']}</f:facet>
                                 <h:outputText value="#{tip.description}" />
                             </h:column>
                         </h:dataTable>

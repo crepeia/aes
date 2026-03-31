@@ -7,7 +7,7 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['termos.de.uso.title.1']}</title>
+        <title>#{messages['termsPagetitle']}</title>
         <w:head_comum />
         <!-- header -->    
         <w:header />
@@ -19,49 +19,49 @@
             <div class="main">
                 <div class="pagecontent">
                   <!--  <h:graphicImage library="default" name="images/logo-alcool-e-saude.png" alt="Álcool & Saúde" id="vstpaisagem" />-->
-                    <h1>#{messages['termos.de.uso.h1.1']}</h1>
+                    <h1>#{messages['termsTitleH1']}</h1>
                     <div class="referencias">
                         <p>#{messages['updated']}</p>
                         <p>#{messages['versao']}</p>
                     </div>
-                    <p>#{messages['termos.de.uso.p.1']}</p>
-                    <p>#{messages['termos.de.uso.p.2']}</p>
-                    <p>#{messages['termos.de.uso.p.3']}<strong> #{messages['termos.de.uso.strong.1']}</strong> #{messages['termos.de.uso.p.3.1']}</p>
-                    <p>#{messages['termos.de.uso.p.4']}<em> #{messages['termos.de.uso.p.4.1']}</em>.</p>
+                    <p>#{messages['termsDescriptionP1']}</p>
+                    <p>#{messages['termosDeUsoP2']}</p>
+                    <p>#{messages['termosUso04']}<strong> #{messages['termosUso05']}</strong> #{messages['termosUso06']}</p>
+                    <p>#{messages['termosDeUsoP4']}<em> #{messages['termosDeUsoP41']}</em>.</p>
                     
-                    <h3>#{messages['termos.de.uso.h3.1']}</h3>
-                    <p>#{messages['termos.de.uso.p.5']}</p>
-                    <h3>#{messages['termos.de.uso.h3.2']}</h3>
+                    <h3>#{messages['termsAccessH3']}</h3>
+                    <p>#{messages['termosDeUsoP5']}</p>
+                    <h3>#{messages['termosUso10']}</h3>
                     <ul>
-                        <li>#{messages['termos.de.uso.li.1']}</li>
-                        <li>#{messages['termos.de.uso.li.2']}</li>
-                        <li>#{messages['termos.de.uso.li.3']}</li>
-                        <li>#{messages['termos.de.uso.li.4']}</li>
-                        <li>#{messages['termos.de.uso.li.5']}</li>
+                        <li>#{messages['termsRestrainsLi1']}</li>
+                        <li>#{messages['termsRestrainsLi2']}</li>
+                        <li>#{messages['termsRestrainsLi3']}</li>
+                        <li>#{messages['termsRestrainsLi4']}</li>
+                        <li>#{messages['termsRestrainsLi5']}</li>
                     </ul>    
 
-                    <h3>#{messages['termos.de.uso.h3.3']} </h3>
-                    <p>#{messages['termos.de.uso.p.6']}</p>
-                    <p>#{messages['termos.de.uso.p.7']}</p>
-                    <p>#{messages['termos.de.uso.p.8']}</p>
-                    <h3>#{messages['termos.de.uso.h3.4']}</h3>
-                    <p>#{messages['termos.de.uso.p.9']}</p>
-                    <h3>#{messages['termos.de.uso.h3.5']}</h3>
-                    <p>#{messages['termos.de.uso.p.10']}</p>
-                    <h3>#{messages['termos.de.uso.h3.6']}</h3>
-                    <p>#{messages['termos.de.uso.p.11']}</p>
-                    <h3>#{messages['termos.de.uso.h3.7']}</h3>
-                    <p>#{messages['termos.de.uso.p.12']}</p>
-                    <h3>#{messages['termos.de.uso.h3.8']}</h3>
-                    <p>#{messages['termos.de.uso.p.13']}</p>
-                    <h:outputLink value="http://www.gnu.org/licenses/gpl.html">#{messages['termos.de.uso.p.13.1']}</h:outputLink>
-                    <center><object type="image/svg+xml" data="resources/default/images/gpl.svg">#{messages['termos.de.uso.object.1']}</object></center>
-                    <h3>#{messages['termos.de.uso.h3.9']}</h3>
-                    <p>#{messages['termos.de.uso.p.14']}</p>
-                    <h3>#{messages['termos.de.uso.h3.10']}</h3>
-                    <p>#{messages['termos.de.uso.p.15']}</p>
+                    <h3>#{messages['termosUso16']} </h3>
+                    <p>#{messages['termosDeUsoP6']}</p>
+                    <p>#{messages['termsGarantiesP2']}</p>
+                    <p>#{messages['termsGarantiesP3']}</p>
+                    <h3>#{messages['termosUso20']}</h3>
+                    <p>#{messages['termsThirdpartyP']}</p>
+                    <h3>#{messages['termosUso22']}</h3>
+                    <p>#{messages['termsLinksP']}</p>
+                    <h3>#{messages['termosUso24']}</h3>
+                    <p>#{messages['termsChangesP']}</p>
+                    <h3>#{messages['termsInfoH3']}</h3>
+                    <p>#{messages['termsInfoP']}</p>
+                    <h3>#{messages['termosUso28']}</h3>
+                    <p>#{messages['termsLicensePa']}</p>
+                    <h:outputLink value="http://www.gnu.org/licenses/gpl.html">#{messages['termosUso30']}</h:outputLink>
+                    <center><object type="image/svg+xml" data="resources/default/images/gpl.svg">#{messages['termosDeUsoObject1']}</object></center>
+                    <h3>#{messages['termosUso31']}</h3>
+                    <p>#{messages['termsTrademarkP']}</p>
+                    <h3>#{messages['termosUso33']}</h3>
+                    <p>#{messages['termsEndP']}</p>
                     <div id="btnprog">
-                        <h:button class="btngen btn btn-primary btn-lg" value ="#{messages['termo.consentimento.p.9']}" outcome="cadastrar-nova-conta.xhtml"  ></h:button>
+                        <h:button class="btngen btn btn-primary btn-lg" value ="#{messages['termoConsentimentoP9']}" outcome="cadastrar-nova-conta.xhtml"  ></h:button>
                     </div> 
                 </div>
             </div>

@@ -7,7 +7,7 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['contato.title']}</title>
+            <title>#{messages['contactTitlepage']}</title>
             <script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>
             <w:head_comum />
             <!-- header -->    
@@ -19,11 +19,11 @@
                 <!--mainmenu-->         	
                 <div class="main">
                     <div class="pagecontent">                   
-                        <h1>#{messages['contact']}</h1>
+                        <h1>#{messages['menuTopLi4']}</h1>
                         <div id="contato">
-                            <h5>#{messages['contato.h4.1']}</h5>
-                            <h5>#{messages['contato.h4.2']} <h:outputLink value="https://twitter.com/alcoolesaude" target="_blank">#{messages['contato.h4.2.1']}</h:outputLink></h5>
-                            <h5>#{messages['contato.h4.3']} <h:outputLink value="https://www.facebook.com/alcoolesaude/" target="_blank">#{messages['contato.h4.3.1']}</h:outputLink></h5>
+                            <h5>#{messages['contactH4A']}</h5>
+                            <h5>#{messages['contatoH42']} <h:outputLink value="https://twitter.com/alcoolesaude" target="_blank">#{messages['contatoH421']}</h:outputLink></h5>
+                            <h5>#{messages['contatoH43']} <h:outputLink value="https://www.facebook.com/alcoolesaude/" target="_blank">#{messages['contatoH421']}</h:outputLink></h5>
 
 
                             <h:form id="form" class="form-signup">
@@ -31,23 +31,23 @@
 
                                 <p:panelGrid columns="2">
                                     <p:panel>
-                                        <h4>#{messages['contato.h4.4']}</h4>
-                                        <p:inputText styleClass="form-control" id="email31d6cfe0d16" required="true" value="#{userController.user.email}"  size="30" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                        <h4>#{messages['contatoH44']}</h4>
+                                        <p:inputText styleClass="form-control" id="email31d6cfe0d16" required="true" value="#{userController.user.email}"  size="30" label="#{messages['formEmail']}" validatorMessage="#{messages['emailWrongFormat']}" disabled="#{userController.loggedIn}" >
                                             <f:validateLength maximum="50" />
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
                                         <p:watermark for="email31d6cfe0d16" value="E-mail" />
                                         <p:message for="email31d6cfe0d16"/>
-                                        <h4>#{messages['h4.message']}</h4>
-                                        <p:inputTextarea styleClass="form-control" id="messaged41d8cd98az" binding="#{messaged41d8cd98az}" rows="4" cols="60" autoResize="false" required="true" label="#{messages['h4.message']}" />
+                                        <h4>#{messages['contactH4Msg']}</h4>
+                                        <p:inputTextarea styleClass="form-control" id="messaged41d8cd98az" binding="#{messaged41d8cd98az}" rows="4" cols="60" autoResize="false" required="true" label="#{messages['contactH4Msg']}" />
                                         <p:message for="messaged41d8cd98az"/>
                                         
-                                        <h4 class="simplehoney">#{messages['contato.h4.4']}</h4>
-                                        <p:inputText styleClass="form-control simplehoney" id="email" required="false" size="30" label="#{messages['email']}"></p:inputText>
+                                        <h4 class="simplehoney">#{messages['contatoH44']}</h4>
+                                        <p:inputText styleClass="form-control simplehoney" id="email" required="false" size="30" label="#{messages['formEmail']}"></p:inputText>
                                         <p:watermark for="email" value="E-mail" />
                                         <p:message for="email"/>
-                                        <h4 class="simplehoney">#{messages['h4.message']}</h4>
-                                        <p:inputTextarea styleClass="form-control simplehoney" id="message" binding="#{message}" rows="4" cols="60" autoResize="false" label="#{messages['h4.message']}" />
+                                        <h4 class="simplehoney">#{messages['contactH4Msg']}</h4>
+                                        <p:inputTextarea styleClass="form-control simplehoney" id="message" binding="#{message}" rows="4" cols="60" autoResize="false" label="#{messages['contactH4Msg']}" />
                                         <p:watermark for="message" value="Insira sua mensagem" />
                                         <p:message for="message"/>
                                         
@@ -57,7 +57,7 @@
                                         <div id="recaptcha-error-container-1"></div>
 
                                         <div id="signinbtn">
-                                            <p:commandButton styleClass="btngen btn btn-primary" value ="#{messages['send']}" update="@form" actionListener="#{contactController.sendContactFormEmail}" onclick="return validateRecaptcha(1);" >
+                                            <p:commandButton styleClass="btngen btn btn-primary" value ="#{messages['enviar']}" update="@form" actionListener="#{contactController.sendContactFormEmail}" onclick="return validateRecaptcha(1);" >
                                                 <f:attribute name="message" value="#{messaged41d8cd98az.value}" />
                                                 <f:attribute name="user" value="#{user.value}" />
                                             </p:commandButton>
@@ -65,11 +65,11 @@
                                     </p:panel>
                                 </p:panelGrid>
                             </h:form>
-                        <h6>#{messages['contact.address']}</h6>
-                        <h6>#{messages['contact.address1']}</h6>
-                        <h6>#{messages['contact.address2']}</h6>
-                        <h6>#{messages['contact.address3']}</h6>
-                        <h6>#{messages['contact.address4']}</h6>
+                        <h6>#{messages['ufjf']}</h6>
+                        <h6>#{messages['contactAddress1']}</h6>
+                        <h6>#{messages['contactAddress2']}</h6>
+                        <h6>#{messages['contactAddress3']}</h6>
+                        <h6>#{messages['contactAddress4']}</h6>
                         </div>	
                     </div>
                 </div>

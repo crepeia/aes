@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
     <h:head>
-        <title>#{messages['preparando.pros.cons.title']}</title>
+        <title>#{messages['preparandoProsConsTitle']}</title>
         <w:head_comum />
         <!-- header -->    
         <w:header loginRequired="true" evaluationRequired="true" />
@@ -24,7 +24,7 @@
                 <div class="pagecontent">
                     <div id="pagetop">
                         <div id="hpagetop">
-                            <h1>#{messages['preparando.pros.cons.h1']}</h1> 
+                            <h1>#{messages['preparandoProsConsH1']}</h1> 
                         </div>    
 
                         <div class="progress">
@@ -36,59 +36,59 @@
                     <div id="pagemiddle">
 
                          <div class="fotoframe">                            
-                            <h:graphicImage library="default" id="yourchoice" title="#{messages['title.image']}" name="images/voce_preparando.png" alt="Preparando parar" />
+                            <h:graphicImage library="default" id="yourchoice" title="#{messages['quantoVoceBebeLimitesHomensMulheresGraphicimage1']}" name="images/voce_preparando.png" alt="Preparando parar" />
                         </div> 
 
                         <div id="pmtext">
                             
-                            <h3>#{messages['preparando.pros.cons.h3']}</h3>
+                            <h3>#{messages['preparingProsCons01']}</h3>
 
-                            <p>#{messages['preparando.pros.cons.p1']}</p> 
-                            <h4>#{messages['preparando.pros.cons.h4']}</h4>
+                            <p>#{messages['preparingProsCons02']}</p> 
+                            <h4>#{messages['preparingProsCons03']}</h4>
 
                             <h:form>
                                 <p:panel id="questoes" >
                                     
                                     <h:panelGrid columns="1"  cellpadding="5">
                                         <f:facet name="header">  
-                                          #{messages['preparando.pros.cons.facet1']}                                      
+                                          #{messages['preparingProsCons04']}                                      
                                         </f:facet>
-                                        <h:outputText value="#{messages['preparando.pros.cons.out1']}" />
-                                        <p:rating id="question1" value="#{evaluationController.evaluation.prosReasons1}" required="false" requiredMessage="#{messages['preparando.pros.cons.req1']}" />
+                                        <h:outputText value="#{messages['preparandoProsConsOut1']}" />
+                                        <p:rating id="question1" value="#{evaluationController.evaluation.prosReasons1}" required="false" requiredMessage="#{messages['preparandoProsConsReq1']}" />
                                         <p:message for="question1"/>
                                         
-                                        <h:outputText value="#{messages['preparando.pros.cons.out2']}" />
-                                        <p:rating id="question2" value="#{evaluationController.evaluation.prosReasons2}" required="false" requiredMessage="#{messages['preparando.pros.cons.req2']} "/>
+                                        <h:outputText value="#{messages['preparandoProsConsOut2']}" />
+                                        <p:rating id="question2" value="#{evaluationController.evaluation.prosReasons2}" required="false" requiredMessage="#{messages['preparandoProsConsReq2']} "/>
                                         <p:message for="question2"/>
                                         
-                                        <h:outputText value="#{messages['preparando.pros.cons.out3']}" />
-                                        <p:rating id="question3" value="#{evaluationController.evaluation.prosReasons3}" required="false" requiredMessage="#{messages['preparando.pros.cons.req3']}"/>
+                                        <h:outputText value="#{messages['preparandoProsConsOut3']}" />
+                                        <p:rating id="question3" value="#{evaluationController.evaluation.prosReasons3}" required="false" requiredMessage="#{messages['preparandoProsConsReq3']}"/>
                                         <p:message for="question3"/>
                                         
-                                        <h:outputText value="#{messages['preparando.pros.cons.out4']}" />
-                                        <p:rating id="question4" value="#{evaluationController.evaluation.prosReasons4}" required="false" requiredMessage="#{messages['preparando.pros.cons.req4']}"/>
+                                        <h:outputText value="#{messages['preparandoProsConsOut4']}" />
+                                        <p:rating id="question4" value="#{evaluationController.evaluation.prosReasons4}" required="false" requiredMessage="#{messages['preparandoProsConsReq4']}"/>
                                         <p:message for="question4"/>
                                         
-                                        <h:outputText value="#{messages['preparando.pros.cons.out5']}" />
-                                        <p:rating id="question5" value="#{evaluationController.evaluation.prosReasons5}" required="false" requiredMessage="#{messages['preparando.pros.cons.req5']}"/>
+                                        <h:outputText value="#{messages['preparandoProsConsOut5']}" />
+                                        <p:rating id="question5" value="#{evaluationController.evaluation.prosReasons5}" required="false" requiredMessage="#{messages['preparandoProsConsReq5']}"/>
                                         <p:message for="question5"/>
                                         
-                                        <h:outputText value="#{messages['preparando.pros.cons.out6']}" />
-                                        <p:rating id="question6" value="#{evaluationController.evaluation.prosReasons6}" required="false" requiredMessage="#{messages['preparando.pros.cons.req6']}"/>
+                                        <h:outputText value="#{messages['preparandoProsConsOut6']}" />
+                                        <p:rating id="question6" value="#{evaluationController.evaluation.prosReasons6}" required="false" requiredMessage="#{messages['preparandoProsConsReq6']}"/>
                                         <p:message for="question6"/>
                                         
-                                        <h:outputText value="#{messages['preparando.pros.cons.out7']}" />
-                                        <p:rating id="question7" value="#{evaluationController.evaluation.prosReasons7}" required="false" requiredMessage="#{messages['preparando.pros.cons.req7']}"/>
+                                        <h:outputText value="#{messages['preparandoProsConsOut7']}" />
+                                        <p:rating id="question7" value="#{evaluationController.evaluation.prosReasons7}" required="false" requiredMessage="#{messages['preparandoProsConsReq7']}"/>
                                         <p:message for="question7"/>
                                         
-                                        <h:outputText value="#{messages['preparando.pros.cons.out8']}" />
-                                        <p:rating id="question8" value="#{evaluationController.evaluation.prosReasons8}" required="false" requiredMessage="#{messages['preparando.pros.cons.req8']}"/>                                                                        
+                                        <h:outputText value="#{messages['preparandoProsConsOut8']}" />
+                                        <p:rating id="question8" value="#{evaluationController.evaluation.prosReasons8}" required="false" requiredMessage="#{messages['preparandoProsConsReq8']}"/>                                                                        
                                         <p:message for="question8"/>
                                         
                                     </h:panelGrid>
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao2">
                                         <f:facet name="header">  
-                                          #{messages['preparando.pros.cons.facet2']}                                   
+                                          #{messages['preparandoProsConsFacet2']}                                   
                                         </f:facet>
                                             <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pros1}" id="campo1"/> 
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.pros2}" id="campo2"/> 
@@ -97,7 +97,7 @@
                                     
                                     <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                         <f:facet name="header">  
-                                           #{messages['preparando.pros.cons.facet3']}                                 
+                                           #{messages['preparandoProsConsFacet3']}                                 
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.cons1}" id="campo4"/> 
                                         <p:inputTextarea rows="2" cols="70" value="#{evaluationController.evaluation.cons2}" id="campo5"/> 

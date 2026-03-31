@@ -7,7 +7,7 @@
       xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['login']}</title>
+            <title>#{messages['loginPagetitle']}</title>
             <script src="https://www.google.com/recaptcha/api.js" async = "defer"></script>
             <w:head_comum />
                                              <!-- Facebook Pixel Code to track our adverts -->
@@ -51,24 +51,24 @@
                 <div class="main">
                     <div class="pagecontent">
                         <div id="signin">
-                            <h1>#{messages['enter']}</h1>
+                            <h1>#{messages['signin']}</h1>
                             <h:form id="form" class="form-signup">
                                 <div class="signuptext"><input type="hidden" name="cx" value="000901674862427730485:_xhsedehfns"/></div>
                                 <div class="signuptext"><input type="hidden" name="ie" value="UTF-8" /></div>						
                                 <div class="signuptext">
-                                    <p:inputText styleClass="form-control" id="emailTxt" label="#{messages['email']}" value="#{userController.user.email}" required="true" size="30" >
+                                    <p:inputText styleClass="form-control" id="emailTxt" label="#{messages['formEmail']}" value="#{userController.user.email}" required="true" size="30" >
                                         <!--<p:ajax update="loginMsg" event="blur" />-->
                                         <f:validateLength maximum="50" />
                                     </p:inputText>
-                                    <p:watermark for="emailTxt" value="#{messages['email']}" />
+                                    <p:watermark for="emailTxt" value="#{messages['formEmail']}" />
                                     <p:message for="emailTxt"/>
                                 </div>
                                 <div class="signuptext">
-                                    <p:password styleClass="form-control" id="passwordTxt" label="#{messages['psw']}" value="#{userController.password}" required="true" redisplay="true" size="30">  
+                                    <p:password styleClass="form-control" id="passwordTxt" label="#{messages['password']}" value="#{userController.password}" required="true" redisplay="true" size="30">  
                                         <f:validateLength maximum="16" />
                                         <!--<p:ajax update="passwordMsg" event="blur" />-->
                                     </p:password>
-                                    <p:watermark for="passwordTxt" value="#{messages['psw']}" />
+                                    <p:watermark for="passwordTxt" value="#{messages['password']}" />
                                     <p:message for="passwordTxt"/>
                                 </div>
                                 <div class="g-recaptcha" style="margin-top: 20px" data-sitekey="#{userController.getRecaptchaKey()}" data-callback="onRecaptchaSuccess"></div>
@@ -82,7 +82,7 @@
                                             <p:commandButton styleClass="btn btn-primary btn-sm" id="entrarBtn" value="Entrar" update="@form" actionListener="#{userController.signIn(true)}" onclick="return validateRecaptcha(5);"/>
                                         </div>
                                         <div>
-                                            <h:outputLink value="enviar-email-senha.xhtml">#{messages['forgot.password']}</h:outputLink>
+                                            <h:outputLink value="enviar-email-senha.xhtml">#{messages['forgotPassword']}</h:outputLink>
                                         </div>
                                     </div>
                                 </div>

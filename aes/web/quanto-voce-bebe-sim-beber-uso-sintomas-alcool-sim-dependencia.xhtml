@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.title']}</title>
+            <title>#{messages['quantoVoceBebeBeberUsoSintAlcoolDependenciaTitle']}</title>
             <w:head_comum />
                                              <!-- Facebook Pixel Code to track our adverts -->
              <h:outputScript>
@@ -53,7 +53,7 @@
                     <div class="pagecontent">
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h1.1']}</h1> 
+                                <h1>#{messages['alcoholYesDependence12']}</h1> 
                             </div>
                             <div class="progress">
                                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">70%</div>
@@ -67,20 +67,20 @@
                             </div> -->
 
                            <div id="pmtext" style="display: flex; flex-direction: column;">                                               
-                                <h2>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h2.1']}</h2>
+                                <h2>#{messages['alcoholYesDependence01']}</h2>
                                 <ul>
                                     <!-- Incluir feedback e diminuir tamanho da paǵina -->
-                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.1']}</li>
-                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.2']}</li>
-                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.3']} </li>
+                                    <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolDependenciaLi1']}</li>
+                                    <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolDependenciaLi2']}</li>
+                                    <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolDependenciaLi3']} </li>
 
-                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.4']}</li>
-                                    <li>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.li.5']}</li>
+                                    <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolRiscoLi17']}</li>
+                                    <li>#{messages['quantoVoceBebeBeberUsoSintAlcoolRiscoLi18']}</li>
                                 </ul>
 
-                                <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h4.1']}</h4>
+                                <h4>#{messages['alcoholYesDependence07']}</h4>
                                 
-                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p2']}</p>
+                                <p>#{messages['quantoVoceBebeBeberUsoSintAlcoolDependenciaPanelP2']}</p>
 
                                
                                 <p>
@@ -91,10 +91,10 @@
                                     Clique aqui para conhecer mais
                                 </a>
                                 
-                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p3']}</p>
+                                <p>#{messages['quantoVoceBebeBeberUsoSintAlcoolDependenciaPanelP3']}</p>
 
                                 
-                                <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.b.1']}</b></p>
+                                <p><b>#{messages['quantoVoceBebeBeberUsoSintAlcoolDependenciaB1']}</b></p>
                                 
                                 <h:form>
                                     <p:ajaxStatus onstart="statusDialog.show()" onsuccess="statusDialog.hide()" />
@@ -109,8 +109,8 @@
                                     <p:panel id="qrecaida" >                
                                         <h:panelGrid columns="2" style="margin:20px;" cellpadding="20" id="questao1">                                                    
                                             <h:selectOneRadio id="dependencia" value="#{evaluationController.evaluation.dependenceContinue}" required="true">  
-                                                <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.yes']}" itemValue="#{true}" />
-                                                <f:selectItem itemLabel="#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.no']}" itemValue="#{false}" /> 
+                                                <f:selectItem itemLabel="#{messages['yes']}" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="#{messages['formPregnantNo']}" itemValue="#{false}" /> 
                                                 <p:ajax event="change" update="@form" listener="#{evaluationController.save()}"/>
                                             </h:selectOneRadio> 
                                         </h:panelGrid>
@@ -119,22 +119,22 @@
                                     
                                     
                                     <p:panel id="panelYes" rendered="#{!evaluationController.evaluation.dependenceContinue and !empty evaluationController.evaluation.dependenceContinue}" >               
-                                        <p><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.p1']}</b></p>
+                                        <p><b>#{messages['alcoholYesDependence13']}</b></p>
 
-                                        <h4><b>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.panel.h4']}</b></h4>
+                                        <h4><b>#{messages['quantoVoceBebeBeberUsoSintAlcoolDependenciaPanelH4']}</b></h4>
 
                                         <h:form id="form" class="form-signup">
                                             <p:growl id="errorGrowl" sticky="true" redisplay="true" globalOnly="true"/>
 
                                             <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="10" id="questao1">                  
-                                                <p:inputText styleClass="form-control" id="email" value="#{evaluationController.user.email}" required="true" size="100" label="#{messages['email']}" validatorMessage="#{messages['email.wrong.format']}" disabled="#{userController.loggedIn}" >
+                                                <p:inputText styleClass="form-control" id="email" value="#{evaluationController.user.email}" required="true" size="100" label="#{messages['formEmail']}" validatorMessage="#{messages['emailWrongFormat']}" disabled="#{userController.loggedIn}" >
                                                     <!--<p:ajax update="loginMsg" event="blur" />-->
                                                     <f:validateLength maximum="50" />
                                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                                 </p:inputText>
-                                                <p:watermark for="email" value="#{messages['email']}" />
+                                                <p:watermark for="email" value="#{messages['formEmail']}" />
                                                 <p:message for="email" />
-                                                <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value ="#{messages['send']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
+                                                <p:commandButton id="saveBtn" styleClass="btngen btn btn-info" value ="#{messages['enviar']}" update="@form" actionListener="#{evaluationController.annualScreening()}" />
                                             </h:panelGrid>
 
                                         </h:form>
@@ -162,9 +162,9 @@
                                     </div>
 
                                 </h:form> 
-                                <h4>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.h4.2']}</h4>                        
-                                <p>#{messages['quanto.voce.bebe.beber.uso.sint.alcool.dependencia.p.1']}
-                                    <h:outputLink value="instrucoes-para-acessar-aplicativo.xhtml">#{messages['link']}</h:outputLink>.
+                                <h4>#{messages['intevencionOfferTitle']}</h4>                        
+                                <p>#{messages['quantoVoceBebeBeberUsoSintAlcoolRiscoP4']}
+                                    <h:outputLink value="instrucoes-para-acessar-aplicativo.xhtml">#{messages['intevencionOfferLink']}</h:outputLink>.
                                 </p>
                             </div><!-- end pmtext -->  
                         </div><!-- end page middle -->      

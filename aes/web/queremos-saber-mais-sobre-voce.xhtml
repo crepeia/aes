@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <f:view locale="#{languageController.locale}">
         <h:head>
-            <title>#{messages['satisfaction.3.title']}</title>
+            <title>#{messages['satisfaction3Title']}</title>
             <w:head_comum />
             <!-- Facebook Pixel Code to track our adverts -->
             <h:outputScript>
@@ -53,7 +53,7 @@
                     <div class="pagecontent">
                         <div id="pagetop">
                             <div id="hpagetop">
-                                <h1>#{messages['satisfaction.h1.1']}</h1> 
+                                <h1>#{messages['satisfaction3Title']}</h1> 
                             </div>    
 
                         </div>
@@ -61,9 +61,9 @@
                         <div id="pagemiddle">
                             <div id="pmtext">
 
-                                <h3>#{messages['satisfaction.3.h3.1']}</h3>
+                                <h3>#{messages['satisfaction3H31']}</h3>
 
-                                <p>#{messages['satisfaction.3.p.1']}</p>
+                                <p>#{messages['satisfaction3P1']}</p>
 
                                 <div id="satisfaction3evaluation">
 
@@ -74,27 +74,27 @@
 
                                             <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" id="satisfaction1">
                                                 <f:facet name="header">  
-                                                    #{messages['satisfaction.scale.q1']}
+                                                    #{messages['satisfactionScaleQ1']}
                                                 </f:facet>
                                                 <h:selectOneRadio id="satisfaction_1" value="#" required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.1']}">  
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1f']}" itemValue="f" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleQ1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleAlittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleSomewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleMostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleVerymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleQ1f']}" itemValue="f" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScalePreferNotAnswer']}" itemValue="g" />
                                                 </h:selectOneRadio> 
                                             </h:panelGrid>
 
                                             <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction2">
                                                 <f:facet name="header">  
-                                                    #{messages['satisfaction.scale.q2']}
+                                                    #{messages['satisfactionScaleQ2']}
                                                 </f:facet>
                                                 <h:selectOneRadio id="satisfaction_2" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.2']}">  
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.yes']}" itemValue="a" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.no']}" itemValue="b" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.maybe']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['yes']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['formPregnantNo']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleMaybe']}" itemValue="c" />
 
                                                 </h:selectOneRadio> 
                                             </h:panelGrid>
@@ -102,75 +102,75 @@
 
                                             <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction3">
                                                 <f:facet name="header">  
-                                                    #{messages['satisfaction.scale.3q']}
+                                                    #{messages['satisfactionScale3q']}
                                                 </f:facet>
                                                 <h:selectOneRadio id="satisfaction_3" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.r.3']}" itemValue="f" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleQ1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleAlittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleSomewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleMostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleVerymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleR3']}" itemValue="f" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScalePreferNotAnswer']}" itemValue="g" />
                                                 </h:selectOneRadio> 
                                             </h:panelGrid>
 
                                             <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction4">
                                                 <f:facet name="header">  
-                                                    #{messages['satisfaction.scale.4q']}
+                                                    #{messages['satisfactionScale4q']}
                                                 </f:facet>
                                                 <h:selectOneRadio id="satisfaction_4" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.r.4']}" itemValue="f" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleQ1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleAlittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleSomewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleMostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleVerymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleR4']}" itemValue="f" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScalePreferNotAnswer']}" itemValue="g" />
                                                 </h:selectOneRadio> 
                                             </h:panelGrid>
 
                                             <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction5">
                                                 <f:facet name="header">  
-                                                    #{messages['satisfaction.scale.5q']}
+                                                    #{messages['satisfactionScale5q']}
                                                 </f:facet>
                                                 <h:selectOneRadio id="satisfaction_5" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.r.5']}" itemValue="f" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="g" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleQ1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleAlittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleSomewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleMostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleVerymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleR5']}" itemValue="f" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScalePreferNotAnswer']}" itemValue="g" />
                                                 </h:selectOneRadio> 
                                             </h:panelGrid>
 
                                             <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="10" id="satisfaction6">
                                                 <f:facet name="header">  
-                                                    #{messages['satisfaction.scale.6q']}
+                                                    #{messages['satisfactionScale6q']}
                                                 </f:facet>
                                                 <h:selectOneRadio id="satisfaction_6" value="#"  required="true" layout="pageDirection" requiredMessage="#{messages['satisfaction.3.Message.3']}">  
-                                                         <f:selectItem itemLabel="#{messages['satisfaction.scale.q1a']}" itemValue="a" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.alittle']}" itemValue="b" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.somewhat']}" itemValue="c" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.mostly']}" itemValue="d" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.verymuch']}" itemValue="e" />
-                                                    <f:selectItem itemLabel="#{messages['satisfaction.scale.prefer.not.answer']}" itemValue="f" />
+                                                         <f:selectItem itemLabel="#{messages['satisfactionScaleQ1a']}" itemValue="a" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleAlittle']}" itemValue="b" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleSomewhat']}" itemValue="c" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleMostly']}" itemValue="d" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScaleVerymuch']}" itemValue="e" />
+                                                    <f:selectItem itemLabel="#{messages['satisfactionScalePreferNotAnswer']}" itemValue="f" />
                                                 </h:selectOneRadio> 
                                             </h:panelGrid>
                                             
                                             <h:panelGrid columns="1"  cellpadding="5" id="satisfaction_7">
                                         <f:facet name="header">  
-                                                    #{messages['satisfaction.scale.r.7']}                         
+                                                    #{messages['satisfactionScaleR7']}                         
                                         </f:facet>
                                         <p:inputTextarea rows="2" cols="70" value="#" id="campo1"/>                              
                                     </h:panelGrid> 
 
-                                            <h2>#{messages['satisfaction.3.h2.6']}</h2>    
+                                            <h2>#{messages['satisfaction3H26']}</h2>    
 
 
 
-                                            <p><h:outputText value="#{messages['satisfaction.3.outputtext.1']}"/></p>
+                                            <p><h:outputText value="#{messages['satisfaction3Outputtext1']}"/></p>
 
                                         </p:panel>
 
