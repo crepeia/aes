@@ -109,7 +109,7 @@ public class RecordController extends BaseController<Record> {
     public void saveLog() {
         try {
             logDAO.insertOrUpdate(dailyLog, getEntityManager());
-            FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("record.save"), null));
+            FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("recordSave"), null));
             if ((getUser().isFemale() && dailyLog.getDrinks() > 1) || (getUser().isMale() && dailyLog.getDrinks() > 2)) {
                 FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.limit"), null));
             }
@@ -218,14 +218,14 @@ public class RecordController extends BaseController<Record> {
             String template = new String(buffer, 0, input.read(buffer), StandardCharsets.US_ASCII);
 
             ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
-            template = template.replace("#dailyGoal#", bundle.getString("daily.goal") + String.valueOf(getRecord().getDailyGoal()));
-            template = template.replace("#weeklyGoal#", bundle.getString("weekly.goal") + String.valueOf(getRecord().getWeeklyGoal()));
+            template = template.replace("#dailyGoal#", bundle.getString("dailyGoal") + String.valueOf(getRecord().getDailyGoal()));
+            template = template.replace("#weeklyGoal#", bundle.getString("weeklyGoal") + String.valueOf(getRecord().getWeeklyGoal()));
             template = template.replace("#title#", bundle.getString("record0"));
-            template = template.replace("#header1#", bundle.getString("estrategia.dim.registro.elet.day"));
-            template = template.replace("#header2#", bundle.getString("estrategia.dim.registro.elet.doses"));
-            template = template.replace("#header3#", bundle.getString("estrategia.dim.registro.elet.context"));
-            template = template.replace("#header4#", bundle.getString("estrategia.dim.registro.elet.outcomes"));
-            template = template.replace("#header5#", bundle.getString("estrategia.dim.registro.elet.daily"));
+            template = template.replace("#header1#", bundle.getString("estrategiaDimRegistroEletDay"));
+            template = template.replace("#header2#", bundle.getString("estrategiaDimRegistroEletDoses"));
+            template = template.replace("#header3#", bundle.getString("estrategiaDimRegistroEletContext"));
+            template = template.replace("#header4#", bundle.getString("estrategiaDimRegistroEletOutcomes"));
+            template = template.replace("#header5#", bundle.getString("estrategiaDimRegistroEletDay"));
 
             List<DailyLog> logs = logDAO.listOrdered("record", getRecord(), "logDate", getEntityManager());
             for (DailyLog log : logs) {
@@ -319,6 +319,9 @@ public class RecordController extends BaseController<Record> {
     }
 
     public void setDate(Date date) {
+        if (date == null) {
+            date = new Date();
+        }
         this.date = date;
         this.localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }

@@ -335,12 +335,20 @@ public class User implements Serializable {
     public Boolean isReceiveEmails() {
         return receiveEmails;
     }
+    
+    public Boolean getReceiveEmails() {
+        return receiveEmails;
+    }
 
     public void setReceiveEmails(Boolean receiveEmails) {
         this.receiveEmails = receiveEmails;
     }
 
     public Boolean isAuthorizeData() {
+        return authorizeData;
+    }
+    
+    public Boolean getAuthorizeData() {
         return authorizeData;
     }
 

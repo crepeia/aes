@@ -38,7 +38,7 @@
     </context-param>
     <context-param>
         <param-name>recaptchaKey</param-name>
-        <param-value></param-value>
+        <param-value>6LfDt5wrAAAAAPDBsS0oIdaW8YIAsx4-MeLxRJWK</param-value>
     </context-param>
     <context-param>
         <param-name>messagesPath</param-name>

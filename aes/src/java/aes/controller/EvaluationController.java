@@ -68,7 +68,12 @@ public class EvaluationController extends BaseController<Evaluation> {
                     limit.add(Calendar.DATE, EvaluationController.DAYS_LIMIT);
                     Calendar eDate = Calendar.getInstance();
                     for (Evaluation e : evaluations) {
+                        if (e.getDateCreated() == null) {
+                            continue;
+                        }
+                        
                         eDate.setTime(e.getDateCreated());
+                        
                         if (eDate.after(limit)) {
                             evaluation = e;
                             limit.setTime(evaluation.getDateCreated());
@@ -269,7 +274,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             template = template.replace("#intro#", bundle.getString("plan.intro"));
             template = template.replace("#user#", getUser().getName());
             template = template.replace("#footer#",
-                    bundle.getString("title.1") + "<br/>"
+                    bundle.getString("title1") + "<br/>"
                     + bundle.getString("crepeia") + "<br/>"
                     + bundle.getString("ufjf"));
             PDFGenerator pdfGenerator = new PDFGenerator();
