@@ -1,24 +1,27 @@
 package aes.filter;
 
 import io.github.bucket4j.*;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter; // Importante para NetBeans/Java EE
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-// A anotação abaixo aplica o filtro para TODAS as rotas (/*)
 @WebFilter(filterName = "RateLimitFilter", urlPatterns = {"/*"})
 public class RateLimitFilter implements Filter {
 
-    private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
-  
-    private Bucket criarNovoBalde() {
+    // Protects memory by limiting cached users and expiring inactive ones
+    private final Cache<String, Bucket> cache = Caffeine.newBuilder()
+            .maximumSize(10_000) 
+            .expireAfterAccess(Duration.ofMinutes(5)) 
+            .build();
+
+    private Bucket createNewBucket() {
         Bandwidth sustainedLimit = Bandwidth.classic(600, Refill.greedy(600, Duration.ofMinutes(1)));
-//        Bandwidth burstLimit = Bandwidth.classic(150, Refill.greedy(150, Duration.ofSeconds(5)));
 
         return Bucket.builder()
                 .addLimit(sustainedLimit)
@@ -27,7 +30,6 @@ public class RateLimitFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        // Método executado quando o servidor sobe. Pode deixar vazio.
     }
 
     @Override
@@ -37,21 +39,28 @@ public class RateLimitFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        String ipCliente = req.getRemoteAddr();
-        Bucket bucket = cache.computeIfAbsent(ipCliente, k -> criarNovoBalde());
+        String uri = req.getRequestURI();
+        
+        // Skip rate limiting for static files to avoid wasting user tokens
+        if (uri.matches(".*\\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2)$")) {
+            chain.doFilter(request, response);
+            return; 
+        }
+        
+        // Use Session ID instead of IP to prevent blocking shared networks (CGNAT)
+        String clientKey = req.getSession(true).getId();
+
+        Bucket bucket = cache.get(clientKey, k -> createNewBucket());
 
         if (bucket.tryConsume(1)) {
-            // SUCESSO: Passa para o próximo passo (Controllers/REST)
             chain.doFilter(request, response);
         } else {
-            // FALHA: Retorna erro 429
             res.setStatus(429);
-            res.getWriter().write("Muitas requisicoes. Tente novamente mais tarde.");
+            res.getWriter().write("Too many requests. Please try again later.");
         }
     }
 
     @Override
     public void destroy() {
-        // Limpeza quando o servidor desliga
     }
 }

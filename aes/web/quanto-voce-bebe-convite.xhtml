@@ -138,14 +138,20 @@
                                                 <p:message for="options" />
                                                  -->
      
-                                                <div id="signupsubmit">
-                                                    <p:panelGrid columns="2" id="allowemail">
-                                                        <label for="chk1">#{messages['quanto.voce.bebe.convite.chk1']}</label>
-                                                        <p:selectBooleanCheckbox value=""/>
-                                                        <div id="signupp"><label for="chk2">#{messages['quanto.voce.bebe.convite.chk2']}
-                                                        <p:selectBooleanCheckbox value=""/></label>
-                                                        </div>
-                                                    </p:panelGrid>
+                                                <div>
+                                                    <h:selectBooleanCheckbox id="chkTermosUso" />
+                                                    <h:outputLabel for="chkTermosUso">
+                                                        #{messages['quanto.voce.bebe.convite.chk1']} 
+                                                        <a href="termos-de-uso.xhtml" target="_blank" style="text-decoration: underline;">(Document)</a>
+                                                    </h:outputLabel>
+                                                </div>
+
+                                                <div style="margin-top: 10px;">
+                                                    <h:selectBooleanCheckbox id="chkConsentimento" />
+                                                    <h:outputLabel for="chkConsentimento">
+                                                        #{messages['quanto.voce.bebe.convite.chk2']} 
+                                                        <a href="termo-consetimento.xhtml" target="_blank" style="text-decoration: underline;">(Document)</a>
+                                                    </h:outputLabel>
                                                 </div>
 
                                                 <div id="signupsubmit">			                                            
