@@ -478,7 +478,6 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
         return em;
     }
     
-    /*
     @GET
     @Path("countByUserAndChallenge/{userId}/{challengeId}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -486,11 +485,14 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             @PathParam("userId") Long userId,
             @PathParam("challengeId") Long challengeId) {
         try {
-            String userEmail = securityContext.getUserPrincipal().getName();
+            // Pega o ID do usuário que está dentro do token JWT (vem como String)
+            String principalId = securityContext.getUserPrincipal().getName();
 
-            // Verifica se o userId corresponde ao usuário logado;
+            // Busca o usuário no banco
             User user = em.find(User.class, userId);
-            if (user == null || !user.getEmail().equals(userEmail)) {
+
+            // Compara se o usuário não existe OU se o ID do banco é diferente do ID do token
+            if (user == null || !String.valueOf(user.getId()).equals(principalId)) {
                 return Response.status(Response.Status.FORBIDDEN).build();
             }
 
@@ -506,13 +508,11 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
-    
-    /*
+
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
     }
-    */
 }
