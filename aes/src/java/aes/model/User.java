@@ -107,6 +107,9 @@ public class User implements Serializable {
     @Column(name = "tutorial_seen", nullable = false)
     private Boolean tutorialSeen = false;
     
+    @Column(name = "advanced_data_consent")
+    private Boolean advancedDataConsent = false;
+    
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Evaluation> evaluations;
@@ -782,5 +785,16 @@ public class User implements Serializable {
 
     public void setTutorialSeen(Boolean tutorialSeen) {
         this.tutorialSeen = tutorialSeen;
+    }
+    
+    public Boolean getAdvancedDataConsent() {
+        if (advancedDataConsent == null) {
+            return false;
+        }
+        return advancedDataConsent;
+    }
+
+    public void setAdvancedDataConsent(Boolean advancedDataConsent) {
+        this.advancedDataConsent = advancedDataConsent;
     }
 }

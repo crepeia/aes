@@ -62,7 +62,7 @@ public class EmailHelper {
             contact.setUser(user);
         }
         contact.setSender(user.getEmail());
-        contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setRecipient(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setSubject("Contato via formulario - " + user.getEmail());
         contact.setContent(message);
         sendPlainTextEmail(contact, entityManager);
@@ -73,7 +73,7 @@ public class EmailHelper {
     public void sendPasswordRecoveryEmail(User user, EntityManager entityManager) throws MessagingException, SQLException {
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("passwordrecovery_subj");
         contact.setContent("passwordrecovery");
@@ -83,8 +83,8 @@ public class EmailHelper {
     public void sendDeleteAccountEmail(User user, String token, EntityManager entityManager) throws MessagingException, SQLException {
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
-        contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
+        contact.setRecipient(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setSubject("deleteaccount_subj");
         contact.setContent("deleteaccount");
         sendHTMLEmailDeleteAccount(contact, token, entityManager);            
@@ -96,8 +96,8 @@ public class EmailHelper {
         u.setEmail(email);
         u.setPreferedLanguage("pt");
         contact.setUser(u);
-        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
-        contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
+        contact.setRecipient(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setSubject("sendContactRequest_subj");
         contact.setContent("contactRequest");
         sendHTMLEmailContactRequest(contact, em, email);
@@ -109,7 +109,7 @@ public class EmailHelper {
         try {
             Contact contact = new Contact();
             contact.setUser(user);
-            contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+            contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
             contact.setRecipient(user.getEmail());
             contact.setSubject("plan_subj");
             contact.setContent("plan");
@@ -127,7 +127,7 @@ public class EmailHelper {
 
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("record_subj");
         contact.setContent("record");
@@ -141,7 +141,7 @@ public class EmailHelper {
 
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("start_subj");
         contact.setContent("start_msg");
@@ -152,7 +152,7 @@ public class EmailHelper {
     public void sendSignUpEmail(User user, EntityManager entityManager) throws MessagingException, MissingResourceException, SQLException {
         Contact contact = new Contact();
         contact.setUser(user);
-        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(user.getEmail());
         contact.setSubject("welcome_subj");
         contact.setContent("welcome");
@@ -161,7 +161,7 @@ public class EmailHelper {
 
     public void sendTestEmail(EntityManager entityManager) throws SQLException, MessagingException {
         Contact contact = new Contact();
-        contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
+        contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient("leomartinsjf@gmail.com");
         contact.setSubject("teste de envio");
         contact.setContent("teste de envio");
@@ -224,7 +224,7 @@ public class EmailHelper {
     public void sendTestEmail(String recipient) throws SQLException, MessagingException {
         String content = "Conteúdo - Teste";
         String subject = "Teste";
-        eMailSSL.send("alcoolesaude@gmail.com", recipient, subject, content, null, null);
+        eMailSSL.send("projeto.alcoolesaude@ufjf.br", recipient, subject, content, null, null);
         Logger.getLogger(ContactController.class.getName()).log(Level.INFO, "Email de teste enviado para:" + recipient);
 
     }
