@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -111,6 +112,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
         public Boolean app_signup;
         public Boolean registration_complete;
     };
+    
+    public class RecoverPasswordDTO {
+        public String email;
+    }
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -361,18 +366,27 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @PUT
     @Path("recover-password")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response recoverPassword(String userEmail) {
+    public Response recoverPassword(RecoverPasswordDTO dto) {
         try {
-            Logger.getLogger(UserFacadeREST.class.getName())
-                .log(Level.WARNING, "[INFO] FORGET_PASSWORD" + "actorUserEmail = {0}", userEmail);
+            String email = dto.email;
             
-            User u = userDAO.generateRecoverCode(userEmail, em);
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.WARNING, "[INFO] FORGET_PASSWORD" + "actorUserEmail = {0}", email);
+            
+            User u = userDAO.generateRecoverCode(email, em);
             emailHelper.sendPasswordRecoveryEmail(u, em);
             
             Logger.getLogger(UserFacadeREST.class.getName())
                 .log(Level.SEVERE, "[INFO] RECOVER_PASSWORD_SERVICE" + "actorUserId = {0}", u.getId());
 
             return Response.status(Response.Status.OK).build();
+        } catch (NoResultException e) {
+            String email = dto.email;
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.WARNING, "[SECURITY] FORGET_PASSWORD USER_NOT_FOUND" + "actorUserEmail = {0}", email);
+            
+            return Response.status(Response.Status.NOT_FOUND)
+                .build();
         } catch (SQLException | MessagingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();

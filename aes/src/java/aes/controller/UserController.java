@@ -377,6 +377,10 @@ public class UserController extends BaseController<User> {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void save(javax.faces.event.ActionEvent event) {
+        save();
+    }
 
     public int redirect(boolean redirectLogin, boolean redirectIndex, boolean redirectEvaluation) {
         if (redirectIndex) {
