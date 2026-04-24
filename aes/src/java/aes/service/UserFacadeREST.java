@@ -1134,4 +1134,83 @@ public class UserFacadeREST extends AbstractFacade<User> {
     protected EntityManager getEntityManager() {
         return em;
     }
+    
+    @PUT
+    @Path("/updateAdvancedDataConsent")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateAdvancedDataConsent(Map<String, Boolean> payload) {
+        try {
+            // 1. Validação de segurança: Garante que há um usuário autenticado
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            // 2. Pega o usuário logado com base no token (Evita vulnerabilidade de IDOR)
+            User loggedUser = securityHelper.getLoggedUser();
+
+            // 3. Valida se o payload (JSON) contém a chave "consent" e se não é nulo
+            if (payload == null || !payload.containsKey("consent") || payload.get("consent") == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING, "[SECURITY] DENIED_UPDATE_CONSENT reason=INVALID_DATA actorUserId={0}", loggedUser.getId());
+                
+                return Response.status(Response.Status.BAD_REQUEST)
+                               .entity("{\"error\":\"Campo 'consent' é obrigatório\"}")
+                               .build();
+            }
+
+            // 4. Atualiza o valor no objeto do usuário
+            boolean consent = payload.get("consent");
+            loggedUser.setAdvancedDataConsent(consent);
+
+            // 5. Salva no banco de dados usando o padrão do projeto (DAO)
+            userDAO.update(loggedUser, em);
+
+            // Retorna o usuário atualizado
+            return Response.ok(loggedUser).build();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao atualizar consentimento", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("{\"error\":\"Erro interno ao atualizar consentimento\"}")
+                           .build();
+        }
+    }
+    
+    @GET
+    @Path("/getAdvancedDataConsent")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAdvancedDataConsent() {
+        try {
+            // 1. Validação de segurança: Garante que há um usuário autenticado
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            // 2. Pega o usuário logado com base no token
+            User loggedUser = securityHelper.getLoggedUser();
+
+            // 3. Garante que nunca volte null (fallback para false)
+            boolean consent = false;
+            if (loggedUser.getAdvancedDataConsent() != null) {
+                consent = loggedUser.getAdvancedDataConsent();
+            }
+
+            // 4. Cria a resposta JSON estruturada
+            Map<String, Object> response = new HashMap<>();
+            response.put("consent", consent);
+
+            // Retorna status 200 OK com o JSON
+            return Response.ok(response).build();
+
+        } catch (Exception ex) {
+            // Tratamento de erro nos mesmos padrões do PUT
+            Logger.getLogger(UserFacadeREST.class.getName())
+                  .log(Level.SEVERE, "Erro ao consultar consentimento de dados avançados", ex);
+                  
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("{\"error\":\"Erro interno ao consultar consentimento\"}")
+                           .build();
+        }
+    }
 }
