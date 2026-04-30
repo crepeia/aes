@@ -52,6 +52,9 @@ public class Message implements Serializable {
     @ManyToOne
     @JoinColumn(name="chat_id")
     private Chat chat;
+    
+    @Column(name = "received")
+    private Boolean received;
 
     public Long getId() {
         return id;
@@ -99,6 +102,14 @@ public class Message implements Serializable {
 
     public void setNameFrom(String nameFrom) {
         this.nameFrom = nameFrom;
+    }
+    
+    public Boolean getReceived() {
+        return received != null ? received : true;
+    }
+    
+    public void setReceived(Boolean flag) {
+        this.received = flag;
     }
     
     @Override

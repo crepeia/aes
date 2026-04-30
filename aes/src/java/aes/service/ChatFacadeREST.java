@@ -118,7 +118,6 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
-
     }
     
     @PUT
@@ -167,6 +166,48 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(ChatFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
+        }
+    }
+    
+    @GET
+    @Path("unread/{chatId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    public Response getUnreadMessages(@PathParam("chatId") Long chatId) {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+            
+            User loggedUser = securityHelper.getLoggedUser();
+            
+            Chat chat = chatDAO.find(chatId, em);
+            
+            if (chat == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                    .entity("TARGET_OBJECT_NOT_FOUND")
+                    .build();
+            }
+            
+            List<Message> unreadMessages = em.createQuery(
+                "SELECT m FROM Message m " +
+                "WHERE m.chat.id = :chatId " +
+                "AND (m.received = false OR m.received IS NULL) " +
+                "AND m.idFrom <> :userId " +
+                "ORDER BY m.id ASC",
+                Message.class
+            )
+            .setParameter("chatId", chatId)
+            .setParameter("userId", String.valueOf(loggedUser.getId()))
+            .getResultList();
+
+            return Response.ok(unreadMessages).build();
+        } catch (Exception ex) {
+            Logger.getLogger(ChatFacadeREST.class.getName())
+                .log(Level.SEVERE, "Error type: ", ex);
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("INTERNAL_SERVER_ERROR")
+                .build();
         }
     }
     

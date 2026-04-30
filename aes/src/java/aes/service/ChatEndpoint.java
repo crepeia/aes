@@ -101,6 +101,51 @@ public class ChatEndpoint {
     private static Map<Session, Long> openChats = new ConcurrentHashMap<>();
 
     private static Map<Session, UserInfo> onlineUsers = new ConcurrentHashMap<>();
+    
+    // -----------------------------------------------
+    // PODE TIRAR DEPOIS
+    private static final ScheduledExecutorService instabilityScheduler = Executors.newSingleThreadScheduledExecutor();
+    private static boolean instabilityStarted = false;
+    
+    private void startInstabilitySimulation() {
+        if (instabilityStarted) return;
+        
+        instabilityStarted = true;
+        
+        instabilityScheduler.scheduleAtFixedRate(() -> {
+            try {
+                double probability = 0.99;
+                double random = Math.random();
+                
+                if (random > probability) {
+                    return;
+                }
+                
+                System.out.println("[TEST] Instability triggered!");
+                
+//                boolean dropConsultant = Math.random() < 0.5;
+                boolean dropConsultant = true;
+                
+                if (dropConsultant && !consultants.isEmpty()) {
+                    Session s = consultants.values().iterator().next();
+                    if (s != null && s.isOpen()) {
+                        System.out.println("[TEST] Closing CONSULTANT session: " + s.getId());
+                        s.close();
+                    }
+                } else if (!users.isEmpty()) {
+                    Session s = users.values().iterator().next();
+                    if (s != null && s.isOpen()) {
+                        System.out.println("[TEST] Closing USER session: " + s.getId());
+                        s.close();
+                    }
+                }
+            } catch (Exception e) {
+                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Instability error", e);
+            }
+        }, 1, 1, TimeUnit.MINUTES);
+    }
+    
+    // -----------------------------------------------
 
     class UserStatusChange{
         public String type;
@@ -327,6 +372,11 @@ public class ChatEndpoint {
                 
                 return;
             }
+            
+            // -----------------------------------------------
+            // PODE TIRAR DEPOIS
+            startInstabilitySimulation();
+            // -----------------------------------------------
             
             List<String> auth = (List<String>) config.getUserProperties().get("auth");
 
@@ -668,6 +718,8 @@ public class ChatEndpoint {
                 m.setNameFrom(node.get("nameFrom").asText());
                 m.setContent(node.get("content").asText());
                 m.setSentDate(format.parse(node.get("sentDate").asText()));
+                m.setReceived(false);
+                
                 c.setId(node.get("chat").asLong());
                 m.setChat(c);
 
@@ -683,6 +735,12 @@ public class ChatEndpoint {
                         }
                     }
                 }
+            } else if (messageType.equals("ping")) {
+                session.getBasicRemote().sendText("{\"type\":\"pong\"}");
+                System.out.println("[INFO] ping -> pong");
+            } else if (messageType.equals("ack")) {
+                Long messageId = node.get("messageId").asLong();
+                messageDAO.markAsReceived(messageId, em);
             }
         } catch (IOException | ParseException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
