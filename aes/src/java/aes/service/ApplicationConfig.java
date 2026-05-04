@@ -71,6 +71,7 @@ public class ApplicationConfig extends Application {
         resources.add(aes.service.QuestionFacadeREST.class);
         resources.add(aes.service.QuestionUserFacadeREST.class);
         resources.add(aes.service.RecordFacadeREST.class);
+        resources.add(aes.service.SensorFacadeREST.class);
         resources.add(aes.service.TipFacadeREST.class);
         resources.add(aes.service.TipUserFacadeREST.class);
         resources.add(aes.service.TitleUserFacadeREST.class);

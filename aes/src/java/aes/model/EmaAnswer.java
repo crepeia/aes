@@ -68,9 +68,19 @@ public class EmaAnswer implements Serializable {
     @Column(name = "period", length = 20)
     private String period;
 
+    /**
+     * Salvo no banco como hora local (America/Sao_Paulo / UTC-3).
+     * O frontend envia a hora local, o Jackson deserializa nesse fuso,
+     * e o banco armazena exatamente esse valor — sem conversão pra UTC.
+     * Assim, queries de DAY/MONTH/YEAR funcionam corretamente.
+     */
     @Column(name = "timestamp")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
+    @JsonFormat(
+        shape    = JsonFormat.Shape.STRING,
+        pattern  = "yyyy-MM-dd'T'HH:mm:ss.SSS",   // sem offset/Z no wire
+        timezone = "America/Sao_Paulo"             // <-- era "UTC", agora é horário local
+    )
     private Date timestamp;
 
     // Getters and Setters

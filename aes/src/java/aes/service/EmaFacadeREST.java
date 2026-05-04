@@ -16,8 +16,10 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -78,6 +80,35 @@ public class EmaFacadeREST extends AbstractFacade<EmaAnswer> {
             Logger.getLogger(EmaFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao gravar EMA", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                            .entity("{\"error\":\"Erro interno ao salvar os dados\"}")
+                           .build();
+        }
+    }
+    
+    @GET
+    @Path("/checkPeriod/{periodo}")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response checkEmaPeriod(@PathParam("periodo") String periodo) {
+        try {
+            // 1. Valida se o token foi enviado e é válido
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            // 2. Descobre quem é o utilizador
+            User loggedUser = securityHelper.getLoggedUser();
+
+            // 3. Pergunta ao DAO se ele já respondeu neste período
+            boolean jaRespondeu = emaAnswerDAO.checkSeJaRespondeu(loggedUser.getId(), periodo, em);
+
+            // 4. Retorna um JSON simples: {"respondeuNestePeriodo": true/false}
+            String jsonResponse = "{\"respondeuNestePeriodo\": " + jaRespondeu + "}";
+
+            return Response.ok(jsonResponse).build();
+
+        } catch (Exception ex) {
+            Logger.getLogger(EmaFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao verificar EMA", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("{\"error\":\"Erro interno ao verificar os dados\"}")
                            .build();
         }
     }
