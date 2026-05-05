@@ -55,10 +55,18 @@ public class MessageDAO extends GenericDAO<Message>{
             throw new RuntimeException("Erro ao verificar se existe mensagem no chat", e);
         }
     }
-
-    public void markAsReceived(Long messageId, EntityManager em) {
-        em.createQuery("UPDATE Message m SET m.received = true WHERE m.id = :id")
-            .setParameter("id", messageId)
-            .executeUpdate();
+    
+    public List<Message> getUnreadMessages(Long chatId, String userId, EntityManager em) {
+        return em.createQuery(
+            "SELECT m FROM Message m " +
+            "WHERE m.chat.id = :chatId " +
+            "AND (m.received = false) " +
+            "AND m.idFrom <> :userId " +
+            "ORDER BY m.id ASC",
+            Message.class
+        )
+        .setParameter("chatId", chatId)
+        .setParameter("userId", userId)
+        .getResultList();
     }
 }

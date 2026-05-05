@@ -24,12 +24,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -84,6 +86,9 @@ public class ChatEndpoint {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     
+    @EJB
+    private ChatMessageService chatMessageService;
+    
     private GenericDAO<Chat> daoBase;
     private UserDAO daoUser;
     private ChatDAO daoChat;
@@ -102,6 +107,10 @@ public class ChatEndpoint {
 
     private static Map<Session, UserInfo> onlineUsers = new ConcurrentHashMap<>();
     
+    private static Set<String> processedClientIds = ConcurrentHashMap.newKeySet();
+    
+    private static Map<Long, ScheduledExecutorService> reconnectTimers = new ConcurrentHashMap<>();
+    
     // -----------------------------------------------
     // PODE TIRAR DEPOIS
     private static final ScheduledExecutorService instabilityScheduler = Executors.newSingleThreadScheduledExecutor();
@@ -114,7 +123,8 @@ public class ChatEndpoint {
         
         instabilityScheduler.scheduleAtFixedRate(() -> {
             try {
-                double probability = 0.99;
+//                double probability = 0.99;
+                double probability = 0.01;
                 double random = Math.random();
                 
                 if (random > probability) {
@@ -164,6 +174,7 @@ public class ChatEndpoint {
         AVAILABLE,
         BUSY,
         IDLE,
+        TEMP_OFFLINE,
         OFFLINE,
     }
     
@@ -359,6 +370,39 @@ public class ChatEndpoint {
         } catch (IOException | EncodeException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void scheduleOfflineCheck(Long chatId) {
+        if (chatId == null) return;
+
+        if (reconnectTimers.containsKey(chatId)) {
+            reconnectTimers.get(chatId).shutdownNow();
+        }
+        
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        
+        scheduler.schedule(() -> {
+            try {
+                Session userSession = users.get(chatId);
+                
+                if (userSession == null) {
+                    System.out.println("[OFFLINE DEFINITIVO] chatId=" + chatId);
+                    
+                    for (Map.Entry<Session, UserInfo> entry : onlineUsers.entrySet()) {
+                        if (entry.getValue().chat.equals(chatId)) {
+                            setStatus(entry.getKey(), statusType.OFFLINE.toString());
+                            break;
+                        }
+                    }
+                    
+                    disconnectConsultantsFromUser(null, chatId);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 15, TimeUnit.SECONDS);
+        
+        reconnectTimers.put(chatId, scheduler);
     }
     
     // This method is responsible for creating the user's chat and populating the lists
@@ -593,7 +637,7 @@ public class ChatEndpoint {
     
     void disconnectConsultantsFromUser(Session userSession, Long chatId){
         try {
-            if (userSession == null || chatId == null) {
+            if (chatId == null) {
                 Logger.getLogger(ChatEndpoint.class.getName())
                     .log(Level.WARNING,
                         "[WARNING] NULL_PARAM reason=NULL_SESSION_OR_CHATID");
@@ -686,30 +730,66 @@ public class ChatEndpoint {
                 } else {
                     Logger.getLogger(ChatEndpoint.class.getName())
                         .log(Level.INFO, "It must be a consultant accessing an offline user on the chatId={0}", chatId);
+                }   
+            } 
+            
+            else if (messageType.equals("disconnect")) {
+                Long chatId = openChats.get(session);
+                
+                if (chatId == null) {
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.WARNING, "[WARNING] DISCONNECT_WITHOUT_CHAT sessionId={0}", session.getId());
+                    return;
                 }
                 
-            } else if (messageType.equals("disconnect")) {
-                consultantDisconnectTimeout(openChats.get(session));
-                openChats.remove(session);
-                
-            } else if (messageType.equals("statusAvailable")) {
+                consultantDisconnectTimeout(chatId);
+                openChats.remove(session);    
+            }
+            
+            else if (messageType.equals("statusAvailable")) {
                 Long chatId = node.get("chatId").asLong();
+                
+                if (reconnectTimers.containsKey(chatId)) {
+                    reconnectTimers.get(chatId).shutdownNow();
+                    reconnectTimers.remove(chatId);
+                }
+                
                 setStatus(users.get(chatId), statusType.AVAILABLE.toString());
                 openChats.put(session, chatId);
-
-            } else if (messageType.equals("statusOffline")){
+            }
+            
+            else if (messageType.equals("statusOffline")){
                 Long chatId = node.get("chatId").asLong();
+                
+                System.out.println("[TEMP OFFLINE] chatId=" + chatId);
+                
                 setStatus(users.get(chatId), statusType.OFFLINE.toString());
-                consultantConnectTimeout(chatId);
+                
                 openChats.remove(session);
-                disconnectConsultantsFromUser(session, chatId);
                 
-            } else if (messageType.equals("statusIdle")){
+                scheduleOfflineCheck(chatId);
+            } 
+            
+            else if (messageType.equals("statusIdle")){
                 Long chatId = node.get("chatId").asLong();
-                setStatus(users.get(chatId), statusType.IDLE.toString());
-                disconnectConsultantsFromUser(session, chatId);
+                setStatus(users.get(chatId), statusType.IDLE.toString()); 
+            }
+            
+            else if(messageType.equals("message")) {
+                String clientId = node.get("clientId").asText();
                 
-            }else if(messageType.equals("message")) {
+                if (processedClientIds.contains(clientId)) {
+                    ObjectNode ack = om.createObjectNode();
+                    ack.put("type", "ack_message");
+                    ack.put("clientId", clientId);
+
+                    session.getBasicRemote().sendText(ack.toString());
+
+                    System.out.println("[ACK] Duplicate clientId, ack resent: " + clientId);
+                    return;
+                }
+                processedClientIds.add(clientId);
+                
                 Message m = new Message();
                 Chat c = new Chat();
                 
@@ -735,12 +815,23 @@ public class ChatEndpoint {
                         }
                     }
                 }
-            } else if (messageType.equals("ping")) {
+                
+                ObjectNode ack = om.createObjectNode();
+                ack.put("type", "ack_message");
+                ack.put("clientId", clientId);
+                ack.put("serverId", m.getId());
+
+                session.getBasicRemote().sendText(ack.toString());
+            }
+            
+            else if (messageType.equals("ping")) {
                 session.getBasicRemote().sendText("{\"type\":\"pong\"}");
                 System.out.println("[INFO] ping -> pong");
-            } else if (messageType.equals("ack")) {
+            }
+            
+            else if (messageType.equals("ack")) {
                 Long messageId = node.get("messageId").asLong();
-                messageDAO.markAsReceived(messageId, em);
+                chatMessageService.markAsReceived(messageId);
             }
         } catch (IOException | ParseException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
