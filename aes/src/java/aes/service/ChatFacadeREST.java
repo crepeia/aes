@@ -184,7 +184,7 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
         Logger logger = Logger.getLogger(ChatFacadeREST.class.getName());
         
         try {
-            Response r = securityHelper.requireAuthenticatedUser();
+            Response r = securityHelper.requireAnyAuthenticated();
             if (r != null) return r;
             
             User loggedUser = securityHelper.getLoggedUser();

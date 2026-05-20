@@ -123,8 +123,8 @@ public class ChatEndpoint {
         
         instabilityScheduler.scheduleAtFixedRate(() -> {
             try {
-//                double probability = 0.99;
-                double probability = 0.01;
+//                double probability = 0.80;
+                double probability = 0.001;
                 double random = Math.random();
                 
                 if (random > probability) {
@@ -133,8 +133,7 @@ public class ChatEndpoint {
                 
                 System.out.println("[TEST] Instability triggered!");
                 
-//                boolean dropConsultant = Math.random() < 0.5;
-                boolean dropConsultant = true;
+                boolean dropConsultant = Math.random() < 0.5;
                 
                 if (dropConsultant && !consultants.isEmpty()) {
                     Session s = consultants.values().iterator().next();
