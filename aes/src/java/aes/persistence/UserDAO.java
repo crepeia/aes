@@ -132,14 +132,18 @@ public class UserDAO extends GenericDAO<User>{
     }
 
     public User generateRecoverCode(String email, EntityManager entityManager) throws SQLException {
-        User u = (User) entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
+        List<User> result = entityManager.createQuery("SELECT u from User u WHERE u.email = :email")
                 .setParameter("email", email)
-                .getSingleResult();
-        
-        u.setRecoverCode(GenerateCode.generate());
+                .getResultList();
 
+        if (result.isEmpty()) {
+            throw new SQLException("Usuário não encontrado para o email: " + email);
+        }
+
+        User u = result.get(0);
+        u.setRecoverCode(GenerateCode.generate());
         super.insertOrUpdate(u, entityManager);
-        
+
         return u;
     }
     

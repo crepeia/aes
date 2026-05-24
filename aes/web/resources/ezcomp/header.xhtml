@@ -83,23 +83,114 @@
                 </div>
             </div>
         </div>
-        <div class="privacy-dialogs">
-            <p:dialog style="background:rgba(0,0,0,0.7);" width="100%" height="100vh" visible="#{userController.showCookiesAlert()}" closable="false" draggable="false" resizable="false"></p:dialog>
-            <h:form>
-                <p:dialog width="50%" height="8vh" visible="#{userController.showCookiesAlert()}" header="Alerta sobre cookies" closable="false" draggable="false" resizable="false" modal="true">
-                    <h:outputText value="
+        <h:form id="cookieForm" rendered="#{userController.showCookiesAlert()}">
+            <div id="cookie-banner">
+                <div id="cookie-content">
+                    <span id="cookie-icon">🍪</span>
+                    <p id="cookie-text">
                         Para proporcionar a melhor experiência de uso, nossos sites usam cookies.
-                        Ao clicar em 'Aceitar', você concorda com o uso de cookies. 
-                        Para saber mais sobre nossa política de cookies, clique em 'Saiba mais'
-                        ">
-                    </h:outputText>
-                    <h:panelGrid columns="3">
-                        <p:commandButton value="Aceitar" actionListener="#{userController.acceptCookies()}"></p:commandButton>
-                        <p:commandButton value="Sair" actionListener="#{userController.exitCookies()}"></p:commandButton>
-                        <p:commandButton value="Saiba mais" actionListener="#{userController.knowMoreCookies()}"></p:commandButton>
-                    </h:panelGrid>
-                </p:dialog>
-            </h:form>
-        </div>
+                        Ao clicar em <strong>Aceitar</strong>, você concorda com o uso de cookies.
+                    </p>
+                    <div id="cookie-buttons">
+                        <p:commandButton 
+                            value="Saiba mais" 
+                            styleClass="cookie-btn cookie-btn-secondary"
+                            actionListener="#{userController.knowMoreCookies()}" />
+                        <p:commandButton 
+                            value="Recusar" 
+                            styleClass="cookie-btn cookie-btn-secondary"
+                            actionListener="#{userController.exitCookies()}" />
+                        <p:commandButton 
+                            value="Aceitar" 
+                            styleClass="cookie-btn cookie-btn-primary"
+                            actionListener="#{userController.acceptCookies()}" />
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <style>
+            #cookie-banner {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: #fff;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+                z-index: 9999;
+                padding: 18px 26px;
+                border-top: 1px solid #e0e0e0;
+            }
+
+            #cookie-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 12px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            #cookie-icon {
+                font-size: 24px;
+                flex-shrink: 0;
+            }
+
+            #cookie-text {
+                flex: 1;
+                margin: 0;
+                font-size: 15px;
+                color: #333;
+                min-width: 200px;
+            }
+
+            #cookie-buttons {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .cookie-btn {
+                border-radius: 4px !important;
+                font-size: 14px !important;
+                padding: 8px 16px !important;
+                cursor: pointer !important;
+                border: none !important;
+                font-weight: 500 !important;
+            }
+
+            .cookie-btn-primary {
+                background-color: #1a73e8 !important;
+                color: #fff !important;
+            }
+
+            .cookie-btn-primary:hover {
+                background-color: #1557b0 !important;
+            }
+
+            .cookie-btn-secondary {
+                background-color: #f1f3f4 !important;
+                color: #333 !important;
+            }
+
+            .cookie-btn-secondary:hover {
+                background-color: #e0e0e0 !important;
+            }
+
+            /* Mobile */
+            @media (max-width: 600px) {
+                #cookie-content {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                #cookie-buttons {
+                    width: 100%;
+                    justify-content: flex-end;
+                }
+            }
+</style>
     </cc:implementation>
 </html>
