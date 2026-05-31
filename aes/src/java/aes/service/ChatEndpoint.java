@@ -110,51 +110,6 @@ public class ChatEndpoint {
     private static Set<String> processedClientIds = ConcurrentHashMap.newKeySet();
     
     private static Map<Long, ScheduledExecutorService> reconnectTimers = new ConcurrentHashMap<>();
-    
-    // -----------------------------------------------
-    // PODE TIRAR DEPOIS
-    private static final ScheduledExecutorService instabilityScheduler = Executors.newSingleThreadScheduledExecutor();
-    private static boolean instabilityStarted = false;
-    
-    private void startInstabilitySimulation() {
-        if (instabilityStarted) return;
-        
-        instabilityStarted = true;
-        
-        instabilityScheduler.scheduleAtFixedRate(() -> {
-            try {
-//                double probability = 0.80;
-                double probability = 0.001;
-                double random = Math.random();
-                
-                if (random > probability) {
-                    return;
-                }
-                
-                System.out.println("[TEST] Instability triggered!");
-                
-                boolean dropConsultant = Math.random() < 0.5;
-                
-                if (dropConsultant && !consultants.isEmpty()) {
-                    Session s = consultants.values().iterator().next();
-                    if (s != null && s.isOpen()) {
-                        System.out.println("[TEST] Closing CONSULTANT session: " + s.getId());
-                        s.close();
-                    }
-                } else if (!users.isEmpty()) {
-                    Session s = users.values().iterator().next();
-                    if (s != null && s.isOpen()) {
-                        System.out.println("[TEST] Closing USER session: " + s.getId());
-                        s.close();
-                    }
-                }
-            } catch (Exception e) {
-                Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Instability error", e);
-            }
-        }, 1, 1, TimeUnit.MINUTES);
-    }
-    
-    // -----------------------------------------------
 
     class UserStatusChange{
         public String type;
@@ -415,11 +370,6 @@ public class ChatEndpoint {
                 
                 return;
             }
-            
-            // -----------------------------------------------
-            // PODE TIRAR DEPOIS
-            startInstabilitySimulation();
-            // -----------------------------------------------
             
             List<String> auth = (List<String>) config.getUserProperties().get("auth");
 
