@@ -364,16 +364,18 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public Response recoverPassword(String userEmail) {
         try {
             Logger.getLogger(UserFacadeREST.class.getName())
-                .log(Level.WARNING, "[INFO] FORGET_PASSWORD" + "actorUserEmail = {0}", userEmail);
-            
+                .log(Level.WARNING, "[INFO] FORGET_PASSWORD actorUserEmail = {0}", userEmail);
+
             User u = userDAO.generateRecoverCode(userEmail, em);
             emailHelper.sendPasswordRecoveryEmail(u, em);
-            
-            Logger.getLogger(UserFacadeREST.class.getName())
-                .log(Level.SEVERE, "[INFO] RECOVER_PASSWORD_SERVICE" + "actorUserId = {0}", u.getId());
 
             return Response.status(Response.Status.OK).build();
-        } catch (SQLException | MessagingException ex) {
+        } catch (SQLException ex) {
+            // Usuário não encontrado — retorna 404 em vez de 500
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.WARNING, "Email não encontrado: {0}", userEmail);
+            return Response.status(Response.Status.NOT_FOUND).entity("TARGET_USER_NOT_FOUND").build();
+        } catch (MessagingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
         }
