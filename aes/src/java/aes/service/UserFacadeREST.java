@@ -1077,24 +1077,20 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
 
     @PUT
-    @Path("/updateTutorialSeen/{id}/{status}")
+    @Path("/updateTutorialSeen")
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTutorialSeen(@PathParam("id") Long id, @PathParam("status") Boolean status) {
+    public Response updateTutorialSeen() {
         try {
-            User user = em.find(User.class, id);
-            if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
-            }
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-            // Define se viu (true) ou não (false)
-            user.setTutorialSeen(status);
+            User loggedUser = securityHelper.getLoggedUser();
 
-            // Usando o padrão do projeto para salvar no banco (sem precisar do userTransaction)
-            userDAO.update(user, em);
+            loggedUser.setTutorialSeen(true);
+            userDAO.update(loggedUser, em);
 
-            // Retorna json confirmação
-            return Response.ok("{\"tutorial_seen\": " + status + "}").build();
+            return Response.ok("{\"tutorial_seen\": true}").build();
 
         } catch (Exception e) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao atualizar status do tutorial", e);
@@ -1103,29 +1099,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
 
     @GET
-    @Path("/getTutorialSeen/{id}")
+    @Path("/getTutorialSeen")
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTutorialSeen(@PathParam("id") Long id) {
+    public Response getTutorialSeen() {
         try {
-            User user = em.find(User.class, id);
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
 
-            if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                             .entity("User not found")
-                             .build();
-            }
+            User loggedUser = securityHelper.getLoggedUser();
 
-            // Pega o status (o getter já trata nulos como false)
-            Boolean seen = user.getTutorialSeen();
+            Boolean seen = loggedUser.getTutorialSeen();
 
-            // Retorna um JSON simples
             return Response.ok("{\"tutorial_seen\": " + seen + "}").build();
 
         } catch (Exception e) {
             Logger.getLogger(UserFacadeREST.class.getName())
                   .log(Level.SEVERE, "Erro ao buscar status do tutorial", e);
-
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                           .entity("Erro ao processar requisição: " + e.getMessage())
                           .build();
