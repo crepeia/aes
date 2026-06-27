@@ -38,12 +38,14 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -851,18 +853,24 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listAllUsers() {
+    public Response listAllUsers(
+        @QueryParam("page") @DefaultValue("0") int page,
+        @QueryParam("size") @DefaultValue("20") int size,
+        @QueryParam("search") @DefaultValue("") String search
+    ) {
         try {
             Response r = securityHelper.requireAuthenticatedUser();
             if (r != null) return r;
 
             User loggedUser = securityHelper.getLoggedUser();
-            
+
             r = securityHelper.requireAdmin(loggedUser);
             if (r != null) return r;
-            
-            List<User> users = userDAO.listNotNull("email", em);
-            
+
+            List<User> users = userDAO.listForAdminPaged(search, page, size, em);
+            long total = userDAO.countForAdmin(search, em);
+            long totalPages = (long) Math.ceil((double) total / size);
+
             List<Map<String, Object>> usersDTO = users.stream()
                 .map(u -> {
                     Map<String, Object> map = new HashMap<>();
@@ -874,8 +882,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     return map;
                 })
                 .collect(Collectors.toList());
-            
-            return Response.ok(usersDTO).build();
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("content", usersDTO);
+            response.put("totalElements", total);
+            response.put("totalPages", totalPages);
+            response.put("currentPage", page);
+
+            return Response.ok(response).build();
         } catch (SQLException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
