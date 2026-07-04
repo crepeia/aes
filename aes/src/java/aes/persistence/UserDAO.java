@@ -23,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
@@ -239,5 +240,42 @@ public class UserDAO extends GenericDAO<User>{
     public User findUserByToken(String token, EntityManager entityManager) {
         return (User) entityManager.createQuery(
             "SELECT a.user FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
+    }
+    
+    public List<User> listForAdminPaged(String search, int page, int size, EntityManager entityManager) throws SQLException {
+        String jpql = "SELECT u FROM User u WHERE u.email IS NOT NULL";
+        
+        if (search != null && !search.trim().isEmpty()) {
+            jpql += " AND (LOWER(u.email) LIKE :search OR CAST(u.id AS string) LIKE :search)";
+        }
+        
+        jpql += " ORDER BY u.id ASC";
+        
+        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+        
+        if (search != null && !search.trim().isEmpty()) {
+            query.setParameter("search", "%" + search.trim().toLowerCase() + "%");
+        }
+        
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
+        
+        return query.getResultList();
+    }
+    
+    public long countForAdmin(String search, EntityManager entityManager) throws SQLException {
+        String jpql = "SELECT COUNT(u) FROM User u WHERE u.email IS NOT NULL";
+    
+        if (search != null && !search.trim().isEmpty()) {
+            jpql += " AND (LOWER(u.email) LIKE :search OR CAST(u.id AS string) LIKE :search)";
+        }
+
+        TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+
+        if (search != null && !search.trim().isEmpty()) {
+            query.setParameter("search", "%" + search.trim().toLowerCase() + "%");
+        }
+
+        return query.getSingleResult();
     }
 }
