@@ -60,6 +60,7 @@ public class ApplicationConfig extends Application {
         resources.add(aes.service.ChatbotResource.class);
         resources.add(aes.service.ContactFacadeREST.class);
         resources.add(aes.service.DailyLogFacadeREST.class);
+        resources.add(aes.service.EmaFacadeREST.class);
         resources.add(aes.service.EvaluationFacadeREST.class);
         resources.add(aes.service.ItemFacadeREST.class);
         resources.add(aes.service.MedalUserFacadeREST.class);
@@ -70,6 +71,7 @@ public class ApplicationConfig extends Application {
         resources.add(aes.service.QuestionFacadeREST.class);
         resources.add(aes.service.QuestionUserFacadeREST.class);
         resources.add(aes.service.RecordFacadeREST.class);
+        resources.add(aes.service.SensorFacadeREST.class);
         resources.add(aes.service.TipFacadeREST.class);
         resources.add(aes.service.TipUserFacadeREST.class);
         resources.add(aes.service.TitleUserFacadeREST.class);
