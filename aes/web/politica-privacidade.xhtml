@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:w="http://xmlns.jcp.org/jsf/composite/ezcomp"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <f:view locale="#{languageController.locale}">
+        <h:head>
+            <title>#{messages['privacidadeTitlepage']}</title>
+            <w:head_comum />
+            <!-- header -->
+            <!-- Página pública: não exige login, igual a contato.xhtml -->
+            <w:header loginRequired="false"/>
+            <w:topmenu />
+        </h:head>
+
+        <h:body>
+
+            <div id="corpo">
+                <div class="main">
+                    <div class="pagecontent">
+                        <div id="mainbottom">
+                            <h1>#{messages['privacidadeH1']}</h1>
+
+                            <div class="privacidade-conteudo" style="text-align: left; max-width: 900px; margin: 0 auto;">
+
+                                <p>
+                                    <h:outputText value="#{messages['privacidadeIntro']}" escape="false"/>
+                                </p>
+                                <ul>
+                                    <li>#{messages['privacidadeParecerNumero']}</li>
+                                    <li>#{messages['privacidadeCaae']}</li>
+                                    <li>#{messages['privacidadeSituacao']}</li>
+                                </ul>
+
+                                <h2>#{messages['privacidadeDadosH2']}</h2>
+                                <ul>
+                                    <li><h:outputText value="#{messages['privacidadeDadosLocalizacao']}" escape="false"/></li>
+                                    <li><h:outputText value="#{messages['privacidadeDadosAcelerometro']}" escape="false"/></li>
+                                    <li><h:outputText value="#{messages['privacidadeDadosEma']}" escape="false"/></li>
+                                </ul>
+                                <p>#{messages['privacidadeDadosNota']}</p>
+
+                                <h2>#{messages['privacidadeFinalidadeH2']}</h2>
+                                <p>#{messages['privacidadeFinalidadeTexto']}</p>
+
+                                <h2>#{messages['privacidadeConsentimentoH2']}</h2>
+                                <p>#{messages['privacidadeConsentimentoTexto']}</p>
+
+                                <h2>#{messages['privacidadeArmazenamentoH2']}</h2>
+                                <ul>
+                                    <li>#{messages['privacidadeArmazenamentoItem1']}</li>
+                                    <li>#{messages['privacidadeArmazenamentoItem2']}</li>
+                                    <li>#{messages['privacidadeArmazenamentoItem3']}</li>
+                                    <li>#{messages['privacidadeArmazenamentoItem4']}</li>
+                                    <li>#{messages['privacidadeArmazenamentoItem5']}</li>
+                                </ul>
+
+                                <h2>#{messages['privacidadeRetencaoH2']}</h2>
+                                <p>#{messages['privacidadeRetencaoTexto']}</p>
+
+                                <h2>#{messages['privacidadeDireitosH2']}</h2>
+                                <ul>
+                                    <li>#{messages['privacidadeDireitosItem1']}</li>
+                                    <li>#{messages['privacidadeDireitosItem2']}</li>
+                                    <li>#{messages['privacidadeDireitosItem3']}</li>
+                                </ul>
+
+                                <h2>#{messages['privacidadeContatoH2']}</h2>
+                                <p>
+                                    #{messages['privacidadeContatoTexto']}
+                                    <br/>
+                                    #{messages['privacidadeContatoEmailLabel']}
+                                    <a href="mailto:jorge.carvalho@estudante.ufjf.br">jorge.carvalho@estudante.ufjf.br</a>
+                                </p>
+
+                                <p style="margin-top: 30px; color: #888; font-size: 0.9em;">
+                                    #{messages['privacidadeAtualizacao']}
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end.corpo -->
+
+            <!--Footer -->
+            <w:footer />
+        </h:body>
+    </f:view>
+</html>
