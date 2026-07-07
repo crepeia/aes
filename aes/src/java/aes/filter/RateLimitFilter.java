@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
 
-@WebFilter(filterName = "RateLimitFilter", urlPatterns = {"/*"})
+//@WebFilter(filterName = "RateLimitFilter", urlPatterns = {"/*"})
 public class RateLimitFilter implements Filter {
 
     // Protects memory by limiting cached users and expiring inactive ones
