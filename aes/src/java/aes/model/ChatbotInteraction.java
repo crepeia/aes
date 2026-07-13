@@ -47,46 +47,33 @@ public class ChatbotInteraction implements Serializable {
     private Message messageConsultor;
     
     @Lob
-    @Column(name = "resposta_1", columnDefinition = "TEXT")
-    private String resposta1;
+    @Column(name = "response_1", columnDefinition = "TEXT")
+    private String response1;
 
     @Lob
-    @Column(name = "resposta_2", columnDefinition = "TEXT")
-    private String resposta2;
+    @Column(name = "response_2", columnDefinition = "TEXT")
+    private String response2;
 
     @Lob
-    @Column(name = "resposta_3", columnDefinition = "TEXT")
-    private String resposta3;
+    @Column(name = "response_3", columnDefinition = "TEXT")
+    private String response3;
 
-    @Column(name = "consultor_clicou_resposta_1", nullable = false)
-    private Boolean consultorClicouResposta1 = false;
+    @Column(name = "consultant_clicked_response_1", nullable = false)
+    private Boolean consultantClickedResponse1 = false;
 
-    @Column(name = "consultor_clicou_resposta_2", nullable = false)
-    private Boolean consultorClicouResposta2 = false;
+    @Column(name = "consultant_clicked_response_2", nullable = false)
+    private Boolean consultantClickedResponse2 = false;
 
-    @Column(name = "consultor_clicou_resposta_3", nullable = false)
-    private Boolean consultorClicouResposta3 = false;
-
-    @Column(name = "consultor_editou_resposta_1", nullable = false)
-    private Boolean consultorEditouResposta1 = false;
-
-    @Column(name = "consultor_editou_resposta_2", nullable = false)
-    private Boolean consultorEditouResposta2 = false;
-
-    @Column(name = "consultor_editou_resposta_3", nullable = false)
-    private Boolean consultorEditouResposta3 = false;
-
-    // Opcional: qual das 3 serviu de base para o envio (1, 2, 3 ou null)
-    @Column(name = "resposta_escolhida")
-    private Integer respostaEscolhida;
+    @Column(name = "consultant_clicked_response_3", nullable = false)
+    private Boolean consultantClickedResponse3 = false;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Column(name = "data_geracao", nullable = false)
-    private Date dataGeracao;
+    @Column(name = "date_request", nullable = false)
+    private Date date_request;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Column(name = "data_envio")
-    private Date dataEnvio;
+    @Column(name = "date_response")
+    private Date date_response;
 
     public ChatbotInteraction() {
     }
@@ -123,99 +110,67 @@ public class ChatbotInteraction implements Serializable {
         this.messageConsultor = messageConsultor;
     }
 
-    public String getResposta1() {
-        return resposta1;
+    public String getResponse1() {
+        return response1;
     }
 
-    public void setResposta1(String resposta1) {
-        this.resposta1 = resposta1;
+    public void setResponse1(String response1) {
+        this.response1 = response1;
     }
 
-    public String getResposta2() {
-        return resposta2;
+    public String getResponse2() {
+        return response2;
     }
 
-    public void setResposta2(String resposta2) {
-        this.resposta2 = resposta2;
+    public void setResponse2(String response2) {
+        this.response2 = response2;
     }
 
-    public String getResposta3() {
-        return resposta3;
+    public String getResponse3() {
+        return response3;
     }
 
-    public void setResposta3(String resposta3) {
-        this.resposta3 = resposta3;
+    public void setResponse3(String response3) {
+        this.response3 = response3;
     }
 
-    public Boolean getConsultorClicouResposta1() {
-        return consultorClicouResposta1;
+    public Boolean getConsultantClickedResponse1() {
+        return consultantClickedResponse1;
     }
 
-    public void setConsultorClicouResposta1(Boolean v) {
-        this.consultorClicouResposta1 = v;
+    public void setConsultantClickedResponse1(Boolean consultantClickedResponse1) {
+        this.consultantClickedResponse1 = consultantClickedResponse1;
     }
 
-    public Boolean getConsultorClicouResposta2() {
-        return consultorClicouResposta2;
+    public Boolean getConsultantClickedResponse2() {
+        return consultantClickedResponse2;
     }
 
-    public void setConsultorClicouResposta2(Boolean v) {
-        this.consultorClicouResposta2 = v;
+    public void setConsultantClickedResponse2(Boolean consultantClickedResponse2) {
+        this.consultantClickedResponse2 = consultantClickedResponse2;
     }
 
-    public Boolean getConsultorClicouResposta3() {
-        return consultorClicouResposta3;
+    public Boolean getConsultantClickedResponse3() {
+        return consultantClickedResponse3;
     }
 
-    public void setConsultorClicouResposta3(Boolean v) {
-        this.consultorClicouResposta3 = v;
+    public void setConsultantClickedResponse3(Boolean consultantClickedResponse3) {
+        this.consultantClickedResponse3 = consultantClickedResponse3;
     }
 
-    public Boolean getConsultorEditouResposta1() {
-        return consultorEditouResposta1;
+    public Date getDate_request() {
+        return date_request;
     }
 
-    public void setConsultorEditouResposta1(Boolean v) {
-        this.consultorEditouResposta1 = v;
+    public void setDate_request(Date date_request) {
+        this.date_request = date_request;
     }
 
-    public Boolean getConsultorEditouResposta2() {
-        return consultorEditouResposta2;
+    public Date getDate_response() {
+        return date_response;
     }
 
-    public void setConsultorEditouResposta2(Boolean v) {
-        this.consultorEditouResposta2 = v;
-    }
-
-    public Boolean getConsultorEditouResposta3() {
-        return consultorEditouResposta3;
-    }
-
-    public void setConsultorEditouResposta3(Boolean v) {
-        this.consultorEditouResposta3 = v;
-    }
-
-    public Integer getRespostaEscolhida() {
-        return respostaEscolhida;
-    }
-
-    public void setRespostaEscolhida(Integer respostaEscolhida) {
-        this.respostaEscolhida = respostaEscolhida;
-    }
-
-    public Date getDataGeracao() {
-        return dataGeracao;
-    }
-
-    public void setDataGeracao(Date dataGeracao) {
-        this.dataGeracao = dataGeracao;
-    }
-
-    public Date getDataEnvio() {
-        return dataEnvio;
-    }
-
-    public void setDataEnvio(Date dataEnvio) {
-        this.dataEnvio = dataEnvio;
+    public void setDate_response(Date date_response) {
+        this.date_response = date_response;
     }
 }
