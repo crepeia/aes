@@ -52,11 +52,7 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     @PostConstruct
     public void init() {
-        try {
-            daoBase = new GenericDAO<Evaluation>(Evaluation.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<Evaluation>(Evaluation.class);
     }
 
     public Evaluation getEvaluation() {

@@ -43,11 +43,7 @@ public class MobileOptionsController extends BaseController<MobileOptions> {
     public void init() {
         mobileOptions = new MobileOptions();
         expoNotification = new ExpoNotification();
-        try {
-            daoBase = new GenericDAO<>(MobileOptions.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<>(MobileOptions.class);
     }
     
     public void sendMobileTips(){

@@ -40,12 +40,8 @@ public class SatisfactionController extends BaseController<Satisfaction> {
         FacesContext context = FacesContext.getCurrentInstance();
         Map<String, String> params = context.getExternalContext().getRequestParameterMap(); 
         id = params.get("hid") != null ? Long.parseLong(params.get("hid")) : 0;
-        try {
-            daoBase = new GenericDAO<Satisfaction>(Satisfaction.class);
-            daoUser = new GenericDAO<User>(User.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(SatisfactionController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<Satisfaction>(Satisfaction.class);
+        daoUser = new GenericDAO<User>(User.class);
     }
 
     public Satisfaction getSatisfaction() {

@@ -53,6 +53,8 @@ public class UserController extends BaseController<User> {
     private boolean loggedIn;
     private String password;
     private ResourceBundle bundle;
+    
+    @Inject
     private UserDAO userDAO;
 
     @Inject
@@ -71,9 +73,6 @@ public class UserController extends BaseController<User> {
     private int mes;
     private int ano;
 
-    private Map<String, String> dias = new LinkedHashMap<String, String>();
-    private Map<String, String> meses = new LinkedHashMap<String, String>();
-    private Map<String, String> anos = new LinkedHashMap<String, String>();
     private String[] nomeMeses;
     private boolean showErrorMessage;
 
@@ -82,23 +81,12 @@ public class UserController extends BaseController<User> {
     @PostConstruct
     public void init() {
         mes = -1;
-        for (int i = 1; i <= 31; i++) {
-            dias.put(String.valueOf(i), String.valueOf(i));
-        }
-        GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
-        int lastYear = gc.get(GregorianCalendar.YEAR) - 1;
-        for (int i = lastYear; i > lastYear - 100; i--) {
-            anos.put(String.valueOf(i), String.valueOf(i));
-        }
-        try {
-            daoBase = new GenericDAO<User>(User.class);
-            userDAO = new UserDAO();
-            user = new User();
-            user.setDateCreated(new Date());
-            user.setIpCreated(getIpAdress());
-        } catch (NamingException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        daoBase = new GenericDAO<User>(User.class);
+
+        user = new User();
+        user.setDateCreated(new Date());
+        user.setIpCreated(getIpAdress());
     }
 
     public void signIn(boolean redirect) {
@@ -558,39 +546,19 @@ public class UserController extends BaseController<User> {
         this.ano = ano;
     }
 
-    public Map<String, String> getDias() {
-        return dias;
-    }
-
-    public void setDias(Map<String, String> dias) {
-        this.dias = dias;
-    }
-
     public Map<String, String> getMeses() {
-        meses.clear();
+        Map<String, String> meses = new LinkedHashMap<>();
+
         for (int i = 1; i <= 12; i++) {
-            meses.put(getString("month." + String.valueOf(i)),
-                    String.valueOf(i - 1));
+
+            meses.put(
+                    getString("month." + i),
+                    String.valueOf(i - 1)
+            );
+
         }
+
         return meses;
-    }
-
-    public void setMeses(Map<String, String> meses) {
-        this.meses = meses;
-    }
-
-    /**
-     * @return the anos
-     */
-    public Map<String, String> getAnos() {
-        return anos;
-    }
-
-    /**
-     * @param anos the anos to set
-     */
-    public void setAnos(Map<String, String> anos) {
-        this.anos = anos;
     }
 
     @Override

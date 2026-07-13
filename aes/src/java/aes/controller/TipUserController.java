@@ -45,11 +45,7 @@ public class TipUserController  extends BaseController<TipUser> {
     public void init() {
         tipUser = new TipUser();
         
-        try {
-            daoBase = new GenericDAO<>(TipUser.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<>(TipUser.class);
     }
 
     public TipUser getTipUser() {

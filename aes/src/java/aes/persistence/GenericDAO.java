@@ -16,28 +16,25 @@ import javax.transaction.UserTransaction;
 import org.hibernate.CacheMode;
 
 public class GenericDAO<T> implements Serializable {
-
-	public final int E = 0, OU = 1;
-	protected Class<T> classe;
-	private UserTransaction transaction;
-        @PersistenceContext(unitName = "aesPU")
-        private EntityManager entityManager;
-
-
-	public GenericDAO(Class<T> classe) throws NamingException {
-		this.classe = classe;
-
-		this.transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
-
-	}
+	protected static final int E = 0;
+        protected static final int OU = 1;
         
-     public EntityManager getEntityManager() {
-        return entityManager;
-    }
+	protected Class<T> classe;
+        
+	private UserTransaction transaction;
+        
+        private void initTransaction() {
+            try {
+                transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
+            } catch (NamingException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
 
-      public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+	public GenericDAO(Class<T> classe) {
+            this.classe = classe;
+            initTransaction();
+        }
 
 	public Class<T> getClasse() {
 		return classe;

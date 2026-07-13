@@ -110,35 +110,31 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
     
     @PostConstruct
     public void init() {
-        try {
-            LocalDate locDate = LocalDate.now();
-            userScoreWeekly = getPointsFromDate(getUser(), locDate.with(ChronoField.DAY_OF_WEEK, 1));
-            userScoreMonthly = getPointsFromDate(getUser(), locDate.with(ChronoField.DAY_OF_MONTH, 1));
-            userScore = getPointsAllTime(getUser());
-            
-            
-            filteredResultList = getRankFromDate(locDate.with(ChronoField.DAY_OF_WEEK, 1));
-            rankFilter = 1;
-            selectedDate = locDate.with(ChronoField.DAY_OF_WEEK, 1).toString();
-            selectedScore = userScoreWeekly;
-            
-            Collections.sort(filteredResultList, (a, b) -> a.score > b.score? -1 : Objects.equals(a.score, b.score) ? 0 : 1);
+        LocalDate locDate = LocalDate.now();
+        userScoreWeekly = getPointsFromDate(getUser(), locDate.with(ChronoField.DAY_OF_WEEK, 1));
+        userScoreMonthly = getPointsFromDate(getUser(), locDate.with(ChronoField.DAY_OF_MONTH, 1));
+        userScore = getPointsAllTime(getUser());
 
-            int  position = 1;
-            Long lastScore = filteredResultList.get(0).getScore();
 
-            for(NicknameScore fr: filteredResultList){
-                if(!Objects.equals(fr.score, lastScore)){
-                    position += 1;
-                    lastScore = fr.score;
-                }
-                fr.setPosition(position);
+        filteredResultList = getRankFromDate(locDate.with(ChronoField.DAY_OF_WEEK, 1));
+        rankFilter = 1;
+        selectedDate = locDate.with(ChronoField.DAY_OF_WEEK, 1).toString();
+        selectedScore = userScoreWeekly;
+
+        Collections.sort(filteredResultList, (a, b) -> a.score > b.score? -1 : Objects.equals(a.score, b.score) ? 0 : 1);
+
+        int  position = 1;
+        Long lastScore = filteredResultList.get(0).getScore();
+
+        for(NicknameScore fr: filteredResultList){
+            if(!Objects.equals(fr.score, lastScore)){
+                position += 1;
+                lastScore = fr.score;
             }
-            
-            daoBase = new GenericDAO<ChallengeUser>(ChallengeUser.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
+            fr.setPosition(position);
         }
+
+        daoBase = new GenericDAO<ChallengeUser>(ChallengeUser.class);
     }
     
     public User getUser() {

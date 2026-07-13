@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -63,14 +64,19 @@ public class Scheduler {
 
     public Scheduler() {
         emailHelper = new EmailHelper();
+    }
+    
+    @PostConstruct
+    public void init() {
         try {
             contactDAO = new ContactDAO();
-            contactDAO.setEntityManager(em);
             medalUserDAO = new MedalUserDAO();
             titleUserDAO = new TitleUserDAO();
             authenticationTokenDAO = new AuthenticationTokenDAO();
-        } catch (NamingException ex) {
-            Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (NamingException ex) {
+            Logger.getLogger(Scheduler.class.getName())
+                  .log(Level.SEVERE, null, ex);
         }
     }
 

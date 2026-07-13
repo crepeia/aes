@@ -49,11 +49,7 @@ public class ItemFacadeREST extends AbstractFacade<Item> {
 
     public ItemFacadeREST() {
         super(Item.class);
-        try {
-            itemDao = new GenericDAO(Item.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(ItemFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-        }
+        itemDao = new GenericDAO(Item.class);
     }
     
     @Path("addItem")
