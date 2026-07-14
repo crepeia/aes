@@ -1,4 +1,4 @@
-Atualizado em 2025
+Atualizado em 2026
 
 V.3
 
@@ -32,11 +32,24 @@ As informações coletadas referente ao acesso e uso dos sistemas **Álcool e Sa
   - Consumo de bebidas alcoólicas;
   - Grau de instrução;
   - Emprego;
-  - Gravidez.
+  - Gravidez;
+  - Respostas ao questionário diário de autorrelato (EMA), no aplicativo móvel.
 
 ### 1.2. Dados pessoais coletados automaticamente
   - Consumo de bebidas alcoólicas;
-  - Dados de navegação referente ao sistema usado.
+  - Dados de navegação referente ao sistema usado;
+  - Localização (GPS) do dispositivo, no aplicativo móvel;
+  - Dados do acelerômetro do dispositivo, no aplicativo móvel.
+
+### 1.3. Dados coletados pelo aplicativo móvel, no âmbito da pesquisa científica
+
+No âmbito do projeto de pesquisa científica conduzido através do aplicativo móvel Álcool e Saúde, aprovado pelo Comitê de Ética em Pesquisa da UFJF (Parecer nº 8.508.969, CAAE 95623726.9.0000.5147), coletamos ainda os seguintes dados adicionais, mediante consentimento prévio e específico do participante através do Termo de Consentimento Livre e Esclarecido (TCLE) apresentado no próprio aplicativo:
+
+  - Localização (GPS) do dispositivo, **inclusive quando o aplicativo está em segundo plano**;
+  - Dados do acelerômetro, utilizados para identificar características do padrão de marcha (caminhada);
+  - Respostas ao questionário diário de autorrelato (EMA - Ecological Momentary Assessment).
+
+Esses dados adicionais têm por finalidade treinar modelos de aprendizado de máquina capazes de identificar padrões associados a episódios de consumo de álcool. O participante pode revogar o consentimento para essa coleta específica a qualquer momento, diretamente no aplicativo, sem prejuízo ao uso das demais funcionalidades. Para essa categoria de dados, o período de armazenamento é de 5 (cinco) anos, sob responsabilidade do pesquisador principal, conforme a Resolução CNS 466/2012, podendo diferir do prazo geral descrito na Seção 5 desta Política.
 
 ## 2. Como coletamos os seus dados?
 _Nesse sentido, a coleta dos seus dados pessoais ocorre da seguinte forma:_
