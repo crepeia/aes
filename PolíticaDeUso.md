@@ -33,13 +33,13 @@ As informações coletadas referente ao acesso e uso dos sistemas **Álcool e Sa
   - Grau de instrução;
   - Emprego;
   - Gravidez;
-  - Respostas ao questionário diário de autorrelato (EMA), no aplicativo móvel.
+  - Respostas ao questionário diário de autorrelato (EMA - Ecological Momentary Assessment).
 
 ### 1.2. Dados pessoais coletados automaticamente
   - Consumo de bebidas alcoólicas;
   - Dados de navegação referente ao sistema usado;
-  - Localização (GPS) do dispositivo, no aplicativo móvel;
-  - Dados do acelerômetro do dispositivo, no aplicativo móvel.
+  - Localização (GPS) do dispositivo, inclusive quando o aplicativo está em segundo plano;
+  - Dados do acelerômetro, utilizados para identificar características do padrão de marcha (caminhada).
 
 ### 1.3. Dados coletados pelo aplicativo móvel, no âmbito da pesquisa científica
 
@@ -133,7 +133,7 @@ Nossos sistemas possuem links e produtos que redirecionam o usuário para outros
 Você pode, a qualquer tempo e sem nenhum custo, alterar as permissões, bloquear ou recusar os Cookies. Todavia, a revogação do consentimento de determinados Cookies pode inviabilizar o funcionamento correto de alguns recursos da plataforma. Você pode gerenciar as permissões de Cookies em seu navegador ou aplicativo.
 
 ## 9. Alteração desta Política de Privacidade
-A atual versão da Política de Privacidade foi formulada e atualizada pela última vez em: 15 de janeiro de 2025.
+A atual versão da Política de Privacidade foi formulada e atualizada pela última vez em: 15 de julho de 2026.
 
 Reservamos o direito de modificar essa Política de Privacidade a qualquer tempo, principalmente em função da adequação a eventuais alterações feitas em nossos sistemas ou em âmbito legislativo. Recomendamos que você a revise com frequência.
 
