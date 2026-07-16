@@ -11,7 +11,7 @@ Ao utilizar nossos serviços, você entende que coletaremos e usaremos suas info
 Dessa forma, os sistemas **Álcool e Saúde** com autorização do Comitê de Ética em Pesquisa da UFJF (CAAE: 0027.0.180.000-11) e UNIFESP (CAAE: 13904513.7.1001.5505), no papel de Controladora de Dados, obrigam-se ao disposto nesta Política de Privacidade.
 
 ## 1. Quais dados coletamos sobre você e para qual finalidade?
-Nossos sistemas coletam e utilizam alguns dados pessoais seus, de forma a viabilizar o oferecimento, a prestação e a melhoria na qualidade de serviços, o fornecimento de informações e outros tipos de comunicados, o envolvimento do titular em iniciativas do site e o aprimoramento da experiência de uso e, assim, atender melhor às necessidades do voluntário e da [Pesquisa desenvolvida](https://alcoolesaude.com.br/aes/programa.xhtml).
+Nossos sistemas coletam e utilizam alguns dados pessoais seus, de forma a viabilizar o oferecimento, a prestação e a melhoria na qualidade de serviços, o fornecimento de informações e outros tipos de comunicados, o envolvimento do titular em iniciativas do site e o aprimoramento da experiência de uso e, assim, atender melhor às necessidades do voluntário e da [Pesquisa desenvolvida](http://alcoolesaude.com.br/aes/programa.xhtml).
 
 Tratando especificamente do aprimoramento da experiência de uso, nossos sistemas podem coletar e arquivar dados e informações referentes ao acesso e uso dos mesmos, como:
   - Nome e domínio onde você acessou a Internet;
@@ -133,7 +133,7 @@ Nossos sistemas possuem links e produtos que redirecionam o usuário para outros
 Você pode, a qualquer tempo e sem nenhum custo, alterar as permissões, bloquear ou recusar os Cookies. Todavia, a revogação do consentimento de determinados Cookies pode inviabilizar o funcionamento correto de alguns recursos da plataforma. Você pode gerenciar as permissões de Cookies em seu navegador ou aplicativo.
 
 ## 9. Alteração desta Política de Privacidade
-A atual versão da Política de Privacidade foi formulada e atualizada pela última vez em: 15 de julho de 2026.
+A atual versão da Política de Privacidade foi formulada e atualizada pela última vez em: 15 de julho de 2025.
 
 Reservamos o direito de modificar essa Política de Privacidade a qualquer tempo, principalmente em função da adequação a eventuais alterações feitas em nossos sistemas ou em âmbito legislativo. Recomendamos que você a revise com frequência.
 
