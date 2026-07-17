@@ -40,12 +40,8 @@ public class PageRatingController extends BaseController<Rating> {
     
 
     public PageRatingController() {
-        try {
-            daoBase = new GenericDAO<Rating>(Rating.class);
-            daoItem = new GenericDAO<Item>(Item.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(PageRatingController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<Rating>(Rating.class);
+        daoItem = new GenericDAO<Item>(Item.class);
     }
 
     public Rating getPageRating() {

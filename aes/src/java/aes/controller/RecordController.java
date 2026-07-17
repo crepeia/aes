@@ -53,12 +53,8 @@ public class RecordController extends BaseController<Record> {
 
     @PostConstruct()
     public void init() {
-        try {
-            daoBase = new GenericDAO<Record>(Record.class);
-            logDAO = new GenericDAO<DailyLog>(DailyLog.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<Record>(Record.class);
+        logDAO = new GenericDAO<DailyLog>(DailyLog.class);
     }
 
     public Record getRecord() {
@@ -298,9 +294,6 @@ public class RecordController extends BaseController<Record> {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
-
-        } catch (NamingException ex) {
             Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lastEvaluation;

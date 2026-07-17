@@ -41,12 +41,8 @@ public class FollowUpController extends BaseController<FollowUp> {
         Map<String, String> params = context.getExternalContext().getRequestParameterMap();
         id = params.get("hid") != null ? Long.parseLong(params.get("hid")) : 0;
         week = params.get("hwk") != null ? Integer.parseInt(params.get("hwk")) : 0;
-        try {
-            daoBase = new GenericDAO<>(FollowUp.class);
-            daoUser = new GenericDAO<>(User.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<>(FollowUp.class);
+        daoUser = new GenericDAO<>(User.class);
     }
 
     public FollowUp getFollowUp() {

@@ -63,7 +63,7 @@
                                         <h:outputText value="02 - Nascimento:" style="font-weight: bold;"/>
                                         <p:selectOneMenu id="day" value="#{userController.dia}" required="true" label="Dia">  
                                             <f:selectItem itemLabel="Dia" itemValue="" />  
-                                            <f:selectItems value="#{userController.dias}" />  
+                                            <f:selectItems value="#{dateOptions.dias}" />  
                                         </p:selectOneMenu>
                                         <p:selectOneMenu id="month" value="#{userController.mes}" required="true" label="Mês">  
                                             <f:selectItem itemLabel="Mês" itemValue="" />  
@@ -71,7 +71,7 @@
                                         </p:selectOneMenu>
                                         <p:selectOneMenu id="year" value="#{userController.ano}" required="true" label="Ano">  
                                             <f:selectItem itemLabel="Ano" itemValue="" />  
-                                            <f:selectItems value="#{userController.anos}" />  
+                                            <f:selectItems value="#{dateOptions.anos}" />  
                                         </p:selectOneMenu>
                                     </p:panelGrid>                                                                                                           
 

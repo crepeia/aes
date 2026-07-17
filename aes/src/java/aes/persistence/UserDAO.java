@@ -105,9 +105,9 @@ public class UserDAO extends GenericDAO<User>{
         return at;
     }
 
-    public User login(String e, String p) throws DecoderException{
+    public User login(String e, String p, EntityManager entityManager) throws DecoderException{
         byte[] b =  Hex.decodeHex(p.toCharArray());
-        return (User) getEntityManager().createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
+        return (User) entityManager.createNamedQuery("User.login").setParameter("email", e).setParameter("password", b).getSingleResult();
     }
 
     

@@ -42,19 +42,11 @@ public class RequestController extends BaseController<User> {
 
     @PostConstruct
     public void init() {
-        try {
-            daoUser = new GenericDAO<User>(User.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(EvaluationController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoUser = new GenericDAO<User>(User.class);
     }
 
     public String getAppRequest() {
-        try {
-            daoEvaluation = new GenericDAO<Evaluation>(Evaluation.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoEvaluation = new GenericDAO<Evaluation>(Evaluation.class);
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (request.getParameter("key").contains(key)) {
@@ -133,8 +125,7 @@ public class RequestController extends BaseController<User> {
             //FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
             String message = getString("ratings.email.thanks", user);
             return message;
-
-        } catch (NamingException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
         }
 

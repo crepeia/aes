@@ -118,7 +118,7 @@
                                         <h:panelGrid columns="3" id="birthdate" style="margin:10px 0">
                                             <h:selectOneMenu class="custom-select" id="day" value="#{userController.dia}" required="true" label="#{messages['alternativeReduceEletro19']}" >  
                                                 <f:selectItem itemLabel="#{messages['alternativeReduceEletro19']}" itemValue=""/>  
-                                                <f:selectItems value="#{userController.dias}"/>
+                                                <f:selectItems value="#{dateOptions.dias}"/>
                                                 <f:ajax listener="#{userController.setBirth()}" />
                                             </h:selectOneMenu>
 
@@ -130,7 +130,7 @@
 
                                             <h:selectOneMenu class="custom-select" id="year" value="#{userController.ano}" required="true" label="#{messages['naccountYear']}"  >  
                                                 <f:selectItem itemLabel="#{messages['naccountYear']}" itemValue="" />  
-                                                <f:selectItems value="#{userController.anos}" />
+                                                <f:selectItems value="#{dateOptions.anos}" />
                                                 <f:ajax listener="#{userController.setBirth()}" />
                                             </h:selectOneMenu>   
                                         </h:panelGrid>

@@ -59,7 +59,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         }
     }
 
-    public void schedulePersistChallengesReduceEmail(User user, Date date) throws SQLException {
+    public void schedulePersistChallengesReduceEmail(User user, Date date, EntityManager entityManager) throws SQLException {
         Contact contact;
         int weeks[] = {2, 3, 4};
         for (int week : weeks) {
@@ -74,11 +74,11 @@ public class ContactDAO extends GenericDAO<Contact> {
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact, getEntityManager());
+            this.insertOrUpdate(contact, entityManager);
         }
     }
 
-    public void schedulePersistChallengesQuitEmail(User user, Date date) throws SQLException {
+    public void schedulePersistChallengesQuitEmail(User user, Date date, EntityManager entityManager) throws SQLException {
         Contact contact;
         int weeks[] = {2, 3, 4};
         for (int week : weeks) {
@@ -93,11 +93,11 @@ public class ContactDAO extends GenericDAO<Contact> {
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact, getEntityManager());
+            this.insertOrUpdate(contact, entityManager);
         }
     }
 
-    public void scheduleKeepingResultQuitEmail(User user, Date date) throws SQLException {
+    public void scheduleKeepingResultQuitEmail(User user, Date date, EntityManager entityManager) throws SQLException {
         Contact contact;
         int weeks[] = {2, 3, 4};
         for (int week : weeks) {
@@ -112,11 +112,11 @@ public class ContactDAO extends GenericDAO<Contact> {
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact, getEntityManager());
+            this.insertOrUpdate(contact, entityManager);
         }
     }
 
-    public void scheduleKeepingResultReduceEmail(User user, Date date) throws SQLException {
+    public void scheduleKeepingResultReduceEmail(User user, Date date, EntityManager entityManager) throws SQLException {
         Contact contact;
         int weeks[] = {2, 3, 4};
         for (int week : weeks) {
@@ -131,7 +131,7 @@ public class ContactDAO extends GenericDAO<Contact> {
             cal.add(Calendar.DATE, 7 * week);
             cal.add(Calendar.DATE, 3);
             contact.setDateScheduled(cal.getTime());
-            this.insertOrUpdate(contact, getEntityManager());
+            this.insertOrUpdate(contact, entityManager);
         }
     }
 
@@ -184,13 +184,13 @@ public class ContactDAO extends GenericDAO<Contact> {
         this.insertOrUpdate(contact, entityManager);
     }
     
-    public void clearScheduledKeepingResultEmails() {
+    public void clearScheduledKeepingResultEmails(EntityManager entityManager) {
         try {
-            List<Contact> contacts = this.list(getEntityManager());
+            List<Contact> contacts = this.list(entityManager);
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("progress_keepingresult")) {
                     if (contact.getUser().getRecord() != null) {
-                        this.delete(contact, getEntityManager());
+                        this.delete(contact, entityManager);
                     }
                 }
             }
@@ -200,12 +200,12 @@ public class ContactDAO extends GenericDAO<Contact> {
         }
     }
 
-    public void clearAnnualScreeningEmails(User user) {
+    public void clearAnnualScreeningEmails(User user, EntityManager entityManager) {
         try {
-            List<Contact> contacts = this.list("user", user, getEntityManager());
+            List<Contact> contacts = this.list("user", user, entityManager);
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("annualscreening_subj")) {
-                    this.delete(contact, getEntityManager());
+                    this.delete(contact, entityManager);
                 }
             }
         } catch (SQLException ex) {
@@ -214,12 +214,12 @@ public class ContactDAO extends GenericDAO<Contact> {
         }
     }
 
-    public void clearScheduledEmails(User user) {
+    public void clearScheduledEmails(User user, EntityManager entityManager) {
         try {
-            List<Contact> contacts = this.list("user", user, getEntityManager());
+            List<Contact> contacts = this.list("user", user, entityManager);
             for (Contact contact : contacts) {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null && !contact.getSubject().contains("tips_subj")) {
-                    this.delete(contact, getEntityManager());
+                    this.delete(contact, entityManager);
 
                 }
             }
@@ -262,9 +262,9 @@ public class ContactDAO extends GenericDAO<Contact> {
         return contacts;
     }
 
-    private Evaluation getLatestEvaluation(User user) {
+    private Evaluation getLatestEvaluation(User user, EntityManager entityManager) {
         try {
-            List evaluations = evaluationDAO.listOrdered("user", user, "date_created", getEntityManager());
+            List evaluations = evaluationDAO.listOrdered("user", user, "date_created", entityManager);
             if (!evaluations.isEmpty()) {
                 return (Evaluation) evaluations.get(evaluations.size() - 1);
             }

@@ -29,11 +29,7 @@ public class ChatController extends BaseController<Chat>{
     
     @PostConstruct
     public void init() {
-        try {
-            daoBase = new GenericDAO<>(Chat.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(FollowUpController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<>(Chat.class);
     }
     
     public ChatController() {

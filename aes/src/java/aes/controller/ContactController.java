@@ -53,12 +53,8 @@ public class ContactController extends BaseController implements Serializable {
         tipsTemplate = readHTMLTemplate("aes/utility/tips-template.html");
         random = new Random();
         System.out.println("PostConstruct!!");
-        try {
-            daoBase = new GenericDAO<Contact>(Contact.class);
-            evaluationDAO = new GenericDAO<Evaluation>(Evaluation.class);
-        } catch (NamingException ex) {
-            Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        daoBase = new GenericDAO<Contact>(Contact.class);
+        evaluationDAO = new GenericDAO<Evaluation>(Evaluation.class);
     }
 
     public void sendContactFormEmail(ActionEvent event) {
