@@ -1,369 +1,294 @@
 package aes.controller;
 
 import aes.model.User;
-import aes.persistence.GenericDAO;
-import aes.persistence.UserDAO;
-import aes.utility.Encrypter;
+import aes.persistence.UserDAOv2;
 import aes.utility.EncrypterException;
-import aes.utility.GenerateCode;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.faces.application.FacesMessage;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.naming.NamingException;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Calendar;
 import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  * @author thiago
+ * @author luansb (refactor)
  */
 @Named("userController")
 @SessionScoped
-public class UserController extends BaseController<User> {
+public class UserController extends BaseController<User> implements Serializable {
 
-    private User user;
-    private boolean loggedIn;
-    private String password;
-    private ResourceBundle bundle;
-    
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(UserController.class.getName());
+
+    private static final String BUNDLE_NAME = "aes.utility.messages";
+    private static final String CACHE_USER_LIST = "userController.userList";
+    private static final String CACHE_MESES = "userController.meses";
+    private static final String COOKIE_POLICY = "cookiesPolicy";
+    private static final String SESSION_URL_KEY = "url";
+
     @Inject
-    private UserDAO userDAO;
+    private UserDAOv2 userDAO;
 
     @Inject
     private ContactController contactController;
 
+    private User user;
+    private boolean loggedIn;
+
+    private transient String password;
+    private transient String editPassword;
+    private transient String confirmEmail;
+    
     private String email;
     private Integer recoverCode;
-    private String passwordd;
-    private String confirmEmail;
-    private String editPassword;
-    private int editDia;
-    private int editMes;
-    private int editAno;
+    private transient String passwordd;
 
     private int dia;
     private int mes;
     private int ano;
-
-    private String[] nomeMeses;
-    private boolean showErrorMessage;
-
-    List<User> userList;
-
-    @PostConstruct
-    public void init() {
-        mes = -1;
-
-        daoBase = new GenericDAO<User>(User.class);
-
-        user = new User();
-        user.setDateCreated(new Date());
-        user.setIpCreated(getIpAdress());
-    }
+    private int editDia;
+    private int editMes;
+    private int editAno;
 
     public void signIn(boolean redirect) {
-
+        String email = getUser().getEmail();
         try {
-            List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
+            User found = userDAO.checkCredentials(email, password);
 
-            if (!userList.isEmpty() && Encrypter.compareHash(password, userList.get(0).getPassword(), userList.get(0).getSalt())) {
-                user = userList.get(0);
-                loggedIn = true;
-                password = null;
-
-                if (redirect) {
-                    Object object = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("url");
-                    if (object != null) {
-                        String url = (String) object;
-                        FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                    } else {
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("escolha-uma-etapa.xhtml");
-                    }
-                } else {
-                    Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
-                    String url = ((HttpServletRequest) request).getRequestURI();
-                    url = url.substring(url.lastIndexOf('/') + 1);
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                }
-                
-                user.setSignInDate(new Date());
-                userDAO.update(user, getEntityManager());
-
-                Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "' logou no sistema.");
-
-            } else {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Usuário '" + user.getEmail() + "' não conseguiu logar.");
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.", null));
+            if (found == null) {
+                LOG.log(Level.WARNING, "Usuario ''{0}'' nao conseguiu logar.", email);
+                addMessage(null, FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.");
+                return;
             }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EncrypterException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+            this.user = userDAO.registerSignIn(found, new Date());
+            this.loggedIn = true;
+            LOG.log(Level.INFO, "Usuario ''{0}'' logou no sistema.", email);
 
+            if (redirect) {
+                Object stored = FacesContext.getCurrentInstance()
+                        .getExternalContext().getSessionMap().get(SESSION_URL_KEY);
+                redirectTo(stored != null ? (String) stored : "escolha-uma-etapa.xhtml");
+            } else {
+                redirectTo(currentViewName());
+            }
+
+        } catch (EncrypterException | IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        } finally {
+            this.password = null;
+        }
     }
 
     public void signOut() {
-        Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'saiu do sistema.");
+        if (user != null) {
+            LOG.log(Level.INFO, "Usuario ''{0}'' saiu do sistema.", user.getEmail());
+        }
+        this.user = null;
+        this.loggedIn = false;
+        this.password = null;
+
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/aes/index.xhtml");
-            user = null;
-            loggedIn = false;
-            password = null;
         } catch (IOException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
     public void clearSession() {
-
+        // mantido para compatibilidade de EL
     }
 
     public void signUp() {
-        try {
-            if (!confirmEmail.equals(user.getEmail())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.equals"), null));
-            } else {
-                List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
-                boolean regComplete = userList.stream().reduce(true, (reg, userElement) -> reg && userElement.isRegistration_complete(), Boolean::logicalAnd);
+        User candidate = getUser();
 
-                if (!userList.isEmpty() && regComplete) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.used"), null));
-                } else {
-                    if (!regComplete) {
-                        user.setId(userList.get(0).getId());
-                    }
-                    byte[] salt = Encrypter.generateRandomSecureSalt(16);
-                    user.setRegistration_complete(true);
-                    user.setSalt(salt);
-                    user.setPassword(Encrypter.hashPassword(password, salt));
-                    user.setSignUpDate(new Date());
-                    save();
-                    
-                    try {
-                        contactController.sendSignUpEmail(user);
-                    } catch (MessagingException | MissingResourceException ex) {
-                        Logger.getLogger(UserController.class.getName()).log(Level.INFO, user.getEmail() + ": sign-up email NOT sent.");
-                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                   
-                    if (user.isReceiveEmails()) {
-                        contactController.scheduleTipsEmail(user);
-                        contactController.scheduleDiaryReminderEmail(user, new Date());
-                        contactController.scheduleWeeklyEmail(user, new Date());
-                    }
-                    signIn(true);
-                    Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "'cadastrou no sistema.");
-                }
+        if (!Objects.equals(confirmEmail, candidate.getEmail())) {
+            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("email.not.equals"));
+            return;
+        }
+
+        try {
+            List<User> existing = userDAO.findByEmail(candidate.getEmail());
+            // lista vazia => registrationComplete == true (mesma semantica do reduce original)
+            boolean regComplete = existing.stream()
+                    .allMatch(User::isRegistration_complete);
+
+            if (!existing.isEmpty() && regComplete) {
+                addMessage(null, FacesMessage.SEVERITY_ERROR, getString("email.used"));
+                return;
             }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EncrypterException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            if (!existing.isEmpty()) { // cadastro incompleto: reaproveita o registro
+                candidate.setId(existing.get(0).getId());
+            }
 
+            candidate.setRegistration_complete(true);
+            candidate.setSignUpDate(new Date());
+            stampCreation(candidate); // rede de seguranca: dateCreated/ipCreated nunca nulos
+
+            this.user = userDAO.createUser(candidate, password);
+
+            try {
+                contactController.sendSignUpEmail(user);
+            } catch (MessagingException | MissingResourceException ex) {
+                LOG.log(Level.INFO, "{0}: sign-up email NOT sent.", user.getEmail());
+                LOG.log(Level.SEVERE, null, ex);
+            }
+
+            if (user.isReceiveEmails()) {
+                contactController.scheduleTipsEmail(user);
+                contactController.scheduleDiaryReminderEmail(user, new Date());
+                contactController.scheduleWeeklyEmail(user, new Date());
+            }
+
+            LOG.log(Level.INFO, "Usuario ''{0}'' cadastrou no sistema.", user.getEmail());
+            signIn(true); // limpa password no finally dele
+
+        } catch (EncrypterException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"));
+            this.password = null;
         }
     }
 
     public void editProfile() {
-        User user = getUser();
-        this.showErrorMessage = true;
+        final User current = getUser();
 
         try {
-            boolean emailAvailable = true;
+            boolean emailAvailable = userDAO.findByEmail(current.getEmail()).stream()
+                    .allMatch(u -> Objects.equals(u.getId(), current.getId()));
 
-            List<User> list = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
-
-            if (list.isEmpty()) {
-                for (User usr : list) {
-                    if (usr.getId() != user.getId()) {
-                        emailAvailable = false;
-                        String message = getString("email.cadastrado");
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
-                    }
-                }
-            }
-            if (emailAvailable = true) {
-                if (editPassword != null && !editPassword.trim().isEmpty()) {
-                    byte[] salt = Encrypter.generateRandomSecureSalt(16);
-                    user.setSalt(salt);
-                    user.setPassword(Encrypter.hashPassword(editPassword, salt));
-                }
-
-                try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-                } catch (IOException ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                getDaoBase().update(user, getEntityManager());
-                editPassword = null;
-                editAno = 0;
-                editMes = 0;
-                editDia = 0;
+            if (!emailAvailable) {
+                addMessage(null, FacesMessage.SEVERITY_FATAL, getString("email.cadastrado"));
+                return;
             }
 
-        } catch (SQLException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            if (editPassword != null && !editPassword.trim().isEmpty()) {
+                this.user = userDAO.changePassword(current, editPassword);
+            } else {
+                this.user = userDAO.insertOrUpdate(current);
+            }
+
+            editAno = 0;
+            editMes = 0;
+            editDia = 0;
+
+            redirectTo("index.xhtml");
 
         } catch (EncrypterException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
+            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"));
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        } catch (RuntimeException ex) { // PersistenceException & cia
+            LOG.log(Level.SEVERE, null, ex);
+            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"));
+        } finally {
+            this.editPassword = null;
         }
     }
 
-    /*public void editProfile() {
-        User user = getLoggedUser();
-        this.showErrorMessage = true;
-
-        try {
-            user.setBirthDate(new GregorianCalendar(editAno, editMes, editDia).getTime());
-            user.setDtCadastro(new Date());
-
-            boolean emailAvailable = true;
-            List<User> list = dao.list("email", user.getEmail(), getEntityManager());
-            if (!list.isEmpty()) {
-                for (User usr : list) {
-                    if (usr.getId() != user.getId()) {
-                        emailAvailable = false;
-                        String message = this.getText("email.cadastrado");
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, null));
-                    }
-                }
-            }
-            if (emailAvailable == true) {
-
-                if (editPassword != null && !editPassword.trim().isEmpty()) {
-                    user.setPassword(Encrypter.encrypt(editPassword));
-                }
-
-                try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-                } catch (IOException ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                dao.update(user, getEntityManager());
-                editPassword = null;
-                editAno = 0;
-                editMes = 0;
-                editDia = 0;
-            }
-
-        } catch (InvalidKeyException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, this.getText("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, this.getText("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, this.getText("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, this.getText("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, this.getText("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, this.getText("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-
-        }
-
-    }*/
     public void recoverPassword() {
         try {
-            List<User> userList = daoBase.list("email", user.getEmail(), this.getEntityManager());
-            if (userList.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registred"), null));
-            } else {
-                User foundUser = userList.get(0);
-                foundUser.setRecoverCode(GenerateCode.generate());
-                daoBase.insertOrUpdate(foundUser, getEntityManager());
-                contactController.sendPasswordRecoveryEmail(foundUser);
-                FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.password"), null));
+            List<User> found = userDAO.findByEmail(getUser().getEmail());
+
+            if (found.isEmpty()) {
+                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("email.not.registred"));
+                return;
             }
-        } catch (SQLException | MessagingException | MissingResourceException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+
+            User target = userDAO.createRecoveryCode(found.get(0));
+            contactController.sendPasswordRecoveryEmail(target);
+            addMessage("info", FacesMessage.SEVERITY_INFO, getString("email.instructions.password"));
+
+        } catch (MessagingException | MissingResourceException ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
     public void checkCode() {
+        if (password == null || password.trim().isEmpty()) {
+            addMessage("error", FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"));
+            return;
+        }
         try {
-            List<User> userList = this.getDaoBase().list("email", user.getEmail(), this.getEntityManager());
-            if (!userList.isEmpty()) {
-                User foundUser = userList.get(0);
-                if (foundUser.getRecoverCode() != null && user.getRecoverCode().equals(foundUser.getRecoverCode())) {
-                    //foundUser.setPassword(Encrypter.encrypt(password));
+            List<User> found = userDAO.findByEmail(getUser().getEmail());
 
-                    byte[] salt = Encrypter.generateRandomSecureSalt(16);
-                    foundUser.setSalt(salt);
-                    foundUser.setPassword(Encrypter.hashPassword(password, salt));
-
-                    password = null;
-                    foundUser.setRecoverCode(null);
-                    daoBase.insertOrUpdate(foundUser, getEntityManager());
-                    FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("redefined.password"), null));
-                } else {
-                    FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("code.invalid"), null));
-                }
-            } else {
-                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("email.not.registered"), null));
+            if (found.isEmpty()) {
+                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("email.not.registered"));
+                return;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+
+            User target = found.get(0);
+            Integer informed = getUser().getRecoverCode();
+
+            if (target.getRecoverCode() == null || !target.getRecoverCode().equals(informed)) {
+                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("code.invalid"));
+                return;
+            }
+
+            target.setRecoverCode(null);
+            userDAO.changePassword(target, password);
+            addMessage("info", FacesMessage.SEVERITY_INFO, getString("redefined.password"));
+
         } catch (EncrypterException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
+        } finally {
+            this.password = null;
         }
     }
 
-    public void setBirth() {
-        user.setBirth(ano, mes, dia);
-    }
+    public void sendEmailRequestingDeleteAccount() throws MessagingException, SQLException {
+        String email = getUser().getEmail();
+        try {
+            User found = userDAO.checkCredentials(email, password);
 
-    public void setBirthEdit() {
-        user.setBirth(editAno, editMes, editDia);
+            if (found == null) {
+                LOG.log(Level.WARNING, "Usuario ''{0}'' nao conseguiu solicitar remocao de conta.", email);
+                addMessage("info", FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.");
+                return;
+            }
+
+            contactController.sendDeleteAccountEmail(found);
+            addMessage("info", FacesMessage.SEVERITY_INFO, getString("email.instructions.deleteAccount"));
+            LOG.log(Level.INFO, "Usuario ''{0}'' solicitou a remocao da conta.", email);
+
+        } catch (EncrypterException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        } finally {
+            this.password = null;
+        }
     }
 
     public void save() {
-        try {
-            daoBase.insertOrUpdate(user, getEntityManager());
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.user = userDAO.insertOrUpdate(getUser());
+    }
+
+    public void setBirth() {
+        getUser().setBirth(ano, mes, dia);
+    }
+
+    public void setBirthEdit() {
+        getUser().setBirth(editAno, editMes, editDia);
     }
 
     public int redirect(boolean redirectLogin, boolean redirectIndex, boolean redirectEvaluation) {
@@ -376,86 +301,264 @@ public class UserController extends BaseController<User> {
         } else if (redirectEvaluation) {
             redirectEvaluation(true);
             return 0;
-        } else {
-            return 1;
         }
+        return 1;
     }
 
     public void redirectLogin(boolean redirect) {
-        if (redirect && !loggedIn) {
-            try {
-                Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
-                String url = ((HttpServletRequest) request).getRequestURI();
-                url = url.substring(url.lastIndexOf('/') + 1);
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("url", url);
-                FacesContext.getCurrentInstance().getExternalContext().redirect("cadastrar-nova-conta.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+        if (!redirect || loggedIn) {
+            return;
+        }
+        try {
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .getSessionMap().put(SESSION_URL_KEY, currentViewName());
+            redirectTo("cadastrar-nova-conta.xhtml");
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
     public void redirectIndex(boolean redirect) {
-        if (redirect && loggedIn) {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if (!redirect || !loggedIn) {
+            return;
+        }
+        try {
+            redirectTo("index.xhtml");
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
     public void redirectEvaluation(boolean redirect) {
-        if (redirect) {
-            try {
-                String url;
-                if (user.getDrink() == null) {
-                    url = "quanto-voce-bebe-introducao.xhtml";
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                } else if (!user.isUnderage() && user.isFemale() && user.getPregnant() && !user.getDrink()) {
-                    url = "quanto-voce-bebe-nao-gravidez.xhtml";
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+        if (!redirect) {
+            return;
+        }
+        String url = evaluationUrl(getUser());
+        if (url == null) {
+            return;
+        }
+        try {
+            redirectTo(url);
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+    }
 
-                } else if (user.isUnderage() && user.isFemale() && user.getPregnant() && !user.getDrink()) {
-                    url = "quanto-voce-bebe-nao-adoles-gravidez.xhtml";
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+    private String evaluationUrl(User u) {
+        if (u.getDrink() == null) {
+            return "quanto-voce-bebe-introducao.xhtml";
+        }
+        boolean pregnant = u.isFemale() && Boolean.TRUE.equals(u.getPregnant());
+        boolean drinks = Boolean.TRUE.equals(u.getDrink());
+        boolean underage = u.isUnderage();
 
-                } else if (!user.isUnderage() && user.isFemale() && user.getPregnant() && user.getDrink()) {
-                    url = "quanto-voce-bebe-sim-gravidez.xhtml";
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+        if (pregnant && !drinks) {
+            return underage ? "quanto-voce-bebe-nao-adoles-gravidez.xhtml"
+                            : "quanto-voce-bebe-nao-gravidez.xhtml";
+        }
+        if (pregnant) {
+            return underage ? "quanto-voce-bebe-sim-adoles-gravidez.xhtml"
+                            : "quanto-voce-bebe-sim-gravidez.xhtml";
+        }
+        if (underage) {
+            return drinks ? "quanto-voce-bebe-sim-adoles.xhtml"
+                          : "quanto-voce-bebe-nao-adoles.xhtml";
+        }
+        if (!drinks) {
+            return "quanto-voce-bebe-abstemio.xhtml";
+        }
+        return null; // bebe, maior de idade, nao gestante: sem redirect (igual ao original)
+    }
 
-                } else if (user.isUnderage() && user.isFemale() && user.getPregnant() && user.getDrink()) {
-                    url = "quanto-voce-bebe-sim-adoles-gravidez.xhtml";
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+    public List<User> userList() {
+        return requestCache(CACHE_USER_LIST, () -> userDAO.listNotNull("email"));
+    }
 
-                } else if (user.isUnderage() && !user.getDrink()) {
-                    url = "quanto-voce-bebe-nao-adoles.xhtml";
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                } else if (user.isUnderage() && user.getDrink()) {
-                    url = "quanto-voce-bebe-sim-adoles.xhtml";
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                } else if (!user.getDrink()) {
-                    url = "quanto-voce-bebe-abstemio.xhtml";
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+    public void setAdmin(User u) {
+        if (!Objects.equals(u.getEmail(), getUser().getEmail())) {
+            u.setAdmin(!u.isAdmin());
+            userDAO.insertOrUpdate(u);
+            invalidateUserListCache();
+        }
+    }
+
+    public void setConsultant(User u) {
+        if (getUser().getEmail() != null) {
+            u.setConsultant(!u.isConsultant());
+            userDAO.insertOrUpdate(u);
+            invalidateUserListCache();
+        }
+    }
+
+    public void setUseChatbot(User u) {
+        if (getUser().getEmail() != null) {
+            u.setUse_chatbot(!u.isUse_chatbot());
+            userDAO.insertOrUpdate(u);
+            invalidateUserListCache();
+        }
+    }
+
+    public boolean isAdmin() {
+        return getUser().isAdmin();
+    }
+
+    public boolean isInRanking() {
+        return getUser().isInRanking();
+    }
+
+    public void acceptCookies() {
+        writePolicyCookie(30 * 24 * 60 * 60);
+        try {
+            redirectTo(currentViewName());
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void knowMoreCookies() {
+        writePolicyCookie(3);
+        try {
+            redirectTo("politica-do-site.xhtml");
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void exitCookies() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("https://google.com");
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public boolean showCookiesAlert() {
+        HttpServletRequest request = currentRequest();
+        if (request == null || request.getCookies() == null) {
+            return true;
+        }
+        for (Cookie cookie : request.getCookies()) {
+            if (COOKIE_POLICY.equals(cookie.getName())) {
+                return Boolean.parseBoolean(cookie.getValue());
             }
         }
+        return true;
+    }
 
+    private void writePolicyCookie(int maxAgeSeconds) {
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance()
+                .getExternalContext().getResponse();
+        Cookie cookie = new Cookie(COOKIE_POLICY, "false");
+        cookie.setMaxAge(maxAgeSeconds);
+        cookie.setHttpOnly(true);
+        cookie.setPath(currentRequest() != null ? currentRequest().getContextPath() : "/");
+        response.addCookie(cookie);
     }
 
     public String getString(String key) {
-        bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
-        return bundle.getString(key);
+        return ResourceBundle.getBundle(BUNDLE_NAME, currentLocale()).getString(key);
     }
 
-    public Date getCurrentDate() {
-        return new Date();
+    private Locale currentLocale() {
+        String lang = (user != null) ? user.getPreferedLanguage() : null;
+        if (lang == null || lang.trim().isEmpty()) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            if (fc != null && fc.getViewRoot() != null && fc.getViewRoot().getLocale() != null) {
+                return fc.getViewRoot().getLocale();
+            }
+            return Locale.getDefault();
+        }
+        return new Locale(lang);
+    }
+
+    public Map<String, String> getMeses() {
+        return requestCache(CACHE_MESES, () -> {
+            Map<String, String> meses = new LinkedHashMap<>();
+            for (int i = 1; i <= 12; i++) {
+                meses.put(getString("month." + i), String.valueOf(i - 1));
+            }
+            return meses;
+        });
+    }
+
+    private HttpServletRequest currentRequest() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (fc == null) {
+            return null;
+        }
+        Object request = fc.getExternalContext().getRequest();
+        return (request instanceof HttpServletRequest) ? (HttpServletRequest) request : null;
+    }
+
+    private String currentViewName() {
+        HttpServletRequest request = currentRequest();
+        if (request == null) {
+            return "index.xhtml";
+        }
+        String url = request.getRequestURI();
+        return url.substring(url.lastIndexOf('/') + 1);
+    }
+
+    private void redirectTo(String url) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+    }
+
+    private void addMessage(String clientId, FacesMessage.Severity severity, String detail) {
+        FacesContext.getCurrentInstance()
+                .addMessage(clientId, new FacesMessage(severity, detail, null));
+    }
+
+    private String getIpAdress() {
+        HttpServletRequest request = currentRequest();
+        if (request == null) {
+            return null;
+        }
+        String ipAddress = request.getHeader("X-FORWARDED-FOR");
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+        return ipAddress;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <V> V requestCache(String key, Supplier<V> supplier) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (fc == null) {
+            return supplier.get();
+        }
+        Map<Object, Object> attrs = fc.getAttributes();
+        V cached = (V) attrs.get(key);
+        if (cached == null) {
+            cached = supplier.get();
+            if (cached != null) {
+                attrs.put(key, cached);
+            }
+        }
+        return cached;
+    }
+
+    private void invalidateUserListCache() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (fc != null) {
+            fc.getAttributes().remove(CACHE_USER_LIST);
+        }
+    }
+
+    /** Preserva EXATAMENTE as informacoes que o @PostConstruct antigo gravava. */
+    private void stampCreation(User u) {
+        if (u.getDateCreated() == null) {
+            u.setDateCreated(new Date());
+        }
+        if (u.getIpCreated() == null) {
+            u.setIpCreated(getIpAdress());
+        }
     }
 
     public User getUser() {
+        if (user == null) {
+            user = new User();
+            stampCreation(user);
+        }
         return user;
     }
 
@@ -475,6 +578,22 @@ public class UserController extends BaseController<User> {
         this.password = password;
     }
 
+    public String getEditPassword() {
+        return editPassword;
+    }
+
+    public void setEditPassword(String editPassword) {
+        this.editPassword = editPassword;
+    }
+
+    public String getConfirmEmail() {
+        return confirmEmail;
+    }
+
+    public void setConfirmEmail(String confirmEmail) {
+        this.confirmEmail = confirmEmail;
+    }
+    
     public String getEmail() {
         return email;
     }
@@ -490,7 +609,7 @@ public class UserController extends BaseController<User> {
     public void setRecoverCode(Integer recoverCode) {
         this.recoverCode = recoverCode;
     }
-
+    
     public String getPasswordd() {
         return passwordd;
     }
@@ -507,12 +626,17 @@ public class UserController extends BaseController<User> {
         this.contactController = contactController;
     }
 
+    public Date getCurrentDate() {
+        return new Date();
+    }
+
+    @Override
+    public User getLoggedUser() {
+        return super.getLoggedUser();
+    }
+
     public int getDia() {
-        if (getUser().getBirthDate() != null) {
-            dia = getUser().getBirthDate().getDayOfMonth();
-        } else {
-            dia = 0;
-        }
+        dia = (getUser().getBirthDate() != null) ? getUser().getBirthDate().getDayOfMonth() : 0;
         return dia;
     }
 
@@ -521,11 +645,7 @@ public class UserController extends BaseController<User> {
     }
 
     public int getMes() {
-        if (getUser().getBirthDate() != null) {
-            mes = getUser().getBirthDate().getMonthValue() - 1;
-        } else {
-            mes = 12;
-        }
+        mes = (getUser().getBirthDate() != null) ? getUser().getBirthDate().getMonthValue() - 1 : 12;
         return mes;
     }
 
@@ -534,11 +654,7 @@ public class UserController extends BaseController<User> {
     }
 
     public int getAno() {
-        if (getUser().getBirthDate() != null) {
-            ano = getUser().getBirthDate().getYear();
-        } else {
-            ano = 0;
-        }
+        ano = (getUser().getBirthDate() != null) ? getUser().getBirthDate().getYear() : 0;
         return ano;
     }
 
@@ -546,40 +662,8 @@ public class UserController extends BaseController<User> {
         this.ano = ano;
     }
 
-    public Map<String, String> getMeses() {
-        Map<String, String> meses = new LinkedHashMap<>();
-
-        for (int i = 1; i <= 12; i++) {
-
-            meses.put(
-                    getString("month." + i),
-                    String.valueOf(i - 1)
-            );
-
-        }
-
-        return meses;
-    }
-
-    @Override
-    public User getLoggedUser() {
-        return super.getLoggedUser();
-    }
-
-    public String getEditPassword() {
-        return editPassword;
-    }
-
-    public void setEditPassword(String editPassword) {
-        this.editPassword = editPassword;
-    }
-
     public int getEditDia() {
-        if (getUser().getBirthDate() != null) {
-            editDia = getUser().getBirthDate().getDayOfMonth();
-        } else {
-            editDia = 0;
-        }
+        editDia = (getUser().getBirthDate() != null) ? getUser().getBirthDate().getDayOfMonth() : 0;
         return editDia;
     }
 
@@ -588,11 +672,7 @@ public class UserController extends BaseController<User> {
     }
 
     public int getEditMes() {
-        if (getUser().getBirthDate() != null) {
-            editMes = getUser().getBirthDate().getMonthValue() - 1;
-        } else {
-            editMes = 12;
-        }
+        editMes = (getUser().getBirthDate() != null) ? getUser().getBirthDate().getMonthValue() - 1 : 12;
         return editMes;
     }
 
@@ -601,166 +681,11 @@ public class UserController extends BaseController<User> {
     }
 
     public int getEditAno() {
-        if (getUser().getBirthDate() != null) {
-            editAno = getUser().getBirthDate().getYear();
-        } else {
-            editAno = 0;
-        }
+        editAno = (getUser().getBirthDate() != null) ? getUser().getBirthDate().getYear() : 0;
         return editAno;
     }
 
     public void setEditAno(int editAno) {
         this.editAno = editAno;
-    }
-
-    public String getConfirmEmail() {
-        return confirmEmail;
-    }
-
-    public void setConfirmEmail(String confirmEmail) {
-        this.confirmEmail = confirmEmail;
-    }
-
-    private String getIpAdress() {
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String ipAddress = request.getHeader("X-FORWARDED-FOR");
-        if (ipAddress == null) {
-            ipAddress = request.getRemoteAddr();
-        }
-        return ipAddress;
-    }
-
-    public boolean isAdmin() {
-        return (getUser().isAdmin());
-    }
-
-    public boolean isInRanking() {
-        return (getUser().isInRanking());
-    }
-
-    public List<User> userList() {
-        try {
-            userList = this.getDaoBase().listNotNull("email", getEntityManager());
-        } catch (SQLException ex) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"), null));
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return userList;
-    }
-    
-    public void setAdmin(User u) {
-        if (u.getEmail() == null ? this.getUser().getEmail() != null : !u.getEmail().equals(this.getUser().getEmail())) {
-            u.setAdmin(!u.isAdmin());
-
-            try {
-                daoBase.update(u, getEntityManager());
-                //administrator = null;
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    public void setConsultant(User u) {
-        if (this.getUser().getEmail() != null) {
-            u.setConsultant(!u.isConsultant());
-
-            try {
-                daoBase.update(u, getEntityManager());
-                //administrator = null;
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    public void setUseChatbot(User u) {
-        if (this.getUser().getEmail() != null) {
-            u.setUse_chatbot(!u.isUse_chatbot());
-
-            try {
-                daoBase.update(u, getEntityManager());
-                //administrator = null;
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-    
-    public void sendEmailRequestingDeleteAccount() throws MessagingException {
-
-        try {
-            List<User> userList = this.getDaoBase().list("email", user.getEmail(), getEntityManager());
-
-            if (!userList.isEmpty() && Encrypter.compareHash(password, userList.get(0).getPassword(), userList.get(0).getSalt())) {
-                User foundUser = userList.get(0);
-                contactController.sendDeleteAccountEmail(foundUser);
-                FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.instructions.deleteAccount"), null));
-                Logger.getLogger(UserController.class.getName()).log(Level.INFO, "Usuário '" + user.getEmail() + "' solicitou a remoção da conta.");
-
-            } else {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Usuário '" + user.getEmail() + "' não conseguiu enviar solicitação de remoção de conta.");
-                FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.", null));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EncrypterException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-
-    }
-    
-    public void acceptCookies() {
-        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        Cookie cookie = new Cookie("cookiesPolicy", "false");
-        cookie.setMaxAge(30 * 24 * 60 * 60);
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
-        try {
-            Object request = FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            String url = ((HttpServletRequest) request).getRequestURI();
-            url = url.substring(url.lastIndexOf('/') + 1);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-        } catch (IOException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
-    
-    public void exitCookies() {
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("https://google.com");
-        } catch (IOException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public boolean showCookiesAlert() {
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        try {
-            for(Cookie cookie : cookies) {
-                if(Objects.equals(cookie.getName(), "cookiesPolicy")) {
-                    return Boolean.getBoolean(cookie.getValue());
-                }
-            }
-            return true;
-        } catch(NullPointerException ex) {
-            return true;
-        }
-    }
-    
-    public void knowMoreCookies() {
-        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        Cookie cookie = new Cookie("cookiesPolicy", "false");
-        cookie.setMaxAge(3);
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("politica-do-site.xhtml");
-        } catch (IOException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }
