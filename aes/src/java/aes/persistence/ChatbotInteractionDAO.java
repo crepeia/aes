@@ -29,4 +29,22 @@ public class ChatbotInteractionDAO extends GenericDAO<ChatbotInteraction> {
             throw new SQLException(erro);
         }
     }
+    
+    public ChatbotInteraction findLastOpenByConsultantAndChat(Long consultantId, Long chatId, EntityManager entityManager) throws SQLException {
+        try {
+            List<ChatbotInteraction> result = entityManager.createQuery(
+                "SELECT ci FROM ChatbotInteraction ci "
+              + "WHERE ci.consultor.id = :consultantId "
+              + "AND ci.messagePaciente.chat.id = :chatId "
+              + "AND ci.messageConsultor IS NULL "
+              + "ORDER BY ci.date_request DESC", ChatbotInteraction.class)
+                .setParameter("consultantId", consultantId)
+                .setParameter("chatId", chatId)
+                .setMaxResults(1)
+                .getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        } catch (Exception erro) {
+            throw new SQLException(erro);
+        }
+    }
 }

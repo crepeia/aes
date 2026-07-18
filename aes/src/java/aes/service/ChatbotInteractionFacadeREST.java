@@ -1,11 +1,13 @@
 package aes.service;
 
 import aes.model.ChatbotInteraction;
+import aes.model.Message;
 import aes.model.User;
 import aes.persistence.ChatbotInteractionDAO;
 import aes.utility.Secured;
 import aes.utility.SecurityContextHelper;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -71,9 +74,8 @@ public class ChatbotInteractionFacadeREST extends AbstractFacade<ChatbotInteract
     
     @Path("insert")
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response insert(ChatbotInteraction interaction) {
+    public Response insert(@QueryParam("messagePacienteId") Long messagePacienteId) {
         try {
             Response r = securityHelper.requireAuthenticatedUser();
             if (r != null) return r;
@@ -83,7 +85,19 @@ public class ChatbotInteractionFacadeREST extends AbstractFacade<ChatbotInteract
             r = securityHelper.requireConsultant(loggedUser);
             if (r != null) return r;
 
+            if (messagePacienteId == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("MISSING_MESSAGE_PACIENTE_ID").build();
+            }
+
+            Message patientMessage = em.find(Message.class, messagePacienteId);
+            if (patientMessage == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("TARGET_MESSAGE_NOT_FOUND").build();
+            }
+
+            ChatbotInteraction interaction = new ChatbotInteraction();
             interaction.setConsultor(loggedUser);
+            interaction.setMessagePaciente(patientMessage);
+            interaction.setDate_request(new Date());
 
             chatbotDao.insert(interaction, em);
 
@@ -123,9 +137,28 @@ public class ChatbotInteractionFacadeREST extends AbstractFacade<ChatbotInteract
             Response access = validateInteractionAccess(loggedUser, existing);
             if (access != null) return access;
 
-            interaction.setConsultor(existing.getConsultor());
+            if (interaction.getResponse1() != null) existing.setResponse1(interaction.getResponse1());
+            if (interaction.getResponse2() != null) existing.setResponse2(interaction.getResponse2());
+            if (interaction.getResponse3() != null) existing.setResponse3(interaction.getResponse3());
 
-            chatbotDao.update(interaction, em);
+            if (interaction.getConsultantClickedResponse1() != null)
+                existing.setConsultantClickedResponse1(interaction.getConsultantClickedResponse1());
+            if (interaction.getConsultantClickedResponse2() != null)
+                existing.setConsultantClickedResponse2(interaction.getConsultantClickedResponse2());
+            if (interaction.getConsultantClickedResponse3() != null)
+                existing.setConsultantClickedResponse3(interaction.getConsultantClickedResponse3());
+
+            if (interaction.getMessageConsultor() != null)
+                existing.setMessageConsultor(interaction.getMessageConsultor());
+
+            boolean respostasChegaram = interaction.getResponse1() != null
+                    || interaction.getResponse2() != null
+                    || interaction.getResponse3() != null;
+            if (respostasChegaram && existing.getDate_response() == null) {
+                existing.setDate_response(new Date());
+            }
+
+            chatbotDao.update(existing, em);
             return Response.status(Response.Status.OK).build();
         } catch (SQLException | RuntimeException ex) {
             Logger.getLogger(ChatbotInteractionFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);

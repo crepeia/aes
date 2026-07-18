@@ -3,10 +3,12 @@ package aes.service;
 import aes.model.AnonymousKey;
 import aes.model.AuthenticationToken;
 import aes.model.Chat;
+import aes.model.ChatbotInteraction;
 import aes.model.User;
 import aes.model.Message;
 import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.ChatDAO;
+import aes.persistence.ChatbotInteractionDAO;
 import aes.persistence.GenericDAO;
 import aes.persistence.MessageDAO;
 import aes.persistence.UserDAO;
@@ -94,6 +96,8 @@ public class ChatEndpoint {
     private ChatDAO daoChat;
     private MessageDAO messageDAO;
     private AuthenticationTokenDAO authTokenDAO;
+    private ChatbotInteractionDAO chatbotInteractionDAO;
+    
     private ChatFacadeREST chatFacade;
     
     private Boolean isWaiting;
@@ -139,6 +143,7 @@ public class ChatEndpoint {
             this.daoChat = new ChatDAO();
             this.messageDAO = new MessageDAO();
             authTokenDAO = new AuthenticationTokenDAO();
+            this.chatbotInteractionDAO = new ChatbotInteractionDAO();
             this.isWaiting = true;
             System.out.println("service.ChatEndpoint.<init>()");
         } catch (NamingException ex) {
@@ -755,6 +760,37 @@ public class ChatEndpoint {
                 messageDAO.insert(m, em);
                 
                 node.put("id", m.getId());
+                
+                // Se esta mensagem do consultor veio de uma sugestão do chatbot,
+                // fecha a ChatbotInteraction correspondente (registra clique + messageConsultor)
+                if (consultants.containsValue(session) && node.has("selectedSuggestionIndex")) {
+                    int selectedIndex = node.get("selectedSuggestionIndex").asInt();
+                    
+                    if (selectedIndex >= 1 && selectedIndex <= 3) {
+                        try {
+                            Long consultantId = getConsultantKeyForSession(session);
+                            ChatbotInteraction interaction = chatbotInteractionDAO.findLastOpenByConsultantAndChat(consultantId, c.getId(), em);
+                            
+                            if (interaction != null) {
+                                interaction.setMessageConsultor(m);
+                                switch (selectedIndex) {
+                                    case 1: interaction.setConsultantClickedResponse1(true); break;
+                                    case 2: interaction.setConsultantClickedResponse2(true); break;
+                                    case 3: interaction.setConsultantClickedResponse3(true); break;
+                                }
+                                chatbotInteractionDAO.update(interaction, em);
+                                System.out.println("[Chatbot] Interaction " + interaction.getId()
+                                    + " fechada. messageConsultor=" + m.getId()
+                                    + " clicou=" + selectedIndex);
+                            } else {
+                                System.out.println("[Chatbot] Nenhuma interação aberta para chatId=" + c.getId());
+                            }
+                        } catch (SQLException e) {
+                            Logger.getLogger(ChatEndpoint.class.getName())
+                                .log(Level.WARNING, "[Chatbot] Falha ao fechar interação (seguindo): ", e);
+                        }
+                    }
+                }
                 
                 for(Map.Entry<Session, Long> e: openChats.entrySet()) {
                     if(!e.getKey().getId().equals(session.getId())){
