@@ -147,6 +147,19 @@ public class ChatbotInteractionFacadeREST extends AbstractFacade<ChatbotInteract
                 existing.setConsultantClickedResponse2(interaction.getConsultantClickedResponse2());
             if (interaction.getConsultantClickedResponse3() != null)
                 existing.setConsultantClickedResponse3(interaction.getConsultantClickedResponse3());
+            
+            Integer lastClicked = interaction.getLastClickedResponseByConsultant();
+            if (lastClicked != null) {
+                switch (lastClicked) {
+                    case 1: existing.setConsultantClickedResponse1(true); break;
+                    case 2: existing.setConsultantClickedResponse2(true); break;
+                    case 3: existing.setConsultantClickedResponse3(true); break;
+                    default:
+                        return Response.status(Response.Status.BAD_REQUEST)
+                            .entity("INVALID_LAST_CLICKED_RESPONSE").build();
+                }
+                existing.setLastClickedResponseByConsultant(lastClicked);
+            }
 
             if (interaction.getMessageConsultor() != null)
                 existing.setMessageConsultor(interaction.getMessageConsultor());

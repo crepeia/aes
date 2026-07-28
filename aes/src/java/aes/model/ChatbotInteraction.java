@@ -66,6 +66,9 @@ public class ChatbotInteraction implements Serializable {
 
     @Column(name = "consultant_clicked_response_3", nullable = false)
     private Boolean consultantClickedResponse3 = false;
+    
+    @Column(name = "last_clicked_response_by_consultant")
+    private Integer lastClickedResponseByConsultant;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "date_request", nullable = false)
@@ -156,6 +159,14 @@ public class ChatbotInteraction implements Serializable {
 
     public void setConsultantClickedResponse3(Boolean consultantClickedResponse3) {
         this.consultantClickedResponse3 = consultantClickedResponse3;
+    }
+    
+    public Integer getLastClickedResponseByConsultant() {
+        return lastClickedResponseByConsultant;
+    }
+
+    public void setLastClickedResponseByConsultant(Integer lastClickedResponseByConsultant) {
+        this.lastClickedResponseByConsultant = lastClickedResponseByConsultant;
     }
 
     public Date getDate_request() {

@@ -778,6 +778,7 @@ public class ChatEndpoint {
                                     case 2: interaction.setConsultantClickedResponse2(true); break;
                                     case 3: interaction.setConsultantClickedResponse3(true); break;
                                 }
+                                interaction.setLastClickedResponseByConsultant(selectedIndex);
                                 chatbotInteractionDAO.update(interaction, em);
                                 System.out.println("[Chatbot] Interaction " + interaction.getId()
                                     + " fechada. messageConsultor=" + m.getId()
