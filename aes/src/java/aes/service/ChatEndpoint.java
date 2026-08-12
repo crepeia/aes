@@ -6,11 +6,13 @@ import aes.model.Chat;
 import aes.model.ChatbotInteraction;
 import aes.model.User;
 import aes.model.Message;
+import aes.model.ReadyTextInteraction;
 import aes.persistence.AuthenticationTokenDAO;
 import aes.persistence.ChatDAO;
 import aes.persistence.ChatbotInteractionDAO;
 import aes.persistence.GenericDAO;
 import aes.persistence.MessageDAO;
+import aes.persistence.ReadyTextInteractionDAO;
 import aes.persistence.UserDAO;
 import aes.utility.MessageDecoder;
 import aes.utility.MessageEncoder;
@@ -97,6 +99,7 @@ public class ChatEndpoint {
     private MessageDAO messageDAO;
     private AuthenticationTokenDAO authTokenDAO;
     private ChatbotInteractionDAO chatbotInteractionDAO;
+    private ReadyTextInteractionDAO readyTextInteractionDAO;
     
     private ChatFacadeREST chatFacade;
     
@@ -144,6 +147,7 @@ public class ChatEndpoint {
             this.messageDAO = new MessageDAO();
             authTokenDAO = new AuthenticationTokenDAO();
             this.chatbotInteractionDAO = new ChatbotInteractionDAO();
+            this.readyTextInteractionDAO = new ReadyTextInteractionDAO();
             this.isWaiting = true;
             System.out.println("service.ChatEndpoint.<init>()");
         } catch (NamingException ex) {
@@ -789,6 +793,31 @@ public class ChatEndpoint {
                         } catch (SQLException e) {
                             Logger.getLogger(ChatEndpoint.class.getName())
                                 .log(Level.WARNING, "[Chatbot] Falha ao fechar interação (seguindo): ", e);
+                        }
+                    }
+                }
+                
+                // Se esta mensagem do consultor veio de um TEXTO PRONTO, registra o uso (tag + messageConsultor)
+                if (consultants.containsValue(session) && node.has("readyTextTag")) {
+                    String readyTextTag = node.get("readyTextTag").asText();
+
+                    if (readyTextTag != null && !readyTextTag.trim().isEmpty()) {
+                        try {
+                            Long consultantId = getConsultantKeyForSession(session);
+                            User consultor = daoUser.find(consultantId, em);
+
+                            ReadyTextInteraction usage = new ReadyTextInteraction();
+                            usage.setConsultor(consultor);
+                            usage.setMessageConsultor(m);
+                            usage.setReadyTextTag(readyTextTag.trim());
+                            usage.setDateUsed(new Date());
+
+                            readyTextInteractionDAO.insert(usage, em);
+                            System.out.println("[ReadyText] Uso registrado. tag=" + readyTextTag
+                                + " messageConsultor=" + m.getId());
+                        } catch (SQLException e) {
+                            Logger.getLogger(ChatEndpoint.class.getName())
+                                .log(Level.WARNING, "[ReadyText] Falha ao registrar uso (seguindo): ", e);
                         }
                     }
                 }
