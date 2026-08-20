@@ -846,7 +846,32 @@ public class ChatEndpoint {
             
             else if (messageType.equals("ack")) {
                 Long messageId = node.get("messageId").asLong();
-                chatMessageService.markAsReceived(messageId);
+                chatMessageService.markAsReceived(messageId); // persiste o delivered
+                
+                // Descobre o chat do ack (o cliente já manda chatId; fallback no openChats)
+                Long ackChatId = (node.has("chatId") && !node.get("chatId").isNull())
+                    ? node.get("chatId").asLong()
+                    : openChats.get(session);
+                
+                if (ackChatId != null) {
+                    ObjectNode delivered = om.createObjectNode();
+                    delivered.put("type", "delivered");
+                    delivered.put("messageId", messageId);
+                    delivered.put("chatId", ackChatId);
+                    String deliveredJson = delivered.toString();
+
+                    for (Map.Entry<Session, Long> e : openChats.entrySet()) {
+                        if (e.getValue().equals(ackChatId)
+                                && !e.getKey().getId().equals(session.getId())) {
+                            try {
+                                e.getKey().getBasicRemote().sendText(deliveredJson);
+                            } catch (IOException ioe) {
+                                Logger.getLogger(ChatEndpoint.class.getName())
+                                    .log(Level.WARNING, "Falha ao encaminhar delivered", ioe);
+                            }
+                        }
+                    }
+                }
             }
         } catch (IOException | ParseException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, "Error type: ", ex);
