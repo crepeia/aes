@@ -1,6 +1,7 @@
 package aes.service;
 
 import aes.persistence.MessageDAO;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +40,30 @@ public class ChatMessageService {
         } catch (Exception ex) {
             Logger.getLogger(MessageFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
             return 0;
+        }
+    }
+    
+    public List<Long> markChatAsReceivedFromSender(Long chatId, String senderId) {
+        try {
+            List<Long> ids = em.createQuery(
+                "SELECT m.id FROM Message m " +
+                "WHERE m.chat.id = :chatId AND m.idFrom = :sender " +
+                "AND (m.received = false OR m.received IS NULL)",
+                Long.class)
+                .setParameter("chatId", chatId)
+                .setParameter("sender", senderId)
+                .getResultList();
+
+            if (ids != null && !ids.isEmpty()) {
+                em.createQuery("UPDATE Message m SET m.received = true WHERE m.id IN :ids")
+                    .setParameter("ids", ids)
+                    .executeUpdate();
+            }
+            return ids != null ? ids : new ArrayList<>();
+        } catch (Exception ex) {
+            Logger.getLogger(ChatMessageService.class.getName())
+                .log(Level.SEVERE, "Error type: ", ex);
+            return new ArrayList<>();
         }
     }
 }

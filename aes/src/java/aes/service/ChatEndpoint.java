@@ -688,7 +688,36 @@ public class ChatEndpoint {
                 } else {
                     Logger.getLogger(ChatEndpoint.class.getName())
                         .log(Level.INFO, "It must be a consultant accessing an offline user on the chatId={0}", chatId);
-                }   
+                }
+                
+                try {
+                    List<Long> deliveredIds =
+                        chatMessageService.markChatAsReceivedFromSender(chatId, String.valueOf(userId));
+
+                    for (Long deliveredId : deliveredIds) {
+                        ObjectNode delivered = om.createObjectNode();
+                        delivered.put("type", "delivered");
+                        delivered.put("messageId", deliveredId);
+                        delivered.put("chatId", chatId);
+                        String deliveredJson = delivered.toString();
+
+                        // manda para quem está no chat, menos o consultor que acabou de entrar
+                        for (Map.Entry<Session, Long> e : openChats.entrySet()) {
+                            if (e.getValue().equals(chatId)
+                                    && !e.getKey().getId().equals(session.getId())) {
+                                try {
+                                    e.getKey().getBasicRemote().sendText(deliveredJson);
+                                } catch (IOException ioe) {
+                                    Logger.getLogger(ChatEndpoint.class.getName())
+                                        .log(Level.WARNING, "Falha ao encaminhar delivered (connect)", ioe);
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(ChatEndpoint.class.getName())
+                        .log(Level.WARNING, "Falha no delivered em massa (connect)", ex);
+                }
             } 
             
             else if (messageType.equals("disconnect")) {
