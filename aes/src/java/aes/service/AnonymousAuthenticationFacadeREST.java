@@ -144,7 +144,7 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
                         "[SECURITY] PUBLIC_KEY_NOT_FOUND reason=INVALID_DATA"
                         + "requestInstanceId={0}",
                         request.instanceId);
-                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
+                return Response.status(Response.Status.UNAUTHORIZED).entity("PUBLIC_KEY_NOT_FOUND").build();
             }
             
             byte[] pubKeyBytes = Base64.getDecoder().decode(existing.getPublicKey());
