@@ -42,7 +42,7 @@ public class Message implements Serializable {
     @Column(name = "name_from")
     private String nameFrom;
     
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)

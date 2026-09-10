@@ -1,6 +1,5 @@
  package aes.model;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -41,7 +40,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 })
 public class User implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

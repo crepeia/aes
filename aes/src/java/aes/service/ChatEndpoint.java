@@ -335,6 +335,22 @@ public class ChatEndpoint {
         }
     }
     
+    private void sendRelatedConsultant(Session session, Long consultantId) {
+        try {
+            if (session == null || consultantId == null) {
+                return;
+            }
+            GenericMessage gm = new GenericMessage();
+            gm.type = "relatedConsultant";
+            gm.value = String.valueOf(consultantId);
+
+            Gson g = new Gson();
+            session.getBasicRemote().sendObject(g.toJson(gm));
+        } catch (IOException | EncodeException ex) {
+            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void scheduleOfflineCheck(Long chatId) {
         if (chatId == null) return;
 
@@ -670,7 +686,6 @@ public class ChatEndpoint {
                 
                 if (user.getRelatedConsultant() == null) {
                     user.setRelatedConsultant(daoUser.find(consultantId, em));
-
                     daoUser.update(user, em);
                     
                     userSession = users.get(chatId);
@@ -680,6 +695,8 @@ public class ChatEndpoint {
                         if (onlineUsers.get(userSession) != null) {
                             onlineUsers.get(userSession).idRelatedConsultant = user.getRelatedConsultant().getId();
                         }
+                        //avisa o app do paciente para atualizar o valor online
+                        sendRelatedConsultant(userSession, user.getRelatedConsultant().getId());
                     }
                 }
                 
