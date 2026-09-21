@@ -208,17 +208,15 @@ public class ChatFacadeREST extends AbstractFacade<Chat> {
                 em
             );
             
-            logger.log(Level.INFO, "[UNREAD] Found {0} unread messages for chatId={1}",
-                new Object[]{unreadMessages.size(), chatId});
-            
-            List<Long> ids = unreadMessages.stream()
-                .map(Message::getId)
-                .collect(java.util.stream.Collectors.toList());
-            
-            int updated = chatMessageService.markAllAsReceived(ids);
-            
-            logger.log(Level.INFO, "[UNREAD] Marked {0} messages as received for chatId={1}",
-                new Object[]{updated, chatId});
+            Logger.getLogger(ChatFacadeREST.class.getName()).log(
+                Level.INFO,
+                "[CHAT] event=UNREAD_RETURNED userId={0} chatId={1} count={2}",
+                new Object[]{
+                    loggedUser.getId(),
+                    chatId,
+                    unreadMessages.size()
+                }
+            );
 
             return Response.ok(unreadMessages).build();
         } catch (Exception ex) {

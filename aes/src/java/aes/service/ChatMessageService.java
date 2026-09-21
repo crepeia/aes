@@ -20,13 +20,18 @@ public class ChatMessageService {
     @PersistenceContext(unitName = "aesPU")
     private EntityManager em;
     
-    public void markAsReceived(Long messageId) {
+    public int markAsReceived(Long messageId) {
         try {
-            em.createQuery("UPDATE Message m SET m.received = true WHERE m.id = :id")
+            return em.createQuery(
+                "UPDATE Message m SET m.received = true WHERE m.id = :id"
+            )
                 .setParameter("id", messageId)
                 .executeUpdate();
         } catch (Exception ex) {
-            Logger.getLogger(MessageFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
+            Logger.getLogger(ChatMessageService.class.getName())
+                .log(Level.SEVERE, "Error type: ", ex);
+
+            return 0;
         }
     }
     
