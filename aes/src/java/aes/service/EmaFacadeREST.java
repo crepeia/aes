@@ -33,6 +33,8 @@ public class EmaFacadeREST extends AbstractFacade<EmaAnswer> {
     private EntityManager em;
 
     private EmaAnswerDAO emaAnswerDAO;
+    @javax.annotation.Resource
+    private javax.transaction.UserTransaction emaTransaction;
 
     @Inject
     private SecurityContextHelper securityHelper;
@@ -63,13 +65,25 @@ public class EmaFacadeREST extends AbstractFacade<EmaAnswer> {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response submitEmaAnswer(EmaAnswer payload) {
+    public Response submitEmaAnswer(EmaAnswer payload, @HeaderParam("Idempotency-Key") String operationKey) {
         try {
             Response r = securityHelper.requireAuthenticatedUser();
             if (r != null) return r;
 
             User loggedUser = securityHelper.getLoggedUser();
+            if (payload == null) return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_EMA").build();
             payload.setUser(loggedUser);
+            if (operationKey != null) {
+                if (!operationKey.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}") ||
+                        !EmaAnswerDAO.isValidOfflineAnswer(payload)) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_EMA").build();
+                }
+                try {
+                    return Response.ok(emaAnswerDAO.saveAnswerOnce(payload, loggedUser.getId(), operationKey, em, emaTransaction)).build();
+                } catch (EmaAnswerDAO.AnswerConflict ex) {
+                    return Response.status(Response.Status.CONFLICT).entity(ex.getMessage()).build();
+                }
+            }
 
             emaAnswerDAO.saveAnswer(payload, em);
 
