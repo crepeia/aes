@@ -200,6 +200,9 @@ public class User implements Serializable {
     @Column(name = "use_chatbot", nullable = false )
     private Boolean use_chatbot=false;
     
+    @Column(name = "use_emotion_detection", nullable = false)
+    private boolean use_emotion_detection = false;
+    
     @Column(name = "in_ranking", nullable = false )
     private Boolean inRanking=false;
     
@@ -591,6 +594,14 @@ public class User implements Serializable {
 
     public void setUse_chatbot(Boolean use_chatbot) {
         this.use_chatbot = use_chatbot;
+    }
+    
+    public boolean isUse_EmotionDetection() {
+        return use_emotion_detection;
+    }
+
+    public void setUse_EmotionDetection(boolean use_emotion_detection) {
+        this.use_emotion_detection = use_emotion_detection;
     }
 
     public boolean isRegistration_complete() {

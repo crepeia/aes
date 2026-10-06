@@ -830,6 +830,53 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+    @PUT
+    @Path("updateUseEmotionDetection/{useEmotionDetection}/{userId}")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUseEmotionDetection(
+            @PathParam("useEmotionDetection") boolean useEmotionDetection,
+            @PathParam("userId") Long userId) {
+        try {
+            Response r = securityHelper.requireAuthenticatedUser();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+
+            r = securityHelper.requireAdmin(loggedUser);
+            if (r != null) return r;
+
+            User user = userDAO.find(userId, em);
+
+            if (user == null) {
+                Logger.getLogger(UserFacadeREST.class.getName())
+                    .log(Level.WARNING,
+                        "[SECURITY] DID_NOT_FOUND_USER reason=INVALID_DATA "
+                        + "loggedUserId={0}, targetUserId={1}",
+                        new Object[]{loggedUser.getId(), userId});
+
+                return Response.status(Response.Status.NOT_FOUND)
+                    .entity("INVALID_DATA").build();
+            }
+
+            if (!user.isConsultant()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("USER_IS_NOT_CONSULTANT").build();
+            }
+
+            user.setUse_EmotionDetection(useEmotionDetection);
+            userDAO.update(user, em);
+
+            return Response.status(Response.Status.OK).build();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName())
+                .log(Level.SEVERE, "Error updating useEmotionDetection: ", ex);
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("INTERNAL_SERVER_ERROR").build();
+        }
+    }
+    
     /*
     @PUT
     @Path("update")
@@ -879,6 +926,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     map.put("isAdmin", u.isAdmin());
                     map.put("isConsultant", u.isConsultant());
                     map.put("useChatbot", u.isUse_chatbot());
+                    map.put("useEmotionDetection", u.isUse_EmotionDetection());
                     return map;
                 })
                 .collect(Collectors.toList());
