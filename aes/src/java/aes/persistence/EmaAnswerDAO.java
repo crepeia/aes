@@ -30,7 +30,7 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
 
     public static boolean isValidOfflineAnswer(EmaAnswer answer) {
         if (answer == null || answer.getId() != 0 || answer.getTimestamp() == null ||
-                answer.getConsumedAlcohol() == null || answer.getSomeoneDrinking() == null) return false;
+                answer.getConsumedAlcohol() == null || answer.getSomeoneDrinking() == null || !isValidTimeContext(answer)) return false;
         for (Integer value : new Integer[]{answer.getCraving(), answer.getMoodValence(), answer.getMoodArousal(),
                 answer.getSelfEfficacy(), answer.getMotivation(), answer.getAvailability()}) {
             if (value == null || value < 0 || value > 5) return false;
@@ -43,6 +43,20 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
         return period.equals(answer.getPeriod()) && (answer.getConsumedAlcohol()
                 ? java.util.Arrays.asList("1", "2", "3", "4", "5+").contains(answer.getNumberOfDoses())
                 : "0".equals(answer.getNumberOfDoses()));
+    }
+
+    private static boolean hasTimeContext(EmaAnswer answer) {
+        return answer.getCapturedAtUtcMs() != null || answer.getDeviceTimeZone() != null || answer.getDeviceUtcOffsetMinutes() != null;
+    }
+
+    public static boolean isValidTimeContext(EmaAnswer answer) {
+        if (!hasTimeContext(answer)) return true; // Old clients and queued operations.
+        Long captured = answer.getCapturedAtUtcMs();
+        Integer offset = answer.getDeviceUtcOffsetMinutes();
+        String zone = answer.getDeviceTimeZone();
+        return captured != null && answer.getTimestamp() != null && captured == answer.getTimestamp().getTime() &&
+                offset != null && offset >= -840 && offset <= 840 &&
+                (zone == null || zone.matches("[A-Za-z0-9_+./:-]{1,64}"));
     }
 
     /** Only keyed clients use this path. Answer and receipt share one transaction. */
@@ -75,10 +89,17 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
                     .setParameter("end", Date.from(day.plusHours(endHour).toInstant())).setMaxResults(1).getResultList();
             if (!matches.isEmpty()) throw new AnswerConflict("EMA_PERIOD_ALREADY_ANSWERED");
             answer.setUser(user);
+            answer.setReceivedAtUtcMs(System.currentTimeMillis());
             em.persist(answer);
             em.flush();
-            String result = new org.primefaces.json.JSONObject().put("id", answer.getId())
-                    .put("idempotencyKey", key).put("periodKey", periodKey(answer)).toString();
+            org.primefaces.json.JSONObject resultJson = new org.primefaces.json.JSONObject().put("id", answer.getId())
+                    .put("idempotencyKey", key).put("periodKey", periodKey(answer));
+            if (hasTimeContext(answer)) {
+                resultJson.put("timeContext", new org.primefaces.json.JSONObject()
+                        .put("capturedAtUtcMs", answer.getCapturedAtUtcMs()).put("deviceTimeZone", answer.getDeviceTimeZone())
+                        .put("deviceUtcOffsetMinutes", answer.getDeviceUtcOffsetMinutes()).put("receivedAtUtcMs", answer.getReceivedAtUtcMs()));
+            }
+            String result = resultJson.toString();
             aes.model.EmaOperation receipt = new aes.model.EmaOperation();
             receipt.setKey(receiptKey);
             receipt.setRequestHash(hash);
@@ -97,12 +118,18 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
     }
 
     static String answerHash(EmaAnswer answer) throws Exception {
-        String canonical = new org.primefaces.json.JSONArray()
+        org.primefaces.json.JSONArray fields = new org.primefaces.json.JSONArray()
                 .put(answer.getCraving()).put(answer.getMoodValence()).put(answer.getMoodArousal())
                 .put(answer.getSelfEfficacy()).put(answer.getMotivation()).put(answer.getCompany())
                 .put(answer.getCurrentLocation()).put(answer.getSomeoneDrinking()).put(answer.getAvailability())
                 .put(answer.getConsumedAlcohol()).put(answer.getNumberOfDoses())
-                .put(answer.getTimestamp().getTime()).put(answer.getPeriod()).toString();
+                .put(answer.getTimestamp().getTime()).put(answer.getPeriod());
+        // Keep the exact legacy hash for operations queued before time context existed.
+        if (hasTimeContext(answer)) {
+            fields.put("ema-time-v1").put(answer.getCapturedAtUtcMs())
+                    .put(answer.getDeviceTimeZone()).put(answer.getDeviceUtcOffsetMinutes());
+        }
+        String canonical = fields.toString();
         byte[] digest = java.security.MessageDigest.getInstance("SHA-256")
                 .digest(canonical.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         StringBuilder hash = new StringBuilder();
@@ -111,6 +138,7 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
     }
 
     public void saveAnswer(EmaAnswer answer, EntityManager entityManager) throws SQLException {
+        if (answer.getId() == 0) answer.setReceivedAtUtcMs(System.currentTimeMillis());
         super.insertOrUpdate(answer, entityManager);
     }
 
@@ -132,26 +160,27 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
             int month = Integer.parseInt(dateParts[1]);
             int day   = Integer.parseInt(dateParts[2]);
 
+            // Match the same instants used when saving, regardless of the DB/JDBC zone.
+            java.time.ZonedDateTime start = java.time.LocalDate.of(year, month, day)
+                    .atStartOfDay(java.time.ZoneId.of("America/Sao_Paulo"));
             Long count = em.createQuery(
                 "SELECT COUNT(e) FROM EmaAnswer e " +
                 "WHERE e.user.id = :userId " +
                 "  AND e.period = :period " +
-                "  AND FUNCTION('YEAR',  e.timestamp) = :year " +
-                "  AND FUNCTION('MONTH', e.timestamp) = :month " +
-                "  AND FUNCTION('DAY',   e.timestamp) = :day",
+                "  AND e.timestamp >= :start " +
+                "  AND e.timestamp < :end",
                 Long.class)
                 .setParameter("userId", userId)
                 .setParameter("period", period)
-                .setParameter("year",   year)
-                .setParameter("month",  month)
-                .setParameter("day",    day)
+                .setParameter("start", Date.from(start.toInstant()))
+                .setParameter("end", Date.from(start.plusDays(1).toInstant()))
                 .getSingleResult();
 
             return count > 0;
 
         } catch (Exception e) {
-            System.err.println("Erro ao verificar resposta no DAO: " + e.getMessage());
-            return false;
+            // The endpoint returns 500; a failed read must never reopen the questionnaire.
+            throw new IllegalStateException("EMA_PERIOD_CHECK_FAILED", e);
         }
     }
 
@@ -179,30 +208,28 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
             int month = Integer.parseInt(dateParts[1]);
             int day   = Integer.parseInt(dateParts[2]);
 
-            // Mesma lógica de filtro de checkSeJaRespondeu,
-            // mas retorna o timestamp mais recente em vez de COUNT.
+            // Same local-day bounds as checkSeJaRespondeu, returning the latest timestamp.
+            java.time.ZonedDateTime start = java.time.LocalDate.of(year, month, day)
+                    .atStartOfDay(java.time.ZoneId.of("America/Sao_Paulo"));
             List<Date> results = em.createQuery(
                 "SELECT e.timestamp FROM EmaAnswer e " +
                 "WHERE e.user.id = :userId " +
                 "  AND e.period = :period " +
-                "  AND FUNCTION('YEAR',  e.timestamp) = :year " +
-                "  AND FUNCTION('MONTH', e.timestamp) = :month " +
-                "  AND FUNCTION('DAY',   e.timestamp) = :day " +
+                "  AND e.timestamp >= :start " +
+                "  AND e.timestamp < :end " +
                 "ORDER BY e.timestamp DESC",
                 Date.class)
                 .setParameter("userId", userId)
                 .setParameter("period", period)
-                .setParameter("year",   year)
-                .setParameter("month",  month)
-                .setParameter("day",    day)
+                .setParameter("start", Date.from(start.toInstant()))
+                .setParameter("end", Date.from(start.plusDays(1).toInstant()))
                 .setMaxResults(1)   // só o mais recente
                 .getResultList();
 
             return results.isEmpty() ? null : results.get(0);
 
         } catch (Exception e) {
-            System.err.println("Erro ao buscar último timestamp no DAO: " + e.getMessage());
-            return null;
+            throw new IllegalStateException("EMA_PERIOD_CHECK_FAILED", e);
         }
     }
 }

@@ -72,6 +72,7 @@ public class EmaFacadeREST extends AbstractFacade<EmaAnswer> {
 
             User loggedUser = securityHelper.getLoggedUser();
             if (payload == null) return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_EMA").build();
+            if (!EmaAnswerDAO.isValidTimeContext(payload)) return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_EMA_TIME").build();
             payload.setUser(loggedUser);
             if (operationKey != null) {
                 if (!operationKey.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}") ||

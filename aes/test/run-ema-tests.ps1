@@ -5,7 +5,9 @@ New-Item -ItemType Directory -Path $doseOutput | Out-Null
 $doseClasses = Join-Path $doseProject 'build/web/WEB-INF/classes'
 $doseLib = Join-Path $doseProject 'build/web/WEB-INF/lib'
 $dosePrimefaces = Join-Path $doseProject 'lib/Primefaces_6.1/primefaces-6.1.jar'
-$doseCompilePath = @($doseClasses, (Join-Path $doseProject 'lib/javaee-api-6.0.jar'), $dosePrimefaces, (Join-Path $doseLib 'jackson-annotations-2.8.11.jar')) -join ';'
+$doseCompilePath = @($doseClasses, (Join-Path $doseProject 'lib/javaee-api-6.0.jar'), $dosePrimefaces,
+    (Join-Path $doseLib 'jackson-annotations-2.8.11.jar'), (Join-Path $doseLib 'jackson-core-2.8.11.jar'),
+    (Join-Path $doseLib 'jackson-databind-2.8.11.4.jar')) -join ';'
 $doseSources = @(
     'src/java/aes/model/DailyLogOperation.java',
     'src/java/aes/persistence/DailyLogDAO.java',
