@@ -33,6 +33,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -141,7 +143,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
             }
 
             String decriptedPassword = Encrypter.decrypt(encryptedPassword);
-
+            
+            entity.setUse_EmotionDetection(null);
             userDAO.createUser(entity, decriptedPassword, em);
 
             Logger.getLogger(UserFacadeREST.class.getName())
@@ -221,6 +224,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 return Response.ok(existingUser).build();
             }
             
+            entity.setUse_EmotionDetection(null);
             userDAO.createAnonymousUser(entity, em);
             
             authToken.setUser(entity);
@@ -275,6 +279,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
                 return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
+            
+            entity.setUse_EmotionDetection(null);
             
             // RECREATION OF THE ANONYMOUS USER
             userDAO.createAnonymousUser(entity, em);
@@ -785,6 +791,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 return Response.status(Response.Status.NOT_FOUND).entity("INVALID_DATA").build();
             }
             
+            if (user.isConsultant() != isConsultant) {
+                user.setUse_EmotionDetection(isConsultant ? Boolean.FALSE : null);
+            }
+            
             user.setConsultant(isConsultant);
             userDAO.update(user, em);
             return Response.status(Response.Status.OK).build();
@@ -874,6 +884,95 @@ public class UserFacadeREST extends AbstractFacade<User> {
         }
     }
     
+    public static class OwnEmotionDetectionRequest {
+        private Boolean useEmotionDetection;
+
+        public Boolean getUseEmotionDetection() {
+            return useEmotionDetection;
+        }
+
+        public void setUseEmotionDetection(Boolean useEmotionDetection) {
+            this.useEmotionDetection = useEmotionDetection;
+        }
+    }
+
+    @PUT
+    @Path("updateOwnUseEmotionDetection")
+    @Secured
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateOwnUseEmotionDetection(OwnEmotionDetectionRequest request) {
+        try {
+            Response r = securityHelper.requireAnyAuthenticated();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            if (loggedUser == null) {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
+            }
+
+            if (request == null || request.getUseEmotionDetection() == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+            }
+
+            User user = userDAO.find(loggedUser.getId(), em);
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("INVALID_DATA").build();
+            }
+
+            if (user.isConsultant()) {
+                return Response.status(Response.Status.FORBIDDEN).entity("CONSULTANT_PERMISSION_REQUIRES_ADMIN").build();
+            }
+
+            user.setUse_EmotionDetection(request.getUseEmotionDetection());
+            userDAO.update(user, em);
+            return Response.noContent().build();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error updating own useEmotionDetection: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
+        }
+    }
+    
+    @GET
+    @Path("emotion-detection-consent")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOwnEmotionDetectionConsent() {
+        try {
+            Response r = securityHelper.requireAnyAuthenticated();
+            if (r != null) return r;
+
+            User loggedUser = securityHelper.getLoggedUser();
+            if (loggedUser == null) {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
+            }
+
+            User user = userDAO.find(loggedUser.getId(), em);
+            if (user == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("INVALID_DATA").build();
+            }
+
+            if (user.isConsultant()) {
+                return Response.status(Response.Status.FORBIDDEN).entity("CONSULTANT_PERMISSION_REQUIRES_ADMIN").build();
+            }
+
+            Boolean agreed = user.getUse_EmotionDetection();
+            JsonObjectBuilder result = Json.createObjectBuilder().add("answered", agreed != null);
+
+            if (agreed == null) {
+                result.addNull("agreed");
+            } else {
+                result.add("agreed", agreed);
+            }
+
+            return Response.ok(result.build().toString(), MediaType.APPLICATION_JSON)
+                    .header("Cache-Control", "no-store")
+                    .build();
+        } catch (Exception ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error reading own emotion consent: ", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("INTERNAL_SERVER_ERROR").build();
+        }
+    }
+    
     /*
     @PUT
     @Path("update")
@@ -923,7 +1022,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     map.put("isAdmin", u.isAdmin());
                     map.put("isConsultant", u.isConsultant());
                     map.put("useChatbot", u.isUse_chatbot());
-                    map.put("useEmotionDetection", u.isUse_EmotionDetection());
+                    map.put("useEmotionDetection", u.getUse_EmotionDetection());
                     return map;
                 })
                 .collect(Collectors.toList());
