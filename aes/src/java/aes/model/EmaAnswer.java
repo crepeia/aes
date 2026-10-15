@@ -2,6 +2,7 @@ package aes.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -69,10 +70,10 @@ public class EmaAnswer implements Serializable {
     private String period;
 
     /**
-     * Salvo no banco como hora local (America/Sao_Paulo / UTC-3).
-     * O frontend envia a hora local, o Jackson deserializa nesse fuso,
-     * e o banco armazena exatamente esse valor — sem conversão pra UTC.
-     * Assim, queries de DAY/MONTH/YEAR funcionam corretamente.
+     * O frontend envia hora local sem offset; o Jackson interpreta America/Sao_Paulo.
+     * Date representa um instante, cuja representação no banco depende do JDBC/fuso.
+     * Consultas por dia devem usar limites explícitos nesse mesmo fuso,
+     * em vez de extrair DAY/MONTH/YEAR da representação armazenada.
      */
     @Column(name = "timestamp")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -82,6 +83,20 @@ public class EmaAnswer implements Serializable {
         timezone = "America/Sao_Paulo"             // <-- era "UTC", agora é horário local
     )
     private Date timestamp;
+
+    // Optional capture context; legacy timestamps and rows retain their meaning.
+    @Column(name = "captured_at_utc_ms")
+    private Long capturedAtUtcMs;
+
+    @Column(name = "device_time_zone", length = 64)
+    private String deviceTimeZone;
+
+    @Column(name = "device_utc_offset_minutes")
+    private Integer deviceUtcOffsetMinutes;
+
+    @Column(name = "received_at_utc_ms")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long receivedAtUtcMs;
 
     // Getters and Setters
     public long getId() { return id; }
@@ -128,4 +143,16 @@ public class EmaAnswer implements Serializable {
 
     public Date getTimestamp() { return timestamp; }
     public void setTimestamp(Date timestamp) { this.timestamp = timestamp; }
+
+    public Long getCapturedAtUtcMs() { return capturedAtUtcMs; }
+    public void setCapturedAtUtcMs(Long capturedAtUtcMs) { this.capturedAtUtcMs = capturedAtUtcMs; }
+
+    public String getDeviceTimeZone() { return deviceTimeZone; }
+    public void setDeviceTimeZone(String deviceTimeZone) { this.deviceTimeZone = deviceTimeZone; }
+
+    public Integer getDeviceUtcOffsetMinutes() { return deviceUtcOffsetMinutes; }
+    public void setDeviceUtcOffsetMinutes(Integer deviceUtcOffsetMinutes) { this.deviceUtcOffsetMinutes = deviceUtcOffsetMinutes; }
+
+    public Long getReceivedAtUtcMs() { return receivedAtUtcMs; }
+    public void setReceivedAtUtcMs(Long receivedAtUtcMs) { this.receivedAtUtcMs = receivedAtUtcMs; }
 }

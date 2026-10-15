@@ -149,17 +149,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     "User created successfully email={0}",
                     entity.getEmail());
             
-            try {
-                emailHelper.sendSignUpEmail(entity, em);
-            } catch (MessagingException | MissingResourceException ex) {
-                Logger.getLogger(UserFacadeREST.class.getName())
-                    .log(Level.SEVERE, "Error sending signup email for user email={0}", entity.getEmail());
+            if (Boolean.TRUE.equals(entity.isReceiveEmails())) {
+                try {
+                    emailHelper.sendSignUpEmail(entity, em);
+                } catch (MessagingException | MissingResourceException ex) {
+                    Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Error sending signup email for user email={0}", entity.getEmail());
+                    Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, "Email error details: ", ex);
+                }
 
-                Logger.getLogger(UserFacadeREST.class.getName())
-                    .log(Level.SEVERE, "Email error details: ", ex);
-            }
-            
-            if (entity.isReceiveEmails()) {
                 contactDAO.scheduleTipsEmail(entity, em);
                 contactDAO.scheduleDiaryReminderEmail(entity, new Date(), em);
                 contactDAO.scheduleWeeklyEmail(entity, new Date(), em);

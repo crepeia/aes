@@ -122,7 +122,7 @@ public class UserController extends BaseController<User> implements Serializable
         User candidate = getUser();
 
         if (!Objects.equals(confirmEmail, candidate.getEmail())) {
-            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("email.not.equals"));
+            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("emailNotEquals"));
             return;
         }
 
@@ -133,7 +133,7 @@ public class UserController extends BaseController<User> implements Serializable
                     .allMatch(User::isRegistration_complete);
 
             if (!existing.isEmpty() && regComplete) {
-                addMessage(null, FacesMessage.SEVERITY_ERROR, getString("email.used"));
+                addMessage(null, FacesMessage.SEVERITY_ERROR, getString("emailUsed"));
                 return;
             }
 
@@ -165,7 +165,7 @@ public class UserController extends BaseController<User> implements Serializable
 
         } catch (EncrypterException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"));
+            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemasGravarUsuario"));
             this.password = null;
         }
     }
@@ -178,7 +178,7 @@ public class UserController extends BaseController<User> implements Serializable
                     .allMatch(u -> Objects.equals(u.getId(), current.getId()));
 
             if (!emailAvailable) {
-                addMessage(null, FacesMessage.SEVERITY_FATAL, getString("email.cadastrado"));
+                addMessage(null, FacesMessage.SEVERITY_FATAL, getString("userAlredyExists"));
                 return;
             }
 
@@ -196,12 +196,12 @@ public class UserController extends BaseController<User> implements Serializable
 
         } catch (EncrypterException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"));
+            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemasGravarUsuario"));
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         } catch (RuntimeException ex) { // PersistenceException & cia
             LOG.log(Level.SEVERE, null, ex);
-            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"));
+            addMessage(null, FacesMessage.SEVERITY_ERROR, getString("problemasGravarUsuario"));
         } finally {
             this.editPassword = null;
         }
@@ -212,13 +212,13 @@ public class UserController extends BaseController<User> implements Serializable
             List<User> found = userDAO.findByEmail(getUser().getEmail());
 
             if (found.isEmpty()) {
-                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("email.not.registred"));
+                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("emailNotRegistred"));
                 return;
             }
 
             User target = userDAO.createRecoveryCode(found.get(0));
             contactController.sendPasswordRecoveryEmail(target);
-            addMessage("info", FacesMessage.SEVERITY_INFO, getString("email.instructions.password"));
+            addMessage("info", FacesMessage.SEVERITY_INFO, getString("emailInstructionsPassword"));
 
         } catch (MessagingException | MissingResourceException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -227,14 +227,14 @@ public class UserController extends BaseController<User> implements Serializable
 
     public void checkCode() {
         if (password == null || password.trim().isEmpty()) {
-            addMessage("error", FacesMessage.SEVERITY_ERROR, getString("problemas.gravar.usuario"));
+            addMessage("error", FacesMessage.SEVERITY_ERROR, getString("problemasGravarUsuario"));
             return;
         }
         try {
             List<User> found = userDAO.findByEmail(getUser().getEmail());
 
             if (found.isEmpty()) {
-                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("email.not.registered"));
+                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("emailNotRegistered"));
                 return;
             }
 
@@ -242,13 +242,13 @@ public class UserController extends BaseController<User> implements Serializable
             Integer informed = getUser().getRecoverCode();
 
             if (target.getRecoverCode() == null || !target.getRecoverCode().equals(informed)) {
-                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("code.invalid"));
+                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("codeInvalid"));
                 return;
             }
 
             target.setRecoverCode(null);
             userDAO.changePassword(target, password);
-            addMessage("info", FacesMessage.SEVERITY_INFO, getString("redefined.password"));
+            addMessage("info", FacesMessage.SEVERITY_INFO, getString("redefinedPassword"));
 
         } catch (EncrypterException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -269,7 +269,7 @@ public class UserController extends BaseController<User> implements Serializable
             }
 
             contactController.sendDeleteAccountEmail(found);
-            addMessage("info", FacesMessage.SEVERITY_INFO, getString("email.instructions.deleteAccount"));
+            addMessage("info", FacesMessage.SEVERITY_INFO, getString("emailInstructionsDeleteAccount"));
             LOG.log(Level.INFO, "Usuario ''{0}'' solicitou a remocao da conta.", email);
 
         } catch (EncrypterException ex) {

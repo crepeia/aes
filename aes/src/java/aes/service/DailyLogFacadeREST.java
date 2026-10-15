@@ -27,6 +27,11 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.annotation.Resource;
+import javax.transaction.UserTransaction;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -50,6 +55,8 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
     private EntityManager em;
     private DailyLogDAO dailyLogDAO;
     private RecordDAO recordDao;
+    @Resource
+    private UserTransaction doseTransaction;
     
     @Inject
     private SecurityContextHelper securityHelper;
@@ -68,14 +75,17 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
     @Path("editOrCreate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editOrCreate(DailyLog entity) {
+    public Response editOrCreate(DailyLog entity,
+            @HeaderParam("Idempotency-Key") String operationKey,
+            @HeaderParam("X-Dose-Challenges") String doseChallenges,
+            @HeaderParam("X-Dose-Saved-On") String savedOn) {
         try {
             Response r = securityHelper.requireAuthenticatedUser();
             if (r != null) return r;
             
             User loggedUser = securityHelper.getLoggedUser();
             
-            if (entity == null) {
+            if (entity == null || entity.getRecord() == null || entity.getLogDate() == null || entity.getDrinks() < 0) {
                 Logger.getLogger(DailyLogFacadeREST.class.getName())
                     .log(Level.WARNING,
                         "[SECURITY] INVALID_DAILY_LOG reason=INVALID_DATA "
@@ -103,6 +113,22 @@ public class DailyLogFacadeREST extends AbstractFacade<DailyLog> {
             
             r = securityHelper.requireSameUser(loggedUser, record.getUser().getId());
             if (r != null) return r;
+
+            if (operationKey != null) {
+                if (!operationKey.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}") || savedOn == null ||
+                        !("true".equals(doseChallenges) || "false".equals(doseChallenges))) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DOSE_OPERATION").build();
+                }
+                try {
+                    LocalDate savedDate = LocalDate.parse(savedOn);
+                    return Response.ok(dailyLogDAO.editOrCreateOnce(entity, loggedUser.getId(), operationKey,
+                            Boolean.parseBoolean(doseChallenges), savedDate, em, doseTransaction)).build();
+                } catch (DateTimeParseException ex) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DOSE_DATE").build();
+                } catch (DailyLogDAO.IdempotencyConflict ex) {
+                    return Response.status(Response.Status.CONFLICT).entity("IDEMPOTENCY_CONFLICT").build();
+                }
+            }
             
             String action;
             boolean edited = dailyLogDAO.edit(entity, em);
