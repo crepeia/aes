@@ -4,6 +4,7 @@ import aes.model.Evaluation;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.PDFGenerator;
+import aes.utility.MessageResources;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,8 +15,6 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -203,7 +202,7 @@ public class EvaluationController extends BaseController<Evaluation> {
         contactController.clearScheduledEmails(getUserController().getUser());
         contactController.scheduleAnnualScreeningEmail(getUserController().getUser());
         disableSaveBtn();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation"), null));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completedEvaluation"), null));
         if (!userController.isLoggedIn()) {
             ((InputText) getComponent("email")).setDisabled(true);
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -215,7 +214,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             getUserController().getUser().setName(getUserController().getUser().getEmail());
         }
         contactController.sendSignInEmail(getUserController().getUser());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation"), null));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completedEvaluation"), null));
         if (!userController.isLoggedIn()) {
             ((InputText) getComponent("email")).setDisabled(true);
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -232,12 +231,12 @@ public class EvaluationController extends BaseController<Evaluation> {
 
     public void savePlan() {
         save();
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completed.evaluation.plan"), null));
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("completedEvaluationPlan"), null));
     }
 
     public void sendPlan() {
         contactController.sendPlanEmail(getUser(), "meuplano.pdf", getPlanPDF());
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("send.plan"), null));
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("sendPlan"), null));
     }
 
     public StreamedContent printPlan() {
@@ -252,7 +251,7 @@ public class EvaluationController extends BaseController<Evaluation> {
             byte[] buffer = new byte[102400];
             String template = new String(buffer, 0, input.read(buffer),StandardCharsets.UTF_8);
 
-            ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
+            ResourceBundle bundle = MessageResources.getBundle(getUser().getPreferedLanguage());
             String subtitle[] = new String[6];
             String title = bundle.getString("plan0");
             subtitle[0] = bundle.getString("plan1");
@@ -266,8 +265,8 @@ public class EvaluationController extends BaseController<Evaluation> {
                 template = template.replace("#subtitle" + (i + 1) + "#", subtitle[i]);
                 template = template.replace("#content" + (i + 1) + "#", getEvaluation().getPlanContent()[i]);
             }
-            template = template.replace("#subintro#", bundle.getString("plan.subintro"));
-            template = template.replace("#intro#", bundle.getString("plan.intro"));
+            template = template.replace("#subintro#", bundle.getString("planSubintro"));
+            template = template.replace("#intro#", bundle.getString("planIntro"));
             template = template.replace("#user#", getUser().getName());
             template = template.replace("#footer#",
                     bundle.getString("title1") + "<br/>"

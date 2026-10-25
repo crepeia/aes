@@ -3,6 +3,7 @@ package aes.controller;
 import aes.model.User;
 import aes.persistence.UserDAOv2;
 import aes.utility.EncrypterException;
+import aes.utility.MessageResources;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -13,7 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +38,6 @@ public class UserController extends BaseController<User> implements Serializable
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(UserController.class.getName());
 
-    private static final String BUNDLE_NAME = "aes.utility.messages";
     private static final String CACHE_USER_LIST = "userController.userList";
     private static final String CACHE_MESES = "userController.meses";
     private static final String COOKIE_POLICY = "cookiesPolicy";
@@ -75,7 +74,7 @@ public class UserController extends BaseController<User> implements Serializable
 
             if (found == null) {
                 LOG.log(Level.WARNING, "Usuario ''{0}'' nao conseguiu logar.", email);
-                addMessage(null, FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.");
+                addMessage(null, FacesMessage.SEVERITY_ERROR, getString("emailPasswordWrong"));
                 return;
             }
 
@@ -212,7 +211,7 @@ public class UserController extends BaseController<User> implements Serializable
             List<User> found = userDAO.findByEmail(getUser().getEmail());
 
             if (found.isEmpty()) {
-                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("emailNotRegistred"));
+                addMessage("error", FacesMessage.SEVERITY_ERROR, getString("emailNotRegistered"));
                 return;
             }
 
@@ -264,7 +263,7 @@ public class UserController extends BaseController<User> implements Serializable
 
             if (found == null) {
                 LOG.log(Level.WARNING, "Usuario ''{0}'' nao conseguiu solicitar remocao de conta.", email);
-                addMessage("info", FacesMessage.SEVERITY_ERROR, "E-mail ou senha inválida.");
+                addMessage("info", FacesMessage.SEVERITY_ERROR, getString("emailPasswordWrong"));
                 return;
             }
 
@@ -456,7 +455,7 @@ public class UserController extends BaseController<User> implements Serializable
     }
 
     public String getString(String key) {
-        return ResourceBundle.getBundle(BUNDLE_NAME, currentLocale()).getString(key);
+        return MessageResources.getString(key, currentLocale());
     }
 
     private Locale currentLocale() {
@@ -468,7 +467,7 @@ public class UserController extends BaseController<User> implements Serializable
             }
             return Locale.getDefault();
         }
-        return new Locale(lang);
+        return MessageResources.resolveLocale(lang);
     }
 
     public Map<String, String> getMeses() {

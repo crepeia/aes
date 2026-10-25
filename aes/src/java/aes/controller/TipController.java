@@ -1,5 +1,6 @@
 package aes.controller;
 
+import aes.utility.MessageResources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -89,11 +90,11 @@ public class TipController extends BaseController {
             
             while(continueSearch) {
                 tip = new Tip(0,"","");
-                String key = properties.getProperty("tip.title." + counter, "");
+                String key = MessageResources.getString("tip", locale) + " " + counter;
                 if (!key.isEmpty()) {
                     tip.setTitle(key);
                 }
-                key = properties.getProperty("tip.description." + counter, "");
+                key = properties.getProperty("tip" + counter, "");
                 if (!key.isEmpty()) {
                     tip.setDescription(key);
                     tip.setId(counter);

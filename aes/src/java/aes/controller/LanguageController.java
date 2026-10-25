@@ -1,6 +1,7 @@
 package aes.controller;
 
 import aes.model.User;
+import aes.utility.MessageResources;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -26,15 +27,15 @@ public class LanguageController extends BaseController<User> {
         languages.put("English", "en");
         languages.put("Español", "es");
         languages.put("Português", "pt");   
-        locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+        locale = MessageResources.resolveLocale(FacesContext.getCurrentInstance().getExternalContext().getRequestLocale().getLanguage());
         //FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);        
     }
     
     
     
     public void setLanguage(String language) {
-        locale = new Locale(language);
-        userController.getUser().setPreferedLanguage(language);
+        locale = MessageResources.resolveLocale(language);
+        userController.getUser().setPreferedLanguage(locale.getLanguage());
         FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
 
         if (userController.isLoggedIn()) {
@@ -48,9 +49,9 @@ public class LanguageController extends BaseController<User> {
     
     public Locale getLocale() {
         if(getUser().getPreferedLanguage() != null){            
-            locale = new Locale(getUser().getPreferedLanguage());
+            locale = MessageResources.resolveLocale(getUser().getPreferedLanguage());
         }else{
-            locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+            locale = MessageResources.resolveLocale(FacesContext.getCurrentInstance().getExternalContext().getRequestLocale().getLanguage());
             userController.getUser().setPreferedLanguage(locale.getLanguage());
         }
         return locale;

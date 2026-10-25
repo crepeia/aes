@@ -77,7 +77,7 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
             contact.setUser(loggedUser);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(loggedUser.getEmail());
-            contact.setSubject("annualscreening_subj");
+            contact.setSubject("annualscreeningSubj");
             contact.setContent("annualscreening");
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.YEAR, 1);
@@ -101,7 +101,7 @@ public class ContactFacadeREST extends AbstractFacade<Contact> {
             Contact contact = new Contact();
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(email);
-            contact.setSubject("annualscreening_subj");
+            contact.setSubject("annualscreeningSubj");
             contact.setContent("annualscreening");
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.YEAR, 1);

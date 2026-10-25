@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import aes.utility.EMailSSL;
+import aes.utility.MessageResources;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,11 +17,8 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.PropertyResourceBundle;
 import java.util.Random;
-import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.enterprise.context.ApplicationScoped;
@@ -43,7 +41,6 @@ public class ContactController extends BaseController implements Serializable {
     private String tipsTemplate;
     private GenericDAO evaluationDAO;
     private Random random;
-    private ResourceBundle bundle;
 
 
     @PostConstruct
@@ -69,7 +66,7 @@ public class ContactController extends BaseController implements Serializable {
         contact.setSubject("Contato via formulario - " + user.getEmail());
         contact.setContent(message);
         sendPlainTextEmail(contact);
-        FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.sent", user), null));
+        FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("emailSent", user), null));
 
     }
 
@@ -78,7 +75,7 @@ public class ContactController extends BaseController implements Serializable {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("passwordrecovery_subj");
+        contact.setSubject("passwordrecoverySubj");
         contact.setContent("passwordrecovery");
         sendHTMLEmail(contact);
     }
@@ -89,7 +86,7 @@ public class ContactController extends BaseController implements Serializable {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
-        contact.setSubject("deleteaccount_subj");
+        contact.setSubject("deleteaccountSubj");
         contact.setContent("deleteaccount");
         sendHTMLEmailDeleteAccount(contact,token);
             
@@ -106,20 +103,20 @@ public class ContactController extends BaseController implements Serializable {
     
     private String getContentDeleteAccount(Contact contact, String template,String token) throws MissingResourceException {
         String htmlMessage = template;
-        htmlMessage = htmlMessage.replace("#title#", getString("title.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#title#", getString("title1", contact.getUser()));
         htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(), contact.getUser()));
         htmlMessage = htmlMessage.replace("#footer#",
-                getString("title.1", contact.getUser()) + "<br>"
+                getString("title1", contact.getUser()) + "<br>"
                 + getString("crepeia", contact.getUser()) + "<br>"
                 + getString("ufjf", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe.1", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe.2", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe2", contact.getUser()));
         htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
         htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
         htmlMessage = htmlMessage.replace("#token#",token);
         htmlMessage = htmlMessage.replace("#id#", String.valueOf(contact.getUser().getId()));
         htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
-        htmlMessage = htmlMessage.replace("#ratingheader#", getString("email.rating.header", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#ratingheader#", getString("emailRatingHeader", contact.getUser()));
         return htmlMessage;
     }
 
@@ -129,7 +126,7 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("plan_subj");
+            contact.setSubject("planSubj");
             contact.setContent("plan");
             contact.setAttachment(attachment);
             contact.setPdf(pdf);
@@ -147,7 +144,7 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("record_subj");
+            contact.setSubject("recordSubj");
             contact.setContent("record");
             contact.setAttachment(attachment);
             contact.setPdf(pdf);
@@ -165,8 +162,8 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("start_subj");
-            contact.setContent("start_msg");
+            contact.setSubject("startSubj");
+            contact.setContent("startMsg");
             sendHTMLEmail(contact);
         } catch (MessagingException ex) {
             Logger.getLogger(ContactController.class.getName()).log(Level.SEVERE, null, ex);
@@ -180,7 +177,7 @@ public class ContactController extends BaseController implements Serializable {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("welcome_subj");
+        contact.setSubject("welcomeSubj");
         contact.setContent("welcome");
         sendHTMLEmail(contact);
     }
@@ -193,8 +190,8 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("email.msg.subject.diary_started_subj");
-            contact.setContent("email.msg.subject.diary_started");
+            contact.setSubject("emailMsgSubjectDiaryStartedSubj");
+            contact.setContent("emailMsgSubjectDiaryStarted");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -212,8 +209,8 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("progress_persistchallenges_reduce_subj");
-            contact.setContent("progress_persistchallenges_reduce");
+            contact.setSubject("progressPersistchallengesReduceSubj");
+            contact.setContent("progressPersistchallengesReduce");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -231,8 +228,8 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("progress_persistchallenges_quit_subj");
-            contact.setContent("progress_persistchallenges_quit");
+            contact.setSubject("progressPersistchallengesQuitSubj");
+            contact.setContent("progressPersistchallengesQuit");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -250,8 +247,8 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("progress_keepingresult_quit_subj");
-            contact.setContent("progress_keepingresult_quit");
+            contact.setSubject("progressKeepingresultQuitSubj");
+            contact.setContent("progressKeepingresultQuit");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -269,8 +266,8 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("progress_keepingresult_reduce_subj");
-            contact.setContent("progress_keepingresult_reduce");
+            contact.setSubject("progressKeepingresultReduceSubj");
+            contact.setContent("progressKeepingresultReduce");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -286,7 +283,7 @@ public class ContactController extends BaseController implements Serializable {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("annualscreening_subj");
+        contact.setSubject("annualscreeningSubj");
         contact.setContent("annualscreening");
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, 1);
@@ -303,8 +300,8 @@ public class ContactController extends BaseController implements Serializable {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("week_" + week + "_subj");
-            contact.setContent("week_" + week);
+            contact.setSubject("week" + week + "Subj");
+            contact.setContent("week" + week);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -320,8 +317,8 @@ public class ContactController extends BaseController implements Serializable {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("tips_subj");
-        contact.setContent("tips" + String.valueOf(randomNumber));
+        contact.setSubject("tipsSubj");
+        contact.setContent("tip" + String.valueOf(randomNumber));
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, frequency);
         contact.setDateScheduled(cal.getTime());
@@ -332,7 +329,7 @@ public class ContactController extends BaseController implements Serializable {
         try {
             List<Contact> contacts = daoBase.list(getEntityManager());
             for (Contact contact : contacts) {
-                if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("progress_keepingresult")) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && MessageResources.canonicalKey(contact.getSubject()).startsWith("progressKeepingresult")) {
                     if (contact.getUser().getRecord() != null) {
                         daoBase.delete(contact, getEntityManager());
                     }
@@ -348,7 +345,7 @@ public class ContactController extends BaseController implements Serializable {
         try {
             List<Contact> contacts = daoBase.list("user", user, getEntityManager());
             for (Contact contact : contacts) {
-                if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("annualscreening_subj")) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && MessageResources.canonicalKey(contact.getSubject()).equals("annualscreeningSubj")) {
                         daoBase.delete(contact, getEntityManager());
                 }
             }
@@ -362,7 +359,7 @@ public class ContactController extends BaseController implements Serializable {
         try {
             List<Contact> contacts = daoBase.list("user", user, getEntityManager());
             for (Contact contact : contacts) {
-                if (contact.getDateScheduled() != null && contact.getDateSent() == null && !contact.getSubject().contains("tips_subj")) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && !MessageResources.canonicalKey(contact.getSubject()).equals("tipsSubj")) {
                     daoBase.delete(contact, getEntityManager());
 
                 }
@@ -382,12 +379,12 @@ public class ContactController extends BaseController implements Serializable {
                 if (contact.getDateScheduled() != null && contact.getDateSent() == null) {
                     scheduledDate.setTime(contact.getDateScheduled());
                     if (today.compareTo(scheduledDate) >= 0) {
-                        if(contact.getSubject().contains("tips_subj")){
+                        if(MessageResources.canonicalKey(contact.getSubject()).equals("tipsSubj")){
                             sendTipsEmail(contact);
                             scheduleTipsEmail(contact.getUser());
                         }else{
                             sendHTMLEmail(contact);
-                            if(contact.getSubject().contains("annualscreening_subj")){
+                            if(MessageResources.canonicalKey(contact.getSubject()).equals("annualscreeningSubj")){
                                 scheduleAnnualScreeningEmail(contact.getUser());
                             }
                         }
@@ -473,20 +470,20 @@ public class ContactController extends BaseController implements Serializable {
 
     private String getContent(Contact contact, String template) throws MissingResourceException {
         String htmlMessage = template;
-        htmlMessage = htmlMessage.replace("#title#", getString("title.1",contact.getUser()));
+        htmlMessage = htmlMessage.replace("#title#", getString("title1",contact.getUser()));
         htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(),contact.getUser()));
         htmlMessage = htmlMessage.replace("#footer#",   
-                getString("title.1",contact.getUser()) + "<br>"
+                getString("title1",contact.getUser()) + "<br>"
                 + getString("crepeia",contact.getUser()) + "<br>"
                 + getString("ufjf",contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe.1", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe.2", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe2", contact.getUser()));
         htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
         htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
         htmlMessage = htmlMessage.replace("#code#", String.valueOf(contact.getUser().getRecoverCode()));
         htmlMessage = htmlMessage.replace("#id#", contact.getUser().getHashedId());
         htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
-        htmlMessage = htmlMessage.replace("#ratingheader#", getString("email.rating.header",contact.getUser()));
+        htmlMessage = htmlMessage.replace("#ratingheader#", getString("emailRatingHeader",contact.getUser()));
         return htmlMessage;
     }
 
@@ -495,8 +492,7 @@ public class ContactController extends BaseController implements Serializable {
     }
     
     private String getString(String key, User user) throws MissingResourceException{
-        bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
-        return bundle.getString(key);
+        return MessageResources.getString(key, user.getPreferedLanguage());
     }
 
     private Evaluation getLatestEvaluation(User user) {

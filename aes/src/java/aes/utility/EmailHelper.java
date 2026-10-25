@@ -18,10 +18,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -38,7 +35,6 @@ import javax.persistence.EntityManager;
 public class EmailHelper {
 
     private EMailSSL eMailSSL;
-    private ResourceBundle bundle;
     private String htmlTemplate;
     private String tipsTemplate;
     private ContactDAO contactDAO;
@@ -66,7 +62,7 @@ public class EmailHelper {
         contact.setSubject("Contato via formulario - " + user.getEmail());
         contact.setContent(message);
         sendPlainTextEmail(contact, entityManager);
-        FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("email.sent", user), null));
+        FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, getString("emailSent", user), null));
 
     }
 
@@ -75,7 +71,7 @@ public class EmailHelper {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("passwordrecovery_subj");
+        contact.setSubject("passwordrecoverySubj");
         contact.setContent("passwordrecovery");
         sendHTMLEmail(contact, entityManager);
     }
@@ -85,7 +81,7 @@ public class EmailHelper {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
-        contact.setSubject("deleteaccount_subj");
+        contact.setSubject("deleteaccountSubj");
         contact.setContent("deleteaccount");
         sendHTMLEmailDeleteAccount(contact, token, entityManager);            
     }
@@ -98,7 +94,7 @@ public class EmailHelper {
         contact.setUser(u);
         contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
-        contact.setSubject("sendContactRequest_subj");
+        contact.setSubject("sendContactRequestSubj");
         contact.setContent("contactRequest");
         sendHTMLEmailContactRequest(contact, em, email);
         
@@ -111,7 +107,7 @@ public class EmailHelper {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("plan_subj");
+            contact.setSubject("planSubj");
             contact.setContent("plan");
             contact.setAttachment(attachment);
             contact.setPdf(pdf);
@@ -129,7 +125,7 @@ public class EmailHelper {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("record_subj");
+        contact.setSubject("recordSubj");
         contact.setContent("record");
         contact.setAttachment(attachment);
         contact.setPdf(pdf);
@@ -143,8 +139,8 @@ public class EmailHelper {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("start_subj");
-        contact.setContent("start_msg");
+        contact.setSubject("startSubj");
+        contact.setContent("startMsg");
         sendHTMLEmail(contact, entityManager);
 
     }
@@ -154,7 +150,7 @@ public class EmailHelper {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("projeto.alcoolesaude@ufjf.br"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("welcome_subj");
+        contact.setSubject("welcomeSubj");
         contact.setContent("welcome");
         sendHTMLEmail(contact, entityManager);
     }
@@ -268,54 +264,54 @@ public class EmailHelper {
     
         private String getContentDeleteAccount(Contact contact, String template,String token) throws MissingResourceException {
         String htmlMessage = template;
-        htmlMessage = htmlMessage.replace("#title#", getString("title.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#title#", getString("title1", contact.getUser()));
         htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(), contact.getUser()));
         htmlMessage = htmlMessage.replace("#footer#",
-                getString("title.1", contact.getUser()) + "<br>"
+                getString("title1", contact.getUser()) + "<br>"
                 + getString("crepeia", contact.getUser()) + "<br>"
                 + getString("ufjf", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe.1", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe.2", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe2", contact.getUser()));
         htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
         htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
         htmlMessage = htmlMessage.replace("#token#",token);
         htmlMessage = htmlMessage.replace("#id#", String.valueOf(contact.getUser().getId()));
         htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
-        htmlMessage = htmlMessage.replace("#ratingheader#", getString("email.rating.header", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#ratingheader#", getString("emailRatingHeader", contact.getUser()));
         return htmlMessage;
     }
         private String getContentContactRequest(Contact contact, String template,String email) throws MissingResourceException {
         String htmlMessage = template;
-        htmlMessage = htmlMessage.replace("#title#", getString("title.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#title#", getString("title1", contact.getUser()));
         htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(), contact.getUser()));
         htmlMessage = htmlMessage.replace("#footer#",
-                getString("title.1", contact.getUser()) + "<br>"
+                getString("title1", contact.getUser()) + "<br>"
                 + getString("crepeia", contact.getUser()) + "<br>"
                 + getString("ufjf", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe.1", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe.2", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe2", contact.getUser()));
         htmlMessage = htmlMessage.replace("#email#", email);
         htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
-        htmlMessage = htmlMessage.replace("#ratingheader#", getString("email.rating.header", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#ratingheader#", getString("emailRatingHeader", contact.getUser()));
         return htmlMessage;
     }
 
     private String getContent(Contact contact, String template) throws MissingResourceException {
         String htmlMessage = template;
-        htmlMessage = htmlMessage.replace("#title#", getString("title.1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#title#", getString("title1", contact.getUser()));
         htmlMessage = htmlMessage.replace("#content#", getString(contact.getContent(), contact.getUser()));
         htmlMessage = htmlMessage.replace("#footer#",
-                getString("title.1", contact.getUser()) + "<br>"
+                getString("title1", contact.getUser()) + "<br>"
                 + getString("crepeia", contact.getUser()) + "<br>"
                 + getString("ufjf", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe.1", contact.getUser()));
-        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe.2", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe1#", getString("unsubscribe1", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#unsubscribe2#", getString("unsubscribe2", contact.getUser()));
         htmlMessage = htmlMessage.replace("#user#", contact.getUser().getName());
         htmlMessage = htmlMessage.replace("#email#", contact.getUser().getEmail());
         htmlMessage = htmlMessage.replace("#code#", String.valueOf(contact.getUser().getRecoverCode()));
         htmlMessage = htmlMessage.replace("#id#", contact.getUser().getHashedId());
         htmlMessage = htmlMessage.replace("#messageid#", contact.getContent());
-        htmlMessage = htmlMessage.replace("#ratingheader#", getString("email.rating.header", contact.getUser()));
+        htmlMessage = htmlMessage.replace("#ratingheader#", getString("emailRatingHeader", contact.getUser()));
         return htmlMessage;
     }
 
@@ -324,8 +320,7 @@ public class EmailHelper {
     }
 
     private String getString(String key, User user) throws MissingResourceException {
-        bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
-        return bundle.getString(key);
+        return MessageResources.getString(key, user.getPreferedLanguage());
     }
 
 }

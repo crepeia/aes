@@ -10,13 +10,11 @@ import aes.model.Item;
 import aes.model.Rating;
 import aes.model.User;
 import aes.persistence.GenericDAO;
+import aes.utility.MessageResources;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -123,7 +121,7 @@ public class RequestController extends BaseController<User> {
             rating.setRelevant(rate);
             daoRating.insertOrUpdate(rating, getEntityManager());
             //FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-            String message = getString("ratings.email.thanks", user);
+            String message = getString("ratingsEmailThanks", user);
             return message;
         } catch (SQLException ex) {
             Logger.getLogger(RequestController.class.getName()).log(Level.SEVERE, null, ex);
@@ -186,8 +184,7 @@ public class RequestController extends BaseController<User> {
    }
    
    private String getString(String key, User user){
-        ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(user.getPreferedLanguage()));
-        return bundle.getString(key);
+        return MessageResources.getString(key, user.getPreferedLanguage());
     }
 
 }

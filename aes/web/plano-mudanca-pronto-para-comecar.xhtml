@@ -58,7 +58,7 @@
                                             <f:facet name="header">  
                                                 #{messages['planoMudancaProntoParaComecarFacet1']}                                  
                                             </f:facet>
-                                            <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" readonlyInput="true" pattern="dd/MM/yyyy" required="true" locale="#{languageController.locale}" requiredMessage="'Data': Campo em branco" >
+                                            <p:calendar id="dataM" value="#{evaluationController.evaluation.dataComecarPlano}"  mindate="#{evaluationController.currentDate}" readonlyInput="true" pattern="dd/MM/yyyy" required="true" locale="#{languageController.locale}" requiredMessage="#{messages['planStartDate']} #{messages['agreeChatWarning']}" >
                                             </p:calendar>
                                         </h:panelGrid>
 
@@ -67,35 +67,35 @@
                                             <f:facet name="header">  
                                                 #{messages['changePlanReadyText04']}                                      
                                             </f:facet>
-                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2" required="true" requiredMessage="'Razões': Campo em branco"/> 
+                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.razoesPlano}" id="campo2" required="true" requiredMessage="#{messages['planReasons']} #{messages['agreeChatWarning']}"/>
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao3">
                                             <f:facet name="header">  
                                                 #{messages['planoMudancaProntoParaComecarFacet3']}                                      
                                             </f:facet>
-                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3" required="true" requiredMessage="'Estratégias': Campo em branco"/> 
+                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.estrategiasPlano}" id="campo3" required="true" requiredMessage="#{messages['planStrategies']} #{messages['agreeChatWarning']}"/>
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao4">
                                             <f:facet name="header">  
                                                 #{messages['planoMudancaProntoParaComecarFacet4']}                                      
                                             </f:facet>
-                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4" required="true" requiredMessage="'Pessoas': Campo em branco"/> 
+                                            <p:inputTextarea styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.pessoasPlano}" id="campo4" required="true" requiredMessage="#{messages['planPeople']} #{messages['agreeChatWarning']}"/>
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao5">
                                             <f:facet name="header">  
                                                 #{messages['planoMudancaProntoParaComecarFacet5']}                                       
                                             </f:facet>
-                                            <p:inputTextarea  styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5" required="true" requiredMessage="'Sinais Sucesso': Campo em branco"/> 
+                                            <p:inputTextarea  styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.sinaisSucessoPlano}" id="campo5" required="true" requiredMessage="#{messages['planSuccessSigns']} #{messages['agreeChatWarning']}"/>
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="1"  cellpadding="5" id="questao6">
                                             <f:facet name="header">  
                                                 #{messages['planoMudancaProntoParaComecarFacet6']}                                       
                                             </f:facet>
-                                            <p:inputTextarea  styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="'Possíveis Dificuldades': Campo em branco"/> 
+                                            <p:inputTextarea  styleClass="form-control" rows="2" cols="70" value="#{evaluationController.evaluation.possiveisDificuladesPlano}" id="campo6" required="true" requiredMessage="#{messages['planDifficulties']} #{messages['agreeChatWarning']}"/>
                                         </h:panelGrid>
 
                                         

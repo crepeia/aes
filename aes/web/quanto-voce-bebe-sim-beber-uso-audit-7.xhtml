@@ -87,7 +87,7 @@
                                         <f:facet name="header">  
                                             #{messages['audit7P1']}
                                         </f:facet>
-                                        <h:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" requiredMessage="" layout="pageDirection">  
+                                        <h:selectOneRadio id="audit_4" value="#{evaluationController.evaluation.audit4}"  required="true" requiredMessage="#{messages['agreeChatWarning']}" layout="pageDirection">
                                             <f:ajax event="change" execute="@this" render="audit5" />
                                             <f:selectItem itemLabel="#{messages['never']}" itemValue="1" />
                                             <f:selectItem itemLabel="#{messages['individualPlan12']}" itemValue="2" />

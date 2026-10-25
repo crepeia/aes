@@ -6,6 +6,7 @@ import aes.model.Record;
 import aes.model.User;
 import aes.persistence.GenericDAO;
 import aes.utility.PDFGenerator;
+import aes.utility.MessageResources;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,8 +19,6 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,13 +91,13 @@ public class RecordController extends BaseController<Record> {
 
     public void checkDailyGoal() {
         if ((getUser().isFemale() && getRecord().getDailyGoal() > 1) || (getUser().isMale() && getRecord().getDailyGoal() > 2)) {
-            FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.dailyGoal"), null));
+            FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("recordWarningDailyGoal"), null));
         }
     }
 
     public void checkWeeklyGoal() {
         if ((getUser().isFemale() && getRecord().getWeeklyGoal() > 5) || (getUser().isMale() && getRecord().getWeeklyGoal() > 10)) {
-            FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.weeklyGoal"), null));
+            FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("recordWarningWeeklyGoal"), null));
         }
     }
 
@@ -107,10 +106,10 @@ public class RecordController extends BaseController<Record> {
             logDAO.insertOrUpdate(dailyLog, getEntityManager());
             FacesContext.getCurrentInstance().addMessage("info", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("recordSave"), null));
             if ((getUser().isFemale() && dailyLog.getDrinks() > 1) || (getUser().isMale() && dailyLog.getDrinks() > 2)) {
-                FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.limit"), null));
+                FacesContext.getCurrentInstance().addMessage("warn1", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("recordWarningLimit"), null));
             }
             if (dailyLog.getDrinks() > getRecord().getDailyGoal()) {
-                FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("record.warning.goal"), null));
+                FacesContext.getCurrentInstance().addMessage("warn2", new FacesMessage(FacesMessage.SEVERITY_WARN, userController.getString("recordWarningGoal"), null));
             }
         } catch (SQLException ex) {
             Logger.getLogger(RecordController.class.getName()).log(Level.SEVERE, null, ex);
@@ -198,7 +197,7 @@ public class RecordController extends BaseController<Record> {
 
     public void sendRecord() {
         contactController.sendRecordEmail(getUser(), "meuregistro.pdf", getRecordPDF());
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("record.send"), null));
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, userController.getString("recordSend"), null));
     }
 
     public StreamedContent printRecord() {
@@ -213,7 +212,7 @@ public class RecordController extends BaseController<Record> {
             byte[] buffer = new byte[102400];
             String template = new String(buffer, 0, input.read(buffer), StandardCharsets.US_ASCII);
 
-            ResourceBundle bundle = PropertyResourceBundle.getBundle("aes.utility.messages", new Locale(getUser().getPreferedLanguage()));
+            ResourceBundle bundle = MessageResources.getBundle(getUser().getPreferedLanguage());
             template = template.replace("#dailyGoal#", bundle.getString("dailyGoal") + String.valueOf(getRecord().getDailyGoal()));
             template = template.replace("#weeklyGoal#", bundle.getString("weeklyGoal") + String.valueOf(getRecord().getWeeklyGoal()));
             template = template.replace("#title#", bundle.getString("record0"));
