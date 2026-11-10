@@ -4,5 +4,12 @@ aes/dist/
 agenda
 chaveRecaptcha.txt
 politicaPrivacidade.md
+.env
+.env.*
+!.env.example
+
+# Documentos locais; manter apenas o README da raiz.
+*.md
+!/README.md
 
 

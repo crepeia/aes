@@ -10,7 +10,6 @@ import aes.model.AuthenticationToken;
 import aes.model.User;
 
 import java.security.Principal;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -55,27 +54,25 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         try {
             
             String authHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.INFO, new StringBuilder("Creating an authentication for: ").append(authHeader).toString());
             if(!isTokenBasedAuthentication(authHeader)){
                 abortWithUnauthorized(requestContext);
-                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, new StringBuilder("This is not a token based authentication: ").append(authHeader).toString());
                 return;
             }
 
             String token = authHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
-            requestContext.setProperty("AUTH_TOKEN", token);
-
-            try {
-                validateToken(token);
-            } catch (SQLException e) {
-                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, new StringBuilder("Error when validating the following token: ").append(token).toString());
-                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, e);
+            if (token.isEmpty()) {
                 abortWithUnauthorized(requestContext);
-            } catch(Exception e){
-                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, new StringBuilder("Error when validating the following token: ").append(token).toString());
-                Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, e);
-                abortWithUnauthorized(requestContext);
+                return;
             }
+
+            // Reuse the validated record: never create a principal after a failed check.
+            AuthenticationToken authentication = validateToken(token);
+            if (authentication == null) {
+                abortWithUnauthorized(requestContext);
+                return;
+            }
+            final User user = authentication.getUser();
+            requestContext.setProperty("AUTH_TOKEN", token);
 
             //OVERRIDING SECURITY CONTEXT
             final SecurityContext currentSecurityContext = requestContext.getSecurityContext();
@@ -83,24 +80,23 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
                 @Override
                 public Principal getUserPrincipal() {
-                    try{
-                        User usr = (User) em.createQuery("SELECT a.user FROM AuthenticationToken a WHERE a.token=:t").setParameter("t", token).getSingleResult();
-                        return () -> String.valueOf(usr.getId());
-                    }catch(Exception e) {
-                        Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, e);
-                        return null;
-                    }
-
+                    // Unbound anonymous tokens intentionally have no user principal.
+                    return user == null ? null : () -> String.valueOf(user.getId());
                 }
 
                 @Override
                 public boolean isUserInRole(String role) {
-                    return true;
+                    if (user == null || role == null) return false;
+                    if ("admin".equalsIgnoreCase(role)) return user.isAdmin();
+                    if ("consultant".equalsIgnoreCase(role)) return user.isConsultant();
+                    if ("anonymous".equalsIgnoreCase(role)) return user.getEmail() == null;
+                    if ("user".equalsIgnoreCase(role)) return user.getEmail() != null;
+                    return false;
                 }
 
                 @Override
                 public boolean isSecure() {
-                    return currentSecurityContext.isSecure();
+                    return currentSecurityContext != null && currentSecurityContext.isSecure();
                 }
 
                 @Override
@@ -109,10 +105,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 }
             });
 
-            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.INFO, "AuthenticationFilter.filter executed with success.");
+        } catch (NoResultException e) {
+            abortWithUnauthorized(requestContext);
         } catch (Exception e) {
-            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, "Error when executing AuthenticationFilter.filter.");
-            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, e);
+            // Exception messages may contain SQL parameters, including the token.
+            Logger.getLogger(AuthenticationFilter.class.getName()).log(
+                    Level.SEVERE, "AUTHENTICATION_UNAVAILABLE exceptionType={0}", e.getClass().getSimpleName());
+            requestContext.abortWith(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                    .entity("AUTHENTICATION_UNAVAILABLE").build());
         }
     }
    
@@ -130,23 +130,19 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private boolean isTokenBasedAuthentication(String authorizationHeader) {
         // Check if the Authorization header is valid
         return authorizationHeader != null && 
-                authorizationHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ");
+                authorizationHeader.regionMatches(true, 0, AUTHENTICATION_SCHEME + " ", 0,
+                        AUTHENTICATION_SCHEME.length() + 1);
     }
 
-    private AuthenticationToken validateToken(String token) throws Exception {
-        // Check if the token was issued by the server and if it's not expired
-        // Throw an Exception if the token is invalid
-        try {
-            LocalDateTime validDateTime = LocalDateTime.now().minusMonths(1);
-            Date validDate = Date.from(validDateTime.atZone(ZoneId.systemDefault()).toInstant());
-            return (AuthenticationToken) em.createQuery(
+    private AuthenticationToken validateToken(String token) {
+        // Preserve the existing one-month policy; unknown/expired tokens throw NoResultException.
+        LocalDateTime validDateTime = LocalDateTime.now().minusMonths(1);
+        Date validDate = Date.from(validDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        return (AuthenticationToken) em.createQuery(
                 "SELECT a FROM AuthenticationToken a WHERE a.token=:t AND a.dateCreated >= :validDate"
             )
             .setParameter("t", token)
             .setParameter("validDate", validDate)        
-            .getSingleResult();  
-        } catch (NoResultException e) {
-            throw new Exception("Token inválido ou expirado.");
-        }
+            .getSingleResult();
     }   
 }

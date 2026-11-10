@@ -63,7 +63,7 @@ public class SecurityContextHelper {
         if (!token.endsWith("-anonymous")) {
             Logger.getLogger(SecurityContextHelper.class.getName())
                 .log(Level.WARNING,
-                    "[SECURITY] INVALID_TOKEN reason=TOKEN_IS_NOT_ANONYMOUS token={0}", token);
+                    "[SECURITY] INVALID_TOKEN reason=TOKEN_IS_NOT_ANONYMOUS");
             
             return Response.status(Response.Status.FORBIDDEN).entity("INVALID_USER_ROLE").build();
         }
