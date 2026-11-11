@@ -1,6 +1,7 @@
 package aes.service;
 
 import aes.model.EmaAnswer;
+import aes.model.EmaContext;
 import aes.model.User;
 import aes.persistence.EmaAnswerDAO;
 import aes.utility.Secured;
@@ -73,6 +74,7 @@ public class EmaFacadeREST extends AbstractFacade<EmaAnswer> {
             User loggedUser = securityHelper.getLoggedUser();
             if (payload == null) return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_EMA").build();
             if (!EmaAnswerDAO.isValidTimeContext(payload)) return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_EMA_TIME").build();
+            if (!EmaContext.isValid(payload)) return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_EMA").build();
             payload.setUser(loggedUser);
             if (operationKey != null) {
                 if (!operationKey.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}") ||

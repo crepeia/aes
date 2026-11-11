@@ -1,6 +1,7 @@
 package aes.persistence;
 
 import aes.model.EmaAnswer;
+import aes.model.EmaContext;
 import aes.model.EmaOperation;
 import aes.model.User;
 import java.io.*;
@@ -242,8 +243,99 @@ public class EmaOfflineTest {
         System.out.println("PASS: EMA optional time context, legacy hash/receipt/data compatibility, real Jackson contract, delayed capture, server receipt time, retry conflicts (JPA/JTA doubles; no real DB)");
     }
 
+    static EmaAnswer idAnswer(int hour) {
+        EmaAnswer answer = answer(hour);
+        answer.setCompany(null); answer.setCurrentLocation(null);
+        answer.setCompanyId(4); answer.setCurrentLocationId(1);
+        return answer;
+    }
+
+    static void contextIdTests() throws Exception {
+        String[][] companies = {{"Sozinho", "Alone"}, {"Amigos", "Friends"}, {"Parceiro(a)", "Partner"},
+                {"Família", "Family"}, {"Colegas de Trabalho", "Coworkers"}, {"Outros", "Others"}};
+        String[][] locations = {{"Casa", "Home"}, {"Trabalho/Escola", "Work/School"}, {"Bar/Restaurante/Balada", "Bar/Restaurant/Club"},
+                {"Festa (Casa de terceiros)", "Party (Someone else's house)"}, {"Trânsito/Rua", "Transit/Street"}, {"Outro", "Other"}};
+        for (int i = 0; i < 6; i++) {
+            for (int language = 0; language < 2; language++) {
+                EmaAnswer old = withTimeContext(answer(10));
+                old.setCompany(companies[i][language]); old.setCurrentLocation(locations[i][language]);
+                String hash = EmaAnswerDAO.answerHash(old);
+                check(EmaAnswerDAO.isValidOfflineAnswer(old), "Legacy translation rejected");
+                EmaAnswer stored = EmaContext.forStorage(old);
+                check(Integer.valueOf(i + 1).equals(stored.getCompanyId()) && Integer.valueOf(i + 1).equals(stored.getCurrentLocationId()),
+                        "Wrong translated category codes");
+                check(stored.getCompany() == null && stored.getCurrentLocation() == null, "Known texts unnecessarily duplicated");
+                check(old.getCompanyId() == null && old.getCurrentLocationId() == null && hash.equals(EmaAnswerDAO.answerHash(old)),
+                        "Storage conversion mutated the queued request/hash");
+                EmaAnswer coded = idAnswer(10); coded.setCompanyId(i + 1); coded.setCurrentLocationId(i + 1);
+                check(EmaAnswerDAO.isValidOfflineAnswer(coded), "Valid codes rejected");
+            }
+        }
+        EmaAnswer unknown = answer(10); unknown.setCompany("Historical unknown company"); unknown.setCurrentLocation("Historical unknown location");
+        EmaAnswer unknownStored = EmaContext.forStorage(unknown);
+        check(unknownStored.getCompanyId() == null && unknownStored.getCurrentLocationId() == null &&
+                unknown.getCompany().equals(unknownStored.getCompany()) && unknown.getCurrentLocation().equals(unknownStored.getCurrentLocation()),
+                "Unknown labels lost or incorrectly mapped to Other");
+
+        for (Integer invalidCode : new Integer[]{null, 0, 7, -1}) {
+            EmaAnswer invalid = idAnswer(10); invalid.setCompanyId(invalidCode);
+            check(!EmaAnswerDAO.isValidOfflineAnswer(invalid), "Invalid company code accepted");
+            invalid = idAnswer(10); invalid.setCurrentLocationId(invalidCode);
+            check(!EmaAnswerDAO.isValidOfflineAnswer(invalid), "Invalid location code accepted");
+        }
+        EmaAnswer mixed = idAnswer(10); mixed.setCompany("Family");
+        check(!EmaAnswerDAO.isValidOfflineAnswer(mixed), "Ambiguous mixed request accepted");
+
+        Database db = new Database();
+        EmaAnswer request = withTimeContext(idAnswer(10));
+        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        EmaAnswer decoded = mapper.readValue(mapper.writeValueAsString(request), EmaAnswer.class);
+        check(EmaAnswerDAO.isValidOfflineAnswer(decoded) && Integer.valueOf(4).equals(decoded.getCompanyId()) &&
+                Integer.valueOf(1).equals(decoded.getCurrentLocationId()), "Jackson lost numeric category codes");
+        String first = save(db, 1, "codes", request);
+        EmaAnswer stored = db.data.answers.get(0);
+        check(stored.getCompany() == null && stored.getCurrentLocation() == null &&
+                Integer.valueOf(4).equals(stored.getCompanyId()) && Integer.valueOf(1).equals(stored.getCurrentLocationId()),
+                "Codes were not persisted without texts");
+        org.primefaces.json.JSONObject ids = new org.primefaces.json.JSONObject(first).getJSONObject("contextIds");
+        check(ids.getInt("companyId") == 4 && ids.getInt("currentLocationId") == 1, "Receipt did not acknowledge stored IDs");
+        check(first.equals(save(db, 1, "codes", decoded)) && db.data.answers.size() == 1, "ID retry duplicated the answer");
+        for (boolean company : new boolean[]{true, false}) {
+            EmaAnswer changed = withTimeContext(idAnswer(10));
+            if (company) changed.setCompanyId(2); else changed.setCurrentLocationId(6);
+            try { save(db, 1, "codes", changed); throw new AssertionError("Changed category reused an idempotency key"); }
+            catch (EmaAnswerDAO.AnswerConflict expected) { check(expected.getMessage().equals("IDEMPOTENCY_CONFLICT"), "Wrong code conflict"); }
+        }
+        EmaAnswer legacy = withTimeContext(answer(14));
+        String hash = EmaAnswerDAO.answerHash(legacy);
+        String legacyReceipt = save(db, 1, "queued-texts", legacy);
+        check(hash.equals(EmaAnswerDAO.answerHash(legacy)), "Saving legacy texts changed their hash");
+        EmaAnswer converted = db.data.answers.get(1);
+        check(Integer.valueOf(4).equals(converted.getCompanyId()) && Integer.valueOf(1).equals(converted.getCurrentLocationId()),
+                "Pending legacy texts did not populate IDs");
+        check(legacyReceipt.equals(save(db, 1, "queued-texts", withTimeContext(answer(14)))) && db.data.answers.size() == 2,
+                "Converted legacy request no longer replays");
+        save(db, 2, "unknown-texts", unknown);
+        check(unknown.getCompany().equals(db.data.answers.get(2).getCompany()), "Unknown queued text lost on save");
+
+        Database historicalDb = new Database();
+        EmaAnswer historical = answer(2); historical.setId(17);
+        User owner = new User(); owner.setId(1); historical.setUser(owner);
+        historicalDb.data.answers.add(historical);
+        save(historicalDb, 1, "new-with-history", idAnswer(10));
+        check(historicalDb.data.answers.size() == 2 && historical.getId() == 17 &&
+                historical.getCompanyId() == null && historical.getCurrentLocationId() == null &&
+                "Family".equals(historical.getCompany()) && "Home".equals(historical.getCurrentLocation()),
+                "New numeric submission rewrote historical texts");
+        EntityManager historicalReader = readManager(historicalDb.data.answers, ZoneId.of("UTC"));
+        check(new EmaAnswerDAO().checkSeJaRespondeu(1L, "2026-09-28_noite", historicalReader),
+                "Historical text-only answer stopped blocking its period");
+        System.out.println("PASS: EMA numeric IDs, all PT/EN aliases, unknown text preservation, original request hashes, Jackson, receipts/retries/conflicts (JPA/JTA doubles; no real DB)");
+    }
+
     public static void main(String[] args) throws Exception {
         System.setProperty(Context.INITIAL_CONTEXT_FACTORY, Naming.class.getName());
+        contextIdTests();
         timeContextTests();
         availabilityTests();
         Database db = new Database();

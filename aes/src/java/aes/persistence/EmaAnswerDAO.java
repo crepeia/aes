@@ -1,6 +1,7 @@
 package aes.persistence;
 
 import aes.model.EmaAnswer;
+import aes.model.EmaContext;
 
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -35,9 +36,7 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
                 answer.getSelfEfficacy(), answer.getMotivation(), answer.getAvailability()}) {
             if (value == null || value < 0 || value > 5) return false;
         }
-        for (String value : new String[]{answer.getCompany(), answer.getCurrentLocation()}) {
-            if (value == null || value.trim().isEmpty() || value.length() > 100) return false;
-        }
+        if (!EmaContext.isValid(answer)) return false;
         int hour = localTime(answer).getHour();
         String period = hour >= 8 && hour < 14 ? "manha" : hour >= 14 && hour < 20 ? "tarde" : "noite";
         return period.equals(answer.getPeriod()) && (answer.getConsumedAlcohol()
@@ -90,10 +89,17 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
             if (!matches.isEmpty()) throw new AnswerConflict("EMA_PERIOD_ALREADY_ANSWERED");
             answer.setUser(user);
             answer.setReceivedAtUtcMs(System.currentTimeMillis());
-            em.persist(answer);
+            // Hash/replay checks above always use the original request, including legacy texts.
+            EmaAnswer stored = EmaContext.forStorage(answer);
+            em.persist(stored);
             em.flush();
+            answer.setId(stored.getId());
             org.primefaces.json.JSONObject resultJson = new org.primefaces.json.JSONObject().put("id", answer.getId())
                     .put("idempotencyKey", key).put("periodKey", periodKey(answer));
+            if (EmaContext.hasIds(answer)) {
+                resultJson.put("contextIds", new org.primefaces.json.JSONObject()
+                        .put("companyId", stored.getCompanyId()).put("currentLocationId", stored.getCurrentLocationId()));
+            }
             if (hasTimeContext(answer)) {
                 resultJson.put("timeContext", new org.primefaces.json.JSONObject()
                         .put("capturedAtUtcMs", answer.getCapturedAtUtcMs()).put("deviceTimeZone", answer.getDeviceTimeZone())
@@ -129,6 +135,10 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
             fields.put("ema-time-v1").put(answer.getCapturedAtUtcMs())
                     .put(answer.getDeviceTimeZone()).put(answer.getDeviceUtcOffsetMinutes());
         }
+        // Append only for the new wire format, preserving every historical text hash.
+        if (EmaContext.hasIds(answer)) {
+            fields.put("ema-context-ids-v1").put(answer.getCompanyId()).put(answer.getCurrentLocationId());
+        }
         String canonical = fields.toString();
         byte[] digest = java.security.MessageDigest.getInstance("SHA-256")
                 .digest(canonical.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -139,7 +149,7 @@ public class EmaAnswerDAO extends GenericDAO<EmaAnswer> {
 
     public void saveAnswer(EmaAnswer answer, EntityManager entityManager) throws SQLException {
         if (answer.getId() == 0) answer.setReceivedAtUtcMs(System.currentTimeMillis());
-        super.insertOrUpdate(answer, entityManager);
+        super.insertOrUpdate(EmaContext.forStorage(answer), entityManager);
     }
 
     /**

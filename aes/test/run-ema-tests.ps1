@@ -13,6 +13,7 @@ $doseSources = @(
     'src/java/aes/persistence/DailyLogDAO.java',
     'src/java/aes/service/DailyLogFacadeREST.java',
     'src/java/aes/model/EmaAnswer.java',
+    'src/java/aes/model/EmaContext.java',
     'src/java/aes/model/EmaOperation.java',
     'src/java/aes/persistence/EmaAnswerDAO.java',
     'src/java/aes/service/EmaFacadeREST.java',
