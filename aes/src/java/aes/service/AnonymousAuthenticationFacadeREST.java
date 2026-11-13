@@ -89,38 +89,27 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
     @Path("anonymous-key/insert")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response insert(KeyRequest request) throws SQLException {
+    public Response insert(KeyRequest request) {
+        if (request == null || request.instanceId == null || request.instanceId.trim().isEmpty()
+                || request.instanceId.length() > 64 || request.publicKey == null
+                || (request.clientMeta != null && request.clientMeta.length() > 64)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+        }
+
         try {
-            if (request == null ||
-                    request.instanceId == null ||
-                    request.publicKey == null) {
-                
-                Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName())
-                    .log(Level.WARNING,
-                        "[SECURITY] DENIED_ANONKEY_INSERT reason=INVALID_DATA");
+            if (Base64.getDecoder().decode(request.publicKey).length != 32) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
             }
-            
-            // Verifica se já existe chave para o instanceId
-            AnonymousKey existing = anonymousAuthenticationDao.findByInstanceId(request.instanceId, true, em);
-            if (existing != null) {
-                // Revoga a chave existente
-                existing.setRevoked(true);
-                anonymousAuthenticationDao.update(existing, em);
-            }
-            
-            AnonymousKey object = new AnonymousKey();
-            object.setPublicKey(request.publicKey);
-            object.setInstanceId(request.instanceId);
-            object.setClientMeta(request.clientMeta);
-            object.setDateCreated(LocalDateTime.now());
-            object.setRevoked(false);
-            
-            anonymousAuthenticationDao.insert(object, em);
+        } catch (IllegalArgumentException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("INVALID_DATA").build();
+        }
+
+        try {
+            anonymousAuthenticationDao.registerKey(request.instanceId, request.publicKey, request.clientMeta, em);
             return Response.status(Response.Status.CREATED).build();
         } catch (SQLException | RuntimeException ex) {
-            Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Error type: ", ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName()).log(Level.SEVERE, "Erro ao registrar chave anônima.", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ANONYMOUS_KEY_REGISTRATION_FAILED").build();
         }
     }
     
@@ -158,7 +147,7 @@ public class AnonymousAuthenticationFacadeREST extends AbstractFacade<AnonymousK
                 Logger.getLogger(AnonymousAuthenticationFacadeREST.class.getName())
                     .log(Level.WARNING,
                         "[SECURITY] INVALID_SIGNATURE reason=INVALID_DATA");
-                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_DATA").build();
+                return Response.status(Response.Status.UNAUTHORIZED).entity("INVALID_SIGNATURE").build();
             }
             
             if (request.userId != null) {
