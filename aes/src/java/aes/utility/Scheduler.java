@@ -159,12 +159,12 @@ public class Scheduler {
      
         for (Contact contact : contacts) {
             try {
-                if (contact.getSubject().contains("tips_subj")) {
+                if (MessageResources.canonicalKey(contact.getSubject()).equals("tipsSubj")) {
                     emailHelper.sendTipsEmail(contact, em);
                    contactDAO.scheduleTipsEmail(contact.getUser(), em);
                 } else {
                     emailHelper.sendHTMLEmail(contact, em);
-                    if (contact.getSubject().contains("annualscreening_subj")) {
+                    if (MessageResources.canonicalKey(contact.getSubject()).equals("annualscreeningSubj")) {
                       contactDAO.scheduleAnnualScreeningEmail(contact.getUser(), em);
                     }
                 }

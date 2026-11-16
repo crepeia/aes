@@ -2,6 +2,7 @@ package aes.service;
 
 import aes.model.ReadyTextInteraction;
 import aes.model.User;
+import aes.utility.MessageResources;
 import aes.utility.Secured;
 import aes.utility.SecurityContextHelper;
 import com.google.gson.Gson;
@@ -34,7 +35,6 @@ import javax.ws.rs.core.Response;
 @TransactionManagement(TransactionManagementType.BEAN)
 @Path("readytext")
 public class ReadyTextFacadeREST extends AbstractFacade<ReadyTextInteraction> {
-    private static final String DEFAULT_LANG = "pt";
     private static final String READY_TEXT_PREFIX = "readyText.";
 
     @PersistenceContext(unitName = "aesPU")
@@ -69,14 +69,7 @@ public class ReadyTextFacadeREST extends AbstractFacade<ReadyTextInteraction> {
     }
 
     private String resolveLang(String langParam) {
-        if (langParam == null) {
-            return DEFAULT_LANG;
-        }
-        String lang = langParam.trim().toLowerCase();
-        if (lang.equals("pt") || lang.equals("es") || lang.equals("en")) {
-            return lang;
-        }
-        return DEFAULT_LANG;
+        return MessageResources.resolveLocale(langParam).getLanguage();
     }
 
     @GET

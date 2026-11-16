@@ -110,20 +110,20 @@ public class ChallengeController extends BaseController {
             
             while(continueSearch) {
                 challenge = new Challenge(0,"","","","");
-                String key = properties.getProperty("challenge.prefix." + counter, "");
+                String key = properties.getProperty("challengePrefix" + counter, "");
                 if (!key.isEmpty()) {
                     challenge.setPrefix(key);
                     challenge.setId(counter);
                 }
-                key = properties.getProperty("challenge.base.value." + counter, "");
+                key = properties.getProperty("challengeBaseValue" + counter, "");
                 if (!key.isEmpty()) {
                     challenge.setBaseValue(key);
                 }
-                key = properties.getProperty("challenge.modifier." + counter, "");
+                key = properties.getProperty("challengeModifier" + counter, "");
                 if (!key.isEmpty()) {
                     challenge.setModifier(key);
                 }
-                key = properties.getProperty("challenge.type." + counter, "");
+                key = properties.getProperty("challengeType" + counter, "");
                 if (!key.isEmpty()) {
                     challenge.setType(key);
                 }
