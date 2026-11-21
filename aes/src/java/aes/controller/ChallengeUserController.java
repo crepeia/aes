@@ -41,7 +41,16 @@ public class ChallengeUserController extends BaseController<ChallengeUser> {
         private String nickname;
         private Long score;
         private int position;
+        private int profilePick;
         private Long title;
+        public NicknameScore(Long id, String nickname, Long score, Integer profilePick, Long title){
+            this.id = id;
+            this.nickname = nickname;
+            this.score = score;
+            this.position = 0;
+            this.profilePick = profilePick;
+            this.title = title;
+        }
         public NicknameScore(Long id, String nickname, Long score, Long title){
             this.id = id;
             this.nickname = nickname;
