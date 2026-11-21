@@ -452,15 +452,21 @@ public class ChallengeUserFacadeREST extends AbstractFacade<ChallengeUser> {
 
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_WEEK, 1));
-                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
+                Integer profilePick = u.getProfilePick();
+                if (profilePick == null) profilePick = 0;
+                rank.weeklyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, profilePick,  u.getSelected_title()));
             });
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_MONTH, 1));
-                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
+                Integer profilePick = u.getProfilePick();
+                if (profilePick == null) profilePick = 0;
+                rank.monthlyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, profilePick, u.getSelected_title()));
             });
             users.forEach(u -> {
                 long points = getPointsFromDate(u, dateStart.with(ChronoField.DAY_OF_YEAR, 1));
-                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, u.getSelected_title()));
+                Integer profilePick = u.getProfilePick();
+                if (profilePick == null) profilePick = 0;
+                rank.yearlyResult.add(new ChallengeUserController.NicknameScore(u.getId(), u.getNickname(), points, profilePick, u.getSelected_title()));
             });
             
             Gson g = new Gson();
