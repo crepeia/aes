@@ -53,6 +53,13 @@ public class EmaAnswer implements Serializable {
     @Column(name = "current_location", length = 100)
     private String currentLocation;
 
+    // Stable codes; legacy text columns remain available for historical rows.
+    @Column(name = "company_id", columnDefinition = "SMALLINT")
+    private Integer companyId;
+
+    @Column(name = "current_location_id", columnDefinition = "SMALLINT")
+    private Integer currentLocationId;
+
     @Column(name = "someone_drinking")
     private Boolean someoneDrinking;
 
@@ -98,6 +105,33 @@ public class EmaAnswer implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long receivedAtUtcMs;
 
+    public EmaAnswer() { }
+
+    /** Separate the persisted representation from the original idempotent request. */
+    public EmaAnswer(EmaAnswer source) {
+        id = source.id;
+        user = source.user;
+        craving = source.craving;
+        moodValence = source.moodValence;
+        moodArousal = source.moodArousal;
+        selfEfficacy = source.selfEfficacy;
+        motivation = source.motivation;
+        company = source.company;
+        currentLocation = source.currentLocation;
+        companyId = source.companyId;
+        currentLocationId = source.currentLocationId;
+        someoneDrinking = source.someoneDrinking;
+        availability = source.availability;
+        consumedAlcohol = source.consumedAlcohol;
+        numberOfDoses = source.numberOfDoses;
+        period = source.period;
+        timestamp = source.timestamp;
+        capturedAtUtcMs = source.capturedAtUtcMs;
+        deviceTimeZone = source.deviceTimeZone;
+        deviceUtcOffsetMinutes = source.deviceUtcOffsetMinutes;
+        receivedAtUtcMs = source.receivedAtUtcMs;
+    }
+
     // Getters and Setters
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
@@ -125,6 +159,12 @@ public class EmaAnswer implements Serializable {
 
     public String getCurrentLocation() { return currentLocation; }
     public void setCurrentLocation(String currentLocation) { this.currentLocation = currentLocation; }
+
+    public Integer getCompanyId() { return companyId; }
+    public void setCompanyId(Integer companyId) { this.companyId = companyId; }
+
+    public Integer getCurrentLocationId() { return currentLocationId; }
+    public void setCurrentLocationId(Integer currentLocationId) { this.currentLocationId = currentLocationId; }
 
     public Boolean getSomeoneDrinking() { return someoneDrinking; }
     public void setSomeoneDrinking(Boolean someoneDrinking) { this.someoneDrinking = someoneDrinking; }

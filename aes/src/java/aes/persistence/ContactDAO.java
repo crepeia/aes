@@ -13,6 +13,7 @@ import aes.model.Title;
 import aes.model.TitleUser;
 import aes.model.User;
 import aes.utility.EMailSSL;
+import aes.utility.MessageResources;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -48,8 +49,8 @@ public class ContactDAO extends GenericDAO<Contact> {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("email.msg.subject.diary_started_subj");
-            contact.setContent("email.msg.subject.diary_started");
+            contact.setSubject("emailMsgSubjectDiaryStartedSubj");
+            contact.setContent("emailMsgSubjectDiaryStarted");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -67,8 +68,8 @@ public class ContactDAO extends GenericDAO<Contact> {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("progress_persistchallenges_reduce_subj");
-            contact.setContent("progress_persistchallenges_reduce");
+            contact.setSubject("progressPersistchallengesReduceSubj");
+            contact.setContent("progressPersistchallengesReduce");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -86,8 +87,8 @@ public class ContactDAO extends GenericDAO<Contact> {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("progress_persistchallenges_quit_subj");
-            contact.setContent("progress_persistchallenges_quit");
+            contact.setSubject("progressPersistchallengesQuitSubj");
+            contact.setContent("progressPersistchallengesQuit");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -105,8 +106,8 @@ public class ContactDAO extends GenericDAO<Contact> {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("progress_keepingresult_quit_subj");
-            contact.setContent("progress_keepingresult_quit");
+            contact.setSubject("progressKeepingresultQuitSubj");
+            contact.setContent("progressKeepingresultQuit");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -124,8 +125,8 @@ public class ContactDAO extends GenericDAO<Contact> {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("progress_keepingresult_reduce_subj");
-            contact.setContent("progress_keepingresult_reduce");
+            contact.setSubject("progressKeepingresultReduceSubj");
+            contact.setContent("progressKeepingresultReduce");
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -141,7 +142,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("annualscreening_subj");
+        contact.setSubject("annualscreeningSubj");
         contact.setContent("annualscreening");
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, 1);
@@ -158,8 +159,8 @@ public class ContactDAO extends GenericDAO<Contact> {
             contact.setUser(user);
             contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
             contact.setRecipient(user.getEmail());
-            contact.setSubject("week_" + week + "_subj");
-            contact.setContent("week_" + week);
+            contact.setSubject("week" + week + "Subj");
+            contact.setContent("week" + week);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, 7 * week);
@@ -176,8 +177,8 @@ public class ContactDAO extends GenericDAO<Contact> {
         contact.setUser(user);
         contact.setSender(eMailSSL.replaceEmail("alcoolesaude@gmail.com"));
         contact.setRecipient(user.getEmail());
-        contact.setSubject("tips_subj");
-        contact.setContent("tips" + String.valueOf(randomNumber));
+        contact.setSubject("tipsSubj");
+        contact.setContent("tip" + String.valueOf(randomNumber));
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, frequency);
         contact.setDateScheduled(cal.getTime());
@@ -188,7 +189,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         try {
             List<Contact> contacts = this.list(entityManager);
             for (Contact contact : contacts) {
-                if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("progress_keepingresult")) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && MessageResources.canonicalKey(contact.getSubject()).startsWith("progressKeepingresult")) {
                     if (contact.getUser().getRecord() != null) {
                         this.delete(contact, entityManager);
                     }
@@ -204,7 +205,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         try {
             List<Contact> contacts = this.list("user", user, entityManager);
             for (Contact contact : contacts) {
-                if (contact.getDateScheduled() != null && contact.getDateSent() == null && contact.getSubject().contains("annualscreening_subj")) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && MessageResources.canonicalKey(contact.getSubject()).equals("annualscreeningSubj")) {
                     this.delete(contact, entityManager);
                 }
             }
@@ -218,7 +219,7 @@ public class ContactDAO extends GenericDAO<Contact> {
         try {
             List<Contact> contacts = this.list("user", user, entityManager);
             for (Contact contact : contacts) {
-                if (contact.getDateScheduled() != null && contact.getDateSent() == null && !contact.getSubject().contains("tips_subj")) {
+                if (contact.getDateScheduled() != null && contact.getDateSent() == null && !MessageResources.canonicalKey(contact.getSubject()).equals("tipsSubj")) {
                     this.delete(contact, entityManager);
 
                 }

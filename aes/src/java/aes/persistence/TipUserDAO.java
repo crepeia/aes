@@ -55,18 +55,19 @@ public class TipUserDAO extends GenericDAO<TipUser> {
             Properties properties = new Properties();
             String propertiesPath = AppServletContextListener.getServletContext().getInitParameter("messagesPath") + "_pt.properties";
             
-            InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath);
-            properties.load(input);
+            try (InputStream input = getClass().getClassLoader().getResourceAsStream(propertiesPath)) {
+                properties.load(input);
+            }
             
             boolean continueSearch = true;
             int counter = 1;
             
             while(continueSearch) {
-                String key = properties.getProperty("tip.description." + counter, "");
+                String key = properties.getProperty("tip" + counter, "");
                 if (key.isEmpty()) {
                     continueSearch = false;
                 } else {
-                    tipsIds.add(Long.parseLong(key));
+                    tipsIds.add((long) counter);
                     counter++;
                 }
             }
@@ -78,8 +79,8 @@ public class TipUserDAO extends GenericDAO<TipUser> {
             
             List<Long> possibleTipsList = new ArrayList<Long>();
             
-            for(Long tip: tipUserIds) {
-                if (!tipsIds.contains(tip)) {
+            for(Long tip: tipsIds) {
+                if (!tipUserIds.contains(tip)) {
                     possibleTipsList.add(tip);
                 }
             }
